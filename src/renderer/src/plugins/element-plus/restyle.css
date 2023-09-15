@@ -1,0 +1,35 @@
+:root {
+  /* 主题色 */
+  --el-color-primary: rgba(var(--color-primary), 1);
+  --el-color-primary-dark-2: rgba(var(--color-primary-60), 1);
+  --el-color-primary-light-1: rgba(var(--color-primary-400), 1);
+  --el-color-primary-light-2: rgba(var(--color-primary-400), 1);
+  --el-color-primary-light-3: rgba(var(--color-primary-300), 1);
+  --el-color-primary-light-4: rgba(var(--color-primary-300), 1);
+  --el-color-primary-light-5: rgba(var(--color-primary-200), 1);
+  --el-color-primary-light-6: rgba(var(--color-primary-200), 1);
+  --el-color-primary-light-7: rgba(var(--color-primary-100), 1);
+  --el-color-primary-light-8: rgba(var(--color-primary-100), 1);
+  --el-color-primary-light-9: rgba(var(--color-primary-50), 1);
+
+  /* 字体大小 */
+  --el-font-size-base: 12px;
+  --el-font-size-small: 14px;
+  --el-font-size-large: 16px;
+}
+
+.el-tabs-flex {
+  @apply flex flex-col h-full !important;
+
+  .el-tabs__header {
+    @apply flex-none !important;
+  }
+
+  .el-tabs__content {
+    @apply flex-grow overflow-hidden h-full !important;
+  }
+
+  .el-tab-pane {
+    @apply h-full;
+  }
+}

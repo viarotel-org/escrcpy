@@ -1,0 +1,10 @@
+{
+  "exclude": ["node_modules", "dist", "out"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@renderer/*": ["src/renderer/src/*"]
+    }
+  }
+}

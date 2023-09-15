@@ -1,5 +1,11 @@
-import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { Adb } from '@devicefarmer/adbkit'
+
+import scrcpyPath from '../../resources/core/scrcpy.exe?asset&asarUnpack'
+import { addContext } from './helpers/index.js'
+
+const util = require('node:util')
+const exec = util.promisify(require('node:child_process').exec)
 
 // Custom APIs for renderer
 const api = {}
@@ -7,14 +13,27 @@ const api = {}
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    console.error(error)
+addContext('electron', electronAPI)
+addContext('api', api)
+
+addContext('adbkit', () => {
+  const client = Adb.createClient()
+  console.log('client', client)
+
+  const getDevices = async () => await client.listDevicesWithPaths()
+  const shell = async (id, command) => await client.getDevice(id).shell(command)
+  const kill = async () => await client.kill()
+  return {
+    getDevices,
+    shell,
+    kill,
   }
-} else {
-  window.electron = electronAPI
-  window.api = api
-}
+})
+
+addContext('scrcpy', () => {
+  const shell = command => exec(`${scrcpyPath} ${command}`)
+
+  return {
+    shell,
+  }
+})

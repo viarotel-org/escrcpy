@@ -7,7 +7,7 @@
   "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -17,23 +17,31 @@
     "build:linux": "npm run build && electron-builder --linux --config"
   },
   "dependencies": {
+    "@devicefarmer/adbkit": "^3.2.5",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.0",
-    "electron-updater": "^6.1.1"
+    "@viarotel-org/design": "^0.7.0",
+    "electron-updater": "^6.1.1",
+    "element-plus": "^2.3.14"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.1",
     "@rushstack/eslint-patch": "^1.3.3",
+    "@viarotel-org/eslint-config": "^0.7.0",
+    "@viarotel-org/postcss-config": "^0.7.0",
+    "@viarotel-org/unocss-config": "^0.7.4",
     "@vitejs/plugin-vue": "^4.3.1",
     "@vue/eslint-config-prettier": "^8.0.0",
     "electron": "^25.6.0",
     "electron-builder": "^24.6.3",
     "electron-vite": "^1.0.27",
-    "eslint": "^8.47.0",
+    "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
     "less": "^4.2.0",
     "prettier": "^3.0.2",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9",
+    "vite-plugin-eslint": "^1.8.1",
     "vue": "^3.3.4"
   }
 }

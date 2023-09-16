@@ -13,8 +13,7 @@ asarUnpack:
 win:
   executableName: escrcpy
   target:
-    - target: nsis
-      arch: [ia32, x64]
+    - nsis
     - zip
     - portable
 nsis:

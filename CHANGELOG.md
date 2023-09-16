@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/viarotel-org/escrcpy/compare/v1.0.0...v1.0.1) (2023-09-16)
+
+
+### Bug Fixes
+
+* 🔧 去除未测试环境的打包以修复构建失败的问题 ([d6ec7fd](https://github.com/viarotel-org/escrcpy/commit/d6ec7fdfbe9a079619da5c97f8512cffb91491ce))
+
 ## 1.0.0 (2023-09-16)
 
 

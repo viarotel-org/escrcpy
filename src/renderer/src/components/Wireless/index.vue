@@ -23,7 +23,14 @@
       </el-button>
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
-      <el-table v-loading="loading" :data="deviceList" style="width: 100%" border height="100%">
+      <el-table
+        v-loading="loading"
+        :element-loading-text="loadingText"
+        :data="deviceList"
+        style="width: 100%"
+        border
+        height="100%"
+      >
         <template #empty>
           <el-empty description="设备列表为空" />
         </template>
@@ -44,9 +51,17 @@
         <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
             <el-button type="primary" :loading="row.$loading" @click="handleStart(row)">
-              {{ row.$loading ? '运行中' : '连接设备' }}
+              {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
-            <el-button type="danger" :loading="row.$stopLoading" @click="handleStop(row)">
+            <el-button :disabled="!row.$loading" type="default" @click="handleScreenUp(row)">
+              点亮屏幕
+            </el-button>
+            <el-button
+              :disabled="!row.$loading"
+              type="danger"
+              :loading="row.$stopLoading"
+              @click="handleStop(row)"
+            >
               {{ row.$stopLoading ? '断开中' : '断开连接' }}
             </el-button>
           </template>
@@ -58,16 +73,19 @@
 
 <script>
 import { isIPWithPort, sleep } from '@renderer/utils/index.js'
+import storage from '@renderer/utils/storages'
 
 export default {
   data() {
+    const adbCache = storage.get('adbCache') || {}
     return {
       loading: false,
+      loadingText: '初始化中...',
       connectLoading: false,
       deviceList: [],
       formData: {
-        host: '',
-        port: null,
+        host: adbCache.host,
+        port: adbCache.port,
       },
     }
   },
@@ -79,6 +97,9 @@ export default {
     })
   },
   methods: {
+    handleScreenUp(row) {
+      this.$adb.shell(row.id, 'input keyevent KEYCODE_POWER')
+    },
     handleReset() {
       this.$electron.ipcRenderer.send('restart-app')
     },
@@ -91,6 +112,7 @@ export default {
       try {
         await this.$adb.connect(this.formData.host, this.formData.port || 5555)
         this.$message.success('连接设备成功')
+        storage.set('adbCache', this.formData)
       }
       catch (error) {
         if (error.message)
@@ -144,6 +166,7 @@ export default {
         this.deviceList = []
       }
       this.loading = false
+      this.loadingText = '正在获取设备列表...'
     },
   },
 }

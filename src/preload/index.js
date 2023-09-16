@@ -2,6 +2,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { Adb } from '@devicefarmer/adbkit'
 
 import scrcpyPath from '../../resources/core/scrcpy.exe?asset&asarUnpack'
+import adbPath from '../../resources/core/adb.exe?asset&asarUnpack'
 import { addContext } from './helpers/index.js'
 
 const util = require('node:util')
@@ -17,7 +18,7 @@ addContext('electron', electronAPI)
 addContext('api', api)
 
 addContext('adbkit', () => {
-  const client = Adb.createClient()
+  const client = Adb.createClient({ bin: adbPath })
   console.log('client', client)
 
   const getDevices = async () => await client.listDevicesWithPaths()
@@ -49,9 +50,9 @@ addContext('adbkit', () => {
     return close
   }
 
-  // window.addEventListener('beforeunload', () => {
-  //   kill()
-  // })
+  window.addEventListener('beforeunload', () => {
+    kill()
+  })
 
   return {
     getDevices,
@@ -64,7 +65,8 @@ addContext('adbkit', () => {
 })
 
 addContext('scrcpy', () => {
-  const shell = command => exec(`${scrcpyPath} ${command}`)
+  const shell = command =>
+    exec(`${scrcpyPath} ${command}`, { env: { ...process.env, ADB: adbPath } })
 
   return {
     shell,

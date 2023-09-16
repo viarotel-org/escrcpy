@@ -1,4 +1,4 @@
-name: Sync To Gitee
+name: sync-gitee
 on:
   workflow_dispatch: {}
   push:

@@ -22,11 +22,44 @@ addContext('adbkit', () => {
 
   const getDevices = async () => await client.listDevicesWithPaths()
   const shell = async (id, command) => await client.getDevice(id).shell(command)
-  const kill = async () => await client.kill()
+  const kill = async (...params) => await client.kill(...params)
+  const connect = async (...params) => await client.connect(...params)
+  const disconnect = async (...params) => await client.disconnect(...params)
+
+  const watch = async (callback) => {
+    const tracker = await client.trackDevices()
+    tracker.on('add', (device) => {
+      callback(device)
+    })
+
+    tracker.on('remove', (device) => {
+      callback(device)
+    })
+
+    tracker.on('end', (ret) => {
+      callback(ret)
+    })
+
+    tracker.on('error', (err) => {
+      callback(err)
+    })
+
+    const close = () => tracker.end()
+
+    return close
+  }
+
+  // window.addEventListener('beforeunload', () => {
+  //   kill()
+  // })
+
   return {
     getDevices,
     shell,
     kill,
+    connect,
+    disconnect,
+    watch,
   }
 })
 

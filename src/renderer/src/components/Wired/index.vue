@@ -1,15 +1,18 @@
 <template>
-  <div class="">
-    <div class="flex">
-      <el-button type="primary" @click="handleFind">
+  <div class="h-full flex flex-col">
+    <div class="flex items-center flex-none">
+      <el-button type="primary" @click="getDeviceData">
         刷新设备
       </el-button>
-      <el-button type="warning" :loading="stopLoading" @click="handleReset">
-        {{ stopLoading ? '重置服务中' : '重置服务' }}
+      <el-button type="warning" @click="handleReset">
+        重启服务
       </el-button>
     </div>
-    <div class="pt-4">
-      <el-table v-loading="loading" :data="deviceList" style="width: 100%" border>
+    <div class="pt-4 flex-1 h-0 overflow-hidden">
+      <el-table v-loading="loading" :data="deviceList" style="width: 100%" border height="100%">
+        <template #empty>
+          <el-empty description="设备列表为空" />
+        </template>
         <el-table-column prop="id" label="设备 ID" />
         <el-table-column prop="name" label="设备名称">
           <template #default="{ row }">
@@ -24,7 +27,7 @@
             <span v-else class="">{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
             <el-button type="primary" :loading="row.$loading" @click="handleStart(row)">
               {{ row.$loading ? '运行中' : '连接设备' }}
@@ -37,27 +40,34 @@
 </template>
 
 <script>
-import { sleep } from '@renderer/utils/index.js'
+import { isIPWithPort, sleep } from '@renderer/utils/index.js'
 
 export default {
   data() {
     return {
       loading: false,
-      stopLoading: false,
       deviceList: [],
     }
   },
   created() {
     this.getDeviceData()
+
+    this.$adb.watch(() => {
+      this.getDeviceData()
+    })
   },
   methods: {
+    handleReset() {
+      this.$electron.ipcRenderer.send('restart-app')
+    },
     async handleStart(row) {
       row.$loading = true
       try {
         await this.$scrcpy.shell(`-s ${row.id}`)
       }
       catch (error) {
-        this.$message.error(`${error.message}`)
+        if (error.message)
+          this.$message.warning(error.message)
       }
       row.$loading = false
     },
@@ -65,35 +75,23 @@ export default {
       this.loading = true
       await sleep(500)
       try {
-        const data = await this.$adb.getDevices().catch(e => console.warn(e))
-        console.log('getDeviceData.data', data)
-        this.deviceList = data.map(item => ({
-          ...item,
-          name: item.model ? item.model.split(':')[1] : '未授权设备',
-          $loading: false,
-          $unauthorized: item.type === 'unauthorized',
-        }))
+        const data = await this.$adb.getDevices()
+        this.deviceList = (data || [])
+          .filter(item => !isIPWithPort(item.id))
+          .map(item => ({
+            ...item,
+            name: item.model ? item.model.split(':')[1] : '未授权设备',
+            $loading: false,
+            $unauthorized: item.type === 'unauthorized',
+          }))
+        console.log('getDeviceData.data', this.deviceList)
       }
       catch (error) {
-        console.warn('error', error.message)
+        if (error.message)
+          this.$message.warning(error.message)
+        this.deviceList = []
       }
       this.loading = false
-    },
-    handleFind() {
-      this.getDeviceData()
-    },
-    async handleReset() {
-      this.stopLoading = true
-      try {
-        await this.$adb.kill()
-        await sleep(2000)
-      }
-      catch (error) {
-        console.warn('error', error.message)
-      }
-      this.stopLoading = false
-      this.$message.success('重置服务状态成功')
-      this.handleFind()
     },
   },
 }

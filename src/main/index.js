@@ -3,6 +3,8 @@ import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+import './ipc/index.js'
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({

@@ -6,6 +6,7 @@
         :key="index"
         :label="item.label"
         :name="item.prop"
+        lazy
       >
         <component :is="item.prop" />
       </el-tab-pane>

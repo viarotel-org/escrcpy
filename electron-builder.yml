@@ -12,11 +12,19 @@ asarUnpack:
   - resources/**
 win:
   executableName: escrcpy
+  target:
+    - target: nsis
+      arch: [ia32, x64]
+    - zip
+    - portable
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${productName}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+portable:
+  artifactName: '${productName}-${version}-portable.${ext}'
+  requestExecutionLevel: user
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

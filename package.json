@@ -1,10 +1,10 @@
 {
   "name": "escrcpy",
   "version": "0.0.0",
-  "description": "An Electron application with Vue",
+  "description": "Scrcpy Powered by Electron",
+  "author": "viarotel",
+  "homepage": "https://github.com/viarotel-org/escrcpy",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix",

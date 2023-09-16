@@ -1,0 +1,20 @@
+name: Sync To Gitee
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+jobs:
+  sync-to-gitee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: gitee-mirror-action
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/viarotel-org
+          dst: gitee/viarotel-org
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          account_type: org
+          white_list: 'escrcpy'
+          force_update: true

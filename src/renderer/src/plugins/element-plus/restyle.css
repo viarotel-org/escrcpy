@@ -13,9 +13,9 @@
   --el-color-primary-light-9: rgba(var(--color-primary-50), 1);
 
   /* 字体大小 */
-  --el-font-size-base: 12px;
-  --el-font-size-small: 14px;
-  --el-font-size-large: 16px;
+  /* --el-font-size-base: 14px;
+  --el-font-size-small: 16px;
+  --el-font-size-large: 18px; */
 }
 
 .el-tabs-flex {
@@ -30,6 +30,6 @@
   }
 
   .el-tab-pane {
-    @apply h-full;
+    @apply h-full overflow-auto;
   }
 }

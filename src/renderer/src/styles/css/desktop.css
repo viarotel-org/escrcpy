@@ -1,0 +1,21 @@
+html {
+  font-size: 14px !important;
+}
+
+/* 自定义滚动条的外观 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: theme('colors.gray.100');
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme('colors.gray.300');
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: theme('colors.gray.500');
+}

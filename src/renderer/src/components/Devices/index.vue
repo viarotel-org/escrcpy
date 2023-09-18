@@ -1,19 +1,26 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex items-center flex-none space-x-2">
-      <el-input v-model="formData.host" placeholder="192.168.0.1" class="w-72">
+      <el-input v-model="formData.host" placeholder="192.168.0.1" class="w-86" clearable>
         <template #prepend>
-          无线连接设备
+          无线连接
         </template>
       </el-input>
       <div class="text-gray-500 text-sm">
         :
       </div>
-      <el-input v-model.number="formData.port" type="number" placeholder="5555" class="w-24">
+      <el-input
+        v-model.number="formData.port"
+        type="number"
+        placeholder="5555"
+        :min="0"
+        clearable
+        class="w-32"
+      >
       </el-input>
 
       <el-button type="primary" :loading="connectLoading" @click="handleConnect">
-        开始连接
+        连接设备
       </el-button>
       <el-button type="primary" :loading="loading" @click="getDeviceData">
         刷新设备
@@ -34,8 +41,8 @@
         <template #empty>
           <el-empty description="设备列表为空" />
         </template>
-        <el-table-column prop="id" label="设备 ID" />
-        <el-table-column prop="name" label="设备名称">
+        <el-table-column prop="id" label="设备 ID" show-overflow-tooltip />
+        <el-table-column prop="name" label="设备名称" show-overflow-tooltip>
           <template #default="{ row }">
             <div class="flex items-center">
               <el-tooltip
@@ -51,9 +58,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300" align="center">
+        <el-table-column label="操作" width="350" align="center">
           <template #default="{ row }">
-            <el-button type="primary" :loading="row.$loading" @click="handleStart(row)">
+            <el-button type="primary" :loading="row.$loading" @click="handleMirror(row)">
               {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
             <el-button type="default" @click="handleScreenUp(row)">
@@ -137,15 +144,36 @@ export default {
       }
       row.$stopLoading = false
     },
-    async handleStart(row) {
+    async handleMirror(row) {
       row.$loading = true
       try {
-        await this.$scrcpy.shell(`--serial=${row.id}`)
+        await this.$scrcpy.shell(`--serial=${row.id} ${this.addScrcpyConfigs()}`)
       }
       catch (error) {
         this.$message.warning(error.message)
       }
       row.$loading = false
+    },
+    addScrcpyConfigs() {
+      const configs = storage.get('scrcpyCache') || {}
+      const value = Object.entries(configs)
+        .reduce((arr, [key, value]) => {
+          if (!value) {
+            return arr
+          }
+          if (typeof value === 'boolean') {
+            arr.push(key)
+          }
+          else {
+            arr.push(`${key}=${value}`)
+          }
+          return arr
+        }, [])
+        .join(' ')
+
+      console.log('addScrcpyConfigs.value', value)
+
+      return value
     },
     async getDeviceData() {
       this.loading = true

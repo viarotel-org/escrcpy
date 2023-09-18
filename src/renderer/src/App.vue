@@ -8,7 +8,7 @@
         :name="item.prop"
         lazy
       >
-        <component :is="item.prop" />
+        <component :is="item.prop" ref="component" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -39,11 +39,7 @@ export default {
     }
   },
   mounted() {},
-  methods: {
-    getDevices() {
-      window.adbkit.createClient()
-    },
-  },
+  methods: {},
 }
 </script>
 

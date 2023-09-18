@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/viarotel-org/escrcpy/compare/v1.0.1...v1.0.2) (2023-09-18)
+
+
+### Performance Improvements
+
+* 🚀 合并无线连接及有线连接到设备列表 ([e84f24e](https://github.com/viarotel-org/escrcpy/commit/e84f24e816e22cd83233dac240c2e384b50ae580))
+
 ## [1.0.1](https://github.com/viarotel-org/escrcpy/compare/v1.0.0...v1.0.1) (2023-09-16)
 
 

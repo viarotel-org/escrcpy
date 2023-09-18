@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/viarotel-org/escrcpy/compare/v1.0.2...v1.1.0) (2023-09-18)
+
+
+### Features
+
+* 🚀 增加了常用的 Scrcpy 高级配置 ([ac52df2](https://github.com/viarotel-org/escrcpy/commit/ac52df2add6b94d51a86576e40621d584f9c9832))
+
 ## [1.0.2](https://github.com/viarotel-org/escrcpy/compare/v1.0.1...v1.0.2) (2023-09-18)
 
 

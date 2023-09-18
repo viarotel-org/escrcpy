@@ -15,33 +15,27 @@
 </template>
 
 <script>
-import Wired from './components/Wired/index.vue'
-import Wireless from './components/Wireless/index.vue'
+import Devices from './components/Devices/index.vue'
 import Advanced from './components/Advanced/index.vue'
 
 export default {
   components: {
-    Wired,
-    Wireless,
+    Devices,
     Advanced,
   },
   data() {
     return {
       tabsModel: [
         {
-          label: '有线模式',
-          prop: 'Wired',
-        },
-        {
-          label: '无线模式',
-          prop: 'Wireless',
+          label: '设备列表',
+          prop: 'Devices',
         },
         {
           label: '高级配置',
           prop: 'Advanced',
         },
       ],
-      activeTab: 'Wired',
+      activeTab: 'Devices',
     }
   },
   mounted() {},

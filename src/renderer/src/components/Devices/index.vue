@@ -3,7 +3,7 @@
     <div class="flex items-center flex-none space-x-2">
       <el-input v-model="formData.host" placeholder="192.168.0.1" class="w-72">
         <template #prepend>
-          无线调试地址
+          无线连接设备
         </template>
       </el-input>
       <div class="text-gray-500 text-sm">
@@ -37,15 +37,18 @@
         <el-table-column prop="id" label="设备 ID" />
         <el-table-column prop="name" label="设备名称">
           <template #default="{ row }">
-            <div v-if="row.$unauthorized" class="flex items-center">
-              <el-tooltip content="请重新插拔设备并点击允许USB调试" placement="top-start">
+            <div class="flex items-center">
+              <el-tooltip
+                v-if="row.$unauthorized"
+                content="设备可能未授权成功，请重新插拔设备并点击允许USB调试"
+                placement="top-start"
+              >
                 <el-icon class="mr-1 text-red-600 text-lg">
                   <WarningFilled />
                 </el-icon>
               </el-tooltip>
-              设备未授权
+              {{ row.name }}
             </div>
-            <span v-else class="">{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300" align="center">
@@ -53,11 +56,11 @@
             <el-button type="primary" :loading="row.$loading" @click="handleStart(row)">
               {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
-            <el-button :disabled="!row.$loading" type="default" @click="handleScreenUp(row)">
+            <el-button type="default" @click="handleScreenUp(row)">
               点亮屏幕
             </el-button>
             <el-button
-              :disabled="!row.$loading"
+              v-if="row.$wireless"
               type="danger"
               :loading="row.$stopLoading"
               @click="handleStop(row)"
@@ -146,18 +149,18 @@ export default {
     },
     async getDeviceData() {
       this.loading = true
-      await sleep(500)
+      await sleep()
       try {
         const data = await this.$adb.getDevices()
-        this.deviceList = (data || [])
-          .filter(item => isIPWithPort(item.id))
-          .map(item => ({
-            ...item,
-            name: item.model ? item.model.split(':')[1] : '未授权设备',
-            $loading: false,
-            $stopLoading: false,
-            $unauthorized: item.type === 'unauthorized',
-          }))
+        this.deviceList = (data || []).map(item => ({
+          ...item,
+          name: item.model ? item.model.split(':')[1] : '未授权设备',
+          $loading: false,
+          $stopLoading: false,
+          $unauthorized: item.type === 'unauthorized',
+          $wireless: isIPWithPort(item.id),
+        }))
+
         console.log('getDeviceData.data', this.deviceList)
       }
       catch (error) {

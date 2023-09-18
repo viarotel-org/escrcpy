@@ -1,6 +1,6 @@
 import { contextBridge } from 'electron'
 
-export function addContext(key, value) {
+export function exposeContext(key, value) {
   if (process.contextIsolated) {
     try {
       contextBridge.exposeInMainWorld(key, value)

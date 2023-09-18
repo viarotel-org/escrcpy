@@ -10,6 +10,11 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
   },
   preload: {
+    resolve: {
+      alias: {
+        '@resources': resolve('resources'),
+      },
+    },
     plugins: [externalizeDepsPlugin()],
   },
   renderer: {

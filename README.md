@@ -1,6 +1,7 @@
 # Escrcpy
 
 📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动
+
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">

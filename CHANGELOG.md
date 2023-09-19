@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/viarotel-org/escrcpy/compare/v1.1.0...v1.2.0) (2023-09-19)
+
+
+### Features
+
+* 🎉 优化设备界面视图并添加虚拟控制栏配置 ([3be0682](https://github.com/viarotel-org/escrcpy/commit/3be0682078f9f6896fa9cd6a5128290820098889))
+
 ## [1.1.0](https://github.com/viarotel-org/escrcpy/compare/v1.0.2...v1.1.0) (2023-09-18)
 
 

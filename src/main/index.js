@@ -1,18 +1,28 @@
 import { join } from 'node:path'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import iconPath from '../../resources/icons/icon.png?asset'
+import winIconPath from '../../resources/icons/icon.ico?asset'
+import macIconPath from '../../resources/icons/icon.icns?asset'
 
 import './ipc/index.js'
 
 function createWindow() {
+  let icon = iconPath
+
+  if (process.platform === 'win32') {
+    icon = winIconPath
+  }
+  else if (process.platform === 'darwin') {
+    icon = macIconPath
+  }
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon,
     minWidth: 900,
     minHeight: 700,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,

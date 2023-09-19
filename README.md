@@ -5,7 +5,7 @@
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">
-  <img src="./resources//screenshot/devices-full.jpg" alt="payment-weixin" style="width: 100%;">
+  <img src="./resources//screenshot/devices-full.jpg" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点
@@ -79,12 +79,13 @@
 
 > 优先级从高到低
 
-1. 用户界面进行优化 添加合适的图标等
-2. 添加更多的高级功能 如： 屏幕录像
-3. 添加 macOS 及 linux 操作系统的支持
-4. 内置的软件更新功能
-5. 支持语言国际化功能
-6. 添加对游戏的增强功能 如游戏键位映射
+1. 用户界面进行优化，制作合适的 Logo ✅
+2. 添加更多的高级功能 如： 屏幕录像 🚧
+3. 添加 macOS 及 linux 操作系统的支持 🚧
+4. 内置的软件更新功能 🚧
+5. 支持语言国际化功能 🚧
+6. 添加侧边控制栏 🚧
+7. 添加对游戏的增强功能 如游戏键位映射 🚧
 
 ## 常见问题
 
@@ -95,9 +96,19 @@
 
 ### 无法输入中文
 
-该问题是已知的，在某些设备上 Scrcpy 似乎并未对中文输入进行测试和支持。
+该问题是已知的， Scrcpy 似乎并未直接对中文输入进行测试和支持 需要在手机端安装第三方输入法 以下输入法经测试可以很好支持
 
-###
+- 搜狗输入法
+- QQ输入法
+- 谷歌拼音输入法
+- Gboard
+
+### 没有控制栏，无法通过点击返回上一步及桌面问题
+
+> 后期会增加支持 目前可以使用以下方法
+
+1. 在高级设置中开启 设备控制 => 虚拟控制栏 （如果该配置不起作用则需要在设备上手动开启）
+2. 通过快捷键，请参阅 [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
 
 ## 获得帮助
 
@@ -121,6 +132,6 @@
 > 如果该项目帮到你的话，可以请我吃包辣条，可以使我更有动力完善该项目
 
 <div style="display:flex;">
-  <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/79dcbc40246743e2b6870419e88e0392~tplv-k3u1fbpfcp-watermark.image?" alt="payment-weixin" style="width: 36%;">
-  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1e5e69b83dd746deade95afd4a6864ec~tplv-k3u1fbpfcp-watermark.image?" alt="payment-alipay" style="width: 36%;">
+  <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/79dcbc40246743e2b6870419e88e0392~tplv-k3u1fbpfcp-watermark.image?" alt="viarotel-wepay" style="width: 36%;">
+  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1e5e69b83dd746deade95afd4a6864ec~tplv-k3u1fbpfcp-watermark.image?" alt="viarotel-alipay" style="width: 36%;">
 </div>

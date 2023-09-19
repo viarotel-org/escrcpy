@@ -5,7 +5,7 @@
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">
-  <img src="./resources//screenshot/devices-full.jpg" alt="payment-weixin" style="width: 100%;border: 1px solid #e5e7eb">
+  <img src="./resources//screenshot/devices-full.jpg" alt="payment-weixin" style="width: 100%;">
 </div>
 
 ## 特点

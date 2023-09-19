@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/viarotel-org/escrcpy/compare/v1.3.0...v1.3.1) (2023-09-19)
+
+
+### Bug Fixes
+
+* 🔧 修复图标不透明的问题 ([24c011f](https://github.com/viarotel-org/escrcpy/commit/24c011f172eb8d4761090a0e036fae3f572d10bb))
+
 ## [1.3.0](https://github.com/viarotel-org/escrcpy/compare/v1.2.0...v1.3.0) (2023-09-19)
 
 

@@ -24,7 +24,7 @@ export default () => {
     {
       label: '屏幕旋转',
       type: 'select',
-      field: '--rotation=0',
+      field: '--rotation',
       value: '',
       placeholder: '默认值为设备屏幕旋转角度',
       options: [

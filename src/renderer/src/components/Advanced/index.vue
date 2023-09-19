@@ -42,7 +42,7 @@
                   v-bind="item_1.props || {}"
                   v-model="scrcpyForm[item_1.field]"
                   class="!w-full"
-                  :placeholder="item_1.placeholder"
+                  :title="item_1.placeholder"
                 ></el-switch>
                 <el-select
                   v-if="item_1.type === 'select'"

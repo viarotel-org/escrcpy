@@ -54,11 +54,16 @@
                   <WarningFilled />
                 </el-icon>
               </el-tooltip>
+
               {{ row.name }}
+
+              <el-tag v-if="row.$wireless" type="primary" effect="light" class="ml-2">
+                WIFI
+              </el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="350" align="center">
+        <el-table-column label="操作" width="350" align="left">
           <template #default="{ row }">
             <el-button type="primary" :loading="row.$loading" @click="handleMirror(row)">
               {{ row.$loading ? '镜像中' : '开始镜像' }}

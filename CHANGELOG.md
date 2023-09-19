@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/viarotel-org/escrcpy/compare/v1.3.1...v1.3.2) (2023-09-19)
+
+
+### Bug Fixes
+
+* 🔧 修复旋转屏幕配置异常的问题 ([af7a319](https://github.com/viarotel-org/escrcpy/commit/af7a3192e4231be6dbc0bd681a14d7568b1e2ba2))
+
 ## [1.3.1](https://github.com/viarotel-org/escrcpy/compare/v1.3.0...v1.3.1) (2023-09-19)
 
 

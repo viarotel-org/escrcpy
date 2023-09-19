@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/viarotel-org/escrcpy/compare/v1.2.0...v1.3.0) (2023-09-19)
+
+
+### Features
+
+* ✨ 用户界面进行优化，制作了合适的 Logo ([1b96ffc](https://github.com/viarotel-org/escrcpy/commit/1b96ffca2ba8f1bf850ad428c02b2ca6cbc85db7))
+
 ## [1.2.0](https://github.com/viarotel-org/escrcpy/compare/v1.1.0...v1.2.0) (2023-09-19)
 
 

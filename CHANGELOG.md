@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/viarotel-org/escrcpy/compare/v1.3.2...v1.3.3) (2023-09-26)
+
+
+### Bug Fixes
+
+* 🐛 修复触摸点配置描述错误的问题 ([4e2be23](https://github.com/viarotel-org/escrcpy/commit/4e2be23815418af1e693f53362948a6b6806a0a9))
+
 ## [1.3.2](https://github.com/viarotel-org/escrcpy/compare/v1.3.1...v1.3.2) (2023-09-19)
 
 

@@ -1,11 +1,11 @@
 export default () => {
   return [
     {
-      label: '虚拟控制栏',
+      label: '展示触摸点',
       type: 'switch',
       field: '--show-touches',
       value: false,
-      placeholder: '开启后将打开虚拟控制栏，在某些机型上可能不会生效 比如较老的具有实体按键的设备',
+      placeholder: '开启后将打开开发者选项中的显示点按触摸反馈(仅在物理设备上展示)',
     },
     {
       label: '保持清醒',

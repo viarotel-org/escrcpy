@@ -50,13 +50,13 @@ devDependencies:
     specifier: ^25.6.0
     version: 25.8.1
   electron-builder:
-    specifier: ^24.6.3
+    specifier: ^24.6.4
     version: 24.6.4
   electron-vite:
-    specifier: ^1.0.27
-    version: 1.0.27(vite@4.4.9)
+    specifier: ^1.0.28
+    version: 1.0.28(vite@4.4.9)
   eslint:
-    specifier: ^8.49.0
+    specifier: 8.49.0
     version: 8.49.0
   eslint-plugin-vue:
     specifier: ^9.17.0
@@ -976,7 +976,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.1
       '@types/keyv': 3.1.4
-      '@types/node': 18.17.15
+      '@types/node': 20.6.0
       '@types/responselike': 1.0.0
 
   /@types/debug@4.1.8:
@@ -1012,7 +1012,7 @@ packages:
   /@types/keyv@3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 18.17.15
+      '@types/node': 20.6.0
 
   /@types/lodash-es@4.17.9:
     resolution: {integrity: sha512-ZTcmhiI3NNU7dEvWLZJkzG6ao49zOIjEgIE0RgV7wbPxU0f2xT3VSAHw2gmst8swH6V0YkLRGp4qPlX/6I90MQ==}
@@ -1039,7 +1039,6 @@ packages:
 
   /@types/node@20.6.0:
     resolution: {integrity: sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==}
-    dev: true
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -1057,7 +1056,7 @@ packages:
   /@types/responselike@1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
-      '@types/node': 18.17.15
+      '@types/node': 20.6.0
 
   /@types/semver@7.5.2:
     resolution: {integrity: sha512-7aqorHYgdNO4DM36stTiGO3DvKoex9TQRwsJU6vMaFGyqpBA1MNZkz+PG3gaNUPpTAOYhT1WR7M1JyA3fbS9Cw==}
@@ -1081,7 +1080,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 18.17.15
+      '@types/node': 20.6.0
     optional: true
 
   /@typescript-eslint/eslint-plugin@6.7.0(@typescript-eslint/parser@6.7.0)(eslint@8.49.0)(typescript@5.2.2):
@@ -2558,8 +2557,8 @@ packages:
       - supports-color
     dev: false
 
-  /electron-vite@1.0.27(vite@4.4.9):
-    resolution: {integrity: sha512-T8UVt9HtMFMMqU78dhv8TsRHYxMkuMTIZBIFYHzfeEoJ1Go3tVemgY/kO6sTTv94jIhkhcZIkvwmq4liABFjmA==}
+  /electron-vite@1.0.28(vite@4.4.9):
+    resolution: {integrity: sha512-cp7nBi6do/jn5SHdL2V71WjxqZ+NXitVqn5bW+TsTEYgAfSUuYYp6INJN854kcgoOj4UrjMqA9cGRTSl79xx0Q==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:

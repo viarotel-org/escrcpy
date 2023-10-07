@@ -118,22 +118,47 @@ export default {
     handleReset() {
       this.$electron.ipcRenderer.send('restart-app')
     },
-    async handleConnect() {
+    async handleConnect({ pairCode = '' } = {}) {
       if (!this.formData.host) {
         this.$message.warning('无线调试地址不能为空')
         return false
       }
       this.connectLoading = true
       try {
-        await this.$adb.connect(this.formData.host, this.formData.port || 5555)
+        await this.$adb.connect(this.formData.host, this.formData.port || 5555, pairCode)
         this.$message.success('连接设备成功')
         storage.set('adbCache', this.formData)
       }
       catch (error) {
-        if (error.message)
+        if (error.message) {
           this.$message.warning(error.message)
+        }
+
+        if (error.message.includes('10060')) {
+          this.handlePair()
+        }
       }
       this.connectLoading = false
+    },
+    async handlePair() {
+      try {
+        const { value } = await this.$prompt('', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputType: 'number',
+          inputPlaceholder: '请输入配对码',
+          closeOnClickModal: false,
+        })
+
+        await this.$adb.rawShell(
+          `pair ${this.formData.host}:${this.formData.port || 5555} ${this.value}`,
+        )
+
+        this.handleConnect({ pairCode: value })
+      }
+      catch (error) {
+        console.warn(error.message)
+      }
     },
     async handleStop(row) {
       row.$stopLoading = true

@@ -12,17 +12,34 @@ window.addEventListener('beforeunload', () => {
   }
 })
 
+const shell = async command => exec(`${adbPath} ${command}`)
 const getDevices = async () => await client.listDevicesWithPaths()
-const shell = async (id, command) => await client.getDevice(id).shell(command)
-const rawShell = async command => exec(`${adbPath} ${command}`)
+const deviceShell = async (id, command) => await client.getDevice(id).shell(command)
 const kill = async (...params) => await client.kill(...params)
 const connect = async (...params) => await client.connect(...params)
 const disconnect = async (...params) => await client.disconnect(...params)
 
+const getDeviceIP = async (id) => {
+  try {
+    const { stdout } = await shell(`-s ${id} shell ip -f inet addr show wlan0`)
+    // console.log('stdout', stdout)
+    const reg = /inet ([0-9.]+)\/\d+/
+    const match = stdout.match(reg)
+    const value = match[1]
+    return value
+  }
+  catch (error) {
+    return false
+  }
+}
+
+const tcpip = async (id, port = 5555) => await client.getDevice(id).tcpip(port)
+
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
-  tracker.on('add', (device) => {
-    callback('add', device)
+  tracker.on('add', async (ret) => {
+    const host = await getDeviceIP(ret.id)
+    callback('add', { ...ret, $host: host })
   })
 
   tracker.on('remove', (device) => {
@@ -47,12 +64,14 @@ export default () => {
   console.log('client', client)
 
   return {
-    getDevices,
     shell,
-    rawShell,
+    getDevices,
+    deviceShell,
     kill,
     connect,
     disconnect,
     watch,
+    getDeviceIP,
+    tcpip,
   }
 }

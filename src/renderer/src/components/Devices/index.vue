@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex items-center flex-none space-x-2">
-      <el-input v-model="formData.host" placeholder="192.168.0.1" class="w-86" clearable>
+      <el-input v-model="formData.host" placeholder="192.168.0.1" class="w-86 flex-none" clearable>
         <template #prepend>
           无线连接
         </template>
@@ -15,7 +15,7 @@
         placeholder="5555"
         :min="0"
         clearable
-        class="w-32"
+        class="w-32 flex-none"
       >
       </el-input>
 
@@ -68,6 +68,9 @@
             <el-button type="primary" :loading="row.$loading" @click="handleMirror(row)">
               {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
+            <el-button v-if="!row.$wireless" type="primary" @click="handleWifi(row)">
+              无线模式
+            </el-button>
             <el-button type="default" @click="handleScreenUp(row)">
               点亮屏幕
             </el-button>
@@ -83,14 +86,19 @@
         </el-table-column>
       </el-table>
     </div>
+    <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
 </template>
 
 <script>
 import { isIPWithPort, sleep } from '@renderer/utils/index.js'
 import storage from '@renderer/utils/storages'
+import PairDialog from './PairDialog/index.vue'
 
 export default {
+  components: {
+    PairDialog,
+  },
   data() {
     const adbCache = storage.get('adbCache') || {}
     return {
@@ -106,55 +114,80 @@ export default {
   },
   created() {
     this.getDeviceData()
+    this.$adb.watch(async (type, ret) => {
+      console.log('adb.watch.ret', ret)
 
-    this.$adb.watch(() => {
       this.getDeviceData()
+
+      if (type === 'add' && !isIPWithPort(ret.id)) {
+        this.formData = {
+          ...this.formData,
+          host: ret.$host,
+        }
+      }
     })
   },
   methods: {
+    async handleWifi(row) {
+      try {
+        const host = await this.$adb.getDeviceIP(row.id)
+        const port = await this.$adb.tcpip(row.id, 5555)
+        this.formData.host = host
+        this.formData.port = port
+        console.log('host:port', `${host}:${port}`)
+
+        this.handleConnect()
+      }
+      catch (error) {
+        console.warn(error.message)
+      }
+    },
+    onPairSuccess() {
+      this.handleConnect()
+    },
     handleScreenUp(row) {
-      this.$adb.shell(row.id, 'input keyevent KEYCODE_POWER')
+      this.$adb.deviceShell(row.id, 'input keyevent KEYCODE_POWER')
     },
     handleReset() {
       this.$electron.ipcRenderer.send('restart-app')
     },
-    async handleConnect({ pairCode = '' } = {}) {
+    async handleConnect() {
       if (!this.formData.host) {
         this.$message.warning('无线调试地址不能为空')
         return false
       }
+
       this.connectLoading = true
       try {
-        await this.$adb.connect(this.formData.host, this.formData.port || 5555, pairCode)
+        await this.$adb.connect(this.formData.host, this.formData.port || 5555)
         this.$message.success('连接设备成功')
         storage.set('adbCache', this.formData)
       }
       catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-
-        if (error.message.includes('10060')) {
-          this.handlePair()
-        }
+        this.handleError(error.message)
       }
       this.connectLoading = false
     },
-    async handlePair() {
+    async handleError(message) {
       try {
-        const { value } = await this.$prompt('', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputType: 'number',
-          inputPlaceholder: '请输入配对码',
-          closeOnClickModal: false,
-        })
-
-        await this.$adb.rawShell(
-          `pair ${this.formData.host}:${this.formData.port || 5555} ${this.value}`,
+        await this.$confirm(
+          `
+        <div class="pb-4 text-sm text-red-500">错误详情：${message}</div>
+        <div>可能有以下原因：</div>
+        <div>1. IP地址或端口号错误</div>
+        <div>2. 设备未与当前电脑配对成功</div>
+        <div>3. 电脑网络和提供的设备网络IP不在同一个局域网中</div>
+        <div>4. 其他未知错误</div>
+        `,
+          '连接设备失败',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '配对',
+            cancelButtonText: '取消',
+            type: 'warning',
+          },
         )
-
-        this.handleConnect({ pairCode: value })
+        this.$refs.pairDialog.show({ params: { ...this.formData } })
       }
       catch (error) {
         console.warn(error.message)
@@ -177,7 +210,9 @@ export default {
     async handleMirror(row) {
       row.$loading = true
       try {
-        await this.$scrcpy.shell(`--serial=${row.id} ${this.addScrcpyConfigs()}`)
+        await this.$scrcpy.shell(
+          `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.addScrcpyConfigs()}`,
+        )
       }
       catch (error) {
         this.$message.warning(error.message)

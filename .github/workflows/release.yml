@@ -17,4 +17,4 @@ jobs:
         with:
           release-type: node
           package-name: release-please-action
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}

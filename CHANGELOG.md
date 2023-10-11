@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/viarotel-org/escrcpy/compare/v1.3.3...v1.4.0) (2023-10-11)
+
+
+### Features
+
+* 🚀 添加在线检查更新功能 ([8de04e0](https://github.com/viarotel-org/escrcpy/commit/8de04e0d6a178f159f2dbdeba888df54386dc64e))
+
+
+### Bug Fixes
+
+* 🔨 修复无线配对时表单验证错误 ([7cd9ea3](https://github.com/viarotel-org/escrcpy/commit/7cd9ea3ae5b6b264eb223d969770bae742aab4b1))
+* 🔨 修复直接进行无线连接时没有处理配对设备的问题 ([4263d07](https://github.com/viarotel-org/escrcpy/commit/4263d07076647f8ce3a4d21db72deac73d3825a7))
+
 ## [1.3.3](https://github.com/viarotel-org/escrcpy/compare/v1.3.2...v1.3.3) (2023-09-26)
 
 

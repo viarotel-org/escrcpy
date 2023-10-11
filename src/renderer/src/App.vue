@@ -17,11 +17,13 @@
 <script>
 import Devices from './components/Devices/index.vue'
 import Advanced from './components/Advanced/index.vue'
+import AboutUs from './components/AboutUs/index.vue'
 
 export default {
   components: {
     Devices,
     Advanced,
+    AboutUs,
   },
   data() {
     return {
@@ -33,6 +35,10 @@ export default {
         {
           label: '高级配置',
           prop: 'Advanced',
+        },
+        {
+          label: '关于我们',
+          prop: 'AboutUs',
         },
       ],
       activeTab: 'Devices',

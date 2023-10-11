@@ -1,7 +1,10 @@
 import { app, ipcMain } from 'electron'
-import './updater/index.js'
+import updaterEvents from './updater/index.js'
 
-ipcMain.on('restart-app', () => {
-  app.relaunch()
-  app.quit()
-})
+export default (mainWindow) => {
+  ipcMain.on('restart-app', () => {
+    app.relaunch()
+    app.quit()
+  })
+  updaterEvents(mainWindow)
+}

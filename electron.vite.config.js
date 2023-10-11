@@ -7,6 +7,11 @@ import postcssConfig from '@viarotel-org/postcss-config'
 
 export default defineConfig({
   main: {
+    resolve: {
+      alias: {
+        '@root': resolve('./'),
+      },
+    },
     plugins: [externalizeDepsPlugin()],
   },
   preload: {
@@ -20,6 +25,7 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
+        '@root': resolve('./'),
         '@renderer': resolve('src/renderer/src'),
       },
     },

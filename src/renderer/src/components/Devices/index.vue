@@ -65,19 +65,30 @@
         </el-table-column>
         <el-table-column label="操作" width="350" align="left">
           <template #default="{ row }">
-            <el-button type="primary" :loading="row.$loading" @click="handleMirror(row)">
+            <el-button
+              type="primary"
+              :loading="row.$loading"
+              :disabled="row.$unauthorized"
+              @click="handleMirror(row)"
+            >
               {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
-            <el-button v-if="!row.$wireless" type="primary" @click="handleWifi(row)">
+            <el-button
+              v-if="!row.$wireless"
+              type="primary"
+              :disabled="row.$unauthorized"
+              @click="handleWifi(row)"
+            >
               无线模式
             </el-button>
-            <el-button type="default" @click="handleScreenUp(row)">
+            <el-button type="default" :disabled="row.$unauthorized" @click="handleScreenUp(row)">
               点亮屏幕
             </el-button>
             <el-button
               v-if="row.$wireless"
               type="danger"
               :loading="row.$stopLoading"
+              :disabled="row.$unauthorized"
               @click="handleStop(row)"
             >
               {{ row.$stopLoading ? '断开中' : '断开连接' }}
@@ -182,7 +193,7 @@ export default {
           '连接设备失败',
           {
             dangerouslyUseHTMLString: true,
-            confirmButtonText: '配对',
+            confirmButtonText: '无线配对',
             cancelButtonText: '取消',
             type: 'warning',
           },
@@ -215,7 +226,9 @@ export default {
         )
       }
       catch (error) {
-        this.$message.warning(error.message)
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
       }
       row.$loading = false
     },
@@ -257,8 +270,9 @@ export default {
         console.log('getDeviceData.data', this.deviceList)
       }
       catch (error) {
-        if (error.message)
+        if (error.message) {
           this.$message.warning(error.message)
+        }
         this.deviceList = []
       }
       this.loading = false

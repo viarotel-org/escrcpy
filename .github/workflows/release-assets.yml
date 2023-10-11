@@ -53,5 +53,4 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}

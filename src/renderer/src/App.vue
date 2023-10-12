@@ -11,10 +11,6 @@
         <component
           :is="item.prop"
           :ref="item.prop"
-          :scrcpy-cache="scrcpyCache"
-          :get-scrcpy-cache="getScrcpyCache"
-          :set-scrcpy-cache="setScrcpyCache"
-          :get-scrcpy-map="getScrcpyMap"
         />
       </el-tab-pane>
     </el-tabs>

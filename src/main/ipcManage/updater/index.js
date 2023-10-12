@@ -1,8 +1,7 @@
+import path from 'node:path'
 import { app, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
-
-const path = require('node:path')
 
 export default (mainWindow) => {
   // dev-start, 这里是为了在本地做应用升级测试使用，正式环境请务必删除

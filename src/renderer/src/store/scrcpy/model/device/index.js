@@ -5,14 +5,16 @@ export default () => {
       type: 'switch',
       field: '--show-touches',
       value: false,
-      placeholder: '开启后将打开开发者选项中的显示点按触摸反馈(仅在物理设备上展示)',
+      placeholder: '开启后将打开开发者选项中的显示点按触摸反馈',
+      tips: '仅在物理设备上展示',
     },
     {
       label: '保持清醒',
       type: 'switch',
       field: '--stay-awake',
       value: false,
-      placeholder: '开启以防止设备进入睡眠状态(仅有线方式连接时有效)',
+      placeholder: '开启以防止设备进入睡眠状态',
+      tips: '仅有线方式连接时有效',
     },
     {
       label: '关闭屏幕',

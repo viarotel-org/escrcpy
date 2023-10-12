@@ -1,10 +1,13 @@
 import { join } from 'node:path'
+
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+
 import iconPath from '../../resources/icons/icon.png?asset'
 import winIconPath from '../../resources/icons/icon.ico?asset'
 import macIconPath from '../../resources/icons/icon.icns?asset'
-import ipcEvent from './ipc/index.js'
+
+import ipcManage from './ipcManage/index.js'
 
 function createWindow() {
   let icon = iconPath
@@ -46,7 +49,7 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  ipcEvent(mainWindow)
+  ipcManage(mainWindow)
 }
 
 // This method will be called when Electron has finished

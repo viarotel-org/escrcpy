@@ -1,8 +1,9 @@
+import util from 'node:util'
+import child_process from 'node:child_process'
 import { Adb } from '@devicefarmer/adbkit'
 import adbPath from '@resources/core/adb.exe?asset&asarUnpack'
 
-const util = require('node:util')
-const exec = util.promisify(require('node:child_process').exec)
+const exec = util.promisify(child_process.exec)
 
 let client = null
 

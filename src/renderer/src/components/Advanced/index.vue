@@ -14,21 +14,42 @@
         </div>
       </template>
       <div class="">
-        <el-form ref="elForm" :model="scrcpyForm" label-width="120px" class="pr-8 pt-4">
+        <el-form ref="elForm" :model="scrcpyForm" label-width="125px" class="pr-8 pt-4">
           <el-row :gutter="20">
             <el-col
-              v-for="(item_1, index_1) of getScrcpyConfig(item.type)"
+              v-for="(item_1, index_1) of getSubModel(item.type)"
               :key="index_1"
               :span="12"
               :offset="0"
             >
               <el-form-item :label="item_1.label" :prop="item_1.field">
+                <template #label>
+                  <div class="flex items-center">
+                    <el-tooltip
+                      v-if="item_1.tips"
+                      class=""
+                      effect="dark"
+                      :content="item_1.tips"
+                      placement="bottom"
+                    >
+                      <el-link
+                        class="mr-1 !text-base"
+                        icon="InfoFilled"
+                        type="warning"
+                        :underline="false"
+                      >
+                      </el-link>
+                    </el-tooltip>
+                    <span class="">{{ item_1.label }}</span>
+                  </div>
+                </template>
                 <el-input
                   v-if="item_1.type === 'input'"
                   v-bind="item_1.props || {}"
                   v-model="scrcpyForm[item_1.field]"
                   class="!w-full"
                   :placeholder="item_1.placeholder"
+                  clearable
                 ></el-input>
                 <el-input
                   v-if="item_1.type === 'input.number'"
@@ -36,6 +57,17 @@
                   v-model.number="scrcpyForm[item_1.field]"
                   class="!w-full"
                   :placeholder="item_1.placeholder"
+                  clearable
+                ></el-input>
+                <el-input
+                  v-if="item_1.type === 'input.directory'"
+                  v-bind="item_1.props || {}"
+                  :value="scrcpyForm[item_1.field]"
+                  readonly
+                  class="!w-full"
+                  clearable
+                  :placeholder="item_1.placeholder"
+                  @click="handleDirectory(item_1)"
                 ></el-input>
                 <el-switch
                   v-if="item_1.type === 'switch'"
@@ -43,6 +75,7 @@
                   v-model="scrcpyForm[item_1.field]"
                   class="!w-full"
                   :title="item_1.placeholder"
+                  clearable
                 ></el-switch>
                 <el-select
                   v-if="item_1.type === 'select'"
@@ -50,6 +83,7 @@
                   v-model="scrcpyForm[item_1.field]"
                   :placeholder="item_1.placeholder"
                   class="!w-full"
+                  clearable
                 >
                   <el-option
                     v-for="(item_2, index_2) in item_1.options"
@@ -69,14 +103,12 @@
 </template>
 
 <script>
-import storage from '@renderer/utils/storages'
-import * as scrcpyConfigs from './configs/index.js'
+import { debounce } from 'lodash-es'
+import { useScrcpyStore } from '@renderer/store/index.js'
 
 export default {
-  emits: ['change'],
   data() {
-    const scrcpyCache = storage.get('scrcpyCache') || {}
-    // console.log('scrcpyCache', scrcpyCache)
+    const scrcpyStore = useScrcpyStore()
 
     return {
       scrcpyModel: [
@@ -89,53 +121,57 @@ export default {
           type: 'device',
         },
         {
-          label: '音频控制',
-          type: 'audio',
-        },
-        {
           label: '窗口控制',
           type: 'window',
         },
+        {
+          label: '录制音视频',
+          type: 'record',
+        },
+        {
+          label: '音频控制',
+          type: 'audio',
+        },
       ],
-      scrcpyForm: { ...this.getDefaultValues(), ...scrcpyCache },
+      scrcpyForm: { ...scrcpyStore.config },
     }
   },
   watch: {
     scrcpyForm: {
       handler() {
-        storage.set('scrcpyCache', this.scrcpyForm)
-        this.$message.success('保存配置成功，将在下一次控制设备时生效')
+        this.handleSave()
       },
       deep: true,
     },
   },
+  created() {
+    this.handleSave = debounce(this.handleSave, 1000, { leading: false, trailing: true })
+  },
   methods: {
-    getScrcpyConfig(type) {
-      const value = scrcpyConfigs[type]()
-      return value
+    async handleDirectory({ field }) {
+      const res = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
+        properties: ['openDirectory'],
+      })
+
+      if (!res) {
+        return false
+      }
+
+      const value = this.$path.normalize(res[0])
+
+      this.scrcpyForm[field] = value
     },
-    getDefaultValues(type) {
-      const model = []
-      if (type) {
-        model.push(...this.getScrcpyConfig(type))
-      }
-      else {
-        // console.log('scrcpyConfigs', scrcpyConfigs)
-        const values = Object.values(scrcpyConfigs)
-        model.push(...values.flatMap(handler => handler()))
-      }
-
-      const value = model.reduce((obj, item) => {
-        const { field, value } = item
-        obj[field] = value
-        return obj
-      }, {})
-
+    handleSave() {
+      this.$store.scrcpy.updateConfig(this.scrcpyForm)
+      this.$message.success('保存配置成功，将在下一次控制设备时生效')
+    },
+    getSubModel(type) {
+      const value = this.$store.scrcpy.getModel(type)
       return value
     },
     handleReset(type) {
-      this.scrcpyForm = { ...this.scrcpyForm, ...this.getDefaultValues(type) }
-      storage.set('scrcpyCache', this.scrcpyForm)
+      this.scrcpyForm = { ...this.scrcpyForm, ...this.$store.scrcpy.getDefaultConfig(type) }
+      this.$store.scrcpy.updateConfig(this.scrcpyForm)
     },
   },
 }

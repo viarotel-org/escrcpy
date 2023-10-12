@@ -1,6 +1,6 @@
 <template>
   <div class="absolute inset-0 px-4 pb-4 h-full overflow-hidden">
-    <el-tabs v-model="activeTab" class="el-tabs-flex" @tab-click="handleClick">
+    <el-tabs v-model="activeTab" class="el-tabs-flex" @tab-change="onTabChange">
       <el-tab-pane
         v-for="(item, index) of tabsModel"
         :key="index"
@@ -8,7 +8,14 @@
         :name="item.prop"
         lazy
       >
-        <component :is="item.prop" ref="component" />
+        <component
+          :is="item.prop"
+          :ref="item.prop"
+          :scrcpy-cache="scrcpyCache"
+          :get-scrcpy-cache="getScrcpyCache"
+          :set-scrcpy-cache="setScrcpyCache"
+          :get-scrcpy-map="getScrcpyMap"
+        />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -44,8 +51,12 @@ export default {
       activeTab: 'Devices',
     }
   },
-  mounted() {},
-  methods: {},
+  created() {
+    this.$store.scrcpy.init()
+  },
+  methods: {
+    onTabChange(prop) {},
+  },
 }
 </script>
 

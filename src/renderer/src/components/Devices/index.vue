@@ -41,8 +41,8 @@
         <template #empty>
           <el-empty description="设备列表为空" />
         </template>
-        <el-table-column prop="id" label="设备 ID" show-overflow-tooltip />
-        <el-table-column prop="name" label="设备名称" show-overflow-tooltip>
+        <el-table-column prop="id" label="设备 ID" show-overflow-tooltip align="left" />
+        <el-table-column prop="name" label="设备名称" show-overflow-tooltip align="left">
           <template #default="{ row }">
             <div class="flex items-center">
               <el-tooltip
@@ -63,7 +63,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="350" align="left">
+        <el-table-column label="操作" width="450" align="left">
           <template #default="{ row }">
             <el-button
               type="primary"
@@ -72,6 +72,14 @@
               @click="handleMirror(row)"
             >
               {{ row.$loading ? '镜像中' : '开始镜像' }}
+            </el-button>
+            <el-button
+              type="primary"
+              :loading="row.$recordLoading"
+              :disabled="row.$unauthorized"
+              @click="handleRecord(row)"
+            >
+              {{ row.$recordLoading ? '录制中' : '开始录制' }}
             </el-button>
             <el-button
               v-if="!row.$wireless"
@@ -104,6 +112,7 @@
 <script>
 import { isIPWithPort, sleep } from '@renderer/utils/index.js'
 import storage from '@renderer/utils/storages'
+import dayjs from 'dayjs'
 import PairDialog from './PairDialog/index.vue'
 
 export default {
@@ -123,8 +132,17 @@ export default {
       },
     }
   },
+  computed: {
+    scrcpyConfig() {
+      return this.$store.scrcpy.config
+    },
+    stringScrcpyConfig() {
+      return this.$store.scrcpy.stringConfig
+    },
+  },
   created() {
     this.getDeviceData()
+
     this.$adb.watch(async (type, ret) => {
       console.log('adb.watch.ret', ret)
 
@@ -139,6 +157,58 @@ export default {
     })
   },
   methods: {
+    getRecordPath(row) {
+      const defaultPath = this.$path.resolve('../')
+      // console.log('defaultPath', defaultPath)
+      const basePath = this.scrcpyConfig['--record'] || defaultPath
+      const recordFormat = this.scrcpyConfig['--record-format'] || 'mp4'
+      const fileName = `${row.name || row.id}-${dayjs().format(
+        'YYYY-MM-DD-HH-mm-ss',
+      )}.${recordFormat}`
+      const joinValue = this.$path.join(basePath, fileName)
+      const value = this.$path.normalize(joinValue)
+      return value
+    },
+    async handleRecord(row) {
+      row.$recordLoading = true
+      const recordPath = this.getRecordPath(row)
+      try {
+        const command = `--serial=${row.id} --window-title=${row.name}-${row.id} --record=${recordPath} ${this.stringScrcpyConfig}`
+
+        console.log('handleRecord.command', command)
+
+        await this.$scrcpy.shell(command)
+
+        await this.$confirm('是否前往录制位置进行查看？', '录制成功', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          closeOnClickModal: false,
+          type: 'success',
+        })
+
+        this.$electron.ipcRenderer.invoke('show-item-in-folder', recordPath)
+      }
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
+      row.$recordLoading = false
+    },
+    async handleMirror(row) {
+      row.$loading = true
+      try {
+        await this.$scrcpy.shell(
+          `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.stringScrcpyConfig}`,
+        )
+      }
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
+      row.$loading = false
+    },
     async handleWifi(row) {
       try {
         const host = await this.$adb.getDeviceIP(row.id)
@@ -193,6 +263,7 @@ export default {
           '连接设备失败',
           {
             dangerouslyUseHTMLString: true,
+            closeOnClickModal: false,
             confirmButtonText: '无线配对',
             cancelButtonText: '取消',
             type: 'warning',
@@ -218,41 +289,7 @@ export default {
       }
       row.$stopLoading = false
     },
-    async handleMirror(row) {
-      row.$loading = true
-      try {
-        await this.$scrcpy.shell(
-          `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.addScrcpyConfigs()}`,
-        )
-      }
-      catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-      }
-      row.$loading = false
-    },
-    addScrcpyConfigs() {
-      const configs = storage.get('scrcpyCache') || {}
-      const value = Object.entries(configs)
-        .reduce((arr, [key, value]) => {
-          if (!value) {
-            return arr
-          }
-          if (typeof value === 'boolean') {
-            arr.push(key)
-          }
-          else {
-            arr.push(`${key}=${value}`)
-          }
-          return arr
-        }, [])
-        .join(' ')
 
-      console.log('addScrcpyConfigs.value', value)
-
-      return value
-    },
     async getDeviceData() {
       this.loading = true
       await sleep()
@@ -262,6 +299,7 @@ export default {
           ...item,
           name: item.model ? item.model.split(':')[1] : '未授权设备',
           $loading: false,
+          $recordLoading: false,
           $stopLoading: false,
           $unauthorized: item.type === 'unauthorized',
           $wireless: isIPWithPort(item.id),

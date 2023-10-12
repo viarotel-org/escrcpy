@@ -8,7 +8,7 @@
       <a class="hover:underline text-primary-500" :href="escrcpyURL" target="_blank">Scrcpy</a>
       显示和控制您的 Android 设备，由 Electron 驱动
     </div>
-    <div class="pt-16 pb-4">
+    <div class="pt-12 pb-4">
       <el-button :loading="loading" type="primary" size="large" @click="handleUpdate">
         {{ loading && percent ? `正在更新中...（${percent.toFixed(1)}%）` : '版本检测更新' }}
       </el-button>
@@ -41,6 +41,10 @@ export default {
     this.onUpdateError()
   },
   methods: {
+    handleUpdate() {
+      this.loading = true
+      this.$electron.ipcRenderer.send('check-for-update')
+    },
     onUpdateNotAvailable() {
       this.$electron.ipcRenderer.on('update-not-available', () => {
         this.loading = false
@@ -68,10 +72,6 @@ export default {
           console.warn(error.message)
         }
       })
-    },
-    handleUpdate() {
-      this.loading = true
-      this.$electron.ipcRenderer.send('check-for-update')
     },
     onDownloadProgress() {
       this.$electron.ipcRenderer.on('download-progress', async (event, ret) => {

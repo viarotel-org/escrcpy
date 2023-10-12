@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/viarotel-org/escrcpy/compare/v1.5.0...v1.5.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* 🐛 去除页面组件冗余参数 ([8e5df15](https://github.com/viarotel-org/escrcpy/commit/8e5df15f6aad94e0eb783961605dc8032c253a7a))
+
 ## [1.5.0](https://github.com/viarotel-org/escrcpy/compare/v1.4.1...v1.5.0) (2023-10-12)
 
 

@@ -37,7 +37,7 @@ export default {
           prop: 'Advanced',
         },
         {
-          label: '关于我们',
+          label: '关于',
           prop: 'AboutUs',
         },
       ],

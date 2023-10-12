@@ -41,7 +41,8 @@ export default (mainWindow) => {
   autoUpdater.autoDownload = false
   // 检测下载错误
   autoUpdater.on('error', (error) => {
-    console.error('update-error', error)
+    console.error('update-error')
+    mainWindow.webContents.send('update-error', error)
   })
 
   // 检测是否需要更新

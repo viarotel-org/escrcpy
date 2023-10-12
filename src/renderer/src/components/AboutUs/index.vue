@@ -5,11 +5,7 @@
     </div>
     <div class="pt-4 text-xl text-center italic text-gray-700">
       📱 使用图形化的
-      <a
-        class="hover:underline text-primary-500"
-        href="https://github.com/viarotel-org/escrcpy"
-        target="_blank"
-      >Scrcpy</a>
+      <a class="hover:underline text-primary-500" :href="escrcpyURL" target="_blank">Scrcpy</a>
       显示和控制您的 Android 设备，由 Electron 驱动
     </div>
     <div class="pt-16 pb-4">
@@ -34,21 +30,45 @@ export default {
       loading: false,
       version,
       percent: 0,
+      escrcpyURL: 'https://github.com/viarotel-org/escrcpy',
     }
   },
   created() {
+    this.onUpdateNotAvailable()
     this.onUpdateAvailable()
     this.onDownloadProgress()
     this.onUpdateDownloaded()
-    this.$electron.ipcRenderer.on('update-not-available', () => {
-      this.loading = false
-      this.$message.success('已经是最新版本')
-    })
-    this.$electron.ipcRenderer.on('error', () => {
-      this.loading = false
-    })
+    this.onUpdateError()
   },
   methods: {
+    onUpdateNotAvailable() {
+      this.$electron.ipcRenderer.on('update-not-available', () => {
+        this.loading = false
+        this.$message.success('已经是最新版本')
+      })
+    },
+    onUpdateError() {
+      this.$electron.ipcRenderer.on('update-error', async (event, ret) => {
+        this.loading = false
+        console.log('ret', ret)
+        try {
+          await this.$confirm(
+            '你可能需要科学上网，是否前往发布页面手动下载更新？',
+            '检查更新失败',
+            {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              closeOnClickModal: false,
+              type: 'error',
+            },
+          )
+          window.open(`${this.escrcpyURL}/releases`)
+        }
+        catch (error) {
+          console.warn(error.message)
+        }
+      })
+    },
     handleUpdate() {
       this.loading = true
       this.$electron.ipcRenderer.send('check-for-update')

@@ -29,14 +29,20 @@ jobs:
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
         run: npm run build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: build-mac
         if: matrix.os == 'macos-latest'
         run: npm run build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: build-win
         if: matrix.os == 'windows-latest'
         run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: release
         uses: softprops/action-gh-release@v1
@@ -54,4 +60,4 @@ jobs:
             dist/*.yml
             dist/*.blockmap
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/viarotel-org/escrcpy/compare/v1.4.1...v1.5.0) (2023-10-12)
+
+
+### Features
+
+* 🚀 添加音视频录制功能以及更多的高级选项 ([b6986d1](https://github.com/viarotel-org/escrcpy/commit/b6986d14de2accee314dac1986f467fbd2893877))
+
 ## [1.4.1](https://github.com/viarotel-org/escrcpy/compare/v1.4.0...v1.4.1) (2023-10-12)
 
 

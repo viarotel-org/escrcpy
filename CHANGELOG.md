@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/viarotel-org/escrcpy/compare/v1.4.0...v1.4.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* 🐛 修复检查更新失败没有提示的问题 ([6f733ea](https://github.com/viarotel-org/escrcpy/commit/6f733ea76d6ad805bc4c11f480f3bd07afc5615a))
+
 ## [1.4.0](https://github.com/viarotel-org/escrcpy/compare/v1.3.3...v1.4.0) (2023-10-11)
 
 

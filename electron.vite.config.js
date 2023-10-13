@@ -12,7 +12,7 @@ export default defineConfig({
         '@root': resolve('./'),
       },
     },
-    plugins: [externalizeDepsPlugin()],
+    plugins: [externalizeDepsPlugin({ exclude: [] })],
   },
   preload: {
     resolve: {
@@ -20,7 +20,7 @@ export default defineConfig({
         '@resources': resolve('resources'),
       },
     },
-    plugins: [externalizeDepsPlugin()],
+    plugins: [externalizeDepsPlugin({ exclude: [] })],
   },
   renderer: {
     resolve: {

@@ -155,6 +155,7 @@ export default {
     async handleDirectory({ field }) {
       const res = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
         properties: ['openDirectory'],
+        defaultPath: this.scrcpyForm[field],
       })
 
       if (!res) {

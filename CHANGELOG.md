@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/viarotel-org/escrcpy/compare/v1.6.1...v1.6.2) (2023-10-13)
+
+
+### Bug Fixes
+
+* 🐛 修复USB未授权设备导致无线连接地址变为假值的问题 ([9c25325](https://github.com/viarotel-org/escrcpy/commit/9c25325d672a3447df21abe9bc01a7c22b440ec9))
+
 ## [1.6.1](https://github.com/viarotel-org/escrcpy/compare/v1.6.0...v1.6.1) (2023-10-13)
 
 

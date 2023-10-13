@@ -41,12 +41,14 @@
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
       <el-table
+        ref="elTable"
         v-loading="loading"
         :element-loading-text="loadingText"
         :data="deviceList"
         style="width: 100%"
         border
         height="100%"
+        row-key="id"
       >
         <template #empty>
           <el-empty description="设备列表为空" />
@@ -98,16 +100,6 @@
             </el-button>
 
             <el-button
-              type="primary"
-              text
-              icon="SwitchButton"
-              :disabled="row.$unauthorized"
-              @click="handleScreenUp(row)"
-            >
-              点亮屏幕
-            </el-button>
-
-            <el-button
               v-if="!row.$wireless"
               type="primary"
               text
@@ -131,6 +123,16 @@
             </el-button>
           </template>
         </el-table-column>
+        <el-table-column type="expand">
+          <template #header>
+            <el-icon class="" title="设备交互">
+              <Operation class="" />
+            </el-icon>
+          </template>
+          <template #default="{ row }">
+            <ControlBar :device="row" />
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <PairDialog ref="pairDialog" @success="onPairSuccess" />
@@ -142,10 +144,12 @@ import { isIPWithPort, sleep } from '@renderer/utils/index.js'
 import storage from '@renderer/utils/storages'
 import dayjs from 'dayjs'
 import PairDialog from './PairDialog/index.vue'
+import ControlBar from './ControlBar/index.vue'
 
 export default {
   components: {
     PairDialog,
+    ControlBar,
   },
   data() {
     const adbCache = storage.get('adbCache') || {}
@@ -185,12 +189,13 @@ export default {
     })
   },
   methods: {
+    toggleRowExpansion(...params) {
+      this.$refs.elTable.toggleRowExpansion(...params)
+    },
     getRecordPath(row) {
-      const defaultPath = this.$path.resolve('../')
-      // console.log('defaultPath', defaultPath)
-      const basePath = this.scrcpyConfig['--record'] || defaultPath
-      const recordFormat = this.scrcpyConfig['--record-format'] || 'mp4'
-      const fileName = `${row.name || row.id}-${dayjs().format(
+      const basePath = this.scrcpyConfig['--record']
+      const recordFormat = this.scrcpyConfig['--record-format']
+      const fileName = `${row.name || row.id}-recording-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',
       )}.${recordFormat}`
       const joinValue = this.$path.join(basePath, fileName)
@@ -199,9 +204,12 @@ export default {
     },
     async handleRecord(row) {
       row.$recordLoading = true
-      const recordPath = this.getRecordPath(row)
+
+      this.toggleRowExpansion(row, true)
+
+      const savePath = this.getRecordPath(row)
       try {
-        const command = `--serial=${row.id} --window-title=${row.name}-${row.id}-🎥录制中... --record=${recordPath} ${this.stringScrcpyConfig}`
+        const command = `--serial=${row.id} --window-title=${row.name}-${row.id}-🎥录制中... --record=${savePath} ${this.stringScrcpyConfig}`
 
         console.log('handleRecord.command', command)
 
@@ -214,7 +222,7 @@ export default {
           type: 'success',
         })
 
-        this.$electron.ipcRenderer.invoke('show-item-in-folder', recordPath)
+        this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
       }
       catch (error) {
         if (error.message) {
@@ -225,6 +233,9 @@ export default {
     },
     async handleMirror(row) {
       row.$loading = true
+
+      this.toggleRowExpansion(row, true)
+
       try {
         await this.$scrcpy.shell(
           `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.stringScrcpyConfig}`,
@@ -254,9 +265,6 @@ export default {
     },
     onPairSuccess() {
       this.handleConnect()
-    },
-    handleScreenUp(row) {
-      this.$adb.deviceShell(row.id, 'input keyevent KEYCODE_POWER')
     },
     handleReset() {
       this.$electron.ipcRenderer.send('restart-app')
@@ -324,15 +332,17 @@ export default {
       await sleep()
       try {
         const data = await this.$adb.getDevices()
-        this.deviceList = (data || []).map(item => ({
-          ...item,
-          name: item.model ? item.model.split(':')[1] : '未授权设备',
-          $loading: false,
-          $recordLoading: false,
-          $stopLoading: false,
-          $unauthorized: item.type === 'unauthorized',
-          $wireless: isIPWithPort(item.id),
-        }))
+        this.deviceList
+          = data?.map(item => ({
+            ...item,
+            id: item.id,
+            name: item.model ? item.model.split(':')[1] : '未授权设备',
+            $loading: false,
+            $recordLoading: false,
+            $stopLoading: false,
+            $unauthorized: item.type === 'unauthorized',
+            $wireless: isIPWithPort(item.id),
+          })) || []
 
         console.log('getDeviceData.data', this.deviceList)
       }

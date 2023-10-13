@@ -1,10 +1,12 @@
 export default () => {
+  const $path = window.nodePath
+
   return [
     {
       label: '录制存储路径',
       type: 'input.directory',
       field: '--record',
-      value: '',
+      value: $path.resolve('../'),
       placeholder: '默认值为执行应用的同级目录',
     },
     {

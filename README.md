@@ -5,7 +5,7 @@
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">
-  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d75ea2c87c734591b2b5c337d8c8b365~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=135919&e=jpg&b=ffffff" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/570065a5683b4cf7af9cfa9743c06ab4~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1360&h=693&s=140693&e=jpg&b=ffffff" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点
@@ -37,6 +37,8 @@
 
 ### WIFI 连接
 
+> 注意：如果首次无线连接失败，你可能需要无线配对请参阅 [常见问题](#常见问题)
+>
 > 注意：需同时开启无线调试功能，并在无线调试页面中获取你的当前设备的无线地址（通常为你连接WIFI时分配的IP地址）及端口号（默认为 5555）
 
 1. 同 USB 连接中的 1-2 步骤
@@ -82,10 +84,11 @@
 1. 用户界面进行优化，制作合适的 Logo ✅
 2. 内置的软件更新功能 ✅
 3. 录制和保存音视频 ✅
-4. 添加设备交互控制栏 🚧
-5. 添加 macOS 及 linux 操作系统的支持 🚧
-6. 支持语言国际化功能 🚧
-7. 添加对游戏的增强功能 如游戏键位映射 🚧
+4. 添加设备快捷交互控制栏 ✅
+5. 支持自定义 Adb 及 Scrcpy 依赖，并支持生成精简版本和完整版本以满足不同用户需求
+6. 添加 macOS 及 linux 操作系统的支持 🚧
+7. 支持语言国际化功能 🚧
+8. 添加对游戏的增强功能，如游戏键位映射 🚧
 
 ## 常见问题
 
@@ -117,6 +120,10 @@
 ### 通过数据线连接后点击无线模式没有反应
 
 请再点一次，或点击刷新设备，一般不会超过两次，如果还不行，请提供机型和安卓版本信息到 [Issues](https://github.com/viarotel-org/escrcpy/issues)
+
+### 设备交互控制栏为什么不设计为自动跟踪吸附的悬浮菜单?
+
+采用悬浮菜单方案不可避免地会增加对 Scrcpy 的耦合性，并增加与 Scrcpy 同步更新的难度。许多类似的 ScrcpyGUI 软件在使用此方案后不得不投入大量精力，最终因难以维护而放弃开发。因此，综合考虑，我们决定采用现有的方案，并期待 Scrcpy 未来能够增加原生交互控制栏的支持。
 
 ## 获得帮助
 

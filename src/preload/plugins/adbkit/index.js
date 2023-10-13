@@ -1,5 +1,8 @@
 import util from 'node:util'
 import child_process from 'node:child_process'
+import path from 'node:path'
+import fs from 'node:fs'
+import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
 import adbPath from '@resources/core/adb.exe?asset&asarUnpack'
 
@@ -36,6 +39,38 @@ const getDeviceIP = async (id) => {
 
 const tcpip = async (id, port = 5555) => await client.getDevice(id).tcpip(port)
 
+const screencap = async (deviceId, options = {}) => {
+  let fileStream = null
+  try {
+    const device = client.getDevice(deviceId)
+    fileStream = await device.screencap()
+    console.log('fileStream', fileStream)
+  }
+  catch (error) {
+    console.warn(error?.message || error)
+    return false
+  }
+
+  if (!fileStream) {
+    return false
+  }
+
+  const fileName = `Screencap-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.png`
+  const savePath = options.savePath || path.resolve('../', fileName)
+
+  return new Promise((resolve, reject) => {
+    fileStream
+      .pipe(fs.createWriteStream(savePath))
+      .on('finish', () => {
+        resolve(true)
+      })
+      .on('error', (error) => {
+        console.warn(error?.message || error)
+        reject(false)
+      })
+  })
+}
+
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -71,8 +106,9 @@ export default () => {
     kill,
     connect,
     disconnect,
-    watch,
     getDeviceIP,
     tcpip,
+    screencap,
+    watch,
   }
 }

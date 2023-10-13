@@ -1,14 +1,39 @@
 import { defineStore } from 'pinia'
 import storage from '@renderer/utils/storages'
-import { cloneDeep } from 'lodash-es'
-import * as model from './model/index.js'
+import { pickBy } from 'lodash-es'
+import * as scrcpyModel from './model/index.js'
+
+/**
+ * 获取 Scrcpy 默认配置
+ */
+function getDefaultConfig(type) {
+  const model = []
+  if (type) {
+    const handler = scrcpyModel[type]
+    model.push(...handler())
+  }
+  else {
+    // console.log('scrcpyModel', scrcpyModel)
+    const values = Object.values(scrcpyModel)
+    model.push(...values.flatMap(handler => handler()))
+  }
+
+  const value = model.reduce((obj, item) => {
+    const { field, value } = item
+    obj[field] = value
+    return obj
+  }, {})
+
+  return value
+}
 
 export const useScrcpyStore = defineStore({
   id: 'app-scrcpy',
   state() {
     return {
-      model,
-      config: storage.get('scrcpyConfig'),
+      model: scrcpyModel,
+      defaultConfig: getDefaultConfig(),
+      config: {},
       excludeKeys: ['--record', '--record-format'],
     }
   },
@@ -44,37 +69,27 @@ export const useScrcpyStore = defineStore({
     },
   },
   actions: {
+    getDefaultConfig,
     init() {
-      this.config = this.config || this.getDefaultConfig()
+      this.config = {
+        ...this.defaultConfig,
+        ...(storage.get('scrcpyConfig') || {}),
+      }
+
       return this.config
     },
-    updateConfig(value) {
-      this.config = cloneDeep(value)
-      storage.set('scrcpyConfig', this.config)
+    updateConfig(data) {
+      const pickConfig = pickBy(data, value => !!value)
+
+      console.log('pickConfig', pickConfig)
+
+      storage.set('scrcpyConfig', pickConfig)
+
+      this.init()
     },
     getModel(key, params) {
-      const handler = this.model[key]
+      const handler = scrcpyModel[key]
       return handler(params)
-    },
-    getDefaultConfig(type) {
-      const model = []
-      if (type) {
-        const handler = this.model[type]
-        model.push(...handler())
-      }
-      else {
-        // console.log('scrcpyModel', scrcpyModel)
-        const values = Object.values(this.model)
-        model.push(...values.flatMap(handler => handler()))
-      }
-
-      const value = model.reduce((obj, item) => {
-        const { field, value } = item
-        obj[field] = value
-        return obj
-      }, {})
-
-      return value
     },
   },
 })

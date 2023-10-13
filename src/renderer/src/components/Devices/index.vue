@@ -19,13 +19,23 @@
       >
       </el-input>
 
-      <el-button type="primary" :loading="connectLoading" @click="handleConnect">
+      <el-button
+        type="primary"
+        :icon="connectLoading ? '' : 'Connection'"
+        :loading="connectLoading"
+        @click="handleConnect"
+      >
         连接设备
       </el-button>
-      <el-button type="primary" :loading="loading" @click="getDeviceData">
+      <el-button
+        type="primary"
+        :icon="loading ? '' : 'Refresh'"
+        :loading="loading"
+        @click="getDeviceData"
+      >
         刷新设备
       </el-button>
-      <el-button type="warning" @click="handleReset">
+      <el-button type="warning" icon="RefreshRight" @click="handleReset">
         重启服务
       </el-button>
     </div>
@@ -63,40 +73,58 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="450" align="left">
+        <el-table-column label="操作" width="500" align="left">
           <template #default="{ row }">
             <el-button
               type="primary"
+              text
               :loading="row.$loading"
               :disabled="row.$unauthorized"
+              :icon="row.$loading ? '' : 'Monitor'"
               @click="handleMirror(row)"
             >
               {{ row.$loading ? '镜像中' : '开始镜像' }}
             </el-button>
+
             <el-button
               type="primary"
+              text
               :loading="row.$recordLoading"
               :disabled="row.$unauthorized"
+              :icon="row.$recordLoading ? '' : 'VideoCamera'"
               @click="handleRecord(row)"
             >
               {{ row.$recordLoading ? '录制中' : '开始录制' }}
             </el-button>
+
+            <el-button
+              type="primary"
+              text
+              icon="SwitchButton"
+              :disabled="row.$unauthorized"
+              @click="handleScreenUp(row)"
+            >
+              点亮屏幕
+            </el-button>
+
             <el-button
               v-if="!row.$wireless"
               type="primary"
+              text
               :disabled="row.$unauthorized || row.$loading || row.$recordLoading"
+              :icon="row.$recordLoading ? '' : 'Switch'"
               @click="handleWifi(row)"
             >
               无线模式
             </el-button>
-            <el-button type="default" :disabled="row.$unauthorized" @click="handleScreenUp(row)">
-              点亮屏幕
-            </el-button>
+
             <el-button
               v-if="row.$wireless"
               type="danger"
+              text
               :loading="row.$stopLoading"
               :disabled="row.$unauthorized"
+              :icon="row.$stopLoading ? '' : 'CircleClose'"
               @click="handleStop(row)"
             >
               {{ row.$stopLoading ? '断开中' : '断开连接' }}
@@ -216,6 +244,7 @@ export default {
         this.formData.host = host
         this.formData.port = port
         console.log('host:port', `${host}:${port}`)
+        await sleep()
 
         this.handleConnect()
       }

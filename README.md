@@ -5,7 +5,7 @@
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">
-  <img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2ec54d3187af4921b3187cbd63338d04~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=132373&e=jpg&b=fefefe" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d75ea2c87c734591b2b5c337d8c8b365~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=135919&e=jpg&b=ffffff" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点
@@ -113,6 +113,10 @@
 ### 无线连接提示： 目标计算机积极拒绝访问
 
 第一次无线连接可能需要配对 或 插入USB 以保证与电脑建立连接即授权成功后方可使用
+
+### 通过数据线连接后点击无线模式没有反应
+
+请再点一次，或点击刷新设备，一般不会超过两次，如果还不行，请提供机型和安卓版本信息到 [Issues](https://github.com/viarotel-org/escrcpy/issues)
 
 ## 获得帮助
 

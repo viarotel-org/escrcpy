@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.3](https://github.com/viarotel-org/escrcpy/compare/v1.5.2...v1.5.3) (2023-10-13)
+
+
+### Bug Fixes
+
+* 🔧 修复点击无线模式没有反应的问题 ([9d55ef9](https://github.com/viarotel-org/escrcpy/commit/9d55ef9187c02099b9428de87f8e661b7b3d2163))
+
 ## [1.5.2](https://github.com/viarotel-org/escrcpy/compare/v1.5.1...v1.5.2) (2023-10-13)
 
 

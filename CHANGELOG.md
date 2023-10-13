@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.2](https://github.com/viarotel-org/escrcpy/compare/v1.5.1...v1.5.2) (2023-10-13)
+
+
+### Bug Fixes
+
+* 📝 修复高级配置标题语义不明的问题 ([218de1c](https://github.com/viarotel-org/escrcpy/commit/218de1c7a427f7348736d0c0207bd1c5592e8f3d))
+
+
+### Performance Improvements
+
+* 🚀 添加更多的高级配置并更新文档 ([922abd2](https://github.com/viarotel-org/escrcpy/commit/922abd2a1f051fe2ffbcc143aeb699f719a344f2))
+
 ## [1.5.1](https://github.com/viarotel-org/escrcpy/compare/v1.5.0...v1.5.1) (2023-10-12)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/viarotel-org/escrcpy/compare/v1.6.0...v1.6.1) (2023-10-13)
+
+
+### Performance Improvements
+
+* 🔨 自定义通用的文件存储路径相关逻辑完善 ([8455e86](https://github.com/viarotel-org/escrcpy/commit/8455e8692be67bc947f76ebcbd4ea4f476ccbca4))
+
 ## [1.6.0](https://github.com/viarotel-org/escrcpy/compare/v1.5.3...v1.6.0) (2023-10-13)
 
 

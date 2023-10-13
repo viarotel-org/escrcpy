@@ -117,7 +117,7 @@ export default {
     return {
       scrcpyModel: [
         {
-          label: '显示配置',
+          label: '视频控制',
           type: 'video',
         },
         {
@@ -129,7 +129,7 @@ export default {
           type: 'window',
         },
         {
-          label: '录制音视频',
+          label: '音视频录制',
           type: 'record',
         },
         {

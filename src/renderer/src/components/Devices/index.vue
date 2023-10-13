@@ -180,7 +180,7 @@ export default {
 
       this.getDeviceData()
 
-      if (type === 'add' && !isIPWithPort(ret.id)) {
+      if (type === 'add' && !isIPWithPort(ret.id) && ret.$host) {
         this.formData = {
           ...this.formData,
           host: ret.$host,

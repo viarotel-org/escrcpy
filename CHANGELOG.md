@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/viarotel-org/escrcpy/compare/v1.5.3...v1.6.0) (2023-10-13)
+
+
+### Features
+
+* 🚀 增加了对设备交互控制栏的支持 ([fd20736](https://github.com/viarotel-org/escrcpy/commit/fd207364a4cb68e352b594bf2d55905e53949a33))
+
 ## [1.5.3](https://github.com/viarotel-org/escrcpy/compare/v1.5.2...v1.5.3) (2023-10-13)
 
 

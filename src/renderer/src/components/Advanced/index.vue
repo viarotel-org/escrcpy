@@ -14,7 +14,7 @@
         </div>
       </template>
       <div class="">
-        <el-form ref="elForm" :model="scrcpyForm" label-width="125px" class="pr-8 pt-4">
+        <el-form ref="elForm" :model="scrcpyForm" label-width="135px" class="pr-8 pt-4">
           <el-row :gutter="20">
             <el-col
               v-for="(item_1, index_1) of getSubModel(item.type)"
@@ -40,7 +40,7 @@
                       >
                       </el-link>
                     </el-tooltip>
-                    <span class="">{{ item_1.label }}</span>
+                    <span class="" :title="item_1.placeholder">{{ item_1.label }}</span>
                   </div>
                 </template>
                 <el-input
@@ -48,6 +48,7 @@
                   v-bind="item_1.props || {}"
                   v-model="scrcpyForm[item_1.field]"
                   class="!w-full"
+                  :title="item_1.placeholder"
                   :placeholder="item_1.placeholder"
                   clearable
                 ></el-input>
@@ -56,6 +57,7 @@
                   v-bind="item_1.props || {}"
                   v-model.number="scrcpyForm[item_1.field]"
                   class="!w-full"
+                  :title="item_1.placeholder"
                   :placeholder="item_1.placeholder"
                   clearable
                 ></el-input>
@@ -67,6 +69,7 @@
                   class="!w-full"
                   clearable
                   :placeholder="item_1.placeholder"
+                  :title="item_1.placeholder"
                   @click="handleDirectory(item_1)"
                 ></el-input>
                 <el-switch
@@ -74,8 +77,8 @@
                   v-bind="item_1.props || {}"
                   v-model="scrcpyForm[item_1.field]"
                   class="!w-full"
-                  :title="item_1.placeholder"
                   clearable
+                  :title="item_1.placeholder"
                 ></el-switch>
                 <el-select
                   v-if="item_1.type === 'select'"
@@ -84,6 +87,7 @@
                   :placeholder="item_1.placeholder"
                   class="!w-full"
                   clearable
+                  :title="item_1.placeholder"
                 >
                   <el-option
                     v-for="(item_2, index_2) in item_1.options"

@@ -84,7 +84,7 @@
             <el-button
               v-if="!row.$wireless"
               type="primary"
-              :disabled="row.$unauthorized"
+              :disabled="row.$unauthorized || row.$loading || row.$recordLoading"
               @click="handleWifi(row)"
             >
               无线模式
@@ -173,7 +173,7 @@ export default {
       row.$recordLoading = true
       const recordPath = this.getRecordPath(row)
       try {
-        const command = `--serial=${row.id} --window-title=${row.name}-${row.id} --record=${recordPath} ${this.stringScrcpyConfig}`
+        const command = `--serial=${row.id} --window-title=${row.name}-${row.id}-🎥录制中... --record=${recordPath} ${this.stringScrcpyConfig}`
 
         console.log('handleRecord.command', command)
 

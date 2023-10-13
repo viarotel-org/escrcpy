@@ -5,7 +5,7 @@
 📱 Use Scrcpy with a graphical interface to display and control your Android device, driven by Electron
 
 <div style="display:flex;">
-  <img src="./resources//screenshot/devices-full.jpg" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2ec54d3187af4921b3187cbd63338d04~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=132373&e=jpg&b=fefefe" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点
@@ -82,8 +82,8 @@
 1. 用户界面进行优化，制作合适的 Logo ✅
 2. 内置的软件更新功能 ✅
 3. 录制和保存音视频 ✅
-4. 添加 macOS 及 linux 操作系统的支持 🚧
-5. 添加外部控制栏 🚧
+4. 添加设备交互控制栏 🚧
+5. 添加 macOS 及 linux 操作系统的支持 🚧
 6. 支持语言国际化功能 🚧
 7. 添加对游戏的增强功能 如游戏键位映射 🚧
 

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.6.2](https://github.com/viarotel-org/escrcpy/compare/v1.6.1...v1.6.2) (2023-10-13)
+
+
+### Bug Fixes
+
+* 🐛 修复USB未授权设备导致无线连接地址变为假值的问题 ([9c25325](https://github.com/viarotel-org/escrcpy/commit/9c25325d672a3447df21abe9bc01a7c22b440ec9))
+
+## [1.6.1](https://github.com/viarotel-org/escrcpy/compare/v1.6.0...v1.6.1) (2023-10-13)
+
+
+### Performance Improvements
+
+* 🔨 自定义通用的文件存储路径相关逻辑完善 ([8455e86](https://github.com/viarotel-org/escrcpy/commit/8455e8692be67bc947f76ebcbd4ea4f476ccbca4))
+
+## [1.6.0](https://github.com/viarotel-org/escrcpy/compare/v1.5.3...v1.6.0) (2023-10-13)
+
+
+### Features
+
+* 🚀 增加了对设备交互控制栏的支持 ([fd20736](https://github.com/viarotel-org/escrcpy/commit/fd207364a4cb68e352b594bf2d55905e53949a33))
+
 ## [1.5.3](https://github.com/viarotel-org/escrcpy/compare/v1.5.2...v1.5.3) (2023-10-13)
 
 

@@ -85,7 +85,7 @@
               :icon="row.$loading ? '' : 'Monitor'"
               @click="handleMirror(row)"
             >
-              {{ row.$loading ? '镜像中' : '开始镜像' }}
+              {{ row.$loading ? '正在镜像' : '开始镜像' }}
             </el-button>
 
             <el-button
@@ -96,7 +96,7 @@
               :icon="row.$recordLoading ? '' : 'VideoCamera'"
               @click="handleRecord(row)"
             >
-              {{ row.$recordLoading ? '录制中' : '开始录制' }}
+              {{ row.$recordLoading ? '正在录制' : '开始录制' }}
             </el-button>
 
             <el-button
@@ -119,7 +119,7 @@
               :icon="row.$stopLoading ? '' : 'CircleClose'"
               @click="handleStop(row)"
             >
-              {{ row.$stopLoading ? '断开中' : '断开连接' }}
+              {{ row.$stopLoading ? '正在断开' : '断开连接' }}
             </el-button>
           </template>
         </el-table-column>

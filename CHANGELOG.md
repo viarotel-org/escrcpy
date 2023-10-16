@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.5](https://github.com/viarotel-org/escrcpy/compare/v1.6.4...v1.6.5) (2023-10-16)
+
+
+### Bug Fixes
+
+* 🐛 修复 App NextTick 错误 ([79d85eb](https://github.com/viarotel-org/escrcpy/commit/79d85ebeee8f7d93913f3f3f9aeeeb7d02fda292))
+
 ## [1.6.4](https://github.com/viarotel-org/escrcpy/compare/v1.6.3...v1.6.4) (2023-10-16)
 
 

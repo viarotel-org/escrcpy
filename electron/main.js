@@ -2,11 +2,13 @@ import path from 'node:path'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
-import logoPath from '@resources/extra/icons/logo.png?path'
-import icoLogoPath from '@resources/extra/icons/logo.ico?path'
-import icnsLogoPath from '@resources/extra/icons/logo.icns?path'
+import logoPath from '@resources/build/logo.png?path'
+import icoLogoPath from '@resources/build/logo.ico?path'
+import icnsLogoPath from '@resources/build/logo.icns?path'
 
 import events from './events/index.js'
+
+console.log('logoPath', logoPath)
 
 // The built directory structure
 //

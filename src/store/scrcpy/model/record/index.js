@@ -3,7 +3,7 @@ export default () => {
 
   return [
     {
-      label: '文件存储地址',
+      label: '文件保存路径',
       type: 'input.directory',
       field: '--record',
       value: $path.resolve('../'),

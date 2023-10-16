@@ -6,7 +6,7 @@ import useRenderer from 'vite-plugin-electron-renderer'
 import useVue from '@vitejs/plugin-vue'
 import useEslint from 'vite-plugin-eslint'
 import useUnoCSS from 'unocss/vite'
-import usePath from './binary.js'
+import usePath from '@viarotel-org/vite-plugin-path'
 
 const merge = config =>
   mergeConfig(

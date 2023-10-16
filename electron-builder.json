@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "org.viarotel.escrcpy",
   "asar": true,
-  "productName": "escrcpy",
+  "productName": "Escrcpy",
   "directories": {
     "output": "dist-release/${version}",
     "buildResources": "electron/resources/build"
@@ -16,10 +16,20 @@
     "updaterCacheDirName": "escrcpy-updater"
   },
   "mac": {
+    "icon": "logo.icns",
     "target": ["dmg"],
-    "artifactName": "${productName}-${version}-mac-installer.${ext}"
+    "artifactName": "${productName}-${version}-mac-installer.${ext}",
+    "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
+    "extendInfo": {
+      "NSCameraUsageDescription": "Application requests access to the device's camera.",
+      "NSMicrophoneUsageDescription": "Application requests access to the device's microphone.",
+      "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
+      "NSDownloadsFolderUsageDescription": "Application requests access to the user's Downloads folder."
+    },
+    "notarize": false
   },
   "win": {
+    "icon": "logo.ico",
     "target": [
       {
         "target": "nsis",
@@ -45,7 +55,9 @@
     "requestExecutionLevel": "user"
   },
   "linux": {
+    "icon": "logo.png",
     "target": ["AppImage"],
     "artifactName": "${productName}-${version}-linux.${ext}"
-  }
+  },
+  "npmRebuild": false
 }

@@ -9,8 +9,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && electron-builder",
+    "build:win": "vite build && electron-builder --win",
+    "build:mac": "vite build && electron-builder --mac",
+    "build:linux": "vite build && electron-builder --linux",
     "preview": "vite preview",
-    "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix"
+    "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "vue": "^3.3.4"
@@ -23,6 +27,7 @@
     "@viarotel-org/eslint-config": "^0.7.0",
     "@viarotel-org/postcss-config": "^0.7.0",
     "@viarotel-org/unocss-config": "^0.7.4",
+    "@viarotel-org/vite-plugin-path": "^0.8.1",
     "@vitejs/plugin-vue": "^4.3.4",
     "dayjs": "^1.11.10",
     "electron": "^26.1.0",

@@ -98,7 +98,7 @@ const watch = async (callback) => {
 
 export default () => {
   client = Adb.createClient({ bin: adbPath })
-  console.log('client', client)
+  // console.log('client', client)
 
   return {
     shell,

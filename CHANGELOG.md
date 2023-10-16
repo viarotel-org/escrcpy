@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/viarotel-org/escrcpy/compare/v1.6.2...v1.6.3) (2023-10-16)
+
+
+### Bug Fixes
+
+* 🐛 修复打包后图标丢失的问题 ([58a66f1](https://github.com/viarotel-org/escrcpy/commit/58a66f1b8576bbaf1fc53649ccb786d4b62137d9))
+
 ## [1.6.2](https://github.com/viarotel-org/escrcpy/compare/v1.6.1...v1.6.2) (2023-10-13)
 
 

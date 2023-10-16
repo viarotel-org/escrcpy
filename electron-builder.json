@@ -1,0 +1,63 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "org.viarotel.escrcpy",
+  "asar": true,
+  "productName": "Escrcpy",
+  "directories": {
+    "output": "dist-release/${version}",
+    "buildResources": "electron/resources/build"
+  },
+  "files": ["dist", "dist-electron"],
+  "extraResources": ["electron/resources/extra"],
+  "publish": {
+    "provider": "github",
+    "owner": "viarotel-org",
+    "repo": "escrcpy",
+    "updaterCacheDirName": "escrcpy-updater"
+  },
+  "mac": {
+    "icon": "logo.icns",
+    "target": ["dmg"],
+    "artifactName": "${productName}-${version}-mac-installer.${ext}",
+    "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
+    "extendInfo": {
+      "NSCameraUsageDescription": "Application requests access to the device's camera.",
+      "NSMicrophoneUsageDescription": "Application requests access to the device's microphone.",
+      "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
+      "NSDownloadsFolderUsageDescription": "Application requests access to the user's Downloads folder."
+    },
+    "notarize": false
+  },
+  "win": {
+    "icon": "logo.ico",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "zip"
+      },
+      {
+        "target": "portable"
+      }
+    ]
+  },
+  "nsis": {
+    "artifactName": "${productName}-${version}-win-setup.${ext}",
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "portable": {
+    "artifactName": "${productName}-${version}-win-portable.${ext}",
+    "requestExecutionLevel": "user"
+  },
+  "linux": {
+    "icon": "logo.png",
+    "target": ["AppImage"],
+    "artifactName": "${productName}-${version}-linux.${ext}"
+  },
+  "npmRebuild": false
+}

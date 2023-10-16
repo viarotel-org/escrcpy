@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.4](https://github.com/viarotel-org/escrcpy/compare/v1.6.3...v1.6.4) (2023-10-16)
+
+
+### Bug Fixes
+
+* 🐛 修复 electron-builder 配置异常导致打包的文件无法发布的问题 ([9a4efa5](https://github.com/viarotel-org/escrcpy/commit/9a4efa5e4ded0b1e4fc7dfe71f43eb953e8dc64e))
+* 🚀 修复设备列表按钮状态变更影响布局变化的问题 ([83a8043](https://github.com/viarotel-org/escrcpy/commit/83a8043b2524b30d0c5993260a6f673d22563251))
+
 ## [1.6.3](https://github.com/viarotel-org/escrcpy/compare/v1.6.2...v1.6.3) (2023-10-16)
 
 

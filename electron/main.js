@@ -8,8 +8,6 @@ import icnsLogoPath from '@resources/build/logo.icns?path'
 
 import events from './events/index.js'
 
-console.log('logoPath', logoPath)
-
 // The built directory structure
 //
 // ├─┬─┬ dist

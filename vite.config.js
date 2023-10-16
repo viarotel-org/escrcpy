@@ -1,12 +1,26 @@
 import { resolve } from 'node:path'
-import { defineConfig } from 'vite'
+import { defineConfig, mergeConfig } from 'vite'
 import useElectron from 'vite-plugin-electron'
 import useRenderer from 'vite-plugin-electron-renderer'
 
 import useVue from '@vitejs/plugin-vue'
 import useEslint from 'vite-plugin-eslint'
 import useUnoCSS from 'unocss/vite'
-import binary from './binary.js'
+import usePath from './binary.js'
+
+const merge = config =>
+  mergeConfig(
+    {
+      resolve: {
+        alias: {
+          '@root': resolve('./'),
+          '@resources': resolve('./electron/resources'),
+        },
+      },
+      plugins: [usePath()],
+    },
+    config,
+  )
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,21 +37,14 @@ export default defineConfig({
     useElectron([
       {
         entry: 'electron/main.js',
-        vite: {},
+        vite: merge({}),
       },
       {
         entry: 'electron/preload.js',
         onstart(args) {
           args.reload()
         },
-        vite: {
-          resolve: {
-            alias: {
-              '@resources': resolve('./electron/resources'),
-            },
-          },
-          plugins: [binary()],
-        },
+        vite: merge({}),
       },
     ]),
     useRenderer(),

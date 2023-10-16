@@ -4,9 +4,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
-import adbPath from '@resources/core/adb.exe?path'
-
-console.log('adbPath', adbPath)
+import adbPath from '@resources/extra/core/adb.exe?path'
 
 const exec = util.promisify(child_process.exec)
 
@@ -99,7 +97,7 @@ const watch = async (callback) => {
 }
 
 export default () => {
-  client = Adb.createClient({})
+  client = Adb.createClient({ bin: adbPath })
   console.log('client', client)
 
   return {

@@ -1,4 +1,4 @@
-export default function CustomPlugin() {
+export default function VitePluginPath() {
   return {
     name: 'vite-plugin-path',
     transform(src, id) {

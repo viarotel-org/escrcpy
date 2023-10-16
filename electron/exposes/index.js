@@ -4,7 +4,7 @@ import adbkit from './adbkit/index.js'
 import scrcpy from './scrcpy/index.js'
 
 export default {
-  install(expose) {
+  init(expose) {
     expose('nodePath', path)
     expose('electron', electron())
     expose('adbkit', adbkit())

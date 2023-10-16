@@ -155,7 +155,7 @@ export default {
     const adbCache = storage.get('adbCache') || {}
     return {
       loading: false,
-      loadingText: '初始化中...',
+      loadingText: '努力加载中...',
       connectLoading: false,
       deviceList: [],
       formData: {

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "org.viarotel.escrcpy",
+  "asar": true,
+  "productName": "escrcpy",
+  "directories": {
+    "output": "dist-release/${version}",
+    "buildResources": "electron/resources/build"
+  },
+  "files": ["dist", "dist-electron"],
+  "extraResources": ["electron/resources/extra"],
+  "publish": {
+    "provider": "github",
+    "owner": "viarotel-org",
+    "repo": "escrcpy",
+    "updaterCacheDirName": "escrcpy-updater"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "artifactName": "${productName}-${version}-mac-installer.${ext}"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "zip"
+      },
+      {
+        "target": "portable"
+      }
+    ]
+  },
+  "nsis": {
+    "artifactName": "${productName}-${version}-win-setup.${ext}",
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "portable": {
+    "artifactName": "${productName}-${version}-win-portable.${ext}",
+    "requestExecutionLevel": "user"
+  },
+  "linux": {
+    "target": ["AppImage"],
+    "artifactName": "${productName}-${version}-linux.${ext}"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "escrcpy-next",
+  "name": "escrcpy",
   "version": "1.6.2",
   "private": true,
   "description": "Scrcpy Powered by Electron",
@@ -29,6 +29,7 @@
     "electron-builder": "^24.6.4",
     "electron-updater": "^6.1.4",
     "element-plus": "^2.4.0",
+    "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",

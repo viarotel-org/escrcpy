@@ -1,22 +1,20 @@
-import path from 'node:path'
 import { app, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
+import devPublishPath from '@root/dev-publish.yml?path'
 
 export default (mainWindow) => {
   // dev-start, 这里是为了在本地做应用升级测试使用，正式环境请务必删除
-  if (is.dev && process.env.ELECTRON_RENDERER_URL) {
-    const updateConfigPath = path.join(process.cwd(), './dev-app-update.yml')
-    // console.log('updateConfigPath', updateConfigPath)
+  // if (is.dev && process.env.ELECTRON_RENDERER_URL) {
+  if (is.dev && process.env.VITE_DEV_SERVER_URL) {
+    const updateConfigPath = devPublishPath
     autoUpdater.updateConfigPath = updateConfigPath
+    Object.defineProperty(app, 'isPackaged', {
+      get() {
+        return true
+      },
+    })
   }
-
-  Object.defineProperty(app, 'isPackaged', {
-    get() {
-      return true
-    },
-  })
-  // dev-end
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
   ipcMain.on('check-for-update', () => {

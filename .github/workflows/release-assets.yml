@@ -49,15 +49,15 @@ jobs:
         with:
           draft: true
           files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
-            dist/*.blockmap
+            dist-release/*.exe
+            dist-release/*.zip
+            dist-release/*.dmg
+            dist-release/*.AppImage
+            dist-release/*.snap
+            dist-release/*.deb
+            dist-release/*.rpm
+            dist-release/*.tar.gz
+            dist-release/*.yml
+            dist-release/*.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

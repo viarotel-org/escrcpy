@@ -58,10 +58,10 @@ export default {
           tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: '截屏快照',
+          label: '截取屏幕',
           icon: 'Crop',
           handle: this.handleScreenCap,
-          tips: '不要和切换键搞错啦',
+          tips: '',
         },
       ],
     }

@@ -1,6 +1,12 @@
 import path from 'node:path'
-import { BrowserWindow, app } from 'electron'
-import ipcManage from './ipcManage/index.js'
+import { BrowserWindow, app, shell } from 'electron'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+
+import logoPath from '@resources/extra/icons/logo.png?path'
+import icoLogoPath from '@resources/extra/icons/logo.ico?path'
+import icnsLogoPath from '@resources/extra/icons/logo.icns?path'
+
+import events from './events/index.js'
 
 // The built directory structure
 //
@@ -11,18 +17,26 @@ import ipcManage from './ipcManage/index.js'
 // │ │ ├── main.js
 // │ │ └── preload.js
 // │
+
 process.env.DIST = path.join(__dirname, '../dist')
-process.env.VITE_PUBLIC = app.isPackaged
-  ? process.env.DIST
-  : path.join(process.env.DIST, '../public')
 
 let mainWindow
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
 function createWindow() {
+  let icon = logoPath
+
+  if (process.platform === 'win32') {
+    icon = icoLogoPath
+  }
+  else if (process.platform === 'darwin') {
+    icon = icnsLogoPath
+  }
+
   mainWindow = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    show: false,
+    icon,
     minWidth: 1000,
     minHeight: 700,
     autoHideMenuBar: true,
@@ -32,6 +46,16 @@ function createWindow() {
       preload: path.join(__dirname, './preload.js'),
       sandbox: false,
     },
+    backgroundColor: 'white',
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
   })
 
   // Test active push message to Renderer-process.
@@ -50,7 +74,7 @@ function createWindow() {
     mainWindow.loadFile(path.join(process.env.DIST, 'index.html'))
   }
 
-  ipcManage(mainWindow)
+  events(mainWindow)
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -71,4 +95,12 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  electronApp.setAppUserModelId('com.viarotel.escrcpy')
+
+  app.on('browser-window-created', (_, window) => {
+    optimizer.watchWindowShortcuts(window)
+  })
+
+  createWindow()
+})

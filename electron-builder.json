@@ -30,6 +30,7 @@
   },
   "win": {
     "icon": "logo.ico",
+    "executableName": "escrcpy",
     "target": [
       {
         "target": "nsis",
@@ -45,6 +46,8 @@
   },
   "nsis": {
     "artifactName": "${productName}-${version}-win-setup.${ext}",
+    "shortcutName": "${productName}",
+    "uninstallDisplayName": "${productName}",
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,

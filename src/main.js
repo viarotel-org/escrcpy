@@ -19,9 +19,7 @@ app.config.globalProperties.$adb = window.adbkit
 app.config.globalProperties.$scrcpy = window.scrcpy
 app.config.globalProperties.$path = window.nodePath
 
-app.mount('#app')
-
-app.$nextTick(() => {
+app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading
   postMessage({ payload: 'removeLoading' }, '*')
 })

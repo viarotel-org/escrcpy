@@ -1,14 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "productName": "Escrcpy",
   "appId": "org.viarotel.escrcpy",
   "asar": true,
-  "productName": "Escrcpy",
   "directories": {
     "output": "dist-release",
     "buildResources": "electron/resources/build"
   },
   "files": ["dist", "dist-electron"],
-  "extraResources": ["electron/resources/extra"],
+  "extraResources": {
+    "from": "electron/resources/extra",
+    "to": "extra"
+  },
   "publish": {
     "provider": "github",
     "owner": "viarotel-org",
@@ -30,7 +33,6 @@
   },
   "win": {
     "icon": "logo.ico",
-    "executableName": "escrcpy",
     "target": [
       {
         "target": "nsis",

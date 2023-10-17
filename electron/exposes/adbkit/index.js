@@ -4,7 +4,9 @@ import path from 'node:path'
 import fs from 'node:fs'
 import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
-import adbPath from '@resources/extra/core/adb.exe?path'
+import { adbPath } from '@electron/configs/index.js'
+
+console.log('adbPath', adbPath)
 
 const exec = util.promisify(child_process.exec)
 

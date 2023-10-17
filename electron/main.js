@@ -2,9 +2,11 @@ import path from 'node:path'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
-import logoPath from '@resources/build/logo.png?path'
-import icoLogoPath from '@resources/build/logo.ico?path'
-import icnsLogoPath from '@resources/build/logo.icns?path'
+import {
+  icnsLogoPath,
+  icoLogoPath,
+  logoPath,
+} from '@electron/configs/index.js'
 
 import events from './events/index.js'
 
@@ -70,7 +72,6 @@ function createWindow() {
     mainWindow.loadURL(VITE_DEV_SERVER_URL)
   }
   else {
-    // win.loadFile('dist/index.html')
     mainWindow.loadFile(path.join(process.env.DIST, 'index.html'))
   }
 

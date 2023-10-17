@@ -1,7 +1,6 @@
 import util from 'node:util'
 import child_process from 'node:child_process'
-import adbPath from '@resources/extra/core/adb.exe?path'
-import scrcpyPath from '@resources/extra/core/scrcpy.exe?path'
+import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
 const exec = util.promisify(child_process.exec)
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.8](https://github.com/viarotel-org/escrcpy/compare/v1.6.7...v1.6.8) (2023-10-17)
+
+
+### Performance Improvements
+
+* 🚀 支持通过操作栏安装应用并提供相应安装反馈 ([3bd2075](https://github.com/viarotel-org/escrcpy/commit/3bd20753242c3f8b218bc23c4077495e0a1ecd7f))
+
 ## [1.6.7](https://github.com/viarotel-org/escrcpy/compare/v1.6.6...v1.6.7) (2023-10-17)
 
 

@@ -2,6 +2,7 @@ import { resolve } from 'node:path'
 import { contextBridge } from 'electron'
 
 export const isPackaged = !process.resourcesPath.includes('node_modules')
+// export const isPackaged = !process.execPath.includes('node_modules')
 
 export const extraResolve = value =>
   isPackaged

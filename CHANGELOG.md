@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.6](https://github.com/viarotel-org/escrcpy/compare/v1.6.5...v1.6.6) (2023-10-17)
+
+
+### Bug Fixes
+
+* 🐛 build fix ([09c8dee](https://github.com/viarotel-org/escrcpy/commit/09c8deeca9d919502b77e3dfbd253ae8b77b651b))
+* 🐛 修复 electron 资源路径问题 ([955756e](https://github.com/viarotel-org/escrcpy/commit/955756e114a485ec3595d39d5b45185a3970258f))
+
 ## [1.6.5](https://github.com/viarotel-org/escrcpy/compare/v1.6.4...v1.6.5) (2023-10-16)
 
 

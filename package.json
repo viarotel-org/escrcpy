@@ -1,6 +1,6 @@
 {
   "name": "escrcpy",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "private": true,
   "description": "Scrcpy Powered by Electron",
   "author": "viarotel",

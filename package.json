@@ -27,7 +27,6 @@
     "@viarotel-org/eslint-config": "^0.7.0",
     "@viarotel-org/postcss-config": "^0.7.0",
     "@viarotel-org/unocss-config": "^0.7.4",
-    "@viarotel-org/vite-plugin-path": "^0.8.1",
     "@vitejs/plugin-vue": "^4.3.4",
     "dayjs": "^1.11.10",
     "electron": "^26.1.0",

@@ -31,9 +31,6 @@ devDependencies:
   '@viarotel-org/unocss-config':
     specifier: ^0.7.4
     version: 0.7.4(postcss@8.4.31)(vite@4.4.11)
-  '@viarotel-org/vite-plugin-path':
-    specifier: ^0.8.1
-    version: 0.8.1
   '@vitejs/plugin-vue':
     specifier: ^4.3.4
     version: 4.4.0(vite@4.4.11)(vue@3.3.4)
@@ -1371,20 +1368,6 @@ packages:
       - rollup
       - supports-color
       - vite
-    dev: true
-
-  /@viarotel-org/vite-plugin-path@0.8.1:
-    resolution: {integrity: sha512-sS3ovVk5tpS08ShtL9HMJxyWge5Oq0kn610xxxihYj2GrlhOqDeKDD+zp0ebhuO6E8dMmlWQctCfnyOVeBYaUQ==}
-    dependencies:
-      vite: 4.4.11
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - terser
     dev: true
 
   /@vitejs/plugin-vue@4.4.0(vite@4.4.11)(vue@3.3.4):

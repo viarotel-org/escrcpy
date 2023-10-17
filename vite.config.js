@@ -2,13 +2,14 @@ import { resolve } from 'node:path'
 import { defineConfig, mergeConfig } from 'vite'
 import useElectron from 'vite-plugin-electron'
 import useRenderer from 'vite-plugin-electron-renderer'
+import { notBundle } from 'vite-plugin-electron/plugin'
 
 import useVue from '@vitejs/plugin-vue'
 import useEslint from 'vite-plugin-eslint'
 import useUnoCSS from 'unocss/vite'
 import useSvg from 'vite-svg-loader'
 
-const merge = config =>
+const merge = (config, { command = '' } = {}) =>
   mergeConfig(
     {
       resolve: {
@@ -17,38 +18,39 @@ const merge = config =>
           '@electron': resolve('electron'),
         },
       },
-      plugins: [],
+      plugins: [...(command === 'serve' ? [notBundle()] : [])],
     },
     config,
   )
 
 // https://vitejs.dev/config/
-export default merge(
-  defineConfig({
-    resolve: {
-      alias: {
-        '@': resolve('src'),
+export default params =>
+  merge(
+    defineConfig({
+      resolve: {
+        alias: {
+          '@': resolve('src'),
+        },
       },
-    },
-    plugins: [
-      useEslint(),
-      useUnoCSS(),
-      useSvg(),
-      useVue(),
-      useElectron([
-        {
-          entry: 'electron/main.js',
-          vite: merge({}),
-        },
-        {
-          entry: 'electron/preload.js',
-          onstart(args) {
-            args.reload()
+      plugins: [
+        useEslint(),
+        useUnoCSS(),
+        useSvg(),
+        useVue(),
+        useElectron([
+          {
+            entry: 'electron/main.js',
+            vite: merge({}, params),
           },
-          vite: merge({}),
-        },
-      ]),
-      useRenderer(),
-    ],
-  }),
-)
+          {
+            entry: 'electron/preload.js',
+            onstart(args) {
+              args.reload()
+            },
+            vite: merge({}, params),
+          },
+        ]),
+        useRenderer(),
+      ],
+    }),
+  )

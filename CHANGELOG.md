@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.7](https://github.com/viarotel-org/escrcpy/compare/v1.6.6...v1.6.7) (2023-10-17)
+
+
+### Performance Improvements
+
+* 📝 去除冗余的依赖项 ([a6744dc](https://github.com/viarotel-org/escrcpy/commit/a6744dc485d2abeba1f09a5c69e86d008c3c1c35))
+
 ## [1.6.6](https://github.com/viarotel-org/escrcpy/compare/v1.6.5...v1.6.6) (2023-10-17)
 
 

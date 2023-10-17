@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.9](https://github.com/viarotel-org/escrcpy/compare/v1.6.8...v1.6.9) (2023-10-17)
+
+
+### Bug Fixes
+
+* 🔧 优化 isPackaged 判断条件解决某些情况下资源路径解析异常的问题 ([fbd1885](https://github.com/viarotel-org/escrcpy/commit/fbd188511df20fffefa936d75edb812abe16baa0))
+
 ## [1.6.8](https://github.com/viarotel-org/escrcpy/compare/v1.6.7...v1.6.8) (2023-10-17)
 
 

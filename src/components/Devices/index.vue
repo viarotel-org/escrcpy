@@ -1,7 +1,12 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex items-center flex-none space-x-2">
-      <el-input v-model="formData.host" placeholder="192.168.0.1" class="!w-86 flex-none" clearable>
+      <el-input
+        v-model="formData.host"
+        placeholder="192.168.0.1"
+        class="!w-86 flex-none"
+        clearable
+      >
         <template #prepend>
           无线连接
         </template>
@@ -53,8 +58,18 @@
         <template #empty>
           <el-empty description="设备列表为空" />
         </template>
-        <el-table-column prop="id" label="设备 ID" show-overflow-tooltip align="left" />
-        <el-table-column prop="name" label="设备名称" show-overflow-tooltip align="left">
+        <el-table-column
+          prop="id"
+          label="设备 ID"
+          show-overflow-tooltip
+          align="left"
+        />
+        <el-table-column
+          prop="name"
+          label="设备名称"
+          show-overflow-tooltip
+          align="left"
+        >
           <template #default="{ row }">
             <div class="flex items-center">
               <el-tooltip
@@ -85,7 +100,7 @@
               :icon="row.$loading ? '' : 'Monitor'"
               @click="handleMirror(row)"
             >
-              {{ row.$loading ? '正在镜像' : '开始镜像' }}
+              {{ row.$loading ? "正在镜像" : "开始镜像" }}
             </el-button>
 
             <el-button
@@ -96,17 +111,21 @@
               :icon="row.$recordLoading ? '' : 'VideoCamera'"
               @click="handleRecord(row)"
             >
-              {{ row.$recordLoading ? '正在录制' : '开始录制' }}
+              {{ row.$recordLoading ? "正在录制" : "开始录制" }}
             </el-button>
 
             <el-button
               v-if="!row.$wireless"
               type="primary"
               text
-              :disabled="row.$unauthorized || row.$loading || row.$recordLoading"
-              :icon="row.$recordLoading ? '' : 'Switch'"
+              :disabled="
+                row.$unauthorized || row.$loading || row.$recordLoading
+              "
               @click="handleWifi(row)"
             >
+              <template #icon>
+                <svg-icon name="wifi"></svg-icon>
+              </template>
               无线模式
             </el-button>
 
@@ -119,7 +138,7 @@
               :icon="row.$stopLoading ? '' : 'CircleClose'"
               @click="handleStop(row)"
             >
-              {{ row.$stopLoading ? '正在断开' : '断开连接' }}
+              {{ row.$stopLoading ? "正在断开" : "断开连接" }}
             </el-button>
           </template>
         </el-table-column>
@@ -189,6 +208,7 @@ export default {
     })
   },
   methods: {
+    onStdout() {},
     toggleRowExpansion(...params) {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
@@ -213,7 +233,7 @@ export default {
 
         console.log('handleRecord.command', command)
 
-        await this.$scrcpy.shell(command)
+        await this.$scrcpy.shell(command, { stdout: this.onStdout })
 
         await this.$confirm('是否前往录制位置进行查看？', '录制成功', {
           confirmButtonText: '确定',
@@ -239,6 +259,7 @@ export default {
       try {
         await this.$scrcpy.shell(
           `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.stringScrcpyConfig}`,
+          { stdout: this.onStdout },
         )
       }
       catch (error) {

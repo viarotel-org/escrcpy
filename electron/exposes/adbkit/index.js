@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
 import { adbPath } from '@electron/configs/index.js'
 
-console.log('adbPath', adbPath)
+// console.log('adbPath', adbPath)
 
 const exec = util.promisify(child_process.exec)
 
@@ -19,12 +19,11 @@ window.addEventListener('beforeunload', () => {
 })
 
 const shell = async command => exec(`${adbPath} ${command}`)
-const getDevices = async () => await client.listDevicesWithPaths()
-const deviceShell = async (id, command) =>
-  await client.getDevice(id).shell(command)
-const kill = async (...params) => await client.kill(...params)
-const connect = async (...params) => await client.connect(...params)
-const disconnect = async (...params) => await client.disconnect(...params)
+const getDevices = async () => client.listDevicesWithPaths()
+const deviceShell = async (id, command) => client.getDevice(id).shell(command)
+const kill = async (...params) => client.kill(...params)
+const connect = async (...params) => client.connect(...params)
+const disconnect = async (...params) => client.disconnect(...params)
 
 const getDeviceIP = async (id) => {
   try {
@@ -40,7 +39,7 @@ const getDeviceIP = async (id) => {
   }
 }
 
-const tcpip = async (id, port = 5555) => await client.getDevice(id).tcpip(port)
+const tcpip = async (id, port = 5555) => client.getDevice(id).tcpip(port)
 
 const screencap = async (deviceId, options = {}) => {
   let fileStream = null
@@ -73,6 +72,8 @@ const screencap = async (deviceId, options = {}) => {
       })
   })
 }
+
+const install = async (id, path) => client.getDevice(id).install(path)
 
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
@@ -112,6 +113,7 @@ export default () => {
     getDeviceIP,
     tcpip,
     screencap,
+    install,
     watch,
   }
 }

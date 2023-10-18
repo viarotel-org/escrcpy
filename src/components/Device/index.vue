@@ -213,7 +213,7 @@ export default {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
     getRecordPath(row) {
-      const basePath = this.scrcpyConfig['--record']
+      const basePath = this.scrcpyConfig.savePath
       const recordFormat = this.scrcpyConfig['--record-format']
       const fileName = `${row.name || row.id}-recording-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',

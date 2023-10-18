@@ -15,33 +15,33 @@
 </template>
 
 <script>
-import Devices from './components/Devices/index.vue'
-import Advanced from './components/Advanced/index.vue'
-import AboutUs from './components/AboutUs/index.vue'
+import Device from './components/Device/index.vue'
+import Preference from './components/Preference/index.vue'
+import About from './components/About/index.vue'
 
 export default {
   components: {
-    Devices,
-    Advanced,
-    AboutUs,
+    Device,
+    Preference,
+    About,
   },
   data() {
     return {
       tabsModel: [
         {
           label: '设备列表',
-          prop: 'Devices',
+          prop: 'Device',
         },
         {
-          label: '高级配置',
-          prop: 'Advanced',
+          label: '偏好设置',
+          prop: 'Preference',
         },
         {
           label: '关于',
-          prop: 'AboutUs',
+          prop: 'About',
         },
       ],
-      activeTab: 'Devices',
+      activeTab: 'Device',
     }
   },
   created() {

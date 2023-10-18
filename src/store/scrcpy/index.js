@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { pickBy } from 'lodash-es'
 import * as scrcpyModel from './model/index.js'
-import storage from '@/utils/storages/index.js'
+
+const $appStore = window.appStore
 
 /**
  * 获取 Scrcpy 默认配置
@@ -34,7 +35,7 @@ export const useScrcpyStore = defineStore({
       model: scrcpyModel,
       defaultConfig: getDefaultConfig(),
       config: {},
-      excludeKeys: ['--record', '--record-format'],
+      excludeKeys: ['--record-format', 'savePath', 'adbPath', 'scrcpyPath'],
     }
   },
   getters: {
@@ -73,7 +74,7 @@ export const useScrcpyStore = defineStore({
     init() {
       this.config = {
         ...this.defaultConfig,
-        ...(storage.get('scrcpyConfig') || {}),
+        ...($appStore.get('scrcpy') || {}),
       }
 
       return this.config
@@ -83,7 +84,7 @@ export const useScrcpyStore = defineStore({
 
       console.log('pickConfig', pickConfig)
 
-      storage.set('scrcpyConfig', pickConfig)
+      $appStore.set('scrcpy', pickConfig)
 
       this.init()
     },

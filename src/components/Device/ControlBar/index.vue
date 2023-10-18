@@ -152,10 +152,7 @@ export default {
       const fileName = `${device.name}-screencap-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',
       )}.png`
-      const savePath = this.$path.resolve(
-        this.scrcpyConfig['--record'],
-        fileName,
-      )
+      const savePath = this.$path.resolve(this.scrcpyConfig.savePath, fileName)
 
       try {
         await this.$adb.screencap(device.id, { savePath })

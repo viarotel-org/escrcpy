@@ -25,3 +25,18 @@ export function exposeContext(key, value) {
     window[key] = value
   }
 }
+
+/**
+ * 创建一个代理对象，将目标对象的指定方法转发并执行。
+ *
+ * @param {object} targetObject - 目标对象，包含要代理的方法。
+ * @param {string[]} methodNames - 要代理的方法名称数组。
+ * @returns {object} - 代理对象，包含转发的方法。
+ */
+export function createProxy(targetObject, methodNames) {
+  return methodNames.reduce((proxyObj, methodName) => {
+    proxyObj[methodName] = (...args) => targetObject[methodName](...args)
+
+    return proxyObj
+  }, {})
+}

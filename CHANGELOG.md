@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.10](https://github.com/viarotel-org/escrcpy/compare/v1.6.9...v1.6.10) (2023-10-18)
+
+
+### Performance Improvements
+
+* 🚀 采用新的方法实现所有进程共享 isPackaged ([8a5f7d9](https://github.com/viarotel-org/escrcpy/commit/8a5f7d9f37cb371f4210149b880535ea677620ea))
+
 ## [1.6.9](https://github.com/viarotel-org/escrcpy/compare/v1.6.8...v1.6.9) (2023-10-17)
 
 

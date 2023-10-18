@@ -2,11 +2,10 @@ import path from 'node:path'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
-import {
-  icnsLogoPath,
-  icoLogoPath,
-  logoPath,
-} from '@electron/configs/index.js'
+// packaged.js 必须位于非依赖项的顶部
+import './helpers/packaged.js'
+
+import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
 import events from './events/index.js'
 

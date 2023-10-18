@@ -28,7 +28,6 @@ export default {
     },
   },
   render() {
-    console.log('this', this)
     if (this.SvgComponent) {
       const props = this.SvgComponent.props
       return {

@@ -1,12 +1,13 @@
 import { resolve } from 'node:path'
 import { contextBridge } from 'electron'
 
-export const isPackaged = !process.env.VITE_DEV_SERVER_URL
+export const isPackaged = process.env.IS_PACKAGED === 'true'
 
-export const extraResolve = value =>
-  isPackaged
+export const extraResolve = (value) => {
+  return isPackaged
     ? resolve(process.resourcesPath, `extra/${value}`)
     : resolve(`electron/resources/extra/${value}`)
+}
 
 export const buildResolve = value =>
   resolve(`electron/resources/build/${value}`)

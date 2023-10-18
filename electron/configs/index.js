@@ -9,4 +9,5 @@ export const icoLogoPath = buildResolve('logo.ico')
 export const icnsLogoPath = buildResolve('logo.icns')
 
 export const adbPath = extraResolve('core/adb.exe')
+
 export const scrcpyPath = extraResolve('core/scrcpy.exe')

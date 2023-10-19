@@ -192,9 +192,6 @@ export default {
     scrcpyConfig() {
       return this.$store.scrcpy.config
     },
-    stringScrcpyConfig() {
-      return this.$store.scrcpy.stringConfig
-    },
   },
   async created() {
     this.getDeviceData()
@@ -220,6 +217,9 @@ export default {
     }
   },
   methods: {
+    scrcpyArgs(...args) {
+      return this.$store.scrcpy.getStringConfig(...args)
+    },
     onStdout() {},
     toggleRowExpansion(...params) {
       this.$refs.elTable.toggleRowExpansion(...params)
@@ -243,9 +243,9 @@ export default {
       try {
         const command = `--serial=${row.id} --window-title=${
           row.$remark ? `${row.$remark}-` : ''
-        }${row.name}-${row.id}-🎥录制中... --record=${savePath} ${
-          this.stringScrcpyConfig
-        }`
+        }${row.name}-${
+          row.id
+        }-🎥录制中... --record=${savePath} ${this.scrcpyArgs()}`
 
         console.log('handleRecord.command', command)
 
@@ -279,7 +279,7 @@ export default {
         await this.$scrcpy.shell(
           `--serial=${row.id} --window-title=${
             row.$remark ? `${row.$remark}-` : ''
-          }${row.name}-${row.id} ${this.stringScrcpyConfig}`,
+          }${row.name}-${row.id} ${this.scrcpyArgs()}`,
           { stdout: this.onStdout },
         )
       }
@@ -371,7 +371,7 @@ export default {
 
     async getDeviceData() {
       this.loading = true
-      await sleep()
+      await sleep(500)
       try {
         const data = await this.$adb.getDevices()
         this.deviceList
@@ -386,6 +386,8 @@ export default {
             $wifi: isIPWithPort(item.id),
             $remark: this.$store.device.getRemark(item.id),
           })) || []
+
+        this.$store.device.setList(this.deviceList)
 
         console.log('getDeviceData.data', this.deviceList)
       }

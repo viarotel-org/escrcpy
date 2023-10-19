@@ -32,19 +32,36 @@ export const useScrcpyStore = defineStore({
   id: 'app-scrcpy',
   state() {
     return {
+      scope: $appStore.get('scrcpy.scope') || 'global',
       model: scrcpyModel,
       defaultConfig: getDefaultConfig(),
       config: {},
       excludeKeys: ['--record-format', 'savePath', 'adbPath', 'scrcpyPath'],
     }
   },
-  getters: {
-    stringConfig() {
-      if (!this.config) {
+  actions: {
+    getDefaultConfig,
+    init(scope = this.scope) {
+      this.config = {
+        ...this.defaultConfig,
+        ...($appStore.get(`scrcpy.${scope}`) || {}),
+      }
+
+      return this.config
+    },
+    setScope(value) {
+      this.scope = value
+      $appStore.set('scrcpy.scope', value)
+      this.init()
+    },
+    getStringConfig(scope = this.scope) {
+      const scopeConfig = $appStore.get(`scrcpy.${scope}`)
+
+      if (!scopeConfig) {
         return ''
       }
 
-      const value = Object.entries(this.config)
+      const value = Object.entries(scopeConfig)
         .reduce((arr, [key, value]) => {
           if (!value) {
             return arr
@@ -68,25 +85,17 @@ export const useScrcpyStore = defineStore({
 
       return value
     },
-  },
-  actions: {
-    getDefaultConfig,
-    init() {
-      this.config = {
-        ...this.defaultConfig,
-        ...($appStore.get('scrcpy') || {}),
-      }
-
-      return this.config
-    },
-    setConfig(data) {
+    setConfig(data, scope = this.scope) {
       const pickConfig = pickBy(data, value => !!value)
-
       // console.log('pickConfig', pickConfig)
 
-      $appStore.set('scrcpy', pickConfig)
+      $appStore.set(`scrcpy.${scope}`, pickConfig)
 
-      this.init()
+      this.init(scope)
+    },
+    getConfig(scope = this.scope) {
+      const value = $appStore.get(`scrcpy.${scope}`)
+      return value
     },
     getModel(key, params) {
       const handler = scrcpyModel[key]

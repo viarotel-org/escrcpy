@@ -1,6 +1,31 @@
 <template>
   <div class="">
-    <div class="pb-4 pr-2 flex items-center">
+    <div class="pb-4 pr-2 flex items-center justify-between">
+      <div label="作用域范围">
+        <el-select
+          v-model="scopeValue"
+          value-key=""
+          title="该选项用于设置偏好设置的作用域范围"
+          placeholder="偏好设置的作用域范围"
+          filterable
+          no-data-text="暂无数据"
+          class="!w-90"
+          @change="onScopeChange"
+        >
+          <template #prefix>
+            <el-icon class="text-primary-300 hover:text-primary-500">
+              <QuestionFilled />
+            </el-icon>
+          </template>
+          <el-option
+            v-for="item in scopeList"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
       <div class="">
         <el-button type="" plain @click="handleImport">
           导入配置
@@ -180,7 +205,28 @@ export default {
         },
       ],
       scrcpyForm: { ...scrcpyStore.config },
+
+      scopeValue: scrcpyStore.scope,
     }
+  },
+  computed: {
+    scopeList() {
+      const value = this.$store.device.list.map(item => ({
+        ...item,
+        label: `${item.id}（${item.name}${
+          item.$remark ? `，${item.$remark}` : ''
+        }）`,
+
+        value: this.$store.device.removeDots(item.id),
+      }))
+
+      value.unshift({
+        label: '全局范围',
+        value: 'global',
+      })
+
+      return value
+    },
   },
   watch: {
     scrcpyForm: {
@@ -197,6 +243,10 @@ export default {
     })
   },
   methods: {
+    onScopeChange(value) {
+      this.$store.scrcpy.setScope(value)
+      this.scrcpyForm = this.$store.scrcpy.config
+    },
     async handleImport() {
       try {
         await this.$electron.ipcRenderer.invoke('show-open-dialog', {

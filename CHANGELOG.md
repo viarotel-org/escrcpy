@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/viarotel-org/escrcpy/compare/v1.6.10...v1.7.0) (2023-10-19)
+
+
+### Features
+
+* 🚀 新增支持导入及导出配置 ([326a133](https://github.com/viarotel-org/escrcpy/commit/326a13346050ac02a7b8ffab2aeadda3c803ec45))
+* 🚀 新增支持添加设备备注 ([43f15be](https://github.com/viarotel-org/escrcpy/commit/43f15be265368766d122f752e59cd4ed623c695d))
+
+
+### Performance Improvements
+
+* ➕ 设备交互栏添加重启设备及打开通知栏功能 ([1341fb8](https://github.com/viarotel-org/escrcpy/commit/1341fb82ebaa3707c1f6661d750526ab3548a87c))
+
 ## [1.6.10](https://github.com/viarotel-org/escrcpy/compare/v1.6.9...v1.6.10) (2023-10-18)
 
 

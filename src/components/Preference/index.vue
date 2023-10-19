@@ -90,19 +90,24 @@
                   <el-input
                     v-if="item_1.type === 'input.path'"
                     v-bind="item_1.props || {}"
-                    :value="scrcpyForm[item_1.field]"
-                    readonly
+                    v-model="scrcpyForm[item_1.field]"
                     class="!w-full"
                     clearable
                     :placeholder="item_1.placeholder"
                     :title="item_1.placeholder"
-                    @click="
-                      handleSelect(item_1, {
-                        properties: item_1.properties,
-                        filters: item_1.filters,
-                      })
-                    "
-                  ></el-input>
+                  >
+                    <template #append>
+                      <el-button
+                        icon="Search"
+                        @click="
+                          handleSelect(item_1, {
+                            properties: item_1.properties,
+                            filters: item_1.filters,
+                          })
+                        "
+                      />
+                    </template>
+                  </el-input>
                   <el-switch
                     v-if="item_1.type === 'switch'"
                     v-bind="item_1.props || {}"
@@ -193,22 +198,22 @@ export default {
   },
   methods: {
     async handleImport() {
-      const result = await this.$electron.ipcRenderer.invoke(
-        'show-open-dialog',
-        {
+      try {
+        await this.$electron.ipcRenderer.invoke('show-open-dialog', {
           preset: 'replaceFile',
           filePath: this.$appStore.path,
           filters: [{ name: '请选择要导入的配置文件', extensions: ['json'] }],
-        },
-      )
+        })
 
-      if (!result) {
-        this.$message.warning('导入偏好配置失败')
-        return
+        this.$message.success('导入偏好配置成功')
+
+        this.scrcpyForm = this.$store.scrcpy.init()
       }
-
-      this.$message.success('导入偏好配置成功')
-      this.scrcpyForm = this.$store.scrcpy.init()
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
     },
     handleEdit() {
       this.$appStore.openInEditor()
@@ -220,40 +225,47 @@ export default {
         duration: 0,
       })
 
-      const result = await this.$electron.ipcRenderer.invoke(
-        'show-save-dialog',
-        {
+      try {
+        await this.$electron.ipcRenderer.invoke('show-save-dialog', {
           defaultPath: 'escrcpy-configs.json',
           filePath: this.$appStore.path,
           filters: [
             { name: '请选择配置文件要保存的位置', extensions: ['json'] },
           ],
-        },
-      )
-
-      messageEl.close()
-
-      if (result) {
+        })
         this.$message.success('导出偏好配置成功')
       }
-    },
-    async handleSelect({ field }, { properties, filters } = {}) {
-      const res = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
-        properties,
-        filters,
-        defaultPath: this.scrcpyForm[field],
-      })
-
-      if (!res) {
-        return false
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
       }
 
-      const value = res[0]
+      messageEl.close()
+    },
+    async handleSelect({ field }, { properties, filters } = {}) {
+      try {
+        const files = await this.$electron.ipcRenderer.invoke(
+          'show-open-dialog',
+          {
+            properties,
+            filters,
+            defaultPath: this.scrcpyForm[field],
+          },
+        )
 
-      this.scrcpyForm[field] = value
+        const value = files[0]
+
+        this.scrcpyForm[field] = value
+      }
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
     },
     handleSave() {
-      this.$store.scrcpy.updateConfig(this.scrcpyForm)
+      this.$store.scrcpy.setConfig(this.scrcpyForm)
       this.$message.success('保存配置成功，将在下一次控制设备时生效')
     },
     getSubModel(type) {
@@ -265,7 +277,7 @@ export default {
         ...this.scrcpyForm,
         ...this.$store.scrcpy.getDefaultConfig(type),
       }
-      this.$store.scrcpy.updateConfig(this.scrcpyForm)
+      this.$store.scrcpy.setConfig(this.scrcpyForm)
     },
   },
 }

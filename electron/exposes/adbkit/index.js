@@ -4,9 +4,8 @@ import path from 'node:path'
 import fs from 'node:fs'
 import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
+import appStore from '@electron/helpers/store.js'
 import { adbPath } from '@electron/configs/index.js'
-
-// console.log('adbPath', adbPath)
 
 const exec = util.promisify(child_process.exec)
 
@@ -16,6 +15,15 @@ window.addEventListener('beforeunload', () => {
   if (client) {
     client.kill()
   }
+})
+
+appStore.onDidChange('scrcpy.adbPath', async (value) => {
+  console.log('onDidChange.scrcpy.adbPath.value', value)
+  if (client) {
+    await client.kill().catch(e => console.warn(e))
+    client = null
+  }
+  client = Adb.createClient({ bin: value })
 })
 
 const shell = async command => exec(`${adbPath} ${command}`)
@@ -100,8 +108,8 @@ const watch = async (callback) => {
 }
 
 export default () => {
-  client = Adb.createClient({ bin: adbPath })
-  // console.log('client', client)
+  client = Adb.createClient({ bin: appStore.get('scrcpy.adbPath') || adbPath })
+  console.log('client', client)
 
   return {
     shell,

@@ -84,13 +84,19 @@ export default {
   },
   methods: {
     async handleInstall(device) {
-      const files = await this.$electron.ipcRenderer.invoke(
-        'show-open-dialog',
-        {
+      let files = null
+
+      try {
+        files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
           properties: ['openFile', 'multiSelections'],
           filters: [{ name: '请选择要安装的应用', extensions: ['apk'] }],
-        },
-      )
+        })
+      }
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
 
       if (!files) {
         return false
@@ -174,7 +180,10 @@ export default {
           closeOnClickModal: false,
           type: 'success',
         })
-        this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
+        await this.$electron.ipcRenderer.invoke(
+          'show-item-in-folder',
+          savePath,
+        )
       }
       catch (error) {
         if (error.message) {

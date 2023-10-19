@@ -6,72 +6,58 @@ export default () => {
     'show-open-dialog',
     async (event, { preset = '', ...options } = {}) => {
       // console.log('options', options)
-      try {
-        const res = await dialog.showOpenDialog(options)
-        // console.log('showOpenDialog.res', res)
-        if (res.canceled) {
-          return false
-        }
-        const filePaths = res.filePaths
+      const res = await dialog
+        .showOpenDialog(options)
+        .catch(e => console.warn(e))
 
-        switch (preset) {
-          case 'replaceFile':
-            await fs.copy(filePaths[0], options.filePath, { overwrite: true })
-            break
-        }
+      if (res.canceled) {
+        throw new Error('用户取消操作')
+      }
 
-        return filePaths
+      if (!res.filePaths.length) {
+        throw new Error('获取目录或文件路径失败')
       }
-      catch (error) {
-        console.warn(error?.message || error)
-        return false
+
+      const filePaths = res.filePaths
+
+      switch (preset) {
+        case 'replaceFile':
+          await fs.copy(filePaths[0], options.filePath, { overwrite: true })
+          break
       }
+
+      return filePaths
     },
   )
 
   ipcMain.handle('open-path', async (event, pathValue) => {
-    try {
-      await shell.openPath(pathValue)
-      return true
-    }
-    catch (error) {
-      console.warn(error?.message || error)
-      return false
-    }
+    return shell.openPath(pathValue)
   })
 
   ipcMain.handle('show-item-in-folder', async (event, filePath) => {
-    try {
-      await shell.showItemInFolder(filePath)
-      return true
-    }
-    catch (error) {
-      console.warn(error?.message || error)
-      return false
-    }
+    return shell.showItemInFolder(filePath)
   })
 
   ipcMain.handle(
     'show-save-dialog',
     async (event, { filePath = '', ...options } = {}) => {
-      try {
-        const result = await dialog.showSaveDialog({
+      const res = await dialog
+        .showSaveDialog({
           ...options,
         })
-        if (!result || result.canceled || !result.filePath) {
-          return false
-        }
+        .catch(e => console.warn(e))
 
-        const destinationPath = result.filePath
-
-        await fs.copy(filePath, destinationPath)
-
-        return true
+      if (res.canceled) {
+        throw new Error('用户取消操作')
       }
-      catch (error) {
-        console.error(error?.message || error)
-        return false
+
+      if (!res.filePath) {
+        throw new Error('获取文件路径失败')
       }
+
+      const destinationPath = res.filePath
+
+      await fs.copy(filePath, destinationPath)
     },
   )
 }

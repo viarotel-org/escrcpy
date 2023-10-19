@@ -63,6 +63,7 @@
           label="设备 ID"
           show-overflow-tooltip
           align="left"
+          width="200"
         />
         <el-table-column
           prop="name"
@@ -84,13 +85,15 @@
 
               {{ row.name }}
 
-              <el-tag v-if="row.$wireless" effect="light" class="ml-2">
+              <el-tag v-if="row.$wifi" effect="light" class="ml-2">
                 WIFI
               </el-tag>
+
+              <Remark :device="row" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="500" align="left">
+        <el-table-column label="操作" width="400" align="left">
           <template #default="{ row }">
             <el-button
               type="primary"
@@ -115,7 +118,7 @@
             </el-button>
 
             <el-button
-              v-if="!row.$wireless"
+              v-if="!row.$wifi"
               type="primary"
               text
               :disabled="
@@ -130,7 +133,7 @@
             </el-button>
 
             <el-button
-              v-if="row.$wireless"
+              v-if="row.$wifi"
               type="danger"
               text
               :loading="row.$stopLoading"
@@ -162,6 +165,7 @@
 import dayjs from 'dayjs'
 import PairDialog from './PairDialog/index.vue'
 import ControlBar from './ControlBar/index.vue'
+import Remark from './Remark/index.vue'
 import storage from '@/utils/storages'
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
@@ -169,6 +173,7 @@ export default {
   components: {
     PairDialog,
     ControlBar,
+    Remark,
   },
   data() {
     const adbCache = storage.get('adbCache') || {}
@@ -191,13 +196,15 @@ export default {
       return this.$store.scrcpy.stringConfig
     },
   },
-  created() {
+  async created() {
     this.getDeviceData()
 
-    this.$adb.watch(async (type, ret) => {
+    this.unAdbWatch = await this.$adb.watch(async (type, ret) => {
       console.log('adb.watch.ret', ret)
 
-      this.getDeviceData()
+      if (ret && ret.id) {
+        this.getDeviceData()
+      }
 
       if (type === 'add' && !isIPWithPort(ret.id) && ret.$host) {
         this.formData = {
@@ -206,6 +213,11 @@ export default {
         }
       }
     })
+  },
+  beforeUnmount() {
+    if (this.unAdbWatch) {
+      this.unAdbWatch()
+    }
   },
   methods: {
     onStdout() {},
@@ -242,7 +254,10 @@ export default {
           type: 'success',
         })
 
-        this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
+        await this.$electron.ipcRenderer.invoke(
+          'show-item-in-folder',
+          savePath,
+        )
       }
       catch (error) {
         if (error.message) {
@@ -362,15 +377,16 @@ export default {
             $recordLoading: false,
             $stopLoading: false,
             $unauthorized: item.type === 'unauthorized',
-            $wireless: isIPWithPort(item.id),
+            $wifi: isIPWithPort(item.id),
+            $remark: this.$store.device.getRemark(item.id),
           })) || []
 
         console.log('getDeviceData.data', this.deviceList)
       }
       catch (error) {
-        console.log(error)
-        if (error.message) {
-          this.$message.warning(error.message)
+        console.warn(error)
+        if (error?.message || error?.cause?.message) {
+          this.$message.warning(error?.message || error?.cause?.message)
         }
         this.deviceList = []
       }

@@ -1,12 +1,17 @@
 import { spawn } from 'node:child_process'
+import appStore from '@electron/helpers/store.js'
 import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
 const shell = async (command, { stdout, stderr } = {}) => {
   const args = command.split(' ')
-  const scrcpyProcess = spawn(scrcpyPath, args, {
-    env: { ...process.env, ADB: adbPath },
-    shell: true,
-  })
+  const scrcpyProcess = spawn(
+    appStore.get('scrcpy.scrcpyPath') || scrcpyPath,
+    args,
+    {
+      env: { ...process.env, ADB: adbPath },
+      shell: true,
+    },
+  )
 
   scrcpyProcess.stdout.on('data', (data) => {
     const stringData = data.toString()

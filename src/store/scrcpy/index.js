@@ -64,7 +64,7 @@ export const useScrcpyStore = defineStore({
         }, [])
         .join(' ')
 
-      console.log('stringifyConfig.value', value)
+      // console.log('stringifyConfig.value', value)
 
       return value
     },
@@ -79,10 +79,10 @@ export const useScrcpyStore = defineStore({
 
       return this.config
     },
-    updateConfig(data) {
+    setConfig(data) {
       const pickConfig = pickBy(data, value => !!value)
 
-      console.log('pickConfig', pickConfig)
+      // console.log('pickConfig', pickConfig)
 
       $appStore.set('scrcpy', pickConfig)
 

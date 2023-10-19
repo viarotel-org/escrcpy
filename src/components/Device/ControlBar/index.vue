@@ -51,15 +51,21 @@ export default {
           command: 'input keyevent KEYCODE_BACK',
         },
         {
-          label: '菜单键',
-          elIcon: 'Menu',
-          command: 'input keyevent KEYCODE_MENU',
-          tips: '不要和切换键搞错啦',
+          label: '通知栏',
+          elIcon: 'Notification',
+          command: 'cmd statusbar expand-notifications',
+          tips: '打开下拉菜单选项',
         },
         {
           label: '电源键',
           elIcon: 'SwitchButton',
           command: 'input keyevent KEYCODE_POWER',
+          tips: '可以用来开启或关闭屏幕',
+        },
+        {
+          label: '重启设备',
+          elIcon: 'RefreshLeft',
+          command: 'reboot',
           tips: '可以用来开启或关闭屏幕',
         },
         {

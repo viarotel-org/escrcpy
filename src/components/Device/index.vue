@@ -241,7 +241,11 @@ export default {
 
       const savePath = this.getRecordPath(row)
       try {
-        const command = `--serial=${row.id} --window-title=${row.name}-${row.id}-🎥录制中... --record=${savePath} ${this.stringScrcpyConfig}`
+        const command = `--serial=${row.id} --window-title=${
+          row.$remark ? `${row.$remark}-` : ''
+        }${row.name}-${row.id}-🎥录制中... --record=${savePath} ${
+          this.stringScrcpyConfig
+        }`
 
         console.log('handleRecord.command', command)
 
@@ -273,7 +277,9 @@ export default {
 
       try {
         await this.$scrcpy.shell(
-          `--serial=${row.id} --window-title=${row.name}-${row.id} ${this.stringScrcpyConfig}`,
+          `--serial=${row.id} --window-title=${
+            row.$remark ? `${row.$remark}-` : ''
+          }${row.name}-${row.id} ${this.stringScrcpyConfig}`,
           { stdout: this.onStdout },
         )
       }

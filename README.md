@@ -1,9 +1,9 @@
 # Escrcpy
 
-📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动
+📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动 [查看更多截图](https://github.com/viarotel-org/escrcpy/tree/main/public/screenshot)
 
 <div style="display:flex;">
-  <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/570065a5683b4cf7af9cfa9743c06ab4~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1360&h=693&s=140693&e=jpg&b=ffffff" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3c2b84b35f8e49d3b809e89272c59e16~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=144785&e=jpg&b=fefefe" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点
@@ -48,13 +48,14 @@
 
 请参阅 [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
 
-## 设备交互操作栏
+## 设备交互栏
 
 - 切换键
 - 主屏幕键
 - 返回键
-- 菜单键
+- 通知栏
 - 电源键
+- 重启设备
 - 截取屏幕
 - 安装应用
 

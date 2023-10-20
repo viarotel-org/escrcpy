@@ -14,41 +14,6 @@
     "repo": "escrcpy",
     "updaterCacheDirName": "escrcpy-updater"
   },
-  "mac": {
-    "icon": "logo.icns",
-    "target": [
-      {
-        "target": "dmg",
-        "arch": ["universal", "arm64", "x64"]
-      }
-    ],
-    "artifactName": "${productName}-${version}-mac-installer.${ext}",
-    "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
-    "extendInfo": {
-      "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
-      "NSDownloadsFolderUsageDescription": "Application requests access to the user's Downloads folder."
-    },
-    "notarize": false
-  },
-  "win": {
-    "icon": "logo.ico",
-    "target": [
-      {
-        "target": "nsis",
-        "arch": ["x64"]
-      },
-      {
-        "target": "zip"
-      },
-      {
-        "target": "portable"
-      }
-    ],
-    "extraResources": {
-      "from": "electron/resources/extra",
-      "to": "extra"
-    }
-  },
   "nsis": {
     "artifactName": "${productName}-${version}-win-setup.${ext}",
     "shortcutName": "${productName}",
@@ -62,9 +27,71 @@
     "artifactName": "${productName}-${version}-win-portable.${ext}",
     "requestExecutionLevel": "user"
   },
+  "win": {
+    "icon": "logo.ico",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64"]
+      },
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      }
+    ],
+    "extraResources": {
+      "from": "electron/resources/extra",
+      "to": "extra"
+    }
+  },
+  "mac": {
+    "icon": "logo.icns",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["universal", "x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["universal", "x64", "arm64"]
+      }
+    ],
+    "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
+    "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
+    "extendInfo": {
+      "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
+      "NSDownloadsFolderUsageDescription": "Application requests access to the user's Downloads folder."
+    },
+    "type": "development",
+    "notarize": false,
+    "darkModeSupport": true,
+    "hardenedRuntime": false
+  },
   "linux": {
+    "category": "Utility",
     "icon": "logo.png",
-    "target": ["AppImage"],
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "rpm",
+        "arch": ["x64"]
+      },
+      {
+        "target": "snap",
+        "arch": ["x64"]
+      }
+    ],
     "artifactName": "${productName}-${version}-linux.${ext}"
   },
   "npmRebuild": false

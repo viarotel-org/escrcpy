@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full -mt-8">
     <div class="">
-      <img src="@/assets/icon.png" class="h-48" alt="" />
+      <img src="@/assets/logo.png" class="h-48" alt="" />
     </div>
     <div class="pt-4 text-xl text-center italic text-gray-700">
       📱 使用图形化的

@@ -54,7 +54,7 @@ jobs:
           draft: true
           prerelease: true
           files: |
-            !dist-release/builder-debug.yml
+            !builder-debug.yml
             dist-release/*.exe
             dist-release/*.zip
             dist-release/*.dmg

@@ -11,8 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
-        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Check out Git repository

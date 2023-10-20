@@ -47,8 +47,39 @@ export default {
   },
   created() {
     this.$store.scrcpy.init()
+    this.showTips()
   },
   methods: {
+    async showTips() {
+      if (this.$electron.process.platform === 'win32') {
+        return false
+      }
+
+      try {
+        const adbWhichPath = await this.$adb.which()
+        console.log('adbWhichPath', adbWhichPath)
+        const scrcpyWhichPath = await this.$scrcpy.which()
+        console.log('scrcpyWhichPath', scrcpyWhichPath)
+        return false
+      }
+      catch (error) {
+        console.warn(error?.message || error?.cause?.message)
+      }
+
+      this.$alert(
+        `<div>该软件依赖与 
+        <a class="hover:underline text-primary-500" href="https://developer.android.com/studio/releases/platform-tools?hl=zh-cn" target="_blank">adb</a>
+         以及
+        <a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>
+        ，请确保已正确安装所述依赖项，或者在偏好设置中手动配置依赖项所在位置。
+        <div>`,
+        '注意事项',
+        {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+        },
+      )
+    },
     isRender(item) {
       if (this.activeTab === item.prop) {
         return this.rendered

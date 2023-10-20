@@ -8,10 +8,6 @@
     "buildResources": "electron/resources/build"
   },
   "files": ["dist", "dist-electron"],
-  "extraResources": {
-    "from": "electron/resources/extra",
-    "to": "extra"
-  },
   "publish": {
     "provider": "github",
     "owner": "viarotel-org",
@@ -44,7 +40,11 @@
       {
         "target": "portable"
       }
-    ]
+    ],
+    "extraResources": {
+      "from": "electron/resources/extra",
+      "to": "extra"
+    }
   },
   "nsis": {
     "artifactName": "${productName}-${version}-win-setup.${ext}",

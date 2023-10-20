@@ -26,6 +26,8 @@ app.config.globalProperties.$appStore = window.appStore
 
 app.config.globalProperties.$replaceIP = replaceIP
 
+console.log('electron', window.electron)
+
 app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading
   postMessage({ payload: 'removeLoading' }, '*')

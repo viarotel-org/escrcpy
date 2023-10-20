@@ -70,7 +70,7 @@ export const useScrcpyStore = defineStore({
 
       if (scope !== 'global') {
         const scopeConfig = $appStore.get(`scrcpy.${replaceIP(scope)}`) || {}
-        tempConfig = mergeConfig(tempConfig, scopeConfig, { debug: true })
+        tempConfig = mergeConfig(tempConfig, scopeConfig)
       }
 
       this.config = tempConfig

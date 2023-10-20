@@ -10,6 +10,8 @@ export const logoPath = buildResolve('logo.png')
 export const icoLogoPath = buildResolve('logo.ico')
 export const icnsLogoPath = buildResolve('logo.icns')
 
-export const adbPath = extraResolve('core/adb.exe')
+export const adbPath
+  = process.platform === 'win32' ? extraResolve('core/adb.exe') : 'adb'
 
-export const scrcpyPath = extraResolve('core/scrcpy.exe')
+export const scrcpyPath
+  = process.platform === 'win32' ? extraResolve('core/scrcpy.exe') : 'scrcpy'

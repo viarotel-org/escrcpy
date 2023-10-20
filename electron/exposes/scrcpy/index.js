@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process'
+import _which from 'which'
 import appStore from '@electron/helpers/store.js'
 import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
@@ -17,7 +18,7 @@ const shell = async (command, { stdout, stderr } = {}) => {
     console.log('scrcpyProcess.stdout.data:', stringData)
 
     if (stdout) {
-      stdout(stringData)
+      stdout(stringData, scrcpyProcess)
     }
   })
 
@@ -27,7 +28,7 @@ const shell = async (command, { stdout, stderr } = {}) => {
     console.error('scrcpyProcess.stderr.data:', stringData)
 
     if (stderr) {
-      stderr(stringData)
+      stderr(stringData, scrcpyProcess)
     }
   })
 
@@ -47,6 +48,9 @@ const shell = async (command, { stdout, stderr } = {}) => {
   })
 }
 
+const which = async () => _which('scrcpy')
+
 export default () => ({
   shell,
+  which,
 })

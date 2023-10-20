@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/viarotel-org/escrcpy/compare/v1.8.3...v1.8.4) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🚑️ 修复 Linux 打包失败的问题 ([96f85d8](https://github.com/viarotel-org/escrcpy/commit/96f85d8264d710b8b3b49da57d01981e4a08298b))
+
 ## [1.8.3](https://github.com/viarotel-org/escrcpy/compare/v1.8.2...v1.8.3) (2023-10-20)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.2](https://github.com/viarotel-org/escrcpy/compare/v1.8.1...v1.8.2) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🔧 修复 Linux 及 MacOS 获取默认依赖路径异常的问题 ([87b533f](https://github.com/viarotel-org/escrcpy/commit/87b533f714204659f72b1d88c3fec895125ee590))
+* 🔧 修复 MacOS ARM64 版本打包失败的问题 ([e9a8fc2](https://github.com/viarotel-org/escrcpy/commit/e9a8fc2a625c60707f842fd7bbb1ca41e777fad2))
+
 ## [1.8.1](https://github.com/viarotel-org/escrcpy/compare/v1.8.0...v1.8.1) (2023-10-20)
 
 

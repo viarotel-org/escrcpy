@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.8](https://github.com/viarotel-org/escrcpy/compare/v1.8.7...v1.8.8) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🚀 修复 macOS 简单关闭应用重新打开时报错的问题 ([4b259c3](https://github.com/viarotel-org/escrcpy/commit/4b259c3771d8923dec55845b6070d06a36e83e3b))
+
 ## [1.8.7](https://github.com/viarotel-org/escrcpy/compare/v1.8.6...v1.8.7) (2023-10-20)
 
 

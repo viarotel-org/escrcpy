@@ -19,7 +19,7 @@
               <template #content>
                 <div class="space-y-1">
                   <div class="pb-1">
-                    对全局或者单个设备的设置不同的偏好配置
+                    对全局或者单个设备设置不同的偏好配置
                   </div>
                   <div class="">
                     全局：将对所有设备生效。

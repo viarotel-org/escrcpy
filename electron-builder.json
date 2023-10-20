@@ -16,7 +16,12 @@
   },
   "mac": {
     "icon": "logo.icns",
-    "target": ["dmg"],
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["universal", "arm64", "x64"]
+      }
+    ],
     "artifactName": "${productName}-${version}-mac-installer.${ext}",
     "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
     "extendInfo": {

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.7](https://github.com/viarotel-org/escrcpy/compare/v1.8.6...v1.8.7) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🐛 修复打包多个平台时可能生成重复文件导致发布软件包失败的问题 ([e89a7a5](https://github.com/viarotel-org/escrcpy/commit/e89a7a564fe8b685e8057b398921eaa383af8ac2))
+
 ## [1.8.6](https://github.com/viarotel-org/escrcpy/compare/v1.8.5...v1.8.6) (2023-10-20)
 
 

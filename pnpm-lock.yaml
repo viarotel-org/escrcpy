@@ -52,6 +52,9 @@ devDependencies:
   element-plus:
     specifier: ^2.4.0
     version: 2.4.0(vue@3.3.4)
+  fix-path:
+    specifier: ^4.0.0
+    version: 4.0.0
   fs-extra:
     specifier: ^11.1.1
     version: 11.1.1
@@ -1617,6 +1620,11 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /ansi-regex@6.0.1:
+    resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
+    engines: {node: '>=12'}
+    dev: true
+
   /ansi-styles@3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
     engines: {node: '>=4'}
@@ -2261,6 +2269,11 @@ packages:
 
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
+    dev: true
+
+  /default-shell@2.2.0:
+    resolution: {integrity: sha512-sPpMZcVhRQ0nEMDtuMJ+RtCxt7iHPAMBU+I4tAlo5dU1sjRpNax0crj6nR3qKpvVnckaQ9U38enXcwW9nZJeCw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
   /defer-to-connect@2.0.1:
@@ -3106,6 +3119,13 @@ packages:
     dependencies:
       locate-path: 6.0.0
       path-exists: 4.0.0
+    dev: true
+
+  /fix-path@4.0.0:
+    resolution: {integrity: sha512-g31GX207Tt+psI53ZSaB1egprYbEN0ZYl90aKcO22A2LmCNnFsSq3b5YpoKp3E/QEiWByTXGJOkFQG4S07Bc1A==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      shell-path: 3.0.0
     dev: true
 
   /flat-cache@3.1.1:
@@ -4654,6 +4674,22 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /shell-env@4.0.1:
+    resolution: {integrity: sha512-w3oeZ9qg/P6Lu6qqwavvMnB/bwfsz67gPB3WXmLd/n6zuh7TWQZtGa3iMEdmua0kj8rivkwl+vUjgLWlqZOMPw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      default-shell: 2.2.0
+      execa: 5.1.1
+      strip-ansi: 7.1.0
+    dev: true
+
+  /shell-path@3.0.0:
+    resolution: {integrity: sha512-HNIZ+W/3P0JuVTV03xjGqYKt3e3h0/Z4AH8TQWeth1LBtCusSjICgkdNdb3VZr6mI7ijE2AiFFpgkVMNKsALeQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      shell-env: 4.0.1
+    dev: true
+
   /signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: true
@@ -4772,6 +4808,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       ansi-regex: 5.0.1
+    dev: true
+
+  /strip-ansi@7.1.0:
+    resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      ansi-regex: 6.0.1
     dev: true
 
   /strip-final-newline@2.0.0:

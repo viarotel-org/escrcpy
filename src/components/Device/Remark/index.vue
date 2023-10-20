@@ -6,7 +6,7 @@
     @show="handleFocus"
   >
     <template #reference>
-      <el-tag effect="light" class="ml-2 cursor-pointer">
+      <el-tag effect="light" class="cursor-pointer">
         <div class="flex items-center">
           <el-icon>
             <EditPen />

@@ -80,11 +80,13 @@
 
               {{ row.$name }}
 
+              <div class="ml-2">
+                <Remark :device="row" class="" />
+              </div>
+
               <el-tag v-if="row.$wifi" effect="light" class="ml-2">
                 WIFI
               </el-tag>
-
-              <Remark :device="row" />
             </div>
           </template>
         </el-table-column>

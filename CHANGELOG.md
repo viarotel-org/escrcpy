@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.9](https://github.com/viarotel-org/escrcpy/compare/v1.8.8...v1.8.9) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🐛 修复 macOS 窗口过小导致出现横向滚动条的问题 ([8ee34ca](https://github.com/viarotel-org/escrcpy/commit/8ee34cafee6c3ddbb866b9c58731c16b4287648c))
+
 ## [1.8.8](https://github.com/viarotel-org/escrcpy/compare/v1.8.7...v1.8.8) (2023-10-20)
 
 

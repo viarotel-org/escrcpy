@@ -64,5 +64,6 @@ jobs:
             dist-release/*.tar.gz
             dist-release/*.yml
             dist-release/*.blockmap
+            !dist-release/builder-debug.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

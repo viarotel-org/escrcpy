@@ -53,8 +53,8 @@ jobs:
         with:
           draft: true
           prerelease: true
+          fail_on_unmatched_files: false
           files: |
-            !builder-debug.yml
             dist-release/*.exe
             dist-release/*.zip
             dist-release/*.dmg

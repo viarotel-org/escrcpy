@@ -14,3 +14,7 @@ export function isIPWithPort(ip) {
 
   return regex.test(ip)
 }
+
+export function replaceIP(value, to = '_') {
+  return value.replaceAll('.', to).replaceAll(':', to)
+}

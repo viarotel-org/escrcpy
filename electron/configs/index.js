@@ -2,6 +2,8 @@ import { resolve } from 'node:path'
 
 import { buildResolve, extraResolve } from '@electron/helpers/index.js'
 
+export const desktopPath = process.env.DESKTOP_PATH
+
 export const devPublishPath = resolve('dev-publish.yml')
 
 export const logoPath = buildResolve('logo.png')

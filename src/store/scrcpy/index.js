@@ -1,8 +1,28 @@
 import { defineStore } from 'pinia'
-import { pickBy } from 'lodash-es'
+import { cloneDeep, mergeWith } from 'lodash-es'
 import * as scrcpyModel from './model/index.js'
+import { replaceIP } from '@/utils/index.js'
 
 const $appStore = window.appStore
+
+function mergeConfig(object, sources, { debug = false } = {}) {
+  const customizer = (objValue, srcValue) => {
+    if (debug) {
+      console.log('objValue', typeof objValue)
+      console.log('srcValue', typeof srcValue)
+    }
+
+    if (typeof srcValue === 'boolean') {
+      return srcValue
+    }
+
+    return srcValue || objValue
+  }
+
+  const value = mergeWith(cloneDeep(object), cloneDeep(sources), customizer)
+
+  return value
+}
 
 /**
  * 获取 Scrcpy 默认配置
@@ -40,28 +60,48 @@ export const useScrcpyStore = defineStore({
     }
   },
   actions: {
+    replaceIP,
     getDefaultConfig,
     init(scope = this.scope) {
-      this.config = {
-        ...this.defaultConfig,
-        ...($appStore.get(`scrcpy.${scope}`) || {}),
+      let tempConfig = mergeConfig(
+        this.defaultConfig,
+        $appStore.get('scrcpy.global') || {},
+      )
+
+      if (scope !== 'global') {
+        const scopeConfig = $appStore.get(`scrcpy.${replaceIP(scope)}`) || {}
+        tempConfig = mergeConfig(tempConfig, scopeConfig, { debug: true })
       }
+
+      this.config = tempConfig
 
       return this.config
     },
+    reset(scope) {
+      if (scope) {
+        this.scope = scope
+        $appStore.set(`scrcpy.${replaceIP(scope)}`, {})
+      }
+      else {
+        this.scope = 'global'
+        $appStore.set('scrcpy', {})
+      }
+
+      this.init()
+    },
     setScope(value) {
-      this.scope = value
-      $appStore.set('scrcpy.scope', value)
+      this.scope = replaceIP(value)
+      $appStore.set('scrcpy.scope', this.scope)
       this.init()
     },
     getStringConfig(scope = this.scope) {
-      const scopeConfig = $appStore.get(`scrcpy.${scope}`)
+      const config = this.getConfig(scope)
 
-      if (!scopeConfig) {
+      if (!config) {
         return ''
       }
 
-      const value = Object.entries(scopeConfig)
+      const value = Object.entries(config)
         .reduce((arr, [key, value]) => {
           if (!value) {
             return arr
@@ -77,6 +117,7 @@ export const useScrcpyStore = defineStore({
           else {
             arr.push(`${key}=${value}`)
           }
+
           return arr
         }, [])
         .join(' ')
@@ -86,15 +127,12 @@ export const useScrcpyStore = defineStore({
       return value
     },
     setConfig(data, scope = this.scope) {
-      const pickConfig = pickBy(data, value => !!value)
-      // console.log('pickConfig', pickConfig)
-
-      $appStore.set(`scrcpy.${scope}`, pickConfig)
+      $appStore.set(`scrcpy.${replaceIP(scope)}`, { ...data })
 
       this.init(scope)
     },
     getConfig(scope = this.scope) {
-      const value = $appStore.get(`scrcpy.${scope}`)
+      const value = this.init(scope)
       return value
     },
     getModel(key, params) {

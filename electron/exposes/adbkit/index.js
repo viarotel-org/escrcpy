@@ -17,12 +17,26 @@ window.addEventListener('beforeunload', () => {
   }
 })
 
-appStore.onDidChange('scrcpy.adbPath', async (value) => {
-  console.log('onDidChange.scrcpy.adbPath.value', value)
+appStore.onDidChange('scrcpy.global.adbPath', async (value, oldValue) => {
+  console.log('onDidChange.scrcpy.global.adbPath', value)
+
+  if (!value) {
+    return false
+  }
+
+  if (value === oldValue) {
+    return false
+  }
+
+  if (value === client?.options?.bin) {
+    return false
+  }
+
   if (client) {
     await client.kill().catch(e => console.warn(e))
     client = null
   }
+
   client = Adb.createClient({ bin: value })
 })
 
@@ -108,7 +122,12 @@ const watch = async (callback) => {
 }
 
 export default () => {
-  client = Adb.createClient({ bin: appStore.get('scrcpy.adbPath') || adbPath })
+  const binPath = appStore.get('scrcpy.global.adbPath') || adbPath
+
+  client = Adb.createClient({
+    bin: binPath,
+  })
+
   console.log('client', client)
 
   return {

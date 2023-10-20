@@ -1,14 +1,12 @@
 export default () => {
-  const $path = window.nodePath
-
-  const { adbPath, scrcpyPath } = window?.electron?.configs || {}
+  const { adbPath, scrcpyPath, desktopPath } = window?.electron?.configs || {}
 
   return [
     {
       label: '文件存储路径',
       type: 'input.path',
       field: 'savePath',
-      value: $path.resolve('../'),
+      value: desktopPath,
       placeholder: '默认值为执行应用的同级目录',
       tips: '截图和录制的音视频都存在这里',
       properties: ['openDirectory'],
@@ -18,7 +16,7 @@ export default () => {
       field: 'adbPath',
       type: 'input.path',
       value: adbPath,
-      tips: '用于连接设备的 adb.exe 的地址，注意：改变此选项时需要重启服务',
+      tips: '用于连接设备的 adb.exe 的地址，注意：该选项不受针对于单个设备配置的影响',
       placeholder: '请选择 Adb.exe',
       properties: ['openFile'],
       filters: [{ name: '请选择 Adb.exe', extensions: ['exe'] }],
@@ -28,7 +26,7 @@ export default () => {
       field: 'scrcpyPath',
       type: 'input.path',
       value: scrcpyPath,
-      tips: '用于控制设备的 Scrcpy.exe 的地址',
+      tips: '用于控制设备的 Scrcpy.exe 的地址，注意：该选项不受针对于单个设备配置的影响',
       placeholder: '请选择 Scrcpy.exe',
       properties: ['openFile'],
       filters: [{ name: '请选择 Scrcpy.exe', extensions: ['exe'] }],

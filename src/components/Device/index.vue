@@ -65,12 +65,7 @@
           align="left"
           width="200"
         />
-        <el-table-column
-          prop="name"
-          label="设备名称"
-          show-overflow-tooltip
-          align="left"
-        >
+        <el-table-column label="设备名称" show-overflow-tooltip align="left">
           <template #default="{ row }">
             <div class="flex items-center">
               <el-tooltip
@@ -83,7 +78,7 @@
                 </el-icon>
               </el-tooltip>
 
-              {{ row.name }}
+              {{ row.$name }}
 
               <el-tag v-if="row.$wifi" effect="light" class="ml-2">
                 WIFI
@@ -188,11 +183,7 @@ export default {
       },
     }
   },
-  computed: {
-    scrcpyConfig() {
-      return this.$store.scrcpy.config
-    },
-  },
+  computed: {},
   async created() {
     this.getDeviceData()
 
@@ -217,6 +208,9 @@ export default {
     }
   },
   methods: {
+    scrcpyConfig(...args) {
+      return this.$store.scrcpy.getConfig(...args)
+    },
     scrcpyArgs(...args) {
       return this.$store.scrcpy.getStringConfig(...args)
     },
@@ -225,13 +219,19 @@ export default {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
     getRecordPath(row) {
-      const basePath = this.scrcpyConfig.savePath
-      const recordFormat = this.scrcpyConfig['--record-format']
-      const fileName = `${row.name || row.id}-recording-${dayjs().format(
+      const rowConfig = this.scrcpyConfig(row.id)
+      const basePath = rowConfig.savePath
+      const recordFormat = rowConfig['--record-format']
+
+      const fileName = `${row.$remark ? `${row.$remark}-` : ''}${
+        row.$name
+      }-${this.$replaceIP(row.id)}-recording-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',
       )}.${recordFormat}`
+
       const joinValue = this.$path.join(basePath, fileName)
       const value = this.$path.normalize(joinValue)
+
       return value
     },
     async handleRecord(row) {
@@ -243,9 +243,9 @@ export default {
       try {
         const command = `--serial=${row.id} --window-title=${
           row.$remark ? `${row.$remark}-` : ''
-        }${row.name}-${
+        }${row.$name}-${
           row.id
-        }-🎥录制中... --record=${savePath} ${this.scrcpyArgs()}`
+        }-🎥录制中... --record=${savePath} ${this.scrcpyArgs(row.id)}`
 
         console.log('handleRecord.command', command)
 
@@ -279,7 +279,7 @@ export default {
         await this.$scrcpy.shell(
           `--serial=${row.id} --window-title=${
             row.$remark ? `${row.$remark}-` : ''
-          }${row.name}-${row.id} ${this.scrcpyArgs()}`,
+          }${row.$name}-${row.id} ${this.scrcpyArgs(row.id)}`,
           { stdout: this.onStdout },
         )
       }
@@ -373,21 +373,14 @@ export default {
       this.loading = true
       await sleep(500)
       try {
-        const data = await this.$adb.getDevices()
+        const data = await this.$store.device.getList()
         this.deviceList
           = data?.map(item => ({
             ...item,
-            id: item.id,
-            name: item.model ? item.model.split(':')[1] : '未授权设备',
             $loading: false,
             $recordLoading: false,
             $stopLoading: false,
-            $unauthorized: item.type === 'unauthorized',
-            $wifi: isIPWithPort(item.id),
-            $remark: this.$store.device.getRemark(item.id),
           })) || []
-
-        this.$store.device.setList(this.deviceList)
 
         console.log('getDeviceData.data', this.deviceList)
       }

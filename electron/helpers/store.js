@@ -3,8 +3,8 @@ import { createProxy } from './index.js'
 
 const appStore = new Store()
 
-appStore.onDidAnyChange(() => {
-  console.log('appStore.onDidAnyChange', appStore.store)
+appStore.onDidAnyChange((value) => {
+  console.log('appStore.onDidAnyChange.value', value)
 })
 
 export default {

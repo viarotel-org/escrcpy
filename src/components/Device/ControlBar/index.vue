@@ -83,12 +83,11 @@ export default {
       ],
     }
   },
-  computed: {
-    scrcpyConfig() {
-      return this.$store.scrcpy.config
-    },
-  },
+  computed: {},
   methods: {
+    scrcpyConfig(...args) {
+      return this.$store.scrcpy.getConfig(...args)
+    },
     async handleInstall(device) {
       let files = null
 
@@ -109,7 +108,7 @@ export default {
       }
 
       const messageEl = this.$message({
-        message: ` 正在为 ${device.name} 安装应用中...`,
+        message: ` 正在为 ${device.$name} 安装应用中...`,
         icon: LoadingIcon,
         duration: 0,
       })
@@ -132,11 +131,11 @@ export default {
       if (successCount) {
         if (totalCount > 1) {
           this.$message.success(
-            `已成功将应用安装到 ${device.name} 中，共 ${totalCount}个，成功 ${successCount}个，失败 ${failCount}个`,
+            `已成功将应用安装到 ${device.$name} 中，共 ${totalCount}个，成功 ${successCount}个，失败 ${failCount}个`,
           )
         }
         else {
-          this.$message.success(`已成功将应用安装到 ${device.name} 中`)
+          this.$message.success(`已成功将应用安装到 ${device.$name} 中`)
         }
         return
       }
@@ -156,15 +155,19 @@ export default {
     },
     async handleScreenCap(device) {
       const messageEl = this.$message({
-        message: ` 正在截取 ${device.name} 的屏幕快照...`,
+        message: ` 正在截取 ${device.$name} 的屏幕快照...`,
         icon: LoadingIcon,
         duration: 0,
       })
 
-      const fileName = `${device.name}-screencap-${dayjs().format(
+      const fileName = `${device.$remark ? `${device.$remark}-` : ''}${
+        device.$name
+      }-${this.$replaceIP(device.id)}-screencap-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',
       )}.png`
-      const savePath = this.$path.resolve(this.scrcpyConfig.savePath, fileName)
+
+      const deviceConfig = this.scrcpyConfig(device.id)
+      const savePath = this.$path.resolve(deviceConfig.savePath, fileName)
 
       try {
         await this.$adb.screencap(device.id, { savePath })

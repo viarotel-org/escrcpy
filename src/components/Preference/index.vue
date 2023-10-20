@@ -5,7 +5,6 @@
         <el-select
           v-model="scopeValue"
           value-key=""
-          title="该选项用于设置偏好设置的作用域范围"
           placeholder="偏好设置的作用域范围"
           filterable
           no-data-text="暂无数据"
@@ -13,9 +12,24 @@
           @change="onScopeChange"
         >
           <template #prefix>
-            <el-icon class="text-primary-300 hover:text-primary-500">
-              <QuestionFilled />
-            </el-icon>
+            <el-tooltip class="" effect="dark" placement="bottom-start">
+              <el-icon class="text-primary-300 hover:text-primary-500">
+                <QuestionFilled />
+              </el-icon>
+              <template #content>
+                <div class="space-y-1">
+                  <div class="pb-1">
+                    对全局或者单个设备的设置不同的偏好配置
+                  </div>
+                  <div class="">
+                    全局：将对所有设备生效。
+                  </div>
+                  <div class="">
+                    单个设备：继承于全局配置，并对单个设备进行独立设置，仅对此设备生效。
+                  </div>
+                </div>
+              </template>
+            </el-tooltip>
           </template>
           <el-option
             v-for="item in scopeList"
@@ -35,6 +49,9 @@
         </el-button>
         <el-button type="" plain @click="handleEdit">
           编辑配置
+        </el-button>
+        <el-button type="" plain @click="handleResetAll">
+          重置配置
         </el-button>
       </div>
     </div>
@@ -213,15 +230,15 @@ export default {
     scopeList() {
       const value = this.$store.device.list.map(item => ({
         ...item,
-        label: `${item.id}（${item.name}${
+        label: `${item.id}（${item.$name}${
           item.$remark ? `，${item.$remark}` : ''
         }）`,
 
-        value: this.$store.device.removeDots(item.id),
+        value: item.id,
       }))
 
       value.unshift({
-        label: '全局范围',
+        label: 'Global（全局）',
         value: 'global',
       })
 
@@ -243,8 +260,13 @@ export default {
     })
   },
   methods: {
+    handleResetAll() {
+      this.$store.scrcpy.reset(this.scopeValue)
+      this.scrcpyForm = this.$store.scrcpy.config
+    },
     onScopeChange(value) {
-      this.$store.scrcpy.setScope(value)
+      const replaceIPValue = this.$store.device.replaceIP(value)
+      this.$store.scrcpy.setScope(replaceIPValue)
       this.scrcpyForm = this.$store.scrcpy.config
     },
     async handleImport() {

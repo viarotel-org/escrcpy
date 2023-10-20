@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.8.0](https://github.com/viarotel-org/escrcpy/compare/v1.7.1...v1.8.0) (2023-10-20)
+
+
+### Features
+
+* 🚀 初步添加对 Linux 以及 MacOS 的支持 ([569ed2e](https://github.com/viarotel-org/escrcpy/commit/569ed2e2fa13a48d9eeb3fa04b8346beca66414a))
+
+
+### Bug Fixes
+
+* 📝 偏好设置描述信息修改 ([23d68d4](https://github.com/viarotel-org/escrcpy/commit/23d68d475054ad2f82d5e90919ddc11934ae64fb))
+* 🔧 设备列表标签显示细节调整 ([4f2f00e](https://github.com/viarotel-org/escrcpy/commit/4f2f00e3b54c944b39de991fbf59619bd40276ff))
+
+
+### Performance Improvements
+
+* 📝 设备备注文本框描述信息调整 ([379b325](https://github.com/viarotel-org/escrcpy/commit/379b3252f88410cda37abe90a32defd74cd8a1b2))
+
 ## [1.7.1](https://github.com/viarotel-org/escrcpy/compare/v1.7.0...v1.7.1) (2023-10-20)
 
 

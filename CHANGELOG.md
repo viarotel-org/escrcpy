@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.1](https://github.com/viarotel-org/escrcpy/compare/v1.7.0...v1.7.1) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🚀 修复对设备进行独立配置时的一些问题 ([6ccd6d0](https://github.com/viarotel-org/escrcpy/commit/6ccd6d09a4220e16cf6c46d9502854028cfbc7c0))
+
+
+### Performance Improvements
+
+* 🎉 初步支持设置偏好设置的作用域范围 ([5dd328c](https://github.com/viarotel-org/escrcpy/commit/5dd328ceef1019ea00581f8bc34c2f3fbf9ae34a))
+
 ## [1.7.0](https://github.com/viarotel-org/escrcpy/compare/v1.6.10...v1.7.0) (2023-10-19)
 
 

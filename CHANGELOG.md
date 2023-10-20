@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3](https://github.com/viarotel-org/escrcpy/compare/v1.8.2...v1.8.3) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🚀 修复 MacOS 软件包安装后无线显示 Logo 的问题 ([77dd81b](https://github.com/viarotel-org/escrcpy/commit/77dd81b11533681bc0d9b62bfb77db8e40b27f71))
+
 ## [1.8.2](https://github.com/viarotel-org/escrcpy/compare/v1.8.1...v1.8.2) (2023-10-20)
 
 

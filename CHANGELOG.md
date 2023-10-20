@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.6](https://github.com/viarotel-org/escrcpy/compare/v1.8.5...v1.8.6) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🔧 修复 macOS 无法正确获取系统依赖路径的问题 ([2352593](https://github.com/viarotel-org/escrcpy/commit/23525930a44c0e9bdd338fb55e11059ad7391484))
+
 ## [1.8.5](https://github.com/viarotel-org/escrcpy/compare/v1.8.4...v1.8.5) (2023-10-20)
 
 

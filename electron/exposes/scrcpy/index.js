@@ -1,5 +1,4 @@
 import { spawn } from 'node:child_process'
-import _which from 'which'
 import appStore from '@electron/helpers/store.js'
 import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
@@ -48,9 +47,6 @@ const shell = async (command, { stdout, stderr } = {}) => {
   })
 }
 
-const which = async () => _which('scrcpy')
-
 export default () => ({
   shell,
-  which,
 })

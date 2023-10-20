@@ -4,7 +4,6 @@ import path from 'node:path'
 import fs from 'node:fs'
 import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
-import _which from 'which'
 import appStore from '@electron/helpers/store.js'
 import { adbPath } from '@electron/configs/index.js'
 
@@ -100,8 +99,6 @@ const install = async (id, path) => client.getDevice(id).install(path)
 
 const version = async () => client.version()
 
-const which = async () => _which('adb')
-
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -147,7 +144,6 @@ export default () => {
     screencap,
     install,
     version,
-    which,
     watch,
   }
 }

@@ -55,15 +55,14 @@ export default {
         return false
       }
 
-      try {
-        const adbWhichPath = await this.$adb.which()
-        console.log('adbWhichPath', adbWhichPath)
-        const scrcpyWhichPath = await this.$scrcpy.which()
-        console.log('scrcpyWhichPath', scrcpyWhichPath)
+      const { adbPath, scrcpyPath } = this.$electron?.configs || {}
+
+      if (adbPath) {
         return false
       }
-      catch (error) {
-        console.warn(error?.message || error?.cause?.message)
+
+      if (scrcpyPath) {
+        return false
       }
 
       this.$alert(

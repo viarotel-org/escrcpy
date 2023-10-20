@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import which from 'which'
 
 import { buildResolve, extraResolve } from '@electron/helpers/index.js'
 
@@ -11,7 +12,14 @@ export const icoLogoPath = buildResolve('logo.ico')
 export const icnsLogoPath = buildResolve('logo.icns')
 
 export const adbPath
-  = process.platform === 'win32' ? extraResolve('core/adb.exe') : 'adb'
+  = process.platform === 'win32'
+    ? extraResolve('core/adb.exe')
+    : which.sync('adb', { nothrow: true })
 
 export const scrcpyPath
-  = process.platform === 'win32' ? extraResolve('core/scrcpy.exe') : 'scrcpy'
+  = process.platform === 'win32'
+    ? extraResolve('core/scrcpy.exe')
+    : which.sync('scrcpy', { nothrow: true })
+
+// console.log('adbPath', adbPath)
+// console.log('scrcpyPath', scrcpyPath)

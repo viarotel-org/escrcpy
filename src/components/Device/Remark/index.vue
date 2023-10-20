@@ -20,7 +20,7 @@
       ref="elInput"
       v-model="device.$remark"
       class=""
-      placeholder="请输入设备备注"
+      placeholder="请输入备注信息"
       clearable
       @change="onChange"
     ></el-input>

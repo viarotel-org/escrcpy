@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/viarotel-org/escrcpy/compare/v1.8.0...v1.8.1) (2023-10-20)
+
+
+### Performance Improvements
+
+* 🚀 支持创建更多架构的 MacOS 软件包格式 ([4780e7c](https://github.com/viarotel-org/escrcpy/commit/4780e7c5063fc2c103d1502c75a3fd3af6719d7b))
+
 ## [1.8.0](https://github.com/viarotel-org/escrcpy/compare/v1.7.1...v1.8.0) (2023-10-20)
 
 

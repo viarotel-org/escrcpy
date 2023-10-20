@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.5](https://github.com/viarotel-org/escrcpy/compare/v1.8.4...v1.8.5) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🚑️ 修复 Linux maintainer 问题 ([4e1542a](https://github.com/viarotel-org/escrcpy/commit/4e1542a54902a3177fe7448e59059b093168a653))
+
 ## [1.8.4](https://github.com/viarotel-org/escrcpy/compare/v1.8.3...v1.8.4) (2023-10-20)
 
 

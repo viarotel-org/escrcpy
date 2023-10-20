@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.10](https://github.com/viarotel-org/escrcpy/compare/v1.8.9...v1.8.10) (2023-10-20)
+
+
+### Bug Fixes
+
+* 🐛 修复 macOS 窗口问题 ([f768566](https://github.com/viarotel-org/escrcpy/commit/f768566636f737bc98d89c443de27a69b343a21f))
+
 ## [1.8.9](https://github.com/viarotel-org/escrcpy/compare/v1.8.8...v1.8.9) (2023-10-20)
 
 

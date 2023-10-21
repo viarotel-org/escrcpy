@@ -51,7 +51,7 @@
 
 1. Linux 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 2. macOS 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md)
-3. 安装上述依赖成功后步骤同 [USB 连接](# USB 连接) 和 [WIFI 连接](# WIFI 连接)
+3. 安装上述依赖成功后步骤同 USB 连接 和 WIFI 连接
 
 ## 快捷键
 

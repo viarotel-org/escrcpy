@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.12](https://github.com/viarotel-org/escrcpy/compare/v1.8.11...v1.8.12) (2023-10-21)
+
+
+### Bug Fixes
+
+* 🐛 修复 macOS 或 linux 下自定义依赖选项描述错误的问题 ([0d4b1ce](https://github.com/viarotel-org/escrcpy/commit/0d4b1cee13bb4d0df429cb89d53b979c142c0101))
+
 ## [1.8.11](https://github.com/viarotel-org/escrcpy/compare/v1.8.10...v1.8.11) (2023-10-21)
 
 

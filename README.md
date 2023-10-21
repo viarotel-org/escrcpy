@@ -45,6 +45,14 @@
 3. 这时 Escrcpy 设备列表应该已经检测到你的手机，点击开始镜像
 4. 开始享受吧
 
+### macOS && Linux
+
+> 注意：这些平台没有集成 [Adb](https://developer.android.com/studio/releases/platform-tools?hl=zh-cn) 及 [Scrcpy](https://github.com/Genymobile/scrcpy) 需要手动安装
+
+1. Linux 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
+2. macOS 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md)
+3. 安装上述依赖成功后步骤同 [USB 连接](# USB 连接) 和 [WIFI 连接](# WIFI 连接)
+
 ## 快捷键
 
 请参阅 [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
@@ -118,8 +126,8 @@
 6. 支持自定义设备名称，以及偏好设置的导出及导入 ✅
 7. 定制化，支持对单个设备进行独立配置 ✅
 8. 添加 macOS 及 linux 操作系统的支持 ✅
-10. 支持语言国际化功能 🚧
-11. 添加对游戏的增强功能，如游戏键位映射 🚧
+9. 支持语言国际化功能 🚧
+10. 添加对游戏的增强功能，如游戏键位映射 🚧
 
 ## 常见问题
 

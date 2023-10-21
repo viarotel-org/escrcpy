@@ -86,7 +86,7 @@
         "arch": ["x64", "arm64"]
       }
     ],
-    "artifactName": "${productName}-${version}-linux.${ext}"
+    "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
   },
   "npmRebuild": false
 }

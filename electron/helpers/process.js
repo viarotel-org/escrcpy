@@ -11,3 +11,5 @@ if (process.platform === 'darwin') {
 process.env.IS_PACKAGED = JSON.stringify(app.isPackaged)
 
 process.env.DESKTOP_PATH = app.getPath('desktop')
+
+process.env.CWD = process.cwd()

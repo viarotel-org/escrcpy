@@ -15,7 +15,7 @@
     "updaterCacheDirName": "escrcpy-updater"
   },
   "nsis": {
-    "artifactName": "${productName}-${version}-win-setup.${ext}",
+    "artifactName": "${productName}-${version}-win-setup-${arch}.${ext}",
     "shortcutName": "${productName}",
     "uninstallDisplayName": "${productName}",
     "oneClick": false,
@@ -24,7 +24,7 @@
     "deleteAppDataOnUninstall": false
   },
   "portable": {
-    "artifactName": "${productName}-${version}-win-portable.${ext}",
+    "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}",
     "requestExecutionLevel": "user"
   },
   "win": {
@@ -32,17 +32,18 @@
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64"]
+        "arch": ["x64", "arm64"]
       },
       {
         "target": "zip",
-        "arch": ["x64"]
+        "arch": ["x64", "arm64"]
       },
       {
         "target": "portable",
-        "arch": ["x64"]
+        "arch": ["x64", "arm64"]
       }
     ],
+    "artifactName": "${productName}-${version}-win-${arch}.${ext}",
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra"

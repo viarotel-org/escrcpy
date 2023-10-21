@@ -1,5 +1,5 @@
 import { Menu, Tray, app, dialog } from 'electron'
-import { logoPath } from '@electron/configs/index'
+import { macTrayPath, trayPath } from '@electron/configs/index'
 import appStore from '@electron/helpers/store.js'
 
 export default (mainWindow) => {
@@ -29,7 +29,9 @@ export default (mainWindow) => {
     else if (response === 1) {
       mainWindow.hide()
 
-      tray = new Tray(logoPath)
+      const trayIcon = process.platform === 'darwin' ? macTrayPath : trayPath
+
+      tray = new Tray(trayIcon)
 
       tray.setToolTip('escrcpy')
 
@@ -42,6 +44,13 @@ export default (mainWindow) => {
           label: '打开',
           click: () => {
             showApp()
+          },
+        },
+        {
+          label: '重启服务',
+          click: () => {
+            app.relaunch()
+            quitApp()
           },
         },
         {
@@ -84,8 +93,8 @@ export default (mainWindow) => {
       checkboxLabel: '是否记住选择？',
     })
 
-    console.log('response', response)
-    console.log('checkboxChecked', checkboxChecked)
+    // console.log('response', response)
+    // console.log('checkboxChecked', checkboxChecked)
 
     if (checkboxChecked) {
       appStore.set('appCloseCode', response)

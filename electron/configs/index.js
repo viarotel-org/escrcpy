@@ -11,6 +11,9 @@ export const logoPath = buildResolve('logo.png')
 export const icoLogoPath = buildResolve('logo.ico')
 export const icnsLogoPath = buildResolve('logo.icns')
 
+export const trayPath = extraResolve('tray.png')
+export const macTrayPath = extraResolve('tray-Template.png')
+
 export const adbPath
   = process.platform === 'win32'
     ? extraResolve('core/adb.exe')

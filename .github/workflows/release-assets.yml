@@ -17,7 +17,7 @@ jobs:
           - os: macos-latest
             arch: [arm64, amd64]
           - os: windows-latest
-            arch: amd64
+            arch: [arm64, amd64]
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3

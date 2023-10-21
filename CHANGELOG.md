@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.13](https://github.com/viarotel-org/escrcpy/compare/v1.8.12...v1.8.13) (2023-10-21)
+
+
+### Performance Improvements
+
+* 🚀 为 windows 添加 ARM64 软件包编译 ([368e8ee](https://github.com/viarotel-org/escrcpy/commit/368e8ee45501b4c68f3509341421d797e5d249ca))
+* 🚀 支持所有平台在点击关闭按钮时选择是否保存到托盘中的功能 ([8360198](https://github.com/viarotel-org/escrcpy/commit/83601984ec2015f007fbe635ea71e7866023102e))
+
 ## [1.8.12](https://github.com/viarotel-org/escrcpy/compare/v1.8.11...v1.8.12) (2023-10-21)
 
 

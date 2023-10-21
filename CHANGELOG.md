@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.11](https://github.com/viarotel-org/escrcpy/compare/v1.8.10...v1.8.11) (2023-10-21)
+
+
+### Performance Improvements
+
+* 🔨 优化窗口默认大小 ([393e899](https://github.com/viarotel-org/escrcpy/commit/393e899eebd684b16388797415b8c843baf110c2))
+
 ## [1.8.10](https://github.com/viarotel-org/escrcpy/compare/v1.8.9...v1.8.10) (2023-10-20)
 
 

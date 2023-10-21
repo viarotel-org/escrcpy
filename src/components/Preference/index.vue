@@ -283,7 +283,8 @@ export default {
       }
       catch (error) {
         if (error.message) {
-          this.$message.warning(error.message)
+          const message = error.message?.match(/Error: (.*)/)?.[1]
+          this.$message.warning(message || error.message)
         }
       }
     },
@@ -309,7 +310,8 @@ export default {
       }
       catch (error) {
         if (error.message) {
-          this.$message.warning(error.message)
+          const message = error.message?.match(/Error: (.*)/)?.[1]
+          this.$message.warning(message || error.message)
         }
       }
 
@@ -317,12 +319,17 @@ export default {
     },
     async handleSelect({ field }, { properties, filters } = {}) {
       try {
+        const defaultPath = this.scrcpyForm[field]
         const files = await this.$electron.ipcRenderer.invoke(
           'show-open-dialog',
           {
             properties,
             filters,
-            defaultPath: this.scrcpyForm[field],
+            ...(defaultPath
+              ? {
+                  defaultPath,
+                }
+              : {}),
           },
         )
 
@@ -332,7 +339,8 @@ export default {
       }
       catch (error) {
         if (error.message) {
-          this.$message.warning(error.message)
+          const message = error.message?.match(/Error: (.*)/)?.[1]
+          this.$message.warning(message || error.message)
         }
       }
     },

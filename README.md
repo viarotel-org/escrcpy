@@ -1,3 +1,7 @@
+<div style="display:flex;">
+  <img src="./src/assets/logo.png" alt="viarotel-escrcpy" style="width: 132px;">
+</div>
+
 # Escrcpy
 
 📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。 [查看更多截图](https://github.com/viarotel-org/escrcpy/tree/main/public/screenshot)
@@ -163,6 +167,12 @@
 ### 设备交互控制栏为什么不设计为自动跟踪吸附的悬浮菜单?
 
 采用悬浮菜单方案不可避免地会增加对 Scrcpy 的耦合性，并增加与 Scrcpy 同步更新的难度。许多类似的 ScrcpyGUI 软件在使用此方案后不得不投入大量精力，最终因难以维护而放弃开发。因此，综合考虑，我们决定采用现有的方案，并期待 Scrcpy 未来能够增加原生交互控制栏的支持。
+
+### 某些设备连接镜像后可以看到画面但是无法操作
+
+> 注意：以小米手机为例，不仅需要开启 USB 调试还需要开启 USB 调试（安全设置）也就是允许通过 USB 调试修改权限或模拟点击的功能
+
+可供参阅的详情说明 [鼠标和键盘不工作的原因](https://github.com/Genymobile/scrcpy/blob/master/FAQ.md#mouse-and-keyboard-do-not-work)
 
 ## 获得帮助
 

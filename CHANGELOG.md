@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.15](https://github.com/viarotel-org/escrcpy/compare/v1.8.14...v1.8.15) (2023-10-22)
+
+
+### Bug Fixes
+
+* 🐛 修复 Linux 平台启动白屏无法正常使用的问题 ([54e713b](https://github.com/viarotel-org/escrcpy/commit/54e713b1dfb1f1ed470e13f7ea512442a53764fc))
+
 ## [1.8.14](https://github.com/viarotel-org/escrcpy/compare/v1.8.13...v1.8.14) (2023-10-21)
 
 

@@ -7,7 +7,7 @@ export const desktopPath = process.env.DESKTOP_PATH
 
 export const devPublishPath = resolve('dev-publish.yml')
 
-export const logoPath = buildResolve('logo.png')
+export const logoPath = buildResolve('logo@256x256.png')
 export const icoLogoPath = buildResolve('logo.ico')
 export const icnsLogoPath = buildResolve('logo.icns')
 

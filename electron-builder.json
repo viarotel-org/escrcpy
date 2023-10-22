@@ -2,33 +2,13 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "productName": "Escrcpy",
   "appId": "org.viarotel.escrcpy",
-  "asar": true,
   "directories": {
     "output": "dist-release",
     "buildResources": "electron/resources/build"
   },
+  "icon": "logo",
   "files": ["dist", "dist-electron"],
-  "publish": {
-    "provider": "github",
-    "owner": "viarotel-org",
-    "repo": "escrcpy",
-    "updaterCacheDirName": "escrcpy-updater"
-  },
-  "nsis": {
-    "artifactName": "${productName}-${version}-win-setup-${arch}.${ext}",
-    "shortcutName": "${productName}",
-    "uninstallDisplayName": "${productName}",
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
-  },
-  "portable": {
-    "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}",
-    "requestExecutionLevel": "user"
-  },
   "win": {
-    "icon": "logo.ico",
     "target": [
       {
         "target": "nsis",
@@ -49,8 +29,20 @@
       "to": "extra"
     }
   },
+  "nsis": {
+    "artifactName": "${productName}-${version}-win-setup-${arch}.${ext}",
+    "shortcutName": "${productName}",
+    "uninstallDisplayName": "${productName}",
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "portable": {
+    "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}",
+    "requestExecutionLevel": "user"
+  },
   "mac": {
-    "icon": "logo.icns",
     "target": [
       {
         "target": "dmg",
@@ -62,6 +54,11 @@
       }
     ],
     "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
+    "extraResources": {
+      "from": "electron/resources/extra",
+      "to": "extra",
+      "filter": ["**/*", "!core"]
+    },
     "entitlementsInherit": "electron/resources/build/entitlements.mac.plist",
     "extendInfo": {
       "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",
@@ -73,9 +70,9 @@
     "hardenedRuntime": false
   },
   "linux": {
+    "desktop": "logo",
     "maintainer": "viarotel@qq.com",
     "category": "Utility",
-    "icon": "logo.png",
     "target": [
       {
         "target": "AppImage",
@@ -86,7 +83,19 @@
         "arch": ["x64", "arm64"]
       }
     ],
-    "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
+    "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
+    "extraResources": {
+      "from": "electron/resources/extra",
+      "to": "extra",
+      "filter": ["**/*", "!core"]
+    }
   },
-  "npmRebuild": false
+  "asar": true,
+  "npmRebuild": false,
+  "publish": {
+    "provider": "github",
+    "owner": "viarotel-org",
+    "repo": "escrcpy",
+    "updaterCacheDirName": "escrcpy-updater"
+  }
 }

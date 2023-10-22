@@ -30,7 +30,7 @@
     "@viarotel-org/unocss-config": "^0.7.4",
     "@vitejs/plugin-vue": "^4.3.4",
     "dayjs": "^1.11.10",
-    "electron": "^26.1.0",
+    "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.4",

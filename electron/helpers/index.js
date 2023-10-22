@@ -10,7 +10,7 @@ export const extraResolve = (value) => {
 }
 
 export const buildResolve = value =>
-  resolve(process.env.CWD, `electron/resources/build/${value}`)
+  resolve(`electron/resources/build/${value}`)
 
 export function exposeContext(key, value) {
   if (process.contextIsolated) {

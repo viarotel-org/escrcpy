@@ -91,7 +91,7 @@
     }
   },
   "asar": true,
-  "npmRebuild": false,
+  "npmRebuild": true,
   "publish": {
     "provider": "github",
     "owner": "viarotel-org",

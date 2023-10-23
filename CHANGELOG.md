@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.17](https://github.com/viarotel-org/escrcpy/compare/v1.8.16...v1.8.17) (2023-10-23)
+
+
+### Bug Fixes
+
+* 🐛 尝试修复构建失败 ([daeb9e5](https://github.com/viarotel-org/escrcpy/commit/daeb9e5facfe9575182462f05106ed3b6cacee41))
+
 ## [1.8.16](https://github.com/viarotel-org/escrcpy/compare/v1.8.15...v1.8.16) (2023-10-23)
 
 

@@ -7,7 +7,7 @@
 📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。 [查看更多截图](https://github.com/viarotel-org/escrcpy/tree/main/public/screenshot)
 
 <div style="display:flex;">
-  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3c2b84b35f8e49d3b809e89272c59e16~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1359&h=693&s=144785&e=jpg&b=fefefe" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/da63c9db7a944899b0ad27a0b67d29ae~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1360&h=693&s=144972&e=jpg&b=ffffff" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
 ## 特点

@@ -1,0 +1,35 @@
+{
+  "// 设备列表": true,
+
+  "wireless-connection": "无线连接",
+  "connected-device": "连接设备",
+  "refresh-device": "刷新设备",
+  "restart-service": "重启服务",
+
+  "device-id": "设备 ID",
+  "device-name": "设备名称",
+  "devices": "设备列表",
+  "operate": "操作",
+
+  "install-app": "安装应用",
+  "screen-capture": "截取屏幕",
+  "reboot-device": "重启设备",
+  "power-key": "电源键",
+  "notification-bar": "通知栏",
+  "return-key": "切换键",
+  "home-key": "切换键",
+  "switch-key": "切换键",
+  "wireless-mode": "无线模式",
+  "start-recording": "开始录制",
+  "start-mirror": "开始镜像",
+
+  "// 偏好设备": true,
+
+  "preferences": "偏好设置",
+
+  "// 关于": true,
+
+  "about": "关于",
+
+  "// 底部占位符": true
+}

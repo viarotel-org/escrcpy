@@ -28,5 +28,11 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "i18n-ally.localesPaths": [
+    "src/locales",
+    "dist-release/win-arm64-unpacked/locales",
+    "dist-release/win-unpacked/locales"
+  ],
+  "i18n-ally.sourceLanguage": "en"
 }

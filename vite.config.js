@@ -8,6 +8,7 @@ import useVue from '@vitejs/plugin-vue'
 import useEslint from 'vite-plugin-eslint'
 import useUnoCSS from 'unocss/vite'
 import useSvg from 'vite-svg-loader'
+import useI18n from '@intlify/unplugin-vue-i18n/vite'
 
 const merge = (config, { command = '' } = {}) =>
   mergeConfig(
@@ -37,6 +38,9 @@ export default params =>
         useUnoCSS(),
         useSvg(),
         useVue(),
+        useI18n({
+          include: [resolve(__dirname, './src/locales/**')],
+        }),
         useElectron([
           {
             entry: 'electron/main.js',

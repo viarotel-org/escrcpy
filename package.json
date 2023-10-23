@@ -24,6 +24,7 @@
     "@devicefarmer/adbkit": "^3.2.5",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.1",
+    "@intlify/unplugin-vue-i18n": "^1.4.0",
     "@viarotel-org/design": "^0.7.0",
     "@viarotel-org/eslint-config": "^0.7.0",
     "@viarotel-org/postcss-config": "^0.7.0",
@@ -45,6 +46,7 @@
     "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-eslint": "^1.8.1",
     "vite-svg-loader": "^4.0.0",
+    "vue-i18n": "^9.5.0",
     "which": "^4.0.0"
   }
 }

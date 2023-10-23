@@ -1,4 +1,6 @@
 import { createApp } from 'vue'
+import { createI18n } from 'vue-i18n'
+import messages from '@intlify/unplugin-vue-i18n/messages'
 import App from './App.vue'
 
 import store from './store/index.js'
@@ -16,7 +18,17 @@ const app = createApp(App)
 app.use(store)
 
 app.use(plugins)
+
 app.use(icons)
+
+const locale = window.electron?.process?.env?.LOCALE
+// const locale = 'en_US'
+// console.log('locale', locale)
+const i18n = createI18n({
+  locale,
+  messages,
+})
+app.use(i18n)
 
 app.config.globalProperties.$electron = window.electron
 app.config.globalProperties.$adb = window.adbkit

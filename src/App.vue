@@ -29,15 +29,15 @@ export default {
     return {
       tabsModel: [
         {
-          label: '设备列表',
+          label: this.$t('devices'),
           prop: 'Device',
         },
         {
-          label: '偏好设置',
+          label: this.$t('preferences'),
           prop: 'Preference',
         },
         {
-          label: '关于',
+          label: this.$t('about'),
           prop: 'About',
         },
       ],

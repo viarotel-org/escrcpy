@@ -1,0 +1,15 @@
+{
+  "// 设备列表": true,
+
+  "devices": "Devices",
+
+  "// 偏好设备": true,
+
+  "preferences": "Preferences",
+
+  "// 关于": true,
+
+  "about": "About",
+
+  "// 底部占位符": true
+}

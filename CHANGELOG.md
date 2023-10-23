@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.16](https://github.com/viarotel-org/escrcpy/compare/v1.8.15...v1.8.16) (2023-10-23)
+
+
+### Performance Improvements
+
+* ✨ 采用新的 Logo 设计 ([3bf79d3](https://github.com/viarotel-org/escrcpy/commit/3bf79d37d1f5957abf8d50067f2eda64859131c1))
+
 ## [1.8.15](https://github.com/viarotel-org/escrcpy/compare/v1.8.14...v1.8.15) (2023-10-22)
 
 

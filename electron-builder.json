@@ -6,9 +6,9 @@
     "output": "dist-release",
     "buildResources": "electron/resources/build"
   },
-  "icon": "logo",
   "files": ["dist", "dist-electron"],
   "win": {
+    "icon": "logo.ico",
     "target": [
       {
         "target": "nsis",
@@ -43,6 +43,7 @@
     "requestExecutionLevel": "user"
   },
   "mac": {
+    "icon": "logo.icns",
     "target": [
       {
         "target": "dmg",
@@ -70,6 +71,7 @@
     "hardenedRuntime": false
   },
   "linux": {
+    "icon": "logo.icns",
     "desktop": "logo",
     "maintainer": "viarotel@qq.com",
     "category": "Utility",

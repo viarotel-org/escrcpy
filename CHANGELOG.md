@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/viarotel-org/escrcpy/compare/v1.9.0...v1.9.1) (2023-10-24)
+
+
+### Performance Improvements
+
+* 💄 窗口控制及交互逻辑优化 ([52514e2](https://github.com/viarotel-org/escrcpy/commit/52514e2daf07ea769dd53bc81ed7e9e0bfd64bb0))
+
 ## [1.9.0](https://github.com/viarotel-org/escrcpy/compare/v1.8.17...v1.9.0) (2023-10-24)
 
 

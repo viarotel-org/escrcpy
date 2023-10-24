@@ -11,7 +11,9 @@
           <el-icon>
             <EditPen />
           </el-icon>
-          <span class="pl-1">{{ device.$remark || "备注" }}</span>
+          <span class="pl-1">{{
+            device.$remark || $t("devices.device.remark")
+          }}</span>
         </div>
       </el-tag>
     </template>

@@ -34,5 +34,5 @@
     "dist-release/win-arm64-unpacked/locales",
     "dist-release/win-unpacked/locales"
   ],
-  "i18n-ally.sourceLanguage": "en"
+  "i18n-ally.sourceLanguage": "zh"
 }

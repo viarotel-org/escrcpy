@@ -21,8 +21,8 @@ app.use(plugins)
 
 app.use(icons)
 
-const locale = window.electron?.process?.env?.LOCALE
-// const locale = 'en_US'
+// const locale = window.electron?.process?.env?.LOCALE
+const locale = 'en_US'
 // console.log('locale', locale)
 const i18n = createI18n({
   locale,

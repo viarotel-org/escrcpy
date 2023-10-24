@@ -8,7 +8,7 @@
         clearable
       >
         <template #prepend>
-          无线连接
+          {{ $t("devices.wireless.name") }}
         </template>
       </el-input>
       <div class="text-gray-500 text-sm">
@@ -30,7 +30,7 @@
         :loading="connectLoading"
         @click="handleConnect"
       >
-        连接设备
+        {{ $t("devices.wireless.connect") }}
       </el-button>
       <el-button
         type="primary"
@@ -38,10 +38,10 @@
         :loading="loading"
         @click="handleRefresh"
       >
-        刷新设备
+        {{ $t("devices.refresh") }}
       </el-button>
       <el-button type="warning" icon="RefreshRight" @click="handleRestart">
-        重启服务
+        {{ $t("devices.restart") }}
       </el-button>
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
@@ -56,16 +56,20 @@
         row-key="id"
       >
         <template #empty>
-          <el-empty description="设备列表为空" />
+          <el-empty :description="$t('devices.empty')" />
         </template>
         <el-table-column
           prop="id"
-          label="设备 ID"
+          :label="$t('devices.device.id')"
           show-overflow-tooltip
           align="left"
           width="200"
         />
-        <el-table-column label="设备名称" show-overflow-tooltip align="left">
+        <el-table-column
+          :label="$t('devices.device.name')"
+          show-overflow-tooltip
+          align="left"
+        >
           <template #default="{ row }">
             <div class="flex items-center">
               <el-tooltip
@@ -90,7 +94,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="400" align="left">
+        <el-table-column
+          :label="$t('devices.operates.name')"
+          width="400"
+          align="left"
+        >
           <template #default="{ row }">
             <el-button
               type="primary"
@@ -100,7 +108,11 @@
               :icon="row.$loading ? '' : 'Monitor'"
               @click="handleMirror(row)"
             >
-              {{ row.$loading ? "正在镜像" : "开始镜像" }}
+              {{
+                row.$loading
+                  ? $t("devices.operates.mirroring")
+                  : $t("devices.operates.mirror")
+              }}
             </el-button>
 
             <el-button
@@ -111,7 +123,11 @@
               :icon="row.$recordLoading ? '' : 'VideoCamera'"
               @click="handleRecord(row)"
             >
-              {{ row.$recordLoading ? "正在录制" : "开始录制" }}
+              {{
+                row.$recordLoading
+                  ? $t("devices.operates.recording")
+                  : $t("devices.operates.record")
+              }}
             </el-button>
 
             <el-button
@@ -126,7 +142,7 @@
               <template #icon>
                 <svg-icon name="wifi"></svg-icon>
               </template>
-              无线模式
+              {{ $t("devices.operates.wireless") }}
             </el-button>
 
             <el-button
@@ -138,13 +154,17 @@
               :icon="row.$stopLoading ? '' : 'CircleClose'"
               @click="handleStop(row)"
             >
-              {{ row.$stopLoading ? "正在断开" : "断开连接" }}
+              {{
+                row.$stopLoading
+                  ? $t("devices.operates.disconnecting")
+                  : $t("devices.operates.disconnect")
+              }}
             </el-button>
           </template>
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
-            <el-icon class="" title="设备交互">
+            <el-icon class="" :title="$t('devices.operates.more')">
               <Operation class="" />
             </el-icon>
           </template>
@@ -177,7 +197,7 @@ export default {
     const adbCache = storage.get('adbCache') || {}
     return {
       loading: false,
-      loadingText: '努力加载中...',
+      loadingText: this.$t('devices.loading'),
       connectLoading: false,
       deviceList: [],
       formData: {
@@ -367,20 +387,22 @@ export default {
       try {
         await this.$confirm(
           `
-        <div class="pb-4 text-sm text-red-500">错误详情：${message}</div>
-        <div>可能有以下原因：</div>
-        <div>1. IP地址或端口号错误</div>
-        <div>2. 设备未与当前电脑配对成功</div>
-        <div>3. 电脑网络和提供的设备网络IP不在同一个局域网中</div>
-        <div>4. adb 依赖路径错误</div>
-        <div>5. 其他未知错误</div>
+        <div class="pb-4 text-sm text-red-500">${this.$t(
+          'devices.wireless.error.detail',
+        )}：${message}</div>
+        <div>${this.$t('devices.wireless.error.reasons[0]')}：</div>
+        <div>1. ${this.$t('devices.wireless.error.reasons[1]')} </div>
+        <div>2. ${this.$t('devices.wireless.error.reasons[2]')} </div>
+        <div>3. ${this.$t('devices.wireless.error.reasons[3]')} </div>
+        <div>4. ${this.$t('devices.wireless.error.reasons[4]')} </div>
+        <div>5. ${this.$t('devices.wireless.error.reasons[5]')} </div>
         `,
-          '连接设备失败',
+          this.$t('devices.wireless.error.title'),
           {
             dangerouslyUseHTMLString: true,
             closeOnClickModal: false,
-            confirmButtonText: '无线配对',
-            cancelButtonText: '取消',
+            confirmButtonText: this.$t('devices.wireless.error.confirm'),
+            cancelButtonText: this.$t('devices.wireless.error.cancel'),
             type: 'warning',
           },
         )
@@ -432,7 +454,7 @@ export default {
         }
       }
       this.loading = false
-      this.loadingText = '正在获取设备列表...'
+      this.loadingText = ''
     },
   },
 }

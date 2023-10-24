@@ -1,15 +1,130 @@
 {
-  "// 设备列表": true,
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "devices": {
+    "name": "Devices",
 
-  "devices": "Devices",
+    "loading": "loading...",
 
-  "// 偏好设备": true,
+    "empty": "No device detected",
 
-  "preferences": "Preferences",
+    "wireless": {
+      "name": "Wireless",
+      "connect": "Connect",
+      "error": {
+        "title": "Failed to Connect Device",
+        "detail": "Error Details",
+        "reasons": [
+          "Possible reasons:",
+          "Incorrect IP address or port number",
+          "Device pairing unsuccessful",
+          "Computer network and provided device network IP are not in the same LAN",
+          "Incorrect adb dependency path",
+          "Other unknown errors"
+        ],
+        "confirm": "Wireless Pairing",
+        "cancel": "@:common.cancel"
+      },
+      "success": "Device Connected Successfully"
+    },
 
-  "// 关于": true,
+    "refresh": "Refresh",
+    "restart": "Restart",
 
-  "about": "About",
+    "device": {
+      "id": "ID",
+      "name": "Name",
+      "remark": "Remark"
+    },
 
-  "// 底部占位符": true
+    "operates": {
+      "name": "Operations",
+      "more": "More",
+      "mirror": "Mirror",
+      "mirroring": "Mirroring",
+      "record": "Record",
+      "recording": "Recording",
+      "wireless": "Wireless Mode",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting",
+      "install": "Install APP",
+      "capture": "Capture",
+      "reboot": "Reboot",
+      "power": "Power",
+      "notification": "Notification",
+      "return": "Back",
+      "home": "Home",
+      "switch": "Switch"
+    }
+  },
+  "preferences": {
+    "name": "Preferences",
+    "global": "Global",
+
+    "config": {
+      "import": "Import Configuration",
+      "export": "Export Configuration",
+      "edit": "Edit Configuration",
+      "reset": "Reset Configuration"
+    },
+
+    "custom": {
+      "name": "Custom",
+      "file-path": "File Storage Path",
+      "adb-path": "ADB Path",
+      "scrcpy-path": "Scrcpy Path"
+    },
+
+    "video": {
+      "name": "Video Control",
+      "resolution": "Resolution",
+      "bit": "Bitrate",
+      "refresh-rate": "Refresh Rate",
+      "decoder": "Video Decoder",
+      "encoder": "Video Encoder",
+      "screen-rotation": "Screen Rotation",
+      "screen-cropping": "Screen Cropping",
+      "multi-display": "Multiple Displays",
+      "video-buffering": "Video Buffering",
+      "audio-buffering": "Audio Buffering",
+      "receiver-buffering": "Receiver Buffering (v412)",
+      "disable": "Disable Video"
+    },
+
+    "device": {
+      "name": "Device Control",
+      "show-touch": "Show Touches",
+      "stay-awake": "Stay Awake",
+      "control-in-close-screen": "Turn Off Screen During Control",
+      "control-end-video": "Turn Off Screen After Control",
+      "control-in-stop-charging": "Stop Charging During Control"
+    },
+
+    "window": {
+      "name": "Window Control",
+      "borderless": "Borderless Mode",
+      "full-screen": "Full Screen Mode",
+      "always-top": "Always on Top",
+      "disable-screen-saver": "Disable Screensaver"
+    },
+
+    "recording": {
+      "name": "Audio/Video Recording",
+      "format": "Video Recording Format"
+    },
+
+    "audio": {
+      "name": "Audio/Video Recording",
+      "disable": "Disable Audio"
+    },
+
+    "reset": "Restore Default Values"
+  },
+  "about": {
+    "name": "About",
+    "description": "📱 Display and control your Android device using a graphical interface powered by Electron",
+    "update": "Check for Updates"
+  }
 }

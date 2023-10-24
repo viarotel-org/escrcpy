@@ -34,15 +34,15 @@ export default {
     return {
       tabsModel: [
         {
-          label: this.$t('devices'),
+          label: this.$t('devices.name'),
           prop: 'Device',
         },
         {
-          label: this.$t('preferences'),
+          label: this.$t('preferences.name'),
           prop: 'Preference',
         },
         {
-          label: this.$t('about'),
+          label: this.$t('about.name'),
           prop: 'About',
         },
       ],

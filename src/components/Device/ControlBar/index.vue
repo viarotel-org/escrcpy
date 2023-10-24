@@ -36,46 +36,46 @@ export default {
     return {
       controlModel: [
         {
-          label: '切换键',
+          label: this.$t('devices.operates.switch'),
           elIcon: 'Switch',
           command: 'input keyevent KEYCODE_APP_SWITCH',
         },
         {
-          label: '主屏幕键',
+          label: this.$t('devices.operates.home'),
           elIcon: 'HomeFilled',
           command: 'input keyevent KEYCODE_HOME',
         },
         {
-          label: '返回键',
+          label: this.$t('devices.operates.return'),
           elIcon: 'Back',
           command: 'input keyevent KEYCODE_BACK',
         },
         {
-          label: '通知栏',
+          label: this.$t('devices.operates.notification'),
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: '打开下拉菜单选项',
         },
         {
-          label: '电源键',
+          label: this.$t('devices.operates.power'),
           elIcon: 'SwitchButton',
           command: 'input keyevent KEYCODE_POWER',
           tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: '重启设备',
+          label: this.$t('devices.operates.reboot'),
           elIcon: 'RefreshLeft',
           command: 'reboot',
           tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: '截取屏幕',
+          label: this.$t('devices.operates.capture'),
           elIcon: 'Crop',
           handle: this.handleScreenCap,
           tips: '',
         },
         {
-          label: '安装应用',
+          label: this.$t('devices.operates.install'),
           svgIcon: 'install',
           handle: this.handleInstall,
           tips: '',

@@ -1,35 +1,132 @@
 {
-  "// 设备列表": true,
+  "common": {
+    "cancel": "取消",
+    "confirm": "确认"
+  },
+  "devices": {
+    "name": "设备列表",
 
-  "wireless-connection": "无线连接",
-  "connected-device": "连接设备",
-  "refresh-device": "刷新设备",
-  "restart-service": "重启服务",
+    "loading": "努力加载中...",
 
-  "device-id": "设备 ID",
-  "device-name": "设备名称",
-  "devices": "设备列表",
-  "operate": "操作",
+    "empty": "没有检测到设备",
 
-  "install-app": "安装应用",
-  "screen-capture": "截取屏幕",
-  "reboot-device": "重启设备",
-  "power-key": "电源键",
-  "notification-bar": "通知栏",
-  "return-key": "切换键",
-  "home-key": "切换键",
-  "switch-key": "切换键",
-  "wireless-mode": "无线模式",
-  "start-recording": "开始录制",
-  "start-mirror": "开始镜像",
+    "wireless": {
+      "name": "无线连接",
+      "connect": "连接设备",
+      "error": {
+        "title": "连接设备失败",
+        "detail": "错误详情",
+        "reasons": [
+          "可能有以下原因",
+          "IP地址或端口号错误",
+          "设备未与当前电脑配对成功",
+          "电脑网络和提供的设备网络IP不在同一个局域网中",
+          "adb 依赖路径错误",
+          "其他未知错误"
+        ],
+        "confirm": "无线配对",
+        "cancel": "@:common.cancel"
+      },
+      "success": "连接设备成功"
+    },
 
-  "// 偏好设备": true,
+    "refresh": "刷新设备",
+    "restart": "重启服务",
 
-  "preferences": "偏好设置",
+    "device": {
+      "id": "设备 ID",
+      "name": "设备名称",
+      "remark": "备注"
+    },
 
-  "// 关于": true,
+    "operates": {
+      "name": "操作",
+      "more": "设备交互",
+      "mirror": "开始镜像",
+      "mirroring": "正在镜像",
+      "record": "开始录制",
+      "recording": "正在录制",
+      "wireless": "无线模式",
+      "disconnect": "断开连接",
+      "disconnecting": "正在断开",
+      "install": "安装应用",
+      "capture": "截取屏幕",
+      "reboot": "重启设备",
+      "power": "电源键",
+      "notification": "通知栏",
+      "return": "切换键",
+      "home": "切换键",
+      "switch": "切换键"
+    }
+  },
 
-  "about": "关于",
+  "preferences": {
+    "name": "偏好设置",
+    "global": "全局",
 
-  "// 底部占位符": true
+    "config": {
+      "import": "导入配置",
+      "export": "导出配置",
+      "edit": "编辑配置",
+      "reset": "重置配置"
+    },
+
+    "custom": {
+      "name": "自定义",
+      "file-path": "文件存储路径",
+      "adb-path": "adb 路径",
+      "scrcpy-path": "scrcpy 路径"
+    },
+
+    "video": {
+      "name": "视频控制",
+      "resolution": "分辨率",
+      "bit": "比特率",
+      "refresh-rate": "刷新率",
+      "decoder": "视频解码器",
+      "encoder": "视频编码器",
+      "screen-rotation": "屏幕旋转",
+      "screen-cropping": "屏幕裁剪",
+      "multi-display": "多显示器",
+      "video-buffering": "视频缓冲",
+      "audio-buffering": "音频缓冲",
+      "receiver-buffering": "接收器缓冲(v412)",
+      "disable": "禁用视频"
+    },
+
+    "device": {
+      "name": "设备控制",
+      "show-touch": "展示触摸点",
+      "stay-awake": "保持清醒",
+      "control-in-close-screen": "控制时关闭屏幕",
+      "control-end-video": "控制结束关闭屏幕",
+      "control-in-stop-charging": "控制时停止充电"
+    },
+
+    "window": {
+      "name": "窗口控制",
+      "borderless": "无边框模式",
+      "full-screen": "全屏模式",
+      "always-top": "始终位于顶部",
+      "disable-screen-saver": "禁用屏幕保护程序"
+    },
+
+    "recording": {
+      "name": "音视频录制",
+      "format": "录制视频格式"
+    },
+
+    "audio": {
+      "name": "音视频录制",
+      "disable": "禁用音频"
+    },
+
+    "reset": "恢复默认值"
+  },
+
+  "about": {
+    "name": "关于",
+    "description": "📱 使用图形化的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动",
+    "update": "版本检测更新"
+  }
 }

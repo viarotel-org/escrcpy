@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/viarotel-org/escrcpy/compare/v1.8.17...v1.9.0) (2023-10-24)
+
+
+### Features
+
+* 🚀 添加 i18n 初步支持 ([18d490f](https://github.com/viarotel-org/escrcpy/commit/18d490f3716b86f99c00cb3150e444ead2e69021))
+
+
+### Bug Fixes
+
+* 🐛 修复 macOS 最小化到托盘后状态栏图标不显示的问题 ([a789826](https://github.com/viarotel-org/escrcpy/commit/a78982673fe7ddb559c49d99453fd0a87a59981f))
+
 ## [1.8.17](https://github.com/viarotel-org/escrcpy/compare/v1.8.16...v1.8.17) (2023-10-23)
 
 

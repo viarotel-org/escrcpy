@@ -17,9 +17,9 @@ export default () => {
       type: 'input.path',
       value: adbPath,
       tips: '用于连接设备的 adb 的地址，注意：该选项不受针对于单个设备配置的影响',
-      placeholder: '请选择 adb',
+      placeholder: '请设置 adb 路径',
       properties: ['openFile'],
-      filters: [{ name: '请选择 adb', extensions: ['*'] }],
+      filters: [{ name: '请设置 adb 路径', extensions: ['*'] }],
     },
     {
       label: 'scrcpy 路径',
@@ -27,9 +27,9 @@ export default () => {
       type: 'input.path',
       value: scrcpyPath,
       tips: '用于控制设备的 scrcpy 的地址，注意：该选项不受针对于单个设备配置的影响',
-      placeholder: '请选择 scrcpy',
+      placeholder: '请设置 scrcpy 路径',
       properties: ['openFile'],
-      filters: [{ name: '请选择 scrcpy', extensions: ['*'] }],
+      filters: [{ name: '请设置 scrcpy 路径', extensions: ['*'] }],
     },
   ]
 }

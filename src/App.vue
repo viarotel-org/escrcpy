@@ -25,6 +25,11 @@ export default {
     Preference,
     About,
   },
+  provide() {
+    return {
+      $app: this,
+    }
+  },
   data() {
     return {
       tabsModel: [
@@ -42,6 +47,7 @@ export default {
         },
       ],
       activeTab: 'Device',
+      renderTab: '',
       rendered: true,
     }
   },
@@ -80,15 +86,20 @@ export default {
       )
     },
     isRender(item) {
-      if (this.activeTab === item.prop) {
+      if (this.renderTab === item.prop) {
         return this.rendered
       }
+
       return true
     },
-    async reRender() {
+    async reRender(other) {
+      this.renderTab = other || this.activeTab
+
       this.rendered = false
       await this.$nextTick()
       this.rendered = true
+
+      this.renderTab = ''
     },
     async onTabChange(prop) {
       switch (prop) {

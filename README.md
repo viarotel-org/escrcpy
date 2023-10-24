@@ -189,6 +189,13 @@
 4. 按下 `Ctrl` + `Shift` + `I` 进入开发者工具，并查看是否有任何报错信息。
 5. 如果有报错，请截图并在 [反馈问题](https://github.com/viarotel-org/escrcpy/issues) 页面中提交您的问题。
 
+### macOS 关闭窗口选择最小化到托盘后顶部右侧状态栏找不到图标
+
+> 这个一般是状态栏图标过多导致无法展示 Escrcpy 的图标 推荐用以下工具解决
+
+- [iBar](https://www.better365.cn/ibar.html)
+- [Bartender](https://www.macbartender.com/)
+
 ## 获得帮助
 
 > 因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定

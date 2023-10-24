@@ -191,6 +191,7 @@ import { useScrcpyStore } from '@/store/index.js'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 
 export default {
+  inject: ['$app'],
   data() {
     const scrcpyStore = useScrcpyStore()
 

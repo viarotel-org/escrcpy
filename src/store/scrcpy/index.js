@@ -5,6 +5,8 @@ import { replaceIP } from '@/utils/index.js'
 
 const $appStore = window.appStore
 
+const { adbPath, scrcpyPath } = window.electron?.configs || {}
+
 function mergeConfig(object, sources, { debug = false } = {}) {
   const customizer = (objValue, srcValue) => {
     if (debug) {
@@ -89,6 +91,21 @@ export const useScrcpyStore = defineStore({
 
       this.init()
     },
+    resetDeps(type) {
+      switch (type) {
+        case 'adb':
+          $appStore.set('scrcpy.global.adbPath', '')
+          break
+        case 'scrcpy':
+          $appStore.set('scrcpy.global.scrcpyPath', '')
+          break
+        default:
+          $appStore.set('scrcpy.global.adbPath', '')
+          $appStore.set('scrcpy.global.scrcpyPath', '')
+          break
+      }
+      this.init()
+    },
     setScope(value) {
       this.scope = replaceIP(value)
       $appStore.set('scrcpy.scope', this.scope)
@@ -127,7 +144,20 @@ export const useScrcpyStore = defineStore({
       return value
     },
     setConfig(data, scope = this.scope) {
-      $appStore.set(`scrcpy.${replaceIP(scope)}`, { ...data })
+      const cloneData = cloneDeep(data)
+
+      // console.log('adbPath', adbPath)
+      // console.log('scrcpyPath', scrcpyPath)
+
+      if (data.adbPath === adbPath) {
+        delete cloneData.adbPath
+      }
+
+      if (data.scrcpyPath === scrcpyPath) {
+        delete cloneData.scrcpyPath
+      }
+
+      $appStore.set(`scrcpy.${replaceIP(scope)}`, cloneData)
 
       this.init(scope)
     },

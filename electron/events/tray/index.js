@@ -10,14 +10,31 @@ export default (mainWindow) => {
       tray.destroy()
       tray = null
     }
+
+    if (process.platform === 'darwin') {
+      app.dock.show()
+    }
+
     mainWindow.show()
+
+    return true
+  }
+
+  const hideApp = () => {
+    if (process.platform === 'darwin') {
+      app.dock.hide()
+    }
+
+    mainWindow.hide()
 
     return true
   }
 
   const quitApp = () => {
     app.isQuiting = true
+
     app.quit()
+
     return true
   }
 
@@ -27,7 +44,7 @@ export default (mainWindow) => {
       return true
     }
     else if (response === 1) {
-      mainWindow.hide()
+      hideApp()
 
       tray = new Tray(trayPath)
 

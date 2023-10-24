@@ -4,10 +4,11 @@ import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
 const shell = async (command, { stdout, stderr } = {}) => {
   const spawnPath = appStore.get('scrcpy.global.scrcpyPath') || scrcpyPath
+  const ADB = appStore.get('scrcpy.global.adbPath') || adbPath
   const args = command.split(' ')
 
   const scrcpyProcess = spawn(spawnPath, args, {
-    env: { ...process.env, ADB: adbPath },
+    env: { ...process.env, ADB },
     shell: true,
   })
 

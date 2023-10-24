@@ -37,8 +37,13 @@ function createWindow() {
   }
 
   mainWindow = new BrowserWindow({
+    // 这里设置的图标仅在开发模式生效，打包后将使用应用程序图标
+    ...(!app.isPackaged
+      ? {
+          icon,
+        }
+      : {}),
     show: false,
-    icon,
     width: 1000,
     height: 700,
     minWidth: 1000,
@@ -85,11 +90,19 @@ app.on('window-all-closed', () => {
   mainWindow = null
 })
 
+// 仅 macOS 有这个事件
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
+  }
+
+  if (app.isHidden()) {
+    app.show()
+    app.focus()
+  }
+
+  if (!app.dock.isVisible()) {
+    app.dock.show()
   }
 })
 

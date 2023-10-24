@@ -36,11 +36,11 @@
         type="primary"
         :icon="loading ? '' : 'Refresh'"
         :loading="loading"
-        @click="getDeviceData"
+        @click="handleRefresh"
       >
         刷新设备
       </el-button>
-      <el-button type="warning" icon="RefreshRight" @click="handleReset">
+      <el-button type="warning" icon="RefreshRight" @click="handleRestart">
         重启服务
       </el-button>
     </div>
@@ -172,6 +172,7 @@ export default {
     ControlBar,
     Remark,
   },
+  inject: ['$app'],
   data() {
     const adbCache = storage.get('adbCache') || {}
     return {
@@ -215,6 +216,35 @@ export default {
     },
     scrcpyArgs(...args) {
       return this.$store.scrcpy.getStringConfig(...args)
+    },
+    handleRefresh() {
+      this.getDeviceData({ resetResolve: true })
+    },
+    async handleReset(depType = 'scrcpy') {
+      try {
+        await this.$confirm(
+          `
+          <div>通常情况下，这可能是因为更新 Escrcpy 后，缓存的依赖配置不兼容所导致的，是否重置依赖配置？</div>
+          <div class="text-red-500">注意：重置后，之前保存的依赖配置将会被清除，因此建议在执行重置操作之前备份您的配置。</div>
+          `,
+          '操作失败',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '重置依赖配置',
+            cancelButtonText: '取消',
+            closeOnClickModal: false,
+            type: 'warning',
+          },
+        )
+        this.$store.scrcpy.resetDeps(depType)
+        this.$app.reRender('Preference')
+        this.$message.success('操作成功，请重新尝试。')
+      }
+      catch (error) {
+        if (error.message) {
+          console.warn(error.message)
+        }
+      }
     },
     onStdout() {},
     toggleRowExpansion(...params) {
@@ -269,6 +299,8 @@ export default {
         if (error.message) {
           this.$message.warning(error.message)
         }
+
+        this.handleReset()
       }
       row.$recordLoading = false
     },
@@ -289,6 +321,7 @@ export default {
         if (error.message) {
           this.$message.warning(error.message)
         }
+        this.handleReset()
       }
       row.$loading = false
     },
@@ -310,7 +343,7 @@ export default {
     onPairSuccess() {
       this.handleConnect()
     },
-    handleReset() {
+    handleRestart() {
       this.$electron.ipcRenderer.send('restart-app')
     },
     async handleConnect() {
@@ -326,7 +359,7 @@ export default {
         storage.set('adbCache', this.formData)
       }
       catch (error) {
-        this.handleError(error.message)
+        this.handleError(error?.message || error?.cause?.message || error)
       }
       this.connectLoading = false
     },
@@ -339,7 +372,8 @@ export default {
         <div>1. IP地址或端口号错误</div>
         <div>2. 设备未与当前电脑配对成功</div>
         <div>3. 电脑网络和提供的设备网络IP不在同一个局域网中</div>
-        <div>4. 其他未知错误</div>
+        <div>4. adb 依赖路径错误</div>
+        <div>5. 其他未知错误</div>
         `,
           '连接设备失败',
           {
@@ -371,7 +405,7 @@ export default {
       row.$stopLoading = false
     },
 
-    async getDeviceData() {
+    async getDeviceData({ resetResolve = false } = {}) {
       this.loading = true
       await sleep(500)
       try {
@@ -392,6 +426,10 @@ export default {
           this.$message.warning(error?.message || error?.cause?.message)
         }
         this.deviceList = []
+
+        if (resetResolve) {
+          this.handleReset('adb')
+        }
       }
       this.loading = false
       this.loadingText = '正在获取设备列表...'

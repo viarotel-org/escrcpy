@@ -20,10 +20,6 @@ window.addEventListener('beforeunload', () => {
 appStore.onDidChange('scrcpy.global.adbPath', async (value, oldValue) => {
   console.log('onDidChange.scrcpy.global.adbPath', value)
 
-  if (!value) {
-    return false
-  }
-
   if (value === oldValue) {
     return false
   }
@@ -37,7 +33,7 @@ appStore.onDidChange('scrcpy.global.adbPath', async (value, oldValue) => {
     client = null
   }
 
-  client = Adb.createClient({ bin: value })
+  client = Adb.createClient({ bin: value || adbPath })
 })
 
 const shell = async command => exec(`${adbPath} ${command}`)

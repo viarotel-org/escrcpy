@@ -1,21 +1,38 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full -mt-8">
     <div class="">
-      <img src="@/assets/logo.png" class="h-48" alt="" />
+      <img src="@electron/resources/build/logo.png" class="h-48" alt="" />
     </div>
     <div class="pt-4 text-xl text-center italic text-gray-700">
       📱 使用图形化的
-      <a class="hover:underline text-primary-500" :href="escrcpyURL" target="_blank">Scrcpy</a>
+      <a
+        class="hover:underline text-primary-500"
+        :href="escrcpyURL"
+        target="_blank"
+      >Scrcpy</a>
       显示和控制您的 Android 设备，由 Electron 驱动
     </div>
     <div class="pt-12 pb-4">
-      <el-button :loading="loading" type="primary" size="large" @click="handleUpdate">
-        {{ loading && percent ? `正在更新中...（${percent.toFixed(1)}%）` : '版本检测更新' }}
+      <el-button
+        :loading="loading"
+        type="primary"
+        size="large"
+        @click="handleUpdate"
+      >
+        {{
+          loading && percent
+            ? `正在更新中...（${percent.toFixed(1)}%）`
+            : "版本检测更新"
+        }}
       </el-button>
     </div>
     <div class="text-sm">
       Supported by
-      <a class="hover:underline text-primary-500" href="https://viarotel.github.io/" target="_blank">Viarotel</a>
+      <a
+        class="hover:underline text-primary-500"
+        href="https://viarotel.github.io/"
+        target="_blank"
+      >Viarotel</a>
       v{{ version }}
     </div>
   </div>

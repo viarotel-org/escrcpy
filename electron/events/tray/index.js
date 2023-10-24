@@ -1,5 +1,5 @@
 import { Menu, Tray, app, dialog } from 'electron'
-import { macTrayPath, trayPath } from '@electron/configs/index'
+import { trayPath } from '@electron/configs/index.js'
 import appStore from '@electron/helpers/store.js'
 
 export default (mainWindow) => {
@@ -29,9 +29,7 @@ export default (mainWindow) => {
     else if (response === 1) {
       mainWindow.hide()
 
-      const trayIcon = process.platform === 'darwin' ? macTrayPath : trayPath
-
-      tray = new Tray(trayIcon)
+      tray = new Tray(trayPath)
 
       tray.setToolTip('escrcpy')
 

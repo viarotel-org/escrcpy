@@ -31,6 +31,7 @@ export default params =>
       resolve: {
         alias: {
           '@': resolve('src'),
+          '@electron': resolve('electron'),
         },
       },
       plugins: [

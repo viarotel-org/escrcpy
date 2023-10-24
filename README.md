@@ -7,10 +7,10 @@
 📱 Display and control your Android device with a graphical interface of Scrcpy powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/da63c9db7a944899b0ad27a0b67d29ae~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="./screenshots/en-us/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
-[More screenshots](https://github.com/viarotel-org/escrcpy/tree/main/screenshots)
+[More screenshots](https://github.com/viarotel-org/escrcpy/tree/main/screenshots/en-us)
 
 ## Features
 

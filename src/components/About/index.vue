@@ -1,17 +1,13 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full -mt-8">
-    <div class="">
+    <a class="block" :href="escrcpyURL" target="_blank">
       <img src="@electron/resources/build/logo.png" class="h-48" alt="" />
-    </div>
+    </a>
+
     <div class="pt-4 text-xl text-center italic text-gray-700">
-      📱 使用图形化的
-      <a
-        class="hover:underline text-primary-500"
-        :href="escrcpyURL"
-        target="_blank"
-      >Scrcpy</a>
-      显示和控制您的 Android 设备，由 Electron 驱动
+      {{ $t("about.description") }}
     </div>
+
     <div class="pt-12 pb-4">
       <el-button
         :loading="loading"
@@ -21,18 +17,21 @@
       >
         {{
           loading && percent
-            ? `正在更新中...（${percent.toFixed(1)}%）`
-            : "版本检测更新"
+            ? `${$t("about.updating")}...（${percent.toFixed(1)}%）`
+            : $t("about.update")
         }}
       </el-button>
     </div>
+
     <div class="text-sm">
       Supported by
+
       <a
         class="hover:underline text-primary-500"
         href="https://viarotel.github.io/"
         target="_blank"
       >Viarotel</a>
+
       v{{ version }}
     </div>
   </div>
@@ -65,20 +64,20 @@ export default {
     onUpdateNotAvailable() {
       this.$electron.ipcRenderer.on('update-not-available', () => {
         this.loading = false
-        this.$message.success('已经是最新版本')
+        this.$message.success(this.$t('about.update-not-available'))
       })
     },
     onUpdateError() {
       this.$electron.ipcRenderer.on('update-error', async (event, ret) => {
         this.loading = false
-        console.log('ret', ret)
+        console.log('onUpdateError.ret', ret)
         try {
           await this.$confirm(
-            '你可能需要科学上网，是否前往发布页面手动下载更新？',
-            '检查更新失败',
+            this.$t('about.update-error.message'),
+            this.$t('about.update-error.title'),
             {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+              confirmButtonText: this.$t('common.confirm'),
+              cancelButtonText: this.$t('common.cancel'),
               closeOnClickModal: false,
               type: 'error',
             },
@@ -101,11 +100,15 @@ export default {
         console.log('ret', ret)
         this.loading = false
         try {
-          await this.$confirm('是否立即重启更新？', '下载新版本成功', {
-            confirmButtonText: '更新',
-            cancelButtonText: '取消',
-            closeOnClickModal: false,
-          })
+          await this.$confirm(
+            this.$t('about.update-downloaded.message'),
+            this.$t('about.update-downloaded.title'),
+            {
+              confirmButtonText: this.$t('about.update-downloaded.confirm'),
+              cancelButtonText: this.$t('common.cancel'),
+              closeOnClickModal: false,
+            },
+          )
           this.$electron.ipcRenderer.send('quit-and-install')
         }
         catch (error) {
@@ -118,12 +121,16 @@ export default {
         this.loading = false
         try {
           console.log('ret', ret)
-          await this.$confirm(ret.releaseNotes, '发现新版本', {
-            dangerouslyUseHTMLString: true,
-            closeOnClickModal: false,
-            confirmButtonText: '更新',
-            cancelButtonText: '取消',
-          })
+          await this.$confirm(
+            ret.releaseNotes,
+            this.$t('about.update-available.title'),
+            {
+              dangerouslyUseHTMLString: true,
+              closeOnClickModal: false,
+              confirmButtonText: this.$t('about.update-available.confirm'),
+              cancelButtonText: this.$t('common.cancel'),
+            },
+          )
           this.$electron.ipcRenderer.send('download-update')
           this.loading = true
         }

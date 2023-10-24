@@ -40,7 +40,7 @@ export default params =>
         useSvg(),
         useVue(),
         useI18n({
-          include: [resolve(__dirname, './src/locales/**')],
+          include: [resolve(__dirname, './src/locales/languages/**')],
         }),
         useElectron([
           {

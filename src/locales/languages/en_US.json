@@ -6,7 +6,7 @@
   "devices": {
     "name": "Devices",
 
-    "loading": "loading...",
+    "loading": "In the loading device...",
 
     "empty": "No device detected",
 
@@ -64,21 +64,33 @@
     "global": "Global",
 
     "config": {
-      "import": "Import Configuration",
-      "export": "Export Configuration",
-      "edit": "Edit Configuration",
-      "reset": "Reset Configuration"
+      "import": "Import",
+      "export": "Export",
+      "edit": "Edit",
+      "reset": "Reset"
     },
 
     "custom": {
       "name": "Custom",
-      "file-path": "File Storage Path",
-      "adb-path": "ADB Path",
-      "scrcpy-path": "Scrcpy Path"
+      "file-path": {
+        "name": "File Path",
+        "placeholder": "Put on the user desktop by default",
+        "tips": "Screenshots and recorded audio and video exist here"
+      },
+      "adb-path": {
+        "name": "ADB Path",
+        "placeholder": "Please set the ADB path",
+        "tips": "The address of the ADB used to connect the device. Note that this option is not affected by the configuration of a single device"
+      },
+      "scrcpy-path": {
+        "name": "Scrcpy Path",
+        "placeholder": "Please set the SCRCPY path",
+        "tips": "The address of the SCRCPY used to connect the device. Note that this option is not affected by the configuration of a single device"
+      }
     },
 
     "video": {
-      "name": "Video Control",
+      "name": "Video",
       "resolution": "Resolution",
       "bit": "Bitrate",
       "refresh-rate": "Refresh Rate",
@@ -94,7 +106,7 @@
     },
 
     "device": {
-      "name": "Device Control",
+      "name": "Device",
       "show-touch": "Show Touches",
       "stay-awake": "Stay Awake",
       "control-in-close-screen": "Turn Off Screen During Control",
@@ -103,20 +115,20 @@
     },
 
     "window": {
-      "name": "Window Control",
+      "name": "Window",
       "borderless": "Borderless Mode",
       "full-screen": "Full Screen Mode",
       "always-top": "Always on Top",
       "disable-screen-saver": "Disable Screensaver"
     },
 
-    "recording": {
-      "name": "Audio/Video Recording",
+    "record": {
+      "name": "Recording",
       "format": "Video Recording Format"
     },
 
     "audio": {
-      "name": "Audio/Video Recording",
+      "name": "Audio",
       "disable": "Disable Audio"
     },
 
@@ -124,7 +136,22 @@
   },
   "about": {
     "name": "About",
-    "description": "📱 Display and control your Android device using a graphical interface powered by Electron",
-    "update": "Check for Updates"
+    "description": "📱 Use the graphical Scrcpy powered by Electron to display and control your Android device.",
+    "update": "Check for Updates",
+    "updating": "Updating",
+    "update-not-available": "Already the latest version",
+    "update-error": {
+      "title": "Update Check Failed",
+      "message": "You may need to use a VPN. Do you want to visit the release page and manually download the update?"
+    },
+    "update-downloaded": {
+      "title": "New Version Downloaded",
+      "message": "Do you want to restart and apply the update now?",
+      "confirm": "Update"
+    },
+    "update-available": {
+      "title": "New Version Available",
+      "confirm": "Update"
+    }
   }
 }

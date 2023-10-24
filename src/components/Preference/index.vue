@@ -42,16 +42,16 @@
       </div>
       <div class="">
         <el-button type="" plain @click="handleImport">
-          导入配置
+          {{ $t("preferences.config.import") }}
         </el-button>
         <el-button type="" plain @click="handleExport">
-          导出配置
+          {{ $t("preferences.config.export") }}
         </el-button>
         <el-button type="" plain @click="handleEdit">
-          编辑配置
+          {{ $t("preferences.config.edit") }}
         </el-button>
         <el-button type="" plain @click="handleResetAll">
-          重置配置
+          {{ $t("preferences.config.reset") }}
         </el-button>
       </div>
     </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="flex-none pl-4">
               <el-button type="primary" text @click="handleReset(item.type)">
-                恢复默认值
+                {{ $t("preferences.reset") }}
               </el-button>
             </div>
           </div>
@@ -191,34 +191,33 @@ import { useScrcpyStore } from '@/store/index.js'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 
 export default {
-  inject: ['$app'],
   data() {
     const scrcpyStore = useScrcpyStore()
 
     return {
       scrcpyModel: [
         {
-          label: '自定义',
+          label: this.$t('preferences.custom.name'),
           type: 'custom',
         },
         {
-          label: '视频控制',
+          label: this.$t('preferences.video.name'),
           type: 'video',
         },
         {
-          label: '设备控制',
+          label: this.$t('preferences.device.name'),
           type: 'device',
         },
         {
-          label: '窗口控制',
+          label: this.$t('preferences.window.name'),
           type: 'window',
         },
         {
-          label: '音视频录制',
+          label: this.$t('preferences.record.name'),
           type: 'record',
         },
         {
-          label: '音频控制',
+          label: this.$t('preferences.audio.name'),
           type: 'audio',
         },
       ],
@@ -239,7 +238,7 @@ export default {
       }))
 
       value.unshift({
-        label: 'Global（全局）',
+        label: `Global（${this.$t('preferences.global')}）`,
         value: 'global',
       })
 

@@ -96,7 +96,7 @@
         </el-table-column>
         <el-table-column
           :label="$t('devices.operates.name')"
-          width="400"
+          width="450"
           align="left"
         >
           <template #default="{ row }">
@@ -192,7 +192,6 @@ export default {
     ControlBar,
     Remark,
   },
-  inject: ['$app'],
   data() {
     const adbCache = storage.get('adbCache') || {}
     return {
@@ -257,7 +256,7 @@ export default {
           },
         )
         this.$store.scrcpy.resetDeps(depType)
-        this.$app.reRender('Preference')
+        this.$root.reRender('Preference')
         this.$message.success('操作成功，请重新尝试。')
       }
       catch (error) {

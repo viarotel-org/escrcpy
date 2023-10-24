@@ -1,35 +1,41 @@
+import { t } from '@/locales/index.js'
+
 export default () => {
   const { adbPath, scrcpyPath, desktopPath } = window?.electron?.configs || {}
 
   return [
     {
-      label: '文件存储路径',
+      label: t('preferences.custom.file-path.name'),
       type: 'input.path',
       field: 'savePath',
       value: desktopPath,
-      placeholder: '默认值为执行应用的同级目录',
-      tips: '截图和录制的音视频都存在这里',
+      placeholder: t('preferences.custom.file-path.placeholder'),
+      tips: t('preferences.custom.file-path.tips'),
       properties: ['openDirectory'],
     },
     {
-      label: 'adb 路径',
+      label: t('preferences.custom.adb-path.name'),
       field: 'adbPath',
       type: 'input.path',
       value: adbPath,
-      tips: '用于连接设备的 adb 的地址，注意：该选项不受针对于单个设备配置的影响',
-      placeholder: '请设置 adb 路径',
+      placeholder: t('preferences.custom.adb-path.placeholder'),
+      tips: t('preferences.custom.adb-path.tips'),
       properties: ['openFile'],
-      filters: [{ name: '请设置 adb 路径', extensions: ['*'] }],
+      filters: [
+        { name: t('preferences.custom.adb-path.name'), extensions: ['*'] },
+      ],
     },
     {
-      label: 'scrcpy 路径',
+      label: t('preferences.custom.scrcpy-path.name'),
       field: 'scrcpyPath',
       type: 'input.path',
       value: scrcpyPath,
-      tips: '用于控制设备的 scrcpy 的地址，注意：该选项不受针对于单个设备配置的影响',
-      placeholder: '请设置 scrcpy 路径',
+      placeholder: t('preferences.custom.scrcpy-path.placeholder'),
+      tips: t('preferences.custom.scrcpy-path.tips'),
       properties: ['openFile'],
-      filters: [{ name: '请设置 scrcpy 路径', extensions: ['*'] }],
+      filters: [
+        { name: t('preferences.custom.scrcpy-path.name'), extensions: ['*'] },
+      ],
     },
   ]
 }

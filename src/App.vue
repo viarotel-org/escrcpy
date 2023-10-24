@@ -25,11 +25,6 @@ export default {
     Preference,
     About,
   },
-  provide() {
-    return {
-      $app: this,
-    }
-  },
   data() {
     return {
       tabsModel: [

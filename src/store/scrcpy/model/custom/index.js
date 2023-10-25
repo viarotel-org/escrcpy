@@ -5,36 +5,34 @@ export default () => {
 
   return [
     {
-      label: t('preferences.custom.file-path.name'),
+      label: t('preferences.custom.file.name'),
       type: 'input.path',
       field: 'savePath',
       value: desktopPath,
-      placeholder: t('preferences.custom.file-path.placeholder'),
-      tips: t('preferences.custom.file-path.tips'),
+      placeholder: t('preferences.custom.file.placeholder'),
+      tips: t('preferences.custom.file.tips'),
       properties: ['openDirectory'],
     },
     {
-      label: t('preferences.custom.adb-path.name'),
+      label: t('preferences.custom.adb.name'),
       field: 'adbPath',
       type: 'input.path',
       value: adbPath,
-      placeholder: t('preferences.custom.adb-path.placeholder'),
-      tips: t('preferences.custom.adb-path.tips'),
+      placeholder: t('preferences.custom.adb.placeholder'),
+      tips: t('preferences.custom.adb.tips'),
       properties: ['openFile'],
-      filters: [
-        { name: t('preferences.custom.adb-path.name'), extensions: ['*'] },
-      ],
+      filters: [{ name: t('preferences.custom.adb.name'), extensions: ['*'] }],
     },
     {
-      label: t('preferences.custom.scrcpy-path.name'),
+      label: t('preferences.custom.scrcpy.name'),
       field: 'scrcpyPath',
       type: 'input.path',
       value: scrcpyPath,
-      placeholder: t('preferences.custom.scrcpy-path.placeholder'),
-      tips: t('preferences.custom.scrcpy-path.tips'),
+      placeholder: t('preferences.custom.scrcpy.placeholder'),
+      tips: t('preferences.custom.scrcpy.tips'),
       properties: ['openFile'],
       filters: [
-        { name: t('preferences.custom.scrcpy-path.name'), extensions: ['*'] },
+        { name: t('preferences.custom.scrcpy.name'), extensions: ['*'] },
       ],
     },
   ]

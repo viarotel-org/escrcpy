@@ -1,32 +1,34 @@
+import { t } from '@/locales/index.js'
+
 export default () => {
   return [
     {
-      label: '无边框模式',
+      label: t('preferences.window.borderless.name'),
       field: '--window-borderless',
       type: 'switch',
       value: false,
-      placeholder: '开启后控制窗口将变为无边框模式',
+      placeholder: t('preferences.window.borderless.placeholder'),
     },
     {
-      label: '全屏模式',
+      label: t('preferences.window.full-screen.name'),
       field: '--fullscreen',
       type: 'switch',
       value: false,
-      placeholder: '开启后控制窗口将全屏显示模式',
+      placeholder: t('preferences.window.full-screen.placeholder'),
     },
     {
-      label: '始终位于顶部',
+      label: t('preferences.window.always-top.name'),
       field: '--always-on-top',
       type: 'switch',
       value: false,
-      placeholder: '开启后控制窗口将始终位于顶部',
+      placeholder: t('preferences.window.always-top.placeholder'),
     },
     {
-      label: '禁用屏幕保护程序',
+      label: t('preferences.window.disable-screen-saver.name'),
       field: '--disable-screensaver',
       type: 'switch',
       value: false,
-      placeholder: '开启后将禁用计算机屏幕保护程序',
+      placeholder: t('preferences.window.disable-screen-saver.placeholder'),
     },
   ]
 }

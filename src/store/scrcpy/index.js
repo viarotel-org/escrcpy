@@ -36,7 +36,7 @@ function getDefaultConfig(type) {
     model.push(...handler())
   }
   else {
-    // console.log('scrcpyModel', scrcpyModel)
+    // console.raw('scrcpyModel', scrcpyModel)
     const values = Object.values(scrcpyModel)
     model.push(...values.flatMap(handler => handler()))
   }
@@ -55,7 +55,7 @@ export const useScrcpyStore = defineStore({
   state() {
     return {
       scope: $appStore.get('scrcpy.scope') || 'global',
-      model: scrcpyModel,
+      model: { ...scrcpyModel },
       defaultConfig: getDefaultConfig(),
       config: {},
       excludeKeys: ['--record-format', 'savePath', 'adbPath', 'scrcpyPath'],
@@ -166,8 +166,20 @@ export const useScrcpyStore = defineStore({
       return value
     },
     getModel(key, params) {
-      const handler = scrcpyModel[key]
-      return handler(params)
+      const handler = this.model[key]
+      const value = handler(params)
+      // console.log('setModel.value', value)
+
+      return value
+    },
+    setModel(key, params) {
+      const handler = this.model[key]
+      const value = handler(params)
+      // console.log('setModel.value', value)
+
+      this.model[key] = () => value
+
+      return this.model
     },
   },
 })

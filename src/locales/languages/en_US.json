@@ -5,50 +5,77 @@
   },
   "devices": {
     "name": "Devices",
-
-    "loading": "In the loading device...",
-
+    "loading": "Devices loading...",
     "empty": "No device detected",
-
     "wireless": {
       "name": "Wireless",
-      "connect": "Connect",
-      "error": {
-        "title": "Failed to Connect Device",
-        "detail": "Error Details",
-        "reasons": [
-          "Possible reasons:",
-          "Incorrect IP address or port number",
-          "Device pairing unsuccessful",
-          "Computer network and provided device network IP are not in the same LAN",
-          "Incorrect adb dependency path",
-          "Other unknown errors"
-        ],
-        "confirm": "Wireless Pairing",
-        "cancel": "@:common.cancel"
+      "mode": "Wireless mode",
+      "connect": {
+        "name": "Connect",
+        "error": {
+          "title": "连接设备失败",
+          "detail": "错误详情",
+          "reasons": [
+            "可能有以下原因",
+            "IP地址或端口号错误",
+            "设备未与当前电脑配对成功",
+            "电脑网络和提供的设备网络IP不在同一个局域网中",
+            "adb 依赖路径错误",
+            "其他未知错误"
+          ],
+          "confirm": "无线配对",
+          "cancel": "@:common.cancel",
+          "no-address": "无线调试地址不能为空"
+        },
+        "success": "连接设备成功"
       },
-      "success": "Device Connected Successfully"
+      "disconnect": {
+        "start": "断开连接",
+        "progress": "正在断开",
+        "success": "断开连接成功"
+      }
     },
-
-    "refresh": "Refresh",
-    "restart": "Restart",
-
+    "reset": {
+      "title": "操作失败",
+      "reasons": [
+        "通常情况下，这可能是因为更新 Escrcpy 后，缓存的依赖配置不兼容所导致的，是否重置依赖配置？",
+        "注意：重置后，之前保存的依赖配置将会被清除，因此建议在执行重置操作之前备份您的配置。"
+      ],
+      "confirm": "重置依赖配置",
+      "cancel": "@:common.cancel",
+      "success": "操作成功，请重新尝试。"
+    },
+    "refresh": {
+      "name": "Refresh"
+    },
+    "restart": {
+      "name": "Restart"
+    },
+    "log": {
+      "name": "Logs"
+    },
     "device": {
       "id": "ID",
       "name": "Name",
-      "remark": "Remark"
+      "remark": "Remark",
+      "permission": {
+        "error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试"
+      }
     },
-
+    "mirror": {
+      "start": "Mirror",
+      "progress": "Mirroring"
+    },
+    "record": {
+      "start": "Record",
+      "progress": "Recording",
+      "success": {
+        "title": "录制成功",
+        "message": "是否前往录制位置进行查看？"
+      }
+    },
     "operates": {
       "name": "Operations",
-      "more": "More",
-      "mirror": "Mirror",
-      "mirroring": "Mirroring",
-      "record": "Record",
-      "recording": "Recording",
-      "wireless": "Wireless Mode",
-      "disconnect": "Disconnect",
-      "disconnecting": "Disconnecting",
       "install": "Install APP",
       "capture": "Capture",
       "reboot": "Reboot",
@@ -61,97 +88,207 @@
   },
   "preferences": {
     "name": "Preferences",
-    "global": "Global",
-
-    "config": {
-      "import": "Import",
-      "export": "Export",
-      "edit": "Edit",
-      "reset": "Reset"
+    "reset": "Resets",
+    "scope": {
+      "global": "Global",
+      "placeholder": "偏好设置的作用域范围",
+      "no-data": "暂无数据",
+      "details": [
+        "对全局或者单个设备设置不同的偏好配置",
+        "全局：将对所有设备生效。",
+        "单个设备：继承于全局配置，并对单个设备进行独立设置，仅对此设备生效。"
+      ]
     },
-
+    "config": {
+      "import": {
+        "name": "导入配置",
+        "placeholder": "请选择要导入的配置文件",
+        "success": "导入成功"
+      },
+      "export": {
+        "name": "导出配置",
+        "message": "导出配置",
+        "placeholder": "请选择要导出的位置",
+        "success": "导出成功"
+      },
+      "edit": {
+        "name": "编辑配置"
+      },
+      "reset": {
+        "name": "重置配置"
+      },
+      "save": {
+        "name": "保存配置",
+        "placeholder": "保存配置成功，将在下一次控制设备时生效"
+      }
+    },
     "custom": {
       "name": "Custom",
-      "file-path": {
+      "file": {
         "name": "File Path",
         "placeholder": "Put on the user desktop by default",
         "tips": "Screenshots and recorded audio and video exist here"
       },
-      "adb-path": {
+      "adb": {
         "name": "ADB Path",
         "placeholder": "Please set the ADB path",
         "tips": "The address of the ADB used to connect the device. Note that this option is not affected by the configuration of a single device"
       },
-      "scrcpy-path": {
+      "scrcpy": {
         "name": "Scrcpy Path",
         "placeholder": "Please set the SCRCPY path",
         "tips": "The address of the SCRCPY used to connect the device. Note that this option is not affected by the configuration of a single device"
       }
     },
-
     "video": {
       "name": "Video",
-      "resolution": "Resolution",
-      "bit": "Bitrate",
-      "refresh-rate": "Refresh Rate",
-      "decoder": "Video Decoder",
-      "encoder": "Video Encoder",
-      "screen-rotation": "Screen Rotation",
-      "screen-cropping": "Screen Cropping",
-      "multi-display": "Multiple Displays",
-      "video-buffering": "Video Buffering",
-      "audio-buffering": "Audio Buffering",
-      "receiver-buffering": "Receiver Buffering (v412)",
-      "disable": "Disable Video"
+      "resolution": {
+        "name": "Resolution",
+        "placeholder": "Default device resolution",
+        "tips": ""
+      },
+      "bit": {
+        "name": "Bitrate",
+        "placeholder": "Default 4M",
+        "tips": ""
+      },
+      "refresh-rate": {
+        "name": "Refresh Rate",
+        "placeholder": "Default 60",
+        "tips": ""
+      },
+      "decoder": {
+        "name": "Decoder",
+        "placeholder": "Default h264",
+        "tips": ""
+      },
+      "encoder": {
+        "name": "Encoder",
+        "placeholder": "Default device encoder",
+        "tips": ""
+      },
+      "screen-rotation": {
+        "name": "Rotation",
+        "placeholder": "Default device rotation",
+        "tips": ""
+      },
+      "screen-cropping": {
+        "name": "Cropping",
+        "placeholder": "Default no cropping",
+        "tips": ""
+      },
+      "multi-display": {
+        "name": "Multi-Display",
+        "placeholder": "Default 0 (main)",
+        "tips": ""
+      },
+      "video-buffering": {
+        "name": "Video Buffering",
+        "placeholder": "Default 0ms",
+        "tips": ""
+      },
+      "audio-buffering": {
+        "name": "Audio Buffering",
+        "placeholder": "Default 0ms",
+        "tips": ""
+      },
+      "receiver-buffering": {
+        "name": "Receiver Buffering",
+        "placeholder": "Default 0ms",
+        "tips": ""
+      },
+      "disable": {
+        "name": "Disable Video",
+        "placeholder": "Disable video if enabled",
+        "tips": ""
+      }
     },
-
     "device": {
       "name": "Device",
-      "show-touch": "Show Touches",
-      "stay-awake": "Stay Awake",
-      "control-in-close-screen": "Turn Off Screen During Control",
-      "control-end-video": "Turn Off Screen After Control",
-      "control-in-stop-charging": "Stop Charging During Control"
+      "show-touch": {
+        "name": "Show Touches",
+        "placeholder": "Enable to show tap feedback in developer options",
+        "tips": "Only on physical devices"
+      },
+      "stay-awake": {
+        "name": "Stay Awake",
+        "placeholder": "Enable to prevent sleep",
+        "tips": "Wired connection only"
+      },
+      "control-in-close-screen": {
+        "name": "Turn Off Screen",
+        "placeholder": "Automatically turn off screen when controlling device",
+        "tips": ""
+      },
+      "control-end-video": {
+        "name": "Turn Off at End",
+        "placeholder": "Automatically turn off screen when control stops",
+        "tips": ""
+      },
+      "control-in-stop-charging": {
+        "name": "Stop Charging",
+        "placeholder": "Stop charging when controlling device",
+        "tips": "May not work on some models"
+      }
     },
-
     "window": {
       "name": "Window",
-      "borderless": "Borderless Mode",
-      "full-screen": "Full Screen Mode",
-      "always-top": "Always on Top",
-      "disable-screen-saver": "Disable Screensaver"
+      "borderless": {
+        "name": "Borderless",
+        "placeholder": "Removes window border",
+        "tips": ""
+      },
+      "full-screen": {
+        "name": "Fullscreen",
+        "placeholder": "Fullscreen mode",
+        "tips": ""
+      },
+      "always-top": {
+        "name": "Always on Top",
+        "placeholder": "Window always on top",
+        "tips": ""
+      },
+      "disable-screen-saver": {
+        "name": "Disable Screen Saver",
+        "placeholder": "Disables screen saver",
+        "tips": ""
+      }
     },
-
     "record": {
       "name": "Recording",
-      "format": "Video Recording Format"
+      "format": {
+        "name": "Format",
+        "placeholder": "Default .mp4 format",
+        "tips": ""
+      }
     },
-
     "audio": {
       "name": "Audio",
-      "disable": "Disable Audio"
-    },
-
-    "reset": "Restore Default Values"
+      "disable": {
+        "name": "Disable Audio",
+        "placeholder": "Disables audio",
+        "tips": ""
+      }
+    }
   },
   "about": {
     "name": "About",
-    "description": "📱 Use the graphical Scrcpy powered by Electron to display and control your Android device.",
-    "update": "Check for Updates",
-    "updating": "Updating",
-    "update-not-available": "Already the latest version",
+    "description": "📱 Display and control your Android device with graphical Scrcpy, powered by Electron",
+    "update": "Check for updates",
+    "update-not-available": "Already up to date",
     "update-error": {
-      "title": "Update Check Failed",
-      "message": "You may need to use a VPN. Do you want to visit the release page and manually download the update?"
+      "title": "Update check failed",
+      "message": "You may need a VPN. Go to releases page to download manually?"
     },
     "update-downloaded": {
-      "title": "New Version Downloaded",
-      "message": "Do you want to restart and apply the update now?",
+      "title": "New version downloaded",
+      "message": "Restart now to update?",
       "confirm": "Update"
     },
     "update-available": {
-      "title": "New Version Available",
+      "title": "New version available",
       "confirm": "Update"
-    }
+    },
+    "updating": "Updating..."
   }
 }

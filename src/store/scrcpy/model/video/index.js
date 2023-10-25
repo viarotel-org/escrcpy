@@ -1,32 +1,45 @@
-export default () => {
+import { t } from '@/locales/index.js'
+
+const getDisplayOptions = (display = []) =>
+  display?.map(value => ({ label: value, value })) || []
+
+export default ({ display } = {}) => {
+  const displayOptions = display?.length
+    ? getDisplayOptions(display)
+    : [
+        { label: '0', value: '0' },
+        { label: '1', value: '1' },
+        { label: '2', value: '2' },
+      ]
+
   return [
     {
-      label: '分辨率',
+      label: t('preferences.video.resolution.name'),
       type: 'input.number',
       field: '--max-size',
       value: '',
-      placeholder: '默认值为设备分辨率，如 1920',
+      placeholder: t('preferences.video.resolution.placeholder'),
     },
     {
-      label: '比特率',
+      label: t('preferences.video.bit.name'),
       type: 'input',
       field: '--video-bit-rate',
       value: '',
-      placeholder: '默认值为 4M，等同于 4000000',
+      placeholder: t('preferences.video.bit.placeholder'),
     },
     {
-      label: '刷新率',
+      label: t('preferences.video.refresh-rate.name'),
       type: 'input.number',
       field: '--max-fps',
       value: '',
-      placeholder: '默认值为 60',
+      placeholder: t('preferences.video.refresh-rate.placeholder'),
     },
     {
-      label: '视频解码器',
+      label: t('preferences.video.decoder.name'),
       type: 'select',
       field: '--video-codec',
       value: '',
-      placeholder: '默认值为 h264',
+      placeholder: t('preferences.video.decoder.placeholder'),
       options: [
         {
           label: 'h264',
@@ -43,11 +56,11 @@ export default () => {
       ],
     },
     {
-      label: '视频编码器',
+      label: t('preferences.video.encoder.name'),
       type: 'select',
       field: '--video-encoder',
       value: '',
-      placeholder: '默认值为设备默认编码器',
+      placeholder: t('preferences.video.encoder.placeholder'),
       // "[server] INFO: List of video encoders:"
       // "--video-codec=h264 --video-encoder='OMX.qcom.video.encoder.avc'"
       // "--video-codec=h264 --video-encoder='c2.android.avc.encoder'"
@@ -56,33 +69,33 @@ export default () => {
       // "--video-codec=h265 --video-encoder='c2.android.hevc.encoder'"
       options: [
         {
-          label: 'Qualcomm AVC(H.264) 视频编码器',
+          label: 'Android HEVC(H.265) ',
           value: 'OMX.qcom.video.encoder.avc',
         },
         {
-          label: 'Android AVC(H.264) 视频编码器',
+          label: 'Qualcomm HEVC(H.265) ',
           value: 'c2.android.avc.encoder',
         },
         {
-          label: 'Google H.264(AVC) 视频编码器',
+          label: 'Google H.264(AVC)',
           value: 'OMX.google.h264.encoder',
         },
         {
-          label: 'Qualcomm HEVC(H.265) 视频编码器',
+          label: 'Android AVC(H.264) ',
           value: 'OMX.qcom.video.encoder.hevc',
         },
         {
-          label: 'Android HEVC(H.265) 视频编码器',
+          label: 'Qualcomm AVC(H.264)',
           value: 'c2.android.hevc.encoder',
         },
       ],
     },
     {
-      label: '屏幕旋转',
+      label: t('preferences.video.screen-rotation.name'),
       type: 'select',
       field: '--rotation',
       value: '',
-      placeholder: '默认值为设备屏幕旋转角度',
+      placeholder: t('preferences.video.screen-rotation.placeholder'),
       options: [
         { label: '0°', value: '0' },
         { label: '-90°', value: '1' },
@@ -91,51 +104,51 @@ export default () => {
       ],
     },
     {
-      label: '屏幕裁剪',
+      label: t('preferences.video.screen-cropping.name'),
       type: 'input',
       field: '--crop',
       value: '',
-      placeholder: '默认不裁剪，格式为 1224:1440:0:0',
+      placeholder: t('preferences.video.screen-cropping.placeholder'),
     },
     {
-      label: '多显示器',
+      label: t('preferences.video.multi-display.name'),
       type: 'select',
       field: '--display',
       value: '',
-      placeholder: '默认值为 0（主屏幕）',
-      options: [
-        { label: '0', value: '0' },
-        { label: '1', value: '1' },
-        { label: '2', value: '2' },
-      ],
+      placeholder: t('preferences.video.multi-display.placeholder'),
+      options: displayOptions,
+      props: {
+        filterable: true,
+        allowCreate: true,
+      },
     },
     {
-      label: '视频缓冲',
+      label: t('preferences.video.video-buffering.name'),
       type: 'input.number',
       field: '--display-buffer',
       value: '',
-      placeholder: '单位为 ms，默认值为 0ms',
+      placeholder: t('preferences.video.video-buffering.placeholder'),
     },
     {
-      label: '音频缓冲',
+      label: t('preferences.video.audio-buffering.name'),
       type: 'input.number',
       field: '--audio-buffer',
       value: '',
-      placeholder: '单位为 ms，默认值为 0ms',
+      placeholder: t('preferences.video.video-buffering.placeholder'),
     },
     {
-      label: '接收器(v4l2)缓冲',
+      label: t('preferences.video.receiver-buffering.name'),
       type: 'input.number',
       field: '--v4l2-buffer',
       value: '',
-      placeholder: '单位为 ms，默认值为 0ms',
+      placeholder: t('preferences.video.video-buffering.placeholder'),
     },
     {
-      label: '禁用视频',
+      label: t('preferences.video.disable.name'),
       type: 'switch',
       field: '--no-video',
       value: false,
-      placeholder: '开启后将禁用视频',
+      placeholder: t('preferences.video.disable.placeholder'),
     },
   ]
 }

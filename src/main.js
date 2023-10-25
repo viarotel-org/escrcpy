@@ -1,3 +1,5 @@
+import '@/utils/console.js'
+
 import { createApp } from 'vue'
 import App from './App.vue'
 
@@ -29,9 +31,13 @@ app.config.globalProperties.$scrcpy = window.scrcpy
 app.config.globalProperties.$path = window.nodePath
 app.config.globalProperties.$appStore = window.appStore
 
+app.config.globalProperties.$appLog = window.appLog
+
 app.config.globalProperties.$replaceIP = replaceIP
 
 app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading
   postMessage({ payload: 'removeLoading' }, '*')
 })
+
+console.log('electron.configs', window.electron.configs)

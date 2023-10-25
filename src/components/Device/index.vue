@@ -30,7 +30,7 @@
         :loading="connectLoading"
         @click="handleConnect"
       >
-        {{ $t("devices.wireless.connect") }}
+        {{ $t("devices.wireless.connect.name") }}
       </el-button>
       <el-button
         type="primary"
@@ -38,10 +38,13 @@
         :loading="loading"
         @click="handleRefresh"
       >
-        {{ $t("devices.refresh") }}
+        {{ $t("devices.refresh.name") }}
       </el-button>
       <el-button type="warning" icon="RefreshRight" @click="handleRestart">
-        {{ $t("devices.restart") }}
+        {{ $t("devices.restart.name") }}
+      </el-button>
+      <el-button icon="View" @click="handleLog">
+        {{ $t("devices.log.name") }}
       </el-button>
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
@@ -74,7 +77,7 @@
             <div class="flex items-center">
               <el-tooltip
                 v-if="row.$unauthorized"
-                content="设备可能未授权成功，请重新插拔设备并点击允许USB调试"
+                :content="$t('devices.device.permission.error')"
                 placement="top-start"
               >
                 <el-icon class="mr-1 text-red-600 text-lg">
@@ -110,8 +113,8 @@
             >
               {{
                 row.$loading
-                  ? $t("devices.operates.mirroring")
-                  : $t("devices.operates.mirror")
+                  ? $t("devices.mirror.progress")
+                  : $t("devices.mirror.start")
               }}
             </el-button>
 
@@ -125,8 +128,8 @@
             >
               {{
                 row.$recordLoading
-                  ? $t("devices.operates.recording")
-                  : $t("devices.operates.record")
+                  ? $t("devices.record.progress")
+                  : $t("devices.record.start")
               }}
             </el-button>
 
@@ -142,7 +145,7 @@
               <template #icon>
                 <svg-icon name="wifi"></svg-icon>
               </template>
-              {{ $t("devices.operates.wireless") }}
+              {{ $t("devices.wireless.mode") }}
             </el-button>
 
             <el-button
@@ -156,8 +159,8 @@
             >
               {{
                 row.$stopLoading
-                  ? $t("devices.operates.disconnecting")
-                  : $t("devices.operates.disconnect")
+                  ? $t("devices.wireless.disconnect.progress")
+                  : $t("devices.wireless.disconnect.start")
               }}
             </el-button>
           </template>
@@ -243,21 +246,24 @@ export default {
       try {
         await this.$confirm(
           `
-          <div>通常情况下，这可能是因为更新 Escrcpy 后，缓存的依赖配置不兼容所导致的，是否重置依赖配置？</div>
-          <div class="text-red-500">注意：重置后，之前保存的依赖配置将会被清除，因此建议在执行重置操作之前备份您的配置。</div>
+          <div>${this.$t('devices.reset.reasons[0]')}</div>
+          <div class="text-red-500">${this.$t('devices.reset.reasons[1]')}</div>
           `,
-          '操作失败',
+          this.$t('devices.reset.title'),
           {
             dangerouslyUseHTMLString: true,
-            confirmButtonText: '重置依赖配置',
-            cancelButtonText: '取消',
+            confirmButtonText: this.$t('devices.reset.confirm'),
+            cancelButtonText: this.$t('devices.reset.cancel'),
             closeOnClickModal: false,
             type: 'warning',
           },
         )
+
         this.$store.scrcpy.resetDeps(depType)
+
         this.$root.reRender('Preference')
-        this.$message.success('操作成功，请重新尝试。')
+
+        this.$message.success(this.$t('devices.reset.success'))
       }
       catch (error) {
         if (error.message) {
@@ -294,20 +300,24 @@ export default {
       try {
         const command = `--serial=${row.id} --window-title=${
           row.$remark ? `${row.$remark}-` : ''
-        }${row.$name}-${
-          row.id
-        }-🎥录制中... --record=${savePath} ${this.scrcpyArgs(row.id)}`
+        }${row.$name}-${row.id}-🎥${this.$t(
+          'devices.record.progress',
+        )}... --record=${savePath} ${this.scrcpyArgs(row.id)}`
 
         console.log('handleRecord.command', command)
 
         await this.$scrcpy.shell(command, { stdout: this.onStdout })
 
-        await this.$confirm('是否前往录制位置进行查看？', '录制成功', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          closeOnClickModal: false,
-          type: 'success',
-        })
+        await this.$confirm(
+          this.$t('devices.record.success.message'),
+          this.$t('devices.record.success.title'),
+          {
+            confirmButtonText: this.$t('common.confirm'),
+            cancelButtonText: this.$t('common.cancel'),
+            closeOnClickModal: false,
+            type: 'success',
+          },
+        )
 
         await this.$electron.ipcRenderer.invoke(
           'show-item-in-folder',
@@ -365,16 +375,21 @@ export default {
     handleRestart() {
       this.$electron.ipcRenderer.send('restart-app')
     },
+    handleLog() {
+      this.$appLog.openInEditor()
+    },
     async handleConnect() {
       if (!this.formData.host) {
-        this.$message.warning('无线调试地址不能为空')
+        this.$message.warning(
+          this.$t('devices.wireless.connect.error.no-address'),
+        )
         return false
       }
 
       this.connectLoading = true
       try {
         await this.$adb.connect(this.formData.host, this.formData.port || 5555)
-        this.$message.success('连接设备成功')
+        this.$message.success(this.$t('devices.wireless.connect.success'))
         storage.set('adbCache', this.formData)
       }
       catch (error) {
@@ -387,21 +402,23 @@ export default {
         await this.$confirm(
           `
         <div class="pb-4 text-sm text-red-500">${this.$t(
-          'devices.wireless.error.detail',
+          'devices.wireless.connect.error.detail',
         )}：${message}</div>
-        <div>${this.$t('devices.wireless.error.reasons[0]')}：</div>
-        <div>1. ${this.$t('devices.wireless.error.reasons[1]')} </div>
-        <div>2. ${this.$t('devices.wireless.error.reasons[2]')} </div>
-        <div>3. ${this.$t('devices.wireless.error.reasons[3]')} </div>
-        <div>4. ${this.$t('devices.wireless.error.reasons[4]')} </div>
-        <div>5. ${this.$t('devices.wireless.error.reasons[5]')} </div>
+        <div>${this.$t('devices.wireless.connect.error.reasons[0]')}：</div>
+        <div>1. ${this.$t('devices.wireless.connect.error.reasons[1]')} </div>
+        <div>2. ${this.$t('devices.wireless.connect.error.reasons[2]')} </div>
+        <div>3. ${this.$t('devices.wireless.connect.error.reasons[3]')} </div>
+        <div>4. ${this.$t('devices.wireless.connect.error.reasons[4]')} </div>
+        <div>5. ${this.$t('devices.wireless.connect.error.reasons[5]')} </div>
         `,
-          this.$t('devices.wireless.error.title'),
+          this.$t('devices.wireless.connect.error.title'),
           {
             dangerouslyUseHTMLString: true,
             closeOnClickModal: false,
-            confirmButtonText: this.$t('devices.wireless.error.confirm'),
-            cancelButtonText: this.$t('devices.wireless.error.cancel'),
+            confirmButtonText: this.$t(
+              'devices.wireless.connect.error.confirm',
+            ),
+            cancelButtonText: this.$t('devices.wireless.connect.error.cancel'),
             type: 'warning',
           },
         )
@@ -417,7 +434,7 @@ export default {
       try {
         await this.$adb.disconnect(host, port)
         await sleep()
-        this.$message.success('断开连接成功')
+        this.$message.success(this.$t('devices.wireless.disconnect.success'))
       }
       catch (error) {
         if (error.message)

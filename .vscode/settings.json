@@ -30,9 +30,16 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "i18n-ally.localesPaths": [
-    "src/locales",
-    "dist-release/win-arm64-unpacked/locales",
-    "dist-release/win-unpacked/locales"
+    "src/locales/index.js",
+    "src/locales/languages"
   ],
-  "i18n-ally.sourceLanguage": "zh"
+  "i18n-ally.sourceLanguage": "zh",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.extract.ignored": [
+    "${item.id}（${item.$name}${\r\n          item.$remark ? `，${item.$remark}` : ''\r\n        }）",
+    "，${item.$remark}",
+    "${row.$remark ? `${row.$remark}-` : ''}${\r\n        row.$name\r\n      }-${this.$replaceIP(row.id)}-recording-${dayjs().format(\r\n        'YYYY-MM-DD-HH-mm-ss',\r\n      )}.${recordFormat}",
+    "--serial=${row.id} --window-title=${\r\n          row.$remark ? `${row.$remark}-` : ''\r\n        }${row.$name}-${\r\n          row.id\r\n        }-🎥录制中... --record=${savePath} ${this.scrcpyArgs(row.id)}",
+    "--serial=${row.id} --window-title=${\r\n            row.$remark ? `${row.$remark}-` : ''\r\n          }${row.$name}-${row.id} ${this.scrcpyArgs(row.id)}"
+  ]
 }

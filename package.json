@@ -33,6 +33,7 @@
     "dayjs": "^1.11.10",
     "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
+    "electron-log": "^5.0.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.4",
     "element-plus": "^2.4.0",

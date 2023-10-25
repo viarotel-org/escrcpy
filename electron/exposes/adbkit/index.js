@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
 import appStore from '@electron/helpers/store.js'
 import { adbPath } from '@electron/configs/index.js'
+import { uniq } from 'lodash-es'
 
 const exec = util.promisify(child_process.exec)
 
@@ -38,7 +39,10 @@ appStore.onDidChange('scrcpy.global.adbPath', async (value, oldValue) => {
 
 const shell = async command => exec(`${adbPath} ${command}`)
 const getDevices = async () => client.listDevicesWithPaths()
-const deviceShell = async (id, command) => client.getDevice(id).shell(command)
+const deviceShell = async (id, command) => {
+  const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
+  return res.toString()
+}
 const kill = async (...params) => client.kill(...params)
 const connect = async (...params) => client.connect(...params)
 const disconnect = async (...params) => client.disconnect(...params)
@@ -95,6 +99,28 @@ const install = async (id, path) => client.getDevice(id).install(path)
 
 const version = async () => client.version()
 
+const display = async (deviceId) => {
+  let value = []
+  try {
+    const res = await deviceShell(deviceId, 'dumpsys display')
+
+    const regex = /Display Id=(\d+)/g
+
+    const match = res.match(regex) || []
+
+    const mapValue = match.map(item => item.split('=')[1])
+
+    value = uniq(mapValue)
+  }
+  catch (error) {
+    console.error(error?.message || error)
+  }
+
+  console.log('display.deviceId.value', value)
+
+  return value
+}
+
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -140,6 +166,7 @@ export default () => {
     screencap,
     install,
     version,
+    display,
     watch,
   }
 }

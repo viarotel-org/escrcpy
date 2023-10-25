@@ -7,9 +7,10 @@ const shell = async (command, { stdout, stderr } = {}) => {
   const ADB = appStore.get('scrcpy.global.adbPath') || adbPath
   const args = command.split(' ')
 
-  const scrcpyProcess = spawn(spawnPath, args, {
-    env: { ...process.env, ADB },
+  const scrcpyProcess = spawn(`"${spawnPath}"`, args, {
+    env: { ...process.env, ADB: `"${ADB}"` },
     shell: true,
+    encoding: 'utf8',
   })
 
   scrcpyProcess.stdout.on('data', (data) => {

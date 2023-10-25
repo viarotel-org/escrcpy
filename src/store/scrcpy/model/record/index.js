@@ -1,11 +1,13 @@
+import { t } from '@/locales/index.js'
+
 export default () => {
   return [
     {
-      label: '录制视频格式',
+      label: t('preferences.record.format.name'),
       type: 'select',
       field: '--record-format',
       value: 'mp4',
-      placeholder: '默认值为 mp4',
+      placeholder: t('preferences.record.format.placeholder'),
       options: [
         {
           label: 'mp4',

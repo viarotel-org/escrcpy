@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { contextBridge } from 'electron'
+import { cloneDeep } from 'lodash-es'
 
 export const isPackaged = process.env.IS_PACKAGED === 'true'
 
@@ -35,7 +36,8 @@ export function exposeContext(key, value) {
  */
 export function createProxy(targetObject, methodNames) {
   return methodNames.reduce((proxyObj, methodName) => {
-    proxyObj[methodName] = (...args) => targetObject[methodName](...args)
+    proxyObj[methodName] = (...args) =>
+      targetObject[methodName](...cloneDeep(args))
 
     return proxyObj
   }, {})

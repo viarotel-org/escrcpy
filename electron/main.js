@@ -6,9 +6,16 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import './helpers/process.js'
 import './helpers/store.js'
 
+import log from './helpers/log.js'
+import './helpers/console.js'
+
 import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
 import events from './events/index.js'
+
+log.initialize({ preload: true })
+
+console.log('Successfully initialized the Escrcpy logging system.')
 
 // The built directory structure
 //

@@ -1,13 +1,13 @@
 <template>
   <div class="">
     <div class="pb-4 pr-2 flex items-center justify-between">
-      <div label="作用域范围">
+      <div class="">
         <el-select
           v-model="scopeValue"
           value-key=""
-          placeholder="偏好设置的作用域范围"
+          :placeholder="$t('preferences.scope.placeholder')"
           filterable
-          no-data-text="暂无数据"
+          :no-data-text="$t('preferences.scope.no-data')"
           class="!w-90"
           @change="onScopeChange"
         >
@@ -19,13 +19,13 @@
               <template #content>
                 <div class="space-y-1">
                   <div class="pb-1">
-                    对全局或者单个设备设置不同的偏好配置
+                    {{ $t("preferences.scope.details[0]") }}
                   </div>
                   <div class="">
-                    全局：将对所有设备生效。
+                    {{ $t("preferences.scope.details[1]") }}
                   </div>
                   <div class="">
-                    单个设备：继承于全局配置，并对单个设备进行独立设置，仅对此设备生效。
+                    {{ $t("preferences.scope.details[2]") }}
                   </div>
                 </div>
               </template>
@@ -42,16 +42,16 @@
       </div>
       <div class="">
         <el-button type="" plain @click="handleImport">
-          {{ $t("preferences.config.import") }}
+          {{ $t("preferences.config.import.name") }}
         </el-button>
         <el-button type="" plain @click="handleExport">
-          {{ $t("preferences.config.export") }}
+          {{ $t("preferences.config.export.name") }}
         </el-button>
         <el-button type="" plain @click="handleEdit">
-          {{ $t("preferences.config.edit") }}
+          {{ $t("preferences.config.edit.name") }}
         </el-button>
         <el-button type="" plain @click="handleResetAll">
-          {{ $t("preferences.config.reset") }}
+          {{ $t("preferences.config.reset.name") }}
         </el-button>
       </div>
     </div>
@@ -78,7 +78,7 @@
           <el-form
             ref="elForm"
             :model="scrcpyForm"
-            label-width="135px"
+            label-width="170px"
             class="pr-8 pt-4"
           >
             <el-row :gutter="20">
@@ -158,6 +158,7 @@
                     clearable
                     :title="item_1.placeholder"
                   ></el-switch>
+
                   <el-select
                     v-if="item_1.type === 'select'"
                     v-bind="item_1.props || {}"
@@ -238,7 +239,7 @@ export default {
       }))
 
       value.unshift({
-        label: `Global（${this.$t('preferences.global')}）`,
+        label: `Global（${this.$t('preferences.scope.global')}）`,
         value: 'global',
       })
 
@@ -251,6 +252,15 @@ export default {
         this.handleSave()
       },
       deep: true,
+    },
+    scopeValue: {
+      handler(value) {
+        if (value === 'global') {
+          return
+        }
+        this.getDisplay(value)
+      },
+      immediate: true,
     },
   },
   created() {
@@ -269,15 +279,27 @@ export default {
       this.$store.scrcpy.setScope(replaceIPValue)
       this.scrcpyForm = this.$store.scrcpy.config
     },
+    async getDisplay(value) {
+      const display = await this.$adb.display(value)
+
+      console.log('display', display)
+
+      this.$store.scrcpy.setModel('video', { display })
+    },
     async handleImport() {
       try {
         await this.$electron.ipcRenderer.invoke('show-open-dialog', {
           preset: 'replaceFile',
           filePath: this.$appStore.path,
-          filters: [{ name: '请选择要导入的配置文件', extensions: ['json'] }],
+          filters: [
+            {
+              name: this.$t('preferences.config.import.placeholder'),
+              extensions: ['json'],
+            },
+          ],
         })
 
-        this.$message.success('导入偏好配置成功')
+        this.$message.success(this.$t('preferences.config.import.success'))
 
         this.scrcpyForm = this.$store.scrcpy.init()
       }
@@ -293,7 +315,7 @@ export default {
     },
     async handleExport() {
       const messageEl = this.$message({
-        message: ' 正在导出偏好配置中...',
+        message: this.$t('preferences.config.export.message'),
         icon: LoadingIcon,
         duration: 0,
       })
@@ -303,10 +325,13 @@ export default {
           defaultPath: 'escrcpy-configs.json',
           filePath: this.$appStore.path,
           filters: [
-            { name: '请选择配置文件要保存的位置', extensions: ['json'] },
+            {
+              name: this.$t('preferences.config.export.placeholder'),
+              extensions: ['json'],
+            },
           ],
         })
-        this.$message.success('导出偏好配置成功')
+        this.$message.success(this.$t('preferences.config.export.success'))
       }
       catch (error) {
         if (error.message) {
@@ -346,9 +371,10 @@ export default {
     },
     handleSave() {
       this.$store.scrcpy.setConfig(this.scrcpyForm)
-      this.$message.success('保存配置成功，将在下一次控制设备时生效')
+      this.$message.success(this.$t('preferences.config.save.placeholder'))
     },
     getSubModel(type) {
+      console.log('getSubModel')
       const value = this.$store.scrcpy.getModel(type)
       return value
     },

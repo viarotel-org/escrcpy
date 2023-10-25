@@ -26,5 +26,7 @@ export const scrcpyPath
     ? extraResolve('core/scrcpy.exe')
     : which.sync('scrcpy', { nothrow: true })
 
+export const logPath = process.env.LOG_PATH
+
 // console.log('adbPath', adbPath)
 // console.log('scrcpyPath', scrcpyPath)

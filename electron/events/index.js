@@ -6,6 +6,7 @@ import tray from './tray/index.js'
 
 export default (mainWindow) => {
   ipcMain.on('restart-app', () => {
+    app.isQuiting = true
     app.relaunch()
     app.quit()
   })

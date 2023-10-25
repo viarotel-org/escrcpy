@@ -103,21 +103,21 @@
     },
     "config": {
       "import": {
-        "name": "导入配置",
+        "name": "导入",
         "placeholder": "请选择要导入的配置文件",
         "success": "导入成功"
       },
       "export": {
-        "name": "导出配置",
+        "name": "导出",
         "message": "导出配置",
         "placeholder": "请选择要导出的位置",
         "success": "导出成功"
       },
       "edit": {
-        "name": "编辑配置"
+        "name": "编辑"
       },
       "reset": {
-        "name": "重置配置"
+        "name": "重置"
       },
       "save": {
         "name": "保存配置",

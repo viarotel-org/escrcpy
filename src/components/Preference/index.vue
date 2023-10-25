@@ -41,16 +41,16 @@
         </el-select>
       </div>
       <div class="">
-        <el-button type="" plain @click="handleImport">
+        <el-button type="" icon="Upload" plain @click="handleImport">
           {{ $t("preferences.config.import.name") }}
         </el-button>
-        <el-button type="" plain @click="handleExport">
+        <el-button type="" icon="Download" plain @click="handleExport">
           {{ $t("preferences.config.export.name") }}
         </el-button>
-        <el-button type="" plain @click="handleEdit">
+        <el-button type="" icon="Edit" plain @click="handleEdit">
           {{ $t("preferences.config.edit.name") }}
         </el-button>
-        <el-button type="" plain @click="handleResetAll">
+        <el-button type="" icon="RefreshRight" plain @click="handleResetAll">
           {{ $t("preferences.config.reset.name") }}
         </el-button>
       </div>

@@ -47,7 +47,6 @@ export default {
       this.$store.device.setRemark(this.device.id, value)
     },
     async handleFocus() {
-      console.log('handleFocus')
       this.$refs.elInput.focus()
     },
   },

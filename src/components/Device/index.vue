@@ -328,8 +328,6 @@ export default {
         if (error.message) {
           this.$message.warning(error.message)
         }
-
-        this.handleReset()
       }
       row.$recordLoading = false
     },

@@ -1,7 +1,14 @@
 <template>
-  <el-dialog v-model="visible" title="无线配对" width="600" append-to-body destroy-on-close>
+  <el-dialog
+    v-model="visible"
+    title="无线配对"
+    width="600"
+    append-to-body
+    destroy-on-close
+  >
     <div class="text-red-500 text-sm pb-8 pl-4">
-      注意：可以在 开发者选项 -> 无线调试(可以点进去) -> 使用配对码配对设备 中获取以下信息
+      注意：可以在 开发者选项 -> 无线调试(可以点进去) -> 使用配对码配对设备
+      中获取以下信息
     </div>
 
     <el-form ref="elForm" :model="formData" label-width="100px">
@@ -10,7 +17,12 @@
         prop="host"
         :rules="[{ required: true, message: '配对码不能为空' }]"
       >
-        <el-input v-model="formData.host" placeholder="请输入配对IP地址" class="" clearable>
+        <el-input
+          v-model="formData.host"
+          placeholder="请输入配对IP地址"
+          class=""
+          clearable
+        >
         </el-input>
       </el-form-item>
       <el-form-item

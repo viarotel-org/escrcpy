@@ -18,8 +18,8 @@ window.addEventListener('beforeunload', () => {
   }
 })
 
-appStore.onDidChange('scrcpy.common.adbPath', async (value, oldValue) => {
-  console.log('onDidChange.scrcpy.common.adbPath', value)
+appStore.onDidChange('common.adbPath', async (value, oldValue) => {
+  console.log('onDidChange.common.adbPath', value)
 
   if (value === oldValue) {
     return false
@@ -146,7 +146,7 @@ const watch = async (callback) => {
 }
 
 export default () => {
-  const binPath = appStore.get('scrcpy.common.adbPath') || adbPath
+  const binPath = appStore.get('common.adbPath') || adbPath
 
   client = Adb.createClient({
     bin: binPath,

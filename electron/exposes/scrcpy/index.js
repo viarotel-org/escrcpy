@@ -3,8 +3,8 @@ import appStore from '@electron/helpers/store.js'
 import { adbPath, scrcpyPath } from '@electron/configs/index.js'
 
 const shell = async (command, { stdout, stderr } = {}) => {
-  const spawnPath = appStore.get('scrcpy.common.scrcpyPath') || scrcpyPath
-  const ADB = appStore.get('scrcpy.common.adbPath') || adbPath
+  const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
+  const ADB = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
 
   const scrcpyProcess = spawn(`"${spawnPath}"`, args, {

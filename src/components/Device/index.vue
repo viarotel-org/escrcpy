@@ -8,7 +8,7 @@
         clearable
       >
         <template #prepend>
-          {{ $t("devices.wireless.name") }}
+          {{ $t("device.wireless.name") }}
         </template>
       </el-input>
       <div class="text-gray-500 text-sm">
@@ -30,7 +30,7 @@
         :loading="connectLoading"
         @click="handleConnect"
       >
-        {{ $t("devices.wireless.connect.name") }}
+        {{ $t("device.wireless.connect.name") }}
       </el-button>
       <el-button
         type="primary"
@@ -38,13 +38,13 @@
         :loading="loading"
         @click="handleRefresh"
       >
-        {{ $t("devices.refresh.name") }}
+        {{ $t("device.refresh.name") }}
       </el-button>
       <el-button type="warning" icon="RefreshRight" @click="handleRestart">
-        {{ $t("devices.restart.name") }}
+        {{ $t("device.restart.name") }}
       </el-button>
       <el-button icon="View" @click="handleLog">
-        {{ $t("devices.log.name") }}
+        {{ $t("device.log.name") }}
       </el-button>
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
@@ -59,17 +59,17 @@
         row-key="id"
       >
         <template #empty>
-          <el-empty :description="$t('devices.empty')" />
+          <el-empty :description="$t('device.list.empty')" />
         </template>
         <el-table-column
           prop="id"
-          :label="$t('devices.device.id')"
+          :label="$t('device.id')"
           show-overflow-tooltip
           align="left"
           width="200"
         />
         <el-table-column
-          :label="$t('devices.device.name')"
+          :label="$t('device.name')"
           show-overflow-tooltip
           align="left"
         >
@@ -77,7 +77,7 @@
             <div class="flex items-center">
               <el-tooltip
                 v-if="row.$unauthorized"
-                :content="$t('devices.device.permission.error')"
+                :content="$t('device.permission.error')"
                 placement="top-start"
               >
                 <el-icon class="mr-1 text-red-600 text-lg">
@@ -98,7 +98,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('devices.operates.name')"
+          :label="$t('device.operates.name')"
           width="450"
           align="left"
         >
@@ -113,8 +113,8 @@
             >
               {{
                 row.$loading
-                  ? $t("devices.mirror.progress")
-                  : $t("devices.mirror.start")
+                  ? $t("device.mirror.progress")
+                  : $t("device.mirror.start")
               }}
             </el-button>
 
@@ -128,8 +128,8 @@
             >
               {{
                 row.$recordLoading
-                  ? $t("devices.record.progress")
-                  : $t("devices.record.start")
+                  ? $t("device.record.progress")
+                  : $t("device.record.start")
               }}
             </el-button>
 
@@ -145,7 +145,7 @@
               <template #icon>
                 <svg-icon name="wifi"></svg-icon>
               </template>
-              {{ $t("devices.wireless.mode") }}
+              {{ $t("device.wireless.mode") }}
             </el-button>
 
             <el-button
@@ -159,15 +159,15 @@
             >
               {{
                 row.$stopLoading
-                  ? $t("devices.wireless.disconnect.progress")
-                  : $t("devices.wireless.disconnect.start")
+                  ? $t("device.wireless.disconnect.progress")
+                  : $t("device.wireless.disconnect.start")
               }}
             </el-button>
           </template>
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
-            <el-icon class="" :title="$t('devices.operates.more')">
+            <el-icon class="" :title="$t('device.operates.more')">
               <Operation class="" />
             </el-icon>
           </template>
@@ -199,7 +199,7 @@ export default {
     const adbCache = storage.get('adbCache') || {}
     return {
       loading: false,
-      loadingText: this.$t('devices.loading'),
+      loadingText: this.$t('device.list.loading'),
       connectLoading: false,
       deviceList: [],
       formData: {
@@ -233,11 +233,11 @@ export default {
     }
   },
   methods: {
-    scrcpyConfig(...args) {
-      return this.$store.scrcpy.getConfig(...args)
+    preferenceData(...args) {
+      return this.$store.preference.getData(...args)
     },
     scrcpyArgs(...args) {
-      return this.$store.scrcpy.getStringConfig(...args)
+      return this.$store.preference.getScrcpyData(...args)
     },
     handleRefresh() {
       this.getDeviceData({ resetResolve: true })
@@ -246,24 +246,24 @@ export default {
       try {
         await this.$confirm(
           `
-          <div>${this.$t('devices.reset.reasons[0]')}</div>
-          <div class="text-red-500">${this.$t('devices.reset.reasons[1]')}</div>
+          <div>${this.$t('device.reset.reasons[0]')}</div>
+          <div class="text-red-500">${this.$t('device.reset.reasons[1]')}</div>
           `,
-          this.$t('devices.reset.title'),
+          this.$t('device.reset.title'),
           {
             dangerouslyUseHTMLString: true,
-            confirmButtonText: this.$t('devices.reset.confirm'),
-            cancelButtonText: this.$t('devices.reset.cancel'),
+            confirmButtonText: this.$t('device.reset.confirm'),
+            cancelButtonText: this.$t('device.reset.cancel'),
             closeOnClickModal: false,
             type: 'warning',
           },
         )
 
-        this.$store.scrcpy.resetDeps(depType)
+        this.$store.preference.resetDeps(depType)
 
         this.$root.reRender('Preference')
 
-        this.$message.success(this.$t('devices.reset.success'))
+        this.$message.success(this.$t('device.reset.success'))
       }
       catch (error) {
         if (error.message) {
@@ -276,7 +276,7 @@ export default {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
     getRecordPath(row) {
-      const rowConfig = this.scrcpyConfig(row.id)
+      const rowConfig = this.preferenceData(row.id)
       const basePath = rowConfig.savePath
       const recordFormat = rowConfig['--record-format']
 
@@ -301,7 +301,7 @@ export default {
         const command = `--serial=${row.id} --window-title=${
           row.$remark ? `${row.$remark}-` : ''
         }${row.$name}-${row.id}-🎥${this.$t(
-          'devices.record.progress',
+          'device.record.progress',
         )}... --record=${savePath} ${this.scrcpyArgs(row.id)}`
 
         console.log('handleRecord.command', command)
@@ -309,8 +309,8 @@ export default {
         await this.$scrcpy.shell(command, { stdout: this.onStdout })
 
         await this.$confirm(
-          this.$t('devices.record.success.message'),
-          this.$t('devices.record.success.title'),
+          this.$t('device.record.success.message'),
+          this.$t('device.record.success.title'),
           {
             confirmButtonText: this.$t('common.confirm'),
             cancelButtonText: this.$t('common.cancel'),
@@ -379,7 +379,7 @@ export default {
     async handleConnect() {
       if (!this.formData.host) {
         this.$message.warning(
-          this.$t('devices.wireless.connect.error.no-address'),
+          this.$t('device.wireless.connect.error.no-address'),
         )
         return false
       }
@@ -387,7 +387,7 @@ export default {
       this.connectLoading = true
       try {
         await this.$adb.connect(this.formData.host, this.formData.port || 5555)
-        this.$message.success(this.$t('devices.wireless.connect.success'))
+        this.$message.success(this.$t('device.wireless.connect.success'))
         storage.set('adbCache', this.formData)
       }
       catch (error) {
@@ -400,23 +400,21 @@ export default {
         await this.$confirm(
           `
         <div class="pb-4 text-sm text-red-500">${this.$t(
-          'devices.wireless.connect.error.detail',
+          'device.wireless.connect.error.detail',
         )}：${message}</div>
-        <div>${this.$t('devices.wireless.connect.error.reasons[0]')}：</div>
-        <div>1. ${this.$t('devices.wireless.connect.error.reasons[1]')} </div>
-        <div>2. ${this.$t('devices.wireless.connect.error.reasons[2]')} </div>
-        <div>3. ${this.$t('devices.wireless.connect.error.reasons[3]')} </div>
-        <div>4. ${this.$t('devices.wireless.connect.error.reasons[4]')} </div>
-        <div>5. ${this.$t('devices.wireless.connect.error.reasons[5]')} </div>
+        <div>${this.$t('device.wireless.connect.error.reasons[0]')}：</div>
+        <div>1. ${this.$t('device.wireless.connect.error.reasons[1]')} </div>
+        <div>2. ${this.$t('device.wireless.connect.error.reasons[2]')} </div>
+        <div>3. ${this.$t('device.wireless.connect.error.reasons[3]')} </div>
+        <div>4. ${this.$t('device.wireless.connect.error.reasons[4]')} </div>
+        <div>5. ${this.$t('device.wireless.connect.error.reasons[5]')} </div>
         `,
-          this.$t('devices.wireless.connect.error.title'),
+          this.$t('device.wireless.connect.error.title'),
           {
             dangerouslyUseHTMLString: true,
             closeOnClickModal: false,
-            confirmButtonText: this.$t(
-              'devices.wireless.connect.error.confirm',
-            ),
-            cancelButtonText: this.$t('devices.wireless.connect.error.cancel'),
+            confirmButtonText: this.$t('device.wireless.connect.error.confirm'),
+            cancelButtonText: this.$t('device.wireless.connect.error.cancel'),
             type: 'warning',
           },
         )
@@ -432,7 +430,7 @@ export default {
       try {
         await this.$adb.disconnect(host, port)
         await sleep()
-        this.$message.success(this.$t('devices.wireless.disconnect.success'))
+        this.$message.success(this.$t('device.wireless.disconnect.success'))
       }
       catch (error) {
         if (error.message)

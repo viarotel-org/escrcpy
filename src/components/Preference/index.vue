@@ -3,7 +3,7 @@
     <div class="pb-4 pr-2 flex items-center justify-between">
       <div class="">
         <el-select
-          v-model="scopeValue"
+          v-model="deviceScope"
           value-key=""
           :placeholder="$t('preferences.scope.placeholder')"
           filterable
@@ -57,8 +57,8 @@
     </div>
     <div class="grid gap-6 pr-2">
       <el-card
-        v-for="(item, index) of scrcpyModel"
-        :key="index"
+        v-for="(item, parentId) of preferenceModel"
+        :key="parentId"
         shadow="hover"
         class=""
       >
@@ -68,7 +68,7 @@
               {{ item.label }}
             </div>
             <div class="flex-none pl-4">
-              <el-button type="primary" text @click="handleReset(item.type)">
+              <el-button type="primary" text @click="handleReset(parentId)">
                 {{ $t("preferences.reset") }}
               </el-button>
             </div>
@@ -77,13 +77,13 @@
         <div class="">
           <el-form
             ref="elForm"
-            :model="scrcpyForm"
+            :model="preferenceData"
             label-width="170px"
             class="pr-8 pt-4"
           >
             <el-row :gutter="20">
               <el-col
-                v-for="(item_1, index_1) of getSubModel(item.type)"
+                v-for="(item_1, index_1) of getSubModel(item)"
                 :key="index_1"
                 :span="12"
                 :offset="0"
@@ -111,28 +111,29 @@
                       }}</span>
                     </div>
                   </template>
+
                   <el-input
-                    v-if="item_1.type === 'input'"
+                    v-if="item_1.type === 'Input'"
                     v-bind="item_1.props || {}"
-                    v-model="scrcpyForm[item_1.field]"
+                    v-model="preferenceData[item_1.field]"
                     class="!w-full"
                     :title="item_1.placeholder"
                     :placeholder="item_1.placeholder"
                     clearable
                   ></el-input>
                   <el-input
-                    v-if="item_1.type === 'input.number'"
+                    v-else-if="item_1.type === 'Input.number'"
                     v-bind="item_1.props || {}"
-                    v-model.number="scrcpyForm[item_1.field]"
+                    v-model.number="preferenceData[item_1.field]"
                     class="!w-full"
                     :title="item_1.placeholder"
                     :placeholder="item_1.placeholder"
                     clearable
                   ></el-input>
                   <el-input
-                    v-if="item_1.type === 'input.path'"
+                    v-else-if="item_1.type === 'Input.path'"
                     v-bind="item_1.props || {}"
-                    v-model="scrcpyForm[item_1.field]"
+                    v-model="preferenceData[item_1.field]"
                     class="!w-full"
                     clearable
                     :placeholder="item_1.placeholder"
@@ -151,18 +152,18 @@
                     </template>
                   </el-input>
                   <el-switch
-                    v-if="item_1.type === 'switch'"
+                    v-else-if="item_1.type === 'Switch'"
                     v-bind="item_1.props || {}"
-                    v-model="scrcpyForm[item_1.field]"
+                    v-model="preferenceData[item_1.field]"
                     class="!w-full"
                     clearable
                     :title="item_1.placeholder"
                   ></el-switch>
 
                   <el-select
-                    v-if="item_1.type === 'select'"
+                    v-else-if="item_1.type === 'Select'"
                     v-bind="item_1.props || {}"
-                    v-model="scrcpyForm[item_1.field]"
+                    v-model="preferenceData[item_1.field]"
                     :placeholder="item_1.placeholder"
                     class="!w-full"
                     clearable
@@ -188,43 +189,20 @@
 
 <script>
 import { debounce } from 'lodash-es'
-import { useScrcpyStore } from '@/store/index.js'
+import { usePreferenceStore } from '@/store/index.js'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 
 export default {
   data() {
-    const scrcpyStore = useScrcpyStore()
+    const preferenceStore = usePreferenceStore()
+
+    // console.raw('preferenceStore.data', preferenceStore.data)
+    // console.raw('preferenceStore.model', preferenceStore.model)
 
     return {
-      scrcpyModel: [
-        {
-          label: this.$t('preferences.custom.name'),
-          type: 'custom',
-        },
-        {
-          label: this.$t('preferences.video.name'),
-          type: 'video',
-        },
-        {
-          label: this.$t('preferences.device.name'),
-          type: 'device',
-        },
-        {
-          label: this.$t('preferences.window.name'),
-          type: 'window',
-        },
-        {
-          label: this.$t('preferences.record.name'),
-          type: 'record',
-        },
-        {
-          label: this.$t('preferences.audio.name'),
-          type: 'audio',
-        },
-      ],
-      scrcpyForm: { ...scrcpyStore.config },
-
-      scopeValue: scrcpyStore.scope,
+      preferenceModel: preferenceStore.model,
+      preferenceData: preferenceStore.data,
+      deviceScope: preferenceStore.deviceScope,
     }
   },
   computed: {
@@ -247,18 +225,23 @@ export default {
     },
   },
   watch: {
-    scrcpyForm: {
+    preferenceData: {
       handler() {
         this.handleSave()
       },
       deep: true,
     },
-    scopeValue: {
-      handler(value) {
+    deviceScope: {
+      async handler(value) {
         if (value === 'global') {
-          return
+          this.$store.preference.resetModel()
+          return false
         }
-        this.getDisplay(value)
+
+        const display = await this.$adb.display(value)
+
+        this.$store.preference.setModelParams('video', { display })
+        this.preferenceModel = this.$store.preference.model
       },
       immediate: true,
     },
@@ -271,20 +254,13 @@ export default {
   },
   methods: {
     handleResetAll() {
-      this.$store.scrcpy.reset(this.scopeValue)
-      this.scrcpyForm = this.$store.scrcpy.config
+      this.$store.preference.reset(this.deviceScope)
+      this.preferenceData = this.$store.preference.data
     },
     onScopeChange(value) {
-      const replaceIPValue = this.$store.device.replaceIP(value)
-      this.$store.scrcpy.setScope(replaceIPValue)
-      this.scrcpyForm = this.$store.scrcpy.config
-    },
-    async getDisplay(value) {
-      const display = await this.$adb.display(value)
-
-      console.log('display', display)
-
-      this.$store.scrcpy.setModel('video', { display })
+      const replaceValue = this.$replaceIP(value)
+      this.$store.preference.setScope(replaceValue)
+      this.preferenceData = this.$store.preference.data
     },
     async handleImport() {
       try {
@@ -301,7 +277,7 @@ export default {
 
         this.$message.success(this.$t('preferences.config.import.success'))
 
-        this.scrcpyForm = this.$store.scrcpy.init()
+        this.preferenceData = this.$store.preference.init()
       }
       catch (error) {
         if (error.message) {
@@ -344,7 +320,7 @@ export default {
     },
     async handleSelect({ field }, { properties, filters } = {}) {
       try {
-        const defaultPath = this.scrcpyForm[field]
+        const defaultPath = this.preferenceData[field]
         const files = await this.$electron.ipcRenderer.invoke(
           'show-open-dialog',
           {
@@ -360,7 +336,7 @@ export default {
 
         const value = files[0]
 
-        this.scrcpyForm[field] = value
+        this.preferenceData[field] = value
       }
       catch (error) {
         if (error.message) {
@@ -370,20 +346,22 @@ export default {
       }
     },
     handleSave() {
-      this.$store.scrcpy.setConfig(this.scrcpyForm)
+      this.$store.preference.setData(this.preferenceData)
       this.$message.success(this.$t('preferences.config.save.placeholder'))
     },
-    getSubModel(type) {
-      console.log('getSubModel')
-      const value = this.$store.scrcpy.getModel(type)
-      return value
+    getSubModel(item) {
+      const data = item?.children() || []
+
+      console.raw(`getSubModel.${item.field}.data`, data)
+
+      return data
     },
     handleReset(type) {
-      this.scrcpyForm = {
-        ...this.scrcpyForm,
-        ...this.$store.scrcpy.getDefaultConfig(type),
+      this.preferenceData = {
+        ...this.preferenceData,
+        ...this.$store.preference.getDefaultData(type),
       }
-      this.$store.scrcpy.setConfig(this.scrcpyForm)
+      this.$store.preference.setData(this.preferenceData)
     },
   },
 }

@@ -17,7 +17,7 @@
       >
         {{
           loading && percent
-            ? `${$t("about.updating")}...（${percent.toFixed(1)}%）`
+            ? `${$t("about.update.progress")}...（${percent.toFixed(1)}%）`
             : $t("about.update")
         }}
       </el-button>

@@ -36,46 +36,46 @@ export default {
     return {
       controlModel: [
         {
-          label: this.$t('devices.operates.switch'),
+          label: this.$t('device.operates.switch'),
           elIcon: 'Switch',
           command: 'input keyevent KEYCODE_APP_SWITCH',
         },
         {
-          label: this.$t('devices.operates.home'),
+          label: this.$t('device.operates.home'),
           elIcon: 'HomeFilled',
           command: 'input keyevent KEYCODE_HOME',
         },
         {
-          label: this.$t('devices.operates.return'),
+          label: this.$t('device.operates.return'),
           elIcon: 'Back',
           command: 'input keyevent KEYCODE_BACK',
         },
         {
-          label: this.$t('devices.operates.notification'),
+          label: this.$t('device.operates.notification'),
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: '打开下拉菜单选项',
         },
         {
-          label: this.$t('devices.operates.power'),
+          label: this.$t('device.operates.power'),
           elIcon: 'SwitchButton',
           command: 'input keyevent KEYCODE_POWER',
           tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: this.$t('devices.operates.reboot'),
+          label: this.$t('device.operates.reboot'),
           elIcon: 'RefreshLeft',
           command: 'reboot',
           tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: this.$t('devices.operates.capture'),
+          label: this.$t('device.operates.capture'),
           elIcon: 'Crop',
           handle: this.handleScreenCap,
           tips: '',
         },
         {
-          label: this.$t('devices.operates.install'),
+          label: this.$t('device.operates.install'),
           svgIcon: 'install',
           handle: this.handleInstall,
           tips: '',
@@ -85,8 +85,8 @@ export default {
   },
   computed: {},
   methods: {
-    scrcpyConfig(...args) {
-      return this.$store.scrcpy.getConfig(...args)
+    preferenceData(...args) {
+      return this.$store.preference.getData(...args)
     },
     async handleInstall(device) {
       let files = null
@@ -166,7 +166,7 @@ export default {
         'YYYY-MM-DD-HH-mm-ss',
       )}.png`
 
-      const deviceConfig = this.scrcpyConfig(device.id)
+      const deviceConfig = this.preferenceData(device.id)
       const savePath = this.$path.resolve(deviceConfig.savePath, fileName)
 
       try {

@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, keyBy } from 'lodash-es'
 
 /**
  * @desc 使用async await 进项进行延时操作
@@ -36,4 +36,15 @@ export function createProxy(targetObject, methodNames) {
 
     return proxyObj
   }, {})
+}
+
+export function keyByValue(data, key = 'key', valueKey = 'value') {
+  const model = keyBy(data, key) || {}
+
+  const value = Object.entries(model).reduce((obj, [modelKey, modelValue]) => {
+    obj[modelKey] = modelValue?.[valueKey]
+    return obj
+  }, {})
+
+  return value
 }

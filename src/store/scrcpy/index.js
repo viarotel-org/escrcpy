@@ -94,14 +94,14 @@ export const useScrcpyStore = defineStore({
     resetDeps(type) {
       switch (type) {
         case 'adb':
-          $appStore.set('scrcpy.global.adbPath', '')
+          $appStore.set('scrcpy.common.adbPath', '')
           break
         case 'scrcpy':
-          $appStore.set('scrcpy.global.scrcpyPath', '')
+          $appStore.set('scrcpy.common.scrcpyPath', '')
           break
         default:
-          $appStore.set('scrcpy.global.adbPath', '')
-          $appStore.set('scrcpy.global.scrcpyPath', '')
+          $appStore.set('scrcpy.common.adbPath', '')
+          $appStore.set('scrcpy.common.scrcpyPath', '')
           break
       }
       this.init()

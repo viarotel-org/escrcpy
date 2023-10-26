@@ -29,7 +29,7 @@ export default {
     return {
       tabsModel: [
         {
-          label: this.$t('devices.name'),
+          label: this.$t('device.list'),
           prop: 'Device',
         },
         {
@@ -47,7 +47,7 @@ export default {
     }
   },
   created() {
-    this.$store.scrcpy.init()
+    this.$store.preference.init()
     this.showTips()
   },
   methods: {

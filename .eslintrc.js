@@ -4,6 +4,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'eqeqeq': 'off',
     'prefer-promise-reject-errors': 'off',
+    'no-new-func': 'off',
 
     'antfu/top-level-function': 'off',
 

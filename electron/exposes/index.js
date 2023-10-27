@@ -14,9 +14,9 @@ export default {
   init(expose) {
     expose('nodePath', path)
 
-    expose('appStore', store)
-
     expose('appLog', log)
+
+    expose('appStore', store)
 
     expose('electron', {
       ...electron(),

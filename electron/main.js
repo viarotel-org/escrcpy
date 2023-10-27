@@ -4,7 +4,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 
 // process.js 必须位于非依赖项的顶部
 import './helpers/process.js'
-import './helpers/store.js'
+import appStore from './helpers/store.js'
 
 import log from './helpers/log.js'
 import './helpers/console.js'
@@ -15,7 +15,16 @@ import events from './events/index.js'
 
 log.initialize({ preload: true })
 
-console.log('Successfully initialized the Escrcpy logging system.')
+const debug = !!appStore.get('common.debug')
+
+log.info('Debug Status:', debug)
+
+if (!debug) {
+  log.warn(
+    'Debug Tips:',
+    '如果需要生成并查看运行日志请在偏好设置页面启动调试功能',
+  )
+}
 
 // The built directory structure
 //

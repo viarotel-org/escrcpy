@@ -11,9 +11,7 @@
           <el-icon>
             <EditPen />
           </el-icon>
-          <span class="pl-1">{{
-            device.$remark || $t("device.remark")
-          }}</span>
+          <span class="pl-1">{{ device.$remark || $t("device.remark") }}</span>
         </div>
       </el-tag>
     </template>
@@ -22,7 +20,7 @@
       ref="elInput"
       v-model="device.$remark"
       class=""
-      placeholder="请输入备注信息"
+      :placeholder="$t('common.input.placeholder')"
       clearable
       @change="onChange"
     ></el-input>

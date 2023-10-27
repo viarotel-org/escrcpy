@@ -8,14 +8,15 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: theme('colors.gray.100');
+  background-color: theme("colors.gray.100");
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: theme('colors.gray.300');
   border-radius: 9999px;
+  @apply bg-gray-300 dark:bg-gray-600;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: theme('colors.gray.500');
+  @apply bg-gray-500 dark:bg-gray-300;
 }

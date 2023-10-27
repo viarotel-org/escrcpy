@@ -42,3 +42,15 @@ export function createProxy(targetObject, methodNames) {
     return proxyObj
   }, {})
 }
+
+export async function executeI18n(mainWindow, value) {
+  try {
+    return await mainWindow.webContents.executeJavaScript(
+      `window.t('${value}')`,
+    )
+  }
+  catch (error) {
+    console.warn(error?.message || error)
+    return value
+  }
+}

@@ -1,8 +1,9 @@
 import { createPinia } from 'pinia'
 import { useDeviceStore } from './device/index.js'
 import { usePreferenceStore } from './preference/index.js'
+import { useThemeStore } from './theme/index.js'
 
-export { useDeviceStore, usePreferenceStore }
+export { useDeviceStore, usePreferenceStore, useThemeStore }
 
 export default {
   install(app) {
@@ -13,6 +14,7 @@ export default {
     app.config.globalProperties.$store = {
       device: useDeviceStore(),
       preference: usePreferenceStore(),
+      theme: useThemeStore(),
     }
   },
 }

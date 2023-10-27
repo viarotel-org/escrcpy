@@ -113,7 +113,7 @@ const display = async (deviceId) => {
     value = uniq(mapValue)
   }
   catch (error) {
-    console.error(error?.message || error)
+    console.warn(error?.message || error)
   }
 
   console.log('display.deviceId.value', value)

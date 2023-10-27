@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, get, set } from 'lodash-es'
 import model from './model/index.js'
 
 import {
   getDefaultData,
-  getModelFields,
   getOtherFields,
   getStoreData,
+  getTopFields,
   mergeConfig,
   setStoreData,
 } from './helpers/index.js'
@@ -26,15 +26,20 @@ export const usePreferenceStore = defineStore({
       scrcpyExcludeKeys: ['--record-format', ...getOtherFields('scrcpy')],
     }
   },
-  getters: {
-    modelList() {
-      return Object.values(this.model)
-    },
-  },
+  getters: {},
   actions: {
     getDefaultData,
     init(scope = this.deviceScope) {
-      const data = mergeConfig(getDefaultData(), getStoreData(scope))
+      const globalData = mergeConfig(getDefaultData(), getStoreData())
+
+      let data = {}
+
+      if (scope === 'global') {
+        data = globalData
+      }
+      else {
+        data = mergeConfig(globalData, getStoreData(replaceIP(scope)))
+      }
 
       this.data = data
 
@@ -59,7 +64,7 @@ export const usePreferenceStore = defineStore({
         delete cloneData.scrcpyPath
       }
 
-      setStoreData(cloneData, scope)
+      setStoreData(cloneData, replaceIP(scope))
 
       this.init(scope)
     },
@@ -68,7 +73,7 @@ export const usePreferenceStore = defineStore({
         window.appStore.reset()
       }
       else {
-        const fields = getModelFields()
+        const fields = getTopFields()
 
         fields.forEach((key) => {
           if (key === 'scrcpy') {
@@ -97,11 +102,12 @@ export const usePreferenceStore = defineStore({
       }
       this.init()
     },
-    getData(scope = this.scope) {
+    getData(scope = this.deviceScope) {
       const value = this.init(scope)
       return value
     },
-    getScrcpyData(scope = this.scope) {
+
+    getScrcpyData(scope = this.deviceScope) {
       const data = this.getData(scope)
 
       if (!data) {
@@ -133,45 +139,24 @@ export const usePreferenceStore = defineStore({
 
       return value
     },
-    getModel(key, params) {
-      const handler = this.model[key]
-      const value = handler(params)
-      // console.log('setModel.value', value)
+    getModel(path) {
+      const value = get(this.model, path)
+      // console.log('getModel.value', value)
 
       return value
     },
-    setModelParams(key, ...args) {
-      const handler = this.model[key]?.children
-
-      if (!handler) {
-        return false
-      }
-
-      const value = handler(...args)
-
-      console.raw('setModelParams.value', value)
-
-      this.model[key].children = () => value
+    setModel(path, value) {
+      set(this.model, path, value)
 
       return this.model
     },
-    resetModel(key) {
-      const keys = []
-      if (key) {
-        keys.push(key)
-      }
-      else {
-        keys.push(...Object.keys(model))
+    resetModel(path) {
+      if (!path) {
+        this.model = cloneDeep(model)
+        return true
       }
 
-      keys.forEach((value) => {
-        if (!this.model?.[value]?.children) {
-          return false
-        }
-
-        this.model[value].children = (...args) =>
-          model[value].children(...args)
-      })
+      set(this.model, path, cloneDeep(get(model, path)))
 
       return true
     },

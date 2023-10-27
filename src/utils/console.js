@@ -1,6 +1,10 @@
 import { createProxy } from './index.js'
 
-Object.assign(console, {
-  ...createProxy(window.appLog.functions, window.appLog.levels),
-  raw: console.log,
-})
+const debug = window.appStore.get('common.debug') || false
+
+if (debug) {
+  Object.assign(console, {
+    ...createProxy(window.appLog.functions, window.appLog.levels),
+    raw: console.log,
+  })
+}

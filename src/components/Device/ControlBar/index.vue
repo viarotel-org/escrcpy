@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary-100 -my-[8px]">
+  <div class="bg-primary-100 dark:bg-gray-800 -my-[8px]">
     <el-button
       v-for="(item, index) in controlModel"
       :key="index"
@@ -36,46 +36,45 @@ export default {
     return {
       controlModel: [
         {
-          label: this.$t('device.operates.switch'),
+          label: this.$t('device.control.switch'),
           elIcon: 'Switch',
           command: 'input keyevent KEYCODE_APP_SWITCH',
         },
         {
-          label: this.$t('device.operates.home'),
+          label: this.$t('device.control.home'),
           elIcon: 'HomeFilled',
           command: 'input keyevent KEYCODE_HOME',
         },
         {
-          label: this.$t('device.operates.return'),
+          label: this.$t('device.control.return'),
           elIcon: 'Back',
           command: 'input keyevent KEYCODE_BACK',
         },
         {
-          label: this.$t('device.operates.notification'),
+          label: this.$t('device.control.notification'),
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
-          tips: '打开下拉菜单选项',
+          tips: this.$t('device.control.notification.tips'),
         },
         {
-          label: this.$t('device.operates.power'),
+          label: this.$t('device.control.power'),
           elIcon: 'SwitchButton',
           command: 'input keyevent KEYCODE_POWER',
-          tips: '可以用来开启或关闭屏幕',
+          tips: this.$t('device.control.power.tips'),
         },
         {
-          label: this.$t('device.operates.reboot'),
+          label: this.$t('device.control.reboot'),
           elIcon: 'RefreshLeft',
           command: 'reboot',
-          tips: '可以用来开启或关闭屏幕',
         },
         {
-          label: this.$t('device.operates.capture'),
+          label: this.$t('device.control.capture'),
           elIcon: 'Crop',
           handle: this.handleScreenCap,
           tips: '',
         },
         {
-          label: this.$t('device.operates.install'),
+          label: this.$t('device.control.install'),
           svgIcon: 'install',
           handle: this.handleInstall,
           tips: '',
@@ -94,7 +93,12 @@ export default {
       try {
         files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
           properties: ['openFile', 'multiSelections'],
-          filters: [{ name: '请选择要安装的应用', extensions: ['apk'] }],
+          filters: [
+            {
+              name: this.$t('device.control.install.placeholder'),
+              extensions: ['apk'],
+            },
+          ],
         })
       }
       catch (error) {
@@ -108,7 +112,9 @@ export default {
       }
 
       const messageEl = this.$message({
-        message: ` 正在为 ${device.$name} 安装应用中...`,
+        message: this.$t('device.control.install.progress', {
+          deviceName: device.$name,
+        }),
         icon: LoadingIcon,
         duration: 0,
       })
@@ -131,16 +137,25 @@ export default {
       if (successCount) {
         if (totalCount > 1) {
           this.$message.success(
-            `已成功将应用安装到 ${device.$name} 中，共 ${totalCount}个，成功 ${successCount}个，失败 ${failCount}个`,
+            this.$t('device.control.install.success', {
+              deviceName: device.$name,
+              totalCount,
+              successCount,
+              failCount,
+            }),
           )
         }
         else {
-          this.$message.success(`已成功将应用安装到 ${device.$name} 中`)
+          this.$message.success(
+            this.$t('device.control.install.success.single', {
+              deviceName: device.$name,
+            }),
+          )
         }
         return
       }
 
-      this.$message.warning('安装应用失败，请检查安装包后重试')
+      this.$message.warning(this.$t('device.control.install.error'))
     },
     handleClick(row) {
       if (row.command) {
@@ -155,7 +170,9 @@ export default {
     },
     async handleScreenCap(device) {
       const messageEl = this.$message({
-        message: ` 正在截取 ${device.$name} 的屏幕快照...`,
+        message: this.$t('device.control.capture.progress', {
+          deviceName: device.$name,
+        }),
         icon: LoadingIcon,
         duration: 0,
       })
@@ -183,12 +200,17 @@ export default {
     },
     async handleScreencapSuccess(savePath) {
       try {
-        await this.$confirm('是否前往截屏位置进行查看？', '录制成功', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          closeOnClickModal: false,
-          type: 'success',
-        })
+        await this.$confirm(
+          this.$t('device.control.capture.success.message'),
+          this.$t('device.control.capture.success.message.title'),
+          {
+            confirmButtonText: this.$t('common.confirm'),
+            cancelButtonText: this.$t('common.cancel'),
+            closeOnClickModal: false,
+            type: 'success',
+          },
+        )
+
         await this.$electron.ipcRenderer.invoke(
           'show-item-in-folder',
           savePath,
@@ -204,4 +226,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+.el-button.is-disabled {
+  @apply !dark:bg-gray-800;
+}
+</style>

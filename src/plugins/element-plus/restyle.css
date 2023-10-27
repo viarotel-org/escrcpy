@@ -1,7 +1,11 @@
-:root {
-  /* 主题色 */
+:root,
+:root.dark {
+  /* --el-font-size-base: 14px;
+  --el-font-size-small: 16px;
+  --el-font-size-large: 18px; */
+
   --el-color-primary: rgba(var(--color-primary), 1);
-  --el-color-primary-dark-2: rgba(var(--color-primary-60), 1);
+  --el-color-primary-dark-2: rgba(var(--color-primary-600), 1);
   --el-color-primary-light-1: rgba(var(--color-primary-400), 1);
   --el-color-primary-light-2: rgba(var(--color-primary-400), 1);
   --el-color-primary-light-3: rgba(var(--color-primary-300), 1);
@@ -11,11 +15,10 @@
   --el-color-primary-light-7: rgba(var(--color-primary-100), 1);
   --el-color-primary-light-8: rgba(var(--color-primary-100), 1);
   --el-color-primary-light-9: rgba(var(--color-primary-50), 1);
+}
 
-  /* 字体大小 */
-  /* --el-font-size-base: 14px;
-  --el-font-size-small: 16px;
-  --el-font-size-large: 18px; */
+:root.dark.dark {
+  --el-color-primary: rgba(var(--color-primary-400), 1);
 }
 
 .el-tabs-flex {

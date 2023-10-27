@@ -4,7 +4,7 @@
       <img src="@electron/resources/build/logo.png" class="h-48" alt="" />
     </a>
 
-    <div class="pt-4 text-xl text-center italic text-gray-700">
+    <div class="pt-4 text-xl text-center italic text-gray-700 dark:text-white">
       {{ $t("about.description") }}
     </div>
 
@@ -68,7 +68,7 @@ export default {
       })
     },
     onUpdateError() {
-      this.$electron.ipcRenderer.on('update-error', async (event, ret) => {
+      this.$electron.ipcRenderer.on('update-error', async (_, ret) => {
         this.loading = false
         console.log('onUpdateError.ret', ret)
         try {

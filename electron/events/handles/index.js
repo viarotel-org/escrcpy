@@ -1,7 +1,10 @@
 import fs from 'fs-extra'
 import { dialog, ipcMain, shell } from 'electron'
+import themeHandles from './theme/index.js'
 
-export default () => {
+export default (mainWindow) => {
+  themeHandles(mainWindow)
+
   ipcMain.handle(
     'show-open-dialog',
     async (event, { preset = '', ...options } = {}) => {
@@ -11,11 +14,11 @@ export default () => {
         .catch(e => console.warn(e))
 
       if (res.canceled) {
-        throw new Error('用户取消操作')
+        throw new Error('User cancel operation')
       }
 
       if (!res.filePaths.length) {
-        throw new Error('获取目录或文件路径失败')
+        throw new Error('Get the directory or file path failure')
       }
 
       const filePaths = res.filePaths
@@ -48,11 +51,11 @@ export default () => {
         .catch(e => console.warn(e))
 
       if (res.canceled) {
-        throw new Error('用户取消操作')
+        throw new Error('User cancel operation')
       }
 
       if (!res.filePath) {
-        throw new Error('获取文件路径失败')
+        throw new Error('Failure to obtain the file path')
       }
 
       const destinationPath = res.filePath

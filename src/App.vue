@@ -4,7 +4,7 @@
       <el-tab-pane
         v-for="(item, index) of tabsModel"
         :key="index"
-        :label="item.label"
+        :label="$t(item.label)"
         :name="item.prop"
         lazy
       >
@@ -29,15 +29,15 @@ export default {
     return {
       tabsModel: [
         {
-          label: this.$t('device.list'),
+          label: 'device.list',
           prop: 'Device',
         },
         {
-          label: this.$t('preferences.name'),
+          label: 'preferences.name',
           prop: 'Preference',
         },
         {
-          label: this.$t('about.name'),
+          label: 'about.name',
           prop: 'About',
         },
       ],
@@ -47,6 +47,7 @@ export default {
     }
   },
   created() {
+    this.$store.theme.init()
     this.$store.preference.init()
     this.showTips()
   },

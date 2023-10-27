@@ -1,8 +1,11 @@
 import { Menu, Tray, app, dialog } from 'electron'
 import { trayPath } from '@electron/configs/index.js'
 import appStore from '@electron/helpers/store.js'
+import { executeI18n } from '@electron/helpers/index.js'
 
 export default (mainWindow) => {
+  const t = value => executeI18n(mainWindow, value)
+
   let tray = null
 
   const showApp = () => {
@@ -38,7 +41,7 @@ export default (mainWindow) => {
     return true
   }
 
-  const closeApp = (response) => {
+  const closeApp = async (response) => {
     if (response === 0) {
       quitApp()
       return true
@@ -56,20 +59,20 @@ export default (mainWindow) => {
 
       const contextMenu = Menu.buildFromTemplate([
         {
-          label: '打开',
+          label: await t('common.open'),
           click: () => {
             showApp()
           },
         },
         {
-          label: '重启服务',
+          label: await t('common.restart'),
           click: () => {
             app.relaunch()
             quitApp()
           },
         },
         {
-          label: '退出',
+          label: await t('close.quit'),
           click: () => {
             quitApp()
           },
@@ -101,11 +104,15 @@ export default (mainWindow) => {
 
     const { response, checkboxChecked } = await dialog.showMessageBox({
       type: 'question',
-      buttons: ['退出', '最小化到托盘', '取消退出'],
-      title: '提示',
-      message: '确定要退出吗？',
+      buttons: [
+        await t('close.quit'),
+        await t('close.minimize'),
+        await t('close.quit.cancel'),
+      ],
+      title: await t('common.tips'),
+      message: await t('close.message'),
       checkboxChecked: false,
-      checkboxLabel: '是否记住选择？',
+      checkboxLabel: await t('close.remember'),
     })
 
     // console.log('response', response)

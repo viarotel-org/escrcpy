@@ -98,7 +98,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('device.operates.name')"
+          :label="$t('device.control.name')"
           width="450"
           align="left"
         >
@@ -167,7 +167,7 @@
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
-            <el-icon class="" :title="$t('device.operates.more')">
+            <el-icon class="" :title="$t('device.control.more')">
               <Operation class="" />
             </el-icon>
           </template>
@@ -413,8 +413,8 @@ export default {
           {
             dangerouslyUseHTMLString: true,
             closeOnClickModal: false,
-            confirmButtonText: this.$t('device.wireless.connect.error.confirm'),
-            cancelButtonText: this.$t('device.wireless.connect.error.cancel'),
+            confirmButtonText: this.$t('device.wireless.pair'),
+            cancelButtonText: this.$t('common.cancel'),
             type: 'warning',
           },
         )

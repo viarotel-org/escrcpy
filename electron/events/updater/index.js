@@ -4,9 +4,7 @@ import { autoUpdater } from 'electron-updater'
 import { devPublishPath } from '@electron/configs/index.js'
 
 export default (mainWindow) => {
-  // dev-start, 这里是为了在本地做应用升级测试使用，正式环境请务必删除
-  // if (is.dev && process.env.ELECTRON_RENDERER_URL) {
-  if (is.dev && process.env.VITE_DEV_SERVER_URL) {
+  if (is.dev) {
     autoUpdater.updateConfigPath = devPublishPath
     Object.defineProperty(app, 'isPackaged', {
       get() {

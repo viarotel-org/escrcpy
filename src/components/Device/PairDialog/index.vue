@@ -1,39 +1,45 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="无线配对"
+    :title="$t('device.wireless.pair')"
     width="600"
     append-to-body
     destroy-on-close
   >
     <div class="text-red-500 text-sm pb-8 pl-4">
-      注意：可以在 开发者选项 -> 无线调试(可以点进去) -> 使用配对码配对设备
-      中获取以下信息
+      {{ $t("device.wireless.pair.tips") }}
     </div>
 
     <el-form ref="elForm" :model="formData" label-width="100px">
       <el-form-item
-        label="配对IP地址"
+        :label="$t('device.wireless.pair.address')"
         prop="host"
-        :rules="[{ required: true, message: '配对码不能为空' }]"
+        :rules="[
+          {
+            required: true,
+            message: $t('device.wireless.pair.address.message'),
+          },
+        ]"
       >
         <el-input
           v-model="formData.host"
-          placeholder="请输入配对IP地址"
+          :placeholder="$t('common.input.placeholder')"
           class=""
           clearable
         >
         </el-input>
       </el-form-item>
       <el-form-item
-        label="配对端口号"
+        :label="$t('device.wireless.pair.port')"
         prop="port"
-        :rules="[{ required: true, message: '配对码不能为空' }]"
+        :rules="[
+          { required: true, message: $t('device.wireless.pair.port.message') },
+        ]"
       >
         <el-input
           v-model.number="formData.port"
           type="number"
-          placeholder="请输入配对端口号"
+          :placeholder="$t('common.input.placeholder')"
           :min="0"
           clearable
           class=""
@@ -41,14 +47,16 @@
         </el-input>
       </el-form-item>
       <el-form-item
-        label="配对码"
+        :label="$t('device.wireless.pair.code')"
         prop="pair"
-        :rules="[{ required: true, message: '配对码不能为空' }]"
+        :rules="[
+          { required: true, message: $t('device.wireless.pair.code.message') },
+        ]"
       >
         <el-input
           v-model.number="formData.pair"
           type="number"
-          placeholder="请输入配对码"
+          :placeholder="$t('common.input.placeholder')"
           :min="0"
           clearable
           class=""
@@ -58,10 +66,10 @@
     </el-form>
     <template #footer>
       <el-button @click="handleClose">
-        取消
+        {{ $t("common.cancel") }}
       </el-button>
       <el-button type="primary" @click="handleSubmit">
-        确定
+        {{ $t("common.confirm") }}
       </el-button>
     </template>
   </el-dialog>

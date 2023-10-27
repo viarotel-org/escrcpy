@@ -1,8 +1,13 @@
 import log from '@electron/helpers/log.js'
 
+import appStore from './store.js'
 import { createProxy } from './index.js'
 
-Object.assign(console, {
-  ...createProxy(log.functions, log.levels),
-  raw: console.log,
-})
+const debug = appStore.get('common.debug') || false
+
+if (debug) {
+  Object.assign(console, {
+    ...createProxy(log.functions, log.levels),
+    raw: console.log,
+  })
+}

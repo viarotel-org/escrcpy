@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.10.0](https://github.com/viarotel-org/escrcpy/compare/v1.9.1...v1.10.0) (2023-10-27)
+
+
+### Features
+
+* 🚀 新增支持 深色模式、国际化语言、运行日志等功能 ([4b13f58](https://github.com/viarotel-org/escrcpy/commit/4b13f5892bf2b1197fdb460ab4b88ccd60eeabd1))
+
+
+### Bug Fixes
+
+* 🐛 修复 linux 打包后图标丢失的问题 ([217d82d](https://github.com/viarotel-org/escrcpy/commit/217d82d03e98f6e3a0a9e8b8f737eccbb3fa5350))
+* 🐛 修复安装路径包含空格会导致无法启动服务的问题 ([29ae786](https://github.com/viarotel-org/escrcpy/commit/29ae786768bafdf72e68a5a7c17bc9fa4d75ba9e))
+* 🐛 修复录制结束点击取消异常弹窗以及点击重启服务没有反应的问题 ([054c55b](https://github.com/viarotel-org/escrcpy/commit/054c55b26deeff7b5c90b93aa0ca588fa0a5ce43))
+* 🔧 修复自定义路径功能没有生效的问题 ([894b581](https://github.com/viarotel-org/escrcpy/commit/894b581988995ad8e6e386041b231722ca9e7ffa))
+
+
+### Performance Improvements
+
+* 📝 翻译设备列表 ([aeae0c6](https://github.com/viarotel-org/escrcpy/commit/aeae0c65bb1d083a70a9d3f95e973264e4944ad4))
+* 🚀 关于页面国际化 ([24e9399](https://github.com/viarotel-org/escrcpy/commit/24e939998e84c126f9a0689ad23809c708913036))
+
 ## [1.9.1](https://github.com/viarotel-org/escrcpy/compare/v1.9.0...v1.9.1) (2023-10-24)
 
 

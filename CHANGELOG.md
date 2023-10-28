@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/viarotel-org/escrcpy/compare/v1.10.1...v1.10.2) (2023-10-28)
+
+
+### Bug Fixes
+
+* 🐛 修复设置主题跟随系统后没有生效的问题 ([95a83f4](https://github.com/viarotel-org/escrcpy/commit/95a83f4072c9428ec12dd18cab9f6f8566f83a1f))
+
 ## [1.10.1](https://github.com/viarotel-org/escrcpy/compare/v1.10.0...v1.10.1) (2023-10-28)
 
 

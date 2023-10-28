@@ -2,12 +2,11 @@ import { defineStore } from 'pinia'
 
 const systemTheme = (key, value) => {
   if (key === 'change') {
-    window.electron.ipcRenderer.on('app-theme-change', (_, ...args) =>
+    return window.electron.ipcRenderer.on('app-theme-change', (_, ...args) =>
       value(...args),
     )
-    return
   }
-  window.electron.ipcRenderer.invoke(`app-theme-${key}`, value)
+  return window.electron.ipcRenderer.invoke(`app-theme-${key}`, value)
 }
 
 export const useThemeStore = defineStore({
@@ -55,9 +54,9 @@ export const useThemeStore = defineStore({
 
 /** 监听系统主题色变化 */
 systemTheme('change', ({ value }) => {
-  // console.log('systemTheme.change.value', value)
+  console.log('systemTheme.change.value', value)
   const themeStore = useThemeStore()
-  if (value !== themeStore.value) {
+  if (value === 'system') {
     themeStore.update(value)
   }
 })

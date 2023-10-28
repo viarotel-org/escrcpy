@@ -8,7 +8,7 @@
     @change="onChange"
   >
     <el-option
-      v-for="(item, index) in options"
+      v-for="(item, index) in data.options"
       :key="index"
       :label="$t(item.label)"
       :value="item.value"

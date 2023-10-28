@@ -106,7 +106,7 @@
   "preferences.common.theme.placeholder": "设置主题",
   "preferences.common.theme.options[0]": "浅色模式",
   "preferences.common.theme.options[1]": "深色模式",
-  "preferences.common.theme.options[2]": "系统自适应",
+  "preferences.common.theme.options[2]": "跟随系统",
   "preferences.common.debug.name": "调试",
   "preferences.common.debug.placeholder": "是否启动软件调试",
   "preferences.common.debug.tips": "启用后可以在运行日志中查看软件运行情况，一般不需要开启可能会影响性能，注意: 改变此选项需要重启软件后才能生效。",

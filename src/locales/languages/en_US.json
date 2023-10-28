@@ -106,7 +106,7 @@
   "preferences.common.theme.placeholder": "Set theme",
   "preferences.common.theme.options[0]": "Light Mode",
   "preferences.common.theme.options[1]": "Dark Mode",
-  "preferences.common.theme.options[2]": "System Default",
+  "preferences.common.theme.options[2]": "Following system",
   "preferences.common.debug.name": "Debug",
   "preferences.common.debug.placeholder": "Enable debug mode",
   "preferences.common.debug.tips": "Show debug info in log, disable to improve performance. Restart to take effect.",

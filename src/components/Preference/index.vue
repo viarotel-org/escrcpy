@@ -178,6 +178,7 @@
                     >
                     </el-option>
                   </el-select>
+
                   <component
                     :is="item_1.type"
                     v-else

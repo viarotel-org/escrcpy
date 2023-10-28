@@ -4,7 +4,7 @@
 
 # Escrcpy
 
-📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。[English Document](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
+📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。[English Document](https://github.com/viarotel-org/escrcpy/blob/main/README.md)
 
 <div style="display:flex;">
   <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/da63c9db7a944899b0ad27a0b67d29ae~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image" alt="viarotel-escrcpy" style="width: 100%;">

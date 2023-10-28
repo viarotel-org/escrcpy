@@ -148,6 +148,8 @@ const watch = async (callback) => {
 export default () => {
   const binPath = appStore.get('common.adbPath') || adbPath
 
+  console.log('adb.binPath', binPath)
+
   client = Adb.createClient({
     bin: binPath,
   })

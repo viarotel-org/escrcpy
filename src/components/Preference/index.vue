@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash-es'
+import { cloneDeep, debounce } from 'lodash-es'
 import LanguageSelect from './LanguageSelect/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
@@ -368,14 +368,15 @@ export default {
 
       messageEl.close()
     },
-    async handleSelect({ field }, { properties, filters } = {}) {
+    async handleSelect({ field }, options = {}) {
+      const { properties, filters } = cloneDeep(options)
       try {
         const defaultPath = this.preferenceData[field]
         const files = await this.$electron.ipcRenderer.invoke(
           'show-open-dialog',
           {
-            properties,
-            filters,
+            properties: properties || [],
+            filters: filters || [],
             ...(defaultPath
               ? {
                   defaultPath,

@@ -7,7 +7,7 @@ export default (mainWindow) => {
 
   ipcMain.handle(
     'show-open-dialog',
-    async (event, { preset = '', ...options } = {}) => {
+    async (_, { preset = '', ...options } = {}) => {
       // console.log('options', options)
       const res = await dialog
         .showOpenDialog(options)
@@ -33,17 +33,17 @@ export default (mainWindow) => {
     },
   )
 
-  ipcMain.handle('open-path', async (event, pathValue) => {
+  ipcMain.handle('open-path', async (_, pathValue) => {
     return shell.openPath(pathValue)
   })
 
-  ipcMain.handle('show-item-in-folder', async (event, filePath) => {
+  ipcMain.handle('show-item-in-folder', async (_, filePath) => {
     return shell.showItemInFolder(filePath)
   })
 
   ipcMain.handle(
     'show-save-dialog',
-    async (event, { filePath = '', ...options } = {}) => {
+    async (_, { filePath = '', ...options } = {}) => {
       const res = await dialog
         .showSaveDialog({
           ...options,

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/viarotel-org/escrcpy/compare/v1.10.0...v1.10.1) (2023-10-28)
+
+
+### Bug Fixes
+
+* 🐛 修复 linux 无法启动镜像或录制服务以及修改自定义依赖目录的问题 ([d815643](https://github.com/viarotel-org/escrcpy/commit/d8156437bc8aa77f8c40a4d3fb9bba587f927436))
+
 ## [1.10.0](https://github.com/viarotel-org/escrcpy/compare/v1.9.1...v1.10.0) (2023-10-27)
 
 

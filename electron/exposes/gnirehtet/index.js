@@ -14,6 +14,12 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
   const spawnPath = appStore.get('common.gnirehtetPath') || gnirehtetPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
+  if (!spawnPath) {
+    throw new Error(
+      'Failed to retrieve Gnirehtet dependency path. If you\'re using macOS, please ensure that the dependency is installed correctly.',
+    )
+  }
+
   const GNIREHTET_APK = gnirehtetApkPath
 
   const args = command.split(' ')
@@ -102,17 +108,16 @@ const installed = async (deviceId) => {
 
 const run = async (deviceId) => {
   await relay().catch((e) => {
-    throw new Error('Gnirehtet Relay fail')
+    throw new Error(e?.message || 'Gnirehtet Relay fail')
   })
-  console.log('run.relay.success')
+
   await install(deviceId).catch((e) => {
-    throw new Error('Gnirehtet Install Client fail')
+    throw new Error(e?.message || 'Gnirehtet Install Client fail')
   })
-  console.log('run.install.success')
+
   await start(deviceId).catch((e) => {
-    throw new Error('Gnirehtet Start fail')
+    throw new Error(e?.message || 'Gnirehtet Start fail')
   })
-  console.log('run.start.success')
 }
 
 window.addEventListener('beforeunload', () => {

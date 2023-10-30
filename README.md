@@ -16,6 +16,7 @@
 
 - 🏃 Synchronous: Benefit from web technologies to synchronize with Scrcpy faster
 - 💡 Customizable: Support independent configuration for multiple devices and ability to add notes and import/export all configurations
+- 🎨 Theme: Supports light mode and dark mode, system-wide switching
 - 😎 Lightweight: Native support, only display device screen
 - ⚡️ Performance: 30-120 fps depending on device
 - 🌟 Quality: 1920×1080 or higher

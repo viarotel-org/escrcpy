@@ -18,7 +18,7 @@ export const trayPath
 
 export const adbPath
   = process.platform === 'win32'
-    ? extraResolve('core/adb.exe')
+    ? extraResolve('adb/adb.exe')
     : which.sync('adb', { nothrow: true })
 
 export const scrcpyPath

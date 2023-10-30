@@ -58,7 +58,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["**/*", "!core"]
+      "filter": ["**/*", "!core", "!adb"]
     },
     "entitlementsInherit": "entitlements.mac.plist",
     "extendInfo": {
@@ -89,7 +89,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["**/*", "!core"]
+      "filter": ["**/*", "!core", "!adb"]
     }
   },
   "asar": true,

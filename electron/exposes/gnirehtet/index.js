@@ -11,7 +11,7 @@ const appDebug = appStore.get('common.debug') || false
 let adbkit = null
 
 const shell = async (command, { debug = false, stdout, stderr } = {}) => {
-  const spawnPath = appStore.get('common.gnirehtet') || gnirehtetPath
+  const spawnPath = appStore.get('common.gnirehtetPath') || gnirehtetPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
   const GNIREHTET_APK = gnirehtetApkPath

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/viarotel-org/escrcpy/compare/v1.11.1...v1.11.2) (2023-10-30)
+
+
+### Bug Fixes
+
+* 🐛 修复 macOS 打包失败的问题 ([1b2236c](https://github.com/viarotel-org/escrcpy/commit/1b2236c908b2b27cf85a50ef4b1a056df102c7de))
+
 ## [1.11.1](https://github.com/viarotel-org/escrcpy/compare/v1.11.0...v1.11.1) (2023-10-30)
 
 

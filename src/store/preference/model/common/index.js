@@ -1,4 +1,5 @@
-const { adbPath, scrcpyPath, desktopPath } = window?.electron?.configs || {}
+const { adbPath, scrcpyPath, gnirehtetPath, desktopPath }
+  = window?.electron?.configs || {}
 
 const defaultLanguage = window.electron?.process?.env?.LOCALE
 
@@ -75,6 +76,18 @@ export default {
       tips: 'preferences.common.scrcpy.tips',
       properties: ['openFile'],
       filters: [{ name: 'preferences.common.scrcpy.name', extensions: ['*'] }],
+    },
+    gnirehtetPath: {
+      label: 'preferences.common.gnirehtet.name',
+      field: 'gnirehtetPath',
+      value: gnirehtetPath,
+      type: 'Input.path',
+      placeholder: 'preferences.common.gnirehtet.placeholder',
+      tips: 'preferences.common.gnirehtet.tips',
+      properties: ['openFile'],
+      filters: [
+        { name: 'preferences.common.gnirehtet.name', extensions: ['*'] },
+      ],
     },
     debug: {
       label: 'preferences.common.debug.name',

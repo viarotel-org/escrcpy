@@ -6,6 +6,8 @@ export { adbPath } from './android-platform-tools/index.js'
 
 export { scrcpyPath } from './scrcpy/index.js'
 
+export { gnirehtetPath, gnirehtetApkPath } from './gnirehtet/index.js'
+
 export const desktopPath = process.env.DESKTOP_PATH
 
 export const devPublishPath = resolve('dev-publish.yml')

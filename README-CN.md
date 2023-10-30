@@ -54,11 +54,17 @@
 
 ### macOS && Linux
 
-> 注意：这些平台没有集成 [Adb](https://developer.android.com/studio/releases/platform-tools?hl=zh-cn) 及 [Scrcpy](https://github.com/Genymobile/scrcpy) 需要手动安装
+> 注意：这些平台没有集成 [Scrcpy](https://github.com/Genymobile/scrcpy) 需要手动安装
 
 1. Linux 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 2. macOS 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md)
 3. 安装上述依赖成功后步骤同 USB 连接 和 WIFI 连接
+
+### Gnirehtet 反向供网
+
+> 注意: macOS 内部没有集成如需使用需要手动安装 [安装文档](https://github.com/Genymobile/gnirehtet)
+
+Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设备的反向供网功能。
 
 ## 快捷键
 
@@ -135,7 +141,7 @@
 8. 添加 macOS 及 linux 操作系统的支持 ✅
 9. 支持国际化 ✅
 10. 对深色模式的支持 ✅
-11. 添加 Gnirehtet 反向供网功能 🚧
+11. 添加 Gnirehtet 反向供网功能 ✅
 12. 添加对游戏的增强功能，如游戏键位映射 🚧
 
 ## 常见问题

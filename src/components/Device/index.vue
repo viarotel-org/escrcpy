@@ -355,16 +355,28 @@ export default {
     async handleWifi(row) {
       try {
         const host = await this.$adb.getDeviceIP(row.id)
-        const port = await this.$adb.tcpip(row.id, 5555)
+
+        if (!host) {
+          throw new Error(this.$t('device.wireless.mode.error'))
+        }
+
         this.formData.host = host
+
+        const port = await this.$adb.tcpip(row.id, 5555)
+
         this.formData.port = port
+
         console.log('host:port', `${host}:${port}`)
+
         await sleep()
 
         this.handleConnect()
       }
       catch (error) {
         console.warn(error.message)
+        if (error?.message || error?.cause?.message) {
+          this.$message.warning(error?.message || error?.cause?.message)
+        }
       }
     },
     onPairSuccess() {

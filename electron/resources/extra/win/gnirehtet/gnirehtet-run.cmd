@@ -1,0 +1,2 @@
+@gnirehtet.exe run
+@pause

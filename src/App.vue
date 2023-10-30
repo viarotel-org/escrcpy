@@ -53,24 +53,15 @@ export default {
   },
   methods: {
     async showTips() {
-      if (this.$electron.process.platform === 'win32') {
-        return false
-      }
-
-      const { adbPath, scrcpyPath } = this.$electron?.configs || {}
-
-      if (adbPath) {
-        return false
-      }
+      const { scrcpyPath } = this.$electron?.configs || {}
 
       if (scrcpyPath) {
         return false
       }
 
       this.$alert(
-        `<div>该软件依赖与 
-        <a class="hover:underline text-primary-500" href="https://developer.android.com/studio/releases/platform-tools?hl=zh-cn" target="_blank">adb</a>
-         以及
+        `<div>
+        该软件依赖与
         <a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>
         ，请确保已正确安装所述依赖项，或者在偏好设置中手动配置依赖项所在位置。
         <div>`,

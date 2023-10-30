@@ -54,6 +54,8 @@ const getDeviceIP = async (id) => {
     const reg = /inet ([0-9.]+)\/\d+/
     const match = stdout.match(reg)
     const value = match[1]
+
+    console.log('adbkit.getDeviceIP', value)
     return value
   }
   catch (error) {
@@ -96,6 +98,8 @@ const screencap = async (deviceId, options = {}) => {
 }
 
 const install = async (id, path) => client.getDevice(id).install(path)
+
+const isInstalled = async (id, pkg) => client.getDevice(id).isInstalled(pkg)
 
 const version = async () => client.version()
 
@@ -167,6 +171,7 @@ export default () => {
     tcpip,
     screencap,
     install,
+    isInstalled,
     version,
     display,
     watch,

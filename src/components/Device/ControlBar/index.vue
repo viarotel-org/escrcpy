@@ -1,13 +1,18 @@
 <template>
-  <div class="bg-primary-100 dark:bg-gray-800 -my-[8px]">
+  <div
+    ref="wheelContainer"
+    class="bg-primary-100 dark:bg-gray-800 -my-[8px] flex flex-nowrap overflow-hidden"
+    title="滚动查看被遮盖的菜单"
+  >
     <el-button
       v-for="(item, index) in controlModel"
       :key="index"
       type="primary"
       plain
-      class="!border-none !mx-0 bg-transparent !rounded-0"
+      class="!border-none !mx-0 bg-transparent !rounded-0 flex-none"
       :disabled="device.$unauthorized"
-      :title="item.tips"
+      :title="item.tips ? $t(item.tips) : ''"
+      @wheel.prevent="onWheel"
       @click="handleClick(item)"
     >
       <template #icon>
@@ -16,7 +21,7 @@
           <component :is="item.elIcon" />
         </el-icon>
       </template>
-      {{ item.label }}
+      {{ $t(item.label) }}
     </el-button>
   </div>
 </template>
@@ -36,56 +41,87 @@ export default {
     return {
       controlModel: [
         {
-          label: this.$t('device.control.switch'),
+          label: 'device.control.switch',
           elIcon: 'Switch',
           command: 'input keyevent KEYCODE_APP_SWITCH',
         },
         {
-          label: this.$t('device.control.home'),
+          label: 'device.control.home',
           elIcon: 'HomeFilled',
           command: 'input keyevent KEYCODE_HOME',
         },
         {
-          label: this.$t('device.control.return'),
+          label: 'device.control.return',
           elIcon: 'Back',
           command: 'input keyevent KEYCODE_BACK',
         },
         {
-          label: this.$t('device.control.notification'),
+          label: 'device.control.notification',
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
-          tips: this.$t('device.control.notification.tips'),
+          tips: 'device.control.notification.tips',
         },
         {
-          label: this.$t('device.control.power'),
+          label: 'device.control.power',
           elIcon: 'SwitchButton',
           command: 'input keyevent KEYCODE_POWER',
-          tips: this.$t('device.control.power.tips'),
+          tips: 'device.control.power.tips',
         },
         {
-          label: this.$t('device.control.reboot'),
+          label: 'device.control.reboot',
           elIcon: 'RefreshLeft',
           command: 'reboot',
         },
         {
-          label: this.$t('device.control.capture'),
+          label: 'device.control.capture',
           elIcon: 'Crop',
           handle: this.handleScreenCap,
           tips: '',
         },
         {
-          label: this.$t('device.control.install'),
+          label: 'device.control.install',
           svgIcon: 'install',
           handle: this.handleInstall,
           tips: '',
+        },
+        {
+          label: 'device.control.gnirehtet',
+          elIcon: 'Link',
+          handle: this.handleGnirehtet,
+          tips: 'device.control.gnirehtet.tips',
         },
       ],
     }
   },
   computed: {},
   methods: {
+    onWheel(event) {
+      const container = this.$refs.wheelContainer
+      container.scrollLeft += event.deltaY
+    },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
+    },
+    async handleGnirehtet(device) {
+      const messageEl = this.$message({
+        message: this.$t('device.control.gnirehtet.progress', {
+          deviceName: device.$name,
+        }),
+        icon: LoadingIcon,
+        duration: 0,
+      })
+
+      try {
+        await this.$gnirehtet.run(device.id)
+        this.$message.success(this.$t('device.control.gnirehtet.success'))
+      }
+      catch (error) {
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+      }
+
+      messageEl.close()
     },
     async handleInstall(device) {
       let files = null

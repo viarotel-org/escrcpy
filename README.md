@@ -58,6 +58,12 @@
 2. Refer to the [installation document](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md) for macOS
 3. Follow steps in USB Connection and WIFI Connection after dependencies are installed successfully
 
+### Gnirehtet Reverse Tethering
+
+> Note: macOS does not have Gnirehtet built-in. You need to manually install it to use this feature [Installation Guide](https://github.com/Genymobile/gnirehtet).
+
+Gnirehtet is built into the Windows and Linux apps to provide reverse tethering from PC to Android devices.
+
 ## Shortcuts
 
 Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
@@ -133,7 +139,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 8. Add support for macOS and linux operating systems ✅
 9. Support internationalization ✅
 10. Support for dark mode ✅
-11. Add Gnirehtet reverse network function 🚧
+11. Add Gnirehtet reverse network function ✅
 12. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ

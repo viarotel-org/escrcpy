@@ -2,9 +2,9 @@ import { resolve } from 'node:path'
 
 import { buildResolve, extraResolve } from '@electron/helpers/index.js'
 
-export { adbPath } from './adb.js'
+export { adbPath } from './android-platform-tools/index.js'
 
-export { scrcpyPath } from './scrcpy.js'
+export { scrcpyPath } from './scrcpy/index.js'
 
 export const desktopPath = process.env.DESKTOP_PATH
 

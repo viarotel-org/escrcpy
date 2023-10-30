@@ -1,7 +1,10 @@
 import { resolve } from 'node:path'
-import which from 'which'
 
 import { buildResolve, extraResolve } from '@electron/helpers/index.js'
+
+export { adbPath } from './adb.js'
+
+export { scrcpyPath } from './scrcpy.js'
 
 export const desktopPath = process.env.DESKTOP_PATH
 
@@ -13,20 +16,7 @@ export const icnsLogoPath = buildResolve('logo.icns')
 
 export const trayPath
   = process.platform === 'darwin'
-    ? extraResolve('trayTemplate.png')
-    : extraResolve('tray.png')
-
-export const adbPath
-  = process.platform === 'win32'
-    ? extraResolve('adb/adb.exe')
-    : which.sync('adb', { nothrow: true })
-
-export const scrcpyPath
-  = process.platform === 'win32'
-    ? extraResolve('core/scrcpy.exe')
-    : which.sync('scrcpy', { nothrow: true })
+    ? extraResolve('mac/tray/iconTemplate.png')
+    : extraResolve('common/tray/icon.png')
 
 export const logPath = process.env.LOG_PATH
-
-// console.log('adbPath', adbPath)
-// console.log('scrcpyPath', scrcpyPath)

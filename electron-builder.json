@@ -26,7 +26,8 @@
     "artifactName": "${productName}-${version}-win-${arch}.${ext}",
     "extraResources": {
       "from": "electron/resources/extra",
-      "to": "extra"
+      "to": "extra",
+      "filter": ["common", "win"]
     }
   },
   "nsis": {
@@ -58,7 +59,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["**/*", "!core", "!adb"]
+      "filter": ["common", "mac"]
     },
     "entitlementsInherit": "entitlements.mac.plist",
     "extendInfo": {
@@ -89,7 +90,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["**/*", "!core", "!adb"]
+      "filter": ["common", "linux"]
     }
   },
   "asar": true,

@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.11.0](https://github.com/viarotel-org/escrcpy/compare/v1.10.2...v1.11.0) (2023-10-30)
+
+
+### Features
+
+* 🎉 Add gnirehtet reverse tethering function ([2c97189](https://github.com/viarotel-org/escrcpy/commit/2c9718997b97919b681e31ceabd87b1f96b13c07))
+
+
+### Bug Fixes
+
+* 🐛 gnirehtet custom dependent paths error ([cfd0e1d](https://github.com/viarotel-org/escrcpy/commit/cfd0e1dc5f2e248923def25cebe0cffba56125b7))
+
+
+### Performance Improvements
+
+* ♻️ Optimize Gnirehtet interaction ([e1237cd](https://github.com/viarotel-org/escrcpy/commit/e1237cd0505d4587345e674e7a65c2b97192ccb5))
+* ♻️ 拆分依赖文件禁用冗余的警告信息 ([93ad836](https://github.com/viarotel-org/escrcpy/commit/93ad83689f191ef60a9faf0b97c47157889edc40))
+* ♻️ 目录结构及描述调整 ([f9a32d6](https://github.com/viarotel-org/escrcpy/commit/f9a32d6f28a657be6f1c91f354fd5677756f5cf5))
+* ♻️ 补充依赖及目录结构调整 ([b18256b](https://github.com/viarotel-org/escrcpy/commit/b18256b6fc9fee4dd9830e72a9b9b6707022dfc4))
+
 ## [1.10.2](https://github.com/viarotel-org/escrcpy/compare/v1.10.1...v1.10.2) (2023-10-28)
 
 

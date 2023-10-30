@@ -247,13 +247,6 @@ export default {
         this.$store.theme.update(value)
       },
     },
-    'preferenceData.language': {
-      handler(value) {
-        console.log('preferenceData.language.value', value)
-        console.log('locale', this.locale)
-        this.locale = value
-      },
-    },
     // 列表设备发生变化后如果没有匹配到则默认选中 global
     'scopeList': {
       handler(value) {

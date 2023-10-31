@@ -148,7 +148,7 @@ function useLoading() {
   divEl.className = `${className}-wrap`
   divEl.innerHTML = `
     <div class="${className}-core"></div>
-    <div class="${className}-text"> 初始化服务中...</div>
+    <div class="${className}-text"> Initializing service...</div>
   `
 
   return {

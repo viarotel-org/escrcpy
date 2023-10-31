@@ -73,7 +73,26 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
   })
 }
 
+const install = deviceId => shell(`install ${deviceId}`)
+const start = deviceId => shell(`start ${deviceId}`)
+const stop = deviceId => shell(`stop ${deviceId}`)
+const tunnel = deviceId => shell(`tunnel ${deviceId}`)
+
+const installed = async (deviceId) => {
+  const res = await adbkit.isInstalled(deviceId, 'com.genymobile.gnirehtet')
+  console.log('gnirehtet.apk.installed', res)
+  return res
+}
+
 let relayProcess = null
+const stopRelayProcess = () => {
+  if (!relayProcess) {
+    return
+  }
+
+  relayProcess?.kill()
+  relayProcess = null
+}
 const relay = async (args) => {
   if (relayProcess) {
     return relayProcess
@@ -89,43 +108,35 @@ const relay = async (args) => {
         }
         resolve(process)
       },
-    }).catch((error) => {
+      stderr: (error) => {
+        stopRelayProcess()
+        reject(error)
+      },
+    })?.catch((error) => {
+      stopRelayProcess()
       reject(error)
     })
   })
 }
 
-const install = deviceId => shell(`install ${deviceId}`)
-const start = deviceId => shell(`start ${deviceId}`)
-const stop = deviceId => shell(`stop ${deviceId}`)
-const tunnel = deviceId => shell(`tunnel ${deviceId}`)
-
-const installed = async (deviceId) => {
-  const res = await adbkit.isInstalled(deviceId, 'com.genymobile.gnirehtet')
-  console.log('gnirehtet.apk.installed', res)
-  return res
-}
-
 const run = async (deviceId) => {
-  await relay().catch((e) => {
-    throw new Error(e?.message || 'Gnirehtet Relay fail')
+  await relay().catch((error) => {
+    throw new Error(error?.message || 'Gnirehtet Relay fail')
   })
 
-  await install(deviceId).catch((e) => {
-    throw new Error(e?.message || 'Gnirehtet Install Client fail')
+  await install(deviceId).catch((error) => {
+    throw new Error(error?.message || 'Gnirehtet Install Client fail')
   })
 
-  await start(deviceId).catch((e) => {
-    throw new Error(e?.message || 'Gnirehtet Start fail')
+  await start(deviceId).catch((error) => {
+    throw new Error(error?.message || 'Gnirehtet Start fail')
   })
 }
 
 window.addEventListener('beforeunload', () => {
   stop()
 
-  if (relayProcess) {
-    relayProcess.kill()
-  }
+  stopRelayProcess()
 })
 
 export default (options = {}) => {

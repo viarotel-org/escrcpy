@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.11.3](https://github.com/viarotel-org/escrcpy/compare/v1.11.2...v1.11.3) (2023-10-31)
+
+
+### Bug Fixes
+
+* 🐛 Unix permission issues ([1279994](https://github.com/viarotel-org/escrcpy/commit/12799943ffe01b6196928599c92021d10e9210d0))
+* 🐛 Unix permission issues ([dc9a3c4](https://github.com/viarotel-org/escrcpy/commit/dc9a3c4ae0c87384381dd3bb3311c19eadddf334))
+* 🐛 x64ArchFiles Error ([82a99d9](https://github.com/viarotel-org/escrcpy/commit/82a99d9c134639580b16fc54df3332e3b75f4f87))
+
 ## [1.11.2](https://github.com/viarotel-org/escrcpy/compare/v1.11.1...v1.11.2) (2023-10-30)
 
 

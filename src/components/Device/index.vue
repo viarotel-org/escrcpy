@@ -298,11 +298,11 @@ export default {
 
       const savePath = this.getRecordPath(row)
       try {
-        const command = `--serial=${row.id} --window-title=${
+        const command = `--serial="${row.id}" --window-title="${
           row.$remark ? `${row.$remark}-` : ''
         }${row.$name}-${row.id}-🎥${this.$t(
           'device.record.progress',
-        )}... --record=${savePath} ${this.scrcpyArgs(row.id)}`
+        )}..." --record="${savePath}" ${this.scrcpyArgs(row.id)}`
 
         console.log('handleRecord.command', command)
 
@@ -338,9 +338,9 @@ export default {
 
       try {
         await this.$scrcpy.shell(
-          `--serial=${row.id} --window-title=${
+          `--serial="${row.id}" --window-title="${
             row.$remark ? `${row.$remark}-` : ''
-          }${row.$name}-${row.id} ${this.scrcpyArgs(row.id)}`,
+          }${row.$name}-${row.id}" ${this.scrcpyArgs(row.id)}`,
           { stdout: this.onStdout },
         )
       }

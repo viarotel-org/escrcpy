@@ -26,6 +26,7 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 
   console.log('gnirehtet.shell.spawnPath', spawnPath)
   console.log('gnirehtet.shell.adbPath', adbPath)
+  console.log('gnirehtet.shell.command', command)
 
   const gnirehtetProcess = spawn(`"${spawnPath}"`, args, {
     env: { ...process.env, ADB, GNIREHTET_APK },
@@ -37,7 +38,7 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
     const stringData = data.toString()
 
     if (debug) {
-      console.log('gnirehtetProcess.stdout.data:', stringData)
+      console.log(`${command}.gnirehtet.process.stdout.data:`, stringData)
     }
 
     if (stdout) {
@@ -49,7 +50,7 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
     const stringData = data.toString()
 
     if (debug) {
-      console.error('gnirehtetProcess.stderr.data:', stringData)
+      console.error(`${command}.gnirehtet.process.stderr.data:`, stringData)
     }
 
     if (stderr) {
@@ -59,6 +60,8 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 
   return new Promise((resolve, reject) => {
     gnirehtetProcess.on('close', (code) => {
+      console.log(`${command}.gnirehtet.process.close.code`, code)
+
       if (code === 0) {
         resolve()
       }
@@ -73,10 +76,10 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
   })
 }
 
-const install = deviceId => shell(`install ${deviceId}`)
-const start = deviceId => shell(`start ${deviceId}`)
-const stop = deviceId => shell(`stop ${deviceId}`)
-const tunnel = deviceId => shell(`tunnel ${deviceId}`)
+const install = deviceId => shell(`install "${deviceId}"`)
+const start = deviceId => shell(`start "${deviceId}"`)
+const stop = deviceId => shell(`stop "${deviceId}"`)
+const tunnel = deviceId => shell(`tunnel "${deviceId}"`)
 
 const installed = async (deviceId) => {
   const res = await adbkit.isInstalled(deviceId, 'com.genymobile.gnirehtet')
@@ -93,10 +96,9 @@ const stopRelayProcess = () => {
   relayProcess?.kill()
   relayProcess = null
 }
+
 const relay = async (args) => {
-  if (relayProcess) {
-    return relayProcess
-  }
+  stopRelayProcess()
 
   return new Promise((resolve, reject) => {
     shell('relay', {
@@ -109,11 +111,9 @@ const relay = async (args) => {
         resolve(process)
       },
       stderr: (error) => {
-        stopRelayProcess()
         reject(error)
       },
-    })?.catch((error) => {
-      stopRelayProcess()
+    }).catch((error) => {
       reject(error)
     })
   })

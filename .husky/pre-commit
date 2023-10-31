@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git ls-files --stage | grep -E '^(100755|100644)' | sed 's/.\{42\}//' | xargs git update-index --chmod=+x
+find electron/resources/extra -type f -exec git update-index --chmod=+x {} +

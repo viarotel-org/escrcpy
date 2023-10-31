@@ -61,7 +61,7 @@
       "to": "extra",
       "filter": ["common", "mac"]
     },
-    "x64ArchFiles": "Contents/Resources/extra",
+    "x64ArchFiles": "Contents/Resources/extra/*",
     "entitlementsInherit": "entitlements.mac.plist",
     "extendInfo": {
       "NSDocumentsFolderUsageDescription": "Application requests access to the user's Documents folder.",

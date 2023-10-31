@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.6](https://github.com/viarotel-org/escrcpy/compare/v1.11.5...v1.11.6) (2023-10-31)
+
+
+### Bug Fixes
+
+* 🐛 macOS x64ArchFiles Errors ([7dbca01](https://github.com/viarotel-org/escrcpy/commit/7dbca016044b156c6fb76b4c2e14a6cf920af32c))
+
 ## [1.11.5](https://github.com/viarotel-org/escrcpy/compare/v1.11.4...v1.11.5) (2023-10-31)
 
 

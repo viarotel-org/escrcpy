@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git update-index --chmod=+x electron/resources/extra/linux/android-platform-tools/adb
+git ls-files --stage | grep -E '^(100755|100644)' | sed 's/.\{42\}//' | xargs git update-index --chmod=+x

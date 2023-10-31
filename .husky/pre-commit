@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git ls-files -z | xargs -0 chmod +x
+git update-index --chmod=+x electron/resources/extra/linux/android-platform-tools/adb

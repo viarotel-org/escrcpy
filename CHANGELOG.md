@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.9](https://github.com/viarotel-org/escrcpy/compare/v1.11.8...v1.11.9) (2023-10-31)
+
+
+### Performance Improvements
+
+* ♻️ Optimization gnirehtet and scrcpy ([9cf800c](https://github.com/viarotel-org/escrcpy/commit/9cf800c2a0a12acda7465ec800257376ada7a102))
+* ♻️ Optimize Gnirehtet interaction ([a90e570](https://github.com/viarotel-org/escrcpy/commit/a90e5705b26f9eb07c8c38492bdaf64ca0e1f98e))
+
 ## [1.11.8](https://github.com/viarotel-org/escrcpy/compare/v1.11.7...v1.11.8) (2023-10-31)
 
 

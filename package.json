@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.config.js",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.3.6"
@@ -39,6 +40,7 @@
     "element-plus": "^2.4.1",
     "fix-path": "^4.0.0",
     "fs-extra": "^11.1.1",
+    "husky": "^8.0.0",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "typescript": "^5.2.2",

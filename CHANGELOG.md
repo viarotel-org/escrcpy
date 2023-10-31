@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.8](https://github.com/viarotel-org/escrcpy/compare/v1.11.7...v1.11.8) (2023-10-31)
+
+
+### Bug Fixes
+
+* 🎨 修复 macOS 设置主题跟随系统后 某些情况下循环触发导致死循环的问题 ([1d7b188](https://github.com/viarotel-org/escrcpy/commit/1d7b188885998552b4fd371ba76b666243cd743c))
+
 ## [1.11.7](https://github.com/viarotel-org/escrcpy/compare/v1.11.6...v1.11.7) (2023-10-31)
 
 

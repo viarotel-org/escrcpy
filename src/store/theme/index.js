@@ -12,8 +12,10 @@ const systemTheme = (key, value) => {
 export const useThemeStore = defineStore({
   id: 'app-theme',
   state() {
+    const themeValue = window.appStore.get('common.theme') || 'system'
     return {
-      value: window.appStore.get('common.theme') || 'system',
+      value: themeValue,
+      isDark: false,
     }
   },
   actions: {
@@ -23,11 +25,14 @@ export const useThemeStore = defineStore({
       this.update(this.value)
     },
 
-    update(value) {
+    async update(value) {
       this.value = value
-      systemTheme('update', value)
-      this.updateHtml(value)
-      return true
+
+      this.isDark = await systemTheme('isDark')
+
+      await systemTheme('update', value)
+
+      await this.updateHtml(value)
     },
 
     async updateHtml(value) {
@@ -42,8 +47,7 @@ export const useThemeStore = defineStore({
       }
 
       if (value === 'system') {
-        const isDark = await systemTheme('isDark')
-        updateClass(isDark ? 'dark' : 'light')
+        updateClass(this.isDark ? 'dark' : 'light')
         return
       }
 
@@ -53,10 +57,18 @@ export const useThemeStore = defineStore({
 })
 
 /** 监听系统主题色变化 */
-systemTheme('change', ({ value }) => {
-  console.log('systemTheme.change.value', value)
-  const themeStore = useThemeStore()
-  if (value === 'system') {
-    themeStore.update(value)
+systemTheme('change', async ({ isDark, value }) => {
+  if (value !== 'system') {
+    return
   }
+
+  const themeStore = useThemeStore()
+
+  if (themeStore.isDark === isDark) {
+    return
+  }
+
+  console.log('systemTheme.change.isDark', isDark)
+
+  themeStore.update(value)
 })

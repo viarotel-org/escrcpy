@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-find electron/resources/extra -type f -exec git update-index --chmod=+x {} +
+find "electron/resources/extra" -type f -exec git update-index --chmod=+x {} +

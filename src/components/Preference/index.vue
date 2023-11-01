@@ -205,20 +205,27 @@
 
 <script>
 import { cloneDeep, debounce } from 'lodash-es'
+import { ref } from 'vue'
 import LanguageSelect from './LanguageSelect/index.vue'
-import { usePreferenceStore } from '@/store/index.js'
+import { useOTG } from './__composables__/OTG/index.js'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
+import { usePreferenceStore } from '@/store/index.js'
 
 export default {
   components: {
     LanguageSelect,
   },
-  data() {
+  setup() {
     const preferenceStore = usePreferenceStore()
 
+    const preferenceData = ref(preferenceStore.data)
+    const deviceScope = ref(preferenceStore.deviceScope)
+
+    useOTG(preferenceData)
+
     return {
-      preferenceData: preferenceStore.data,
-      deviceScope: preferenceStore.deviceScope,
+      preferenceData,
+      deviceScope,
     }
   },
   computed: {

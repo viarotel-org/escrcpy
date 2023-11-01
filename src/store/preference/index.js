@@ -114,30 +114,30 @@ export const usePreferenceStore = defineStore({
         return ''
       }
 
-      const value = Object.entries(data)
-        .reduce((arr, [key, value]) => {
-          if (!value) {
-            return arr
-          }
-
-          if (this.scrcpyExcludeKeys.includes(key)) {
-            return arr
-          }
-
-          if (typeof value === 'boolean') {
-            arr.push(key)
-          }
-          else {
-            arr.push(`${key}=${value}`)
-          }
-
+      const value = Object.entries(data).reduce((arr, [key, value]) => {
+        if (!value) {
           return arr
-        }, [])
-        .join(' ')
+        }
 
-      console.log('getScrcpyData.value', value)
+        if (this.scrcpyExcludeKeys.includes(key)) {
+          return arr
+        }
 
-      return value
+        if (typeof value === 'boolean') {
+          arr.push(key)
+        }
+        else {
+          arr.push(`${key}=${value}`)
+        }
+
+        return arr
+      }, [])
+
+      const joinValue = value.join(' ')
+
+      console.log('getScrcpyData.joinValue', joinValue)
+
+      return joinValue
     },
     getModel(path) {
       const value = get(this.model, path)

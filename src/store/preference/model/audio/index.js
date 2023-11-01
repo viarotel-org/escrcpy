@@ -3,11 +3,21 @@ export default {
   field: 'scrcpy',
 
   children: {
+    audioBuffer: {
+      label: 'preferences.audio.audio-buffer.name',
+      field: '--audio-buffer',
+      type: 'Input.number',
+      value: '',
+      placeholder: 'preferences.audio.audio-buffer.placeholder',
+    },
+    audioOutputBuffer: {
+      label: 'preferences.audio.audio-output-buffer.name',
+      field: '--audio-output-buffer',
+      type: 'Input.number',
+      value: '',
+      placeholder: 'preferences.audio.audio-output-buffer.placeholder',
+    },
     noAudio: {
-      // "[server] INFO: List of audio encoders:"
-      // "--audio-codec=opus --audio-encoder='c2.android.opus.encoder'"
-      // "--audio-codec=aac --audio-encoder='c2.android.aac.encoder'"
-      // "--audio-codec=aac --audio-encoder='OMX.google.aac.encoder'"
       label: 'preferences.audio.disable.name',
       field: '--no-audio',
       type: 'Switch',

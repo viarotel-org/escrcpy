@@ -163,7 +163,7 @@
   "preferences.device.stay-awake.tips": "Wired only",
   "preferences.device.control-in-close-screen.name": "Turn Off Screen",
   "preferences.device.control-in-close-screen.placeholder": "Turn off device screen when controlling",
-  "preferences.device.control-end-video.name": "Turn Off at End",
+  "preferences.device.control-end-video.name": "Turn Off at End Screen",
   "preferences.device.control-end-video.placeholder": "Turn off screen when control ends",
   "preferences.device.control-in-stop-charging.name": "Stop Charging",
   "preferences.device.control-in-stop-charging.placeholder": "Stop charging when controlling",

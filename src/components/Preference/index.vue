@@ -140,28 +140,6 @@
                     </template>
                   </el-input>
 
-                  <el-input
-                    v-else-if="item_1.type === 'Input.path'"
-                    v-bind="item_1.props || {}"
-                    v-model="preferenceData[item_1.field]"
-                    clearable
-                    class="!w-full"
-                    :title="$t(item_1.placeholder)"
-                    :placeholder="$t(item_1.placeholder)"
-                  >
-                    <template #append>
-                      <el-button
-                        icon="Search"
-                        @click="
-                          handleSelect(item_1, {
-                            properties: item_1.properties,
-                            filters: item_1.filters,
-                          })
-                        "
-                      />
-                    </template>
-                  </el-input>
-
                   <el-switch
                     v-else-if="item_1.type === 'Switch'"
                     v-bind="item_1.props || {}"
@@ -204,16 +182,18 @@
 </template>
 
 <script>
-import { cloneDeep, debounce } from 'lodash-es'
+import { debounce } from 'lodash-es'
 import { ref } from 'vue'
-import LanguageSelect from './LanguageSelect/index.vue'
 import { useOTG } from './__composables__/OTG/index.js'
+import LanguageSelect from './LanguageSelect/index.vue'
+import PathInput from './PathInput/index.vue'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 
 export default {
   components: {
     LanguageSelect,
+    PathInput,
   },
   setup() {
     const preferenceStore = usePreferenceStore()
@@ -293,6 +273,7 @@ export default {
       this.$store.preference.reset(this.deviceScope)
       this.preferenceData = this.$store.preference.data
     },
+
     onScopeChange(value) {
       this.$store.preference.setScope(value)
       this.preferenceData = this.$store.preference.data
@@ -303,6 +284,7 @@ export default {
 
       this.getDisplay()
     },
+
     async getDisplay() {
       if (this.deviceScope === 'global') {
         return false
@@ -377,45 +359,12 @@ export default {
 
       messageEl.close()
     },
-    async handleSelect({ field }, options = {}) {
-      const { properties, filters } = cloneDeep(options)
-      try {
-        const defaultPath = this.preferenceData[field]
-        const files = await this.$electron.ipcRenderer.invoke(
-          'show-open-dialog',
-          {
-            properties: properties || [],
-            filters: filters || [],
-            ...(defaultPath
-              ? {
-                  defaultPath,
-                }
-              : {}),
-          },
-        )
 
-        const value = files[0]
-
-        this.preferenceData[field] = value
-      }
-      catch (error) {
-        if (error.message) {
-          const message = error.message?.match(/Error: (.*)/)?.[1]
-          this.$message.warning(message || error.message)
-        }
-      }
-    },
     handleSave() {
       this.$store.preference.setData(this.preferenceData)
       this.$message.success(this.$t('preferences.config.save.placeholder'))
     },
-    getSubModel(item) {
-      const data = item?.children() || []
 
-      console.log(`getSubModel.${item.field}.data`, data)
-
-      return data
-    },
     handleReset(type) {
       this.preferenceData = {
         ...this.preferenceData,

@@ -120,7 +120,11 @@
                     :title="$t(item_1.placeholder)"
                     :placeholder="$t(item_1.placeholder)"
                     clearable
-                  ></el-input>
+                  >
+                    <template v-if="item_1.append" #append>
+                      {{ item_1.append }}
+                    </template>
+                  </el-input>
 
                   <el-input
                     v-else-if="item_1.type === 'Input.number'"
@@ -130,7 +134,11 @@
                     :title="$t(item_1.placeholder)"
                     :placeholder="$t(item_1.placeholder)"
                     clearable
-                  ></el-input>
+                  >
+                    <template v-if="item_1.append" #append>
+                      {{ item_1.append }}
+                    </template>
+                  </el-input>
 
                   <el-input
                     v-else-if="item_1.type === 'Input.path'"

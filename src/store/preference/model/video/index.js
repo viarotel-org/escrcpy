@@ -23,6 +23,7 @@ export default {
       type: 'Input.number',
       value: '',
       placeholder: 'preferences.video.refresh-rate.placeholder',
+      append: 'fps',
     },
     videoCodec: {
       label: 'preferences.video.decoder.name',
@@ -122,6 +123,7 @@ export default {
       type: 'Input.number',
       value: '',
       placeholder: 'preferences.video.video-buffer.placeholder',
+      append: 'ms',
     },
     v4l2Buffer: {
       label: 'preferences.video.receiver-buffer.name',
@@ -129,6 +131,7 @@ export default {
       type: 'Input.number',
       value: '',
       placeholder: 'preferences.video.receiver-buffer.placeholder',
+      append: 'ms',
     },
     noVideo: {
       label: 'preferences.video.disable.name',

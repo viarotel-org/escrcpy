@@ -9,6 +9,7 @@ export default {
       type: 'Input.number',
       value: '',
       placeholder: 'preferences.audio.audio-buffer.placeholder',
+      append: 'ms',
     },
     audioOutputBuffer: {
       label: 'preferences.audio.audio-output-buffer.name',
@@ -16,6 +17,7 @@ export default {
       type: 'Input.number',
       value: '',
       placeholder: 'preferences.audio.audio-output-buffer.placeholder',
+      append: 'ms',
     },
     noAudio: {
       label: 'preferences.audio.disable.name',

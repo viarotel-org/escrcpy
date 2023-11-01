@@ -70,6 +70,7 @@ function createWindow() {
       // contextIsolation: false,
       preload: path.join(__dirname, './preload.js'),
       sandbox: false,
+      spellcheck: false,
     },
     backgroundColor: 'white',
   })

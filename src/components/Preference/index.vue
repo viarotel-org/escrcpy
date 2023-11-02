@@ -78,7 +78,7 @@
           <el-form
             ref="elForm"
             :model="preferenceData"
-            label-width="170px"
+            label-width="200px"
             class="pr-8 pt-4"
           >
             <el-row :gutter="20">

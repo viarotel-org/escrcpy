@@ -16,11 +16,11 @@ export default {
       ],
     },
     audioCode: {
-      label: 'preferences.audio.audio-codec.name',
+      label: 'preferences.audio.audio-code.name',
       field: '--audio-code',
       type: 'AudioCodecSelect',
       value: '',
-      placeholder: 'preferences.audio.audio-codec.placeholder',
+      placeholder: 'preferences.audio.audio-code.placeholder',
       options: [
         {
           label: 'opus & c2.android.opus.encoder',

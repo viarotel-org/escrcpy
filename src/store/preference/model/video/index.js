@@ -26,11 +26,11 @@ export default {
       append: 'fps',
     },
     videoCode: {
-      label: 'preferences.video.codec.name',
+      label: 'preferences.video.video-code.name',
       field: '--video-code',
       type: 'VideoCodecSelect',
       value: '',
-      placeholder: 'preferences.video.codec.placeholder',
+      placeholder: 'preferences.video.video-code.placeholder',
       options: [
         {
           label: 'h265 & OMX.qcom.video.encoder.avc',

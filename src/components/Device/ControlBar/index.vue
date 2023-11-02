@@ -4,33 +4,51 @@
     class="bg-primary-100 dark:bg-gray-800 -my-[8px] flex flex-nowrap overflow-hidden"
     title="滚动查看被遮盖的菜单"
   >
-    <el-button
+    <component
+      :is="item.component || 'div'"
       v-for="(item, index) in controlModel"
       :key="index"
-      type="primary"
-      plain
-      class="!border-none !mx-0 bg-transparent !rounded-0 flex-none"
-      :disabled="device.$unauthorized"
-      :title="item.tips ? $t(item.tips) : ''"
-      @wheel.prevent="onWheel"
-      @click="handleClick(item)"
+      class="flex-none"
+      v-bind="{
+        device,
+        ...(item.command
+          ? {
+            onClick: () => handleShell(item),
+          }
+          : {}),
+      }"
     >
-      <template #icon>
-        <svg-icon v-if="item.svgIcon" :name="item.svgIcon"></svg-icon>
-        <el-icon v-else-if="item.elIcon" class="">
-          <component :is="item.elIcon" />
-        </el-icon>
-      </template>
-      {{ $t(item.label) }}
-    </el-button>
+      <el-button
+        type="primary"
+        plain
+        class="!border-none !mx-0 bg-transparent !rounded-0"
+        :disabled="device.$unauthorized"
+        :title="item.tips ? $t(item.tips) : ''"
+        @wheel.prevent="onWheel"
+      >
+        <template #icon>
+          <svg-icon v-if="item.svgIcon" :name="item.svgIcon"></svg-icon>
+          <el-icon v-else-if="item.elIcon" class="">
+            <component :is="item.elIcon" />
+          </el-icon>
+        </template>
+        {{ $t(item.label) }}
+      </el-button>
+    </component>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import LoadingIcon from './LoadingIcon/index.vue'
+import Screenshot from './Screenshot/index.vue'
+import AppInstall from './AppInstall/index.vue'
+import Gnirehtet from './Gnirehtet/index.vue'
 
 export default {
+  components: {
+    Screenshot,
+    AppInstall,
+    Gnirehtet,
+  },
   props: {
     device: {
       type: Object,
@@ -75,19 +93,19 @@ export default {
         {
           label: 'device.control.capture',
           elIcon: 'Crop',
-          handle: this.handleScreenCap,
+          component: 'Screenshot',
           tips: '',
         },
         {
           label: 'device.control.install',
           svgIcon: 'install',
-          handle: this.handleInstall,
+          component: 'AppInstall',
           tips: '',
         },
         {
           label: 'device.control.gnirehtet',
           elIcon: 'Link',
-          handle: this.handleGnirehtet,
+          component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
         },
       ],
@@ -99,164 +117,8 @@ export default {
       const container = this.$refs.wheelContainer
       container.scrollLeft += event.deltaY
     },
-    preferenceData(...args) {
-      return this.$store.preference.getData(...args)
-    },
-    async handleGnirehtet(device) {
-      const messageEl = this.$message({
-        message: this.$t('device.control.gnirehtet.progress', {
-          deviceName: device.$name,
-        }),
-        icon: LoadingIcon,
-        duration: 0,
-      })
-
-      try {
-        await this.$gnirehtet.run(device.id)
-        this.$message.success(this.$t('device.control.gnirehtet.success'))
-      }
-      catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-      }
-
-      messageEl.close()
-    },
-    async handleInstall(device) {
-      let files = null
-
-      try {
-        files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
-          properties: ['openFile', 'multiSelections'],
-          filters: [
-            {
-              name: this.$t('device.control.install.placeholder'),
-              extensions: ['apk'],
-            },
-          ],
-        })
-      }
-      catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-      }
-
-      if (!files) {
-        return false
-      }
-
-      const messageEl = this.$message({
-        message: this.$t('device.control.install.progress', {
-          deviceName: device.$name,
-        }),
-        icon: LoadingIcon,
-        duration: 0,
-      })
-
-      let failCount = 0
-
-      for (let index = 0; index < files.length; index++) {
-        const item = files[index]
-        await this.$adb.install(device.id, item).catch((e) => {
-          console.warn(e)
-          ++failCount
-        })
-      }
-
-      messageEl.close()
-
-      const totalCount = files.length
-      const successCount = totalCount - failCount
-
-      if (successCount) {
-        if (totalCount > 1) {
-          this.$message.success(
-            this.$t('device.control.install.success', {
-              deviceName: device.$name,
-              totalCount,
-              successCount,
-              failCount,
-            }),
-          )
-        }
-        else {
-          this.$message.success(
-            this.$t('device.control.install.success.single', {
-              deviceName: device.$name,
-            }),
-          )
-        }
-        return
-      }
-
-      this.$message.warning(this.$t('device.control.install.error'))
-    },
-    handleClick(row) {
-      if (row.command) {
-        this.$adb.deviceShell(this.device.id, row.command)
-      }
-      else if (row.handle) {
-        row.handle(this.device)
-      }
-      else {
-        return false
-      }
-    },
-    async handleScreenCap(device) {
-      const messageEl = this.$message({
-        message: this.$t('device.control.capture.progress', {
-          deviceName: device.$name,
-        }),
-        icon: LoadingIcon,
-        duration: 0,
-      })
-
-      const fileName = `${device.$remark ? `${device.$remark}-` : ''}${
-        device.$name
-      }-${this.$replaceIP(device.id)}-screencap-${dayjs().format(
-        'YYYY-MM-DD-HH-mm-ss',
-      )}.png`
-
-      const deviceConfig = this.preferenceData(device.id)
-      const savePath = this.$path.resolve(deviceConfig.savePath, fileName)
-
-      try {
-        await this.$adb.screencap(device.id, { savePath })
-        this.handleScreencapSuccess(savePath)
-      }
-      catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-      }
-
-      messageEl.close()
-    },
-    async handleScreencapSuccess(savePath) {
-      try {
-        await this.$confirm(
-          this.$t('device.control.capture.success.message'),
-          this.$t('device.control.capture.success.message.title'),
-          {
-            confirmButtonText: this.$t('common.confirm'),
-            cancelButtonText: this.$t('common.cancel'),
-            closeOnClickModal: false,
-            type: 'success',
-          },
-        )
-
-        await this.$electron.ipcRenderer.invoke(
-          'show-item-in-folder',
-          savePath,
-        )
-      }
-      catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-      }
+    handleShell(row) {
+      this.$adb.deviceShell(this.device.id, row.command)
     },
   },
 }

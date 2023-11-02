@@ -297,16 +297,16 @@ export default {
       this.toggleRowExpansion(row, true)
 
       const savePath = this.getRecordPath(row)
+
       try {
-        const command = `--serial="${row.id}" --window-title="${
-          row.$remark ? `${row.$remark}-` : ''
-        }${row.$name}-${row.id}-🎥${this.$t(
-          'device.record.progress',
-        )}..." --record="${savePath}" ${this.scrcpyArgs(row.id)}`
-
-        console.log('handleRecord.command', command)
-
-        await this.$scrcpy.shell(command, { stdout: this.onStdout })
+        await this.$scrcpy.record(row.id, {
+          title: `${row.$remark ? `${row.$remark}-` : ''}${row.$name}-${
+            row.id
+          }-🎥${this.$t('device.record.progress')}...`,
+          savePath,
+          args: this.scrcpyArgs(row.id),
+          stdout: this.onStdout,
+        })
 
         await this.$confirm(
           this.$t('device.record.success.message'),
@@ -337,12 +337,13 @@ export default {
       this.toggleRowExpansion(row, true)
 
       try {
-        await this.$scrcpy.shell(
-          `--serial="${row.id}" --window-title="${
-            row.$remark ? `${row.$remark}-` : ''
-          }${row.$name}-${row.id}" ${this.scrcpyArgs(row.id)}`,
-          { stdout: this.onStdout },
-        )
+        await this.$scrcpy.mirror(row.id, {
+          title: `${row.$remark ? `${row.$remark}-` : ''}${row.$name}-${
+            row.id
+          }`,
+          args: this.scrcpyArgs(row.id),
+          stdout: this.onStdout,
+        })
       }
       catch (error) {
         if (error.message) {

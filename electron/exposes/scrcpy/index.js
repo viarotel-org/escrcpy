@@ -102,8 +102,27 @@ const getEncoders = async (serial) => {
   return value
 }
 
+const mirror = async (serial, { title, args = '', ...options } = {}) => {
+  return shell(
+    `--serial="${serial}" --window-title="${title}" ${args}`,
+    options,
+  )
+}
+
+const record = async (
+  serial,
+  { title, args = '', savePath, ...options } = {},
+) => {
+  return shell(
+    `--serial="${serial}" --window-title="${title}" --record="${savePath}" ${args}`,
+    options,
+  )
+}
+
 export default () => ({
   shell,
   execShell,
   getEncoders,
+  mirror,
+  record,
 })

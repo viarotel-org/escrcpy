@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.12.0](https://github.com/viarotel-org/escrcpy/compare/v1.11.9...v1.12.0) (2023-11-02)
+
+
+### Features
+
+* 🎉 Update Scrcpy to v2.2 ([5c401a8](https://github.com/viarotel-org/escrcpy/commit/5c401a82ff44dc3f02d296c64c6fdd4ab1d9523d))
+
+
+### Bug Fixes
+
+* 📝 Translate problem ([994cb09](https://github.com/viarotel-org/escrcpy/commit/994cb094285cb3d1dc5d14ecbf40e45e057033b8))
+
+
+### Performance Improvements
+
+* ♻️ Optimize OTG ([d908d58](https://github.com/viarotel-org/escrcpy/commit/d908d588b046a54e425879ce0a5469234a2053bc))
+* 🎉 Add OTG functions ([e249d84](https://github.com/viarotel-org/escrcpy/commit/e249d847e497eca9f69e73849923711d33c0b454))
+* 💄 Disable spellcheck ([b864fab](https://github.com/viarotel-org/escrcpy/commit/b864faba4466410a3f01f5186d55a214f251b5fc))
+* 🔊 Add audio-output-buffer option ([c210140](https://github.com/viarotel-org/escrcpy/commit/c2101405366df871d3958721168d8ab32a3bc79f))
+* 🚀 Update Preferences ([34800cf](https://github.com/viarotel-org/escrcpy/commit/34800cf5c192b6daf9be1556e610a028d6c97632))
+
 ## [1.11.9](https://github.com/viarotel-org/escrcpy/compare/v1.11.8...v1.11.9) (2023-10-31)
 
 

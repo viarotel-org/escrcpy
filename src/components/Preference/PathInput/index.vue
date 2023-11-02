@@ -1,11 +1,12 @@
 <template>
   <el-input
     v-bind="data.props || {}"
-    :model-value="modelValue"
+    v-model="pathValue"
     clearable
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
+    @change="handleUpdate"
   >
     <template #append>
       <el-button
@@ -27,7 +28,7 @@ import { cloneDeep } from 'lodash-es'
 export default {
   props: {
     modelValue: {
-      type: [String, Array],
+      type: String,
       default: '',
     },
     data: {
@@ -36,7 +37,23 @@ export default {
     },
   },
   emits: ['update:model-value'],
+  data() {
+    return {
+      pathValue: '',
+    }
+  },
+  watch: {
+    modelValue: {
+      handler(value) {
+        this.pathValue = value
+      },
+      immediate: true,
+    },
+  },
   methods: {
+    handleUpdate(value) {
+      this.$emit('update:model-value', value)
+    },
     async handleSelect(options = {}) {
       const { properties, filters } = cloneDeep(options)
       try {
@@ -56,7 +73,7 @@ export default {
 
         const value = files[0]
 
-        this.$emit('update:model-value', value)
+        this.handleUpdate(value)
       }
       catch (error) {
         if (error.message) {

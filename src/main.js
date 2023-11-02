@@ -10,7 +10,7 @@ import icons from './icons/index.js'
 
 import { i18n, t } from './locales/index.js'
 
-import { replaceIP } from '@/utils/index.js'
+import { replaceIP, restoreIP } from '@/utils/index.js'
 
 import 'virtual:uno.css'
 import './styles/index.js'
@@ -36,6 +36,7 @@ app.config.globalProperties.$scrcpy = window.scrcpy
 app.config.globalProperties.$gnirehtet = window.gnirehtet
 
 app.config.globalProperties.$replaceIP = replaceIP
+app.config.globalProperties.$restoreIP = restoreIP
 
 app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading

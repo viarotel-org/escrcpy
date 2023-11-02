@@ -1,6 +1,6 @@
 import { watchEffect } from 'vue'
 
-export function useOTG(data) {
+export function useOtg(data) {
   watchEffect(() => {
     if (data.value['--hid-keyboard'] || data.value['--hid-mouse']) {
       data.value['--otg'] = true

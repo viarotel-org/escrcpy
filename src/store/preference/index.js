@@ -11,19 +11,27 @@ import {
   setStoreData,
 } from './helpers/index.js'
 
-import { replaceIP } from '@/utils/index.js'
+import { replaceIP, restoreIP } from '@/utils/index.js'
 
 const { adbPath, scrcpyPath } = window.electron?.configs || {}
 
 export const usePreferenceStore = defineStore({
   id: 'app-preference',
   state() {
+    const deviceScope = restoreIP(
+      window.appStore.get('scrcpy.deviceScope') || 'global',
+    )
+
     return {
       model: cloneDeep(model),
       data: { ...getDefaultData() },
-      deviceScope: window.appStore.get('scrcpy.deviceScope') || 'global',
-
-      scrcpyExcludeKeys: ['--record-format', ...getOtherFields('scrcpy')],
+      deviceScope,
+      scrcpyExcludeKeys: [
+        '--record-format',
+        '--video-code',
+        '--audio-code',
+        ...getOtherFields('scrcpy'),
+      ],
     }
   },
   getters: {},
@@ -114,7 +122,7 @@ export const usePreferenceStore = defineStore({
         return ''
       }
 
-      const value = Object.entries(data).reduce((arr, [key, value]) => {
+      const valueList = Object.entries(data).reduce((arr, [key, value]) => {
         if (!value) {
           return arr
         }
@@ -133,11 +141,11 @@ export const usePreferenceStore = defineStore({
         return arr
       }, [])
 
-      const joinValue = value.join(' ')
+      const value = valueList.join(' ')
 
-      console.log('getScrcpyData.joinValue', joinValue)
+      console.log('getScrcpyData.value', value)
 
-      return joinValue
+      return value
     },
     getModel(path) {
       const value = get(this.model, path)

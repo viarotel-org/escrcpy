@@ -83,7 +83,7 @@
           >
             <el-row :gutter="20">
               <el-col
-                v-for="(item_1, index_1) of item?.children || {}"
+                v-for="(item_1, index_1) of subModel(item)"
                 :key="index_1"
                 :span="12"
                 :offset="0"
@@ -170,6 +170,8 @@
                     v-else
                     v-model="preferenceData[item_1.field]"
                     :data="item_1"
+                    :device-scope="deviceScope"
+                    :preference-data="preferenceData"
                   ></component>
                 </el-form-item>
               </el-col>
@@ -184,9 +186,11 @@
 <script>
 import { debounce } from 'lodash-es'
 import { ref } from 'vue'
-import { useOTG } from './__composables__/OTG/index.js'
+import { useOtg } from './__composables__/otg/index.js'
 import LanguageSelect from './LanguageSelect/index.vue'
 import PathInput from './PathInput/index.vue'
+import VideoCodecSelect from './VideoCodecSelect/index.vue'
+import AudioCodecSelect from './AudioCodecSelect/index.vue'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 
@@ -194,6 +198,8 @@ export default {
   components: {
     LanguageSelect,
     PathInput,
+    VideoCodecSelect,
+    AudioCodecSelect,
   },
   setup() {
     const preferenceStore = usePreferenceStore()
@@ -201,7 +207,7 @@ export default {
     const preferenceData = ref(preferenceStore.data)
     const deviceScope = ref(preferenceStore.deviceScope)
 
-    useOTG(preferenceData)
+    useOtg(preferenceData)
 
     return {
       preferenceData,
@@ -218,7 +224,6 @@ export default {
         label: `${item.id}（${item.$name}${
           item.$remark ? `，${item.$remark}` : ''
         }）`,
-
         value: item.id,
       }))
 
@@ -269,6 +274,16 @@ export default {
     this.getDisplay()
   },
   methods: {
+    subModel(item) {
+      const children = item?.children || {}
+      const value = {}
+      Object.entries(children).forEach(([key, data]) => {
+        if (!data.hidden) {
+          value[key] = data
+        }
+      })
+      return value
+    },
     handleResetAll() {
       this.$store.preference.reset(this.deviceScope)
       this.preferenceData = this.$store.preference.data

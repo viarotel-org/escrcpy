@@ -11,5 +11,6 @@ module.exports = {
     'import/default': 'off',
 
     'vue/no-mutating-props': 'off',
+    'vue/no-use-v-if-with-v-for': 'off',
   },
 }

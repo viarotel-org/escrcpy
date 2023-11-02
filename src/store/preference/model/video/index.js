@@ -25,61 +25,44 @@ export default {
       placeholder: 'preferences.video.refresh-rate.placeholder',
       append: 'fps',
     },
-    videoCodec: {
-      label: 'preferences.video.decoder.name',
-      field: '--video-codec',
-      type: 'Select',
+    videoCode: {
+      label: 'preferences.video.codec.name',
+      field: '--video-code',
+      type: 'VideoCodecSelect',
       value: '',
-      placeholder: 'preferences.video.decoder.placeholder',
+      placeholder: 'preferences.video.codec.placeholder',
       options: [
         {
-          label: 'h264',
-          value: 'h264',
+          label: 'h265 & OMX.qcom.video.encoder.avc',
+          value: 'h265 & OMX.qcom.video.encoder.avc',
         },
         {
-          label: 'h265',
-          value: 'h265',
+          label: 'h265 & c2.android.avc.encoder',
+          value: 'h265 & c2.android.avc.encoder',
         },
         {
-          label: 'av1',
-          value: 'av1',
+          label: 'h264 & OMX.google.h264.encoder',
+          value: 'h264 & OMX.google.h264.encoder',
+        },
+        {
+          label: 'h264 & OMX.qcom.video.encoder.hevc',
+          value: 'h264 & OMX.qcom.video.encoder.hevc',
+        },
+        {
+          label: 'h264 & c2.android.hevc.encoder',
+          value: 'h264 & c2.android.hevc.encoder',
         },
       ],
     },
-    videoEncoder: {
-      label: 'preferences.video.encoder.name',
-      field: '--video-encoder',
-      type: 'Select',
+    videoCodec: {
+      hidden: true,
+      field: '--video-codec',
       value: '',
-      placeholder: 'preferences.video.encoder.placeholder',
-      // "[server] INFO: List of video encoders:"
-      // "--video-codec=h264 --video-encoder='OMX.qcom.video.encoder.avc'"
-      // "--video-codec=h264 --video-encoder='c2.android.avc.encoder'"
-      // "--video-codec=h264 --video-encoder='OMX.google.h264.encoder'"
-      // "--video-codec=h265 --video-encoder='OMX.qcom.video.encoder.hevc'"
-      // "--video-codec=h265 --video-encoder='c2.android.hevc.encoder'"
-      options: [
-        {
-          label: 'Android HEVC(H.265) ',
-          value: 'OMX.qcom.video.encoder.avc',
-        },
-        {
-          label: 'Qualcomm HEVC(H.265) ',
-          value: 'c2.android.avc.encoder',
-        },
-        {
-          label: 'Google H.264(AVC)',
-          value: 'OMX.google.h264.encoder',
-        },
-        {
-          label: 'Android AVC(H.264) ',
-          value: 'OMX.qcom.video.encoder.hevc',
-        },
-        {
-          label: 'Qualcomm AVC(H.264)',
-          value: 'c2.android.hevc.encoder',
-        },
-      ],
+    },
+    videoEncoder: {
+      hidden: true,
+      field: '--video-encoder',
+      value: '',
     },
     rotation: {
       label: 'preferences.video.screen-rotation.name',

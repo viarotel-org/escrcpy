@@ -1,7 +1,7 @@
 <template>
   <el-select
     v-bind="data.props || {}"
-    :model-value="modelValue"
+    v-model="selectValue"
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       deviceOptions: [],
+      selectValue: '',
     }
   },
   computed: {
@@ -49,6 +50,11 @@ export default {
     },
   },
   watch: {
+    modelValue: {
+      handler(value) {
+        this.selectValue = value
+      },
+    },
     deviceScope: {
       handler(value) {
         if (value === 'global') {

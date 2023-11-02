@@ -223,6 +223,8 @@ This project would not be possible without the following open source projects:
 - [scrcpy](https://github.com/Genymobile/scrcpy)
 - [adbkit](https://github.com/DeviceFarmer/adbkit)
 - [electron](https://www.electronjs.org/)
+- [vue](https://vuejs.org/)
+- [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 
 ## Support the Project
 

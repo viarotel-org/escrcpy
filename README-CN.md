@@ -227,6 +227,8 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 - [scrcpy](https://github.com/Genymobile/scrcpy)
 - [adbkit](https://github.com/DeviceFarmer/adbkit)
 - [electron](https://www.electronjs.org/)
+- [vue](https://vuejs.org/)
+- [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 
 ## 支持项目
 

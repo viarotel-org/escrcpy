@@ -22,6 +22,10 @@ export const usePreferenceStore = defineStore({
       window.appStore.get('scrcpy.deviceScope') || 'global',
     )
 
+    const recordKeys = Object.values(model?.record?.children || {}).map(
+      item => item.field,
+    )
+
     return {
       model: cloneDeep(model),
       data: { ...getDefaultData() },
@@ -31,14 +35,7 @@ export const usePreferenceStore = defineStore({
         '--audio-code',
         ...getOtherFields('scrcpy'),
       ],
-      recordKeys: [
-        '--record-format',
-        '--lock-video-orientation',
-        '--no-video',
-        '--no-audio',
-        '--no-video-playback',
-        '--no-audio-playback',
-      ],
+      recordKeys,
     }
   },
   getters: {},

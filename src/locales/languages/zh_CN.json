@@ -177,6 +177,8 @@
   "preferences.record.name": "音视频录制",
   "preferences.record.format.name": "录制视频格式",
   "preferences.record.format.placeholder": "默认为 *.mp4 格式",
+  "preferences.record.time-limit.name": "录制时长",
+  "preferences.record.time-limit.placeholder": "默认不限时长",
   "preferences.record.lock-video-orientation.name": "录制视频方向",
   "preferences.record.lock-video-orientation.placeholder": "默认为设备默认方向",
   "preferences.record.disable-video.name": "禁用视频录制",

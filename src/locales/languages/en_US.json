@@ -176,6 +176,8 @@
   "preferences.window.disable-screen-saver.placeholder": "Disable computer screensaver",
   "preferences.record.name": "Recording",
   "preferences.record.format.name": "Format",
+  "preferences.record.time-limit.name": "Recording Time Limit",
+  "preferences.record.time-limit.placeholder": "Default No time limit",
   "preferences.record.format.placeholder": "Default *.mp4",
   "preferences.record.lock-video-orientation.name": "Video Direction",
   "preferences.record.lock-video-orientation.placeholder": "Default Device Orientation",

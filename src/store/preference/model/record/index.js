@@ -19,6 +19,14 @@ export default {
         },
       ],
     },
+    timeLimit: {
+      label: 'preferences.record.time-limit.name',
+      field: '--time-limit',
+      type: 'Input.number',
+      value: '',
+      placeholder: 'preferences.record.time-limit.placeholder',
+      append: 's',
+    },
     lockVideoOrientation: {
       label: 'preferences.record.lock-video-orientation.name',
       field: '--lock-video-orientation',
@@ -32,13 +40,13 @@ export default {
         { label: '90°', value: '3' },
       ],
     },
-    // noVideo: {
-    //   label: 'preferences.record.disable-video.name',
-    //   field: '--no-video',
-    //   type: 'Switch',
-    //   value: null,
-    //   placeholder: 'preferences.record.disable-video.placeholder',
-    // },
+    noVideo: {
+      label: 'preferences.record.disable-video.name',
+      field: '--no-video',
+      type: 'Switch',
+      value: null,
+      placeholder: 'preferences.record.disable-video.placeholder',
+    },
     noAudio: {
       label: 'preferences.record.disable-audio.name',
       field: '--no-audio',
@@ -46,14 +54,14 @@ export default {
       value: null,
       placeholder: 'preferences.record.disable-audio.placeholder',
     },
-    // noVideoPlayback: {
-    //   label: 'preferences.record.no-video-playback.name',
-    //   field: '--no-video-playback',
-    //   type: 'Switch',
-    //   value: null,
-    //   placeholder: 'preferences.record.no-video-playback.placeholder',
-    //   tips: 'preferences.record.no-video-playback.tips',
-    // },
+    noVideoPlayback: {
+      label: 'preferences.record.no-video-playback.name',
+      field: '--no-video-playback',
+      type: 'Switch',
+      value: null,
+      placeholder: 'preferences.record.no-video-playback.placeholder',
+      tips: 'preferences.record.no-video-playback.tips',
+    },
     noAudioPlayback: {
       label: 'preferences.record.no-audio-playback.name',
       field: '--no-audio-playback',

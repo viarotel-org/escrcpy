@@ -136,7 +136,7 @@
   "preferences.video.resolution.name": "Resolution",
   "preferences.video.resolution.placeholder": "Default is device resolution e.g. 1920",
   "preferences.video.bit.name": "Video Bit Rate",
-  "preferences.video.bit.placeholder": "Default 4M, equal to 4000000",
+  "preferences.video.bit.placeholder": "Default 8000000bps",
   "preferences.video.video-code.name": "Video Codec",
   "preferences.video.video-code.placeholder": "Default H.264",
   "preferences.video.refresh-rate.name": "Frame Rate",

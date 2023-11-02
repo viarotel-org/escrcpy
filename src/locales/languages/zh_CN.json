@@ -136,7 +136,7 @@
   "preferences.video.resolution.name": "分辨率",
   "preferences.video.resolution.placeholder": "默认值为设备分辨率,如 1920",
   "preferences.video.bit.name": "视频比特率",
-  "preferences.video.bit.placeholder": "默认值为 8000000",
+  "preferences.video.bit.placeholder": "默认值为 8000000bps",
   "preferences.video.refresh-rate.name": "刷新率",
   "preferences.video.refresh-rate.placeholder": "默认值为 60",
   "preferences.video.video-code.name": "视频编码",

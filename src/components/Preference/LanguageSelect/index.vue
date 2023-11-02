@@ -30,6 +30,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    preferenceData: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ['update:model-value'],
   data() {
@@ -41,6 +45,16 @@ export default {
         value: item,
       })),
     }
+  },
+  watch: {
+    'preferenceData.language': {
+      handler(value) {
+        if (!value) {
+          return
+        }
+        this.locale = value
+      },
+    },
   },
   methods: {
     onChange(value) {

@@ -71,12 +71,5 @@ export default {
       placeholder: 'preferences.audio.audio-output-buffer.placeholder',
       append: 'ms',
     },
-    noAudio: {
-      label: 'preferences.audio.disable.name',
-      field: '--no-audio',
-      type: 'Switch',
-      value: null,
-      placeholder: 'preferences.audio.disable.placeholder',
-    },
   },
 }

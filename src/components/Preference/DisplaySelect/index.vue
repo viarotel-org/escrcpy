@@ -62,24 +62,20 @@ export default {
   },
   methods: {
     async getDeviceOptions() {
-      const res = await this.$scrcpy.getEncoders(this.deviceScope)
+      const res = await this.$adb.display(this.deviceScope)
 
-      this.deviceOptions = res?.video?.map((item) => {
-        const value = `${item.decoder} & ${item.encoder}`
-        return {
-          label: value,
-          value,
-        }
-      })
+      this.deviceOptions
+        = res?.map((item) => {
+          return {
+            label: item,
+            value: item,
+          }
+        }) || []
 
-      console.log('VideoCodecSelect.deviceOptions', this.deviceOptions)
+      console.log('DisplaySelect.deviceOptions', this.deviceOptions)
     },
     onChange(value) {
       this.$emit('update:model-value', value)
-
-      const [decoder, encoder] = value.split(' & ')
-      this.preferenceData['--video-codec'] = decoder
-      this.preferenceData['--video-encoder'] = encoder
     },
   },
 }

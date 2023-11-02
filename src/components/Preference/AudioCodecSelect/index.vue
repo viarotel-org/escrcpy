@@ -72,7 +72,7 @@ export default {
         }
       })
 
-      console.log('deviceOptions', this.deviceOptions)
+      console.log('AudioCodecSelect.deviceOptions', this.deviceOptions)
     },
     onChange(value) {
       // console.log('value', value)

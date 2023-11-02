@@ -237,7 +237,7 @@ export default {
       return this.$store.preference.getData(...args)
     },
     scrcpyArgs(...args) {
-      return this.$store.preference.getScrcpyData(...args)
+      return this.$store.preference.getScrcpyArgs(...args)
     },
     handleRefresh() {
       this.getDeviceData({ resetResolve: true })
@@ -278,13 +278,12 @@ export default {
     getRecordPath(row) {
       const rowConfig = this.preferenceData(row.id)
       const basePath = rowConfig.savePath
-      const recordFormat = rowConfig['--record-format']
 
       const fileName = `${row.$remark ? `${row.$remark}-` : ''}${
         row.$name
       }-${this.$replaceIP(row.id)}-recording-${dayjs().format(
         'YYYY-MM-DD-HH-mm-ss',
-      )}.${recordFormat}`
+      )}`
 
       const joinValue = this.$path.join(basePath, fileName)
       const value = this.$path.normalize(joinValue)
@@ -304,7 +303,7 @@ export default {
             row.id
           }-🎥${this.$t('device.record.progress')}...`,
           savePath,
-          args: this.scrcpyArgs(row.id),
+          args: this.scrcpyArgs(row.id, { isRecord: true }),
           stdout: this.onStdout,
         })
 

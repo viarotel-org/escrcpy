@@ -191,6 +191,7 @@ import LanguageSelect from './LanguageSelect/index.vue'
 import PathInput from './PathInput/index.vue'
 import VideoCodecSelect from './VideoCodecSelect/index.vue'
 import AudioCodecSelect from './AudioCodecSelect/index.vue'
+import DisplaySelect from './DisplaySelect/index.vue'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 
@@ -200,6 +201,7 @@ export default {
     PathInput,
     VideoCodecSelect,
     AudioCodecSelect,
+    DisplaySelect,
   },
   setup() {
     const preferenceStore = usePreferenceStore()
@@ -255,7 +257,7 @@ export default {
         )
 
         if (someValue) {
-          return false
+          return
         }
 
         this.deviceScope = 'global'
@@ -270,8 +272,6 @@ export default {
       leading: false,
       trailing: true,
     })
-
-    this.getDisplay()
   },
   methods: {
     subModel(item) {
@@ -292,31 +292,8 @@ export default {
     onScopeChange(value) {
       this.$store.preference.setScope(value)
       this.preferenceData = this.$store.preference.data
-
-      if (value === 'global') {
-        this.$store.preference.resetModel()
-      }
-
-      this.getDisplay()
     },
 
-    async getDisplay() {
-      if (this.deviceScope === 'global') {
-        return false
-      }
-
-      const display = await this.$adb.display(this.deviceScope)
-
-      const displayOptions = display.map(item => ({
-        label: item,
-        value: item,
-      }))
-
-      this.$store.preference.setModel(
-        'video.children.display.options',
-        displayOptions,
-      )
-    },
     async handleImport() {
       try {
         await this.$electron.ipcRenderer.invoke('show-open-dialog', {
@@ -341,6 +318,7 @@ export default {
         }
       }
     },
+
     handleEdit() {
       this.$appStore.openInEditor()
     },

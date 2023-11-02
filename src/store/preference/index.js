@@ -26,11 +26,18 @@ export const usePreferenceStore = defineStore({
       model: cloneDeep(model),
       data: { ...getDefaultData() },
       deviceScope,
-      scrcpyExcludeKeys: [
-        '--record-format',
+      excludeKeys: [
         '--video-code',
         '--audio-code',
         ...getOtherFields('scrcpy'),
+      ],
+      recordKeys: [
+        '--record-format',
+        '--lock-video-orientation',
+        '--no-video',
+        '--no-audio',
+        '--no-video-playback',
+        '--no-audio-playback',
       ],
     }
   },
@@ -115,8 +122,9 @@ export const usePreferenceStore = defineStore({
       return value
     },
 
-    getScrcpyData(scope = this.deviceScope) {
+    getScrcpyArgs(scope = this.deviceScope, { isRecord = false } = {}) {
       const data = this.getData(scope)
+      // console.log('getScrcpyArgs.data', data)
 
       if (!data) {
         return ''
@@ -127,8 +135,15 @@ export const usePreferenceStore = defineStore({
           return arr
         }
 
-        if (this.scrcpyExcludeKeys.includes(key)) {
+        if (this.excludeKeys.includes(key)) {
           return arr
+        }
+
+        if (!isRecord) {
+          console.log('isRecord')
+          if (this.recordKeys.includes(key)) {
+            return arr
+          }
         }
 
         if (typeof value === 'boolean') {
@@ -143,7 +158,7 @@ export const usePreferenceStore = defineStore({
 
       const value = valueList.join(' ')
 
-      console.log('getScrcpyData.value', value)
+      console.log('getScrcpyArgs.value', value)
 
       return value
     },

@@ -13,9 +13,10 @@ export default {
     videoBitRate: {
       label: 'preferences.video.bit.name',
       field: '--video-bit-rate',
-      type: 'Input',
+      type: 'Input.number',
       value: '',
       placeholder: 'preferences.video.bit.placeholder',
+      append: 'bps',
     },
     maxFps: {
       label: 'preferences.video.refresh-rate.name',
@@ -84,10 +85,10 @@ export default {
       value: '',
       placeholder: 'preferences.video.screen-cropping.placeholder',
     },
-    display: {
+    displayId: {
       label: 'preferences.video.multi-display.name',
       field: '--display-id',
-      type: 'Select',
+      type: 'DisplaySelect',
       value: '',
       placeholder: 'preferences.video.multi-display.placeholder',
       options: [
@@ -115,13 +116,6 @@ export default {
       value: '',
       placeholder: 'preferences.video.receiver-buffer.placeholder',
       append: 'ms',
-    },
-    noVideo: {
-      label: 'preferences.video.disable.name',
-      field: '--no-video',
-      type: 'Switch',
-      value: null,
-      placeholder: 'preferences.video.disable.placeholder',
     },
   },
 }

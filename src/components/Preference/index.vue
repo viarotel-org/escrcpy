@@ -85,8 +85,8 @@
               <el-col
                 v-for="(item_1, index_1) of subModel(item)"
                 :key="index_1"
-                :span="12"
-                :offset="0"
+                :span="item_1.span || 12"
+                :offset="item_1.offset || 0"
               >
                 <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
                   <template #label>

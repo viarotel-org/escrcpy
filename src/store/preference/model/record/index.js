@@ -19,14 +19,6 @@ export default {
         },
       ],
     },
-    timeLimit: {
-      label: 'preferences.record.time-limit.name',
-      field: '--time-limit',
-      type: 'Input.number',
-      value: '',
-      placeholder: 'preferences.record.time-limit.placeholder',
-      append: 's',
-    },
     lockVideoOrientation: {
       label: 'preferences.record.lock-video-orientation.name',
       field: '--lock-video-orientation',
@@ -39,6 +31,15 @@ export default {
         { label: '180°', value: '2' },
         { label: '90°', value: '3' },
       ],
+    },
+    timeLimit: {
+      label: 'preferences.record.time-limit.name',
+      field: '--time-limit',
+      type: 'Input.number',
+      value: '',
+      placeholder: 'preferences.record.time-limit.placeholder',
+      append: 's',
+      span: 24,
     },
     noVideo: {
       label: 'preferences.record.disable-video.name',

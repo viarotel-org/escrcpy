@@ -103,7 +103,7 @@ export default {
     },
     display: {
       label: 'preferences.video.multi-display.name',
-      field: '--display',
+      field: '--display-id',
       type: 'Select',
       value: '',
       placeholder: 'preferences.video.multi-display.placeholder',

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.12.1](https://github.com/viarotel-org/escrcpy/compare/v1.12.0...v1.12.1) (2023-11-03)
+
+
+### Bug Fixes
+
+* 🐛 Add gnirehtet fix option ([f9c6c32](https://github.com/viarotel-org/escrcpy/commit/f9c6c321744bcf5ab4e7e2aaab6f9fef1aa72cc0))
+* 🐛 Display options cannot be changed ([3046746](https://github.com/viarotel-org/escrcpy/commit/3046746de808d91e776c6176a5613e5f44309b36))
+* 🐛 Preference style ([0f72090](https://github.com/viarotel-org/escrcpy/commit/0f7209064beb26301e3e1e90269938fba03c7d70))
+* 🐛 Reset preferences language not restored ([d691780](https://github.com/viarotel-org/escrcpy/commit/d69178013359b7f2499e4a66c4c124dcb425cfe2))
+* 🐛 Unable to update path selector ([3279c34](https://github.com/viarotel-org/escrcpy/commit/3279c34bf014780a83ea38b475ef0698490041c7))
+* 🐛 Video codec preset error ([1af9abd](https://github.com/viarotel-org/escrcpy/commit/1af9abd8eafce1874e2f122b16bcc0dee56f28d3))
+
+
+### Performance Improvements
+
+* ♻️ optimize Codec ([6154ffc](https://github.com/viarotel-org/escrcpy/commit/6154ffcfaeb060dbf66bfdf08c7af00a93f5de2d))
+* ♻️ Optimize recording ([f4dfb2c](https://github.com/viarotel-org/escrcpy/commit/f4dfb2ca983fbacc436f2ce99a5d02bf0027014f))
+* 🎨 Update preferences style ([e9befea](https://github.com/viarotel-org/escrcpy/commit/e9befea886b4a9152605aafeb7691d0ba3d0982a))
+
 ## [1.12.0](https://github.com/viarotel-org/escrcpy/compare/v1.11.9...v1.12.0) (2023-11-02)
 
 

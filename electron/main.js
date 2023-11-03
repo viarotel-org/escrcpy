@@ -105,14 +105,12 @@ app.on('activate', () => {
     createWindow()
   }
 
-  if (app.isHidden()) {
-    app.show()
-    app.focus()
-  }
-
   if (!app.dock.isVisible()) {
     app.dock.show()
   }
+
+  app.show()
+  app.focus()
 })
 
 app.whenReady().then(() => {

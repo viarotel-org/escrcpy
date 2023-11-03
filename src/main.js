@@ -1,6 +1,6 @@
 import '@/utils/console.js'
 
-import { createApp } from 'vue'
+import { createApp, toRaw } from 'vue'
 import App from './App.vue'
 
 import store from './store/index.js'
@@ -37,6 +37,8 @@ app.config.globalProperties.$gnirehtet = window.gnirehtet
 
 app.config.globalProperties.$replaceIP = replaceIP
 app.config.globalProperties.$restoreIP = restoreIP
+
+app.config.globalProperties.$toRaw = toRaw
 
 app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading

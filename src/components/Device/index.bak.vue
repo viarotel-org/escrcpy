@@ -1,7 +1,40 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex items-center flex-none space-x-2">
-      <Wireless ref="wireless" />
+      <el-autocomplete
+        v-model="formData.host"
+        placeholder="192.168.0.1"
+        clearable
+        :fetch-suggestions="fetchSuggestions"
+        class="!w-86 flex-none"
+        value-key="host"
+        @select="onSelect"
+      >
+        <template #prepend>
+          {{ $t("device.wireless.name") }}
+        </template>
+      </el-autocomplete>
+      <div class="text-gray-500 text-sm">
+        :
+      </div>
+      <el-input
+        v-model.number="formData.port"
+        type="number"
+        placeholder="5555"
+        :min="0"
+        clearable
+        class="!w-32 flex-none"
+      >
+      </el-input>
+
+      <el-button
+        type="primary"
+        :icon="connectLoading ? '' : 'Connection'"
+        :loading="connectLoading"
+        @click="handleConnect"
+      >
+        {{ $t("device.wireless.connect.name") }}
+      </el-button>
 
       <el-button
         type="primary"
@@ -150,27 +183,36 @@
         </el-table-column>
       </el-table>
     </div>
+    <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import PairDialog from './PairDialog/index.vue'
 import ControlBar from './ControlBar/index.vue'
 import Remark from './Remark/index.vue'
-import Wireless from './Wireless/index.vue'
+import storage from '@/utils/storages'
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
 export default {
   components: {
-    Wireless,
+    PairDialog,
     ControlBar,
     Remark,
   },
   data() {
+    const adbCache = storage.get('adbCache') || {}
     return {
       loading: false,
       loadingText: this.$t('device.list.loading'),
+      connectLoading: false,
       deviceList: [],
+      formData: {
+        host: adbCache.host,
+        port: adbCache.port,
+      },
+      wirelessList: this.$appStore.get('history.wireless') || [],
     }
   },
   computed: {},
@@ -196,9 +238,29 @@ export default {
     this?.unAdbWatch()
   },
   methods: {
-    onStdout() {},
-    handleConnect(...args) {
-      this.$refs.wireless.connect(...args)
+    onSelect({ host, port }) {
+      // console.log('onSelect.value', value)
+
+      Object.assign(this.formData, {
+        host,
+        port,
+      })
+    },
+    fetchSuggestions(value, callback) {
+      // console.log('fetchSuggestions.value', value)
+
+      let results = []
+
+      if (value) {
+        results = this.wirelessList.filter(
+          item => item.host.toLowerCase().indexOf(value.toLowerCase()) === 0,
+        )
+      }
+      else {
+        results = this.wirelessList
+      }
+
+      callback(results)
     },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
@@ -238,6 +300,7 @@ export default {
         }
       }
     },
+    onStdout() {},
     toggleRowExpansion(...params) {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
@@ -326,16 +389,17 @@ export default {
           throw new Error(this.$t('device.wireless.mode.error'))
         }
 
+        this.formData.host = host
+
         const port = await this.$adb.tcpip(row.id, 5555)
 
-        await sleep()
+        this.formData.port = port
 
         console.log('host:port', `${host}:${port}`)
 
-        this.handleConnect({
-          host,
-          port,
-        })
+        await sleep()
+
+        this.handleConnect()
       }
       catch (error) {
         console.warn(error.message)
@@ -344,14 +408,80 @@ export default {
         }
       }
     },
-
+    onPairSuccess() {
+      this.handleConnect()
+    },
     handleRestart() {
       this.$electron.ipcRenderer.send('restart-app')
     },
     handleLog() {
       this.$appLog.openInEditor()
     },
+    async handleConnect() {
+      if (!this.formData.host) {
+        this.$message.warning(
+          this.$t('device.wireless.connect.error.no-address'),
+        )
+        return false
+      }
 
+      this.connectLoading = true
+      try {
+        await this.$adb.connect(this.formData.host, this.formData.port || 5555)
+        this.$message.success(this.$t('device.wireless.connect.success'))
+
+        this.handleSave()
+      }
+      catch (error) {
+        this.handleError(error?.message || error?.cause?.message || error)
+      }
+      this.connectLoading = false
+    },
+    handleSave() {
+      const someValue = this.wirelessList.some(
+        item => item.host === this.formData.host,
+      )
+
+      if (someValue) {
+        return false
+      }
+
+      this.wirelessList.push({
+        host: this.formData.host,
+        port: this.formData.port,
+      })
+
+      this.$appStore.set('history.wireless', this.$toRaw(this.wirelessList))
+    },
+    async handleError(message) {
+      try {
+        await this.$confirm(
+          `
+        <div class="pb-4 text-sm text-red-500">${this.$t(
+          'device.wireless.connect.error.detail',
+        )}：${message}</div>
+        <div>${this.$t('device.wireless.connect.error.reasons[0]')}：</div>
+        <div>1. ${this.$t('device.wireless.connect.error.reasons[1]')} </div>
+        <div>2. ${this.$t('device.wireless.connect.error.reasons[2]')} </div>
+        <div>3. ${this.$t('device.wireless.connect.error.reasons[3]')} </div>
+        <div>4. ${this.$t('device.wireless.connect.error.reasons[4]')} </div>
+        <div>5. ${this.$t('device.wireless.connect.error.reasons[5]')} </div>
+        `,
+          this.$t('device.wireless.connect.error.title'),
+          {
+            dangerouslyUseHTMLString: true,
+            closeOnClickModal: false,
+            confirmButtonText: this.$t('device.wireless.pair'),
+            cancelButtonText: this.$t('common.cancel'),
+            type: 'warning',
+          },
+        )
+        this.$refs.pairDialog.show({ params: { ...this.formData } })
+      }
+      catch (error) {
+        console.warn(error.message)
+      }
+    },
     async handleStop(row) {
       row.$stopLoading = true
       const [host, port] = row.id.split(':')

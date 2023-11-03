@@ -54,6 +54,11 @@ export default {
       },
     },
   },
+  watch: {
+    inputValue(value) {
+      this.locale = value
+    },
+  },
   methods: {},
 }
 </script>

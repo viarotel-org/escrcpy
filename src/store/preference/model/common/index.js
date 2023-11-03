@@ -89,6 +89,14 @@ export default {
         { name: 'preferences.common.gnirehtet.name', extensions: ['*'] },
       ],
     },
+    gnirehtetFix: {
+      label: 'preferences.common.gnirehtet.fix.name',
+      field: 'gnirehtetFix',
+      type: 'Switch',
+      value: false,
+      placeholder: 'preferences.common.gnirehtet.fix.placeholder',
+      tips: 'preferences.common.gnirehtet.fix.tips',
+    },
     debug: {
       label: 'preferences.common.debug.name',
       field: 'debug',

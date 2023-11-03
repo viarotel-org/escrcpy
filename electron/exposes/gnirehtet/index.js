@@ -124,9 +124,15 @@ const run = async (deviceId) => {
     throw new Error(error?.message || 'Gnirehtet Relay fail')
   })
 
-  await install(deviceId).catch((error) => {
-    throw new Error(error?.message || 'Gnirehtet Install Client fail')
-  })
+  const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
+  const isInstalled = installed(deviceId)
+
+  if (gnirehtetFix || !isInstalled) {
+    console.log('Installing Gnirehtet Client...')
+    await install(deviceId).catch((error) => {
+      throw new Error(error?.message || 'Gnirehtet Install Client fail')
+    })
+  }
 
   await start(deviceId).catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Start fail')

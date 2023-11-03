@@ -193,7 +193,7 @@ export default {
     })
   },
   beforeUnmount() {
-    this?.unAdbWatch()
+    this?.unAdbWatch?.()
   },
   methods: {
     onStdout() {},

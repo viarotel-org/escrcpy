@@ -73,7 +73,7 @@
               <div class="flex-1 w-0 truncate pl-4 text-base">
                 {{ $t(item.label) }}
               </div>
-              <div class="flex-none pl-4 pr-12">
+              <div class="flex-none pl-4 pr-12" @click.stop>
                 <el-button type="primary" text @click="handleReset(name)">
                   {{ $t("preferences.reset") }}
                 </el-button>

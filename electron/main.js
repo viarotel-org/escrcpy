@@ -84,14 +84,6 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-  // Test active push message to Renderer-process.
-  mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow?.webContents.send(
-      'main-process-message',
-      new Date().toLocaleString(),
-    )
-  })
-
   if (VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(VITE_DEV_SERVER_URL)
   }

@@ -34,24 +34,24 @@ export default {
       placeholder: 'preferences.video.video-code.placeholder',
       options: [
         {
-          label: 'h265 & OMX.qcom.video.encoder.avc',
-          value: 'h265 & OMX.qcom.video.encoder.avc',
+          label: 'h264 & OMX.qcom.video.encoder.avc',
+          value: 'h264 & OMX.qcom.video.encoder.avc',
         },
         {
-          label: 'h265 & c2.android.avc.encoder',
-          value: 'h265 & c2.android.avc.encoder',
+          label: 'h264 & c2.android.avc.encoder',
+          value: 'h264 & c2.android.avc.encoder',
         },
         {
           label: 'h264 & OMX.google.h264.encoder',
           value: 'h264 & OMX.google.h264.encoder',
         },
         {
-          label: 'h264 & OMX.qcom.video.encoder.hevc',
-          value: 'h264 & OMX.qcom.video.encoder.hevc',
+          label: 'h265 & OMX.qcom.video.encoder.hevc',
+          value: 'h265 & OMX.qcom.video.encoder.hevc',
         },
         {
-          label: 'h264 & c2.android.hevc.encoder',
-          value: 'h264 & c2.android.hevc.encoder',
+          label: 'h265 & c2.android.hevc.encoder',
+          value: 'h265 & c2.android.hevc.encoder',
         },
       ],
     },

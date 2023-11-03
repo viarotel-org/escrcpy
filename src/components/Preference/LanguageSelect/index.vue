@@ -1,11 +1,10 @@
 <template>
   <el-select
     v-bind="data.props || {}"
-    v-model="locale"
+    v-model="inputValue"
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
-    @change="onChange"
   >
     <el-option
       v-for="(item, index) in data.options"
@@ -36,31 +35,26 @@ export default {
     },
   },
   emits: ['update:model-value'],
-  data() {
-    const { locale, availableLocales } = i18n.global
+  setup() {
     return {
-      locale,
-      options: availableLocales.map(item => ({
-        label: item,
-        value: item,
-      })),
+      locale: i18n.global.locale,
     }
   },
-  watch: {
-    'preferenceData.language': {
-      handler(value) {
-        if (!value) {
-          return
-        }
+  data() {
+    return {}
+  },
+  computed: {
+    inputValue: {
+      get() {
+        return this.modelValue || this.locale
+      },
+      set(value) {
         this.locale = value
+        this.$emit('update:model-value', value)
       },
     },
   },
-  methods: {
-    onChange(value) {
-      this.$emit('update:model-value', value)
-    },
-  },
+  methods: {},
 }
 </script>
 

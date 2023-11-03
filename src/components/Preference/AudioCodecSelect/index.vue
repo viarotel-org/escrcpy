@@ -1,11 +1,10 @@
 <template>
   <el-select
     v-bind="data.props || {}"
-    :model-value="modelValue"
+    v-model="selectValue"
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
-    @change="onChange"
   >
     <el-option
       v-for="(item, index) in options"
@@ -47,6 +46,17 @@ export default {
     options() {
       return this.deviceOptions.length ? this.deviceOptions : this.data.options
     },
+    selectValue: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:model-value', value)
+        const [decoder, encoder] = value.split(' & ')
+        this.preferenceData['--audio-codec'] = decoder
+        this.preferenceData['--audio-encoder'] = encoder
+      },
+    },
   },
   watch: {
     deviceScope: {
@@ -73,14 +83,6 @@ export default {
       })
 
       console.log('AudioCodecSelect.deviceOptions', this.deviceOptions)
-    },
-    onChange(value) {
-      // console.log('value', value)
-      this.$emit('update:model-value', value)
-
-      const [decoder, encoder] = value.split(' & ')
-      this.preferenceData['--audio-codec'] = decoder
-      this.preferenceData['--audio-encoder'] = encoder
     },
   },
 }

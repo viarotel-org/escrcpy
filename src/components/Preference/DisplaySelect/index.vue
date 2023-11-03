@@ -5,7 +5,6 @@
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
-    @change="onChange"
   >
     <el-option
       v-for="(item, index) in options"
@@ -41,20 +40,22 @@ export default {
   data() {
     return {
       deviceOptions: [],
-      selectValue: '',
     }
   },
   computed: {
     options() {
       return this.deviceOptions.length ? this.deviceOptions : this.data.options
     },
-  },
-  watch: {
-    modelValue: {
-      handler(value) {
-        this.selectValue = value
+    selectValue: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:model-value', value)
       },
     },
+  },
+  watch: {
     deviceScope: {
       handler(value) {
         if (value === 'global') {
@@ -79,9 +80,6 @@ export default {
         }) || []
 
       console.log('DisplaySelect.deviceOptions', this.deviceOptions)
-    },
-    onChange(value) {
-      this.$emit('update:model-value', value)
     },
   },
 }

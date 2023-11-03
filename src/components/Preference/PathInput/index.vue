@@ -6,7 +6,6 @@
     class="!w-full"
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
-    @change="handleUpdate"
   >
     <template #append>
       <el-button
@@ -38,22 +37,19 @@ export default {
   },
   emits: ['update:model-value'],
   data() {
-    return {
-      pathValue: '',
-    }
+    return {}
   },
-  watch: {
-    modelValue: {
-      handler(value) {
-        this.pathValue = value
+  computed: {
+    pathValue: {
+      get() {
+        return this.modelValue
       },
-      immediate: true,
+      set(value) {
+        this.$emit('update:model-value', value)
+      },
     },
   },
   methods: {
-    handleUpdate(value) {
-      this.$emit('update:model-value', value)
-    },
     async handleSelect(options = {}) {
       const { properties, filters } = cloneDeep(options)
       try {
@@ -73,7 +69,7 @@ export default {
 
         const value = files[0]
 
-        this.handleUpdate(value)
+        this.pathValue = value
       }
       catch (error) {
         if (error.message) {

@@ -54,6 +54,8 @@
     "\r\n      Supported by\r\n\r\n      ",
     "Viarotel",
     "\r\n\r\n      v{{ version }}\r\n    ",
-    "pair ${this.formData.host}:${this.formData.port} ${this.formData.pair}"
+    "pair ${this.formData.host}:${this.formData.port} ${this.formData.pair}",
+    "${item.decoder} & ${item.encoder}",
+    " & "
   ]
 }

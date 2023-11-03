@@ -193,12 +193,12 @@
 <script>
 import { debounce } from 'lodash-es'
 import { ref } from 'vue'
-import { useOtg } from './__composables__/otg/index.js'
-import LanguageSelect from './LanguageSelect/index.vue'
-import PathInput from './PathInput/index.vue'
-import VideoCodecSelect from './VideoCodecSelect/index.vue'
-import AudioCodecSelect from './AudioCodecSelect/index.vue'
-import DisplaySelect from './DisplaySelect/index.vue'
+import { useOtg } from './composables/otg/index.js'
+import LanguageSelect from './components/LanguageSelect/index.vue'
+import PathInput from './components/PathInput/index.vue'
+import VideoCodecSelect from './components/VideoCodecSelect/index.vue'
+import AudioCodecSelect from './components/AudioCodecSelect/index.vue'
+import DisplaySelect from './components/DisplaySelect/index.vue'
 import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 

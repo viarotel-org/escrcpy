@@ -94,25 +94,6 @@ function createWindow() {
   events(mainWindow)
 }
 
-app.on('window-all-closed', () => {
-  app.quit()
-  mainWindow = null
-})
-
-// 仅 macOS 有这个事件
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
-
-  if (!app.dock.isVisible()) {
-    app.dock.show()
-  }
-
-  app.show()
-  app.focus()
-})
-
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.viarotel.escrcpy')
 
@@ -121,4 +102,20 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // macOS 中应用被激活
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+      return
+    }
+
+    app.dock.show()
+    mainWindow.show()
+  })
+})
+
+app.on('window-all-closed', () => {
+  app.quit()
+  mainWindow = null
 })

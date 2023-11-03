@@ -6,7 +6,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import LoadingIcon from '@/components/Device/ControlBar/LoadingIcon/index.vue'
+import LoadingIcon from '@/components/Device/components/LoadingIcon/index.vue'
 
 export default {
   props: {

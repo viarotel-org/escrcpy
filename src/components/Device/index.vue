@@ -155,9 +155,9 @@
 
 <script>
 import dayjs from 'dayjs'
-import ControlBar from './ControlBar/index.vue'
-import Remark from './Remark/index.vue'
-import Wireless from './Wireless/index.vue'
+import ControlBar from './components/ControlBar/index.vue'
+import Remark from './components/Remark/index.vue'
+import Wireless from './components/Wireless/index.vue'
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
 export default {

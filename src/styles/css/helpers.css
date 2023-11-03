@@ -1,0 +1,4 @@
+.borderless,
+.borderless * {
+  @apply border-width-0;
+}

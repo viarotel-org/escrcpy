@@ -56,136 +56,129 @@
       </div>
     </div>
     <div class="grid gap-6 pr-2">
-      <el-collapse v-model="collapseValues" class="space-y-4 borderless">
-        <el-collapse-item
-          v-for="(item, name) of preferenceModel"
-          :key="name"
-          :name="name"
-          class="!border dark:border-gray-700 rounded-[5px] overflow-hidden shadow-el-lighter"
-        >
-          <template #title>
-            <div
-              class="flex items-center w-full text-left -mr-10 overflow-hidden dark:border-gray-700"
-              :class="{
-                '!border-b': collapseValues.includes(name),
-              }"
-            >
-              <div class="flex-1 w-0 truncate pl-4 text-base">
-                {{ $t(item.label) }}
-              </div>
-              <div class="flex-none pl-4 pr-12">
-                <el-button type="primary" text @click="handleReset(name)">
-                  {{ $t("preferences.reset") }}
-                </el-button>
-              </div>
+      <el-card
+        v-for="(item, parentId) of preferenceModel"
+        :key="parentId"
+        shadow="hover"
+        class=""
+      >
+        <template #header>
+          <div class="flex items-center">
+            <div class="flex-1 w-0 truncate pl-2 text-base">
+              {{ $t(item.label) }}
             </div>
-          </template>
-          <div class="">
-            <el-form
-              ref="elForm"
-              :model="preferenceData"
-              label-width="200px"
-              class="pr-8 pt-4"
-            >
-              <el-row :gutter="20">
-                <el-col
-                  v-for="(item_1, name_1) of subModel(item)"
-                  :key="name_1"
-                  :span="item_1.span || 12"
-                  :offset="item_1.offset || 0"
-                >
-                  <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
-                    <template #label>
-                      <div class="flex items-center">
-                        <el-tooltip
-                          v-if="item_1.tips"
-                          class=""
-                          effect="dark"
-                          :content="$t(item_1.tips)"
-                          placement="bottom"
-                        >
-                          <el-link
-                            class="mr-1 !text-base"
-                            icon="InfoFilled"
-                            type="warning"
-                            :underline="false"
-                          >
-                          </el-link>
-                        </el-tooltip>
-                        <span class="" :title="$t(item_1.placeholder)">{{
-                          $t(item_1.label)
-                        }}</span>
-                      </div>
-                    </template>
-
-                    <el-input
-                      v-if="item_1.type === 'Input'"
-                      v-bind="item_1.props || {}"
-                      v-model="preferenceData[item_1.field]"
-                      class="!w-full"
-                      :title="$t(item_1.placeholder)"
-                      :placeholder="$t(item_1.placeholder)"
-                      clearable
-                    >
-                      <template v-if="item_1.append" #append>
-                        {{ item_1.append }}
-                      </template>
-                    </el-input>
-
-                    <el-input
-                      v-else-if="item_1.type === 'Input.number'"
-                      v-bind="item_1.props || {}"
-                      v-model.number="preferenceData[item_1.field]"
-                      class="!w-full"
-                      :title="$t(item_1.placeholder)"
-                      :placeholder="$t(item_1.placeholder)"
-                      clearable
-                    >
-                      <template v-if="item_1.append" #append>
-                        {{ item_1.append }}
-                      </template>
-                    </el-input>
-
-                    <el-switch
-                      v-else-if="item_1.type === 'Switch'"
-                      v-bind="item_1.props || {}"
-                      v-model="preferenceData[item_1.field]"
-                      class="!w-full"
-                      :title="$t(item_1.placeholder)"
-                    ></el-switch>
-
-                    <el-select
-                      v-else-if="item_1.type === 'Select'"
-                      v-bind="item_1.props || {}"
-                      v-model="preferenceData[item_1.field]"
-                      class="!w-full"
-                      :title="$t(item_1.placeholder)"
-                      :placeholder="$t(item_1.placeholder)"
-                    >
-                      <el-option
-                        v-for="(item_2, index_2) in item_1.options"
-                        :key="index_2"
-                        :label="$t(item_2.label)"
-                        :value="item_2.value"
-                      >
-                      </el-option>
-                    </el-select>
-
-                    <component
-                      :is="item_1.type"
-                      v-else
-                      v-model="preferenceData[item_1.field]"
-                      :data="item_1"
-                      :device-scope="deviceScope"
-                      :preference-data="preferenceData"
-                    ></component>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
+            <div class="flex-none pl-4">
+              <el-button type="primary" text @click="handleReset(parentId)">
+                {{ $t("preferences.reset") }}
+              </el-button>
+            </div>
           </div>
-        </el-collapse-item>
-      </el-collapse>
+        </template>
+        <div class="">
+          <el-form
+            ref="elForm"
+            :model="preferenceData"
+            label-width="200px"
+            class="pr-8 pt-4"
+          >
+            <el-row :gutter="20">
+              <el-col
+                v-for="(item_1, index_1) of subModel(item)"
+                :key="index_1"
+                :span="item_1.span || 12"
+                :offset="item_1.offset || 0"
+              >
+                <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
+                  <template #label>
+                    <div class="flex items-center">
+                      <el-tooltip
+                        v-if="item_1.tips"
+                        class=""
+                        effect="dark"
+                        :content="$t(item_1.tips)"
+                        placement="bottom"
+                      >
+                        <el-link
+                          class="mr-1 !text-base"
+                          icon="InfoFilled"
+                          type="warning"
+                          :underline="false"
+                        >
+                        </el-link>
+                      </el-tooltip>
+                      <span class="" :title="$t(item_1.placeholder)">{{
+                        $t(item_1.label)
+                      }}</span>
+                    </div>
+                  </template>
+
+                  <el-input
+                    v-if="item_1.type === 'Input'"
+                    v-bind="item_1.props || {}"
+                    v-model="preferenceData[item_1.field]"
+                    class="!w-full"
+                    :title="$t(item_1.placeholder)"
+                    :placeholder="$t(item_1.placeholder)"
+                    clearable
+                  >
+                    <template v-if="item_1.append" #append>
+                      {{ item_1.append }}
+                    </template>
+                  </el-input>
+
+                  <el-input
+                    v-else-if="item_1.type === 'Input.number'"
+                    v-bind="item_1.props || {}"
+                    v-model.number="preferenceData[item_1.field]"
+                    class="!w-full"
+                    :title="$t(item_1.placeholder)"
+                    :placeholder="$t(item_1.placeholder)"
+                    clearable
+                  >
+                    <template v-if="item_1.append" #append>
+                      {{ item_1.append }}
+                    </template>
+                  </el-input>
+
+                  <el-switch
+                    v-else-if="item_1.type === 'Switch'"
+                    v-bind="item_1.props || {}"
+                    v-model="preferenceData[item_1.field]"
+                    class="!w-full"
+                    :title="$t(item_1.placeholder)"
+                  ></el-switch>
+
+                  <el-select
+                    v-else-if="item_1.type === 'Select'"
+                    v-bind="item_1.props || {}"
+                    v-model="preferenceData[item_1.field]"
+                    class="!w-full"
+                    :title="$t(item_1.placeholder)"
+                    :placeholder="$t(item_1.placeholder)"
+                  >
+                    <el-option
+                      v-for="(item_2, index_2) in item_1.options"
+                      :key="index_2"
+                      :label="$t(item_2.label)"
+                      :value="item_2.value"
+                    >
+                    </el-option>
+                  </el-select>
+
+                  <component
+                    :is="item_1.type"
+                    v-else
+                    v-model="preferenceData[item_1.field]"
+                    :data="item_1"
+                    :device-scope="deviceScope"
+                    :preference-data="preferenceData"
+                  ></component>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
@@ -216,14 +209,11 @@ export default {
     const preferenceData = ref(preferenceStore.data)
     const deviceScope = ref(preferenceStore.deviceScope)
 
-    const collapseValues = ref(Object.keys(preferenceStore.model))
-
     useOtg(preferenceData)
 
     return {
       preferenceData,
       deviceScope,
-      collapseValues,
     }
   },
   computed: {
@@ -380,11 +370,7 @@ export default {
 </script>
 
 <style scoped lang="postcss">
-:deep(.el-collapse-item__header) {
-  @apply h-13 leading-13;
-}
-
-:deep(.el-collapse-item__arrow) {
-  @apply w-2em;
+:deep(.el-card) {
+  --el-card-padding: 8px;
 }
 </style>

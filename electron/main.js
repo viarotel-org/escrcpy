@@ -116,6 +116,7 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
+  app.isQuiting = true
   app.quit()
   mainWindow = null
 })

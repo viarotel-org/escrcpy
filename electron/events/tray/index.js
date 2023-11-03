@@ -9,16 +9,16 @@ export default (mainWindow) => {
   let tray = null
 
   const showApp = () => {
-    if (tray) {
-      tray.destroy()
-      tray = null
-    }
-
     if (process.platform === 'darwin') {
       app.dock.show()
     }
 
     mainWindow.show()
+
+    if (tray) {
+      tray.destroy()
+      tray = null
+    }
 
     return true
   }

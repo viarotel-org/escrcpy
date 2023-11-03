@@ -22,7 +22,7 @@ log.info('Debug Status:', debug)
 if (!debug) {
   log.warn(
     'Debug Tips:',
-    '如果需要生成并查看运行日志请在偏好设置页面启动调试功能',
+    'If you need to generate and view the running log, please start the debugging function on the preference setting page',
   )
 }
 

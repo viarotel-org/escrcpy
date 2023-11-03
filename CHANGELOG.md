@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.2](https://github.com/viarotel-org/escrcpy/compare/v1.12.1...v1.12.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* 🐛 Linux build error ([c74f03d](https://github.com/viarotel-org/escrcpy/commit/c74f03dff6ed9eb2ffa7e928e2ee7825019fc679))
+
 ## [1.12.1](https://github.com/viarotel-org/escrcpy/compare/v1.12.0...v1.12.1) (2023-11-03)
 
 

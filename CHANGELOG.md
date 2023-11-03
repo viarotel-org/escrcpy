@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.4](https://github.com/viarotel-org/escrcpy/compare/v1.12.3...v1.12.4) (2023-11-03)
+
+
+### Bug Fixes
+
+* 🐛 MacOS reduced to the tray to evoke failure ([d7bf83b](https://github.com/viarotel-org/escrcpy/commit/d7bf83b488df11cd18478b837de2c2c141bba470))
+
 ## [1.12.3](https://github.com/viarotel-org/escrcpy/compare/v1.12.2...v1.12.3) (2023-11-03)
 
 

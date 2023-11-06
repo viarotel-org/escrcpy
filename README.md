@@ -84,47 +84,76 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 > Continuously improving. Currently supports the following common configurations
 
-### Customization
+### General
 
 - Adb path
 - Scrcpy path
-- File storage path (for video/audio recording and device screenshots)
+- File storage path (audio and video recordings and device screenshots are all saved here)
+- Gnirehtet path
+- Gnirehtet fix
+- Scrcpy append parameter
+- Change theme
+- Adjust language
+- Enable debug
 
-### Video Control
+### Video
 
 - Resolution
 - Bitrate
 - Refresh rate
-- Video decoder
-- Video encoder
+- Video encoding
 - Screen rotation
 - Screen cropping
-- Multi-display
-- Video buffering
-- Audio buffering
-- Receiver (v4l2) buffering
-- Disable video
+- Display
+- Video buffer
+- Receiver (v4l2) buffer
 
-### Device Control
+### Device
 
 - Show touch points
-- Keep screen on
-- Close screen when controlling
-- Close screen after control ends
-- Stop charging when controlling
+- Keep awake
+- Close screen during control
+- Close screen after control
+- Stop charging during control
 
-### Window Control
+### Window
 
 - Borderless mode
 - Fullscreen mode
+- Always on top
+- Disable screen saver
 
-### Video/Audio Recording
+### Recording
 
-- Recording video format
+- Recording format
+- Recording duration
+- Recording video orientation
+- Disable video recording
+- Disable video playback
+- Disable audio recording
+- Disable audio playback
 
-### Audio Control
+### Audio
 
-- Disable audio
+- Audio source
+- Audio encoding
+- Audio bitrate
+- Audio buffer
+- Audio output buffer
+
+### OTG
+
+- Enable OTG
+- Keyboard only
+- Mouse only
+
+### Camera
+
+- Enable camera
+- Camera source
+- Camera size
+- Camera ratio
+- Camera frame rate
 
 ## Next Steps?
 

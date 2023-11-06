@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden">
     <div
-      class="pr-2 pb-4 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
+      class="mr-4 pb-4 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
     >
       <div class="">
         <el-select

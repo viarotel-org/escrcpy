@@ -74,7 +74,11 @@ export function setStoreData(data, scope) {
   }, {})
 
   Object.entries(data).forEach(([key, value]) => {
-    const { parentField } = modelMap[key]
+    const { parentField } = modelMap?.[key] || {}
+
+    if (!parentField) {
+      return
+    }
 
     storeModel[parentField][key] = value
   })

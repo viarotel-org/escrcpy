@@ -199,6 +199,7 @@ import PathInput from './components/PathInput/index.vue'
 import VideoCodecSelect from './components/VideoCodecSelect/index.vue'
 import AudioCodecSelect from './components/AudioCodecSelect/index.vue'
 import DisplaySelect from './components/DisplaySelect/index.vue'
+import CameraSwitch from './components/CameraSwitch/index.vue'
 import LoadingIcon from '@/components/Device/components/LoadingIcon/index.vue'
 import { usePreferenceStore } from '@/store/index.js'
 
@@ -209,6 +210,7 @@ export default {
     VideoCodecSelect,
     AudioCodecSelect,
     DisplaySelect,
+    CameraSwitch,
   },
   setup() {
     const preferenceStore = usePreferenceStore()

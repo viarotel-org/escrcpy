@@ -26,16 +26,27 @@ export const usePreferenceStore = defineStore({
       item => item.field,
     )
 
+    const cameraKeys = Object.values(model?.camera?.children || {}).map(
+      item => item.field,
+    )
+
+    const otgKeys = Object.values(model?.otg?.children || {}).map(
+      item => item.field,
+    )
+
     return {
       model: cloneDeep(model),
       data: { ...getDefaultData() },
       deviceScope,
       excludeKeys: [
+        '--camera',
         '--video-code',
         '--audio-code',
         ...getOtherFields('scrcpy'),
       ],
       recordKeys,
+      cameraKeys,
+      otgKeys,
     }
   },
   getters: {},
@@ -121,7 +132,7 @@ export const usePreferenceStore = defineStore({
 
     getScrcpyArgs(scope = this.deviceScope, { isRecord = false } = {}) {
       const data = this.getData(scope)
-      // console.log('getScrcpyArgs.data', data)
+      console.log('getScrcpyArgs.data', data)
 
       if (!data) {
         return ''
@@ -137,8 +148,19 @@ export const usePreferenceStore = defineStore({
         }
 
         if (!isRecord) {
-          console.log('isRecord')
           if (this.recordKeys.includes(key)) {
+            return arr
+          }
+        }
+
+        if (!this.data['--camera']) {
+          if (this.cameraKeys.includes(key)) {
+            return arr
+          }
+        }
+
+        if (!this.data['--otg']) {
+          if (this.otgKeys.includes(key)) {
             return arr
           }
         }
@@ -152,6 +174,10 @@ export const usePreferenceStore = defineStore({
 
         return arr
       }, [])
+
+      if (this.data.scrcpyAppend) {
+        valueList.push(...this.data.scrcpyAppend.split(' '))
+      }
 
       const value = valueList.join(' ')
 

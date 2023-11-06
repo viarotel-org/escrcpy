@@ -5,5 +5,6 @@ import window from './window/index.js'
 import audio from './audio/index.js'
 import record from './record/index.js'
 import otg from './otg/index.js'
+import camera from './camera/index.js'
 
-export default { common, video, device, window, audio, record, otg }
+export default { common, video, device, window, audio, record, otg, camera }

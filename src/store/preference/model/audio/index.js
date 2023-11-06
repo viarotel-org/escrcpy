@@ -11,8 +11,8 @@ export default {
       placeholder: 'preferences.audio.audio-source.placeholder',
       tips: 'preferences.audio.audio-source.tips',
       options: [
-        { label: 'common.default', value: '' },
-        { label: '麦克风', value: 'mic' },
+        { label: 'preferences.audio.audio-source.output', value: '' },
+        { label: 'preferences.audio.audio-source.mic', value: 'mic' },
       ],
     },
     audioCode: {

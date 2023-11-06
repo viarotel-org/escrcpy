@@ -89,6 +89,19 @@ export default {
         { name: 'preferences.common.gnirehtet.name', extensions: ['*'] },
       ],
     },
+    scrcpyAppend: {
+      label: 'preferences.common.scrcpy.append.name',
+      field: 'scrcpyAppend',
+      value: '',
+      type: 'Input',
+      placeholder: 'preferences.common.scrcpy.append.placeholder',
+      tips: 'preferences.common.scrcpy.append.tips',
+      props: {
+        type: 'textarea',
+        rows: 4,
+      },
+      span: 24,
+    },
     gnirehtetFix: {
       label: 'preferences.common.gnirehtet.fix.name',
       field: 'gnirehtetFix',

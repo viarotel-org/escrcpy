@@ -141,9 +141,11 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 9. Support internationalization ✅
 10. Support for dark mode ✅
 11. Add Gnirehtet reverse network function ✅
-12. Add Scrcpy shortcut key query page 🚧
-13. Add new camera mirror related features 🚧"
-14. Add game enhancement features such as game keyboard mapping 🚧
+12. Add new camera mirror related features ✅
+13. Add an clipboard synchronization function 🚧
+14. Better multi -screen collaboration 🚧
+15. Add Scrcpy shortcut key query page 🚧
+16. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ
 

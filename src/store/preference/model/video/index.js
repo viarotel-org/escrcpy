@@ -3,6 +3,24 @@ export default {
   field: 'scrcpy',
 
   children: {
+    videoSource: {
+      hidden: true,
+      label: 'preferences.video.video-source.name',
+      field: '--video-source',
+      type: 'Select',
+      value: '',
+      placeholder: 'preferences.video.video-source.placeholder',
+      options: [
+        {
+          label: 'preferences.video.video-source.display',
+          value: 'display',
+        },
+        {
+          label: 'preferences.video.video-source.camera',
+          value: 'camera',
+        },
+      ],
+    },
     maxSize: {
       label: 'preferences.video.resolution.name',
       field: '--max-size',
@@ -86,11 +104,11 @@ export default {
       placeholder: 'preferences.video.screen-cropping.placeholder',
     },
     displayId: {
-      label: 'preferences.video.multi-display.name',
+      label: 'preferences.video.display.name',
       field: '--display-id',
       type: 'DisplaySelect',
       value: '',
-      placeholder: 'preferences.video.multi-display.placeholder',
+      placeholder: 'preferences.video.display.placeholder',
       options: [
         { label: '0', value: '0' },
         { label: '1', value: '1' },

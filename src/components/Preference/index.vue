@@ -80,7 +80,7 @@
               </div>
             </div>
           </template>
-          <div class="">
+          <div class="pt-4">
             <el-form
               ref="elForm"
               :model="preferenceData"

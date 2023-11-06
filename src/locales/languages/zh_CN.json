@@ -134,7 +134,7 @@
   "preferences.common.scrcpy.placeholder": "请设置 scrcpy 路径",
   "preferences.common.scrcpy.tips": "用于连接设备的 scrcpy 地址。",
   "preferences.common.scrcpy.append.name": "scrcpy 参数",
-  "preferences.common.scrcpy.append.placeholder": "为 scrcpy 命令附加额外的参数",
+  "preferences.common.scrcpy.append.placeholder": "为 scrcpy 命令追加额外的参数",
   "preferences.common.scrcpy.append.tips": "注意：录入参数将会直接附加到 scrcpy 命令中，如果存在重复的参数，并不会自动进行过滤。",
   "preferences.common.gnirehtet.name": "gnirehtet 路径",
   "preferences.common.gnirehtet.placeholder": "请设置 gnirehtet 路径",

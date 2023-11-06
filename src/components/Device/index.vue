@@ -77,9 +77,9 @@
         >
           <template #default="{ row }">
             <el-button
+              :loading="row.$loading"
               type="primary"
               text
-              :loading="row.$loading"
               :disabled="row.$unauthorized"
               :icon="row.$loading ? '' : 'Monitor'"
               @click="handleMirror(row)"

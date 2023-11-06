@@ -81,6 +81,7 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 - 重启设备
 - 截取屏幕
 - 安装应用
+- 反向供网（Gnirehtet）
 
 ## 偏好设置
 

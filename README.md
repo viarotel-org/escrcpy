@@ -79,6 +79,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Restart
 - Screenshot
 - Install APP
+- Gnirehtet
 
 ## Preferences
 

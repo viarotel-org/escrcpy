@@ -1,6 +1,8 @@
 <template>
-  <div class="">
-    <div class="pb-4 pr-2 flex items-center justify-between">
+  <div class="h-full flex flex-col overflow-hidden">
+    <div
+      class="pr-2 pb-4 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
+    >
       <div class="">
         <el-select
           v-model="deviceScope"
@@ -55,7 +57,8 @@
         </el-button>
       </div>
     </div>
-    <div class="grid gap-6 pr-2">
+
+    <div class="grid gap-6 pr-2 pt-4 flex-1 h-0 overflow-auto">
       <el-collapse v-model="collapseValues" class="space-y-4 borderless">
         <el-collapse-item
           v-for="(item, name) of preferenceModel"

@@ -171,7 +171,7 @@ const mirrorGroup = async (serial, { open = 1, ...options } = {}) => {
       exec: true,
     }).catch((error) => {
       console.warn(
-        'error',
+        'mirrorGroup.error',
         error?.message
           || error?.cause?.message
           || `display-id-${displayId}: Open failed`,

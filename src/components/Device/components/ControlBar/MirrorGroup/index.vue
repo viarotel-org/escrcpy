@@ -39,7 +39,7 @@ export default {
       this.loading = true
 
       try {
-        await this.$scrcpy.mirrorGroup(this.device.id, {
+        const res = await this.$scrcpy.mirrorGroup(this.device.id, {
           open,
           title: ({ displayId }) =>
             `${this.device.$remark ? `${this.device.$remark}-` : ''}${
@@ -47,6 +47,8 @@ export default {
             }-${this.device.id}-display-${displayId}`,
           args: this.scrcpyArgs(this.device.id),
         })
+
+        console.log('handleMirror.res', res)
       }
       catch (error) {
         console.warn(error.message)

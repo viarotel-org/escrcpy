@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.13.0](https://github.com/viarotel-org/escrcpy/compare/v1.12.4...v1.13.0) (2023-11-07)
+
+
+### Features
+
+* 🎉 Add mirror group function ([0c9d36f](https://github.com/viarotel-org/escrcpy/commit/0c9d36fddbd7989073c514bc56a136ad3dc6f98d))
+
+
+### Bug Fixes
+
+* 🐛 Repair style ([96bfc77](https://github.com/viarotel-org/escrcpy/commit/96bfc7770e5142965540fec2d19a84b74106629c))
+
+
+### Performance Improvements
+
+* ♻️ Optimize mirror group ([cf9c82d](https://github.com/viarotel-org/escrcpy/commit/cf9c82dcbcbfdd77f66242298a8309d2e5926044))
+* ♻️ optimize mirror group tips ([46defbf](https://github.com/viarotel-org/escrcpy/commit/46defbf680330ef8efecc6fb5f7a553f7ac5692a))
+* ♻️ Optimize preferences ([7a6417e](https://github.com/viarotel-org/escrcpy/commit/7a6417ecf42082798e5eaa93a2552ddff686ebda))
+* ♻️ Optimize window control ([0530ed3](https://github.com/viarotel-org/escrcpy/commit/0530ed38efa22e36fa6f784bda073a7264d98471))
+* 💄 Update styles ([37da97b](https://github.com/viarotel-org/escrcpy/commit/37da97bc30153f0e5cbf1330ee1b4f44c5850fd0))
+* 🚀 Add camera options ([5a04b4c](https://github.com/viarotel-org/escrcpy/commit/5a04b4c3b89f3094a412d545948080ed9804f0a3))
+
 ## [1.12.4](https://github.com/viarotel-org/escrcpy/compare/v1.12.3...v1.12.4) (2023-11-03)
 
 

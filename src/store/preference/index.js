@@ -39,6 +39,7 @@ export const usePreferenceStore = defineStore({
       data: { ...getDefaultData() },
       deviceScope,
       excludeKeys: [
+        '--display-overlay',
         '--camera',
         '--video-code',
         '--audio-code',
@@ -169,7 +170,7 @@ export const usePreferenceStore = defineStore({
           arr.push(key)
         }
         else {
-          arr.push(`${key}=${value}`)
+          arr.push(`${key}="${value}"`)
         }
 
         return arr

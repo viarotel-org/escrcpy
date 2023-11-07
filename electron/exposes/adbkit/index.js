@@ -125,6 +125,13 @@ const display = async (deviceId) => {
   return value
 }
 
+const clearOverlayDisplayDevices = async (deviceId) => {
+  return deviceShell(
+    deviceId,
+    'settings put global overlay_display_devices none',
+  )
+}
+
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -174,6 +181,7 @@ export default () => {
     isInstalled,
     version,
     display,
+    clearOverlayDisplayDevices,
     watch,
   }
 }

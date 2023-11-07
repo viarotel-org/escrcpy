@@ -28,7 +28,7 @@ export default {
 
     expose('adbkit', adbkitExecute)
 
-    expose('scrcpy', scrcpy())
+    expose('scrcpy', scrcpy({ adbkit: adbkitExecute }))
 
     expose('gnirehtet', gnirehtet({ adbkit: adbkitExecute }))
   },

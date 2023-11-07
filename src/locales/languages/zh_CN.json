@@ -95,6 +95,9 @@
   "device.control.gnirehtet.tips": "使用 Gnirehtet 为 Android 提供反向网络共享；注意：首次连接需要在设备上进行授权",
   "device.control.gnirehtet.progress": "正在启动 Gnirehtet 反向供网服务中...",
   "device.control.gnirehtet.success": "Gnirehtet 反向网络共享功能启动成功",
+  "device.control.mirror-group.name": "多屏协同",
+  "device.control.mirror-group.tips": "开启后，可以同时镜像多个模拟辅助显示设备，并通过操作各个镜像窗口实现多屏协同功能。请注意，此功能需要手机 ROM 支持，并且必须开启强制使用桌面模式选项。",
+  "device.control.mirror-group.open": "开启 {num} 个窗口",
 
   "preferences.name": "偏好设置",
   "preferences.reset": "恢复默认值",
@@ -185,6 +188,9 @@
   "preferences.device.control-in-stop-charging.name": "控制时停止充电",
   "preferences.device.control-in-stop-charging.placeholder": "开启后控制设备时将停止充电",
   "preferences.device.control-in-stop-charging.tips": "某些机型上似乎不起作用",
+  "preferences.device.display-overlay.name": "模拟辅助显示器",
+  "preferences.device.display-overlay.placeholder": "用于调整模拟辅助显示器的大小和分辨率，默认值为 1080x1920/320,secure",
+  "preferences.device.display-overlay.tips": "多屏协同（镜像组）依赖于此选项",
 
   "preferences.window.name": "窗口控制",
   "preferences.window.borderless.name": "无边框模式",

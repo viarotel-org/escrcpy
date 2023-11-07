@@ -4,7 +4,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@root/*": ["*"],
-      "@electron/*": ["electron/*"]
+      "@electron/*": ["electron/*"],
+      "@renderer/*": ["src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],

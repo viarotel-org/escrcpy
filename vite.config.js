@@ -17,6 +17,7 @@ const merge = (config, { command = '' } = {}) =>
         alias: {
           '@root': resolve(),
           '@electron': resolve('electron'),
+          '@renderer': resolve('src'),
         },
       },
       plugins: [...(command === 'serve' ? [notBundle()] : [])],

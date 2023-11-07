@@ -18,22 +18,29 @@
           : {}),
       }"
     >
-      <el-button
-        type="primary"
-        plain
-        class="!border-none !mx-0 bg-transparent !rounded-0"
-        :disabled="device.$unauthorized"
-        :title="item.tips ? $t(item.tips) : ''"
-        @wheel.prevent="onWheel"
-      >
-        <template #icon>
-          <svg-icon v-if="item.svgIcon" :name="item.svgIcon"></svg-icon>
-          <el-icon v-else-if="item.elIcon" class="">
-            <component :is="item.elIcon" />
-          </el-icon>
-        </template>
-        {{ $t(item.label) }}
-      </el-button>
+      <template #default="{ loading = false } = {}">
+        <el-button
+          type="primary"
+          plain
+          class="!border-none !mx-0 bg-transparent !rounded-0"
+          :disabled="device.$unauthorized"
+          :title="item.tips ? $t(item.tips) : ''"
+          :loading="loading"
+          @wheel.prevent="onWheel"
+        >
+          <template #icon>
+            <svg-icon
+              v-if="item.svgIcon"
+              :name="item.svgIcon"
+              :class="item.iconClass"
+            ></svg-icon>
+            <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+              <component :is="item.elIcon" />
+            </el-icon>
+          </template>
+          {{ $t(item.label) }}
+        </el-button>
+      </template>
     </component>
   </div>
 </template>
@@ -42,12 +49,14 @@
 import Screenshot from './Screenshot/index.vue'
 import AppInstall from './AppInstall/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
+import MirrorGroup from './MirrorGroup/index.vue'
 
 export default {
   components: {
     Screenshot,
     AppInstall,
     Gnirehtet,
+    MirrorGroup,
   },
   props: {
     device: {
@@ -107,6 +116,13 @@ export default {
           elIcon: 'Link',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
+        },
+        {
+          label: 'device.control.mirror-group.name',
+          svgIcon: 'multi-screen',
+          iconClass: '',
+          component: 'MirrorGroup',
+          tips: 'device.control.mirror-group.tips',
         },
       ],
     }

@@ -2,6 +2,9 @@ import util from 'node:util'
 import { exec as _exec, spawn } from 'node:child_process'
 import appStore from '@electron/helpers/store.js'
 import { adbPath, scrcpyPath } from '@electron/configs/index.js'
+import { replaceIP, sleep } from '@renderer/utils/index.js'
+
+let adbkit
 
 const exec = util.promisify(_exec)
 
@@ -102,8 +105,13 @@ const getEncoders = async (serial) => {
   return value
 }
 
-const mirror = async (serial, { title, args = '', ...options } = {}) => {
-  return shell(
+const mirror = async (
+  serial,
+  { title, args = '', exec = false, ...options } = {},
+) => {
+  const mirrorShell = exec ? execShell : shell
+
+  return mirrorShell(
     `--serial="${serial}" --window-title="${title}" ${args}`,
     options,
   )
@@ -119,10 +127,74 @@ const record = async (
   )
 }
 
-export default () => ({
-  shell,
-  execShell,
-  getEncoders,
-  mirror,
-  record,
-})
+const mirrorGroup = async (serial, { open = 1, ...options } = {}) => {
+  const overlayDisplay
+    = appStore.get(`scrcpy.${replaceIP(serial)}.--display-overlay`)
+    || appStore.get('scrcpy.global.--display-overlay')
+    || '1080x1920/320,secure'
+
+  const command = `settings put global overlay_display_devices "${[
+    ...Array.from({ length: open }).keys(),
+  ]
+    .map(() => overlayDisplay)
+    .join(';')}"`
+
+  await adbkit.deviceShell(serial, command)
+
+  await sleep()
+
+  const displayList = await adbkit.display(serial, command)
+
+  const filterList = displayList.filter(item => item !== '0')
+  console.log('filterList', filterList)
+
+  const results = []
+
+  for (let index = 0; index < filterList.length; index++) {
+    const displayId = filterList[index]
+
+    let args = options.args || ''
+
+    if (args.includes('--display-id')) {
+      args = args.replace(/(--display-id=)"[^"]*"/, `$1"${displayId}"`)
+    }
+    else {
+      args += ` --display-id="${displayId}"`
+    }
+
+    const title = options?.title?.({ displayId, index }) || options?.title
+
+    const promise = mirror(serial, {
+      ...options,
+      title,
+      args,
+      exec: true,
+    }).catch((error) => {
+      console.warn(
+        'error',
+        error?.message
+          || error?.cause?.message
+          || `display-id-${displayId}: Open failed`,
+      )
+    })
+
+    results.push(promise)
+
+    await sleep(1500)
+  }
+
+  return Promise.allSettled(results)
+}
+
+export default (options = {}) => {
+  adbkit = options.adbkit
+
+  return {
+    shell,
+    execShell,
+    getEncoders,
+    mirror,
+    record,
+    mirrorGroup,
+  }
+}

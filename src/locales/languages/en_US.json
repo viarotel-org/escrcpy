@@ -97,6 +97,9 @@
   "device.control.gnirehtet.tips": "Gnirehtet provides reverse tethering for Android; Note: Initial connection requires authorization on the device.",
   "device.control.gnirehtet.progress": "Starting Gnirehtet reverse tethering service...",
   "device.control.gnirehtet.success": "Gnirehtet reverse tethering feature started successfully",
+  "device.control.mirror-group.name": "Mirror Group",
+  "device.control.mirror-group.tips": "When enabled, can mirror multiple simulated secondary displays and achieve multi-screen collaboration by operating each mirrored window. Note this requires ROM support and desktop mode enabled.",
+  "device.control.mirror-group.open": "Open {num} windows",
 
   "preferences.name": "Preferences",
   "preferences.reset": "Reset to Default",
@@ -187,6 +190,9 @@
   "preferences.device.control-in-stop-charging.name": "Stop Charging",
   "preferences.device.control-in-stop-charging.placeholder": "Stop charging when controlling",
   "preferences.device.control-in-stop-charging.tips": "May not work on some models",
+  "preferences.device.display-overlay.name": "Simulated Display",
+  "preferences.device.display-overlay.placeholder": "Size and resolution of simulated secondary display, default 1080x1920/320,secure",
+  "preferences.device.display-overlay.tips": "Mirroring group relies on this option",
 
   "preferences.window.name": "Window",
   "preferences.window.borderless.name": "Borderless",

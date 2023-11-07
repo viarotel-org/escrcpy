@@ -40,5 +40,13 @@ export default {
       placeholder: 'preferences.device.control-in-stop-charging.placeholder',
       tips: 'preferences.device.control-in-stop-charging.tips',
     },
+    overlayDisplay: {
+      label: 'preferences.device.display-overlay.name',
+      field: '--display-overlay',
+      type: 'Input',
+      value: '',
+      placeholder: 'preferences.device.display-overlay.placeholder',
+      tips: 'preferences.device.display-overlay.tips',
+    },
   },
 }

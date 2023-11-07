@@ -49,9 +49,15 @@ export default {
         })
 
         console.log('handleMirror.res', res)
+
+        res.forEach((item) => {
+          if (item.status === 'rejected') {
+            throw item.reason || item
+          }
+        })
       }
       catch (error) {
-        console.warn(error.message)
+        console.warn('error.message', error.message)
         if (error?.message || error?.cause?.message) {
           this.$message.warning(error?.message || error?.cause?.message)
         }

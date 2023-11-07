@@ -169,13 +169,6 @@ const mirrorGroup = async (serial, { open = 1, ...options } = {}) => {
       title,
       args,
       exec: true,
-    }).catch((error) => {
-      console.warn(
-        'mirrorGroup.error',
-        error?.message
-          || error?.cause?.message
-          || `display-id-${displayId}: Open failed`,
-      )
     })
 
     results.push(promise)

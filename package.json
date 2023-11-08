@@ -14,7 +14,7 @@
     "build:linux": "vite build && electron-builder --linux",
     "preview": "vite preview",
     "lint": "eslint . --ext .md,.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .eslintignore --fix",
-    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.config.js",
+    "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps",
     "prepare": "husky install"
   },

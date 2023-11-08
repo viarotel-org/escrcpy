@@ -24,7 +24,7 @@
           plain
           class="!border-none !mx-0 bg-transparent !rounded-0"
           :disabled="device.$unauthorized"
-          :title="item.tips ? $t(item.tips) : ''"
+          :title="$t(item.tips || item.label)"
           :loading="loading"
           @wheel.prevent="onWheel"
         >
@@ -74,7 +74,7 @@ export default {
         },
         {
           label: 'device.control.home',
-          elIcon: 'HomeFilled',
+          svgIcon: 'home',
           command: 'input keyevent KEYCODE_HOME',
         },
         {
@@ -87,6 +87,21 @@ export default {
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
+        },
+        {
+          label: 'device.control.volume-down.name',
+          svgIcon: 'volume-down',
+          command: 'input keyevent KEYCODE_VOLUME_DOWN',
+        },
+        {
+          label: 'device.control.volume-up.name',
+          svgIcon: 'volume-up',
+          command: 'input keyevent KEYCODE_VOLUME_UP',
+        },
+        {
+          label: 'device.control.volume-mute.name',
+          svgIcon: 'volume-mute',
+          command: 'input keyevent KEYCODE_VOLUME_MUTE',
         },
         {
           label: 'device.control.power',

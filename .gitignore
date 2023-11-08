@@ -7,14 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-dist-electron
-dist-release
-pnpm-lock.yaml
-*.local
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,3 +17,13 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
+
+# User
+node_modules
+pnpm-lock.yaml
+*.local
+dist
+dist-ssr
+dist-electron
+dist-release
+svgo

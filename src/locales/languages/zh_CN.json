@@ -98,6 +98,9 @@
   "device.control.mirror-group.name": "多屏协同",
   "device.control.mirror-group.tips": "开启后，可以同时镜像多个模拟辅助显示设备，并通过操作各个镜像窗口实现多屏协同功能。请注意，此功能需要手机 ROM 支持，并且必须开启强制使用桌面模式选项。",
   "device.control.mirror-group.open": "开启 {num} 个窗口",
+  "device.control.volume-up.name": "增加音量",
+  "device.control.volume-down.name": "减小音量",
+  "device.control.volume-mute.name": "静音",
 
   "preferences.name": "偏好设置",
   "preferences.reset": "恢复默认值",

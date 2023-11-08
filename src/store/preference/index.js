@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { cloneDeep, get, set } from 'lodash-es'
+import { cloneDeep, get, pickBy, set } from 'lodash-es'
 import model from './model/index.js'
 
 import {
@@ -13,7 +13,7 @@ import {
 
 import { replaceIP, restoreIP } from '@/utils/index.js'
 
-const { adbPath, scrcpyPath } = window.electron?.configs || {}
+const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
 
 export const usePreferenceStore = defineStore({
   id: 'app-preference',
@@ -54,15 +54,10 @@ export const usePreferenceStore = defineStore({
   actions: {
     getDefaultData,
     init(scope = this.deviceScope) {
-      const globalData = mergeConfig(getDefaultData(), getStoreData())
+      let data = mergeConfig(getDefaultData(), getStoreData())
 
-      let data = {}
-
-      if (scope === 'global') {
-        data = globalData
-      }
-      else {
-        data = mergeConfig(globalData, getStoreData(replaceIP(scope)))
+      if (scope !== 'global') {
+        data = mergeConfig(data, getStoreData(replaceIP(scope)))
       }
 
       this.data = data
@@ -75,20 +70,21 @@ export const usePreferenceStore = defineStore({
       this.init()
     },
     setData(data, scope = this.deviceScope) {
-      const cloneData = cloneDeep(data)
-
-      // console.log('adbPath', adbPath)
-      // console.log('scrcpyPath', scrcpyPath)
+      const pickData = pickBy(data, value => !!value)
 
       if (data.adbPath === adbPath) {
-        delete cloneData.adbPath
+        delete pickData.adbPath
       }
 
       if (data.scrcpyPath === scrcpyPath) {
-        delete cloneData.scrcpyPath
+        delete pickData.scrcpyPath
       }
 
-      setStoreData(cloneData, replaceIP(scope))
+      if (data.gnirehtetPath === gnirehtetPath) {
+        delete pickData.gnirehtetPath
+      }
+
+      setStoreData(pickData, replaceIP(scope))
 
       this.init(scope)
     },

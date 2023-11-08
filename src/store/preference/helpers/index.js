@@ -98,21 +98,18 @@ export function setStoreData(data, scope) {
   })
 }
 
-export function mergeConfig(object, sources, { debug = false } = {}) {
+export function mergeConfig(object, sources) {
   const cloneObject = cloneDeep(object)
   const cloneSources = cloneDeep(sources)
 
   const customizer = (objValue, srcValue, key) => {
-    let value = srcValue || objValue
+    let value
 
-    if (typeof srcValue === 'boolean') {
+    if (srcValue) {
       value = srcValue
     }
-
-    if (debug) {
-      console.log(`srcValue.${key}`, srcValue)
-      console.log(`objValue.${key}`, objValue)
-      console.log(key, value)
+    else if (objValue) {
+      value = objValue
     }
 
     return value

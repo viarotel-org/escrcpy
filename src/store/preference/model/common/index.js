@@ -14,7 +14,6 @@ export default {
       type: 'Select',
       value: 'system',
       placeholder: 'preferences.common.theme.placeholder',
-      tips: '',
       options: [
         {
           label: 'preferences.common.theme.options[0]',
@@ -36,7 +35,6 @@ export default {
       type: 'LanguageSelect',
       value: defaultLanguage,
       placeholder: 'preferences.common.language.placeholder',
-      tips: '',
       options: [
         {
           label: 'preferences.common.language.chinese',
@@ -92,7 +90,7 @@ export default {
     scrcpyAppend: {
       label: 'preferences.common.scrcpy.append.name',
       field: 'scrcpyAppend',
-      value: '',
+      value: undefined,
       type: 'Input',
       placeholder: 'preferences.common.scrcpy.append.placeholder',
       tips: 'preferences.common.scrcpy.append.tips',
@@ -106,7 +104,7 @@ export default {
       label: 'preferences.common.gnirehtet.fix.name',
       field: 'gnirehtetFix',
       type: 'Switch',
-      value: false,
+      value: undefined,
       placeholder: 'preferences.common.gnirehtet.fix.placeholder',
       tips: 'preferences.common.gnirehtet.fix.tips',
     },
@@ -114,7 +112,7 @@ export default {
       label: 'preferences.common.debug.name',
       field: 'debug',
       type: 'Switch',
-      value: false,
+      value: undefined,
       placeholder: 'preferences.common.debug.placeholder',
       tips: 'preferences.common.debug.tips',
     },

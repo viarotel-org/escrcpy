@@ -7,7 +7,7 @@ export default {
       label: 'preferences.audio.audio-source.name',
       field: '--audio-source',
       type: 'Select',
-      value: '',
+      value: undefined,
       placeholder: 'preferences.audio.audio-source.placeholder',
       tips: 'preferences.audio.audio-source.tips',
       options: [
@@ -19,7 +19,7 @@ export default {
       label: 'preferences.audio.audio-code.name',
       field: '--audio-code',
       type: 'AudioCodecSelect',
-      value: '',
+      value: undefined,
       placeholder: 'preferences.audio.audio-code.placeholder',
       options: [
         {
@@ -40,18 +40,18 @@ export default {
     audioCodec: {
       hidden: true,
       field: '--audio-codec',
-      value: '',
+      value: undefined,
     },
     audioEncoder: {
       hidden: true,
       field: '--audio-encoder',
-      value: '',
+      value: undefined,
     },
     audioBitRate: {
       label: 'preferences.audio.audio-bit-rate.name',
       field: '--audio-bit-rate',
       type: 'Input.number',
-      value: '',
+      value: undefined,
       placeholder: 'preferences.audio.audio-bit-rate.placeholder',
       append: 'bps',
     },
@@ -59,7 +59,7 @@ export default {
       label: 'preferences.audio.audio-buffer.name',
       field: '--audio-buffer',
       type: 'Input.number',
-      value: '',
+      value: undefined,
       placeholder: 'preferences.audio.audio-buffer.placeholder',
       append: 'ms',
     },
@@ -67,7 +67,7 @@ export default {
       label: 'preferences.audio.audio-output-buffer.name',
       field: '--audio-output-buffer',
       type: 'Input.number',
-      value: '',
+      value: undefined,
       placeholder: 'preferences.audio.audio-output-buffer.placeholder',
       append: 'ms',
     },

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.1](https://github.com/viarotel-org/escrcpy/compare/v1.13.0...v1.13.1) (2023-11-08)
+
+
+### Performance Improvements
+
+* ♻️ Adjust volume control position ([1b3f49e](https://github.com/viarotel-org/escrcpy/commit/1b3f49edb2e263766f0c2cb9d0f67f463457199f))
+* ♻️ Optimize configuration file logic ([5f8cc5a](https://github.com/viarotel-org/escrcpy/commit/5f8cc5a01312b95bd177509b824f1f2c7a8a531e))
+* 🚀 Add volume control ([1505518](https://github.com/viarotel-org/escrcpy/commit/15055188e1cf6296f8d73f772bad2f681996e9f3))
+
 ## [1.13.0](https://github.com/viarotel-org/escrcpy/compare/v1.12.4...v1.13.0) (2023-11-07)
 
 

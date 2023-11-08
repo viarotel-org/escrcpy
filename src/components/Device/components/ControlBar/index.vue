@@ -89,6 +89,17 @@ export default {
           tips: 'device.control.notification.tips',
         },
         {
+          label: 'device.control.power',
+          elIcon: 'SwitchButton',
+          command: 'input keyevent KEYCODE_POWER',
+          tips: 'device.control.power.tips',
+        },
+        {
+          label: 'device.control.reboot',
+          elIcon: 'RefreshLeft',
+          command: 'reboot',
+        },
+        {
           label: 'device.control.volume-down.name',
           svgIcon: 'volume-down',
           command: 'input keyevent KEYCODE_VOLUME_DOWN',
@@ -102,17 +113,6 @@ export default {
           label: 'device.control.volume-mute.name',
           svgIcon: 'volume-mute',
           command: 'input keyevent KEYCODE_VOLUME_MUTE',
-        },
-        {
-          label: 'device.control.power',
-          elIcon: 'SwitchButton',
-          command: 'input keyevent KEYCODE_POWER',
-          tips: 'device.control.power.tips',
-        },
-        {
-          label: 'device.control.reboot',
-          elIcon: 'RefreshLeft',
-          command: 'reboot',
         },
         {
           label: 'device.control.capture',

@@ -101,6 +101,11 @@
   "device.control.volume-up.name": "增加音量",
   "device.control.volume-down.name": "减小音量",
   "device.control.volume-mute.name": "静音",
+  "device.control.rotation.name": "旋转屏幕",
+  "device.control.rotation.vertically": "纵向旋转",
+  "device.control.rotation.horizontally": "横向旋转",
+  "device.control.rotation.auto": "自动旋转",
+  "device.control.rotation.disable": "禁用旋转",
 
   "preferences.name": "偏好设置",
   "preferences.reset": "恢复默认值",

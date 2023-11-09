@@ -50,6 +50,7 @@ import Screenshot from './Screenshot/index.vue'
 import AppInstall from './AppInstall/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import MirrorGroup from './MirrorGroup/index.vue'
+import Rotation from './Rotation/index.vue'
 
 export default {
   components: {
@@ -57,6 +58,7 @@ export default {
     AppInstall,
     Gnirehtet,
     MirrorGroup,
+    Rotation,
   },
   props: {
     device: {
@@ -98,6 +100,11 @@ export default {
           label: 'device.control.reboot',
           elIcon: 'RefreshLeft',
           command: 'reboot',
+        },
+        {
+          label: 'device.control.rotation.name',
+          svgIcon: 'rotation',
+          component: 'Rotation',
         },
         {
           label: 'device.control.volume-down.name',

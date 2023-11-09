@@ -103,6 +103,11 @@
   "device.control.volume-up.name": "Volume Up",
   "device.control.volume-down.name": "Volume Down",
   "device.control.volume-mute.name": "Mute",
+  "device.control.rotation.name": "Rotation",
+  "device.control.rotation.vertically": "Vertically",
+  "device.control.rotation.horizontally": "Horizontally",
+  "device.control.rotation.auto": "Auto",
+  "device.control.rotation.disable": "Disable",
 
   "preferences.name": "Preferences",
   "preferences.reset": "Reset to Default",

@@ -173,12 +173,13 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 11. Add Gnirehtet reverse network function ✅
 12. Add new camera mirror related features ✅
 13. Better multi -screen collaboration ✅
-14. Add more features to device interaction bar: file transfer, screen rotation, audio control etc 🚧
+14. Add more features to device interaction bar: file push, screen rotation, audio control etc ✅
 15. Support bulk connecting to historical devices 🚧
-16. Support grouping devices and bulk operations by group 🚧
-17. Add standalone clipboard sync feature 🚧
-18. Support custom Adb script execution 🚧
-19. Add game enhancement features such as game keyboard mapping 🚧
+16. Add standalone clipboard sync feature 🚧
+17. Support GUI-based selective file downloads from devices 🚧
+18. Support grouping devices and bulk operations by group 🚧
+19. Support custom Adb script execution 🚧
+20. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ
 

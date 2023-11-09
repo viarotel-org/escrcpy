@@ -132,6 +132,30 @@ const clearOverlayDisplayDevices = async (deviceId) => {
   )
 }
 
+const push = async (
+  id,
+  filePath,
+  { progress, savePath = `/sdcard/Download/${path.basename(filePath)}` } = {},
+) => {
+  const res = await client.getDevice(id).push(filePath, savePath)
+
+  return new Promise((resolve, reject) => {
+    res.on('progress', (stats) => {
+      console.log('adb.push.progress', stats)
+
+      progress?.(stats)
+    })
+
+    res.on('end', (ret) => {
+      resolve(ret)
+    })
+
+    res.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -182,6 +206,7 @@ export default () => {
     version,
     display,
     clearOverlayDisplayDevices,
+    push,
     watch,
   }
 }

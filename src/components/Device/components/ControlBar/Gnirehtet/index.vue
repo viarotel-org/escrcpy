@@ -41,7 +41,9 @@ export default {
       try {
         await this.$gnirehtet.run(device.id)
         await sleep()
-        this.$message.success(this.$t('device.control.gnirehtet.success'))
+        this.$message.success(
+          this.$t('device.control.gnirehtet.start.success'),
+        )
       }
       catch (error) {
         this.$message.warning(error.message || 'Start service failure')

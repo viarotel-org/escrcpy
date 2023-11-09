@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.13.2](https://github.com/viarotel-org/escrcpy/compare/v1.13.1...v1.13.2) (2023-11-09)
+
+
+### Bug Fixes
+
+* 🐛 Gnirehtet state ([e5f78e7](https://github.com/viarotel-org/escrcpy/commit/e5f78e7f86d4734b9f355cf1fb49c533e04a1b89))
+* 📝 Operation description ([517091a](https://github.com/viarotel-org/escrcpy/commit/517091a5ca56a367fae17c535783f3025afa8af9))
+
+
+### Performance Improvements
+
+* ♻️ Configure Incompatible Handling Mechanism ([c0e6a01](https://github.com/viarotel-org/escrcpy/commit/c0e6a015446916d638c2888626408f966d378e2e))
+* ♻️ Optimize gnirehtet ([de3555b](https://github.com/viarotel-org/escrcpy/commit/de3555ba1e6cb92e11306e96bed4fffeeb82dedc))
+* 💄 Optimize volume control and gnirehtet ([b40bdcf](https://github.com/viarotel-org/escrcpy/commit/b40bdcfd7d583fb46441a6d97f5b1db7f15196e6))
+* 🚀 Add File push function ([70f8b46](https://github.com/viarotel-org/escrcpy/commit/70f8b469b9458b0f19064b8b5a038431e6c02878))
+* 🚀 Add screen rotation shortcut menu ([dd601df](https://github.com/viarotel-org/escrcpy/commit/dd601dfdfed50c427ab9e17bc928a7c1c3ff9d4a))
+
 ## [1.13.1](https://github.com/viarotel-org/escrcpy/compare/v1.13.0...v1.13.1) (2023-11-08)
 
 

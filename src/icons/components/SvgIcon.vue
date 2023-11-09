@@ -13,15 +13,22 @@ export default {
       SvgComponent: null,
     }
   },
-  created() {
-    this.getSvgComponent()
+
+  watch: {
+    name: {
+      handler(value) {
+        if (!value) {
+          return false
+        }
+
+        this.SvgComponent = null
+        this.getSvgComponent()
+      },
+      immediate: true,
+    },
   },
   methods: {
     async getSvgComponent() {
-      if (!this.name) {
-        return
-      }
-
       const module = await import(`../svg/${this.name}.svg?component`)
       this.SvgComponent = module.default.render()
       // console.log('this.SvgComponent', this.SvgComponent)

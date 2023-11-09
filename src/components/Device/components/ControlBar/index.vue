@@ -51,6 +51,7 @@ import AppInstall from './AppInstall/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import MirrorGroup from './MirrorGroup/index.vue'
 import Rotation from './Rotation/index.vue'
+import Volume from './Volume/index.vue'
 
 export default {
   components: {
@@ -59,6 +60,7 @@ export default {
     Gnirehtet,
     MirrorGroup,
     Rotation,
+    Volume,
   },
   props: {
     device: {
@@ -72,17 +74,17 @@ export default {
         {
           label: 'device.control.switch',
           elIcon: 'Switch',
-          command: 'input keyevent KEYCODE_APP_SWITCH',
+          command: 'input keyevent 187',
         },
         {
           label: 'device.control.home',
           svgIcon: 'home',
-          command: 'input keyevent KEYCODE_HOME',
+          command: 'input keyevent 3',
         },
         {
           label: 'device.control.return',
           elIcon: 'Back',
-          command: 'input keyevent KEYCODE_BACK',
+          command: 'input keyevent 4',
         },
         {
           label: 'device.control.notification',
@@ -93,39 +95,30 @@ export default {
         {
           label: 'device.control.power',
           elIcon: 'SwitchButton',
-          command: 'input keyevent KEYCODE_POWER',
+          command: 'input keyevent 26',
           tips: 'device.control.power.tips',
         },
-        {
-          label: 'device.control.reboot',
-          elIcon: 'RefreshLeft',
-          command: 'reboot',
-        },
+
         {
           label: 'device.control.rotation.name',
           svgIcon: 'rotation',
           component: 'Rotation',
         },
         {
-          label: 'device.control.volume-down.name',
-          svgIcon: 'volume-down',
-          command: 'input keyevent KEYCODE_VOLUME_DOWN',
-        },
-        {
-          label: 'device.control.volume-up.name',
+          label: 'device.control.volume.name',
           svgIcon: 'volume-up',
-          command: 'input keyevent KEYCODE_VOLUME_UP',
-        },
-        {
-          label: 'device.control.volume-mute.name',
-          svgIcon: 'volume-mute',
-          command: 'input keyevent KEYCODE_VOLUME_MUTE',
+          component: 'Volume',
         },
         {
           label: 'device.control.capture',
           elIcon: 'Crop',
           component: 'Screenshot',
           tips: '',
+        },
+        {
+          label: 'device.control.reboot',
+          elIcon: 'RefreshLeft',
+          command: 'reboot',
         },
         {
           label: 'device.control.install',

@@ -100,6 +100,7 @@
   "device.control.mirror-group.name": "Mirror Group",
   "device.control.mirror-group.tips": "When enabled, can mirror multiple simulated secondary displays and achieve multi-screen collaboration by operating each mirrored window. Note this requires ROM support and desktop mode enabled.",
   "device.control.mirror-group.open": "Open {num} windows",
+  "device.control.volume.name": "Volume",
   "device.control.volume-up.name": "Volume Up",
   "device.control.volume-down.name": "Volume Down",
   "device.control.volume-mute.name": "Mute",

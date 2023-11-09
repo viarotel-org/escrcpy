@@ -37,7 +37,7 @@
     "electron-log": "^5.0.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.4",
-    "element-plus": "^2.4.1",
+    "element-plus": "^2.4.2",
     "fix-path": "^4.0.0",
     "fs-extra": "^11.1.1",
     "husky": "^8.0.0",

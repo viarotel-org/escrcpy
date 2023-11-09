@@ -37,7 +37,8 @@ export default {
       }
       catch (error) {
         if (error.message) {
-          this.$message.warning(error.message)
+          const message = error.message?.match(/Error: (.*)/)?.[1]
+          this.$message.warning(message || error.message)
         }
       }
 

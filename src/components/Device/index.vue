@@ -209,7 +209,7 @@ export default {
     handleRefresh() {
       this.getDeviceData({ resetResolve: true })
     },
-    async handleReset(depType = 'scrcpy') {
+    async handleReset() {
       try {
         await this.$confirm(
           `
@@ -226,7 +226,7 @@ export default {
           },
         )
 
-        this.$store.preference.resetDeps(depType)
+        this.$store.preference.reset()
 
         this.$root.reRender('Preference')
 
@@ -293,6 +293,7 @@ export default {
         if (error.message) {
           this.$message.warning(error.message)
         }
+        this.handleReset()
       }
       row.$recordLoading = false
     },
@@ -390,7 +391,7 @@ export default {
         this.deviceList = []
 
         if (resetResolve) {
-          this.handleReset('adb')
+          this.handleReset()
         }
       }
       this.loading = false

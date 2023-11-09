@@ -57,9 +57,9 @@
   "device.wireless.pair.code.placeholder": "Input pair code",
 
   "device.reset.title": "Operation Failed",
-  "device.reset.reasons[0]": "This is usually caused by incompatible cached dependencies after updating Escrcpy. Reset dependencies?",
-  "device.reset.reasons[1]": "Note: Dependencies will be cleared after reset, please backup first.",
-  "device.reset.confirm": "Reset Dependencies",
+  "device.reset.reasons[0]": "Typically, this may be caused by incompatible configurations. Do you want to reset preferences?",
+  "device.reset.reasons[1]": "Note: After resetting, any previously saved configurations will be cleared, so it is recommended to back up your configurations before performing the reset operation.",
+  "device.reset.confirm": "Reset Preferences",
   "device.reset.cancel": "@:common.cancel",
   "device.reset.success": "Success, please try again",
 

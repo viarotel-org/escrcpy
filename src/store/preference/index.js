@@ -90,7 +90,7 @@ export const usePreferenceStore = defineStore({
     },
     reset(scope) {
       if (!scope) {
-        window.appStore.reset()
+        window.appStore.clear()
       }
       else {
         const fields = getTopFields()

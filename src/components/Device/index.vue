@@ -379,6 +379,7 @@ export default {
             $loading: false,
             $recordLoading: false,
             $stopLoading: false,
+            $gnirehtetLoading: false,
           })) || []
 
         console.log('getDeviceData.data', this.deviceList)

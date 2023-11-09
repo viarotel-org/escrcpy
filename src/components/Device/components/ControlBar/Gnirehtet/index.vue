@@ -1,14 +1,12 @@
 <template>
-  <el-dropdown :disabled="loading">
-    <div class="">
-      <slot :loading="loading" />
+  <el-dropdown>
+    <div class="" :title="loadingText" @click="handleStart">
+      <slot :loading="device.$gnirehtetLoading" />
     </div>
-    <template #dropdown>
+
+    <template v-if="device.$gnirehtetLoading" #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item @click="handleStart(device)">
-          {{ $t("device.control.gnirehtet.start") }}
-        </el-dropdown-item>
-        <el-dropdown-item @click="handleStop(device)">
+        <el-dropdown-item @click="handleStop">
           {{ $t("device.control.gnirehtet.stop") }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -28,18 +26,19 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loadingText: '',
     }
   },
   methods: {
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleStart(device) {
-      this.loading = true
+    async handleStart() {
+      this.loadingText = this.$t('device.control.gnirehtet.running')
+      this.device.$gnirehtetLoading = true
 
       try {
-        await this.$gnirehtet.run(device.id)
+        await this.$gnirehtet.run(this.device.id)
         await sleep()
         this.$message.success(
           this.$t('device.control.gnirehtet.start.success'),
@@ -47,12 +46,13 @@ export default {
       }
       catch (error) {
         this.$message.warning(error.message || 'Start service failure')
+        this.device.$gnirehtetLoading = false
+        this.loadingText = ''
       }
-
-      this.loading = false
     },
     async handleStop() {
-      this.loading = true
+      this.loadingText = this.$t('device.control.gnirehtet.stopping')
+
       try {
         await this.$gnirehtet.stop(this.device.id)
         await sleep()
@@ -61,7 +61,9 @@ export default {
       catch (error) {
         this.$message.warning(error.message || 'Stop service failure')
       }
-      this.loading = false
+
+      this.device.$gnirehtetLoading = false
+      this.loadingText = ''
     },
   },
 }

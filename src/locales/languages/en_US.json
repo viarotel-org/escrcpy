@@ -106,6 +106,8 @@
   "device.control.gnirehtet.start.success": "Gnirehtet reverse tethering feature started successfully",
   "device.control.gnirehtet.stop": "Stop Service",
   "device.control.gnirehtet.stop.success": "Service stopped successfully",
+  "device.control.gnirehtet.running": "Service Running",
+  "device.control.gnirehtet.stopping": "Service Stopping",
   "device.control.mirror-group.name": "Mirror Group",
   "device.control.mirror-group.tips": "When enabled, can mirror multiple simulated secondary displays and achieve multi-screen collaboration by operating each mirrored window. Note this requires ROM support and desktop mode enabled.",
   "device.control.mirror-group.open": "Open {num} windows",

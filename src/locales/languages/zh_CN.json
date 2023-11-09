@@ -104,6 +104,8 @@
   "device.control.gnirehtet.start.success": "Gnirehtet 反向网络共享功能启动成功",
   "device.control.gnirehtet.stop": "停止服务",
   "device.control.gnirehtet.stop.success": "停止服务成功",
+  "device.control.gnirehtet.running": "服务运行中",
+  "device.control.gnirehtet.stopping": "服务停止中",
   "device.control.mirror-group.name": "多屏协同",
   "device.control.mirror-group.tips": "开启后，可以同时镜像多个模拟辅助显示设备，并通过操作各个镜像窗口实现多屏协同功能。请注意，此功能需要手机 ROM 支持，并且必须开启强制使用桌面模式选项。",
   "device.control.mirror-group.open": "开启 {num} 个窗口",

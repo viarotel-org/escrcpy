@@ -1,6 +1,6 @@
 <template>
   <el-dropdown>
-    <div class="" :title="loadingText" @click="handleStart">
+    <div class="" :title="device.$gnirehtetLoadingText" @click="handleStart">
       <slot :loading="device.$gnirehtetLoading" />
     </div>
 
@@ -26,7 +26,6 @@ export default {
   },
   data() {
     return {
-      loadingText: '',
     }
   },
   methods: {
@@ -34,7 +33,7 @@ export default {
       return this.$store.preference.getData(...args)
     },
     async handleStart() {
-      this.loadingText = this.$t('device.control.gnirehtet.running')
+      this.device.$gnirehtetLoadingText = this.$t('device.control.gnirehtet.running')
       this.device.$gnirehtetLoading = true
 
       try {
@@ -47,11 +46,11 @@ export default {
       catch (error) {
         this.$message.warning(error.message || 'Start service failure')
         this.device.$gnirehtetLoading = false
-        this.loadingText = ''
+        this.device.$gnirehtetLoadingText = ''
       }
     },
     async handleStop() {
-      this.loadingText = this.$t('device.control.gnirehtet.stopping')
+      this.device.$gnirehtetLoadingText = this.$t('device.control.gnirehtet.stopping')
 
       try {
         await this.$gnirehtet.stop(this.device.id)
@@ -63,7 +62,7 @@ export default {
       }
 
       this.device.$gnirehtetLoading = false
-      this.loadingText = ''
+      this.device.$gnirehtetLoadingText = ''
     },
   },
 }

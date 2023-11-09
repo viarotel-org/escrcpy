@@ -380,6 +380,7 @@ export default {
             $recordLoading: false,
             $stopLoading: false,
             $gnirehtetLoading: false,
+            $gnirehtetLoadingText: '',
           })) || []
 
         console.log('getDeviceData.data', this.deviceList)

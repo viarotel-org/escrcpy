@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.4](https://github.com/viarotel-org/escrcpy/compare/v1.13.3...v1.13.4) (2023-11-10)
+
+
+### Performance Improvements
+
+* ♻️ Optimization updater ([61ccd4a](https://github.com/viarotel-org/escrcpy/commit/61ccd4a4690a1da46a492ef4b6f78ba0778619fd))
+* ♻️ Optimize mirror group ([81c007f](https://github.com/viarotel-org/escrcpy/commit/81c007f9d0617371b717e5f6eba5a9fa474456d6))
+
 ## [1.13.3](https://github.com/viarotel-org/escrcpy/compare/v1.13.2...v1.13.3) (2023-11-10)
 
 

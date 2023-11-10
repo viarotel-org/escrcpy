@@ -25,7 +25,14 @@ export default {
     },
   },
   data() {
-    return {
+    return {}
+  },
+  created() {
+    if (!Object.hasOwnProperty.call(this.device, '$gnirehtetLoading')) {
+      Object.assign(this.device, {
+        $gnirehtetLoading: false,
+        $gnirehtetLoadingText: '',
+      })
     }
   },
   methods: {
@@ -33,7 +40,9 @@ export default {
       return this.$store.preference.getData(...args)
     },
     async handleStart() {
-      this.device.$gnirehtetLoadingText = this.$t('device.control.gnirehtet.running')
+      this.device.$gnirehtetLoadingText = this.$t(
+        'device.control.gnirehtet.running',
+      )
       this.device.$gnirehtetLoading = true
 
       try {
@@ -50,7 +59,9 @@ export default {
       }
     },
     async handleStop() {
-      this.device.$gnirehtetLoadingText = this.$t('device.control.gnirehtet.stopping')
+      this.device.$gnirehtetLoadingText = this.$t(
+        'device.control.gnirehtet.stopping',
+      )
 
       try {
         await this.$gnirehtet.stop(this.device.id)

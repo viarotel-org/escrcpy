@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import LoadingIcon from '@/components/Device/components/LoadingIcon/index.vue'
 
 export default {
@@ -25,17 +24,16 @@ export default {
     async handleScreenCap(device) {
       const messageEl = this.$message({
         message: this.$t('device.control.capture.progress', {
-          deviceName: device.$name,
+          deviceName: this.$store.device.getLabel(device),
         }),
         icon: LoadingIcon,
         duration: 0,
       })
 
-      const fileName = `${device.$remark ? `${device.$remark}-` : ''}${
-        device.$name
-      }-${this.$replaceIP(device.id)}-screencap-${dayjs().format(
-        'YYYY-MM-DD-HH-mm-ss',
-      )}.png`
+      const fileName = this.$store.device.getLabel(
+        device,
+        ({ time }) => `screenshot-${time}.png`,
+      )
 
       const deviceConfig = this.preferenceData(device.id)
       const savePath = this.$path.resolve(deviceConfig.savePath, fileName)

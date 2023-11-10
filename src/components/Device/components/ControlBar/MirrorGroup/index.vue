@@ -42,9 +42,9 @@ export default {
         const res = await this.$scrcpy.mirrorGroup(this.device.id, {
           open,
           title: ({ displayId }) =>
-            `${this.device.$remark ? `${this.device.$remark}-` : ''}${
-              this.device.$name
-            }-${this.device.id}-display-${displayId}`,
+            `${this.$store.device.getLabel(
+              this.device,
+            )}-displayId-${displayId}`,
           args: this.scrcpyArgs(this.device.id),
         })
 

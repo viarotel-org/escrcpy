@@ -48,7 +48,7 @@ export default {
 
       const messageEl = this.$message({
         message: this.$t('device.control.install.progress', {
-          deviceName: device.$name,
+          deviceName: this.$store.device.getLabel(device),
         }),
         icon: LoadingIcon,
         duration: 0,
@@ -73,7 +73,7 @@ export default {
         if (totalCount > 1) {
           this.$message.success(
             this.$t('device.control.install.success', {
-              deviceName: device.$name,
+              deviceName: this.$store.device.getLabel(device),
               totalCount,
               successCount,
               failCount,
@@ -83,7 +83,7 @@ export default {
         else {
           this.$message.success(
             this.$t('device.control.install.success.single', {
-              deviceName: device.$name,
+              deviceName: this.$store.device.getLabel(device),
             }),
           )
         }

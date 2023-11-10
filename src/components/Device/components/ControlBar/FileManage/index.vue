@@ -6,7 +6,9 @@
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="handlePush">
-          {{ $t("device.control.file.push") }}
+          <span class="" title="/sdcard/Download/">
+            {{ $t("device.control.file.push") }}
+          </span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -73,7 +75,7 @@ export default {
         if (totalCount > 1) {
           this.$message.success(
             this.$t('device.control.file.push.success', {
-              deviceName: this.device.$name,
+              deviceName: this.$store.device.getLabel(this.device),
               totalCount,
               successCount,
               failCount,
@@ -83,7 +85,7 @@ export default {
         else {
           this.$message.success(
             this.$t('device.control.file.push.success.single', {
-              deviceName: this.device.$name,
+              deviceName: this.$store.device.getLabel(this.device),
             }),
           )
         }

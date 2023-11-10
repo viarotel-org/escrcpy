@@ -154,7 +154,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
 import Wireless from './components/Wireless/index.vue'
@@ -242,14 +241,14 @@ export default {
       this.$refs.elTable.toggleRowExpansion(...params)
     },
     getRecordPath(row) {
-      const rowConfig = this.preferenceData(row.id)
-      const basePath = rowConfig.savePath
+      const config = this.preferenceData(row.id)
+      const basePath = config.savePath
+      const ext = config['--record-format'] || 'mp4'
 
-      const fileName = `${row.$remark ? `${row.$remark}-` : ''}${
-        row.$name
-      }-${this.$replaceIP(row.id)}-recording-${dayjs().format(
-        'YYYY-MM-DD-HH-mm-ss',
-      )}`
+      const fileName = this.$store.device.getLabel(
+        row,
+        ({ time }) => `record-${time}.${ext}`,
+      )
 
       const joinValue = this.$path.join(basePath, fileName)
       const value = this.$path.normalize(joinValue)
@@ -265,14 +264,21 @@ export default {
 
       try {
         await this.$scrcpy.record(row.id, {
-          title: `${row.$remark ? `${row.$remark}-` : ''}${row.$name}-${
-            row.id
-          }-🎥${this.$t('device.record.progress')}...`,
+          title: this.$store.device.getLabel(row, 'recording'),
           savePath,
           args: this.scrcpyArgs(row.id, { isRecord: true }),
           stdout: this.onStdout,
         })
+      }
+      catch (error) {
+        console.warn(error)
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+        this.handleReset()
+      }
 
+      try {
         await this.$confirm(
           this.$t('device.record.success.message'),
           this.$t('device.record.success.title'),
@@ -290,11 +296,9 @@ export default {
         )
       }
       catch (error) {
-        if (error.message) {
-          this.$message.warning(error.message)
-        }
-        this.handleReset()
+        console.warn(error)
       }
+
       row.$recordLoading = false
     },
     async handleMirror(row) {
@@ -304,17 +308,17 @@ export default {
 
       try {
         await this.$scrcpy.mirror(row.id, {
-          title: `${row.$remark ? `${row.$remark}-` : ''}${row.$name}-${
-            row.id
-          }`,
+          title: this.$store.device.getLabel(row),
           args: this.scrcpyArgs(row.id),
           stdout: this.onStdout,
         })
       }
       catch (error) {
+        console.warn(error)
         if (error.message) {
           this.$message.warning(error.message)
         }
+
         this.handleReset()
       }
       row.$loading = false
@@ -379,8 +383,6 @@ export default {
             $loading: false,
             $recordLoading: false,
             $stopLoading: false,
-            $gnirehtetLoading: false,
-            $gnirehtetLoadingText: '',
           })) || []
 
         console.log('getDeviceData.data', this.deviceList)

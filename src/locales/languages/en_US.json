@@ -42,6 +42,8 @@
   "device.wireless.connect.error.no-address": "Wireless debug address cannot be empty",
   "device.wireless.connect.success": "Connect success",
   "device.wireless.connect.batch.name": "Connect all historical devices",
+  "device.wireless.connect.batch.success": "Connected {totalCount} historical devices, {successCount} succeeded, {failCount} failed",
+  "device.wireless.connect.batch.error": "Failed to connect historical devices",
   "device.wireless.disconnect.start": "Disconnect",
   "device.wireless.disconnect.progress": "Disconnecting",
   "device.wireless.disconnect.success": "Disconnected",

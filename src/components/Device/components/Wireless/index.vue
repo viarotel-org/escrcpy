@@ -112,13 +112,44 @@ export default {
       this.handleConnect()
     },
     async handleBatch() {
-      for (let index = 0; index < this.wirelessList.length; index++) {
-        const item = this.wirelessList[index]
-        await this.handleConnect(item, { successTips: false })
+      const totalCount = this.wirelessList.length
+
+      let failCount = 0
+
+      const promises = []
+
+      for (let index = 0; index < totalCount; index++) {
+        const { host, port } = this.wirelessList[index]
+
+        promises.push(
+          this.$adb.connect(host, port || 5555).catch(() => {
+            ++failCount
+          }),
+        )
       }
-      this.$message.success(this.$t('device.wireless.connect.success'))
+
+      this.loading = true
+      await Promise.allSettled(promises)
+      this.loading = false
+
+      const successCount = totalCount - failCount
+
+      if (successCount) {
+        this.$message({
+          message: this.$t('device.wireless.connect.batch.success', {
+            totalCount,
+            successCount,
+            failCount,
+          }),
+          type: totalCount === successCount ? 'success' : 'warning',
+        })
+        return
+      }
+
+      this.$message.warning(this.$t('device.wireless.connect.batch.error'))
     },
-    async handleConnect(params = this.formData, { successTips = true } = {}) {
+
+    async handleConnect(params = this.formData) {
       if (!params.host) {
         this.$message.warning(
           this.$t('device.wireless.connect.error.no-address'),
@@ -130,9 +161,8 @@ export default {
 
       try {
         await this.$adb.connect(params.host, params.port || 5555)
-        if (successTips) {
-          this.$message.success(this.$t('device.wireless.connect.success'))
-        }
+
+        this.$message.success(this.$t('device.wireless.connect.success'))
 
         this.handleSave(params)
       }

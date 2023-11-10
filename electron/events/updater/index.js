@@ -28,7 +28,10 @@ export default (mainWindow) => {
   // 安装更新
   ipcMain.on('quit-and-install', () => {
     console.log('ipcMain:quit-and-install')
-    setImmediate(() => autoUpdater.quitAndInstall())
+    setImmediate(() => {
+      app.isQuiting = true
+      autoUpdater.quitAndInstall()
+    })
   })
 
   // 设置自动下载为false(默认为true，检测到有更新就自动下载)

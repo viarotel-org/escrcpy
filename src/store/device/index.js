@@ -24,9 +24,6 @@ export const useDeviceStore = defineStore({
 
       return this.config
     },
-    setList(data) {
-      this.list = data
-    },
     getLabel(device, param) {
       if (!device) {
         return ''
@@ -53,6 +50,9 @@ export const useDeviceStore = defineStore({
       const value = labels.filter(item => !!item).join('-')
 
       return value
+    },
+    setList(data) {
+      this.list = data
     },
     async getList() {
       const res = await window.adbkit.getDevices()

@@ -175,10 +175,10 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 13. Better multi -screen collaboration ✅
 14. Add more features to device interaction bar: file push, screen rotation, audio control etc ✅
 15. Support bulk connecting to historical devices ✅
-16. Add standalone clipboard sync feature 🚧
-17. Support GUI-based selective file downloads from devices 🚧
-18. Support grouping devices and bulk operations by group 🚧
-19. Support custom Adb script execution 🚧
+16. Support custom Adb script execution 🚧
+17. Add standalone clipboard sync feature 🚧
+18. Support GUI-based selective file downloads from devices 🚧
+19. Support grouping devices and bulk operations by group 🚧
 20. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ

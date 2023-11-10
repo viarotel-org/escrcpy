@@ -41,6 +41,7 @@
   "device.wireless.connect.error.cancel": "@:common.cancel",
   "device.wireless.connect.error.no-address": "无线调试地址不能为空",
   "device.wireless.connect.success": "连接设备成功",
+  "device.wireless.connect.batch.name": "连接所有历史设备",
   "device.wireless.disconnect.start": "断开连接",
   "device.wireless.disconnect.progress": "正在断开",
   "device.wireless.disconnect.success": "断开连接成功",

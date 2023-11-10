@@ -103,7 +103,7 @@ export default {
       }
 
       results.push({
-        batch: '连接所有历史设备',
+        batch: this.$t('device.wireless.connect.batch.name'),
       })
 
       callback(results)

@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown :disabled="loading" @command="handleMirror">
+  <el-dropdown :disabled="loading" @command="handleCommand">
     <div class="">
       <slot :loading="loading" />
     </div>
@@ -7,6 +7,12 @@
       <el-dropdown-menu>
         <el-dropdown-item v-for="item of 4" :key="item" :command="item">
           {{ $t("device.control.mirror-group.open", { num: item }) }}
+        </el-dropdown-item>
+
+        <el-dropdown-item command="close">
+          <span class="" :title="$t('device.control.mirror-group.close.tips')">
+            {{ $t("device.control.mirror-group.close") }}
+          </span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -33,14 +39,19 @@ export default {
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleMirror(open) {
-      console.log('handleMirror.open', open)
+    async handleCommand(command) {
+      console.log('handleCommand.command', command)
+
+      if (command === 'close') {
+        this.$adb.clearOverlayDisplayDevices(this.device.id)
+        return false
+      }
 
       this.loading = true
 
       try {
         const res = await this.$scrcpy.mirrorGroup(this.device.id, {
-          open,
+          open: command,
           title: ({ displayId }) =>
             `${this.$store.device.getLabel(
               this.device,
@@ -48,7 +59,7 @@ export default {
           args: this.scrcpyArgs(this.device.id),
         })
 
-        console.log('handleMirror.res', res)
+        console.log('handleCommand.res', res)
 
         res.forEach((item) => {
           if (item.status === 'rejected') {

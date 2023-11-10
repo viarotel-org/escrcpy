@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.13.3](https://github.com/viarotel-org/escrcpy/compare/v1.13.2...v1.13.3) (2023-11-10)
+
+
+### Bug Fixes
+
+* 🐛 Recording prompt and file format errors ([bfdad9e](https://github.com/viarotel-org/escrcpy/commit/bfdad9e8dee31f0c8e59078ebbed646bab499375))
+
+
+### Performance Improvements
+
+* ♻️ Optimize Batch connection performance ([36de67b](https://github.com/viarotel-org/escrcpy/commit/36de67b59077574c28bd99356b4582baee39c0a4))
+* ♻️ Optimize file push prompts ([4a3575f](https://github.com/viarotel-org/escrcpy/commit/4a3575f8ed916bf1a9afc88169fd324c9bb90b35))
+* ♻️ Optimize historical device connections ([83f8c04](https://github.com/viarotel-org/escrcpy/commit/83f8c041dec72996af932d1e18833a295646cdce))
+* ✨ Support bulk connecting to historical devices ([b7eb1dd](https://github.com/viarotel-org/escrcpy/commit/b7eb1dd0d67dac779ca3dd1eaed41040b4124810))
+
 ## [1.13.2](https://github.com/viarotel-org/escrcpy/compare/v1.13.1...v1.13.2) (2023-11-09)
 
 

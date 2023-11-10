@@ -25,7 +25,7 @@
   "device.remark": "备注",
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",
 
-  "device.wireless.name": "无线连接",
+  "device.wireless.name": "无线",
   "device.wireless.mode": "无线模式",
   "device.wireless.mode.error": "没有获取到局域网连接地址，请检查网络",
   "device.wireless.connect.name": "连接设备",

@@ -12,6 +12,22 @@
       <template #prepend>
         {{ $t("device.wireless.name") }}
       </template>
+
+      <template #default="{ item }">
+        <div
+          v-if="item.batch"
+          text
+          type="primary"
+          class="text-primary-500"
+          @click.stop="handleBatch"
+        >
+          {{ item.batch }}
+        </div>
+
+        <template v-else>
+          {{ item.host }}
+        </template>
+      </template>
     </el-autocomplete>
     <div class="text-gray-500 text-sm">
       :
@@ -83,15 +99,26 @@ export default {
         )
       }
       else {
-        results = this.wirelessList
+        results = [...this.wirelessList]
       }
+
+      results.push({
+        batch: '连接所有历史设备',
+      })
 
       callback(results)
     },
     onPairSuccess() {
       this.handleConnect()
     },
-    async handleConnect(params = this.formData) {
+    async handleBatch() {
+      for (let index = 0; index < this.wirelessList.length; index++) {
+        const item = this.wirelessList[index]
+        await this.handleConnect(item, { successTips: false })
+      }
+      this.$message.success(this.$t('device.wireless.connect.success'))
+    },
+    async handleConnect(params = this.formData, { successTips = true } = {}) {
       if (!params.host) {
         this.$message.warning(
           this.$t('device.wireless.connect.error.no-address'),
@@ -103,7 +130,9 @@ export default {
 
       try {
         await this.$adb.connect(params.host, params.port || 5555)
-        this.$message.success(this.$t('device.wireless.connect.success'))
+        if (successTips) {
+          this.$message.success(this.$t('device.wireless.connect.success'))
+        }
 
         this.handleSave(params)
       }

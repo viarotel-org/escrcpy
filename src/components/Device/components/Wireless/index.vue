@@ -112,6 +112,10 @@ export default {
       this.handleConnect()
     },
     async handleBatch() {
+      if (this.loading) {
+        return false
+      }
+
       const totalCount = this.wirelessList.length
 
       let failCount = 0

@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { sleep } from '@/utils'
+
 export default {
   props: {
     device: {
@@ -41,6 +43,8 @@ export default {
       return this.$store.preference.getData(...args)
     },
     async handleCommand(command) {
+      await sleep(300)
+
       console.log('handleCommand.command', command)
 
       if (command === 'close') {

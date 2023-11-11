@@ -1,15 +1,16 @@
 <template>
-  <el-dropdown :disabled="loading" @command="handleCommand">
+  <el-dropdown @command="handleCommand">
     <div class="">
       <slot :loading="loading" />
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item v-for="item of 4" :key="item" :command="item">
-          {{ $t("device.control.mirror-group.open", { num: item }) }}
-        </el-dropdown-item>
-
-        <el-dropdown-item command="close">
+        <template v-if="!loading">
+          <el-dropdown-item v-for="item of 4" :key="item" :command="item">
+            {{ $t("device.control.mirror-group.open", { num: item }) }}
+          </el-dropdown-item>
+        </template>
+        <el-dropdown-item v-else command="close">
           <span class="" :title="$t('device.control.mirror-group.close.tips')">
             {{ $t("device.control.mirror-group.close") }}
           </span>

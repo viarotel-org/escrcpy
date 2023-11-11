@@ -44,7 +44,8 @@ export default {
       console.log('handleCommand.command', command)
 
       if (command === 'close') {
-        this.$adb.clearOverlayDisplayDevices(this.device.id)
+        this.handleStop()
+        this.loading = false
         return false
       }
 
@@ -75,9 +76,11 @@ export default {
         }
       }
 
-      this.$adb.clearOverlayDisplayDevices(this.device.id)
-
+      this.handleStop()
       this.loading = false
+    },
+    handleStop() {
+      this.$adb.clearOverlayDisplayDevices(this.device.id)
     },
   },
 }

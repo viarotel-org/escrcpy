@@ -143,10 +143,9 @@ const mirrorGroup = async (serial, { open = 1, ...options } = {}) => {
 
   await sleep()
 
-  const displayList = await adbkit.display(serial, command)
+  const displayList = await adbkit.display(serial)
 
   const filterList = displayList.filter(item => item !== '0')
-  console.log('filterList', filterList)
 
   const results = []
 

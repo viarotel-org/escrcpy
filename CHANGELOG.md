@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.5](https://github.com/viarotel-org/escrcpy/compare/v1.13.4...v1.13.5) (2023-11-11)
+
+
+### Performance Improvements
+
+* ♻️ Mirror group shutdown logic ([296e21d](https://github.com/viarotel-org/escrcpy/commit/296e21dfcf5f2fb28eed1159757bddb15e00f515))
+* ♻️ Optimize mirror group ([5793c24](https://github.com/viarotel-org/escrcpy/commit/5793c246fa7e678b49d8d3c4e388de04fa7e82fb))
+
 ## [1.13.4](https://github.com/viarotel-org/escrcpy/compare/v1.13.3...v1.13.4) (2023-11-10)
 
 

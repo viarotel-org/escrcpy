@@ -22,7 +22,10 @@
 
       <Terminal>
         <template #default="{ show }">
-          <el-button icon="View" @click="show">
+          <el-button @click="show">
+            <template #icon>
+              <svg-icon name="command"></svg-icon>
+            </template>
             {{ $t("device.terminal.name") }}
           </el-button>
         </template>

@@ -24,6 +24,7 @@
   "device.name": "设备名称",
   "device.remark": "备注",
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",
+  "device.terminal.name": "终端调试",
 
   "device.wireless.name": "无线",
   "device.wireless.mode": "无线模式",

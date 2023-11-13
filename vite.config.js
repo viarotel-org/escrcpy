@@ -10,6 +10,8 @@ import useUnoCSS from 'unocss/vite'
 import useSvg from 'vite-svg-loader'
 import useI18n from '@intlify/unplugin-vue-i18n/vite'
 
+import postcssConfig from './postcss.config.mjs'
+
 const merge = (config, { command = '' } = {}) =>
   mergeConfig(
     {
@@ -58,5 +60,8 @@ export default params =>
         ]),
         useRenderer(),
       ],
+      css: {
+        postcss: postcssConfig,
+      },
     }),
   )

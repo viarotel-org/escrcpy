@@ -19,6 +19,14 @@
       <el-button icon="View" @click="handleLog">
         {{ $t("device.log.name") }}
       </el-button>
+
+      <Terminal>
+        <template #default="{ show }">
+          <el-button icon="View" @click="show">
+            {{ $t("device.terminal.name") }}
+          </el-button>
+        </template>
+      </Terminal>
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
       <el-table
@@ -157,6 +165,7 @@
 import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
 import Wireless from './components/Wireless/index.vue'
+import Terminal from './components/Terminal/index.vue'
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
 export default {
@@ -164,6 +173,7 @@ export default {
     Wireless,
     ControlBar,
     Remark,
+    Terminal,
   },
   data() {
     return {

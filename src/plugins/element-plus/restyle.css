@@ -36,3 +36,26 @@
     @apply h-full overflow-auto;
   }
 }
+
+.el-dialog-flex {
+  height: calc(100% - 20vh - 8px) !important;
+  @apply flex flex-col !my-[10vh];
+  .el-dialog__header,
+  .el-dialog__footer {
+    @apply flex-none;
+  }
+  .el-dialog__body {
+    @apply flex-1 !h-0;
+  }
+}
+
+.el-dialog-headless {
+  .el-dialog__header,
+  .el-dialog__footer {
+    @apply !hidden;
+  }
+
+  .el-dialog__body {
+    @apply !p-0;
+  }
+}

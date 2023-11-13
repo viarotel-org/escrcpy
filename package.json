@@ -43,12 +43,16 @@
     "husky": "^8.0.0",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
+    "postcss": "^8.4.31",
+    "postcss-nested": "^6.0.1",
+    "postcss-scss": "^4.0.9",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vite-plugin-electron": "^0.14.1",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-eslint": "^1.8.1",
     "vite-svg-loader": "^4.0.0",
+    "vue-command": "^35.2.1",
     "vue-i18n": "^9.5.0",
     "which": "^4.0.0"
   }

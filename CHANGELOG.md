@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.14.0](https://github.com/viarotel-org/escrcpy/compare/v1.13.5...v1.14.0) (2023-11-14)
+
+
+### Features
+
+* 🎉 Add Terminal Debugging ([fdf40c7](https://github.com/viarotel-org/escrcpy/commit/fdf40c70e87a7e6fa79acdde16b6222b19a66a30))
+
+
+### Performance Improvements
+
+* ♻️ Optimize terminal performance ([d3afc4b](https://github.com/viarotel-org/escrcpy/commit/d3afc4ba626332622a86aa46078016d5883960d2))
+* 💄 Update terminal style ([5b6b8d1](https://github.com/viarotel-org/escrcpy/commit/5b6b8d11501b19772c26a6693e57938acfdb6590))
+* 🚨 Optimization error prompt ([b759502](https://github.com/viarotel-org/escrcpy/commit/b75950298feb599fdfe7ff9cad9edcae1cd79871))
+
 ## [1.13.5](https://github.com/viarotel-org/escrcpy/compare/v1.13.4...v1.13.5) (2023-11-11)
 
 

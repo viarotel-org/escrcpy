@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     invert() {
-      return this.$store.theme.value !== 'dark'
+      return !this.$store.theme.isDark
     },
   },
   watch: {

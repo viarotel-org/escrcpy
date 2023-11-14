@@ -32,6 +32,8 @@ export const useThemeStore = defineStore({
 
       await systemTheme('update', value)
 
+      this.isDark = await systemTheme('isDark')
+
       await this.updateHtml(value)
     },
 

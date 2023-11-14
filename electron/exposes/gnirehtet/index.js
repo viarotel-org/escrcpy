@@ -46,8 +46,11 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
     }
   })
 
+  let lastStderr = ''
   gnirehtetProcess.stderr.on('data', (data) => {
     const stringData = data.toString()
+
+    lastStderr = stringData
 
     if (debug) {
       console.error(`${command}.gnirehtet.process.stderr.data:`, stringData)

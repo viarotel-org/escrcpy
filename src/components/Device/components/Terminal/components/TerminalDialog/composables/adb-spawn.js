@@ -2,10 +2,10 @@ import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
 import { useFixCursor } from './helper.js'
 
-const $gnirehtet = window.gnirehtet
+const $adb = window.adbkit
 
-export function useGnirehtet({ vShell, history, loading } = {}) {
-  const gnirehtet = async (args) => {
+export function useAdb({ vShell, history, loading } = {}) {
+  const adb = async (args) => {
     loading.value = true
 
     const command = args.slice(1).join(' ')
@@ -14,7 +14,7 @@ export function useGnirehtet({ vShell, history, loading } = {}) {
 
     let stdoutText = ''
     let stderrText = ''
-    $gnirehtet.shell(command, {
+    $adb.spawnShell(command, {
       stdout(text) {
         loading.value = false
 
@@ -39,6 +39,6 @@ export function useGnirehtet({ vShell, history, loading } = {}) {
   }
 
   return {
-    gnirehtet,
+    adb,
   }
 }

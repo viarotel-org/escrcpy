@@ -282,15 +282,21 @@ export default {
           args: this.scrcpyArgs(row.id, { isRecord: true }),
           stdout: this.onStdout,
         })
+        this.handleRecordSuccess(savePath)
       }
       catch (error) {
         console.warn(error)
+
         if (error.message) {
           this.$message.warning(error.message)
         }
+
         this.handleReset()
       }
 
+      row.$recordLoading = false
+    },
+    async handleRecordSuccess(savePath) {
       try {
         await this.$confirm(
           this.$t('device.record.success.message'),
@@ -311,8 +317,6 @@ export default {
       catch (error) {
         console.warn(error)
       }
-
-      row.$recordLoading = false
     },
     async handleMirror(row) {
       row.$loading = true

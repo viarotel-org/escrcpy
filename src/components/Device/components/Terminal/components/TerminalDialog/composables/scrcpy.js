@@ -1,14 +1,8 @@
 import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
+import { useFixCursor } from './helper.js'
 
 const $scrcpy = window.scrcpy
-
-const fixCursor = (history) => {
-  const length = history.value.length
-  if (history.value[length - 1]?.__name === 'VueCommandQuery') {
-    history.value.splice(length - 1, 1, textFormatter('Waiting...'))
-  }
-}
 
 export function useScrcpy({ vShell, history, loading } = {}) {
   const scrcpy = async (args) => {
@@ -22,11 +16,12 @@ export function useScrcpy({ vShell, history, loading } = {}) {
     let stderrText = ''
     $scrcpy.shell(command, {
       stdout(text) {
+        console.log('history', history)
         loading.value = false
 
         stdoutText += text
 
-        fixCursor(history)
+        useFixCursor(history)
 
         appendToHistory(createStdout(stdoutText))
       },
@@ -35,13 +30,13 @@ export function useScrcpy({ vShell, history, loading } = {}) {
 
         stderrText += text
 
-        fixCursor(history)
+        useFixCursor(history)
 
         appendToHistory(createStderr(stderrText))
       },
     })
 
-    return textFormatter('Loading...')
+    return textFormatter('Waiting...')
   }
 
   return {

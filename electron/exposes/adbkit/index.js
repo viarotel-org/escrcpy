@@ -1,5 +1,5 @@
 import util from 'node:util'
-import child_process from 'node:child_process'
+import { exec as _exec, spawn } from 'node:child_process'
 import path from 'node:path'
 import fs from 'node:fs'
 import dayjs from 'dayjs'
@@ -8,7 +8,7 @@ import appStore from '@electron/helpers/store.js'
 import { adbPath } from '@electron/configs/index.js'
 import { uniq } from 'lodash-es'
 
-const exec = util.promisify(child_process.exec)
+const exec = util.promisify(_exec)
 
 let client = null
 
@@ -37,7 +37,66 @@ appStore.onDidChange('common.adbPath', async (value, oldValue) => {
   client = Adb.createClient({ bin: value || adbPath })
 })
 
-const shell = async command => exec(`${adbPath} ${command}`)
+const shell = async (command) => {
+  const execPath = appStore.get('common.adbPath') || adbPath
+  return exec(`${execPath} ${command}`, {
+    env: { ...process.env },
+    shell: true,
+  })
+}
+
+const spawnShell = async (command, { stdout, stderr } = {}) => {
+  const spawnPath = appStore.get('common.adbPath') || adbPath
+  const args = command.split(' ')
+
+  console.log('adb.spawnShell.spawnPath', spawnPath)
+  console.log('adb.spawnShell.args', args)
+
+  const spawnProcess = spawn(`"${spawnPath}"`, args, {
+    env: { ...process.env },
+    shell: true,
+    encoding: 'utf8',
+  })
+
+  spawnProcess.stdout.on('data', (data) => {
+    const stringData = data.toString()
+
+    console.log('spawnProcess.stdout.data:', stringData)
+
+    if (stdout) {
+      stdout(stringData, spawnProcess)
+    }
+  })
+
+  let lastStderr = ''
+  spawnProcess.stderr.on('data', (data) => {
+    const stringData = data.toString()
+
+    lastStderr = stringData
+
+    console.error('spawnProcess.stderr.data:', stringData)
+
+    if (stderr) {
+      stderr(stringData, spawnProcess)
+    }
+  })
+
+  return new Promise((resolve, reject) => {
+    spawnProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve()
+      }
+      else {
+        reject(new Error(lastStderr || `Command failed with code ${code}`))
+      }
+    })
+
+    spawnProcess.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
 const getDevices = async () => client.listDevicesWithPaths()
 const deviceShell = async (id, command) => {
   const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
@@ -193,6 +252,7 @@ export default () => {
 
   return {
     shell,
+    spawnShell,
     getDevices,
     deviceShell,
     kill,

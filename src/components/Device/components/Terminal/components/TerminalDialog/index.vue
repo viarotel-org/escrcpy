@@ -3,32 +3,34 @@
     v-model="visible"
     width="80%"
     :close-on-click-modal="false"
-    :close-on-press-escape="false"
-    class="overflow-hidden rounded-xl el-dialog-headless"
+    :close-on-press-escape="true"
+    class="overflow-hidden rounded-md el-dialog-headless dark:border dark:border-gray-700"
     @open="onOpen"
   >
     <el-icon
-      class="cursor-pointer absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-gray-200 hover:bg-gray-700 !active:bg-red-600 rounded"
+      class="cursor-pointer absolute top-2 right-2 w-8 h-8 flex items-center justify-center hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
       @click="hide"
     >
       <CloseBold />
     </el-icon>
 
     <VueCommand
-      v-if="visible"
+      v-if="renderShell"
       :ref="(value) => (vShell = value)"
       v-model:history="history"
+      :dispatched-queries="dispatchedQueries"
       :commands="commands"
       hide-bar
       show-help
       help-text="Type in help"
-      :help-timeout="3500"
+      :help-timeout="3000"
+      :invert="invert"
       class=""
-      :dispatched-queries="dispatchedQueries"
+      @update:dispatched-queries="onDispatchedQueriesUpdate"
     >
       <template #prompt>
         <div class="flex items-center pr-2">
-          <span class="">escrcpy~$</span>
+          <span class="">Escrcpy~$</span>
         </div>
       </template>
     </VueCommand>
@@ -36,7 +38,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import VueCommand, {
   createQuery,
   createStdout,
@@ -53,8 +55,9 @@ export default {
   },
   setup() {
     const vShell = ref(null)
-    const history = ref([createQuery()])
+    const history = shallowRef([createQuery()])
     const loading = ref(false)
+    const renderShell = ref(false)
     const dispatchedQueries = ref(new Set([]))
 
     const { adb } = useAdb({ vShell, history, loading })
@@ -76,7 +79,17 @@ export default {
       return createStdout(listFormatter('Supported Commands:', ...commandList))
     }
 
-    dispatchedQueries.value = new Set(Object.keys(commands.value))
+    dispatchedQueries.value = new Set([
+      ...(window.appStore.get('terminal.dispatchedQueries') || []),
+      ...Object.keys(commands.value),
+    ])
+
+    const onOpen = () => {
+      console.log('vShell.value', vShell.value)
+      console.log('history.value', history.value)
+
+      renderShell.value = true
+    }
 
     return {
       vShell,
@@ -84,6 +97,8 @@ export default {
       history,
       commands,
       dispatchedQueries,
+      onOpen,
+      renderShell,
     }
   },
   data() {
@@ -91,22 +106,44 @@ export default {
       visible: false,
     }
   },
+  computed: {
+    invert() {
+      return this.$store.theme.value !== 'dark'
+    },
+  },
+  watch: {
+    'vShell.signals': {
+      handler(value) {
+        console.log('vShell.signals.value', value)
+
+        value.off('SIGINT')
+
+        value.on('SIGINT', () => {
+          console.log('vShell.signals.on.SIGINT')
+          this.onCtrlC()
+        })
+      },
+    },
+  },
   methods: {
     show() {
       this.visible = true
     },
+
     hide() {
       this.visible = false
     },
-    async onOpen() {
-      console.log('vShell', this.vShell)
 
-      this.vShell.signals.off('SIGINT')
+    onDispatchedQueriesUpdate(value) {
+      console.log('onDispatchedQueriesUpdate.value', value)
 
-      this.vShell.signals.on('SIGINT', () => {
-        console.log('vShell.signals.on.SIGINT')
-        this.$gnirehtet.shell('stop')
-      })
+      this.$appStore.set('terminal.dispatchedQueries', Array.from(value))
+
+      this.dispatchedQueries = value
+    },
+
+    onCtrlC() {
+      window.gnirehtet.shell('stop')
     },
   },
 }

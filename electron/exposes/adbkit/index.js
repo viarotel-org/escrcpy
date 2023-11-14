@@ -98,12 +98,16 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
 }
 
 const getDevices = async () => client.listDevicesWithPaths()
+
 const deviceShell = async (id, command) => {
   const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
   return res.toString()
 }
+
 const kill = async (...params) => client.kill(...params)
+
 const connect = async (...params) => client.connect(...params)
+
 const disconnect = async (...params) => client.disconnect(...params)
 
 const getDeviceIP = async (id) => {

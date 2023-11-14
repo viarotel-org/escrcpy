@@ -80,8 +80,11 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 }
 
 const install = deviceId => shell(`install "${deviceId}"`)
+
 const start = deviceId => shell(`start "${deviceId}"`)
+
 const stop = deviceId => shell(`stop "${deviceId}"`)
+
 const tunnel = deviceId => shell(`tunnel "${deviceId}"`)
 
 const installed = async (deviceId) => {

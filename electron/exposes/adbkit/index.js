@@ -68,11 +68,11 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
     }
   })
 
-  let lastStderr = ''
+  const stderrList = []
   spawnProcess.stderr.on('data', (data) => {
     const stringData = data.toString()
 
-    lastStderr = stringData
+    stderrList.push(stringData)
 
     console.error('spawnProcess.stderr.data:', stringData)
 
@@ -87,7 +87,9 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
         resolve()
       }
       else {
-        reject(new Error(lastStderr || `Command failed with code ${code}`))
+        reject(
+          new Error(stderrList.join(',') || `Command failed with code ${code}`),
+        )
       }
     })
 

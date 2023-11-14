@@ -33,11 +33,11 @@ const shell = async (command, { stdout, stderr } = {}) => {
     }
   })
 
-  let lastStderr = ''
+  const stderrList = []
   scrcpyProcess.stderr.on('data', (data) => {
     const stringData = data.toString()
 
-    lastStderr = stringData
+    stderrList.push(stringData)
 
     console.error('scrcpyProcess.stderr.data:', stringData)
 
@@ -52,7 +52,9 @@ const shell = async (command, { stdout, stderr } = {}) => {
         resolve()
       }
       else {
-        reject(new Error(lastStderr || `Command failed with code ${code}`))
+        reject(
+          new Error(stderrList.join(',') || `Command failed with code ${code}`),
+        )
       }
     })
 

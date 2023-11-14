@@ -46,11 +46,11 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
     }
   })
 
-  let lastStderr = ''
+  const stderrList = []
   gnirehtetProcess.stderr.on('data', (data) => {
     const stringData = data.toString()
 
-    lastStderr = stringData
+    stderrList.push(stringData)
 
     if (debug) {
       console.error(`${command}.gnirehtet.process.stderr.data:`, stringData)
@@ -69,7 +69,9 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
         resolve()
       }
       else {
-        reject(new Error(`Command failed with code ${code}`))
+        reject(
+          new Error(stderrList.join(',') || `Command failed with code ${code}`),
+        )
       }
     })
 

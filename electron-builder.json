@@ -21,6 +21,10 @@
       {
         "target": "portable",
         "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "appx",
+        "arch": ["x64", "arm64"]
       }
     ],
     "artifactName": "${productName}-${version}-win-${arch}.${ext}",
@@ -42,6 +46,13 @@
   "portable": {
     "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}",
     "requestExecutionLevel": "user"
+  },
+  "appx": {
+    "identityName": "",
+    "publisher": "",
+    "applicationId": "",
+    "publisherDisplayName": "viarotel",
+    "languages": ["zh-CN", "en-US"]
   },
   "mac": {
     "icon": "logo.icns",

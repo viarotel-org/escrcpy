@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/viarotel-org/escrcpy/compare/v1.14.0...v1.14.1) (2023-11-14)
+
+
+### Bug Fixes
+
+* 🐛 Abnormal terminal theme ([20d37c1](https://github.com/viarotel-org/escrcpy/commit/20d37c11b4e7a48a046e8b08b693d0191c4aaf77))
+
 ## [1.14.0](https://github.com/viarotel-org/escrcpy/compare/v1.13.5...v1.14.0) (2023-11-14)
 
 

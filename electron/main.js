@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
+import contextMenu from 'electron-context-menu'
 
 // process.js 必须位于非依赖项的顶部
 import './helpers/process.js'
@@ -25,6 +26,14 @@ if (!debug) {
     'If you need to generate and view the running log, please start the debugging function on the preference setting page',
   )
 }
+
+contextMenu({
+  showCopyImage: false,
+  showSelectAll: false,
+  showSearchWithGoogle: false,
+  showSaveImageAs: true,
+  showInspectElement: !app.isPackaged,
+})
 
 // The built directory structure
 //

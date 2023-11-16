@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.2](https://github.com/viarotel-org/escrcpy/compare/v1.14.1...v1.14.2) (2023-11-16)
+
+
+### Performance Improvements
+
+* ♻️ Optimize autoConnect historical devices ([755a130](https://github.com/viarotel-org/escrcpy/commit/755a130ec0a0756c85d077ee1723c50457285802))
+* 💡 Add autoConnect option ([a57b847](https://github.com/viarotel-org/escrcpy/commit/a57b847dd910a16ebdbdfa93683e5e2540849aa7))
+
 ## [1.14.1](https://github.com/viarotel-org/escrcpy/compare/v1.14.0...v1.14.1) (2023-11-14)
 
 

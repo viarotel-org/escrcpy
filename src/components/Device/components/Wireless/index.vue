@@ -61,6 +61,12 @@ export default {
   components: {
     PairDialog,
   },
+  props: {
+    reload: {
+      type: Function,
+      default: () => () => false,
+    },
+  },
   data() {
     const wirelessList = this.$appStore.get('history.wireless') || []
 
@@ -75,6 +81,13 @@ export default {
         host: lastWireless.host,
         port: lastWireless.port,
       },
+    }
+  },
+  async created() {
+    const autoConnect = this.$store.preference.data.autoConnect
+    if (autoConnect) {
+      await this.handleBatch()
+      this.reload()
     }
   },
   methods: {

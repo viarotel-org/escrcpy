@@ -100,6 +100,13 @@ export default {
       },
       span: 24,
     },
+    autoConnect: {
+      label: 'preferences.common.auto-connect.name',
+      field: 'autoConnect',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.auto-connect.placeholder',
+    },
     gnirehtetFix: {
       label: 'preferences.common.gnirehtet.fix.name',
       field: 'gnirehtetFix',

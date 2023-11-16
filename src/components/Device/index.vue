@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex items-center flex-none space-x-2">
-      <Wireless ref="wireless" />
+      <Wireless ref="wireless" :reload="getDeviceData" />
 
       <el-button
         type="primary"

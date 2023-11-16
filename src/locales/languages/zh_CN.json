@@ -175,6 +175,8 @@
   "preferences.common.language.placeholder": "选择你需要的语言",
   "preferences.common.language.chinese": "中文",
   "preferences.common.language.english": "English",
+  "preferences.common.auto-connect.name": "自动连接历史设备",
+  "preferences.common.auto-connect.placeholder": "启用后，该软件将在启动时尝试自动连接到历史设备",
 
   "preferences.video.name": "视频控制",
   "preferences.video.video-source.name": "视频源",

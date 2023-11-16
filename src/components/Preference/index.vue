@@ -264,6 +264,11 @@ export default {
         this.$store.theme.update(value)
       },
     },
+    'preferenceData.adbPath': {
+      handler() {
+        this.handleDevices()
+      },
+    },
     // 列表设备发生变化后如果没有匹配到则默认选中 global
     'scopeList': {
       handler(value) {
@@ -283,12 +288,13 @@ export default {
     },
   },
   created() {
-    this.handleSave = debounce(this.handleSave, 1000, {
-      leading: false,
-      trailing: true,
-    })
+    this.handleSave = debounce(this.handleSave, 1000)
+    this.handleDevices = debounce(this.handleDevices, 1000)
   },
   methods: {
+    handleDevices() {
+      this.$root.reRenderPost()
+    },
     subModel(item) {
       const children = item?.children || {}
       const value = {}

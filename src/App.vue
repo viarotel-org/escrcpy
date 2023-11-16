@@ -8,7 +8,12 @@
         :name="item.prop"
         lazy
       >
-        <component :is="item.prop" v-if="isRender(item)" :ref="item.prop" />
+        <component
+          :is="item.prop"
+          v-if="isRender(item)"
+          :ref="item.prop"
+          :re-render="reRender"
+        />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -44,6 +49,7 @@ export default {
       activeTab: 'Device',
       renderTab: '',
       rendered: true,
+      renderSign: false,
     }
   },
   created() {
@@ -88,12 +94,24 @@ export default {
 
       this.renderTab = ''
     },
+    reRenderPost() {
+      this.renderSign = true
+    },
     async onTabChange(prop) {
+      if (!this.renderSign) {
+        return false
+      }
+
       switch (prop) {
         case 'Device':
           this.reRender()
           break
+        case 'Preference':
+          this.reRender()
+          break
       }
+
+      this.renderSign = false
     },
   },
 }

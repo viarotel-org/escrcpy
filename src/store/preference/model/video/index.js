@@ -34,7 +34,7 @@ export default {
       type: 'Input.number',
       value: undefined,
       placeholder: 'preferences.video.bit.placeholder',
-      append: 'bps',
+      append: 'kbps',
     },
     maxFps: {
       label: 'preferences.video.refresh-rate.name',

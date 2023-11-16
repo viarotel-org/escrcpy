@@ -53,7 +53,7 @@ export default {
       type: 'Input.number',
       value: undefined,
       placeholder: 'preferences.audio.audio-bit-rate.placeholder',
-      append: 'bps',
+      append: 'kbps',
     },
     audioBuffer: {
       label: 'preferences.audio.audio-buffer.name',

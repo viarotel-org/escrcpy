@@ -1,9 +1,28 @@
 <template>
   <div
     ref="wheelContainer"
-    class="bg-primary-100 dark:bg-gray-800 -my-[8px] flex flex-nowrap overflow-hidden"
-    title="滚动查看被遮盖的菜单"
+    class="bg-primary-100 dark:bg-gray-800 -my-[8px] flex flex-nowrap overflow-hidden scroll-smooth px-4 group"
   >
+    <el-button
+      type="primary"
+      class="el-button-nav prev"
+      title="Prev"
+      @click="handlePrev"
+    >
+      <el-icon>
+        <CaretLeft />
+      </el-icon>
+    </el-button>
+    <el-button
+      type="primary"
+      class="el-button-nav next"
+      title="Next"
+      @click="handleNext"
+    >
+      <el-icon>
+        <CaretRight />
+      </el-icon>
+    </el-button>
     <component
       :is="item.component || 'div'"
       v-for="(item, index) in controlModel"
@@ -153,6 +172,27 @@ export default {
       const container = this.$refs.wheelContainer
       container.scrollLeft += event.deltaY
     },
+    handlePrev() {
+      const container = this.$refs.wheelContainer
+
+      if (container.scrollLeft <= 0) {
+        return false
+      }
+
+      container.scrollLeft -= 100
+    },
+    handleNext() {
+      const container = this.$refs.wheelContainer
+
+      if (
+        container.scrollLeft
+        >= container.scrollWidth - container.clientWidth
+      ) {
+        return false
+      }
+
+      container.scrollLeft += 100
+    },
     handleShell(row) {
       this.$adb.deviceShell(this.device.id, row.command)
     },
@@ -163,5 +203,15 @@ export default {
 <style lang="postcss" scoped>
 .el-button.is-disabled {
   @apply !dark:bg-gray-800;
+}
+
+.el-button.el-button-nav {
+  @apply p-0 rounded-none border-0 absolute z-10 inset-y-0 flex items-center justify-center opacity-0 bg-primary-100 hover:bg-primary-300 active:bg-primary-500 text-primary-600 hover:text-white w-4 group-hover:opacity-100 transition-opacity;
+  &.prev {
+    @apply left-0;
+  }
+  &.next {
+    @apply right-0;
+  }
 }
 </style>

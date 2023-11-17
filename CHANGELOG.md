@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.3](https://github.com/viarotel-org/escrcpy/compare/v1.14.2...v1.14.3) (2023-11-17)
+
+
+### Performance Improvements
+
+* ♻️ Add context menu ([f0f25a7](https://github.com/viarotel-org/escrcpy/commit/f0f25a79ab8f85d590cbe83de742ae4ea32ad5a5))
+* ♻️ Optimize extended menu bar interaction ([de9352c](https://github.com/viarotel-org/escrcpy/commit/de9352cf8ee21c9a8feac4da711dc5c8c1640c76))
+* 📝 Optimization preferences description ([30eca50](https://github.com/viarotel-org/escrcpy/commit/30eca508373c32b44628dcc455d1315ac6e34253))
+
 ## [1.14.2](https://github.com/viarotel-org/escrcpy/compare/v1.14.1...v1.14.2) (2023-11-16)
 
 

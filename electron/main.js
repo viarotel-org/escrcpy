@@ -14,6 +14,8 @@ import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
 import events from './events/index.js'
 
+import server from './server/index.js'
+
 log.initialize({ preload: true })
 
 const debug = !!appStore.get('common.debug')
@@ -101,6 +103,8 @@ function createWindow() {
   }
 
   events(mainWindow)
+
+  server(mainWindow)
 }
 
 app.whenReady().then(() => {

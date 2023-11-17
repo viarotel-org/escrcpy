@@ -31,6 +31,14 @@ const merge = (config, { command = '' } = {}) =>
 export default params =>
   merge(
     defineConfig({
+      build: {
+        rollupOptions: {
+          input: {
+            main: resolve(__dirname, 'index.html'),
+            server: resolve(__dirname, 'server/index.html'),
+          },
+        },
+      },
       resolve: {
         alias: {
           '@': resolve('src'),

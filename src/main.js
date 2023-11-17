@@ -45,4 +45,4 @@ app.mount('#app').$nextTick(() => {
   postMessage({ payload: 'removeLoading' }, '*')
 })
 
-console.log('electron.configs', window.electron.configs)
+console.log('electron', window.electron)

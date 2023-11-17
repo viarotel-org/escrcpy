@@ -31,5 +31,19 @@ export default {
       value: undefined,
       placeholder: 'preferences.window.disable-screen-saver.placeholder',
     },
+    windowWidth: {
+      label: 'preferences.window.size.width',
+      field: '--window-width',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.size.width.placeholder',
+    },
+    windowHeight: {
+      label: 'preferences.window.size.height',
+      field: '--window-height',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.size.height.placeholder',
+    },
   },
 }

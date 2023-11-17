@@ -231,6 +231,10 @@
   "preferences.window.always-top.placeholder": "Keep control window topmost",
   "preferences.window.disable-screen-saver.name": "Disable Screensaver",
   "preferences.window.disable-screen-saver.placeholder": "Disable computer screensaver",
+  "preferences.window.size.width": "Window width",
+  "preferences.window.size.width.placeholder": "The window width may cause the display to be blurred",
+  "preferences.window.size.height": "Window height",
+  "preferences.window.size.height.placeholder": "Window height",
 
   "preferences.record.name": "Recording",
   "preferences.record.format.name": "Format",

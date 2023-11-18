@@ -3,6 +3,36 @@ export default {
   field: 'scrcpy',
 
   children: {
+    windowWidth: {
+      label: 'preferences.window.size.width',
+      field: '--window-width',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.size.width.placeholder',
+      tips: 'preferences.window.size.width.tips',
+    },
+    windowHeight: {
+      label: 'preferences.window.size.height',
+      field: '--window-height',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.size.height.placeholder',
+      tips: 'preferences.window.size.height.tips',
+    },
+    windowX: {
+      label: 'preferences.window.position.x',
+      field: '--window-x',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.position.x.placeholder',
+    },
+    windowY: {
+      label: 'preferences.window.position.y',
+      field: '--window-y',
+      type: 'Input.number',
+      value: undefined,
+      placeholder: 'preferences.window.position.y.placeholder',
+    },
     windowBorderless: {
       label: 'preferences.window.borderless.name',
       field: '--window-borderless',
@@ -30,20 +60,6 @@ export default {
       type: 'Switch',
       value: undefined,
       placeholder: 'preferences.window.disable-screen-saver.placeholder',
-    },
-    windowWidth: {
-      label: 'preferences.window.size.width',
-      field: '--window-width',
-      type: 'Input.number',
-      value: undefined,
-      placeholder: 'preferences.window.size.width.placeholder',
-    },
-    windowHeight: {
-      label: 'preferences.window.size.height',
-      field: '--window-height',
-      type: 'Input.number',
-      value: undefined,
-      placeholder: 'preferences.window.size.height.placeholder',
     },
   },
 }

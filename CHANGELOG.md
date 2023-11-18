@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.0](https://github.com/viarotel-org/escrcpy/compare/v1.14.3...v1.15.0) (2023-11-18)
+
+
+### Features
+
+* 添加投屏窗口大小控制 ([97d7868](https://github.com/viarotel-org/escrcpy/commit/97d7868abaf321a5693b621b97af82ecf3fa9ada))
+
+
+### Performance Improvements
+
+* 🚀 Add window position option ([866aa2c](https://github.com/viarotel-org/escrcpy/commit/866aa2cfd253f702112367a857c88c40714c1065))
+
 ## [1.14.3](https://github.com/viarotel-org/escrcpy/compare/v1.14.2...v1.14.3) (2023-11-17)
 
 

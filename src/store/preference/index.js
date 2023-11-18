@@ -70,7 +70,10 @@ export const usePreferenceStore = defineStore({
       this.init()
     },
     setData(data, scope = this.deviceScope) {
-      const pickData = pickBy(data, value => !!value)
+      const pickData = pickBy(
+        data,
+        value => !!value || typeof value === 'number',
+      )
 
       if (data.adbPath === adbPath) {
         delete pickData.adbPath
@@ -136,7 +139,7 @@ export const usePreferenceStore = defineStore({
       }
 
       const valueList = Object.entries(data).reduce((arr, [key, value]) => {
-        if (!value) {
+        if (!value && typeof value !== 'number') {
           return arr
         }
 

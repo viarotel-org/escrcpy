@@ -243,6 +243,13 @@ Please refer to the detailed instructions under [Reasons why mouse and keyboard 
 - [iBar](https://www.better365.cn/ibar.html)
 - [Bartender](https://www.macbartender.com/)
 
+### After a successful installation of macOS, when I try to open it, I receive a prompt saying the file is damaged.
+
+> This is usually due to the software package not being signed. You can try the following solutions:
+
+1. Open Terminal and execute `sudo spctl --master-disable` to allow software from any source.
+2. Open Terminal and execute `sudo xattr -r -d com.apple.quarantine [AppPath]` to attempt fixing the damaged software package prompt.
+
 ## Getting Help
 
 > As this is an open source project run entirely by donations, support is limited and updates may not be on a fixed schedule.

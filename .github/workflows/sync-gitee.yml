@@ -1,9 +1,11 @@
 name: sync-gitee
+
 on:
-  workflow_dispatch: {}
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ['release']
+    types:
+      - completed
+
 jobs:
   sync-to-gitee:
     runs-on: ubuntu-latest

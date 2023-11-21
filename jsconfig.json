@@ -3,11 +3,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@copilot/*": ["copilot/*"],
       "@root/*": ["*"],
       "@electron/*": ["electron/*"],
       "@renderer/*": ["src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.vue", "electron"]
+  "include": ["src", "electron", "copilot"]
 }

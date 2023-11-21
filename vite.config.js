@@ -35,13 +35,14 @@ export default params =>
         rollupOptions: {
           input: {
             main: resolve(__dirname, 'index.html'),
-            server: resolve(__dirname, 'server/index.html'),
+            copilot: resolve(__dirname, 'copilot/index.html'),
           },
         },
       },
       resolve: {
         alias: {
           '@': resolve('src'),
+          '@copilot': resolve('copilot'),
           '@electron': resolve('electron'),
         },
       },

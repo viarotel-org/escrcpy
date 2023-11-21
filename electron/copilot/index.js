@@ -7,14 +7,14 @@ export default async (mainWindow) => {
   const app = new Hono()
 
   app.notFound((c) => {
-    return c.text('Escrcpy server 404', 404)
+    return c.text('Escrcpy copilot 404', 404)
   })
 
   const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
   if (VITE_DEV_SERVER_URL) {
     app.get('/', ctx =>
-      ctx.redirect(`${VITE_DEV_SERVER_URL}server/index.html`),
+      ctx.redirect(`${VITE_DEV_SERVER_URL}copilot/index.html`),
     )
   }
   else {
@@ -23,7 +23,7 @@ export default async (mainWindow) => {
       serveStatic({
         root: relative('./', process.env.DIST),
         rewriteRequestPath: (path) => {
-          return path.replace(/^\//, '/server')
+          return path.replace(/^\//, '/copilot')
         },
       }),
     )

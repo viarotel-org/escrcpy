@@ -2,6 +2,7 @@ import { relative } from 'node:path'
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
+import createWebSocketServer from './wss/index'
 
 export default async (mainWindow) => {
   const app = new Hono()
@@ -13,9 +14,10 @@ export default async (mainWindow) => {
   const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
   if (VITE_DEV_SERVER_URL) {
-    app.get('/', ctx =>
-      ctx.redirect(`${VITE_DEV_SERVER_URL}copilot/index.html`),
-    )
+    app.get('/', (ctx) => {
+      console.log('ctx', ctx.get('wss'))
+      return ctx.redirect(`${VITE_DEV_SERVER_URL}copilot/index.html`)
+    })
   }
   else {
     app.use(
@@ -38,6 +40,8 @@ export default async (mainWindow) => {
       }),
     )
   }
+
+  createWebSocketServer()
 
   serve({ fetch: app.fetch, port: 1996 })
 }

@@ -44,6 +44,7 @@
     "fs-extra": "^11.1.1",
     "hono": "^3.10.1",
     "husky": "^8.0.0",
+    "isomorphic-ws": "^5.0.0",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "postcss": "^8.4.31",
@@ -57,6 +58,7 @@
     "vite-svg-loader": "^4.0.0",
     "vue-command": "^35.2.1",
     "vue-i18n": "^9.5.0",
-    "which": "^4.0.0"
+    "which": "^4.0.0",
+    "ws": "^8.14.2"
   }
 }

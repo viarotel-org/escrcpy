@@ -83,17 +83,21 @@ export default {
       field: '--video-encoder',
       value: undefined,
     },
-    rotation: {
-      label: 'preferences.video.screen-rotation.name',
-      field: '--rotation',
+    displayOrientation: {
+      label: 'preferences.video.display-orientation.name',
+      field: '--display-orientation',
       type: 'Select',
       value: undefined,
-      placeholder: 'preferences.video.screen-rotation.placeholder',
+      placeholder: 'preferences.video.display-orientation.placeholder',
       options: [
         { label: '0°', value: '0' },
-        { label: '-90°', value: '1' },
-        { label: '180°', value: '2' },
-        { label: '90°', value: '3' },
+        { label: '90°', value: '90' },
+        { label: '180°', value: '180' },
+        { label: '270°', value: '270' },
+        { label: 'flip-0°', value: 'flip0' },
+        { label: 'flip-90°', value: 'flip90' },
+        { label: 'flip-180°', value: 'flip180' },
+        { label: 'flip-270°', value: 'flip270' },
       ],
     },
     crop: {

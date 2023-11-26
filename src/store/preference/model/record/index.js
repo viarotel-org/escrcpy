@@ -27,9 +27,9 @@ export default {
       placeholder: 'preferences.record.lock-video-orientation.placeholder',
       options: [
         { label: '0°', value: '0' },
-        { label: '-90°', value: '1' },
-        { label: '180°', value: '2' },
-        { label: '90°', value: '3' },
+        { label: '90°', value: '90' },
+        { label: '180°', value: '180' },
+        { label: '270°', value: '270' },
       ],
     },
     timeLimit: {

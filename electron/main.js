@@ -14,7 +14,7 @@ import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
 import events from './events/index.js'
 
-import copilot from './copilot/index.js'
+// import copilot from './copilot/index.js'
 
 log.initialize({ preload: true })
 
@@ -104,7 +104,7 @@ function createWindow() {
 
   events(mainWindow)
 
-  copilot(mainWindow)
+  // copilot(mainWindow)
 }
 
 app.whenReady().then(() => {

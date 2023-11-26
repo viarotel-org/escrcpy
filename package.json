@@ -50,7 +50,7 @@
     "postcss": "^8.4.31",
     "postcss-nested": "^6.0.1",
     "postcss-scss": "^4.0.9",
-    "typescript": "^5.2.2",
+    "typescript": "5.2.2",
     "vite": "^4.5.0",
     "vite-plugin-electron": "^0.14.1",
     "vite-plugin-electron-renderer": "^0.14.5",

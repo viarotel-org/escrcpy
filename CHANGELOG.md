@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.16.0](https://github.com/viarotel-org/escrcpy/compare/v1.15.0...v1.16.0) (2023-11-26)
+
+
+### Performance Improvements
+
+* ⚡️ Add webSocket ([ae96df0](https://github.com/viarotel-org/escrcpy/commit/ae96df03d40c8f2d2543910c3d6e1bc85978fedd))
+* ✨ Update to scrcpy v2.3 ([9e4f432](https://github.com/viarotel-org/escrcpy/commit/9e4f432333a41d56c9393853ea35b48375583d00))
+* 🍻 Update base copilot ([5ac5ee6](https://github.com/viarotel-org/escrcpy/commit/5ac5ee6e970ed7523fd27280a92ccb105da26b26))
+
+
+### Miscellaneous Chores
+
+* release 1.16.0 ([64d4486](https://github.com/viarotel-org/escrcpy/commit/64d44863c5942c8e9a9b42a42bab2cb04b22c2d3))
+
 ## [1.15.0](https://github.com/viarotel-org/escrcpy/compare/v1.14.3...v1.15.0) (2023-11-18)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.2](https://github.com/viarotel-org/escrcpy/compare/v1.16.1...v1.16.2) (2023-12-02)
+
+
+### Bug Fixes
+
+* 🐛 Bps unit error ([07f7ded](https://github.com/viarotel-org/escrcpy/commit/07f7ded0b5e1a2404b89217816d08eac5c904ba2))
+
 ## [1.16.1](https://github.com/viarotel-org/escrcpy/compare/v1.16.0...v1.16.1) (2023-11-26)
 
 

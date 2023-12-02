@@ -50,10 +50,10 @@ export default {
     audioBitRate: {
       label: 'preferences.audio.audio-bit-rate.name',
       field: '--audio-bit-rate',
-      type: 'Input.number',
+      type: 'Input',
       value: undefined,
       placeholder: 'preferences.audio.audio-bit-rate.placeholder',
-      append: 'kbps',
+      append: 'bps',
     },
     audioBuffer: {
       label: 'preferences.audio.audio-buffer.name',

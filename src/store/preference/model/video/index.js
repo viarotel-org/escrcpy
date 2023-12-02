@@ -31,10 +31,10 @@ export default {
     videoBitRate: {
       label: 'preferences.video.bit.name',
       field: '--video-bit-rate',
-      type: 'Input.number',
+      type: 'Input',
       value: undefined,
       placeholder: 'preferences.video.bit.placeholder',
-      append: 'kbps',
+      append: 'bps',
     },
     maxFps: {
       label: 'preferences.video.refresh-rate.name',

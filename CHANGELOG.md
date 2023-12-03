@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.3](https://github.com/viarotel-org/escrcpy/compare/v1.16.2...v1.16.3) (2023-12-03)
+
+
+### Performance Improvements
+
+* 🚀 Update scrcpy v2.3.1 ([3566655](https://github.com/viarotel-org/escrcpy/commit/3566655f46b7221973386ff423d91c426907386d))
+
 ## [1.16.2](https://github.com/viarotel-org/escrcpy/compare/v1.16.1...v1.16.2) (2023-12-02)
 
 

@@ -217,7 +217,7 @@
   "preferences.device.control-end-video.placeholder": "Turn off screen when control ends",
   "preferences.device.control-in-stop-charging.name": "Stop Charging",
   "preferences.device.control-in-stop-charging.placeholder": "Stop charging when controlling",
-  "preferences.device.control-in-stop-charging.tips": "May not work on some models",
+  "preferences.device.control-in-stop-charging.tips": "Stop charging when controlling",
   "preferences.device.display-overlay.name": "Simulated Display",
   "preferences.device.display-overlay.placeholder": "1080x1920/320,secure",
   "preferences.device.display-overlay.tips": "Size and resolution of simulated secondary display, Mirroring group relies on this option",

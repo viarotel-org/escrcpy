@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.5](https://github.com/viarotel-org/escrcpy/compare/v1.16.4...v1.16.5) (2023-12-19)
+
+
+### Performance Improvements
+
+* 📝 Control in stop charging ([8707eb5](https://github.com/viarotel-org/escrcpy/commit/8707eb54096d589a33b4ee138710033aa60071ed))
+
 ## [1.16.4](https://github.com/viarotel-org/escrcpy/compare/v1.16.3...v1.16.4) (2023-12-19)
 
 

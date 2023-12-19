@@ -54,10 +54,8 @@
         ]"
       >
         <el-input
-          v-model.number="formData.pair"
-          type="number"
+          v-model="formData.pair"
           :placeholder="$t('common.input.placeholder')"
-          :min="0"
           clearable
           class=""
         >

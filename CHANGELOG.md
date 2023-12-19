@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.4](https://github.com/viarotel-org/escrcpy/compare/v1.16.3...v1.16.4) (2023-12-19)
+
+
+### Bug Fixes
+
+* 🐛 Pairing code type issue ([889fe8c](https://github.com/viarotel-org/escrcpy/commit/889fe8c805e968feefc73661aa125ee0e197c006))
+
 ## [1.16.3](https://github.com/viarotel-org/escrcpy/compare/v1.16.2...v1.16.3) (2023-12-03)
 
 

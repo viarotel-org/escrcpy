@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.6](https://github.com/viarotel-org/escrcpy/compare/v1.16.5...v1.16.6) (2023-12-19)
+
+
+### Miscellaneous Chores
+
+* release 1.16.6 ([6d7778a](https://github.com/viarotel-org/escrcpy/commit/6d7778a6ca557d0605835893f767faeab4fc8656))
+
 ## [1.16.5](https://github.com/viarotel-org/escrcpy/compare/v1.16.4...v1.16.5) (2023-12-19)
 
 

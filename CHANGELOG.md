@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.7](https://github.com/viarotel-org/escrcpy/compare/v1.16.6...v1.16.7) (2023-12-19)
+
+
+### Performance Improvements
+
+* ♻️ Options describe ([1349b2a](https://github.com/viarotel-org/escrcpy/commit/1349b2a1f66c99413420a4fa93fcada62863a6cb))
+
 ## [1.16.6](https://github.com/viarotel-org/escrcpy/compare/v1.16.5...v1.16.6) (2023-12-19)
 
 

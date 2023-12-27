@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.8](https://github.com/viarotel-org/escrcpy/compare/v1.16.7...v1.16.8) (2023-12-27)
+
+
+### Bug Fixes
+
+* 🐛 The maximum size description error ([01fd926](https://github.com/viarotel-org/escrcpy/commit/01fd9264a6f5ad03a0ab2de3cfba5e1d1e4c0924))
+
 ## [1.16.7](https://github.com/viarotel-org/escrcpy/compare/v1.16.6...v1.16.7) (2023-12-19)
 
 

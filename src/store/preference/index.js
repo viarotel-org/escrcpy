@@ -43,6 +43,7 @@ export const usePreferenceStore = defineStore({
         '--camera',
         '--video-code',
         '--audio-code',
+        '--keyboard-inject',
         ...getOtherFields('scrcpy'),
       ],
       recordKeys,

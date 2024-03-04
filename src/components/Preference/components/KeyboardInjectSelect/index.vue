@@ -1,13 +1,14 @@
 <template>
   <el-select
     v-bind="data.props || {}"
-    v-model="inputValue"
+    v-model="selectValue"
     class="!w-full"
+    clearable
     :title="$t(data.placeholder)"
     :placeholder="$t(data.placeholder)"
   >
     <el-option
-      v-for="(item, index) in data.options"
+      v-for="(item, index) in options"
       :key="index"
       :label="$t(item.label)"
       :value="item.value"
@@ -18,8 +19,6 @@
 </template>
 
 <script>
-import { i18n } from '@/locales/index.js'
-
 export default {
   props: {
     modelValue: {
@@ -36,28 +35,26 @@ export default {
     },
   },
   emits: ['update:model-value'],
-  setup() {
-    return {
-      locale: i18n.global.locale,
-    }
-  },
   data() {
     return {}
   },
   computed: {
-    inputValue: {
+    options() {
+      return this.data.options || []
+    },
+    selectValue: {
       get() {
-        return this.modelValue || this.locale
+        return this.modelValue
       },
       set(value) {
-        this.locale = value
         this.$emit('update:model-value', value)
+
+        this.options.forEach((item) => {
+          if (item.value) {
+            this.preferenceData[item.value] = item.value === value
+          }
+        })
       },
-    },
-  },
-  watch: {
-    inputValue(value) {
-      this.locale = value
     },
   },
   methods: {},

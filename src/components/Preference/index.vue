@@ -21,13 +21,13 @@
               <template #content>
                 <div class="space-y-1">
                   <div class="pb-1">
-                    {{ $t("preferences.scope.details[0]") }}
+                    {{ $t('preferences.scope.details[0]') }}
                   </div>
                   <div class="">
-                    {{ $t("preferences.scope.details[1]") }}
+                    {{ $t('preferences.scope.details[1]') }}
                   </div>
                   <div class="">
-                    {{ $t("preferences.scope.details[2]") }}
+                    {{ $t('preferences.scope.details[2]') }}
                   </div>
                 </div>
               </template>
@@ -44,16 +44,16 @@
       </div>
       <div class="">
         <el-button type="" icon="Upload" plain @click="handleImport">
-          {{ $t("preferences.config.import.name") }}
+          {{ $t('preferences.config.import.name') }}
         </el-button>
         <el-button type="" icon="Download" plain @click="handleExport">
-          {{ $t("preferences.config.export.name") }}
+          {{ $t('preferences.config.export.name') }}
         </el-button>
         <el-button type="" icon="Edit" plain @click="handleEdit">
-          {{ $t("preferences.config.edit.name") }}
+          {{ $t('preferences.config.edit.name') }}
         </el-button>
         <el-button type="" icon="RefreshRight" plain @click="handleResetAll">
-          {{ $t("preferences.config.reset.name") }}
+          {{ $t('preferences.config.reset.name') }}
         </el-button>
       </div>
     </div>
@@ -78,7 +78,7 @@
               </div>
               <div class="flex-none pl-4 pr-12" @click.stop>
                 <el-button type="primary" text @click="handleReset(name)">
-                  {{ $t("preferences.reset") }}
+                  {{ $t('preferences.reset') }}
                 </el-button>
               </div>
             </div>
@@ -170,6 +170,7 @@
                         :key="index_2"
                         :label="$t(item_2.label)"
                         :value="item_2.value"
+                        :title="$t(item_2.placeholder || item_2.label)"
                       >
                       </el-option>
                     </el-select>
@@ -196,15 +197,19 @@
 <script>
 import { debounce } from 'lodash-es'
 import { ref } from 'vue'
+
 import { useOtg } from './composables/otg/index.js'
+
 import LanguageSelect from './components/LanguageSelect/index.vue'
 import PathInput from './components/PathInput/index.vue'
 import VideoCodecSelect from './components/VideoCodecSelect/index.vue'
 import AudioCodecSelect from './components/AudioCodecSelect/index.vue'
 import DisplaySelect from './components/DisplaySelect/index.vue'
 import CameraSwitch from './components/CameraSwitch/index.vue'
-import LoadingIcon from '@/components/Device/components/LoadingIcon/index.vue'
+import KeyboardInjectSelect from './components/KeyboardInjectSelect/index.vue'
+
 import { usePreferenceStore } from '@/store/index.js'
+import LoadingIcon from '@/components/Device/components/LoadingIcon/index.vue'
 
 export default {
   components: {
@@ -214,6 +219,7 @@ export default {
     AudioCodecSelect,
     DisplaySelect,
     CameraSwitch,
+    KeyboardInjectSelect,
   },
   setup() {
     const preferenceStore = usePreferenceStore()

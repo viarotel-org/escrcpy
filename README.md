@@ -76,10 +76,14 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Back
 - Notification
 - Power
-- Restart
+- Rotation
+- Volume
 - Screenshot
+- Reboot
 - Install APP
+- File Manager
 - Gnirehtet
+- Mirror Group
 
 ## Preferences
 

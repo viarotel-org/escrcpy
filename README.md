@@ -87,60 +87,72 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ### General
 
-- Adb path
-- Scrcpy path
-- File storage path (audio and video recordings and device screenshots are all saved here)
-- Gnirehtet path
-- Gnirehtet fix
-- Scrcpy append parameter
 - Change theme
 - Adjust language
-- Enable debug
+- File storage path (for storing audio/video recordings and device screenshots)
+- ADB path
+- Scrcpy path
+- Gnirehtet path
+- Scrcpy parameters
+- Auto-connect to historical devices
+- Gnirehtet Fix
+- Enable debugging
 
-### Video
+### Video Control
 
-- Resolution
-- Bitrate
+- Maximum size
+- Video bitrate
 - Refresh rate
 - Video encoding
-- Screen rotation
-- Screen cropping
-- Display
-- Video buffer
-- Receiver (v4l2) buffer
+- Display orientation
+- Screen clipping
+- Monitor
+- Video buffering
+- Receiver (v4l2) buffering
 
-### Device
+### Device Control
 
 - Show touch points
 - Keep awake
-- Close screen during control
-- Close screen after control
-- Stop charging during control
+- Turn off screen during control
+- Turn off screen after control
+- Disable auto-brightness during control
+- Simulate auxiliary display
 
-### Window
+### Window Control
 
+- Window width
+- Window height
+- Window X coordinate
+- Window Y coordinate
 - Borderless mode
 - Fullscreen mode
 - Always on top
-- Disable screen saver
+- Disable screensaver
 
-### Recording
-
-- Recording format
-- Recording duration
-- Recording video orientation
-- Disable video recording
-- Disable video playback
-- Disable audio recording
-- Disable audio playback
-
-### Audio
+### Audio Control
 
 - Audio source
 - Audio encoding
 - Audio bitrate
-- Audio buffer
-- Audio output buffer
+- Audio buffering
+- Audio output buffering
+
+### Audio/Video Recording
+
+- Video recording format
+- Video recording orientation
+- Recording duration
+- Disable video recording
+- Disable audio recording
+- Disable video playback
+- Disable audio playback
+
+### Input Control
+
+- Mouse mode
+- Keyboard mode
+- Keyboard injection method
 
 ### OTG
 
@@ -148,12 +160,12 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Keyboard only
 - Mouse only
 
-### Camera
+### Camera Control
 
 - Enable camera
 - Camera source
-- Camera size
-- Camera ratio
+- Camera resolution
+- Camera aspect ratio
 - Camera frame rate
 
 ## Next Steps?

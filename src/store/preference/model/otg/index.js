@@ -10,6 +10,7 @@ export default {
       value: undefined,
       placeholder: 'preferences.otg.enable.placeholder',
       tips: 'preferences.otg.enable.tips',
+      hidden: true,
     },
     hidKeyboard: {
       label: 'preferences.otg.only-keyboard.name',

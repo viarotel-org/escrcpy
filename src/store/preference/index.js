@@ -131,8 +131,12 @@ export const usePreferenceStore = defineStore({
       return value
     },
 
-    getScrcpyArgs(scope = this.deviceScope, { isRecord = false } = {}) {
+    getScrcpyArgs(
+      scope = this.deviceScope,
+      { isRecord = false, isCamera = false, isOtg = false, excludes = [] } = {},
+    ) {
       const data = this.getData(scope)
+
       console.log('getScrcpyArgs.data', data)
 
       if (!data) {
@@ -154,16 +158,20 @@ export const usePreferenceStore = defineStore({
           }
         }
 
-        if (!this.data['--camera']) {
+        if (!this.data['--camera'] && !isCamera) {
           if (this.cameraKeys.includes(key)) {
             return arr
           }
         }
 
-        if (!this.data['--otg']) {
+        if (!this.data['--otg'] && !isOtg) {
           if (this.otgKeys.includes(key)) {
             return arr
           }
+        }
+
+        if (excludes.includes(key) || excludes.includes(`${key}=${value}`)) {
+          return arr
         }
 
         if (typeof value === 'boolean') {

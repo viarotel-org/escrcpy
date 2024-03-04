@@ -2,14 +2,15 @@ export default {
   label: 'preferences.camera.name',
   field: 'scrcpy',
   children: {
-    camera: {
-      label: 'preferences.camera.enable.name',
-      field: '--camera',
-      type: 'CameraSwitch',
-      value: undefined,
-      placeholder: 'preferences.camera.enable.placeholder',
-      tips: 'preferences.camera.enable.tips',
-    },
+    // camera: {
+    //   label: 'preferences.camera.enable.name',
+    //   field: '--camera',
+    //   type: 'CameraSwitch',
+    //   value: undefined,
+    //   placeholder: 'preferences.camera.enable.placeholder',
+    //   tips: 'preferences.camera.enable.tips',
+    //   hidden: true,
+    // },
     cameraFacing: {
       label: 'preferences.camera.camera-facing.name',
       field: '--camera-facing',

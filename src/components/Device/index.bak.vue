@@ -87,9 +87,35 @@
           align="left"
         >
           <template #default="{ row }">
-            <StartDropdown
-              v-bind="{ deviceInfo: row, toggleRowExpansion, handleReset }"
-            />
+            <el-button
+              :loading="row.$loading"
+              type="primary"
+              text
+              :disabled="row.$unauthorized"
+              :icon="row.$loading ? '' : 'Monitor'"
+              @click="handleMirror(row)"
+            >
+              {{
+                row.$loading
+                  ? $t('device.mirror.progress')
+                  : $t('device.mirror.start')
+              }}
+            </el-button>
+
+            <el-button
+              type="primary"
+              text
+              :loading="row.$recordLoading"
+              :disabled="row.$unauthorized"
+              :icon="row.$recordLoading ? '' : 'VideoCamera'"
+              @click="handleRecord(row)"
+            >
+              {{
+                row.$recordLoading
+                  ? $t('device.record.progress')
+                  : $t('device.record.start')
+              }}
+            </el-button>
 
             <el-button
               v-if="!row.$wifi"
@@ -143,7 +169,6 @@ import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
 import Wireless from './components/Wireless/index.vue'
 import Terminal from './components/Terminal/index.vue'
-import StartDropdown from './components/StartDropdown/index.vue'
 
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
@@ -153,7 +178,6 @@ export default {
     ControlBar,
     Remark,
     Terminal,
-    StartDropdown,
   },
   data() {
     return {
@@ -189,6 +213,12 @@ export default {
     handleConnect(...args) {
       this.$refs.wireless.connect(...args)
     },
+    preferenceData(...args) {
+      return this.$store.preference.getData(...args)
+    },
+    scrcpyArgs(...args) {
+      return this.$store.preference.getScrcpyArgs(...args)
+    },
     handleRefresh() {
       this.getDeviceData({ resetResolve: true })
     },
@@ -221,8 +251,92 @@ export default {
         }
       }
     },
-    toggleRowExpansion(...args) {
-      this.$refs.elTable.toggleRowExpansion(...args)
+    toggleRowExpansion(...params) {
+      this.$refs.elTable.toggleRowExpansion(...params)
+    },
+    getRecordPath(row) {
+      const config = this.preferenceData(row.id)
+      const basePath = config.savePath
+      const ext = config['--record-format'] || 'mp4'
+
+      const fileName = this.$store.device.getLabel(
+        row,
+        ({ time }) => `record-${time}.${ext}`,
+      )
+
+      const joinValue = this.$path.join(basePath, fileName)
+      const value = this.$path.normalize(joinValue)
+
+      return value
+    },
+    async handleRecord(row) {
+      row.$recordLoading = true
+
+      this.toggleRowExpansion(row, true)
+
+      const savePath = this.getRecordPath(row)
+
+      try {
+        await this.$scrcpy.record(row.id, {
+          title: this.$store.device.getLabel(row, 'recording'),
+          savePath,
+          args: this.scrcpyArgs(row.id, { isRecord: true }),
+          stdout: this.onStdout,
+        })
+        this.handleRecordSuccess(savePath)
+      }
+      catch (error) {
+        console.warn(error)
+
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+
+        this.handleReset()
+      }
+
+      row.$recordLoading = false
+    },
+    async handleRecordSuccess(savePath) {
+      try {
+        await this.$confirm(
+          this.$t('device.record.success.message'),
+          this.$t('device.record.success.title'),
+          {
+            confirmButtonText: this.$t('common.confirm'),
+            cancelButtonText: this.$t('common.cancel'),
+            closeOnClickModal: false,
+            type: 'success',
+          },
+        )
+
+        await this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
+      }
+      catch (error) {
+        console.warn(error)
+      }
+    },
+    async handleMirror(row) {
+      row.$loading = true
+
+      this.toggleRowExpansion(row, true)
+
+      try {
+        await this.$scrcpy.mirror(row.id, {
+          title: this.$store.device.getLabel(row),
+          args: this.scrcpyArgs(row.id),
+          stdout: this.onStdout,
+        })
+      }
+      catch (error) {
+        console.warn(error)
+        if (error.message) {
+          this.$message.warning(error.message)
+        }
+
+        this.handleReset()
+      }
+      row.$loading = false
     },
     async handleWifi(row) {
       try {
@@ -254,7 +368,6 @@ export default {
     handleRestart() {
       this.$electron.ipcRenderer.send('restart-app')
     },
-
     handleLog() {
       this.$appLog.openInEditor()
     },

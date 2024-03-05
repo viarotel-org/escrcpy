@@ -21,5 +21,6 @@ module.exports = {
     'n/prefer-global/process': 'off',
 
     '@typescript-eslint/no-invalid-this': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 }

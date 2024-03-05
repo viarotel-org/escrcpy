@@ -10,7 +10,7 @@
       @select="onSelect"
     >
       <template #prepend>
-        {{ $t("device.wireless.name") }}
+        {{ $t('device.wireless.name') }}
       </template>
 
       <template #default="{ item }">
@@ -29,9 +29,11 @@
         </template>
       </template>
     </el-autocomplete>
+
     <div class="text-gray-500 text-sm">
       :
     </div>
+
     <el-input
       v-model.number="formData.port"
       type="number"
@@ -48,8 +50,9 @@
       :loading="loading"
       @click="handleConnect()"
     >
-      {{ $t("device.wireless.connect.name") }}
+      {{ $t('device.wireless.connect.name') }}
     </el-button>
+
     <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
 </template>

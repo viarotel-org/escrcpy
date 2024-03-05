@@ -1,6 +1,12 @@
 <template>
   <div class="">
-    <slot :show="show" />
+    <el-button plain @click="handleShow">
+      <template #icon>
+        <svg-icon name="command"></svg-icon>
+      </template>
+      {{ $t('device.terminal.name') }}
+    </el-button>
+
     <TerminalDialog ref="terminalDialog" />
   </div>
 </template>
@@ -13,7 +19,7 @@ export default {
     TerminalDialog,
   },
   methods: {
-    show() {
+    handleShow() {
       this.$refs.terminalDialog.show()
     },
   },

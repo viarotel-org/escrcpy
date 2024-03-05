@@ -3,8 +3,11 @@
     <div class="flex items-center flex-none space-x-2 pt-1">
       <Wireless ref="wireless" :reload="getDeviceData" />
 
+      <div class="w-px h-7 !ml-4 !mr-2 bg-gray-200"></div>
+
       <el-button
         type="primary"
+        plain
         :icon="loading ? '' : 'Refresh'"
         :loading="loading"
         @click="handleRefresh"
@@ -12,30 +15,26 @@
         {{ $t('device.refresh.name') }}
       </el-button>
 
-      <el-button type="warning" icon="RefreshRight" @click="handleRestart">
+      <el-button
+        type="warning"
+        plain
+        icon="RefreshRight"
+        @click="handleRestart"
+      >
         {{ $t('device.restart.name') }}
       </el-button>
 
-      <el-button icon="View" @click="handleLog">
+      <el-button plain icon="View" @click="handleLog">
         {{ $t('device.log.name') }}
       </el-button>
 
-      <Terminal>
-        <template #default="{ show }">
-          <el-button @click="show">
-            <template #icon>
-              <svg-icon name="command"></svg-icon>
-            </template>
-            {{ $t('device.terminal.name') }}
-          </el-button>
-        </template>
-      </Terminal>
+      <TerminalAction />
     </div>
     <div class="pt-4 flex-1 h-0 overflow-hidden">
       <el-table
         ref="elTable"
         v-loading="loading"
-        :element-loading-text="loadingText"
+        :element-loading-text="$t('common.loading')"
         :data="deviceList"
         style="width: 100%"
         border
@@ -113,7 +112,7 @@
 import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
 import Wireless from './components/Wireless/index.vue'
-import Terminal from './components/Terminal/index.vue'
+import TerminalAction from './components/TerminalAction/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
@@ -125,7 +124,7 @@ export default {
     Wireless,
     ControlBar,
     Remark,
-    Terminal,
+    TerminalAction,
     MirrorAction,
     MoreDropdown,
     WirelessAction,
@@ -133,7 +132,6 @@ export default {
   data() {
     return {
       loading: false,
-      loadingText: this.$t('device.list.loading'),
       deviceList: [],
     }
   },
@@ -237,7 +235,6 @@ export default {
         }
       }
       this.loading = false
-      this.loadingText = ''
     },
   },
 }

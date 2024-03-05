@@ -52,7 +52,8 @@ export default {
         await recording
 
         this.onRecordSuccess(savePath)
-      } catch (error) {
+      }
+      catch (error) {
         console.warn(error)
 
         if (error.message) {
@@ -69,7 +70,7 @@ export default {
 
       const fileName = this.$store.device.getLabel(
         row,
-        ({ time }) => `record-${time}.${extension}`
+        ({ time }) => `record-${time}.${extension}`,
       )
 
       const joinValue = this.$path.join(basePath, fileName)
@@ -87,11 +88,12 @@ export default {
             cancelButtonText: this.$t('common.cancel'),
             closeOnClickModal: false,
             type: 'success',
-          }
+          },
         )
 
         await this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
-      } catch (error) {
+      }
+      catch (error) {
         console.warn(error)
       }
     },

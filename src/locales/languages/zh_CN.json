@@ -11,6 +11,7 @@
   "common.input.placeholder": "请填写",
   "common.success": "操作成功",
   "common.progress": "启动中",
+  "common.loading": "加载中",
 
   "close.quit": "退出",
   "close.quit.cancel": "取消退出",
@@ -19,7 +20,6 @@
   "close.remember": "是否记住选择？",
 
   "device.list": "设备列表",
-  "device.list.loading": "努力加载中...",
   "device.list.empty": "没有检测到设备",
   "device.id": "设备 ID",
   "device.name": "设备名称",

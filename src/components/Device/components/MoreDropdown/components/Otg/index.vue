@@ -47,7 +47,8 @@ export default {
         this.loading = false
 
         await mirroring
-      } catch (error) {
+      }
+      catch (error) {
         console.warn(error)
 
         if (error.message) {

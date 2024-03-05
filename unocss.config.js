@@ -1,4 +1,4 @@
-import { presetWind, defineConfig } from 'unocss'
+import { defineConfig, presetWind } from 'unocss'
 import transformerDirectives from '@unocss/transformer-directives'
 import { presetShades } from '@viarotel-org/unocss-preset-shades'
 
@@ -7,12 +7,16 @@ const presetMain = presetWind()
 const presets = [presetMain, presetShades('#028d71')]
 
 export default defineConfig({
-  // @ts-ignore
+  // @ts-expect-error
   presets,
   transformers: [transformerDirectives()],
   theme: {
+    colors: {
+      // @ts-expect-error
+      gray: presetMain?.theme?.colors?.neutral,
+    },
     boxShadow: {
-      el: 'var(--el-box-shadow)',
+      'el': 'var(--el-box-shadow)',
       'el-light': 'var(--el-box-shadow-light)',
       'el-lighter': 'var(--el-box-shadow-lighter)',
       'el-dark': 'var(--el-box-shadow-dark)',

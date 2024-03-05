@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.17.1](https://github.com/viarotel-org/escrcpy/compare/v1.17.0...v1.17.1) (2024-03-05)
+
+
+### Performance Improvements
+
+* ♻️ Interactive logic optimization ([193f80a](https://github.com/viarotel-org/escrcpy/commit/193f80a2a4611bb718ab3754249ed2b3d688e5a2))
+* ♻️ Optimize design and code ([d507c2d](https://github.com/viarotel-org/escrcpy/commit/d507c2d0dbf5699ab0f311d78d1686ea36332b51))
+* ♻️ Optimize equipment operation ([389ac33](https://github.com/viarotel-org/escrcpy/commit/389ac335b8801076ff9bb89c0c5f4899d142ff1b))
+* ➖ Remove redundant packages ([f9e4a0e](https://github.com/viarotel-org/escrcpy/commit/f9e4a0e77465e3e89e5058553383dec104fc096f))
+* 💄 Optimize dark mode styles ([1cac054](https://github.com/viarotel-org/escrcpy/commit/1cac054d413e3f1b56e9dd8e430671805d7fe3ae))
+
 ## [1.17.0](https://github.com/viarotel-org/escrcpy/compare/v1.16.8...v1.17.0) (2024-03-04)
 
 

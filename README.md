@@ -69,7 +69,16 @@ Gnirehtet is built into the Windows and Linux apps to provide reverse tethering 
 
 Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
 
-## Device Interaction Bar
+## Device Operation
+
+### Control Model
+
+- Mirror
+- Recording
+- OTG
+- Camera
+
+### Device Interaction Bar
 
 - Switch
 - Home
@@ -157,12 +166,6 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Mouse mode
 - Keyboard mode
 - Keyboard injection method
-
-### OTG
-
-- Enable OTG
-- Keyboard only
-- Mouse only
 
 ### Camera Control
 

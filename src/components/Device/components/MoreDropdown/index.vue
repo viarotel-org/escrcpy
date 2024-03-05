@@ -3,10 +3,10 @@
     <el-button
       type="primary"
       text
-      :disabled="deviceInfo.$unauthorized"
-      icon="Monitor"
+      :disabled="row.$unauthorized"
+      icon="CirclePlus"
     >
-      {{ $t('device.mirror.start') }}
+      {{ $t('device.actions.more.name') }}
     </el-button>
 
     <template #dropdown>
@@ -18,9 +18,18 @@
           v-bind="{
             ...$props,
           }"
+          v-slot="{ loading, trigger }"
         >
-          <el-dropdown-item>
-            {{ item.label }}
+          <el-dropdown-item :disabled="loading" @click="trigger">
+            <template v-if="loading">
+              <el-icon class="is-loading">
+                <Loading />
+              </el-icon>
+              {{ $t('common.progress') }}
+            </template>
+            <template v-else>
+              {{ $t(item.label) }}
+            </template>
           </el-dropdown-item>
         </component>
       </el-dropdown-menu>
@@ -29,20 +38,17 @@
 </template>
 
 <script>
-import Default from './components/Default/index.vue'
 import Record from './components/Record/index.vue'
 import Otg from './components/Otg/index.vue'
 import Camera from './components/Camera/index.vue'
 
 export default {
   components: {
-    Default,
     Record,
     Otg,
     Camera,
   },
   props: {
-    ...Default.props,
     ...Record.props,
     ...Otg.props,
     ...Camera.props,
@@ -51,19 +57,15 @@ export default {
     return {
       options: [
         {
-          label: '默认模式',
-          component: 'Default',
-        },
-        {
-          label: '录制模式',
+          label: 'device.actions.more.record.name',
           component: 'Record',
         },
         {
-          label: 'OTG模式',
+          label: 'device.actions.more.otg.name',
           component: 'Otg',
         },
         {
-          label: '摄像模式',
+          label: 'device.actions.more.camera.name',
           component: 'Camera',
         },
       ],

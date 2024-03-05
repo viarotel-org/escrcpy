@@ -1,21 +1,22 @@
 <template>
-  <el-dropdown-item class="" :disabled="loading" @click="handleClick">
-    <template v-if="loading">
-      <el-icon class="is-loading">
-        <Loading />
-      </el-icon>
-      摄像中
-    </template>
-    <template v-else>
-      摄像模式
-    </template>
-  </el-dropdown-item>
+  <el-button
+    type="primary"
+    text
+    :disabled="row.$unauthorized"
+    :loading="loading"
+    :icon="loading ? '' : 'Monitor'"
+    @click="handleClick(row)"
+  >
+    {{ loading ? $t('common.progress') : $t('device.mirror.start') }}
+  </el-button>
 </template>
 
 <script>
+import { sleep } from '@/utils'
+
 export default {
   props: {
-    deviceInfo: {
+    row: {
       type: Object,
       default: () => ({}),
     },
@@ -30,40 +31,37 @@ export default {
     }
   },
   methods: {
-    async handleClick() {
-      const row = this.deviceInfo
-
+    async handleClick(row) {
       this.loading = true
 
       this.toggleRowExpansion(row, true)
 
-      const args = `--video-source=camera ${this.$store.preference.getScrcpyArgs(
-        row.id,
-        {
-          excludes: ['--video-source', '--mouse', '--keyboard'],
-          isCamera: true,
-        },
-      )}`
+      const args = this.$store.preference.getScrcpyArgs(row.id, {
+        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+      })
 
       try {
-        await this.$scrcpy.mirror(row.id, {
+        const mirroring = this.$scrcpy.mirror(row.id, {
           title: this.$store.device.getLabel(row),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,
         })
+
+        await sleep(1 * 1000)
+
+        this.loading = false
+
+        await mirroring
       }
       catch (error) {
         console.warn(error)
-
         if (error.message) {
           this.$message.warning(error.message)
         }
 
         this.handleReset()
       }
-
-      this.loading = false
     },
     onStdout() {},
     onStderr() {

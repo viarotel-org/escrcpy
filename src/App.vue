@@ -117,4 +117,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+:deep() {
+  .el-tabs__header {
+    @apply !mb-3;
+  }
+}
+</style>

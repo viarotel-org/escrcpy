@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col">
-    <div class="flex items-center flex-none space-x-2">
+    <div class="flex items-center flex-none space-x-2 pt-1">
       <Wireless ref="wireless" :reload="getDeviceData" />
 
       <el-button
@@ -82,46 +82,16 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-slot="{ row }"
           :label="$t('device.control.name')"
           width="450"
           align="left"
         >
-          <template #default="{ row }">
-            <StartDropdown
-              v-bind="{ deviceInfo: row, toggleRowExpansion, handleReset }"
-            />
+          <MirrorAction v-bind="{ row, toggleRowExpansion, handleReset }" />
 
-            <el-button
-              v-if="!row.$wifi"
-              type="primary"
-              text
-              :disabled="
-                row.$unauthorized || row.$loading || row.$recordLoading
-              "
-              @click="handleWifi(row)"
-            >
-              <template #icon>
-                <svg-icon name="wifi"></svg-icon>
-              </template>
-              {{ $t('device.wireless.mode') }}
-            </el-button>
+          <MoreDropdown v-bind="{ row, toggleRowExpansion, handleReset }" />
 
-            <el-button
-              v-if="row.$wifi"
-              type="danger"
-              text
-              :loading="row.$stopLoading"
-              :disabled="row.$unauthorized"
-              :icon="row.$stopLoading ? '' : 'CircleClose'"
-              @click="handleStop(row)"
-            >
-              {{
-                row.$stopLoading
-                  ? $t('device.wireless.disconnect.progress')
-                  : $t('device.wireless.disconnect.start')
-              }}
-            </el-button>
-          </template>
+          <WirelessAction v-bind="{ row, handleConnect }" />
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
@@ -129,6 +99,7 @@
               <Operation class="" />
             </el-icon>
           </template>
+
           <template #default="{ row }">
             <ControlBar :device="row" />
           </template>
@@ -143,7 +114,9 @@ import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
 import Wireless from './components/Wireless/index.vue'
 import Terminal from './components/Terminal/index.vue'
-import StartDropdown from './components/StartDropdown/index.vue'
+import MirrorAction from './components/MirrorAction/index.vue'
+import MoreDropdown from './components/MoreDropdown/index.vue'
+import WirelessAction from './components/WirelessAction/index.vue'
 
 import { isIPWithPort, sleep } from '@/utils/index.js'
 
@@ -153,7 +126,9 @@ export default {
     ControlBar,
     Remark,
     Terminal,
-    StartDropdown,
+    MirrorAction,
+    MoreDropdown,
+    WirelessAction,
   },
   data() {
     return {
@@ -185,13 +160,18 @@ export default {
     this?.unAdbWatch?.()
   },
   methods: {
-    onStdout() {},
+    toggleRowExpansion(...args) {
+      this.$refs.elTable.toggleRowExpansion(...args)
+    },
+
     handleConnect(...args) {
       this.$refs.wireless.connect(...args)
     },
+
     handleRefresh() {
       this.getDeviceData({ resetResolve: true })
     },
+
     async handleReset() {
       try {
         await this.$confirm(
@@ -221,35 +201,6 @@ export default {
         }
       }
     },
-    toggleRowExpansion(...args) {
-      this.$refs.elTable.toggleRowExpansion(...args)
-    },
-    async handleWifi(row) {
-      try {
-        const host = await this.$adb.getDeviceIP(row.id)
-
-        if (!host) {
-          throw new Error(this.$t('device.wireless.mode.error'))
-        }
-
-        const port = await this.$adb.tcpip(row.id, 5555)
-
-        await sleep()
-
-        console.log('host:port', `${host}:${port}`)
-
-        this.handleConnect({
-          host,
-          port,
-        })
-      }
-      catch (error) {
-        console.warn(error.message)
-        if (error?.message || error?.cause?.message) {
-          this.$message.warning(error?.message || error?.cause?.message)
-        }
-      }
-    },
 
     handleRestart() {
       this.$electron.ipcRenderer.send('restart-app')
@@ -257,21 +208,6 @@ export default {
 
     handleLog() {
       this.$appLog.openInEditor()
-    },
-
-    async handleStop(row) {
-      row.$stopLoading = true
-      const [host, port] = row.id.split(':')
-      try {
-        await this.$adb.disconnect(host, port)
-        await sleep()
-        this.$message.success(this.$t('device.wireless.disconnect.success'))
-      }
-      catch (error) {
-        if (error.message)
-          this.$message.warning(error.message)
-      }
-      row.$stopLoading = false
     },
 
     async getDeviceData({ resetResolve = false } = {}) {
@@ -307,4 +243,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+:deep() {
+  .el-table .el-table__row .cell {
+    @apply py-1;
+  }
+}
+</style>

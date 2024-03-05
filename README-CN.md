@@ -71,7 +71,16 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 
 请参阅 [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
 
-## 设备交互栏
+## 设备操作
+
+### 控制模式
+
+- 镜像
+- 录制
+- OTG
+- 摄像
+
+### 设备交互栏
 
 - 切换键
 - 主屏幕
@@ -159,12 +168,6 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 - 鼠标模式
 - 键盘模式
 - 键盘注入方式
-
-### OTG
-
-- 启用 OTG
-- 仅键盘
-- 仅鼠标
 
 ### 摄像控制
 

@@ -158,13 +158,13 @@ export const usePreferenceStore = defineStore({
           }
         }
 
-        if (!this.data['--camera'] && !isCamera) {
+        if (!isCamera) {
           if (this.cameraKeys.includes(key)) {
             return arr
           }
         }
 
-        if (!this.data['--otg'] && !isOtg) {
+        if (!isOtg) {
           if (this.otgKeys.includes(key)) {
             return arr
           }

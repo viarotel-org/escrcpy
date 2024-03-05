@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col overflow-hidden">
+  <div class="h-full flex flex-col overflow-hidden pt-1">
     <div
       class="mr-4 pb-4 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
     >
@@ -205,7 +205,6 @@ import PathInput from './components/PathInput/index.vue'
 import VideoCodecSelect from './components/VideoCodecSelect/index.vue'
 import AudioCodecSelect from './components/AudioCodecSelect/index.vue'
 import DisplaySelect from './components/DisplaySelect/index.vue'
-import CameraSwitch from './components/CameraSwitch/index.vue'
 import KeyboardInjectSelect from './components/KeyboardInjectSelect/index.vue'
 
 import { usePreferenceStore } from '@/store/index.js'
@@ -218,7 +217,6 @@ export default {
     VideoCodecSelect,
     AudioCodecSelect,
     DisplaySelect,
-    CameraSwitch,
     KeyboardInjectSelect,
   },
   setup() {

@@ -1,21 +1,13 @@
 <template>
-  <el-dropdown-item class="" :disabled="loading" @click="handleClick">
-    <template v-if="loading">
-      <el-icon class="is-loading">
-        <Loading />
-      </el-icon>
-      录制中
-    </template>
-    <template v-else>
-      录制模式
-    </template>
-  </el-dropdown-item>
+  <slot :loading="loading" :trigger="handleClick" />
 </template>
 
 <script>
+import { sleep } from '@/utils'
+
 export default {
   props: {
-    deviceInfo: {
+    row: {
       type: Object,
       default: () => ({}),
     },
@@ -31,7 +23,7 @@ export default {
   },
   methods: {
     async handleClick() {
-      const row = this.deviceInfo
+      const row = this.row
 
       this.loading = true
 
@@ -45,13 +37,20 @@ export default {
       })
 
       try {
-        await this.$scrcpy.record(row.id, {
+        const recording = this.$scrcpy.record(row.id, {
           title: this.$store.device.getLabel(row, 'recording'),
           savePath,
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,
         })
+
+        await sleep(1 * 1000)
+
+        this.loading = false
+
+        await recording
+
         this.onRecordSuccess(savePath)
       }
       catch (error) {
@@ -61,8 +60,6 @@ export default {
           this.$message.warning(error.message)
         }
       }
-
-      this.loading = false
     },
     onStdout() {},
     onStderr() {

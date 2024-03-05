@@ -5,7 +5,6 @@ import useRenderer from 'vite-plugin-electron-renderer'
 import { notBundle } from 'vite-plugin-electron/plugin'
 
 import useVue from '@vitejs/plugin-vue'
-import useEslint from 'vite-plugin-eslint'
 import useUnoCSS from 'unocss/vite'
 import useSvg from 'vite-svg-loader'
 import useI18n from '@intlify/unplugin-vue-i18n/vite'
@@ -47,7 +46,6 @@ export default params =>
         },
       },
       plugins: [
-        useEslint(),
         useUnoCSS(),
         useSvg(),
         useVue(),

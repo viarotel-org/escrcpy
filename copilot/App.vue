@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col absolute inset-fix-0 h-full overflow-hidden">
+  <div class="flex flex-col absolute inset-0 h-full overflow-hidden">
     <div class="py-4 px-4 flex items-center flex-none">
       <a class="block" :href="escrcpyURL" target="_blank">
         <img src="@electron/resources/build/logo.png" class="h-9" alt="" />

@@ -1,3 +1,3 @@
-import '@viarotel-org/design/styles/resets'
+import '@unocss/reset/tailwind-compat.css'
 import './desktop.css'
 import './helpers.css'

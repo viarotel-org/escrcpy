@@ -17,6 +17,7 @@ module.exports = {
     'vue/html-self-closing': 'off',
     'vue/block-order': 'off',
     'vue/no-unused-refs': 'off',
+    'vue/component-tags-order': 'off',
 
     'n/prefer-global/process': 'off',
 

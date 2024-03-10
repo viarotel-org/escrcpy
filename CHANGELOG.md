@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.17.2](https://github.com/viarotel-org/escrcpy/compare/v1.17.1...v1.17.2) (2024-03-10)
+
+
+### Bug Fixes
+
+* 🐛 Abnormal built-in terminal adb command ([368551a](https://github.com/viarotel-org/escrcpy/commit/368551a954664548f6b60ce7f9c6b8be30923edd))
+
+
+### Performance Improvements
+
+* ♻️ Update eslint config ([bf2d2b4](https://github.com/viarotel-org/escrcpy/commit/bf2d2b47b41d63f5d6ba69c5c11c46494a71813f))
+
 ## [1.17.1](https://github.com/viarotel-org/escrcpy/compare/v1.17.0...v1.17.1) (2024-03-05)
 
 

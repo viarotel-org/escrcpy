@@ -45,7 +45,7 @@ import VueCommand, {
   listFormatter,
 } from 'vue-command'
 import 'vue-command/dist/vue-command.css'
-import { useAdb } from './composables/adb.js'
+import { useAdb } from './composables/adb-async.js'
 import { useScrcpy } from './composables/scrcpy.js'
 import { useGnirehtet } from './composables/gnirehtet.js'
 

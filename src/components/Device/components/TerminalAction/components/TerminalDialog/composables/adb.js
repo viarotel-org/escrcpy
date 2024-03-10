@@ -7,7 +7,18 @@ export function useAdb({ loading }) {
     loading.value = true
     const command = args.slice(1).join(' ')
 
-    const { stderr, stdout } = await $adb.shell(command || 'help')
+    let stderr
+    let stdout
+
+    try {
+      const res = await $adb.shell(command || 'help')
+
+      stdout = res?.stdout
+      stderr = res?.stderr
+    }
+    catch (error) {
+      stderr = error?.message || JSON.stringify(error) || 'Command failed'
+    }
 
     if (stderr) {
       return createStderr(stderr)

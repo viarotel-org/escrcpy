@@ -21,6 +21,7 @@ lerna-debug.log*
 # User
 node_modules
 pnpm-lock.yaml
+yarn.lock
 *.local
 dist
 dist-ssr

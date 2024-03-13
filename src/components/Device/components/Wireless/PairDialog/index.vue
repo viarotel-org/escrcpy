@@ -101,7 +101,6 @@ export default {
       try {
         await this.$refs.elForm.validate()
         const command = `pair ${this.formData.host}:${this.formData.port} ${this.formData.pair}`
-        // console.log(command)
         await this.$adb.shell(command)
         this.$emit('success')
         this.handleClose()

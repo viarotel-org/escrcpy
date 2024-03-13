@@ -55,12 +55,12 @@ export default {
         await mirroring
       }
       catch (error) {
-        console.warn(error)
+        console.error('mirror.args', args)
+        console.error('mirror.error', error)
+
         if (error.message) {
           this.$message.warning(error.message)
         }
-
-        this.handleReset()
       }
     },
     onStdout() {},

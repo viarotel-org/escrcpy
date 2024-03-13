@@ -78,8 +78,6 @@ export default {
             value: item,
           }
         }) || []
-
-      console.log('DisplaySelect.deviceOptions', this.deviceOptions)
     },
   },
 }

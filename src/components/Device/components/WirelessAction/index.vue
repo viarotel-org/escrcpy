@@ -62,8 +62,6 @@ export default {
 
         await sleep()
 
-        console.log('host:port', `${host}:${port}`)
-
         this.handleConnect({
           host,
           port,

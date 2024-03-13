@@ -13,10 +13,6 @@ const shell = async (command, { stdout, stderr } = {}) => {
   const ADB = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
 
-  console.log('scrcpy.shell.spawnPath', spawnPath)
-  console.log('scrcpy.shell.ADB', ADB)
-  console.log('scrcpy.shell.args', args)
-
   const scrcpyProcess = spawn(`"${spawnPath}"`, args, {
     env: { ...process.env, ADB },
     shell: true,
@@ -25,8 +21,6 @@ const shell = async (command, { stdout, stderr } = {}) => {
 
   scrcpyProcess.stdout.on('data', (data) => {
     const stringData = data.toString()
-
-    console.log('scrcpyProcess.stdout.data:', stringData)
 
     if (stdout) {
       stdout(stringData, scrcpyProcess)
@@ -68,10 +62,6 @@ const execShell = async (command) => {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
-  console.log('scrcpy.execShell.spawnPath', spawnPath)
-  console.log('scrcpy.execShell.ADB', ADB)
-  console.log('scrcpy.shell.command', command)
-
   const res = exec(`"${spawnPath}" ${command}`, {
     env: { ...process.env, ADB },
     shell: true,
@@ -83,7 +73,6 @@ const execShell = async (command) => {
 
 const getEncoders = async (serial) => {
   const res = await execShell(`--serial="${serial}" --list-encoders`)
-  // console.log('getEncoders.res', res)
   const stdout = res.stdout
 
   // 提取视频编码器列表
@@ -104,8 +93,6 @@ const getEncoders = async (serial) => {
     audio: audioEncoders,
     video: videoEncoders,
   }
-
-  console.log('getEncoders.value', value)
 
   return value
 }

@@ -15,19 +15,16 @@ export default (mainWindow) => {
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
   ipcMain.on('check-for-update', () => {
-    console.log('ipcMain:check-for-update')
     autoUpdater.checkForUpdates()
   })
 
   // 下载更新
   ipcMain.on('download-update', () => {
-    console.log('ipcMain:download-update')
     autoUpdater.downloadUpdate()
   })
 
   // 安装更新
   ipcMain.on('quit-and-install', () => {
-    console.log('ipcMain:quit-and-install')
     setImmediate(() => {
       app.isQuiting = true
       autoUpdater.quitAndInstall()
@@ -49,25 +46,21 @@ export default (mainWindow) => {
 
   // 检测到可以更新时
   autoUpdater.on('update-available', (ret) => {
-    console.log('update-available')
     mainWindow.webContents.send('update-available', ret)
   })
 
   // 检测到不需要更新时
   autoUpdater.on('update-not-available', (ret) => {
-    console.log('update-not-available')
     mainWindow.webContents.send('update-not-available', ret)
   })
 
   // 更新下载进度
   autoUpdater.on('download-progress', (ret) => {
-    console.log('download-progress')
     mainWindow.webContents.send('download-progress', ret)
   })
 
   // 当需要更新的内容下载完成后
   autoUpdater.on('update-downloaded', (ret) => {
-    console.log('update-downloaded')
     mainWindow.webContents.send('update-downloaded', ret)
   })
 }

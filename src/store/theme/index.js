@@ -70,7 +70,5 @@ systemTheme('change', async ({ isDark, value }) => {
     return
   }
 
-  console.log('systemTheme.change.isDark', isDark)
-
   themeStore.update(value)
 })

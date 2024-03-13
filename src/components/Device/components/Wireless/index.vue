@@ -98,15 +98,12 @@ export default {
       return this.handleConnect(...args)
     },
     onSelect({ host, port }) {
-      // console.log('onSelect.value', value)
       Object.assign(this.formData, {
         host,
         port,
       })
     },
     fetchSuggestions(value, callback) {
-      // console.log('fetchSuggestions.value', value)
-
       let results = []
 
       if (value) {

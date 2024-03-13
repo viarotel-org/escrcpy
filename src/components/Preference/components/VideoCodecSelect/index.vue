@@ -81,8 +81,6 @@ export default {
           value,
         }
       })
-
-      console.log('VideoCodecSelect.deviceOptions', this.deviceOptions)
     },
   },
 }

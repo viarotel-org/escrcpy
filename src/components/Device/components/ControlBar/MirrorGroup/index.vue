@@ -45,8 +45,6 @@ export default {
     async handleCommand(command) {
       await sleep(300)
 
-      console.log('handleCommand.command', command)
-
       if (command === 'close') {
         this.handleStop()
         this.loading = false
@@ -64,8 +62,6 @@ export default {
             )}-displayId-${displayId}`,
           args: this.scrcpyArgs(this.device.id),
         })
-
-        console.log('handleCommand.res', res)
 
         res.forEach((item) => {
           if (item.status === 'rejected') {

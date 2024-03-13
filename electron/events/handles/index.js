@@ -8,7 +8,6 @@ export default (mainWindow) => {
   ipcMain.handle(
     'show-open-dialog',
     async (_, { preset = '', ...options } = {}) => {
-      // console.log('options', options)
       const res = await dialog
         .showOpenDialog(options)
         .catch(e => console.warn(e))

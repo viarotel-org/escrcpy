@@ -5,10 +5,6 @@ const locale
   = window.appStore?.get('common.language')
   || window.electron?.process?.env?.LOCALE
 
-// const locale = 'en_US'
-
-// console.log('locale', locale)
-
 export const i18n = createI18n({
   allowComposition: false,
   locale,
@@ -17,6 +13,5 @@ export const i18n = createI18n({
   fallbackWarn: false,
   missingWarn: false,
 })
-// console.log('i18n', i18n)
 
 export const t = i18n.global.t

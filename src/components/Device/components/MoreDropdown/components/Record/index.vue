@@ -54,7 +54,8 @@ export default {
         this.onRecordSuccess(savePath)
       }
       catch (error) {
-        console.warn(error)
+        console.error('record.args', args)
+        console.error('record.error', error)
 
         if (error.message) {
           this.$message.warning(error.message)

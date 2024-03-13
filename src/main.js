@@ -44,5 +44,3 @@ app.mount('#app').$nextTick(() => {
   // Remove Preload scripts loading
   postMessage({ payload: 'removeLoading' }, '*')
 })
-
-console.log('electron', window.electron)

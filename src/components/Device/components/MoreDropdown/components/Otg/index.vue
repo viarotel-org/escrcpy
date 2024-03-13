@@ -49,13 +49,12 @@ export default {
         await mirroring
       }
       catch (error) {
-        console.warn(error)
+        console.error('otg.args', args)
+        console.error('otg.error', error)
 
         if (error.message) {
           this.$message.warning(error.message)
         }
-
-        this.handleReset()
       }
     },
     onStdout() {},

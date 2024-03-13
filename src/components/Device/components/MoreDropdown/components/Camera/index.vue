@@ -52,7 +52,8 @@ export default {
         await mirroring
       }
       catch (error) {
-        console.warn(error)
+        console.error('camera.args', args)
+        console.error('camera.error', error)
 
         if (error.message) {
           this.$message.warning(error.message)

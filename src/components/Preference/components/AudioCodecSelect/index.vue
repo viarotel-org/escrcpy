@@ -81,8 +81,6 @@ export default {
           value,
         }
       })
-
-      console.log('AudioCodecSelect.deviceOptions', this.deviceOptions)
     },
   },
 }

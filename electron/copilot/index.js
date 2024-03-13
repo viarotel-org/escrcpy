@@ -15,7 +15,6 @@ export default async (mainWindow) => {
 
   if (VITE_DEV_SERVER_URL) {
     app.get('/', (ctx) => {
-      console.log('ctx', ctx.get('wss'))
       return ctx.redirect(`${VITE_DEV_SERVER_URL}copilot/index.html`)
     })
   }
@@ -34,7 +33,6 @@ export default async (mainWindow) => {
       serveStatic({
         root: relative('./', `${process.env.DIST}/assets/`),
         rewriteRequestPath: (path) => {
-          console.log('path', path)
           return path.replace(/^\/assets/, '/')
         },
       }),

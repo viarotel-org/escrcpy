@@ -70,7 +70,6 @@ export default {
     onUpdateError() {
       this.$electron.ipcRenderer.on('update-error', async (_, ret) => {
         this.loading = false
-        console.log('onUpdateError.ret', ret)
         try {
           await this.$confirm(
             this.$t('about.update-error.message'),
@@ -91,13 +90,11 @@ export default {
     },
     onDownloadProgress() {
       this.$electron.ipcRenderer.on('download-progress', async (event, ret) => {
-        console.log('ret', ret)
         this.percent = ret.percent
       })
     },
     async onUpdateDownloaded() {
       this.$electron.ipcRenderer.on('update-downloaded', async (event, ret) => {
-        console.log('ret', ret)
         this.loading = false
         try {
           await this.$confirm(
@@ -120,7 +117,6 @@ export default {
       this.$electron.ipcRenderer.on('update-available', async (event, ret) => {
         this.loading = false
         try {
-          console.log('ret', ret)
           await this.$confirm(
             ret.releaseNotes,
             this.$t('about.update-available.title'),

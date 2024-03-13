@@ -140,8 +140,6 @@ export default {
     this.getDeviceData()
 
     this.unAdbWatch = await this.$adb.watch(async (type, ret) => {
-      console.log('adb.watch.ret', ret)
-
       if (ret && ret.id) {
         this.getDeviceData()
       }
@@ -220,8 +218,6 @@ export default {
             $recordLoading: false,
             $stopLoading: false,
           })) || []
-
-        console.log('getDeviceData.data', this.deviceList)
       }
       catch (error) {
         console.warn(error)

@@ -115,9 +115,6 @@ export default (mainWindow) => {
       checkboxLabel: await t('close.remember'),
     })
 
-    // console.log('response', response)
-    // console.log('checkboxChecked', checkboxChecked)
-
     if (checkboxChecked) {
       appStore.set('appCloseCode', response)
     }

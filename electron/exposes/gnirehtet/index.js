@@ -24,10 +24,6 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 
   const args = command.split(' ')
 
-  console.log('gnirehtet.shell.spawnPath', spawnPath)
-  console.log('gnirehtet.shell.adbPath', adbPath)
-  console.log('gnirehtet.shell.command', command)
-
   const gnirehtetProcess = spawn(`"${spawnPath}"`, args, {
     env: { ...process.env, ADB, GNIREHTET_APK },
     shell: true,
@@ -36,10 +32,6 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 
   gnirehtetProcess.stdout.on('data', (data) => {
     const stringData = data.toString()
-
-    if (debug) {
-      console.log(`${command}.gnirehtet.process.stdout.data:`, stringData)
-    }
 
     if (stdout) {
       stdout(stringData, gnirehtetProcess)
@@ -63,8 +55,6 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
 
   return new Promise((resolve, reject) => {
     gnirehtetProcess.on('close', (code) => {
-      console.log(`${command}.gnirehtet.process.close.code`, code)
-
       if (code === 0) {
         resolve()
       }
@@ -91,7 +81,6 @@ const tunnel = deviceId => shell(`tunnel "${deviceId}"`)
 
 const installed = async (deviceId) => {
   const res = await adbkit.isInstalled(deviceId, 'com.genymobile.gnirehtet')
-  console.log('gnirehtet.apk.installed', res)
   return res
 }
 
@@ -136,7 +125,6 @@ const run = async (deviceId) => {
   const isInstalled = installed(deviceId)
 
   if (gnirehtetFix || !isInstalled) {
-    console.log('Installing Gnirehtet Client...')
     await install(deviceId).catch((error) => {
       throw new Error(error?.message || 'Gnirehtet Install Client fail')
     })

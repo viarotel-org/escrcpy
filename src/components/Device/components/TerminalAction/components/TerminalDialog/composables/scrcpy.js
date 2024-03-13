@@ -16,7 +16,6 @@ export function useScrcpy({ vShell, history, loading } = {}) {
     let stderrText = ''
     $scrcpy.shell(command, {
       stdout(text) {
-        console.log('history', history)
         loading.value = false
 
         stdoutText += text

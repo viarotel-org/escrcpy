@@ -19,8 +19,6 @@ window.addEventListener('beforeunload', () => {
 })
 
 appStore.onDidChange('common.adbPath', async (value, oldValue) => {
-  console.log('onDidChange.common.adbPath', value)
-
   if (value === oldValue) {
     return false
   }
@@ -49,9 +47,6 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
   const spawnPath = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
 
-  console.log('adb.spawnShell.spawnPath', spawnPath)
-  console.log('adb.spawnShell.args', args)
-
   const spawnProcess = spawn(`"${spawnPath}"`, args, {
     env: { ...process.env },
     shell: true,
@@ -60,8 +55,6 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
 
   spawnProcess.stdout.on('data', (data) => {
     const stringData = data.toString()
-
-    console.log('spawnProcess.stdout.data:', stringData)
 
     if (stdout) {
       stdout(stringData, spawnProcess)
@@ -115,15 +108,14 @@ const disconnect = async (...params) => client.disconnect(...params)
 const getDeviceIP = async (id) => {
   try {
     const { stdout } = await shell(`-s ${id} shell ip -f inet addr show wlan0`)
-    // console.log('stdout', stdout)
     const reg = /inet ([0-9.]+)\/\d+/
     const match = stdout.match(reg)
     const value = match[1]
 
-    console.log('adbkit.getDeviceIP', value)
     return value
   }
   catch (error) {
+    console.warn('adbkit.getDeviceIP.error', error.message)
     return false
   }
 }
@@ -135,7 +127,6 @@ const screencap = async (deviceId, options = {}) => {
   try {
     const device = client.getDevice(deviceId)
     fileStream = await device.screencap()
-    console.log('fileStream', fileStream)
   }
   catch (error) {
     console.warn(error?.message || error)
@@ -185,8 +176,6 @@ const display = async (deviceId) => {
     console.warn(error?.message || error)
   }
 
-  console.log('display.deviceId.value', value)
-
   return value
 }
 
@@ -206,8 +195,6 @@ const push = async (
 
   return new Promise((resolve, reject) => {
     res.on('progress', (stats) => {
-      console.log('adb.push.progress', stats)
-
       progress?.(stats)
     })
 
@@ -248,13 +235,9 @@ const watch = async (callback) => {
 export default () => {
   const binPath = appStore.get('common.adbPath') || adbPath
 
-  console.log('adb.binPath', binPath)
-
   client = Adb.createClient({
     bin: binPath,
   })
-
-  console.log('client', client)
 
   return {
     shell,

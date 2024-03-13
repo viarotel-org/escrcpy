@@ -4,10 +4,6 @@ import { createProxy } from './index.js'
 
 const appStore = new Store()
 
-// appStore.onDidAnyChange((value) => {
-//   console.log('appStore.onDidAnyChange.value', value)
-// })
-
 // 如果没有数据则手动设置值，以保证配置文件生成成功
 if (isEqual(appStore.store, {})) {
   appStore.store = {}

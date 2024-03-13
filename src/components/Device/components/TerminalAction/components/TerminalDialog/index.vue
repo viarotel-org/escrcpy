@@ -85,9 +85,6 @@ export default {
     ])
 
     const onOpen = () => {
-      console.log('vShell.value', vShell.value)
-      console.log('history.value', history.value)
-
       renderShell.value = true
     }
 
@@ -114,12 +111,9 @@ export default {
   watch: {
     'vShell.signals': {
       handler(value) {
-        console.log('vShell.signals.value', value)
-
         value.off('SIGINT')
 
         value.on('SIGINT', () => {
-          console.log('vShell.signals.on.SIGINT')
           this.onCtrlC()
         })
       },
@@ -135,8 +129,6 @@ export default {
     },
 
     onDispatchedQueriesUpdate(value) {
-      console.log('onDispatchedQueriesUpdate.value', value)
-
       this.$appStore.set('terminal.dispatchedQueries', Array.from(value))
 
       this.dispatchedQueries = value

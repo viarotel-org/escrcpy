@@ -137,8 +137,6 @@ export const usePreferenceStore = defineStore({
     ) {
       const data = this.getData(scope)
 
-      console.log('getScrcpyArgs.data', data)
-
       if (!data) {
         return ''
       }
@@ -190,13 +188,10 @@ export const usePreferenceStore = defineStore({
 
       const value = valueList.join(' ')
 
-      console.log('getScrcpyArgs.value', value)
-
       return value
     },
     getModel(path) {
       const value = get(this.model, path)
-      // console.log('getModel.value', value)
 
       return value
     },

@@ -8,8 +8,6 @@ const levels = Object.keys(log.functions)
 
 const getFilePath = () => log.transports.file.getFile()?.path
 
-console.log('logPath', getFilePath())
-
 export default {
   ...createProxy(log, ['initialize', ...levels]),
   levels,

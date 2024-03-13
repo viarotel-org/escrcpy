@@ -27,8 +27,6 @@ export function getModelMap(data = model) {
     return obj
   }, {})
 
-  // console.log('getModelMap.value', value)
-
   return value
 }
 
@@ -41,8 +39,6 @@ export function getDefaultData(parentId) {
     }
     return obj
   }, {})
-
-  // console.log('getDefaultData.value', value)
 
   return value
 }
@@ -59,8 +55,6 @@ export const getStoreData = (scope) => {
 
     Object.assign(value, storeValue)
   })
-
-  // console.log('getStoreData.value', value)
 
   return value
 }
@@ -90,8 +84,6 @@ export function setStoreData(data, scope) {
     })
     return arr
   }, [])
-
-  // console.log('setStoreData.storeList', storeList)
 
   storeList.forEach((item) => {
     window.appStore.set(item.field, item.value)

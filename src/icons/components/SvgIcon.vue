@@ -31,7 +31,6 @@ export default {
     async getSvgComponent() {
       const module = await import(`../svg/${this.name}.svg?component`)
       this.SvgComponent = module.default.render()
-      // console.log('this.SvgComponent', this.SvgComponent)
     },
   },
   render() {

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.3](https://github.com/viarotel-org/escrcpy/compare/v1.17.2...v1.17.3) (2024-03-13)
+
+
+### Performance Improvements
+
+* ♻️ Remove console log ([6e25eb7](https://github.com/viarotel-org/escrcpy/commit/6e25eb7ad6888065fa35bee3cddf33a55cc9fb70))
+
 ## [1.17.2](https://github.com/viarotel-org/escrcpy/compare/v1.17.1...v1.17.2) (2024-03-10)
 
 

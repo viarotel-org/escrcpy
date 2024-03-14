@@ -269,6 +269,10 @@ Please refer to the detailed instructions under [Reasons why mouse and keyboard 
 1. Open Terminal and execute `sudo spctl --master-disable` to allow software from any source.
 2. Open Terminal and execute `sudo xattr -r -d com.apple.quarantine [AppPath]` to attempt fixing the damaged software package prompt.
 
+### Unable to locate the input point DiscardvirtualMemory on the dynamic link library Kernel32.dll.
+
+Only support Windows 10 and above versions.
+
 ## Getting Help
 
 > As this is an open source project run entirely by donations, support is limited and updates may not be on a fixed schedule.

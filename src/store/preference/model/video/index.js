@@ -3,6 +3,13 @@ export default {
   field: 'scrcpy',
 
   children: {
+    noVideo: {
+      label: 'preferences.video.disable-video.name',
+      field: '--no-video',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.video.disable-video.placeholder',
+    },
     videoSource: {
       hidden: true,
       label: 'preferences.video.video-source.name',

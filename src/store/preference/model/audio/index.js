@@ -3,6 +3,14 @@ export default {
   field: 'scrcpy',
 
   children: {
+    noAudio: {
+      label: 'preferences.audio.disable-audio.name',
+      field: '--no-audio',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.audio.disable-audio.placeholder',
+      tips: 'preferences.audio.disable-audio.tips',
+    },
     audioSource: {
       label: 'preferences.audio.audio-source.name',
       field: '--audio-source',

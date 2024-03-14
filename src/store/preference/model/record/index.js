@@ -41,20 +41,6 @@ export default {
       append: 's',
       span: 24,
     },
-    noVideo: {
-      label: 'preferences.record.disable-video.name',
-      field: '--no-video',
-      type: 'Switch',
-      value: undefined,
-      placeholder: 'preferences.record.disable-video.placeholder',
-    },
-    noAudio: {
-      label: 'preferences.record.disable-audio.name',
-      field: '--no-audio',
-      type: 'Switch',
-      value: undefined,
-      placeholder: 'preferences.record.disable-audio.placeholder',
-    },
     noVideoPlayback: {
       label: 'preferences.record.no-video-playback.name',
       field: '--no-video-playback',

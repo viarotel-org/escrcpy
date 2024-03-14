@@ -273,6 +273,12 @@ Please refer to the detailed instructions under [Reasons why mouse and keyboard 
 
 Only support `Windows 10` and above versions.
 
+### Audio capture exception causing mirroring failure.
+
+> This usually happens because your computer lacks audio output or you have a low Android version (Android 11+).
+
+Please try `disabling audio forwarding` feature through the `preferences settings` to resolve this issue.
+
 ## Getting Help
 
 > As this is an open source project run entirely by donations, support is limited and updates may not be on a fixed schedule.

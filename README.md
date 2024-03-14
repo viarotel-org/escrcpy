@@ -271,7 +271,7 @@ Please refer to the detailed instructions under [Reasons why mouse and keyboard 
 
 ### Unable to locate the input point DiscardvirtualMemory on the dynamic link library Kernel32.dll.
 
-Only support Windows 10 and above versions.
+Only support `Windows 10` and above versions.
 
 ## Getting Help
 

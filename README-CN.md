@@ -273,7 +273,7 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 
 ### 无法定位程序输入点 DiscardVirtualMemory 于动态链接库 KERNEL32.dll 上。
 
-仅支持 Windows 10 及更高版本。
+仅支持 `Windows 10` 及更高版本。
 
 ## 获得帮助
 

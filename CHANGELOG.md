@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.4](https://github.com/viarotel-org/escrcpy/compare/v1.17.3...v1.17.4) (2024-03-14)
+
+
+### Performance Improvements
+
+* ♻️ Options in the preference settings ([dc711cb](https://github.com/viarotel-org/escrcpy/commit/dc711cbb64ff12e542974c07a817ec46a2f15700))
+
 ## [1.17.3](https://github.com/viarotel-org/escrcpy/compare/v1.17.2...v1.17.3) (2024-03-13)
 
 

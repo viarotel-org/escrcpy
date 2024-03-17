@@ -20,7 +20,7 @@
   "close.remember": "是否记住选择？",
 
   "dependencies.lack.title": "注意事项",
-  "dependencies.lack.content": "此软件依赖于{name}。请确保正确安装了上述依赖项，或手动配置首选项中依赖项的位置",
+  "dependencies.lack.content": "此软件依赖于{name}。请确保正确安装了上述依赖项，或手动配置偏好设置中依赖项的位置",
 
   "device.list": "设备列表",
   "device.list.empty": "没有检测到设备",

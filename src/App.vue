@@ -67,14 +67,14 @@ export default {
 
       this.$alert(
         `<div>
-        该软件依赖与
-        <a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>
-        ，请确保已正确安装所述依赖项，或者在偏好设置中手动配置依赖项所在位置。
+          ${this.$t('dependencies.lack.content', {
+            name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
+          })}
         <div>`,
-        '注意事项',
+        this.$t('dependencies.lack.title'),
         {
           dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
+          confirmButtonText: this.$t('common.confirm'),
         },
       )
     },

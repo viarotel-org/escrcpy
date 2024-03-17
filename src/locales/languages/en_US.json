@@ -19,6 +19,9 @@
   "close.message": "Are you sure you want to quit?",
   "close.remember": "Remember this choice?",
 
+  "dependencies.lack.title": "Notice",
+  "dependencies.lack.content": "This software relies on {name}. Please ensure that the mentioned dependencies are correctly installed, or manually configure the location of the dependencies in the preferences.",
+
   "device.list": "Devices",
   "device.list.empty": "No devices detected",
   "device.id": "Device ID",

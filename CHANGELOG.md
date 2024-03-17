@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.5](https://github.com/viarotel-org/escrcpy/compare/v1.17.4...v1.17.5) (2024-03-17)
+
+
+### Performance Improvements
+
+* 🌐 Improve i8n ([4fe55a3](https://github.com/viarotel-org/escrcpy/commit/4fe55a3329f325cb254515f364867e107dfdb278))
+
 ## [1.17.4](https://github.com/viarotel-org/escrcpy/compare/v1.17.3...v1.17.4) (2024-03-14)
 
 

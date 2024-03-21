@@ -3,7 +3,7 @@
     v-if="!row.$wifi"
     type="primary"
     text
-    :disabled="row.$unauthorized || row.$loading || row.$recordLoading"
+    :disabled="row.$unauthorized"
     @click="handleWifi(row)"
   >
     <template #icon>

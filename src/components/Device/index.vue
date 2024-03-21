@@ -81,12 +81,15 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-slot="{ row }"
+          v-slot="{ row, $index }"
           :label="$t('device.control.name')"
           width="450"
           align="left"
         >
-          <MirrorAction v-bind="{ row, toggleRowExpansion, handleReset }" />
+          <MirrorAction
+            :ref="(value) => getMirrorActionRefs(value, $index)"
+            v-bind="{ row, toggleRowExpansion, handleReset }"
+          />
 
           <MoreDropdown v-bind="{ row, toggleRowExpansion, handleReset }" />
 
@@ -133,13 +136,18 @@ export default {
     return {
       loading: false,
       deviceList: [],
+      mirrorActionRefs: [],
     }
   },
-  computed: {},
   async created() {
     this.getDeviceData()
-
-    this.unAdbWatch = await this.$adb.watch(async (type, ret) => {
+    this.unAdbWatch = await this.$adb.watch(this.onAdbWatch)
+  },
+  beforeUnmount() {
+    this?.unAdbWatch?.()
+  },
+  methods: {
+    async onAdbWatch(type, ret) {
       if (ret && ret.id) {
         this.getDeviceData()
       }
@@ -150,12 +158,41 @@ export default {
           host: ret.$host,
         }
       }
-    })
-  },
-  beforeUnmount() {
-    this?.unAdbWatch?.()
-  },
-  methods: {
+
+      if (type === 'remove') {
+        this.mirrorActionRefs = this.mirrorActionRefs.filter(
+          item => item.row.id !== ret.id,
+        )
+      }
+    },
+    async getMirrorActionRefs(ref, index) {
+      await this.$nextTick()
+
+      if (!ref?.row?.id) {
+        return false
+      }
+
+      const someFlag = this.mirrorActionRefs.some(
+        item => item.row.id === ref.row.id,
+      )
+
+      if (someFlag) {
+        return false
+      }
+
+      this.mirrorActionRefs.push(ref)
+
+      const secondNum = index
+
+      await sleep(secondNum * 2000)
+
+      const autoMirror = this.$store.preference.data.autoMirror
+
+      if (autoMirror) {
+        ref.handleClick(ref.row)
+      }
+    },
+
     toggleRowExpansion(...args) {
       this.$refs.elTable.toggleRowExpansion(...args)
     },
@@ -208,16 +245,13 @@ export default {
 
     async getDeviceData({ resetResolve = false } = {}) {
       this.loading = true
+
       await sleep(500)
+
       try {
         const data = await this.$store.device.getList()
-        this.deviceList
-          = data?.map(item => ({
-            ...item,
-            $loading: false,
-            $recordLoading: false,
-            $stopLoading: false,
-          })) || []
+
+        this.deviceList = data
       }
       catch (error) {
         console.warn(error)

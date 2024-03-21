@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    async handleClick(row) {
+    async handleClick(row = this.row) {
       this.loading = true
 
       this.toggleRowExpansion(row, true)

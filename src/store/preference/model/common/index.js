@@ -107,6 +107,13 @@ export default {
       value: undefined,
       placeholder: 'preferences.common.auto-connect.placeholder',
     },
+    autoMirror: {
+      label: 'preferences.common.auto-mirror.name',
+      field: 'autoMirror',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.auto-mirror.placeholder',
+    },
     gnirehtetFix: {
       label: 'preferences.common.gnirehtet.fix.name',
       field: 'gnirehtetFix',

@@ -15,6 +15,7 @@
 ## Features
 
 - 🏃 Synchronous: Benefit from web technologies to synchronize with Scrcpy faster
+- 🤖 Automation: Enables automatic connection to historical devices and automatic execution of mirror.
 - 💡 Customizable: Support independent configuration for multiple devices and ability to add notes and import/export all configurations
 - 🎨 Theme: Supports light mode and dark mode, system-wide switching
 - 🔗 Gnirehtet: Integrated Gnirehtet's reverse tethering functionality
@@ -195,10 +196,11 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 14. Add more features to device interaction bar: file push, screen rotation, audio control etc ✅
 15. Support bulk connecting to historical devices ✅
 16. Support to use built-in terminals to execute custom commands ✅
-17. Add standalone clipboard sync feature 🚧
-18. Support GUI-based selective file downloads from devices 🚧
-19. Support grouping devices and bulk operations by group 🚧
-20. Add game enhancement features such as game keyboard mapping 🚧
+17. Supports automatic execution of mirror on devices. ✅
+18. Add file transmission assistant function 🚧
+19. Support GUI-based selective file downloads from devices 🚧
+20. Support grouping devices and bulk operations by group 🚧
+21. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ
 

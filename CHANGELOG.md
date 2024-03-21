@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.6](https://github.com/viarotel-org/escrcpy/compare/v1.17.5...v1.17.6) (2024-03-21)
+
+
+### Performance Improvements
+
+* ♻️ Supports automatic execution of mirrors on devices ([11e0884](https://github.com/viarotel-org/escrcpy/commit/11e0884c1128ec431f31f5025571eecbd3065a82))
+
 ## [1.17.5](https://github.com/viarotel-org/escrcpy/compare/v1.17.4...v1.17.5) (2024-03-17)
 
 

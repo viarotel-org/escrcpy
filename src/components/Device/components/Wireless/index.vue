@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center flex-none space-x-2">
     <el-autocomplete
+      ref="elAutocompleteRef"
       v-model="formData.host"
       placeholder="192.168.0.1"
       clearable
@@ -16,17 +17,25 @@
       <template #default="{ item }">
         <div
           v-if="item.batch"
-          text
-          type="primary"
           class="text-primary-500"
           @click.stop="handleBatch"
         >
           {{ item.batch }}
         </div>
 
-        <template v-else>
-          {{ item.host }}
-        </template>
+        <div v-else class="flex items-center">
+          <div class="flex-1 w-0">
+            {{ item.host }}
+          </div>
+          <div
+            class="flex-none leading-none"
+            @click.prevent.stop="handleRemove(item)"
+          >
+            <el-icon class="hover:text-primary-500 !active:text-primary-700">
+              <Close />
+            </el-icon>
+          </div>
+        </div>
       </template>
     </el-autocomplete>
 
@@ -59,6 +68,7 @@
 
 <script>
 import PairDialog from './PairDialog/index.vue'
+import { sleep } from '@/utils'
 
 export default {
   components: {
@@ -123,6 +133,19 @@ export default {
     },
     onPairSuccess() {
       this.handleConnect()
+    },
+    handleRemove(info) {
+      const index = this.wirelessList.findIndex(
+        item => info.host === item.host && item.port === info.port,
+      )
+
+      if (index === -1) {
+        return false
+      }
+
+      this.wirelessList.splice(index, 1)
+
+      this.$appStore.set('history.wireless', this.$toRaw(this.wirelessList))
     },
     async handleBatch() {
       if (this.loading) {

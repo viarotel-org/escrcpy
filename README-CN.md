@@ -309,8 +309,8 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 > 如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛
 
 <div style="display:flex;">
-  <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/79dcbc40246743e2b6870419e88e0392~tplv-k3u1fbpfcp-watermark.image?" alt="viarotel-wepay" style="width: 30%;">
-  <img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1e5e69b83dd746deade95afd4a6864ec~tplv-k3u1fbpfcp-watermark.image?" alt="viarotel-alipay" style="width: 30%;">
+  <img src="./screenshots/zh-cn/viarotel-wepay.jpg" alt="viarotel-wepay" style="width: 30%;">
+  <img src="./screenshots/zh-cn/viarotel-alipay.jpg" alt="viarotel-alipay" style="width: 30%;">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
     <img src="./screenshots/en-us/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
   </a>

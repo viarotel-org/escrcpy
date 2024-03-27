@@ -68,7 +68,6 @@
 
 <script>
 import PairDialog from './PairDialog/index.vue'
-import { sleep } from '@/utils'
 
 export default {
   components: {

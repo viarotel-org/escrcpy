@@ -42,7 +42,7 @@
       </el-autocomplete>
     </div>
 
-    <div class="text-gray-500 text-sm">
+    <div class="text-gray-500 text-sm flex-none">
       :
     </div>
 
@@ -60,6 +60,7 @@
       type="primary"
       :icon="loading ? '' : 'Connection'"
       :loading="loading"
+      class="flex-none"
       @click="handleConnect()"
     >
       {{ $t('device.wireless.connect.name') }}

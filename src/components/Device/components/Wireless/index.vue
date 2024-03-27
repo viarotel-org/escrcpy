@@ -1,43 +1,46 @@
 <template>
   <div class="flex items-center flex-none space-x-2">
-    <el-autocomplete
-      ref="elAutocompleteRef"
-      v-model="formData.host"
-      placeholder="192.168.0.1"
-      clearable
-      :fetch-suggestions="fetchSuggestions"
-      class="!w-86 flex-none"
-      value-key="host"
-      @select="onSelect"
-    >
-      <template #prepend>
-        {{ $t('device.wireless.name') }}
-      </template>
+    <div class="w-86 flex-none">
+      <el-autocomplete
+        v-if="!showAutocomplete"
+        ref="elAutocompleteRef"
+        v-model="formData.host"
+        placeholder="192.168.0.1"
+        clearable
+        :fetch-suggestions="fetchSuggestions"
+        class="!w-full"
+        value-key="host"
+        @select="onSelect"
+      >
+        <template #prepend>
+          {{ $t('device.wireless.name') }}
+        </template>
 
-      <template #default="{ item }">
-        <div
-          v-if="item.batch"
-          class="text-primary-500"
-          @click.stop="handleBatch"
-        >
-          {{ item.batch }}
-        </div>
-
-        <div v-else class="flex items-center">
-          <div class="flex-1 w-0">
-            {{ item.host }}
-          </div>
+        <template #default="{ item }">
           <div
-            class="flex-none leading-none"
-            @click.prevent.stop="handleRemove(item)"
+            v-if="item.batch"
+            class="text-primary-500"
+            @click.stop="handleBatch"
           >
-            <el-icon class="hover:text-primary-500 !active:text-primary-700">
-              <Close />
-            </el-icon>
+            {{ item.batch }}
           </div>
-        </div>
-      </template>
-    </el-autocomplete>
+
+          <div v-else class="flex items-center">
+            <div class="flex-1 w-0">
+              {{ item.host }}
+            </div>
+            <div
+              class="flex-none leading-none"
+              @click.prevent.stop="handleRemove(item)"
+            >
+              <el-icon class="hover:text-primary-500 !active:text-primary-700">
+                <Close />
+              </el-icon>
+            </div>
+          </div>
+        </template>
+      </el-autocomplete>
+    </div>
 
     <div class="text-gray-500 text-sm">
       :
@@ -93,6 +96,8 @@ export default {
         host: lastWireless.host,
         port: lastWireless.port,
       },
+
+      showAutocomplete: false,
     }
   },
   async created() {
@@ -145,7 +150,18 @@ export default {
       this.wirelessList.splice(index, 1)
 
       this.$appStore.set('history.wireless', this.$toRaw(this.wirelessList))
+
+      this.reRenderAutocomplete()
     },
+
+    async reRenderAutocomplete() {
+      this.showAutocomplete = true
+
+      await this.$nextTick()
+
+      this.showAutocomplete = false
+    },
+
     async handleBatch() {
       if (this.loading) {
         return false

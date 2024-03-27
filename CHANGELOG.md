@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.17.7](https://github.com/viarotel-org/escrcpy/compare/v1.17.6...v1.17.7) (2024-03-27)
+
+
+### Bug Fixes
+
+* ♻️ Remove the redundant imports ([a06708f](https://github.com/viarotel-org/escrcpy/commit/a06708ff19f31ea9231e620a5f780b8c714b0feb))
+
+
+### Performance Improvements
+
+* ♻️ Optimize delete history logic ([780e3b9](https://github.com/viarotel-org/escrcpy/commit/780e3b9abc199800b0cdb10c5d48d591cf91cf29))
+* ♻️ Support delete historical connection ([c82560f](https://github.com/viarotel-org/escrcpy/commit/c82560f205321653d51d74ea3e3b44e96c41a96f))
+* 💄 Wireless style optimization ([ba51fe3](https://github.com/viarotel-org/escrcpy/commit/ba51fe3db79c8beb81a237baf2454a0a5c1eb041))
+
 ## [1.17.6](https://github.com/viarotel-org/escrcpy/compare/v1.17.5...v1.17.6) (2024-03-21)
 
 

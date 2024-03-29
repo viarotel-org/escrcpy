@@ -30,7 +30,14 @@ export default {
       this.toggleRowExpansion(row, true)
 
       const args = `--otg ${this.$store.preference.getScrcpyArgs(row.id, {
-        excludes: ['--mouse=uhid', '--keyboard=uhid', '--turn-screen-off'],
+        excludes: [
+          '--mouse=uhid',
+          '--keyboard=uhid',
+          '--turn-screen-off',
+          '--power-off-on-close',
+          '--stay-awake',
+          '--show-touches',
+        ],
         isOtg: true,
       })}`
 

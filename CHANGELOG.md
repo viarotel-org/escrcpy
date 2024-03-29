@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.17.8](https://github.com/viarotel-org/escrcpy/compare/v1.17.7...v1.17.8) (2024-03-29)
+
+
+### Bug Fixes
+
+* 🐛 Camera configuration conflict ([07cc5f3](https://github.com/viarotel-org/escrcpy/commit/07cc5f3cc2140a0fa90ae1d72608cc2c468bb80e))
+* 🐛 OTG configuration conflict ([576d287](https://github.com/viarotel-org/escrcpy/commit/576d287cf4636564d526d2af6aa4e9c5aaa1f83b))
+* 🐛 OTG mode: could not turn screen off ([c5bed0e](https://github.com/viarotel-org/escrcpy/commit/c5bed0e895461c21e3588314b6e244074403610e))
+
 ## [1.17.7](https://github.com/viarotel-org/escrcpy/compare/v1.17.6...v1.17.7) (2024-03-27)
 
 

@@ -32,7 +32,15 @@ export default {
       const args = `--video-source=camera ${this.$store.preference.getScrcpyArgs(
         row.id,
         {
-          excludes: ['--video-source', '--mouse', '--keyboard'],
+          excludes: [
+            '--video-source',
+            '--mouse',
+            '--keyboard',
+            '--turn-screen-off',
+            '--power-off-on-close',
+            '--stay-awake',
+            '--show-touches',
+          ],
           isCamera: true,
         },
       )}`

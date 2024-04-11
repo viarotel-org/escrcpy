@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.2](https://github.com/viarotel-org/escrcpy/compare/v1.18.1...v1.18.2) (2024-04-11)
+
+
+### Bug Fixes
+
+* 🐛 zh_TW Language support ([885af3a](https://github.com/viarotel-org/escrcpy/commit/885af3aa1d238a18487727ca13a6bf739dca6934))
+
 ## [1.18.1](https://github.com/viarotel-org/escrcpy/compare/v1.18.0...v1.18.1) (2024-04-11)
 
 

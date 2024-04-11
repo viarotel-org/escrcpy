@@ -41,6 +41,10 @@ export default {
           value: 'zh_CN',
         },
         {
+          label: 'preferences.common.language.traditionalchinese',
+          value: 'zh_TW',
+        },
+        {
           label: 'preferences.common.language.english',
           value: 'en_US',
         },

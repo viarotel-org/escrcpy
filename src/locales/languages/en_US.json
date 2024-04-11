@@ -1,5 +1,6 @@
 {
   "zh_CN": "中文",
+  "zh_TW": "繁體中文",
   "en_US": "English",
 
   "common.cancel": "Cancel",
@@ -180,6 +181,7 @@
   "preferences.common.language.name": "Language",
   "preferences.common.language.placeholder": "Select language",
   "preferences.common.language.chinese": "中文",
+  "preferences.common.language.traditionalChinese": "繁體中文",
   "preferences.common.language.english": "English",
   "preferences.common.auto-connect.name": "Auto Connect",
   "preferences.common.auto-connect.placeholder": "When enabled, the software will attempt to automatically connect to historical devices upon startup.",

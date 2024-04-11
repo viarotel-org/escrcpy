@@ -1,5 +1,6 @@
 {
   "zh_CN": "中文",
+  "zh_TW": "繁體中文",
   "en_US": "English",
 
   "common.cancel": "取消",
@@ -180,6 +181,7 @@
   "preferences.common.language.name": "语言",
   "preferences.common.language.placeholder": "选择你需要的语言",
   "preferences.common.language.chinese": "中文",
+  "preferences.common.language.traditionalChinese": "繁體中文",
   "preferences.common.language.english": "English",
   "preferences.common.auto-connect.name": "自动连接设备",
   "preferences.common.auto-connect.placeholder": "启用后，该软件将在启动时尝试自动连接到历史无线设备",

@@ -5,7 +5,6 @@
 
 ### Features
 
-* Add a simple zh_TW Traditional Chinese locale ([a3c8462](https://github.com/viarotel-org/escrcpy/commit/a3c8462618964d6ebe6d5dc37d7ff78a80b05034))
 * Add a simple zh_TW Traditional Chinese locale ([cec6539](https://github.com/viarotel-org/escrcpy/commit/cec6539c1dde2551edf284d5e8aca1a101a583b6))
 
 ## [1.17.8](https://github.com/viarotel-org/escrcpy/compare/v1.17.7...v1.17.8) (2024-03-29)

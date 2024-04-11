@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.1](https://github.com/viarotel-org/escrcpy/compare/v1.18.0...v1.18.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* 🔧 Repair merge zh-TW failed ([81ff63f](https://github.com/viarotel-org/escrcpy/commit/81ff63f1fb2703616b6fb195e0bb510a597514a8))
+
+
+### Performance Improvements
+
+* 🔧 Update workflows ([343423e](https://github.com/viarotel-org/escrcpy/commit/343423ea77418561f156cfd9f9e3a6bc559b0baa))
+
 ## [1.18.0](https://github.com/viarotel-org/escrcpy/compare/v1.17.8...v1.18.0) (2024-04-11)
 
 

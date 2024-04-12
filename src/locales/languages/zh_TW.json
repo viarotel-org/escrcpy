@@ -1,8 +1,4 @@
 {
-  "zh_CN": "中文",
-  "zh_TW": "繁體中文",
-  "en_US": "English",
-
   "common.cancel": "取消",
   "common.confirm": "確認",
   "common.restart": "重新啟動",
@@ -13,6 +9,12 @@
   "common.success": "操作成功",
   "common.progress": "啟動中",
   "common.loading": "載入中",
+
+  "common.language.name": "語言",
+  "common.language.placeholder": "選擇你要的語言",
+  "common.language.zh_CN": "中文",
+  "common.language.zh_TW": "繁體中文",
+  "common.language.en_US": "English",
 
   "close.quit": "結束",
   "close.quit.cancel": "取消結束",
@@ -178,11 +180,6 @@
   "preferences.common.gnirehtet.fix.name": "gnirehtet 修復",
   "preferences.common.gnirehtet.fix.placeholder": "開啟將嘗試修復某些機型二次開啟反向網路分享功能失敗的問題",
   "preferences.common.gnirehtet.fix.tips": "注意：可能導致 gnirehtet 客戶端重複安裝",
-  "preferences.common.language.name": "語言",
-  "preferences.common.language.placeholder": "選擇你要的語言",
-  "preferences.common.language.chinese": "中文",
-  "preferences.common.language.traditionalChinese": "繁體中文",
-  "preferences.common.language.english": "English",
   "preferences.common.auto-connect.name": "自動連接裝置",
   "preferences.common.auto-connect.placeholder": "啟用後，該軟體將在啟動時嘗試自動連接到歷史無線裝置",
   "preferences.common.auto-mirror.name": "自動執行鏡像",

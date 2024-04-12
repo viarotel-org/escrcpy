@@ -1,8 +1,4 @@
 {
-  "zh_CN": "中文",
-  "zh_TW": "繁體中文",
-  "en_US": "English",
-
   "common.cancel": "Cancel",
   "common.confirm": "Confirm",
   "common.restart": "Restart",
@@ -13,6 +9,12 @@
   "common.success": "Operation successful",
   "common.progress": "Starting",
   "common.loading": "Loading",
+
+  "common.language.name": "Language",
+  "common.language.placeholder": "Select language",
+  "common.language.zh_CN": "中文",
+  "common.language.zh_TW": "繁體中文",
+  "common.language.en_US": "English",
 
   "close.quit": "Quit",
   "close.quit.cancel": "Cancel quit",
@@ -178,11 +180,6 @@
   "preferences.common.gnirehtet.fix.name": "Gnirehtet Fix",
   "preferences.common.gnirehtet.fix.placeholder": "Turning this on will try to fix reverse tethering issues on some devices",
   "preferences.common.gnirehtet.fix.tips": "Note: May cause duplicate gnirehtet client installations",
-  "preferences.common.language.name": "Language",
-  "preferences.common.language.placeholder": "Select language",
-  "preferences.common.language.chinese": "中文",
-  "preferences.common.language.traditionalChinese": "繁體中文",
-  "preferences.common.language.english": "English",
   "preferences.common.auto-connect.name": "Auto Connect",
   "preferences.common.auto-connect.placeholder": "When enabled, the software will attempt to automatically connect to historical devices upon startup.",
   "preferences.common.auto-mirror.name": "Auto Mirror",

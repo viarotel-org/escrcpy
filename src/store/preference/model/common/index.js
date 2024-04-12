@@ -30,22 +30,22 @@ export default {
       ],
     },
     language: {
-      label: 'preferences.common.language.name',
+      label: 'common.language.name',
       field: 'language',
       type: 'LanguageSelect',
       value: defaultLanguage,
-      placeholder: 'preferences.common.language.placeholder',
+      placeholder: 'common.language.placeholder',
       options: [
         {
-          label: 'preferences.common.language.chinese',
+          label: 'common.language.zh_CN',
           value: 'zh_CN',
         },
         {
-          label: 'preferences.common.language.traditionalChinese',
+          label: 'common.language.zh_TW',
           value: 'zh_TW',
         },
         {
-          label: 'preferences.common.language.english',
+          label: 'common.language.en_US',
           value: 'en_US',
         },
       ],

@@ -1,8 +1,4 @@
 {
-  "zh_CN": "中文",
-  "zh_TW": "繁體中文",
-  "en_US": "English",
-
   "common.cancel": "取消",
   "common.confirm": "确认",
   "common.restart": "重启",
@@ -13,6 +9,12 @@
   "common.success": "操作成功",
   "common.progress": "启动中",
   "common.loading": "加载中",
+
+  "common.language.name": "语言",
+  "common.language.placeholder": "选择你需要的语言",
+  "common.language.zh_CN": "中文",
+  "common.language.zh_TW": "繁體中文",
+  "common.language.en_US": "English",
 
   "close.quit": "退出",
   "close.quit.cancel": "取消退出",
@@ -178,11 +180,6 @@
   "preferences.common.gnirehtet.fix.name": "gnirehtet 修复",
   "preferences.common.gnirehtet.fix.placeholder": "开启将尝试修复某些机型二次开启反向供网功能失败的问题",
   "preferences.common.gnirehtet.fix.tips": "注意：可能导致 gnirehtet 客户端重复安装",
-  "preferences.common.language.name": "语言",
-  "preferences.common.language.placeholder": "选择你需要的语言",
-  "preferences.common.language.chinese": "中文",
-  "preferences.common.language.traditionalChinese": "繁體中文",
-  "preferences.common.language.english": "English",
   "preferences.common.auto-connect.name": "自动连接设备",
   "preferences.common.auto-connect.placeholder": "启用后，该软件将在启动时尝试自动连接到历史无线设备",
   "preferences.common.auto-mirror.name": "自动执行镜像",

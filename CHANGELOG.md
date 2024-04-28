@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.3](https://github.com/viarotel-org/escrcpy/compare/v1.18.2...v1.18.3) (2024-04-12)
+
+
+### Performance Improvements
+
+* ♻️ i18n configuration ([1ca0469](https://github.com/viarotel-org/escrcpy/commit/1ca0469ff2df2ecf66b07bb3a24040490cd8563b))
+
 ## [1.18.2](https://github.com/viarotel-org/escrcpy/compare/v1.18.1...v1.18.2) (2024-04-11)
 
 

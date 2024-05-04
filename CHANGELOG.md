@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.4](https://github.com/viarotel-org/escrcpy/compare/v1.18.3...v1.18.4) (2024-05-04)
+
+
+### Bug Fixes
+
+* 🐛 Wireless adb does not support Spaces ([1f27597](https://github.com/viarotel-org/escrcpy/commit/1f27597ff3c31fa88867199ca13e43ba20ffa088))
+
 ## [1.18.3](https://github.com/viarotel-org/escrcpy/compare/v1.18.2...v1.18.3) (2024-04-12)
 
 

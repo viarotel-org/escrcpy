@@ -78,6 +78,7 @@ export default {
         },
       )
     },
+
     isRender(item) {
       if (this.renderTab === item.prop) {
         return this.rendered
@@ -85,6 +86,7 @@ export default {
 
       return true
     },
+
     async reRender(other) {
       this.renderTab = other || this.activeTab
 
@@ -94,9 +96,11 @@ export default {
 
       this.renderTab = ''
     },
+
     reRenderPost() {
       this.renderSign = true
     },
+
     async onTabChange(prop) {
       if (!this.renderSign) {
         return false

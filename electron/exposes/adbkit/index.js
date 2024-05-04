@@ -37,7 +37,7 @@ appStore.onDidChange('common.adbPath', async (value, oldValue) => {
 
 const shell = async (command) => {
   const execPath = appStore.get('common.adbPath') || adbPath
-  return exec(`${execPath} ${command}`, {
+  return exec(`"${execPath}" ${command}`, {
     env: { ...process.env },
     shell: true,
   })

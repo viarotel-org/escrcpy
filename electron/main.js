@@ -1,4 +1,7 @@
 import path from 'node:path'
+import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
+
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import contextMenu from 'electron-context-menu'
@@ -15,6 +18,9 @@ import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 import events from './events/index.js'
 
 // import copilot from './copilot/index.js'
+
+const require = createRequire(import.meta.url)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 log.initialize({ preload: true })
 
@@ -77,9 +83,8 @@ function createWindow() {
     minHeight: 800,
     autoHideMenuBar: true,
     webPreferences: {
-      // nodeIntegration: true,
-      // contextIsolation: false,
-      preload: path.join(__dirname, './preload.js'),
+      preload: path.join(__dirname, 'preload.mjs'),
+      nodeIntegration: true,
       sandbox: false,
       spellcheck: false,
     },

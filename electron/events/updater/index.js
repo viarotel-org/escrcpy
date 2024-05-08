@@ -1,7 +1,9 @@
 import { app, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
-import { autoUpdater } from 'electron-updater'
+import electronUpdater from 'electron-updater'
 import { devPublishPath } from '@electron/configs/index.js'
+
+const { autoUpdater } = electronUpdater
 
 export default (mainWindow) => {
   if (is.dev) {

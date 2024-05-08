@@ -1,5 +1,5 @@
 import { shell } from 'electron'
-import log from 'electron-log/main'
+import log from 'electron-log/main.js'
 import { createProxy } from '@electron/helpers/index'
 
 log.transports.console.level = false

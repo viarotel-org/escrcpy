@@ -1,15 +1,11 @@
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './restyle.css'
 
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import * as ElementPlusIcons from '@element-plus/icons-vue'
 
 export default {
   install(app) {
-    app.use(ElementPlus, { size: 'default' })
-
-    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    for (const [key, component] of Object.entries(ElementPlusIcons)) {
       app.component(key, component)
     }
   },

@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { defineConfig, mergeConfig } from 'vite'
-import useElectron from 'vite-plugin-electron'
+import useElectron from 'vite-plugin-electron/simple'
 import useRenderer from 'vite-plugin-electron-renderer'
 import { notBundle } from 'vite-plugin-electron/plugin'
 
@@ -9,7 +9,9 @@ import useUnoCSS from 'unocss/vite'
 import useSvg from 'vite-svg-loader'
 import useI18n from '@intlify/unplugin-vue-i18n/vite'
 
-import postcssConfig from './postcss.config.mjs'
+import postcssConfig from './postcss.config.js'
+
+import useAutoImports from './src/plugins/auto.js'
 
 const merge = (config, { command = '' } = {}) =>
   mergeConfig(
@@ -26,15 +28,14 @@ const merge = (config, { command = '' } = {}) =>
     config,
   )
 
-// https://vitejs.dev/config/
-export default params =>
+export default args =>
   merge(
     defineConfig({
       build: {
         rollupOptions: {
           input: {
-            main: resolve(__dirname, 'index.html'),
-            copilot: resolve(__dirname, 'copilot/index.html'),
+            main: resolve('index.html'),
+            copilot: resolve('copilot/index.html'),
           },
         },
       },
@@ -50,22 +51,20 @@ export default params =>
         useSvg(),
         useVue(),
         useI18n({
-          include: [resolve(__dirname, './src/locales/languages/**')],
+          include: [resolve('src/locales/languages/**')],
         }),
-        useElectron([
-          {
+        useElectron({
+          main: {
             entry: 'electron/main.js',
-            vite: merge({}, params),
+            vite: merge({}, args),
           },
-          {
-            entry: 'electron/preload.js',
-            onstart(args) {
-              args.reload()
-            },
-            vite: merge({}, params),
+          preload: {
+            input: 'electron/preload.js',
+            vite: merge({}, args),
           },
-        ]),
+        }),
         useRenderer(),
+        ...useAutoImports(),
       ],
       css: {
         postcss: postcssConfig,

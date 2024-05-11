@@ -1,9 +1,11 @@
 import fs from 'fs-extra'
 import { dialog, ipcMain, shell } from 'electron'
 import themeHandles from './theme/index.js'
+import searchHandles from './search/index.js'
 
 export default (mainWindow) => {
   themeHandles(mainWindow)
+  searchHandles(mainWindow)
 
   ipcMain.handle(
     'show-open-dialog',

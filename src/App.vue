@@ -1,6 +1,14 @@
 <template>
-  <div class="absolute inset-0 px-4 pb-4 h-full overflow-hidden">
-    <el-tabs v-model="activeTab" class="el-tabs-flex" @tab-change="onTabChange">
+  <div class="absolute inset-0 px-4 pb-4 h-full">
+    <el-tabs
+      v-model="activeTab"
+      class="el-tabs-flex"
+      addable
+      @tab-change="onTabChange"
+    >
+      <template #add-icon>
+        <AppSearch />
+      </template>
       <el-tab-pane
         v-for="(item, index) of tabsModel"
         :key="index"
@@ -9,7 +17,7 @@
         lazy
       >
         <component
-          :is="item.prop"
+          :is="item.component"
           v-if="isRender(item)"
           :ref="item.prop"
           :re-render="reRender"
@@ -19,112 +27,116 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ElMessageBox } from 'element-plus'
+
 import Device from './components/Device/index.vue'
 import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
+import AppSearch from './components/AppSearch/index.vue'
 
-export default {
-  components: {
-    Device,
-    Preference,
-    About,
-  },
-  data() {
-    return {
-      tabsModel: [
-        {
-          label: 'device.list',
-          prop: 'Device',
-        },
-        {
-          label: 'preferences.name',
-          prop: 'Preference',
-        },
-        {
-          label: 'about.name',
-          prop: 'About',
-        },
-      ],
-      activeTab: 'Device',
-      renderTab: '',
-      rendered: true,
-      renderSign: false,
-    }
-  },
-  created() {
-    this.$store.theme.init()
-    this.$store.preference.init()
-    this.showTips()
-  },
-  methods: {
-    async showTips() {
-      const { scrcpyPath } = this.$electron?.configs || {}
+import { useThemeStore } from '@/store/theme/index.js'
+import { usePreferenceStore } from '@/store/preference/index.js'
 
-      if (scrcpyPath) {
-        return false
-      }
+const tabsModel = ref([
+  {
+    label: 'device.list',
+    prop: 'Device',
+    component: markRaw(Device),
+  },
+  {
+    label: 'preferences.name',
+    prop: 'Preference',
+    component: markRaw(Preference),
+  },
+  {
+    label: 'about.name',
+    prop: 'About',
+    component: markRaw(About),
+  },
+])
 
-      this.$alert(
-        `<div>
-          ${this.$t('dependencies.lack.content', {
+const activeTab = ref('Device')
+const renderTab = ref('')
+const rendered = ref(true)
+const renderSign = ref(false)
+
+const themeStore = useThemeStore()
+const preferenceStore = usePreferenceStore()
+
+themeStore.init()
+preferenceStore.init()
+
+showTips()
+
+async function showTips() {
+  const { scrcpyPath } = window.electron?.configs || {}
+
+  if (scrcpyPath) {
+    return false
+  }
+
+  ElMessageBox.alert(
+    `<div>
+          ${window.t('dependencies.lack.content', {
             name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
           })}
         <div>`,
-        this.$t('dependencies.lack.title'),
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: this.$t('common.confirm'),
-        },
-      )
+    window.t('dependencies.lack.title'),
+    {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: window.t('common.confirm'),
     },
-
-    isRender(item) {
-      if (this.renderTab === item.prop) {
-        return this.rendered
-      }
-
-      return true
-    },
-
-    async reRender(other) {
-      this.renderTab = other || this.activeTab
-
-      this.rendered = false
-      await this.$nextTick()
-      this.rendered = true
-
-      this.renderTab = ''
-    },
-
-    reRenderPost() {
-      this.renderSign = true
-    },
-
-    async onTabChange(prop) {
-      if (!this.renderSign) {
-        return false
-      }
-
-      switch (prop) {
-        case 'Device':
-          this.reRender()
-          break
-        case 'Preference':
-          this.reRender()
-          break
-      }
-
-      this.renderSign = false
-    },
-  },
+  )
 }
+
+function isRender(item) {
+  if (renderTab.value === item.prop) {
+    return rendered.value
+  }
+
+  return true
+}
+
+async function reRender(other) {
+  renderTab.value = other || activeTab.value
+
+  rendered.value = false
+  await nextTick()
+  rendered.value = true
+
+  renderTab.value = ''
+}
+
+function reRenderPost() {
+  renderSign.value = true
+}
+
+async function onTabChange(prop) {
+  if (!renderSign.value) {
+    return false
+  }
+
+  if (['Device', 'Preference'].includes(prop)) {
+    reRender()
+  }
+
+  renderSign.value = false
+}
+
+defineExpose({
+  reRenderPost,
+  reRender,
+})
 </script>
 
 <style lang="postcss" scoped>
 :deep() {
   .el-tabs__header {
     @apply !mb-3;
+  }
+  .el-tabs__new-tab {
+    @apply !absolute !inset-y-0 !right-0 !border-none;
   }
 }
 </style>

@@ -9,6 +9,7 @@
   "common.success": "操作成功",
   "common.progress": "启动中",
   "common.loading": "加载中",
+  "common.search": "搜索",
 
   "common.language.name": "语言",
   "common.language.placeholder": "选择你需要的语言",

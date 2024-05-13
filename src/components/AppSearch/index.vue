@@ -1,31 +1,35 @@
 <template>
-  <div class="absolute -bottom-1 right-0 z-10">
+  <div class="absolute -bottom-[5px] right-0 z-10">
     <el-input
       ref="elInputRef"
       v-model="keyword"
       prefix-icon="Search"
-      placeholder="搜索"
+      :placeholder="$t('common.search')"
       clearable
       class="transition-all overflow-hidden"
-      :class="activated || keyword ? '!w-96' : '!w-24'"
+      :class="activated || keyword ? '!w-96' : '!w-26'"
       @focus="onFocus"
       @blur="onBlur"
-      @input="onInput"
+      @change="onChange"
       @clear="onClear"
     >
       <template v-if="keyword" #append>
-        <div
-          class="flex flex-col size-full absolute inset-0 justify-center items-center"
-        >
-          <div class="flex-1 h-0 flex items-end">
+        <div class="flex flex-col size-full absolute inset-0 justify-center">
+          <div
+            class="flex-1 h-0 flex items-end justify-center apply-search-button"
+            @click="handlePrev"
+          >
             <el-icon size="12">
               <ElIconArrowUpBold />
             </el-icon>
           </div>
 
-          <div class="h-px w-full border-[0.5px] border-gray-200"></div>
+          <div class="h-px w-full bg-gray-200 dark:bg-gray-600"></div>
 
-          <div class="flex-1 h-0 flex items-start">
+          <div
+            class="flex-1 h-0 flex items-start justify-center apply-search-button"
+            @click="handleNext"
+          >
             <el-icon size="12">
               <ElIconArrowDownBold />
             </el-icon>
@@ -55,20 +59,35 @@ function onBlur() {
 }
 
 function onClear() {
-  window.electron.ipcRenderer.invoke('stop-find-in-page', 'clearSelection')
+  window.electron.ipcRenderer.invoke('findInPageStop')
 }
 
-function onInput(value) {
+async function onChange(value) {
   if (!value) {
     onClear()
     return false
   }
 
-  window.electron.ipcRenderer.invoke('find-in-page', {
+  window.electron.ipcRenderer.invoke('findInPageStart', {
     text: value,
-    findNext: true,
   })
 }
+
+function handlePrev() {
+  window.electron.ipcRenderer.invoke('findInPagePrev')
+}
+
+function handleNext() {
+  window.electron.ipcRenderer.invoke('findInPageNext')
+}
+
+window.electron.ipcRenderer.on('focus-on-search', (event, ret) => {
+  handleFocus()
+})
 </script>
 
-<style></style>
+<style lang="postcss">
+.apply-search-button {
+  @apply hover:bg-gray-200 dark:hover:bg-gray-700 !active:bg-gray-300 !dark:active:bg-gray-600 !active:text-primary-500;
+}
+</style>

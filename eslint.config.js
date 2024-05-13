@@ -45,6 +45,7 @@ export default antfu(
       'no-restricted-syntax': 'off',
       'no-new': 'off',
       'prefer-promise-reject-errors': 'off',
+      'no-unused-expressions': 'off',
 
       'vue/html-self-closing': 'off',
       'vue/block-order': 'off',

@@ -3,9 +3,9 @@
     <el-tabs
       v-model="activeTab"
       class="el-tabs-flex"
-      addable
       @tab-change="onTabChange"
     >
+      <!-- addable -->
       <template #add-icon>
         <AppSearch />
       </template>

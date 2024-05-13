@@ -9,6 +9,7 @@
   "common.success": "Operation successful",
   "common.progress": "Starting",
   "common.loading": "Loading",
+  "common.search": "Search",
 
   "common.language.name": "Language",
   "common.language.placeholder": "Select language",

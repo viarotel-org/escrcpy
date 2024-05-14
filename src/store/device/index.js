@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 
-import { t } from '@/locales/index.js'
-import { isIPWithPort, replaceIP } from '@/utils/index.js'
+import { t } from '#/locales/index.js'
+import { isIPWithPort, replaceIP } from '#/utils/index.js'
 
 const $appStore = window.appStore
 

@@ -1,10 +1,11 @@
 import { defineConfig, presetWind } from 'unocss'
 import transformerDirectives from '@unocss/transformer-directives'
 import { presetShades } from '@viarotel-org/unocss-preset-shades'
+import { primaryColor } from './src/configs/index.js'
 
 const presetMain = presetWind()
 
-const presets = [presetMain, presetShades('#028d71')]
+const presets = [presetMain, presetShades(primaryColor)]
 
 export default defineConfig({
   // @ts-expect-error

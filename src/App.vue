@@ -3,9 +3,9 @@
     <el-tabs
       v-model="activeTab"
       class="el-tabs-flex"
+      addable
       @tab-change="onTabChange"
     >
-      <!-- addable -->
       <template #add-icon>
         <AppSearch />
       </template>
@@ -35,8 +35,8 @@ import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
 import AppSearch from './components/AppSearch/index.vue'
 
-import { useThemeStore } from '@/store/theme/index.js'
-import { usePreferenceStore } from '@/store/preference/index.js'
+import { useThemeStore } from '#/store/theme/index.js'
+import { usePreferenceStore } from '#/store/preference/index.js'
 
 const tabsModel = ref([
   {
@@ -57,6 +57,8 @@ const tabsModel = ref([
 ])
 
 const activeTab = ref('Device')
+provide('activeTab', activeTab)
+
 const renderTab = ref('')
 const rendered = ref(true)
 const renderSign = ref(false)
@@ -78,10 +80,10 @@ async function showTips() {
 
   ElMessageBox.alert(
     `<div>
-          ${window.t('dependencies.lack.content', {
-            name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
-          })}
-        <div>`,
+      ${window.t('dependencies.lack.content', {
+        name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
+      })}
+    <div>`,
     window.t('dependencies.lack.title'),
     {
       dangerouslyUseHTMLString: true,
@@ -137,6 +139,10 @@ defineExpose({
   }
   .el-tabs__new-tab {
     @apply !absolute !inset-y-0 !right-0 !border-none;
+  }
+
+  .el-tabs__nav-wrap:after {
+    @apply !h-px;
   }
 }
 </style>

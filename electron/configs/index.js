@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 
-import { buildResolve, extraResolve } from '@electron/helpers/index.js'
+import { buildResolve, extraResolve } from '#electron/helpers/index.js'
 
 export { adbPath } from './android-platform-tools/index.js'
 

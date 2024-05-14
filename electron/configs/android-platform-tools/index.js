@@ -1,4 +1,4 @@
-import { extraResolve } from '@electron/helpers/index.js'
+import { extraResolve } from '#electron/helpers/index.js'
 
 export const getAdbPath = () => {
   switch (process.platform) {

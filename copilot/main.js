@@ -2,14 +2,14 @@ import { createApp, toRaw } from 'vue'
 import App from './App.vue'
 import { mockAPI } from './utils/index.js'
 import ws from './utils/ws.js'
-import { i18n, t } from '@/locales/index.js'
-import plugins from '@/plugins/index.js'
-import icons from '@/icons/index.js'
+import { i18n, t } from '#/locales/index.js'
+import plugins from '#/plugins/index.js'
+import icons from '#/icons/index.js'
 
-import { replaceIP, restoreIP } from '@/utils/index.js'
+import { replaceIP, restoreIP } from '#/utils/index.js'
 
 import 'virtual:uno.css'
-import '@/styles/index.js'
+import '#/styles/index.js'
 
 const app = createApp(App)
 

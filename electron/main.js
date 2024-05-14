@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { BrowserWindow, app, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import contextMenu from 'electron-context-menu'
+import remote from '@electron/remote/main'
 
 // process.js 必须位于非依赖项的顶部
 import './helpers/process.js'
@@ -90,6 +91,9 @@ function createWindow() {
     },
     backgroundColor: 'white',
   })
+
+  remote.enable(mainWindow.webContents)
+  remote.initialize()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

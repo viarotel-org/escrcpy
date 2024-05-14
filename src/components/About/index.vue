@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full -mt-8">
     <a class="block" :href="escrcpyURL" target="_blank">
-      <img src="@electron/resources/build/logo.png" class="h-48" alt="" />
+      <img src="#electron/resources/build/logo.png" class="h-48" alt="" />
     </a>
 
     <div class="pt-4 text-xl text-center italic text-gray-700 dark:text-white">

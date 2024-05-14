@@ -11,7 +11,7 @@ import {
   setStoreData,
 } from './helpers/index.js'
 
-import { replaceIP, restoreIP } from '@/utils/index.js'
+import { replaceIP, restoreIP } from '#/utils/index.js'
 
 const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
 

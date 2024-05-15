@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { useThemeStore } from '$/store'
+import { useThemeStore } from '$/store/theme/index.js'
 
 const themeStore = useThemeStore()
 
@@ -32,6 +32,7 @@ window.electron.ipcRenderer.on('focus-on-search', (event, ret) => {
 function openPageModal() {
   window.findInPageModal.open({ isDark: themeStore.isDark })
 }
+
 function closePageModal() {
   window.findInPageModal.close()
 }

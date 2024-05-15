@@ -16,9 +16,12 @@ export default () => {
   }
 
   function close() {
+    remote.getCurrentWebContents().stopFindInPage('clearSelection')
+
     if (!findInPage) {
       return false
     }
+
     return findInPage.closeFindWindow()
   }
 
@@ -61,6 +64,8 @@ export default () => {
           }
         : {}),
     })
+
+    console.log('findInPage', findInPage)
 
     return findInPage
   }

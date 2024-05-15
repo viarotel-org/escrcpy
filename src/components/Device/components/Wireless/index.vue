@@ -170,6 +170,10 @@ export default {
 
       const totalCount = this.wirelessList.length
 
+      if (!totalCount) {
+        return false
+      }
+
       let failCount = 0
 
       const promises = []

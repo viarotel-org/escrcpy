@@ -1,6 +1,6 @@
 import appStore from './store.js'
 import { createProxy } from './index.js'
-import log from '#electron/helpers/log.js'
+import log from '$electron/helpers/log.js'
 
 const debug = appStore.get('common.debug') || false
 

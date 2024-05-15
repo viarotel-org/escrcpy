@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { sleep } from '#/utils'
+import { sleep } from '$/utils'
 
 export default {
   props: {

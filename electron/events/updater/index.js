@@ -1,7 +1,7 @@
 import { app, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import electronUpdater from 'electron-updater'
-import { devPublishPath } from '#electron/configs/index.js'
+import { devPublishPath } from '$electron/configs/index.js'
 
 const { autoUpdater } = electronUpdater
 

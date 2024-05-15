@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import logoURL from '#electron/resources/build/logo.png'
-import userURL from '#/assets/user.png'
-import mobileURL from '#/assets/mobile.png'
-import computerURL from '#/assets/computer.png'
+import logoURL from '$electron/resources/build/logo.png'
+import userURL from '$/assets/user.png'
+import mobileURL from '$/assets/mobile.png'
+import computerURL from '$/assets/computer.png'
 
 export default {
   props: {

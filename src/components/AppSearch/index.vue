@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { useThemeStore } from '#/store'
+import { useThemeStore } from '$/store'
 
 const themeStore = useThemeStore()
 

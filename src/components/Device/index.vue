@@ -120,7 +120,7 @@ import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
 
-import { isIPWithPort, sleep } from '#/utils/index.js'
+import { isIPWithPort, sleep } from '$/utils/index.js'
 
 export default {
   components: {

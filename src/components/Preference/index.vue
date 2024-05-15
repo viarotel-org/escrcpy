@@ -207,8 +207,8 @@ import AudioCodecSelect from './components/AudioCodecSelect/index.vue'
 import DisplaySelect from './components/DisplaySelect/index.vue'
 import KeyboardInjectSelect from './components/KeyboardInjectSelect/index.vue'
 
-import { usePreferenceStore } from '#/store/index.js'
-import LoadingIcon from '#/components/Device/components/LoadingIcon/index.vue'
+import { usePreferenceStore } from '$/store/index.js'
+import LoadingIcon from '$/components/Device/components/LoadingIcon/index.vue'
 
 export default {
   components: {

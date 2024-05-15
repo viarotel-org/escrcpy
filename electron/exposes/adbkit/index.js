@@ -5,8 +5,8 @@ import fs from 'node:fs'
 import dayjs from 'dayjs'
 import { Adb } from '@devicefarmer/adbkit'
 import { uniq } from 'lodash-es'
-import appStore from '#electron/helpers/store.js'
-import { adbPath } from '#electron/configs/index.js'
+import appStore from '$electron/helpers/store.js'
+import { adbPath } from '$electron/configs/index.js'
 
 const exec = util.promisify(_exec)
 

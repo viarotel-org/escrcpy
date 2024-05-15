@@ -18,9 +18,9 @@ const merge = (config, { command = '' } = {}) =>
     {
       resolve: {
         alias: {
-          '#root': resolve(),
-          '#electron': resolve('electron'),
-          '#renderer': resolve('src'),
+          $root: resolve(),
+          $electron: resolve('electron'),
+          $renderer: resolve('src'),
         },
       },
       plugins: [...(command === 'serve' ? [notBundle()] : [])],
@@ -41,9 +41,9 @@ export default args =>
       },
       resolve: {
         alias: {
-          '#': resolve('src'),
-          '#copilot': resolve('copilot'),
-          '#electron': resolve('electron'),
+          $: resolve('src'),
+          $copilot: resolve('copilot'),
+          $electron: resolve('electron'),
         },
       },
       plugins: [

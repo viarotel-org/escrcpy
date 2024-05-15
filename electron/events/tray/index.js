@@ -1,7 +1,7 @@
 import { Menu, Tray, app, dialog } from 'electron'
-import { trayPath } from '#electron/configs/index.js'
-import appStore from '#electron/helpers/store.js'
-import { executeI18n } from '#electron/helpers/index.js'
+import { trayPath } from '$electron/configs/index.js'
+import appStore from '$electron/helpers/store.js'
+import { executeI18n } from '$electron/helpers/index.js'
 
 export default (mainWindow) => {
   const t = value => executeI18n(mainWindow, value)

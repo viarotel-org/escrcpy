@@ -1,4 +1,4 @@
-import '#/utils/console.js'
+import '$/utils/console.js'
 
 import { createApp, toRaw } from 'vue'
 import App from './App.vue'
@@ -10,7 +10,7 @@ import icons from './icons/index.js'
 
 import { i18n, t } from './locales/index.js'
 
-import { replaceIP, restoreIP } from '#/utils/index.js'
+import { replaceIP, restoreIP } from '$/utils/index.js'
 
 import 'virtual:uno.css'
 import './styles/index.js'

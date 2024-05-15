@@ -1,28 +1,32 @@
 import remote from '@electron/remote'
 import { FindInPage } from 'electron-find-in-page'
-import { primaryColor } from '#renderer/configs/index.js'
+import { primaryColor } from '$renderer/configs/index.js'
 
 export default () => {
   const theme = {
     isDark: false,
   }
 
-  let findInPage = create()
+  let findInPage = null
 
-  async function open({ isDark = false } = {}) {
-    if (theme.isDark !== isDark) {
-      theme.isDark = isDark
-      await update()
-    }
+  async function open({ ...args } = {}) {
+    await create(args)
 
     return findInPage.openFindWindow()
   }
 
   function close() {
+    if (!findInPage) {
+      return false
+    }
     return findInPage.closeFindWindow()
   }
 
-  async function update() {
+  async function update({ isDark = false, ...args } = {}) {
+    if (isDark === theme.isDark) {
+      return findInPage
+    }
+
     try {
       await findInPage.destroy()
     }
@@ -30,11 +34,20 @@ export default () => {
       console.warn('error', error.message)
     }
 
-    findInPage = create()
+    findInPage = null
+
+    return create({ ...args, isDark })
   }
 
-  function create() {
-    return new FindInPage(remote.getCurrentWebContents(), {
+  async function create({ ...args } = {}) {
+    if (findInPage) {
+      return update(args)
+    }
+
+    theme.isDark = args.isDark
+
+    findInPage = new FindInPage(remote.getCurrentWebContents(), {
+      ...args,
       preload: true,
       inputFocusColor: primaryColor,
       ...(theme.isDark
@@ -48,6 +61,8 @@ export default () => {
           }
         : {}),
     })
+
+    return findInPage
   }
 
   return {

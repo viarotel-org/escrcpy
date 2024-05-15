@@ -35,8 +35,8 @@ import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
 import AppSearch from './components/AppSearch/index.vue'
 
-import { useThemeStore } from '#/store/theme/index.js'
-import { usePreferenceStore } from '#/store/preference/index.js'
+import { useThemeStore } from '$/store/theme/index.js'
+import { usePreferenceStore } from '$/store/preference/index.js'
 
 const tabsModel = ref([
   {

@@ -2,7 +2,7 @@ import path from 'node:path'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 
-import { BrowserWindow, app, shell } from 'electron'
+import { BrowserWindow, app, nativeTheme, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import contextMenu from 'electron-context-menu'
 import remote from '@electron/remote/main'
@@ -89,7 +89,7 @@ function createWindow() {
       sandbox: false,
       spellcheck: false,
     },
-    backgroundColor: 'white',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? 'black' : 'white',
   })
 
   remote.enable(mainWindow.webContents)

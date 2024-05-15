@@ -4,7 +4,7 @@
       class=""
       circle
       size="small"
-      :title="$t('common.search')"
+      :title="`${$t('common.search')}（Command/Ctrl + F）`"
       @click="openSearchModal"
     >
       <el-icon size="12">

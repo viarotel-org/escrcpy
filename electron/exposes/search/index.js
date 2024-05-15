@@ -56,7 +56,7 @@ export default () => {
       ...(theme.isDark
         ? {
             boxShadowColor: '#4C4D4F',
-            boxBgColor: '#262727',
+            boxBgColor: '#262626',
             inputColor: '#CFD3DC',
             inputBgColor: '#141414',
             textColor: '#CFD3DC',
@@ -64,8 +64,6 @@ export default () => {
           }
         : {}),
     })
-
-    console.log('findInPage', findInPage)
 
     return findInPage
   }

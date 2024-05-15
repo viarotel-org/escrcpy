@@ -5,7 +5,7 @@
       circle
       size="small"
       :title="$t('common.search')"
-      @click="openPageModal"
+      @click="openSearchModal"
     >
       <el-icon size="12">
         <ElIconSearch />
@@ -22,18 +22,18 @@ const themeStore = useThemeStore()
 const activeTab = inject('activeTab')
 
 watch([() => themeStore.value, () => activeTab.value], () => {
-  closePageModal()
+  closeSearchModal()
 })
 
 window.electron.ipcRenderer.on('focus-on-search', (event, ret) => {
-  openPageModal()
+  openSearchModal()
 })
 
-function openPageModal() {
+function openSearchModal() {
   window.findInPageModal.open({ isDark: themeStore.isDark })
 }
 
-function closePageModal() {
+function closeSearchModal() {
   window.findInPageModal.close()
 }
 </script>

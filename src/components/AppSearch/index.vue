@@ -4,7 +4,7 @@
       class=""
       circle
       size="small"
-      :title="`${$t('common.search')}（Command/Ctrl + F）`"
+      :title="`${$t('common.search')}（${shortcutTip}）`"
       @click="openSearchModal"
     >
       <el-icon size="12">
@@ -20,6 +20,10 @@ import { useThemeStore } from '$/store/theme/index.js'
 const themeStore = useThemeStore()
 
 const activeTab = inject('activeTab')
+
+const shortcutTip = `${
+  window.electron.process.platform === 'darwin' ? 'Command' : 'Ctrl'
+} + F`
 
 watch([() => themeStore.value, () => activeTab.value], () => {
   closeSearchModal()

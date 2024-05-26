@@ -36,6 +36,7 @@
     "@unocss/transformer-directives": "^0.59.4",
     "@viarotel-org/unocss-preset-shades": "^0.8.2",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vueuse/core": "^10.9.0",
     "dayjs": "^1.11.11",
     "electron": "^30.0.3",
     "electron-builder": "^24.13.3",

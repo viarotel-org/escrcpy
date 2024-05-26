@@ -15,22 +15,18 @@
 </template>
 
 <script setup>
+import { useMagicKeys, whenever } from '@vueuse/core'
+
 import { useThemeStore } from '$/store/theme/index.js'
 
 const themeStore = useThemeStore()
 
 const activeTab = inject('activeTab')
 
-const shortcutTip = `${
-  window.electron.process.platform === 'darwin' ? 'Command' : 'Ctrl'
-} + F`
+const shortcutTip = 'Ctrl + F'
 
 watch([() => themeStore.value, () => activeTab.value], () => {
   closeSearchModal()
-})
-
-window.electron.ipcRenderer.on('focus-on-search', (event, ret) => {
-  openSearchModal()
 })
 
 function openSearchModal() {
@@ -40,6 +36,12 @@ function openSearchModal() {
 function closeSearchModal() {
   window.findInPageModal.close()
 }
+
+const { ctrl_f } = useMagicKeys()
+
+whenever(ctrl_f, () => {
+  openSearchModal()
+})
 </script>
 
 <style lang="postcss"></style>

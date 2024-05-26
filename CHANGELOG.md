@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.19.0](https://github.com/viarotel-org/escrcpy/compare/v1.18.4...v1.19.0) (2024-05-15)
+
+
+### Features
+
+* 🚀 Add page search function ([6dd8244](https://github.com/viarotel-org/escrcpy/commit/6dd8244ed58b8bb4cde17c9fe991ad5704e55057))
+* 🚀 Update dependencies to support ESM ([9f1696f](https://github.com/viarotel-org/escrcpy/commit/9f1696f289bbc8f833e9a6494d18f1d5d025bf9c))
+
+
+### Bug Fixes
+
+* 🐛 Resolving build failures ([8460945](https://github.com/viarotel-org/escrcpy/commit/8460945bd62de0d9be0b9767a3a0ece809ef05f0))
+* 🐛 Tips unavailable ([603e4e9](https://github.com/viarotel-org/escrcpy/commit/603e4e98d251a14ffdde2b48f1f064522154e6fe))
+
+
+### Performance Improvements
+
+* ♻️ FindInPage API ([fcf8269](https://github.com/viarotel-org/escrcpy/commit/fcf8269e0eba3638d8f9364e5c238c406b6fc9fe))
+* ♻️ Optimize dark mode ([2f2e1cf](https://github.com/viarotel-org/escrcpy/commit/2f2e1cfcd6ff6eae376bd260dc16d1e674e34286))
+* ♻️ Search interaction ([a195b7e](https://github.com/viarotel-org/escrcpy/commit/a195b7ead7c6664e0138f99a58b67f6800fb681f))
+* ♻️ Search variable name ([7c55e50](https://github.com/viarotel-org/escrcpy/commit/7c55e50edc1afc162696b9581ae5d25c01580ffc))
+* 🐛 Global search error ([091d503](https://github.com/viarotel-org/escrcpy/commit/091d5035dd7d6d91f7377d3cfb738c21d0c8e4f3))
+* 🚀 优化页面查找工具性能 ([8587977](https://github.com/viarotel-org/escrcpy/commit/8587977627ba1c8635b6b536dc88aeb5c067da5c))
+
 ## [1.18.4](https://github.com/viarotel-org/escrcpy/compare/v1.18.3...v1.18.4) (2024-05-04)
 
 

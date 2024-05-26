@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.1](https://github.com/viarotel-org/escrcpy/compare/v1.19.0...v1.19.1) (2024-05-26)
+
+
+### Bug Fixes
+
+* 🐛 In some cases, the light mode is abnormal ([ea227e0](https://github.com/viarotel-org/escrcpy/commit/ea227e0792b4938c8763efc833c34e8e7d587323))
+* 🐛 Search for shortcut key conflicts ([c70e6ca](https://github.com/viarotel-org/escrcpy/commit/c70e6ca2fc716ecea495b032ec0c9f4c2fc7e421))
+
+
+### Performance Improvements
+
+* ♻️ Search prompts ([0d963aa](https://github.com/viarotel-org/escrcpy/commit/0d963aab65297964a19b5e7ed1982732e96bcfcb))
+
 ## [1.19.0](https://github.com/viarotel-org/escrcpy/compare/v1.18.4...v1.19.0) (2024-05-15)
 
 

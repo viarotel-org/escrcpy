@@ -89,7 +89,6 @@ function createWindow() {
       sandbox: false,
       spellcheck: false,
     },
-    backgroundColor: nativeTheme.shouldUseDarkColors ? 'black' : 'white',
   })
 
   remote.enable(mainWindow.webContents)

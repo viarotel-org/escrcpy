@@ -7,10 +7,10 @@
 📱 Display and control your Android device with a graphical interface of Scrcpy powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="./screenshots/en-us/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="./screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
-[More screenshots](https://github.com/viarotel-org/escrcpy/tree/main/screenshots/en-us)
+[More screenshots](https://github.com/viarotel-org/escrcpy/tree/main/screenshots/en-US)
 
 ## Features
 
@@ -54,7 +54,7 @@
 
 ### macOS && Linux
 
-> Note: These platforms do not come with integrated [Adb](https://developer.android.com/studio/releases/platform-tools?hl=zh-cn) and [Scrcpy](https://github.com/Genymobile/scrcpy), you need to install them manually
+> Note: These platforms do not come with integrated [Scrcpy](https://github.com/Genymobile/scrcpy), you need to install them manually
 
 1. Refer to the [installation document](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md) for Linux
 2. Refer to the [installation document](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md) for macOS
@@ -305,9 +305,9 @@ This project would not be possible without the following open source projects:
 > If this project has helped you, you can buy me a coffee to keep me energized and improving the project! 😛
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-cn/viarotel-wepay.jpg" alt="viarotel-wepay" style="width: 30%;">
-  <img src="./screenshots/zh-cn/viarotel-alipay.jpg" alt="viarotel-alipay" style="width: 30%;">
+  <img src="./screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" style="width: 30%;">
+  <img src="./screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" style="width: 30%;">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="./screenshots/en-us/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
+    <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
   </a>
 </div>

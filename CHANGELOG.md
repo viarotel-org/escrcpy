@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.2](https://github.com/viarotel-org/escrcpy/compare/v1.19.1...v1.19.2) (2024-06-03)
+
+
+### Bug Fixes
+
+* 🐛 Automatically apply local languages ([0cc8208](https://github.com/viarotel-org/escrcpy/commit/0cc8208dd1bb51f700dcab213bd598ba07186bbb))
+
 ## [1.19.1](https://github.com/viarotel-org/escrcpy/compare/v1.19.0...v1.19.1) (2024-05-26)
 
 

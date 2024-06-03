@@ -1,7 +1,7 @@
+import { locale } from '$/locales/index.js'
+
 const { adbPath, scrcpyPath, gnirehtetPath, desktopPath }
   = window?.electron?.configs || {}
-
-const defaultLanguage = window.electron?.process?.env?.LOCALE
 
 export default {
   label: 'preferences.common.name',
@@ -33,20 +33,20 @@ export default {
       label: 'common.language.name',
       field: 'language',
       type: 'LanguageSelect',
-      value: defaultLanguage,
+      value: locale,
       placeholder: 'common.language.placeholder',
       options: [
         {
-          label: 'common.language.zh_CN',
-          value: 'zh_CN',
+          label: 'common.language.zh-CN',
+          value: 'zh-CN',
         },
         {
-          label: 'common.language.zh_TW',
-          value: 'zh_TW',
+          label: 'common.language.zh-TW',
+          value: 'zh-TW',
         },
         {
-          label: 'common.language.en_US',
-          value: 'en_US',
+          label: 'common.language.en-US',
+          value: 'en-US',
         },
       ],
     },

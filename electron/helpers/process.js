@@ -13,5 +13,3 @@ process.env.IS_PACKAGED = JSON.stringify(app.isPackaged)
 process.env.DESKTOP_PATH = app.getPath('desktop')
 
 process.env.CWD = process.cwd()
-
-process.env.LOCALE = process.env.LANG?.split('.')?.[0] || 'zh_CN'

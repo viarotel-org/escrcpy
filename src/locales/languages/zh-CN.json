@@ -13,9 +13,9 @@
 
   "common.language.name": "语言",
   "common.language.placeholder": "选择你需要的语言",
-  "common.language.zh_CN": "中文",
-  "common.language.zh_TW": "繁體中文",
-  "common.language.en_US": "English",
+  "common.language.zh-CN": "中文",
+  "common.language.zh-TW": "繁體中文",
+  "common.language.en-US": "English",
 
   "close.quit": "退出",
   "close.quit.cancel": "取消退出",

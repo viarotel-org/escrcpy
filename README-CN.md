@@ -315,3 +315,15 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
     <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
   </a>
 </div>
+
+## 贡献者
+
+感谢他们的所做的一切贡献！
+
+<a href="https://github.com/viarotel-org/escrcpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=viarotel-org/escrcpy" alt="contributors" />
+</a>
+
+## Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=viarotel-org/escrcpy&type=Date)](https://star-history.com/#viarotel-org/escrcpy&Date)

@@ -311,3 +311,15 @@ This project would not be possible without the following open source projects:
     <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
   </a>
 </div>
+
+## Contributors
+
+Thanks for all their contributions!
+
+<a href="https://github.com/viarotel-org/escrcpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=viarotel-org/escrcpy" alt="contributors" />
+</a>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=viarotel-org/escrcpy&type=Date)](https://star-history.com/#viarotel-org/escrcpy&Date)

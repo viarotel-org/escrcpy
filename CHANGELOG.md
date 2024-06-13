@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.3](https://github.com/viarotel-org/escrcpy/compare/v1.19.2...v1.19.3) (2024-06-13)
+
+
+### Bug Fixes
+
+* 🐛 Abnormal operations cause the program that cannot be closed ([b989140](https://github.com/viarotel-org/escrcpy/commit/b9891404f4251b7fa22cc0481d1cda29c11092dd))
+
 ## [1.19.2](https://github.com/viarotel-org/escrcpy/compare/v1.19.1...v1.19.2) (2024-06-03)
 
 

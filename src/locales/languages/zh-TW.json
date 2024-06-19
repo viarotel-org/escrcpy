@@ -216,7 +216,7 @@
   "preferences.device.show-touch.name": "顯示觸控點",
   "preferences.device.show-touch.placeholder": "開啟後將啟用開發者選項中的顯示點按觸控回饋",
   "preferences.device.show-touch.tips": "僅在實體裝置上顯示",
-  "preferences.device.stay-awake.name": "保持清醒",
+  "preferences.device.stay-awake.name": "保持喚醒",
   "preferences.device.stay-awake.placeholder": "開啟後將防止裝置進入睡眠狀態",
   "preferences.device.stay-awake.tips": "僅有線方式連接時有效",
   "preferences.device.control-in-close-screen.name": "控制時關閉螢幕",

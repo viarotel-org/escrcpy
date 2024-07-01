@@ -4,7 +4,7 @@
     width="80%"
     :close-on-click-modal="false"
     :close-on-press-escape="true"
-    class="overflow-hidden rounded-md el-dialog-headless dark:border dark:border-gray-700"
+    class="overflow-hidden !rounded-md el-dialog-headless dark:border dark:border-gray-700"
     @open="onOpen"
   >
     <el-icon

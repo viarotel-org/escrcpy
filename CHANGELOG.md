@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.4](https://github.com/viarotel-org/escrcpy/compare/v1.19.3...v1.19.4) (2024-07-02)
+
+
+### Bug Fixes
+
+* 🐛 Fix terminal style problems ([9fc1ded](https://github.com/viarotel-org/escrcpy/commit/9fc1ded583fd1c48bdb1890e7b27021920716cbc))
+* Update Chinese language translations ([b8d77e3](https://github.com/viarotel-org/escrcpy/commit/b8d77e39214823b6c7903f926d68aead4f00274b))
+
+
+### Performance Improvements
+
+* 🚀 Update to scrcpy v2.5 ([22cc5a3](https://github.com/viarotel-org/escrcpy/commit/22cc5a3bc722d882a70e70ea2f45aa7577b01df5))
+
 ## [1.19.3](https://github.com/viarotel-org/escrcpy/compare/v1.19.2...v1.19.3) (2024-06-13)
 
 

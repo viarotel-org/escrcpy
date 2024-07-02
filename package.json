@@ -1,7 +1,7 @@
 {
   "name": "escrcpy",
   "type": "module",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "private": true,
   "description": "Scrcpy Powered by Electron",
   "author": "viarotel",

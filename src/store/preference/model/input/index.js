@@ -36,6 +36,14 @@ export default {
         },
       ],
     },
+    mouseBind: {
+      field: '--mouse-bind',
+      type: 'Input',
+      label: 'preferences.input.mouse-bind.name',
+      placeholder: 'preferences.input.mouse-bind.placeholder',
+      tips: 'preferences.input.mouse-bind.tips',
+      value: void 0,
+    },
     keyboard: {
       label: 'preferences.input.keyboard.name',
       field: '--keyboard',

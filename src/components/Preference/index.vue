@@ -102,7 +102,7 @@
                       <div class="flex items-center">
                         <el-tooltip
                           v-if="item_1.tips"
-                          class=""
+                          popper-class="max-w-96"
                           effect="dark"
                           :content="$t(item_1.tips)"
                           placement="bottom"

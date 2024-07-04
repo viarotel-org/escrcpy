@@ -46,5 +46,8 @@
     "${item.decoder} & ${item.encoder}",
     " & ",
     "${key}=${value}"
+  ],
+  "cSpell.words": [
+    "bhsn"
   ]
 }

@@ -8,9 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     About: typeof import('./src/components/About/index.vue')['default']
-    AppInstall: typeof import('./src/components/Device/components/ControlBar/AppInstall/index.vue')['default']
+    AppInstall: typeof import('./src/components/Device/components/BatchActions/AppInstall/index.vue')['default']
     AppSearch: typeof import('./src/components/AppSearch/index.vue')['default']
     AudioCodecSelect: typeof import('./src/components/Preference/components/AudioCodecSelect/index.vue')['default']
+    BatchActions: typeof import('./src/components/Device/components/BatchActions/index.vue')['default']
     Camera: typeof import('./src/components/Device/components/MoreDropdown/components/Camera/index.vue')['default']
     ControlBar: typeof import('./src/components/Device/components/ControlBar/index.vue')['default']
     Device: typeof import('./src/components/Device/index.vue')['default']
@@ -20,6 +21,7 @@ declare module 'vue' {
     ElCol: typeof import('element-plus/es')['ElCol']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
+    ElCollapseTransition: typeof import('element-plus/es')['ElCollapseTransition']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']

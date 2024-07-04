@@ -10,6 +10,7 @@
   "common.progress": "启动中",
   "common.loading": "加载中",
   "common.search": "搜索",
+  "common.batch": "批量",
 
   "common.language.name": "语言",
   "common.language.placeholder": "选择你需要的语言",

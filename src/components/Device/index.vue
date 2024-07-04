@@ -30,6 +30,13 @@
 
       <TerminalAction />
     </div>
+
+    <BatchActions
+      class="overflow-hidden transition-all"
+      :class="isMultipleRow ? 'h-12 opacity-100 mt-4' : 'h-0 opacity-0 mt-0'"
+      :devices="selectionRows"
+    />
+
     <div class="pt-4 flex-1 h-0 overflow-hidden">
       <el-table
         ref="elTable"
@@ -40,19 +47,25 @@
         border
         height="100%"
         row-key="id"
+        @selection-change="onSelectionChange"
       >
         <template #empty>
           <el-empty :description="$t('device.list.empty')" />
         </template>
+
+        <el-table-column type="selection"></el-table-column>
+
         <el-table-column
           prop="id"
           :label="$t('device.id')"
+          sortable
           show-overflow-tooltip
           align="left"
           width="200"
         />
         <el-table-column
           :label="$t('device.name')"
+          sortable
           show-overflow-tooltip
           align="left"
         >
@@ -119,6 +132,7 @@ import TerminalAction from './components/TerminalAction/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
+import BatchActions from './components/BatchActions/index.vue'
 
 import { isIPWithPort, sleep } from '$/utils/index.js'
 
@@ -131,13 +145,20 @@ export default {
     MirrorAction,
     MoreDropdown,
     WirelessAction,
+    BatchActions,
   },
   data() {
     return {
       loading: false,
       deviceList: [],
       mirrorActionRefs: [],
+      selectionRows: [],
     }
+  },
+  computed: {
+    isMultipleRow() {
+      return this.selectionRows.length > 0
+    },
   },
   async created() {
     this.getDeviceData()
@@ -147,6 +168,9 @@ export default {
     this?.unAdbWatch?.()
   },
   methods: {
+    onSelectionChange(rows) {
+      this.selectionRows = rows
+    },
     async onAdbWatch(type, ret) {
       if (ret && ret.id) {
         this.getDeviceData()

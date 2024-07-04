@@ -10,6 +10,7 @@
   "common.progress": "Starting",
   "common.loading": "Loading",
   "common.search": "Search",
+  "common.batch": "Batch",
 
   "common.language.name": "Language",
   "common.language.placeholder": "Select language",

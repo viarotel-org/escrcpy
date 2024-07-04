@@ -119,7 +119,6 @@ export default {
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
         },
-
         {
           label: 'device.control.rotation.name',
           svgIcon: 'rotation',

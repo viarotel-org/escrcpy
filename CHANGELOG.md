@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/viarotel-org/escrcpy/compare/v1.20.0...v1.20.1) (2024-07-04)
+
+
+### Bug Fixes
+
+* 🐛 Fix batch text spelling errors ([062c689](https://github.com/viarotel-org/escrcpy/commit/062c689755df5bcc5f8e38605c7f101762d7ada0))
+
 ## [1.20.0](https://github.com/viarotel-org/escrcpy/compare/v1.19.4...v1.20.0) (2024-07-04)
 
 

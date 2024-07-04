@@ -72,6 +72,10 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ## Device Operation
 
+### Batch Processing
+
+- Batch installation application
+
 ### Control Model
 
 - Mirror
@@ -196,11 +200,13 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 14. Add more features to device interaction bar: file push, screen rotation, audio control etc ✅
 15. Support bulk connecting to historical devices ✅
 16. Support to use built-in terminals to execute custom commands ✅
-17. Supports automatic execution of mirror on devices. ✅
-18. Add file transmission assistant function 🚧
-19. Support GUI-based selective file downloads from devices 🚧
-20. Support grouping devices and bulk operations by group 🚧
-21. Add game enhancement features such as game keyboard mapping 🚧
+17. Supports automatic execution of mirror on devices ✅
+18. Add batch installation application function ✅
+19. Support more batch processing functions 🚧
+20. Support the device to group 🚧
+21. Add file transmission assistant function 🚧
+22. Support GUI-based selective file downloads from devices 🚧
+23. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ
 

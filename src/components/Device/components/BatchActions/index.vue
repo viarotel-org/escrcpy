@@ -31,7 +31,7 @@
               <component :is="item.elIcon" />
             </el-icon>
           </template>
-          {{ $t('common.batch') }}{{ $t(item.label) }}
+          {{ $t('common.batch') }}-{{ $t(item.label) }}
         </el-button>
       </template>
     </component>

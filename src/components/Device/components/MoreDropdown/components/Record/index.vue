@@ -51,7 +51,7 @@ export default {
 
         await recording
 
-        this.onRecordSuccess(savePath)
+        await this.handleSuccess(savePath)
       }
       catch (error) {
         console.error('record.args', args)
@@ -79,24 +79,10 @@ export default {
 
       return value
     },
-    async onRecordSuccess(savePath) {
-      try {
-        await this.$confirm(
-          this.$t('device.record.success.message'),
-          this.$t('device.record.success.title'),
-          {
-            confirmButtonText: this.$t('common.confirm'),
-            cancelButtonText: this.$t('common.cancel'),
-            closeOnClickModal: false,
-            type: 'success',
-          },
-        )
-
-        await this.$electron.ipcRenderer.invoke('show-item-in-folder', savePath)
-      }
-      catch (error) {
-        console.warn(error)
-      }
+    async handleSuccess(savePath) {
+      return this.$message.success(
+        `${this.$t('device.record.success.title')}: ${savePath}`,
+      )
     },
   },
 }

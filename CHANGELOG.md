@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.20.1](https://github.com/viarotel-org/escrcpy/compare/v1.20.0...v1.20.1) (2024-07-04)
+
+
+### Bug Fixes
+
+* 🐛 Fix batch text spelling errors ([062c689](https://github.com/viarotel-org/escrcpy/commit/062c689755df5bcc5f8e38605c7f101762d7ada0))
+
+## [1.20.0](https://github.com/viarotel-org/escrcpy/compare/v1.19.4...v1.20.0) (2024-07-04)
+
+
+### Features
+
+* ✨ Add batch installation application function ([37ce245](https://github.com/viarotel-org/escrcpy/commit/37ce2457bce9a1b661c6db7162023f53268833f5))
+
+
+### Performance Improvements
+
+* 🚀 Add mouse binding options ([7ee4ba4](https://github.com/viarotel-org/escrcpy/commit/7ee4ba4f2b177e6dbfce85036425b51bfa35ecff))
+
 ## [1.19.4](https://github.com/viarotel-org/escrcpy/compare/v1.19.3...v1.19.4) (2024-07-02)
 
 

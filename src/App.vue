@@ -33,7 +33,7 @@ import { ElMessageBox } from 'element-plus'
 import Device from './components/Device/index.vue'
 import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
-import AppSearch from './components/AppSearch/index.vue'
+import AppSearch from './components/Search/index.vue'
 
 import { useThemeStore } from '$/store/theme/index.js'
 import { usePreferenceStore } from '$/store/preference/index.js'

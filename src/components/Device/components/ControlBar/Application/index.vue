@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import LoadingIcon from '$/components/Device/components/LoadingIcon/index.vue'
-
 export default {
   props: {
     device: {
@@ -18,6 +16,9 @@ export default {
     return {}
   },
   methods: {
+    invoke(...args) {
+      return this.handleInstall(...args)
+    },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
@@ -46,13 +47,11 @@ export default {
         return false
       }
 
-      const messageEl = this.$message({
-        message: this.$t('device.control.install.progress', {
+      const messageEl = this.$message.loading(
+        this.$t('device.control.install.progress', {
           deviceName: this.$store.device.getLabel(device),
         }),
-        icon: LoadingIcon,
-        duration: 0,
-      })
+      )
 
       let failCount = 0
 

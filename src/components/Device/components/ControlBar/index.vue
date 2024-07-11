@@ -66,7 +66,7 @@
 
 <script>
 import Screenshot from './Screenshot/index.vue'
-import AppInstall from './AppInstall/index.vue'
+import Application from './Application/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import MirrorGroup from './MirrorGroup/index.vue'
 import Rotation from './Rotation/index.vue'
@@ -76,7 +76,7 @@ import FileManage from './FileManage/index.vue'
 export default {
   components: {
     Screenshot,
-    AppInstall,
+    Application,
     Gnirehtet,
     MirrorGroup,
     Rotation,
@@ -142,7 +142,7 @@ export default {
         {
           label: 'device.control.install',
           svgIcon: 'install',
-          component: 'AppInstall',
+          component: 'Application',
         },
         {
           label: 'device.control.file.name',

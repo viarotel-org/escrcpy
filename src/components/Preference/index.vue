@@ -208,7 +208,6 @@ import DisplaySelect from './components/DisplaySelect/index.vue'
 import KeyboardInjectSelect from './components/KeyboardInjectSelect/index.vue'
 
 import { usePreferenceStore } from '$/store/index.js'
-import LoadingIcon from '$/components/Device/components/LoadingIcon/index.vue'
 
 export default {
   components: {
@@ -349,11 +348,7 @@ export default {
     },
 
     async handleExport() {
-      const messageEl = this.$message({
-        message: this.$t('preferences.config.export.message'),
-        icon: LoadingIcon,
-        duration: 0,
-      })
+      const messageEl = this.$message.loading(this.$t('preferences.config.export.message'))
 
       try {
         await this.$electron.ipcRenderer.invoke('show-save-dialog', {

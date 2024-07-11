@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center space-x-2">
     <component
       :is="item.component || 'div'"
       v-for="(item, index) in actionModel"
@@ -31,7 +31,7 @@
               <component :is="item.elIcon" />
             </el-icon>
           </template>
-          {{ $t('common.batch') }}{{ $t(item.label) }}
+          {{ $t('common.batch') }}-{{ $t(item.label) }}
         </el-button>
       </template>
     </component>
@@ -39,11 +39,13 @@
 </template>
 
 <script>
-import AppInstall from './AppInstall/index.vue'
+import Application from './Application/index.vue'
+import Screenshot from './Screenshot/index.vue'
 
 export default {
   components: {
-    AppInstall,
+    Application,
+    Screenshot,
   },
   props: {
     devices: {
@@ -55,9 +57,14 @@ export default {
     return {
       actionModel: [
         {
+          label: 'device.control.capture',
+          elIcon: 'Crop',
+          component: 'Screenshot',
+        },
+        {
           label: 'device.control.install',
           svgIcon: 'install',
-          component: 'AppInstall',
+          component: 'Application',
         },
       ],
     }

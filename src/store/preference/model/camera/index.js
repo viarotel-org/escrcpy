@@ -34,7 +34,7 @@ export default {
     cameraFps: {
       label: 'preferences.camera.camera-fps.name',
       field: '--camera-fps',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.camera.camera-fps.placeholder',
       append: 'fps',

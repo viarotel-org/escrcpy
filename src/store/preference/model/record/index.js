@@ -35,7 +35,7 @@ export default {
     timeLimit: {
       label: 'preferences.record.time-limit.name',
       field: '--time-limit',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.record.time-limit.placeholder',
       append: 's',

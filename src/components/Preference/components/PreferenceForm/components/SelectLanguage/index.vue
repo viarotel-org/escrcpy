@@ -1,10 +1,8 @@
 <template>
   <el-select
-    v-bind="data.props || {}"
+    v-bind="{ ...(data.props || {}) }"
     v-model="inputValue"
     class="!w-full"
-    :title="$t(data.placeholder)"
-    :placeholder="$t(data.placeholder)"
   >
     <el-option
       v-for="(item, index) in data.options"

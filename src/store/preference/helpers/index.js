@@ -30,12 +30,14 @@ export function getModelMap(data = model) {
   return value
 }
 
-export function getDefaultData(parentId) {
+export function getDefaultData(parentId, iteratee) {
   const modelMap = getModelMap()
+
+  iteratee = iteratee ?? (value => value)
 
   const value = Object.entries(modelMap).reduce((obj, [key, data]) => {
     if (!parentId || data.parentId === parentId) {
-      obj[key] = data.value
+      obj[key] = iteratee(data.value)
     }
     return obj
   }, {})

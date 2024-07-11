@@ -1,11 +1,8 @@
 <template>
   <el-select
-    v-bind="data.props || {}"
+    v-bind="{ clearable: true, ...(data.props || {}) }"
     v-model="selectValue"
     class="!w-full"
-    clearable
-    :title="$t(data.placeholder)"
-    :placeholder="$t(data.placeholder)"
   >
     <el-option
       v-for="(item, index) in options"

@@ -31,7 +31,7 @@ export default {
     maxSize: {
       label: 'preferences.video.resolution.name',
       field: '--max-size',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.resolution.placeholder',
     },
@@ -46,7 +46,7 @@ export default {
     maxFps: {
       label: 'preferences.video.refresh-rate.name',
       field: '--max-fps',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.refresh-rate.placeholder',
       append: 'fps',
@@ -133,7 +133,7 @@ export default {
     displayBuffer: {
       label: 'preferences.video.video-buffer.name',
       field: '--display-buffer',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.video-buffer.placeholder',
       append: 'ms',
@@ -141,7 +141,7 @@ export default {
     v4l2Buffer: {
       label: 'preferences.video.receiver-buffer.name',
       field: '--v4l2-buffer',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.receiver-buffer.placeholder',
       append: 'ms',

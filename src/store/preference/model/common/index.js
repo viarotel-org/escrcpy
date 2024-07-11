@@ -28,6 +28,9 @@ export default {
           value: 'system',
         },
       ],
+      props: {
+        clearable: false,
+      },
     },
     language: {
       label: 'common.language.name',

@@ -86,6 +86,7 @@
   "device.actions.more.record.name": "Start Recording",
   "device.actions.more.otg.name": "Startup OTG",
   "device.actions.more.camera.name": "Startup Camera",
+  "device.actions.more.custom.name": "Custom Startup",
 
   "device.control.name": "Control",
   "device.control.more": "More Controls",

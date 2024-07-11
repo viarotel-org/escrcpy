@@ -1,11 +1,17 @@
 <template>
   <slot :loading="loading" :trigger="handleClick" />
+
+  <DeployDialog ref="deployDialogRef" />
 </template>
 
 <script>
+import DeployDialog from './components/DeployDialog/index.vue'
 import { sleep } from '$/utils'
 
 export default {
+  components: {
+    DeployDialog,
+  },
   props: {
     row: {
       type: Object,
@@ -27,25 +33,24 @@ export default {
 
       this.loading = true
 
+      let args = ''
+
+      try {
+        args = await this.$refs.deployDialogRef.open(row)
+      }
+      catch (error) {
+        this.loading = false
+        this.$message.warning(error.message)
+        return false
+      }
+
+      /** TODO */
+      const isCamera = ['--camera-facing'].some(key => args.includes(key))
+      if (isCamera) {
+        args += ' --video-source=camera'
+      }
+
       this.toggleRowExpansion(row, true)
-
-      const args = `--video-source=camera ${this.$store.preference.getScrcpyArgs(
-        row.id,
-        {
-          excludes: [
-            '--video-source',
-            '--mouse',
-            '--keyboard',
-            '--turn-screen-off',
-            '--power-off-on-close',
-            '--stay-awake',
-            '--show-touches',
-          ],
-          isCamera: true,
-        },
-      )}`
-
-      console.log('args', args)
 
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
@@ -62,14 +67,12 @@ export default {
         await mirroring
       }
       catch (error) {
-        console.error('camera.args', args)
-        console.error('camera.error', error)
+        console.error('mirror.args', args)
+        console.error('mirror.error', error)
 
         if (error.message) {
           this.$message.warning(error.message)
         }
-
-        this.handleReset()
       }
     },
     onStdout() {},

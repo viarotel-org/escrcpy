@@ -82,6 +82,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Recording
 - OTG
 - Camera
+- Custom
 
 ### Device Interaction Bar
 
@@ -202,11 +203,12 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 16. Support to use built-in terminals to execute custom commands ✅
 17. Supports automatic execution of mirror on devices ✅
 18. Support common batch processing function ✅
-19. Support more batch processing functions 🚧
-20. Support the device to group 🚧
-21. Add file transmission assistant function 🚧
-22. Support GUI-based selective file downloads from devices 🚧
-23. Add game enhancement features such as game keyboard mapping 🚧
+19. Support for custom startup mirroring ✅
+20. Support more batch processing functions 🚧
+21. Support the device to group 🚧
+22. Add file transmission assistant function 🚧
+23. Support GUI-based selective file downloads from devices 🚧
+24. Add game enhancement features such as game keyboard mapping 🚧
 
 ## FAQ
 

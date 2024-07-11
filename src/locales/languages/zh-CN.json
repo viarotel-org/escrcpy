@@ -86,6 +86,7 @@
   "device.actions.more.record.name": "开始录制",
   "device.actions.more.otg.name": "启动OTG",
   "device.actions.more.camera.name": "启动摄像",
+  "device.actions.more.custom.name": "灵活启动",
 
   "device.control.name": "操作",
   "device.control.more": "设备交互",

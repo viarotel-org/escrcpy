@@ -41,17 +41,20 @@
 import Record from './components/Record/index.vue'
 import Otg from './components/Otg/index.vue'
 import Camera from './components/Camera/index.vue'
+import Custom from './components/Custom/index.vue'
 
 export default {
   components: {
     Record,
     Otg,
     Camera,
+    Custom,
   },
   props: {
     ...Record.props,
     ...Otg.props,
     ...Camera.props,
+    ...Custom.props,
   },
   data() {
     return {
@@ -67,6 +70,10 @@ export default {
         {
           label: 'device.actions.more.camera.name',
           component: 'Camera',
+        },
+        {
+          label: 'device.actions.more.custom.name',
+          component: 'Custom',
         },
       ],
     }

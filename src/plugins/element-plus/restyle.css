@@ -59,3 +59,16 @@
     @apply !p-0;
   }
 }
+
+.el-dialog-beautify {
+  @apply !rounded-lg;
+
+  .el-dialog__title {
+    @apply relative;
+
+    &::before {
+      content: '';
+      @apply absolute inset-x-0 bottom-0 h-2 bg-primary-500/30;
+    }
+  }
+}

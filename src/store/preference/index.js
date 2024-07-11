@@ -54,15 +54,9 @@ export const usePreferenceStore = defineStore({
   getters: {},
   actions: {
     getDefaultData,
+
     init(scope = this.deviceScope) {
-      let data = mergeConfig(getDefaultData(), getStoreData())
-
-      if (scope !== 'global') {
-        data = mergeConfig(data, getStoreData(replaceIP(scope)))
-      }
-
-      this.data = data
-
+      this.data = this.getData(scope)
       return this.data
     },
     setScope(value) {
@@ -127,7 +121,12 @@ export const usePreferenceStore = defineStore({
       this.init()
     },
     getData(scope = this.deviceScope) {
-      const value = this.init(scope)
+      let value = mergeConfig(getDefaultData(), getStoreData())
+
+      if (scope !== 'global') {
+        value = mergeConfig(value, getStoreData(replaceIP(scope)))
+      }
+
       return value
     },
 
@@ -135,7 +134,7 @@ export const usePreferenceStore = defineStore({
       scope = this.deviceScope,
       { isRecord = false, isCamera = false, isOtg = false, excludes = [] } = {},
     ) {
-      const data = this.getData(scope)
+      const data = typeof scope === 'object' ? scope : this.getData(scope)
 
       if (!data) {
         return ''
@@ -182,11 +181,13 @@ export const usePreferenceStore = defineStore({
         return arr
       }, [])
 
-      if (this.data.scrcpyAppend) {
-        valueList.push(...this.data.scrcpyAppend.split(' '))
+      if (data.scrcpyAppend) {
+        valueList.push(...data.scrcpyAppend.split(' '))
       }
 
       const value = valueList.join(' ')
+
+      // console.log('value', value)
 
       return value
     },

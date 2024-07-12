@@ -3,7 +3,7 @@
     <el-dialog
       v-model="visible"
       :title="$t('device.actions.more.custom.name')"
-      class="w-11/12 el-dialog-flex el-dialog-beautify"
+      class="w-[98%] el-dialog-flex el-dialog-beautify"
       append-to-body
       destroy-on-close
       @close="close(reject)"
@@ -22,10 +22,10 @@
 
       <template #footer>
         <el-button @click="close(reject)">
-          取消
+          {{ $t('common.cancel') }}
         </el-button>
         <el-button type="primary" @click="submit(resolve)">
-          确定
+          {{ $t('common.confirm') }}
         </el-button>
       </template>
     </el-dialog>

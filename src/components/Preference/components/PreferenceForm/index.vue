@@ -119,13 +119,13 @@ const preferenceData = defineModel('modelValue', {
 
 const preferenceStore = usePreferenceStore()
 
-const collapseValue = ref([])
-
 const preferenceModel = computed(() =>
   omit(preferenceStore.model, props.excludes),
 )
 
 const preferenceModelKeys = Object.keys(preferenceModel.value ?? {})
+
+const collapseValue = ref([])
 
 if (preferenceModelKeys.length) {
   if (props.collapseProps.accordion) {
@@ -135,18 +135,6 @@ if (preferenceModelKeys.length) {
     collapseValue.value = preferenceModelKeys
   }
 }
-
-watch(
-  () => props.deviceScope,
-  (value) => {
-    if (!value) {
-      return false
-    }
-
-    preferenceData.value = preferenceStore.getData(value)
-  },
-  { immediate: true },
-)
 
 function subModel(item) {
   const children = item?.children || {}

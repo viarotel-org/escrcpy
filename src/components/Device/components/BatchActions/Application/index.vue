@@ -24,7 +24,7 @@ export default {
       for (let index = 0; index < this.devices.length; index++) {
         const item = this.devices[index]
         await this.$refs.applicationProxyRef.invoke(item)
-        await sleep(2 * 1000)
+        await sleep(1 * 1000)
       }
     },
   },

@@ -4,43 +4,11 @@
       class="mr-4 pb-4 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
     >
       <div class="">
-        <el-select
+        <ScopeSelect
           v-model="deviceScope"
-          value-key=""
-          :placeholder="$t('preferences.scope.placeholder')"
-          filterable
-          :no-data-text="$t('preferences.scope.no-data')"
-          class="!w-90"
           @change="onScopeChange"
-        >
-          <template #prefix>
-            <el-tooltip class="" effect="dark" placement="bottom-start">
-              <el-icon class="text-primary-300 hover:text-primary-500">
-                <QuestionFilled />
-              </el-icon>
-              <template #content>
-                <div class="space-y-1">
-                  <div class="pb-1">
-                    {{ $t('preferences.scope.details[0]') }}
-                  </div>
-                  <div class="">
-                    {{ $t('preferences.scope.details[1]') }}
-                  </div>
-                  <div class="">
-                    {{ $t('preferences.scope.details[2]') }}
-                  </div>
-                </div>
-              </template>
-            </el-tooltip>
-          </template>
-          <el-option
-            v-for="item in scopeList"
-            :key="item.id"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
+          @device-change="onDeviceChange"
+        />
       </div>
       <div class="">
         <el-button type="" icon="Upload" plain @click="handleImport">
@@ -52,7 +20,7 @@
         <el-button type="" icon="Edit" plain @click="handleEdit">
           {{ $t('preferences.config.edit.name') }}
         </el-button>
-        <el-button type="" icon="RefreshRight" plain @click="handleResetAll">
+        <el-button type="" icon="RefreshRight" plain @click="handleReset">
           {{ $t('preferences.config.reset.name') }}
         </el-button>
       </div>
@@ -73,47 +41,32 @@
 <script>
 import { debounce } from 'lodash-es'
 
+import ScopeSelect from './components/ScopeSelect/index.vue'
 import PreferenceForm from './components/PreferenceForm/index.vue'
 
 import { usePreferenceStore } from '$/store/index.js'
 
 export default {
   components: {
+    ScopeSelect,
     PreferenceForm,
   },
   setup() {
     const preferenceStore = usePreferenceStore()
 
     const preferenceData = ref(preferenceStore.data)
+
     const deviceScope = ref(preferenceStore.deviceScope)
 
     return {
+      preferenceStore,
       preferenceData,
       deviceScope,
     }
   },
   computed: {
-    commonPreferenceModel() {
-      return this.$store.preference.model?.common || {}
-    },
     preferenceModel() {
-      return this.$store.preference.model || {}
-    },
-    scopeList() {
-      const value = this.$store.device.list.map(item => ({
-        ...item,
-        label: `${item.id}（${item.$name}${
-          item.$remark ? `，${item.$remark}` : ''
-        }）`,
-        value: item.id,
-      }))
-
-      value.unshift({
-        label: `Global（${this.$t('preferences.scope.global')}）`,
-        value: 'global',
-      })
-
-      return value
+      return this.preferenceStore.model || {}
     },
   },
   watch: {
@@ -133,50 +86,36 @@ export default {
         this.handleDevices()
       },
     },
-    // 列表设备发生变化后如果没有匹配到则默认选中 global
-    'scopeList': {
-      handler(value) {
-        const someValue = value.some(
-          item => this.$replaceIP(item.value) === this.deviceScope,
-        )
-
-        if (someValue) {
-          return
-        }
-
-        this.deviceScope = 'global'
-        this.$store.preference.setScope(this.deviceScope)
-        this.preferenceData = this.$store.preference.data
-      },
-      immediate: true,
-    },
   },
   created() {
     this.handleSave = debounce(this.handleSave, 1000)
     this.handleDevices = debounce(this.handleDevices, 1000)
   },
   methods: {
+    onDeviceChange(options) {
+      const device = options.some(
+        item => this.$replaceIP(item.value) === this.deviceScope,
+      )
+
+      if (device) {
+        return false
+      }
+
+      this.deviceScope = 'global'
+      this.preferenceStore.setScope(this.deviceScope)
+      this.preferenceData = this.preferenceStore.data
+    },
     handleDevices() {
       this.$root.reRenderPost()
     },
-    subModel(item) {
-      const children = item?.children || {}
-      const value = {}
-      Object.entries(children).forEach(([key, data]) => {
-        if (!data.hidden) {
-          value[key] = data
-        }
-      })
-      return value
-    },
-    handleResetAll() {
-      this.$store.preference.reset(this.deviceScope)
-      this.preferenceData = this.$store.preference.data
+    handleReset() {
+      this.preferenceStore.reset(this.deviceScope)
+      this.preferenceData = this.preferenceStore.data
     },
 
     onScopeChange(value) {
-      this.$store.preference.setScope(value)
-      this.preferenceData = this.$store.preference.data
+      this.preferenceStore.setScope(value)
+      this.preferenceData = this.preferenceStore.data
     },
 
     async handleImport() {
@@ -194,7 +133,7 @@ export default {
 
         this.$message.success(this.$t('preferences.config.import.success'))
 
-        this.preferenceData = this.$store.preference.init()
+        this.preferenceData = this.preferenceStore.init()
       }
       catch (error) {
         if (error.message) {
@@ -237,16 +176,8 @@ export default {
     },
 
     handleSave() {
-      this.$store.preference.setData(this.preferenceData)
+      this.preferenceStore.setData(this.preferenceData)
       this.$message.success(this.$t('preferences.config.save.placeholder'))
-    },
-
-    handleReset(type) {
-      this.preferenceData = {
-        ...this.preferenceData,
-        ...this.$store.preference.getDefaultData(type),
-      }
-      this.$store.preference.setData(this.preferenceData)
     },
   },
 }

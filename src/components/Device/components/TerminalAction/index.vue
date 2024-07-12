@@ -22,6 +22,9 @@ export default {
     handleShow() {
       this.$refs.terminalDialog.show()
     },
+    invoke(...args) {
+      this.$refs.terminalDialog.invoke(...args)
+    },
   },
 }
 </script>

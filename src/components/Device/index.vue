@@ -28,7 +28,7 @@
         {{ $t('device.log.name') }}
       </el-button>
 
-      <TerminalAction />
+      <TerminalAction ref="terminalActionRef" />
     </div>
 
     <BatchActions
@@ -147,6 +147,11 @@ export default {
     MoreDropdown,
     WirelessAction,
     BatchActions,
+  },
+  provide() {
+    return {
+      invokeTerminal: (...args) => this.$refs.terminalActionRef.invoke(...args),
+    }
   },
   data() {
     return {

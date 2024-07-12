@@ -4,8 +4,9 @@
     width="80%"
     :close-on-click-modal="false"
     :close-on-press-escape="true"
+    destroy-on-close
     class="overflow-hidden !rounded-md el-dialog-headless dark:border dark:border-gray-700"
-    @open="onOpen"
+    @closed="onClosed"
   >
     <el-icon
       class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
@@ -15,8 +16,7 @@
     </el-icon>
 
     <VueCommand
-      v-if="renderShell"
-      :ref="(value) => (vShell = value)"
+      ref="vShell"
       v-model:history="history"
       :dispatched-queries="dispatchedQueries"
       :commands="commands"
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import { ref, shallowRef } from 'vue'
 import VueCommand, {
   createQuery,
   createStdout,
@@ -48,6 +47,7 @@ import 'vue-command/dist/vue-command.css'
 import { useAdb } from './composables/adb-async.js'
 import { useScrcpy } from './composables/scrcpy.js'
 import { useGnirehtet } from './composables/gnirehtet.js'
+import { sleep } from '$/utils/index.js'
 
 export default {
   components: {
@@ -57,7 +57,6 @@ export default {
     const vShell = ref(null)
     const history = shallowRef([createQuery()])
     const loading = ref(false)
-    const renderShell = ref(false)
     const dispatchedQueries = ref(new Set([]))
 
     const { adb } = useAdb({ vShell, history, loading })
@@ -84,18 +83,12 @@ export default {
       ...Object.keys(commands.value),
     ])
 
-    const onOpen = () => {
-      renderShell.value = true
-    }
-
     return {
       vShell,
       loading,
       history,
       commands,
       dispatchedQueries,
-      onOpen,
-      renderShell,
     }
   },
   data() {
@@ -128,6 +121,26 @@ export default {
       this.visible = false
     },
 
+    async invoke(command) {
+      this.visible = true
+
+      if (!this.vShell) {
+        await this.$nextTick()
+        await sleep(1000)
+      }
+
+      await this.vShell.setQuery(command)
+
+      const vueCommandHistoryEntryComponentRefs
+        = this.vShell.$refs.vueCommandHistoryEntryComponentRefs
+
+      const queryLength = vueCommandHistoryEntryComponentRefs.length
+
+      vueCommandHistoryEntryComponentRefs[queryLength - 1].focus()
+
+      this.$message.info(this.$t('device.control.shell.enter'))
+    },
+
     onDispatchedQueriesUpdate(value) {
       this.$appStore.set('terminal.dispatchedQueries', Array.from(value))
 
@@ -136,6 +149,10 @@ export default {
 
     onCtrlC() {
       window.gnirehtet.shell('stop')
+    },
+
+    onClosed() {
+      this.vShell.dispatch('clear')
     },
   },
 }

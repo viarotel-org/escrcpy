@@ -72,6 +72,7 @@ import MirrorGroup from './MirrorGroup/index.vue'
 import Rotation from './Rotation/index.vue'
 import Volume from './Volume/index.vue'
 import FileManage from './FileManage/index.vue'
+import Shell from './Shell/index.vue'
 
 export default {
   components: {
@@ -82,6 +83,7 @@ export default {
     Rotation,
     Volume,
     FileManage,
+    Shell,
   },
   props: {
     device: {
@@ -148,6 +150,12 @@ export default {
           label: 'device.control.file.name',
           svgIcon: 'file-send',
           component: 'FileManage',
+        },
+        {
+          label: 'device.control.shell.name',
+          svgIcon: 'command',
+          component: 'Shell',
+          tips: 'device.control.shell.tips',
         },
         {
           label: 'device.control.gnirehtet',

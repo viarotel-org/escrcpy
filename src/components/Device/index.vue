@@ -61,14 +61,14 @@
           sortable
           show-overflow-tooltip
           align="left"
-          width="200"
+          min-width="100"
         />
         <el-table-column
           :label="$t('device.name')"
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="200"
+          min-width="150"
         >
           <template #default="{ row }">
             <div class="flex items-center">
@@ -97,7 +97,7 @@
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
-          width="400"
+          min-width="200"
           align="left"
         >
           <MirrorAction

@@ -3,7 +3,7 @@
     <el-dialog
       v-model="visible"
       :title="$t('device.actions.more.custom.name')"
-      class="w-[98%] el-dialog-flex el-dialog-beautify"
+      class="!w-[98%] el-dialog-flex el-dialog-beautify"
       append-to-body
       destroy-on-close
       @close="close(reject)"

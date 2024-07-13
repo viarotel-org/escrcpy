@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.3](https://github.com/viarotel-org/escrcpy/compare/v1.21.2...v1.21.3) (2024-07-13)
+
+
+### Bug Fixes
+
+* Fix the width problem of custom startup pop-up windows ([9a7e56b](https://github.com/viarotel-org/escrcpy/commit/9a7e56b8ebc08fb20eadf0b2f853441ea28c6a80))
+
 ## [1.21.2](https://github.com/viarotel-org/escrcpy/compare/v1.21.1...v1.21.2) (2024-07-13)
 
 

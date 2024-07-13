@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.21.2](https://github.com/viarotel-org/escrcpy/compare/v1.21.1...v1.21.2) (2024-07-13)
+
+
+### Bug Fixes
+
+* 🐛 Fix terminal style abnormalities in dark theme ([3d4dc7c](https://github.com/viarotel-org/escrcpy/commit/3d4dc7c98164fd01780989e892948c06f30018a3))
+
+
+### Performance Improvements
+
+* ♻️ Improve code robustness ([2f389af](https://github.com/viarotel-org/escrcpy/commit/2f389af834413b9018cad1b3ae977902386fb5da))
+* 🚀 Optimize batch operation interaction ([343eab2](https://github.com/viarotel-org/escrcpy/commit/343eab2e110d065869ff95140b2ba98a365dd65d))
+
 ## [1.21.1](https://github.com/viarotel-org/escrcpy/compare/v1.21.0...v1.21.1) (2024-07-13)
 
 

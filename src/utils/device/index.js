@@ -1,5 +1,5 @@
 import { ElMessage } from 'element-plus'
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 /**
  * 选择并将文件发送到设备
  */
@@ -42,7 +42,7 @@ export async function selectAndSendFileToDevice(
   const successFiles = []
   const failFiles = []
 
-  await allSettled(files, async (item) => {
+  await allSettledWrapper(files, async (item) => {
     const ret = await window.adbkit.push(deviceId, item).catch((e) => {
       console.warn(e?.message)
       failFiles.push(`${deviceId}-${item}`)

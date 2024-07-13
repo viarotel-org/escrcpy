@@ -76,9 +76,9 @@ export function keyByValue(data, key = 'key', valueKey = 'value') {
  *     throw new Error('奇数');
  *   }
  * };
- * allSettled(list, iterator).then(console.log);
+ * allSettledWrapper(list, iterator).then(console.log);
  */
-export function allSettled(list = [], iterator) {
+export function allSettledWrapper(list = [], iterator) {
   const promises = []
 
   for (let index = 0; index < list.length; index++) {

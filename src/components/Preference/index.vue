@@ -64,11 +64,6 @@ export default {
       deviceScope,
     }
   },
-  computed: {
-    preferenceModel() {
-      return this.preferenceStore.model || {}
-    },
-  },
   watch: {
     'preferenceData': {
       handler() {

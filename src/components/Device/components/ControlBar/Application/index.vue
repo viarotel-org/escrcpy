@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 
 export default {
   props: {
@@ -55,7 +55,7 @@ export default {
 
       let failCount = 0
 
-      await allSettled(files, (item) => {
+      await allSettledWrapper(files, (item) => {
         return this.$adb.install(device.id, item).catch((e) => {
           console.warn(e)
           ++failCount

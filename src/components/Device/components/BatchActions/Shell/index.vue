@@ -7,7 +7,7 @@
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { selectAndSendFileToDevice } from '$/utils/device/index.js'
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 
 const props = defineProps({
   devices: {
@@ -44,7 +44,7 @@ async function handleClick(devices) {
 
   const failFiles = []
 
-  await allSettled(devices, async (device) => {
+  await allSettledWrapper(devices, async (device) => {
     const successFiles = await selectAndSendFileToDevice(device.id, {
       files,
       loadingText: window.t('device.control.shell.push.loading'),

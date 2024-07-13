@@ -21,7 +21,7 @@ import { ElMessage } from 'element-plus'
 import FileManageProxy from '$/components/Device/components/ControlBar/FileManage/index.vue'
 
 import { selectAndSendFileToDevice } from '$/utils/device/index.js'
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 
 const props = defineProps({
   devices: {
@@ -58,7 +58,7 @@ async function handlePush(devices) {
 
   loading.value = true
 
-  await allSettled(devices, (item) => {
+  await allSettledWrapper(devices, (item) => {
     return fileManageProxyRef.value.handlePush(item, { files })
   })
 

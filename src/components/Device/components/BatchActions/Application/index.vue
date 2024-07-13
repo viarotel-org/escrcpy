@@ -7,7 +7,7 @@
 
 <script>
 import ApplicationProxy from '$/components/Device/components/ControlBar/Application/index.vue'
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 
 export default {
   components: {
@@ -50,7 +50,7 @@ export default {
 
       this.loading = true
 
-      await allSettled(this.devices, (item) => {
+      await allSettledWrapper(this.devices, (item) => {
         return this.$refs.applicationProxyRef.invoke(item, { files })
       })
 

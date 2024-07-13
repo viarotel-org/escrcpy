@@ -19,7 +19,7 @@
 import { ElMessage } from 'element-plus'
 import { selectAndSendFileToDevice } from '$/utils/device/index.js'
 import { useDeviceStore } from '$/store'
-import { allSettled } from '$/utils'
+import { allSettledWrapper } from '$/utils'
 
 const props = defineProps({
   device: {
@@ -65,7 +65,7 @@ async function handlePush(device, { files } = {}) {
 
   let failCount = 0
 
-  await allSettled(files, (item) => {
+  await allSettledWrapper(files, (item) => {
     return window.adbkit.push(device.id, item).catch(() => {
       ++failCount
     })

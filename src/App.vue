@@ -20,7 +20,6 @@
           :is="item.component"
           v-if="isRender(item)"
           :ref="item.prop"
-          :re-render="reRender"
         />
       </el-tab-pane>
     </el-tabs>

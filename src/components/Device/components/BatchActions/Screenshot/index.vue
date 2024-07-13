@@ -7,7 +7,7 @@
 
 <script>
 import ScreenshotProxy from '$/components/Device/components/ControlBar/Screenshot/index.vue'
-import { allSettled, sleep } from '$/utils'
+import { allSettledWrapper, sleep } from '$/utils'
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
     async handleClick() {
       this.loading = true
 
-      await allSettled(this.devices, (item) => {
+      await allSettledWrapper(this.devices, (item) => {
         return this.$refs.screenshotProxyRef.invoke(item)
       })
 

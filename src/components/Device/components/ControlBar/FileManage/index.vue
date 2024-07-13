@@ -32,7 +32,7 @@ const deviceStore = useDeviceStore()
 
 const loading = ref(false)
 
-async function handlePush(device, { files } = {}) {
+async function handlePush(device, { files, silent = false } = {}) {
   if (!files) {
     try {
       files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
@@ -58,10 +58,15 @@ async function handlePush(device, { files } = {}) {
 
   loading.value = true
 
-  const closeMessage = ElMessage.loading(
-    window.t('device.control.file.push.loading'),
-    { grouping: true },
-  ).close
+  let closeLoading
+
+  if (!silent) {
+    closeLoading = ElMessage.loading(
+      `${deviceStore.getLabel(device)}: ${window.t(
+        'device.control.file.push.loading',
+      )}`,
+    ).close
+  }
 
   let failCount = 0
 
@@ -73,11 +78,15 @@ async function handlePush(device, { files } = {}) {
 
   loading.value = false
 
+  if (silent) {
+    return false
+  }
+
   const totalCount = files.length
   const successCount = totalCount - failCount
 
   if (successCount) {
-    closeMessage()
+    closeLoading()
 
     if (totalCount > 1) {
       ElMessage.success(
@@ -100,7 +109,7 @@ async function handlePush(device, { files } = {}) {
     return false
   }
 
-  closeMessage()
+  closeLoading()
   ElMessage.warning(window.t('device.control.file.push.error'))
 }
 

@@ -28,9 +28,19 @@ export default {
     async handleClick() {
       this.loading = true
 
+      const closeMessage = this.$message.loading(
+        window.t('device.control.capture.progress', {
+          deviceName: window.t('common.device'),
+        }),
+      ).close
+
       await allSettledWrapper(this.devices, (item) => {
-        return this.$refs.screenshotProxyRef.invoke(item)
+        return this.$refs.screenshotProxyRef.invoke(item, { silent: true })
       })
+
+      closeMessage()
+
+      ElMessage.success(window.t('common.success.batch'))
 
       this.loading = false
     },

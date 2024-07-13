@@ -1,5 +1,5 @@
 import { ElMessage } from 'element-plus'
-import { allSettledWrapper } from '$/utils'
+import { allSettledWrapper, sleep } from '$/utils'
 /**
  * 选择并将文件发送到设备
  */
@@ -8,6 +8,7 @@ export async function selectAndSendFileToDevice(
   {
     files,
     multiSelections = false,
+    silent = false,
     extensions = ['*'],
     selectText = window.t('device.control.file.push.placeholder'),
     loadingText = window.t('device.control.file.push.loading'),
@@ -37,7 +38,10 @@ export async function selectAndSendFileToDevice(
     }
   }
 
-  const closeMessage = ElMessage.loading(loadingText).close
+  let closeLoading
+  if (!silent) {
+    closeLoading = ElMessage.loading(`${deviceId}: ${loadingText}`).close
+  }
 
   const successFiles = []
   const failFiles = []
@@ -53,14 +57,18 @@ export async function selectAndSendFileToDevice(
     }
   })
 
+  await sleep()
+
   if (failFiles.length) {
-    closeMessage()
+    closeLoading?.()
     throw new Error(`Push file failed: ${failFiles.join(',')}`)
   }
 
-  closeMessage()
+  closeLoading?.()
 
-  ElMessage.success({ message: successText, grouping: true })
+  if (!silent) {
+    ElMessage.success({ message: successText, grouping: true })
+  }
 
   return successFiles
 }

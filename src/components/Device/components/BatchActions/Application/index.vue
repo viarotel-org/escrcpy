@@ -50,9 +50,22 @@ export default {
 
       this.loading = true
 
+      const closeMessage = this.$message.loading(
+        this.$t('device.control.install.progress', {
+          deviceName: window.t('common.device'),
+        }),
+      ).close
+
       await allSettledWrapper(this.devices, (item) => {
-        return this.$refs.applicationProxyRef.invoke(item, { files })
+        return this.$refs.applicationProxyRef.invoke(item, {
+          files,
+          silent: true,
+        })
       })
+
+      closeMessage()
+
+      ElMessage.success(window.t('common.success.batch'))
 
       this.loading = false
     },

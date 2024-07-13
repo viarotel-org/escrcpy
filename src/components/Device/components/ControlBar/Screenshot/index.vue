@@ -22,12 +22,15 @@ export default {
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleCapture(device) {
-      const messageEl = this.$message.loading(
-        this.$t('device.control.capture.progress', {
-          deviceName: this.$store.device.getLabel(device),
-        }),
-      )
+    async handleCapture(device, { silent = false } = {}) {
+      let closeLoading
+      if (!silent) {
+        closeLoading = this.$message.loading(
+          this.$t('device.control.capture.progress', {
+            deviceName: this.$store.device.getLabel(device),
+          }),
+        ).close
+      }
 
       const fileName = this.$store.device.getLabel(
         device,
@@ -39,18 +42,21 @@ export default {
 
       try {
         await this.$adb.screencap(device.id, { savePath })
-        await this.handleSuccess(savePath)
       }
       catch (error) {
         if (error.message) {
           this.$message.warning(error.message)
         }
+        return false
       }
 
-      messageEl.close()
-    },
-    async handleSuccess(savePath) {
-      return this.$message.success(
+      if (silent) {
+        return false
+      }
+
+      closeLoading()
+
+      this.$message.success(
         `${this.$t(
           'device.control.capture.success.message.title',
         )}: ${savePath}`,

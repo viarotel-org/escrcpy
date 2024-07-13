@@ -42,13 +42,16 @@ async function handleClick(devices) {
 
   loading.value = true
 
+  const closeLoading = ElMessage.loading(
+    window.t('device.control.shell.push.loading'),
+  ).close
+
   const failFiles = []
 
   await allSettledWrapper(devices, async (device) => {
     const successFiles = await selectAndSendFileToDevice(device.id, {
       files,
-      loadingText: window.t('device.control.shell.push.loading'),
-      successText: window.t('device.control.shell.push.success'),
+      silent: true,
     }).catch((e) => {
       console.warn(e.message)
       failFiles.push(e.message)
@@ -73,6 +76,8 @@ async function handleClick(devices) {
     loading.value = false
     return false
   }
+
+  closeLoading()
 
   await ElMessage.success(window.t('device.control.shell.success'))
 

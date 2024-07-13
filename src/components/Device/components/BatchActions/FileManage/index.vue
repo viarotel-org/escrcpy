@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown :hide-on-click="false">
+  <el-dropdown :hide-on-click="false" :disabled="loading">
     <div class="">
       <slot :loading="loading" />
       <FileManageProxy ref="fileManageProxyRef" />
@@ -58,9 +58,15 @@ async function handlePush(devices) {
 
   loading.value = true
 
+  const closeMessage = ElMessage.loading(
+    window.t('device.control.file.push.loading'),
+  ).close
+
   await allSettledWrapper(devices, (item) => {
-    return fileManageProxyRef.value.handlePush(item, { files })
+    return fileManageProxyRef.value.handlePush(item, { files, silent: true })
   })
+
+  closeMessage()
 
   ElMessage.success(window.t('common.success.batch'))
 

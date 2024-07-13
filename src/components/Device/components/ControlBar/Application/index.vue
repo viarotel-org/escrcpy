@@ -24,7 +24,7 @@ export default {
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleInstall(device, { files } = {}) {
+    async handleInstall(device, { files, silent = false } = {}) {
       if (!files) {
         try {
           files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
@@ -47,11 +47,14 @@ export default {
         }
       }
 
-      const messageEl = this.$message.loading(
-        this.$t('device.control.install.progress', {
-          deviceName: this.$store.device.getLabel(device),
-        }),
-      )
+      let closeLoading = null
+      if (!silent) {
+        closeLoading = this.$message.loading(
+          this.$t('device.control.install.progress', {
+            deviceName: this.$store.device.getLabel(device),
+          }),
+        ).close
+      }
 
       let failCount = 0
 
@@ -62,7 +65,11 @@ export default {
         })
       })
 
-      messageEl.close()
+      if (silent) {
+        return false
+      }
+
+      closeLoading()
 
       const totalCount = files.length
       const successCount = totalCount - failCount

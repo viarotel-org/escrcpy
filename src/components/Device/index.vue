@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col">
-    <div class="flex items-center flex-none space-x-2 pt-1">
+    <div class="flex items-center flex-none space-x-2 py-1 overflow-x-auto">
       <Wireless ref="wireless" :reload="getDeviceData" />
 
       <div class="w-px h-7 !ml-4 !mr-2 bg-gray-200"></div>
@@ -28,12 +28,12 @@
         {{ $t('device.log.name') }}
       </el-button>
 
-      <TerminalAction />
+      <TerminalAction ref="terminalActionRef" />
     </div>
 
     <BatchActions
       class="overflow-hidden transition-all"
-      :class="isMultipleRow ? 'h-12 opacity-100 mt-4' : 'h-0 opacity-0 mt-0'"
+      :class="isMultipleRow ? 'h-12 opacity-100 mt-3' : 'h-0 opacity-0 mt-0'"
       :devices="selectionRows"
     />
 
@@ -61,13 +61,14 @@
           sortable
           show-overflow-tooltip
           align="left"
-          width="200"
+          min-width="100"
         />
         <el-table-column
           :label="$t('device.name')"
           sortable
           show-overflow-tooltip
           align="left"
+          min-width="150"
         >
           <template #default="{ row }">
             <div class="flex items-center">
@@ -96,7 +97,7 @@
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
-          width="450"
+          min-width="200"
           align="left"
         >
           <MirrorAction
@@ -146,6 +147,11 @@ export default {
     MoreDropdown,
     WirelessAction,
     BatchActions,
+  },
+  provide() {
+    return {
+      invokeTerminal: (...args) => this.$refs.terminalActionRef.invoke(...args),
+    }
   },
   data() {
     return {

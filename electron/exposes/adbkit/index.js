@@ -198,8 +198,8 @@ const push = async (
       progress?.(stats)
     })
 
-    res.on('end', (ret) => {
-      resolve(ret)
+    res.on('end', () => {
+      resolve(savePath)
     })
 
     res.on('error', (err) => {

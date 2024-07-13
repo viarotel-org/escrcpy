@@ -1,11 +1,11 @@
 <template>
   <el-input
-    v-bind="data.props || {}"
+    v-bind="{
+      clearable: true,
+      ...(data.props || {}),
+    }"
     v-model="pathValue"
-    clearable
     class="!w-full"
-    :title="$t(data.placeholder)"
-    :placeholder="$t(data.placeholder)"
   >
     <template #append>
       <el-button

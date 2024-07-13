@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center space-x-2">
     <component
       :is="item.component || 'div'"
       v-for="(item, index) in actionModel"
@@ -38,34 +38,41 @@
   </div>
 </template>
 
-<script>
-import AppInstall from './AppInstall/index.vue'
+<script setup>
+import Application from './Application/index.vue'
+import Screenshot from './Screenshot/index.vue'
+import FileManage from './FileManage/index.vue'
+import Shell from './Shell/index.vue'
 
-export default {
-  components: {
-    AppInstall,
+const props = defineProps({
+  devices: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    devices: {
-      type: Array,
-      default: () => [],
-    },
+})
+
+const actionModel = [
+  {
+    label: 'device.control.capture',
+    elIcon: 'Crop',
+    component: Screenshot,
   },
-  data() {
-    return {
-      actionModel: [
-        {
-          label: 'device.control.install',
-          svgIcon: 'install',
-          component: 'AppInstall',
-        },
-      ],
-    }
+  {
+    label: 'device.control.install',
+    svgIcon: 'install',
+    component: Application,
   },
-  methods: {
-    handleShell() {},
+  {
+    label: 'device.control.file.name',
+    svgIcon: 'file-send',
+    component: FileManage,
   },
-}
+  {
+    label: 'device.control.shell.name',
+    svgIcon: 'command',
+    component: Shell,
+  },
+]
 </script>
 
 <style></style>

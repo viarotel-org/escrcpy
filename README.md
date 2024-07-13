@@ -74,7 +74,10 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ### Batch Processing
 
-- Batch installation application
+- Batch Interception Screen
+- Batch Installation Application
+- Batch File Management
+- Batch Execution Script
 
 ### Control Model
 
@@ -82,6 +85,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Recording
 - OTG
 - Camera
+- Custom
 
 ### Device Interaction Bar
 
@@ -96,6 +100,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Reboot
 - Install APP
 - File Manager
+- Execution Script
 - Gnirehtet
 - Mirror Group
 
@@ -200,9 +205,9 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 14. Add more features to device interaction bar: file push, screen rotation, audio control etc ✅
 15. Support bulk connecting to historical devices ✅
 16. Support to use built-in terminals to execute custom commands ✅
-17. Supports automatic execution of mirror on devices ✅
-18. Add batch installation application function ✅
-19. Support more batch processing functions 🚧
+17. Support automatic execution of mirror on devices ✅
+18. Support for custom startup mirroring ✅
+19. Support common batch processing function ✅
 20. Support the device to group 🚧
 21. Add file transmission assistant function 🚧
 22. Support GUI-based selective file downloads from devices 🚧

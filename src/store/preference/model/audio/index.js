@@ -66,7 +66,7 @@ export default {
     audioBuffer: {
       label: 'preferences.audio.audio-buffer.name',
       field: '--audio-buffer',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.audio.audio-buffer.placeholder',
       append: 'ms',
@@ -74,7 +74,7 @@ export default {
     audioOutputBuffer: {
       label: 'preferences.audio.audio-output-buffer.name',
       field: '--audio-output-buffer',
-      type: 'Input.number',
+      type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.audio.audio-output-buffer.placeholder',
       append: 'ms',

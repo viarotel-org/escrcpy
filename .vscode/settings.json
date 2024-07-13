@@ -30,7 +30,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "i18n-ally.localesPaths": ["src/locales/index.js", "src/locales/languages"],
-  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.sourceLanguage": "zh-CN",
   "i18n-ally.keystyle": "nested",
   "i18n-ally.extract.ignored": [
     "Switch",

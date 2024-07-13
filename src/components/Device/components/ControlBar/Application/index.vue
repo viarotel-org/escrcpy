@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LoadingIcon from '$/components/Device/components/LoadingIcon/index.vue'
+import { allSettled } from '$/utils'
 
 export default {
   props: {
@@ -18,51 +18,49 @@ export default {
     return {}
   },
   methods: {
+    invoke(...args) {
+      return this.handleInstall(...args)
+    },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleInstall(device) {
-      let files = null
-
-      try {
-        files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
-          properties: ['openFile', 'multiSelections'],
-          filters: [
-            {
-              name: this.$t('device.control.install.placeholder'),
-              extensions: ['apk'],
-            },
-          ],
-        })
-      }
-      catch (error) {
-        if (error.message) {
-          const message = error.message?.match(/Error: (.*)/)?.[1]
-          this.$message.warning(message || error.message)
+    async handleInstall(device, { files } = {}) {
+      if (!files) {
+        try {
+          files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
+            properties: ['openFile', 'multiSelections'],
+            filters: [
+              {
+                name: this.$t('device.control.install.placeholder'),
+                extensions: ['apk'],
+              },
+            ],
+          })
+        }
+        catch (error) {
+          if (error.message) {
+            const message
+              = error.message?.match(/Error: (.*)/)?.[1] || error.message
+            this.$message.warning(message)
+          }
+          return false
         }
       }
 
-      if (!files) {
-        return false
-      }
-
-      const messageEl = this.$message({
-        message: this.$t('device.control.install.progress', {
+      const messageEl = this.$message.loading(
+        this.$t('device.control.install.progress', {
           deviceName: this.$store.device.getLabel(device),
         }),
-        icon: LoadingIcon,
-        duration: 0,
-      })
+      )
 
       let failCount = 0
 
-      for (let index = 0; index < files.length; index++) {
-        const item = files[index]
-        await this.$adb.install(device.id, item).catch((e) => {
+      await allSettled(files, (item) => {
+        return this.$adb.install(device.id, item).catch((e) => {
           console.warn(e)
           ++failCount
         })
-      }
+      })
 
       messageEl.close()
 
@@ -87,7 +85,7 @@ export default {
             }),
           )
         }
-        return
+        return false
       }
 
       this.$message.warning(this.$t('device.control.install.error'))

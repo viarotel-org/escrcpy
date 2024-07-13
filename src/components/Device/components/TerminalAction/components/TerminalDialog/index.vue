@@ -4,27 +4,26 @@
     width="80%"
     :close-on-click-modal="false"
     :close-on-press-escape="true"
+    :destroy-on-close="true"
     class="overflow-hidden !rounded-md el-dialog-headless dark:border dark:border-gray-700"
-    @open="onOpen"
+    @closed="onClosed"
   >
     <el-icon
-      class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
-      @click="hide"
+      class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
+      @click="close"
     >
       <CloseBold />
     </el-icon>
-
     <VueCommand
-      v-if="renderShell"
-      :ref="(value) => (vShell = value)"
+      ref="vShell"
       v-model:history="history"
       :dispatched-queries="dispatchedQueries"
       :commands="commands"
+      :invert="invert"
       hide-bar
       show-help
       help-text="Type in help"
       :help-timeout="3000"
-      :invert="invert"
       class=""
       @update:dispatched-queries="onDispatchedQueriesUpdate"
     >
@@ -37,108 +36,141 @@
   </el-dialog>
 </template>
 
-<script>
-import { ref, shallowRef } from 'vue'
+<script setup>
 import VueCommand, {
   createQuery,
   createStdout,
   listFormatter,
 } from 'vue-command'
 import 'vue-command/dist/vue-command.css'
+import { ElMessage } from 'element-plus'
 import { useAdb } from './composables/adb-async.js'
 import { useScrcpy } from './composables/scrcpy.js'
 import { useGnirehtet } from './composables/gnirehtet.js'
+import { sleep } from '$/utils/index.js'
+import { useThemeStore } from '$/store/index.js'
 
-export default {
-  components: {
-    VueCommand,
+const themeStore = useThemeStore()
+
+const loading = ref(false)
+const visible = ref(false)
+
+const vShell = ref(null)
+const history = shallowRef([createQuery()])
+const dispatchedQueries = ref(new Set([]))
+
+const { adb } = useAdb({ vShell, history, loading })
+const { scrcpy } = useScrcpy({ vShell, history, loading })
+const { gnirehtet } = useGnirehtet({ vShell, history, loading })
+
+const invert = computed(() => !themeStore.isDark)
+
+const commands = ref({
+  adb,
+  scrcpy,
+  gnirehtet,
+  clear() {
+    history.value = []
+    return createQuery()
   },
-  setup() {
-    const vShell = ref(null)
-    const history = shallowRef([createQuery()])
-    const loading = ref(false)
-    const renderShell = ref(false)
-    const dispatchedQueries = ref(new Set([]))
+})
 
-    const { adb } = useAdb({ vShell, history, loading })
-    const { scrcpy } = useScrcpy({ vShell, history, loading })
-    const { gnirehtet } = useGnirehtet({ vShell, history, loading })
-
-    const commands = ref({
-      adb,
-      scrcpy,
-      gnirehtet,
-      clear() {
-        history.value = []
-        return createQuery()
-      },
-    })
-
-    commands.value.help = () => {
-      const commandList = Object.keys(commands.value)
-      return createStdout(listFormatter('Supported Commands:', ...commandList))
-    }
-
-    dispatchedQueries.value = new Set([
-      ...(window.appStore.get('terminal.dispatchedQueries') || []),
-      ...Object.keys(commands.value),
-    ])
-
-    const onOpen = () => {
-      renderShell.value = true
-    }
-
-    return {
-      vShell,
-      loading,
-      history,
-      commands,
-      dispatchedQueries,
-      onOpen,
-      renderShell,
-    }
-  },
-  data() {
-    return {
-      visible: false,
-    }
-  },
-  computed: {
-    invert() {
-      return !this.$store.theme.isDark
-    },
-  },
-  watch: {
-    'vShell.signals': {
-      handler(value) {
-        value.off('SIGINT')
-
-        value.on('SIGINT', () => {
-          this.onCtrlC()
-        })
-      },
-    },
-  },
-  methods: {
-    show() {
-      this.visible = true
-    },
-
-    hide() {
-      this.visible = false
-    },
-
-    onDispatchedQueriesUpdate(value) {
-      this.$appStore.set('terminal.dispatchedQueries', Array.from(value))
-
-      this.dispatchedQueries = value
-    },
-
-    onCtrlC() {
-      window.gnirehtet.shell('stop')
-    },
-  },
+commands.value.help = () => {
+  const commandList = Object.keys(commands.value)
+  return createStdout(listFormatter('Supported Commands:', ...commandList))
 }
+
+dispatchedQueries.value = new Set([
+  ...(window.appStore.get('terminal.dispatchedQueries') || []),
+  ...Object.keys(commands.value),
+])
+
+function getShell() {
+  let unwatch = null
+
+  return new Promise((resolve) => {
+    unwatch = watch(
+      () => vShell.value,
+      (value) => {
+        if (value) {
+          unwatch?.()
+          resolve(value)
+        }
+      },
+      { immediate: true },
+    )
+  })
+}
+
+;(async () => {
+  const shell = await getShell()
+
+  shell.signals.off('SIGINT')
+
+  shell.signals.on('SIGINT', () => {
+    onCtrlC()
+  })
+})()
+
+async function open() {
+  visible.value = true
+  await focus()
+}
+
+function close() {
+  visible.value = false
+}
+
+async function invoke(command) {
+  visible.value = true
+
+  const shell = await getShell()
+
+  shell.setQuery(command)
+
+  await focus()
+
+  ElMessage.info(window.t('device.control.shell.enter'))
+}
+
+async function focus() {
+  await nextTick()
+
+  const shell = await getShell()
+
+  const targetRefs = shell.$refs.vueCommandHistoryEntryComponentRefs || []
+
+  const targetRef = targetRefs[targetRefs.length - 1]
+
+  if (!targetRef) {
+    return false
+  }
+
+  await sleep()
+
+  targetRef.focus()
+}
+
+function onDispatchedQueriesUpdate(value) {
+  window.appStore.set('terminal.dispatchedQueries', Array.from(value))
+
+  dispatchedQueries.value = value
+}
+
+function onCtrlC() {
+  window.gnirehtet.shell('stop')
+}
+
+function onClosed() {
+  vShell.value.dispatch('clear')
+  history.value = [createQuery()]
+}
+
+defineExpose({
+  open,
+  close,
+  invoke,
+})
 </script>
 
 <style lang="postcss" scoped>

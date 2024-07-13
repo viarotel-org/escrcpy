@@ -27,8 +27,6 @@ log.initialize({ preload: true })
 
 const debug = !!appStore.get('common.debug')
 
-log.info('Debug Status:', debug)
-
 if (!debug) {
   log.warn(
     'Debug Tips:',

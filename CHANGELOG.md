@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.21.0](https://github.com/viarotel-org/escrcpy/compare/v1.20.1...v1.21.0) (2024-07-13)
+
+
+### Features
+
+* 🎉 Support batch execution script function ([8097022](https://github.com/viarotel-org/escrcpy/commit/8097022798ca3ea95ed6530a722f321a862f2e23))
+* 🚀 Support execution script function ([2013413](https://github.com/viarotel-org/escrcpy/commit/2013413611b3efe44811b230ceea036eba310026))
+
+
+### Bug Fixes
+
+* 🐛 Repair the problem of equipment width in the English state ([25c42d9](https://github.com/viarotel-org/escrcpy/commit/25c42d94ec38210c519db78ad60b32813e9ff2f5))
+* 📝 Update Translation ([33b0181](https://github.com/viarotel-org/escrcpy/commit/33b018110cc7727a822f61b97ae5c5f1211adb0c))
+
+
+### Performance Improvements
+
+* ✅ Support batch screenshot and other performance optimization ([db9e3e7](https://github.com/viarotel-org/escrcpy/commit/db9e3e791e3a168c2f3cdef75d5cf1f834bce484))
+* ✨ Support for custom startup mirroring ([677f30c](https://github.com/viarotel-org/escrcpy/commit/677f30cdc2ab87aef1cf2c3ec1b1d3bc066342c6))
+* 🐛 Fix the problem of frequently trigger preservation of preferences ([8261916](https://github.com/viarotel-org/escrcpy/commit/826191617215db3cf027f0ec22530052c8dd97fe))
+
 ## [1.20.1](https://github.com/viarotel-org/escrcpy/compare/v1.20.0...v1.20.1) (2024-07-04)
 
 

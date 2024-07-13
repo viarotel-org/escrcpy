@@ -1,13 +1,13 @@
 <template>
   <div class="" @click="handleClick">
-    <slot />
+    <slot v-bind="{ loading }" />
     <ScreenshotProxy ref="screenshotProxyRef" />
   </div>
 </template>
 
 <script>
 import ScreenshotProxy from '$/components/Device/components/ControlBar/Screenshot/index.vue'
-import { sleep } from '$/utils'
+import { allSettled, sleep } from '$/utils'
 
 export default {
   components: {
@@ -19,13 +19,20 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      loading: false,
+    }
+  },
   methods: {
     async handleClick() {
-      for (let index = 0; index < this.devices.length; index++) {
-        const item = this.devices[index]
-        await this.$refs.screenshotProxyRef.invoke(item)
-        await sleep(1 * 1000)
-      }
+      this.loading = true
+
+      await allSettled(this.devices, (item) => {
+        return this.$refs.screenshotProxyRef.invoke(item)
+      })
+
+      this.loading = false
     },
   },
 }

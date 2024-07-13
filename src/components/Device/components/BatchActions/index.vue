@@ -38,41 +38,41 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Application from './Application/index.vue'
 import Screenshot from './Screenshot/index.vue'
+import FileManage from './FileManage/index.vue'
+import Shell from './Shell/index.vue'
 
-export default {
-  components: {
-    Application,
-    Screenshot,
+const props = defineProps({
+  devices: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    devices: {
-      type: Array,
-      default: () => [],
-    },
+})
+
+const actionModel = [
+  {
+    label: 'device.control.capture',
+    elIcon: 'Crop',
+    component: Screenshot,
   },
-  data() {
-    return {
-      actionModel: [
-        {
-          label: 'device.control.capture',
-          elIcon: 'Crop',
-          component: 'Screenshot',
-        },
-        {
-          label: 'device.control.install',
-          svgIcon: 'install',
-          component: 'Application',
-        },
-      ],
-    }
+  {
+    label: 'device.control.install',
+    svgIcon: 'install',
+    component: Application,
   },
-  methods: {
-    handleShell() {},
+  {
+    label: 'device.control.file.name',
+    svgIcon: 'file-send',
+    component: FileManage,
   },
-}
+  {
+    label: 'device.control.shell.name',
+    svgIcon: 'command',
+    component: Shell,
+  },
+]
 </script>
 
 <style></style>

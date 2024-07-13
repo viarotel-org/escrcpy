@@ -7,7 +7,7 @@
     <template v-if="device.$gnirehtetLoading" #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="handleStop">
-          {{ $t("device.control.gnirehtet.stop") }}
+          {{ $t('device.control.gnirehtet.stop') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -48,9 +48,7 @@ export default {
       try {
         await this.$gnirehtet.run(this.device.id)
         await sleep()
-        this.$message.success(
-          this.$t('device.control.gnirehtet.start.success'),
-        )
+        this.$message.success(this.$t('device.control.gnirehtet.start.success'))
       }
       catch (error) {
         this.$message.warning(error.message || 'Start service failure')

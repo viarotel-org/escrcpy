@@ -6,74 +6,45 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
+import { selectAndSendFileToDevice } from '$/utils/device/index.js'
 
 const props = defineProps({
   device: {
     type: Object,
     default: () => null,
   },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
 })
+
+const loading = ref(false)
 
 const invokeTerminal = inject('invokeTerminal')
 
 async function handleClick(device) {
   let files = null
 
+  loading.value = true
+
   try {
-    files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
-      properties: ['openFile'],
-      filters: [
-        {
-          name: window.t('device.control.shell.select'),
-          extensions: ['sh'],
-        },
-      ],
+    files = await selectAndSendFileToDevice(device.id, {
+      extensions: ['sh'],
+      selectText: window.t('device.control.shell.select'),
+      loadingText: window.t('device.control.shell.push.loading'),
+      successText: window.t('device.control.shell.push.success'),
     })
   }
   catch (error) {
-    if (error.message) {
-      const message = error.message?.match(/Error: (.*)/)?.[1]
-      ElMessage.warning(message || error.message)
-    }
-    return false
-  }
-
-  const closeMessage = ElMessage.loading(
-    window.t('device.control.shell.pushing'),
-  ).close
-
-  const filePath = files[0]
-
-  let pushFilePath = ''
-
-  try {
-    pushFilePath = await window.adbkit.push(device.id, filePath)
-  }
-  catch (error) {
-    closeMessage()
+    loading.value = false
     ElMessage.warning(error.message)
     return false
   }
 
-  if (!pushFilePath) {
-    closeMessage()
-    ElMessage.warning('Push script failed')
-    return false
-  }
+  const filePath = files[0]
 
-  await window.adbkit.deviceShell(device.id, `sh ${pushFilePath}`)
-
-  closeMessage()
-
-  await ElMessage.success(window.t('device.control.shell.success'))
-
-  const command = `adb -s ${device.id} shell sh ${pushFilePath}`
+  const command = `adb -s ${device.id} shell sh ${filePath}`
 
   invokeTerminal(command)
+
+  loading.value = false
 }
 </script>
 

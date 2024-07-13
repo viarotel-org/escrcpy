@@ -52,3 +52,40 @@ export function keyByValue(data, key = 'key', valueKey = 'value') {
 
   return value
 }
+
+/**
+ * 对列表中的每个项目执行给定的迭代器函数，并返回一个 Promise，
+ * 该 Promise 在所有迭代完成时解决，无论它们是成功还是失败。
+ *
+ * @param {Array} list - 要迭代的项目数组。
+ * @param {Function} iterator - 对列表中每个项目执行的函数。
+ *   它应该返回一个 Promise 或者可以是一个异步函数。
+ * @param {*} iterator.item - 当前正在处理的列表项。
+ * @param {number} iterator.index - 当前正在处理的项目的索引。
+ * @param {Array} iterator.array - 正在处理的原始数组。
+ * @returns {Promise<Array<PromiseSettledResult>>} 一个 Promise，解析为一个对象数组，
+ *   描述输入数组中每个 promise 的结果。
+ * @throws {TypeError} 如果第一个参数不是数组或第二个参数不是函数。
+ *
+ * @example
+ * const list = [1, 2, 3, 4, 5];
+ * const iterator = async (item) => {
+ *   if (item % 2 === 0) {
+ *     return item * 2;
+ *   } else {
+ *     throw new Error('奇数');
+ *   }
+ * };
+ * allSettled(list, iterator).then(console.log);
+ */
+export function allSettled(list = [], iterator) {
+  const promises = []
+
+  for (let index = 0; index < list.length; index++) {
+    const item = list[index]
+
+    promises.push(iterator(item))
+  }
+
+  return Promise.allSettled(promises)
+}

@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { allSettled } from '$/utils'
+
 export default {
   props: {
     device: {
@@ -22,29 +24,27 @@ export default {
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
-    async handleInstall(device) {
-      let files = null
-
-      try {
-        files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
-          properties: ['openFile', 'multiSelections'],
-          filters: [
-            {
-              name: this.$t('device.control.install.placeholder'),
-              extensions: ['apk'],
-            },
-          ],
-        })
-      }
-      catch (error) {
-        if (error.message) {
-          const message = error.message?.match(/Error: (.*)/)?.[1]
-          this.$message.warning(message || error.message)
-        }
-      }
-
+    async handleInstall(device, { files } = {}) {
       if (!files) {
-        return false
+        try {
+          files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
+            properties: ['openFile', 'multiSelections'],
+            filters: [
+              {
+                name: this.$t('device.control.install.placeholder'),
+                extensions: ['apk'],
+              },
+            ],
+          })
+        }
+        catch (error) {
+          if (error.message) {
+            const message
+              = error.message?.match(/Error: (.*)/)?.[1] || error.message
+            this.$message.warning(message)
+          }
+          return false
+        }
       }
 
       const messageEl = this.$message.loading(
@@ -55,13 +55,12 @@ export default {
 
       let failCount = 0
 
-      for (let index = 0; index < files.length; index++) {
-        const item = files[index]
-        await this.$adb.install(device.id, item).catch((e) => {
+      await allSettled(files, (item) => {
+        return this.$adb.install(device.id, item).catch((e) => {
           console.warn(e)
           ++failCount
         })
-      }
+      })
 
       messageEl.close()
 
@@ -86,7 +85,7 @@ export default {
             }),
           )
         }
-        return
+        return false
       }
 
       this.$message.warning(this.$t('device.control.install.error'))

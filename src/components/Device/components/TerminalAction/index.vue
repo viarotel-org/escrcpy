@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     handleShow() {
-      this.$refs.terminalDialog.show()
+      this.$refs.terminalDialog.open()
     },
     invoke(...args) {
       this.$refs.terminalDialog.invoke(...args)

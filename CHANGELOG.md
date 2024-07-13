@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.1](https://github.com/viarotel-org/escrcpy/compare/v1.21.0...v1.21.1) (2024-07-13)
+
+
+### Bug Fixes
+
+* 🐛 Fix dependency build errors ([5b02621](https://github.com/viarotel-org/escrcpy/commit/5b026215a9f964b08fd86503d3e5204a60b559ef))
+
 ## [1.21.0](https://github.com/viarotel-org/escrcpy/compare/v1.20.1...v1.21.0) (2024-07-13)
 
 

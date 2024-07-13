@@ -9,7 +9,7 @@
     @closed="onClosed"
   >
     <el-icon
-      class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
+      class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-[var(--el-bg-color)] hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
       @click="close"
     >
       <CloseBold />

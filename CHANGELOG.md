@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.21.4](https://github.com/viarotel-org/escrcpy/compare/v1.21.3...v1.21.4) (2024-07-14)
+
+
+### Performance Improvements
+
+* ♻️ Optimize custom startup performance ([abd468b](https://github.com/viarotel-org/escrcpy/commit/abd468bd433e14bdda737f42e748ca7a947b2917))
+* ♻️ Perfect allSettledWrapper method ([5b7d0af](https://github.com/viarotel-org/escrcpy/commit/5b7d0af683a56ef93bda8708e83bbda0258d531a))
+
 ## [1.21.3](https://github.com/viarotel-org/escrcpy/compare/v1.21.2...v1.21.3) (2024-07-13)
 
 

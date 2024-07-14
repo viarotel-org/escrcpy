@@ -84,7 +84,7 @@ export function allSettledWrapper(list = [], iterator) {
   for (let index = 0; index < list.length; index++) {
     const item = list[index]
 
-    promises.push(iterator(item))
+    promises.push(iterator(item, index))
   }
 
   return Promise.allSettled(promises)

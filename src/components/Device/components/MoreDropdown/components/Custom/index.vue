@@ -1,7 +1,7 @@
 <template>
   <slot :loading="loading" :trigger="handleClick" />
 
-  <DeployDialog ref="deployDialogRef" />
+  <DeployDialog ref="deployDialogRef" @success="handleScrcpy" />
 </template>
 
 <script>
@@ -31,18 +31,12 @@ export default {
     async handleClick() {
       const row = this.row
 
+      this.$refs.deployDialogRef.open({ row })
+    },
+    async handleScrcpy(args) {
+      const row = this.row
+
       this.loading = true
-
-      let args = ''
-
-      try {
-        args = await this.$refs.deployDialogRef.open(row)
-      }
-      catch (error) {
-        this.loading = false
-        this.$message.warning(error.message)
-        return false
-      }
 
       /** TODO */
       const isCamera = ['--camera-facing'].some(key => args.includes(key))

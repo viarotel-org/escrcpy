@@ -10,8 +10,6 @@
   <img src="./screenshots/zh-CN/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
-[更多截图](https://github.com/viarotel-org/escrcpy/tree/main/screenshots/zh-CN)
-
 ## 特点
 
 - 🏃 同步：得益于 Web 技术，将更快速的与 Scrcpy 保持同步

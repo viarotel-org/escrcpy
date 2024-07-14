@@ -10,8 +10,6 @@
   <img src="./screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
 </div>
 
-[More screenshots](https://github.com/viarotel-org/escrcpy/tree/main/screenshots/en-US)
-
 ## Features
 
 - 🏃 Synchronous: Benefit from web technologies to synchronize with Scrcpy faster

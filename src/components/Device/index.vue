@@ -1,34 +1,36 @@
 <template>
   <div class="h-full flex flex-col">
-    <div class="flex items-center flex-none space-x-2 py-1 overflow-x-auto">
-      <Wireless ref="wireless" :reload="getDeviceData" />
+    <div class="flex-none flex items-center py-1 overflow-x-auto">
+      <div class="flex-none">
+        <Wireless ref="wireless" :reload="getDeviceData" />
+      </div>
 
-      <div class="w-px h-7 !ml-4 !mr-2 bg-gray-200"></div>
+      <div class="flex-1 w-0 flex items-center justify-end space-x-2">
+        <el-button
+          type="primary"
+          plain
+          :icon="loading ? '' : 'Refresh'"
+          :loading="loading"
+          @click="handleRefresh"
+        >
+          {{ $t('device.refresh.name') }}
+        </el-button>
 
-      <el-button
-        type="primary"
-        plain
-        :icon="loading ? '' : 'Refresh'"
-        :loading="loading"
-        @click="handleRefresh"
-      >
-        {{ $t('device.refresh.name') }}
-      </el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="RefreshRight"
+          @click="handleRestart"
+        >
+          {{ $t('device.restart.name') }}
+        </el-button>
 
-      <el-button
-        type="warning"
-        plain
-        icon="RefreshRight"
-        @click="handleRestart"
-      >
-        {{ $t('device.restart.name') }}
-      </el-button>
+        <el-button plain icon="View" @click="handleLog">
+          {{ $t('device.log.name') }}
+        </el-button>
 
-      <el-button plain icon="View" @click="handleLog">
-        {{ $t('device.log.name') }}
-      </el-button>
-
-      <TerminalAction ref="terminalActionRef" />
+        <TerminalAction ref="terminalActionRef" />
+      </div>
     </div>
 
     <BatchActions

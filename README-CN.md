@@ -300,8 +300,6 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 
 - issues: [反馈问题](https://github.com/viarotel-org/escrcpy/issues)
 - email: viarotel@qq.com
-- weixin: viarotel
-- qq: 523469508
 
 ## 致谢
 

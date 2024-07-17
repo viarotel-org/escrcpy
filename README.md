@@ -296,8 +296,6 @@ Please try `disabling audio forwarding` feature through the `preferences setting
 
 - Issues: [Submit Feedback](https://github.com/viarotel-org/escrcpy/issues)
 - Email: viarotel@qq.com
-- WeChat: viarotel
-- QQ: 523469508
 
 ## Acknowledgements
 

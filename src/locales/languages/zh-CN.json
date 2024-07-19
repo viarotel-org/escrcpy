@@ -113,6 +113,7 @@
   "device.control.shell.push.success": "推送脚本成功",
   "device.control.shell.enter": "请输入回车键确认执行该脚本",
   "device.control.shell.success": "脚本执行成功",
+  "device.control.task.name": "定时任务",
   "device.control.capture": "截取屏幕",
   "device.control.capture.progress": "正在截取 {deviceName} 的屏幕快照...",
   "device.control.capture.success.message": "是否前往截屏位置进行查看？",

@@ -113,6 +113,7 @@
   "device.control.shell.push.success": "Push script success",
   "device.control.shell.enter": "Please enter the Enter key to confirm the execution of the script",
   "device.control.shell.success": "Script execution successfully",
+  "device.control.task.name": "Timing Task",
   "device.control.capture": "Screenshot",
   "device.control.capture.progress": "Capturing screenshot for {deviceName}...",
   "device.control.capture.success.message": "Open screenshot location?",

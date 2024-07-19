@@ -43,6 +43,7 @@ import Application from './Application/index.vue'
 import Screenshot from './Screenshot/index.vue'
 import FileManage from './FileManage/index.vue'
 import Shell from './Shell/index.vue'
+import Tasks from './Tasks/index.vue'
 
 const props = defineProps({
   devices: {
@@ -71,6 +72,11 @@ const actionModel = [
     label: 'device.control.shell.name',
     svgIcon: 'command',
     component: Shell,
+  },
+  {
+    label: 'device.control.task.name',
+    elIcon: 'Clock',
+    component: Tasks,
   },
 ]
 </script>

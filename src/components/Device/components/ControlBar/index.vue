@@ -73,6 +73,7 @@ import Rotation from './Rotation/index.vue'
 import Volume from './Volume/index.vue'
 import FileManage from './FileManage/index.vue'
 import Shell from './Shell/index.vue'
+import Tasks from './Tasks/index.vue'
 
 export default {
   components: {
@@ -84,6 +85,7 @@ export default {
     Volume,
     FileManage,
     Shell,
+    Tasks,
   },
   props: {
     device: {
@@ -156,6 +158,11 @@ export default {
           svgIcon: 'command',
           component: 'Shell',
           tips: 'device.control.shell.tips',
+        },
+        {
+          label: 'device.control.task.name',
+          elIcon: 'Clock',
+          component: 'Tasks',
         },
         {
           label: 'device.control.gnirehtet',

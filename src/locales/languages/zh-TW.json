@@ -113,6 +113,7 @@
   "device.control.shell.push.success": "推送腳本成功",
   "device.control.shell.enter": "請輸入回車鍵確認執行該腳本",
   "device.control.shell.success": "腳本執行成功",
+  "device.control.task.name": "定時任務",
   "device.control.capture": "擷取螢幕",
   "device.control.capture.progress": "正在擷取 {deviceName} 的螢幕快照...",
   "device.control.capture.success.message": "是否前往截圖位置進行檢視？",

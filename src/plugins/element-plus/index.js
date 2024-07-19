@@ -11,6 +11,8 @@ import * as ElementPlusIcons from '@element-plus/icons-vue'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 
 import EleIconLoading from './components/EleIconLoading/index.vue'
+import EleFormRow from './components/EleFormRow/index.vue'
+import EleFormItemCol from './components/EleFormItemCol/index.vue'
 
 export default {
   install(app) {
@@ -29,5 +31,8 @@ export default {
     app.use(ElMessage)
     app.use(ElMessageBox)
     app.use(ElLoading)
+
+    app.component('EleFormRow', EleFormRow)
+    app.component('EleFormItemCol', EleFormItemCol)
   },
 }

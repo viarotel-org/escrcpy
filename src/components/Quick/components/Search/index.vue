@@ -1,16 +1,6 @@
 <template>
-  <div class="relative z-10">
-    <el-button
-      class=""
-      circle
-      size="small"
-      :title="`${$t('common.search')}（${shortcutTip}）`"
-      @click="openSearchModal"
-    >
-      <el-icon size="12">
-        <ElIconSearch />
-      </el-icon>
-    </el-button>
+  <div class="" @click="handleClick">
+    <slot />
   </div>
 </template>
 
@@ -32,6 +22,8 @@ watch([() => themeStore.value, () => activeTab.value], () => {
 function openSearchModal() {
   window.findInPageModal.open({ isDark: themeStore.isDark })
 }
+
+const handleClick = openSearchModal
 
 function closeSearchModal() {
   window.findInPageModal.close()

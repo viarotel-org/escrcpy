@@ -2,10 +2,12 @@
   <div class="h-full flex flex-col">
     <div class="flex-none flex items-center py-1 overflow-x-auto">
       <div class="flex-none">
-        <Wireless ref="wireless" :reload="getDeviceData" />
+        <WirelessGroup ref="wirelessGroupRef" :reload="getDeviceData" />
       </div>
 
-      <div class="flex-1 w-0 flex items-center justify-end space-x-2">
+      <div class="w-px h-7 !mx-4 bg-gray-200 flex-none"></div>
+
+      <div class="flex-1 w-0 space-x-2">
         <el-button
           type="primary"
           plain
@@ -15,21 +17,6 @@
         >
           {{ $t('device.refresh.name') }}
         </el-button>
-
-        <el-button
-          type="warning"
-          plain
-          icon="RefreshRight"
-          @click="handleRestart"
-        >
-          {{ $t('device.restart.name') }}
-        </el-button>
-
-        <el-button plain icon="View" @click="handleLog">
-          {{ $t('device.log.name') }}
-        </el-button>
-
-        <TerminalAction ref="terminalActionRef" />
       </div>
     </div>
 
@@ -130,8 +117,7 @@
 <script>
 import ControlBar from './components/ControlBar/index.vue'
 import Remark from './components/Remark/index.vue'
-import Wireless from './components/Wireless/index.vue'
-import TerminalAction from './components/TerminalAction/index.vue'
+import WirelessGroup from './components/WirelessGroup/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
@@ -141,10 +127,9 @@ import { isIPWithPort, sleep } from '$/utils/index.js'
 
 export default {
   components: {
-    Wireless,
+    WirelessGroup,
     ControlBar,
     Remark,
-    TerminalAction,
     MirrorAction,
     MoreDropdown,
     WirelessAction,
@@ -225,7 +210,7 @@ export default {
     },
 
     handleConnect(...args) {
-      this.$refs.wireless.connect(...args)
+      this.$refs.wirelessGroupRef.connect(...args)
     },
 
     handleRefresh() {
@@ -260,14 +245,6 @@ export default {
           console.warn(error.message)
         }
       }
-    },
-
-    handleRestart() {
-      this.$electron.ipcRenderer.send('restart-app')
-    },
-
-    handleLog() {
-      this.$appLog.openInEditor()
     },
 
     async getDeviceData({ resetResolve = false } = {}) {

@@ -4,7 +4,8 @@
     width="80%"
     :close-on-click-modal="false"
     :close-on-press-escape="true"
-    :destroy-on-close="true"
+    destroy-on-close
+    append-to-body
     class="overflow-hidden !rounded-md el-dialog-headless dark:border dark:border-gray-700"
     @closed="onClosed"
   >

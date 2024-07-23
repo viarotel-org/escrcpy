@@ -8,7 +8,7 @@
         @tab-change="onTabChange"
       >
         <template #add-icon>
-          <AppSearch />
+          <Quick />
         </template>
         <el-tab-pane
           v-for="(item, index) of tabsModel"
@@ -34,7 +34,7 @@ import { ElMessageBox } from 'element-plus'
 import Device from './components/Device/index.vue'
 import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
-import AppSearch from './components/Search/index.vue'
+import Quick from './components/Quick/index.vue'
 
 import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
@@ -150,7 +150,7 @@ defineExpose({
     @apply !mb-3;
   }
   .el-tabs__new-tab {
-    @apply !absolute !inset-y-0 !right-0 !border-none;
+    @apply !absolute !inset-y-0 !right-0 !border-none !w-auto;
   }
 
   .el-tabs__nav-wrap:after {

@@ -58,7 +58,10 @@ export default {
           'show-open-dialog',
           {
             properties: properties || [],
-            filters: filters || [],
+            filters: (filters || []).map(item => ({
+              ...item,
+              name: window.t(item.name),
+            })),
             ...(defaultPath
               ? {
                   defaultPath,

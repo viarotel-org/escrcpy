@@ -70,7 +70,7 @@ export default {
           },
         )
 
-        const value = files[0]
+        const value = files.join(',')
 
         this.pathValue = value
       }

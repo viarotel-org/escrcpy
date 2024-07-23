@@ -1,4 +1,4 @@
-import { cloneDeep, keyBy } from 'lodash-es'
+import { camelCase, cloneDeep, keyBy } from 'lodash-es'
 
 /**
  * @desc 使用async await 进项进行延时操作
@@ -88,4 +88,38 @@ export function allSettledWrapper(list = [], iterator) {
   }
 
   return Promise.allSettled(promises)
+}
+
+/**
+ * @description 继承组件方法
+ * @param {*} refName ref名称
+ * @param {*} methodNames 需要继承的方法名列表
+ * @returns
+ */
+export function inheritComponentMethods(refName, methodNames) {
+  const methods = {}
+  methodNames.forEach((name) => {
+    methods[name] = function (...params) {
+      return this.$refs[refName][name](...params)
+    }
+  })
+  return methods
+}
+
+/**
+ * 通用定时器
+ * @param {string} type
+ */
+export function setTimer(type, ...args) {
+  const method = camelCase(`set-${type}`)
+  return globalThis[method](...args)
+}
+
+/**
+ * 通用清除定时器
+ * @param {string} type
+ */
+export function clearTimer(type, ...args) {
+  const method = camelCase(`clear-${type}`)
+  return globalThis[method](...args)
 }

@@ -7,12 +7,12 @@
 </template>
 
 <script setup>
-import TaskDialog from './components/TaskDialog/index.vue'
+import TaskDialog from '$/components/Device/components/BatchActions/Tasks/components/TaskDialog/index.vue'
 
 const props = defineProps({
   device: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: null,
   },
 })
 
@@ -21,7 +21,7 @@ const loading = ref(false)
 const taskDialogRef = ref(null)
 
 function handleClick(device) {
-  taskDialogRef.value.open(device)
+  taskDialogRef.value.open({ devices: [device] })
 }
 </script>
 

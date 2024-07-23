@@ -48,9 +48,10 @@ import { useAdb } from './composables/adb-async.js'
 import { useScrcpy } from './composables/scrcpy.js'
 import { useGnirehtet } from './composables/gnirehtet.js'
 import { sleep } from '$/utils/index.js'
-import { useThemeStore } from '$/store/index.js'
+import { useTaskStore, useThemeStore } from '$/store/index.js'
 
 const themeStore = useThemeStore()
+const taskStore = useTaskStore()
 
 const loading = ref(false)
 const visible = ref(false)
@@ -165,6 +166,10 @@ function onClosed() {
   vShell.value.dispatch('clear')
   history.value = [createQuery()]
 }
+
+taskStore.on('terminal', (task) => {
+  invoke(task.command)
+})
 
 defineExpose({
   open,

@@ -1,29 +1,31 @@
 <template>
-  <div class="absolute inset-0 px-4 pb-4 h-full">
-    <el-tabs
-      v-model="activeTab"
-      class="el-tabs-flex"
-      addable
-      @tab-change="onTabChange"
-    >
-      <template #add-icon>
-        <AppSearch />
-      </template>
-      <el-tab-pane
-        v-for="(item, index) of tabsModel"
-        :key="index"
-        :label="$t(item.label)"
-        :name="item.prop"
-        lazy
+  <el-config-provider :locale="locale">
+    <div class="absolute inset-0 px-4 pb-4 h-full">
+      <el-tabs
+        v-model="activeTab"
+        class="el-tabs-flex"
+        addable
+        @tab-change="onTabChange"
       >
-        <component
-          :is="item.component"
-          v-if="isRender(item)"
-          :ref="item.prop"
-        />
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+        <template #add-icon>
+          <AppSearch />
+        </template>
+        <el-tab-pane
+          v-for="(item, index) of tabsModel"
+          :key="index"
+          :label="$t(item.label)"
+          :name="item.prop"
+          lazy
+        >
+          <component
+            :is="item.component"
+            v-if="isRender(item)"
+            :ref="item.prop"
+          />
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </el-config-provider>
 </template>
 
 <script setup>
@@ -34,8 +36,19 @@ import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
 import AppSearch from './components/Search/index.vue'
 
+import { i18n } from '$/locales/index.js'
+import localeModel from '$/plugins/element-plus/locale.js'
+
 import { useThemeStore } from '$/store/theme/index.js'
 import { usePreferenceStore } from '$/store/preference/index.js'
+
+const locale = computed(() => {
+  const i18nLocale = i18n.global.locale.value
+
+  const value = localeModel[i18nLocale]
+
+  return value
+})
 
 const tabsModel = ref([
   {

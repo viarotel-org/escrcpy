@@ -1,51 +1,31 @@
 <template>
-  <div class="" @click="handleClick">
+  <div class="" @click="handleClick(devices)">
     <slot v-bind="{ loading }" />
-    <ScreenshotProxy ref="screenshotProxyRef" />
   </div>
 </template>
 
-<script>
-import ScreenshotProxy from '$/components/Device/components/ControlBar/Screenshot/index.vue'
-import { allSettledWrapper, sleep } from '$/utils'
+<script setup>
+import { useTaskStore } from '$/store/index.js'
 
-export default {
-  components: {
-    ScreenshotProxy,
+import { useScreenshotAction } from '$/composables/useScreenshotAction/index.js'
+
+const props = defineProps({
+  devices: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    devices: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {
-      loading: false,
-    }
-  },
-  methods: {
-    async handleClick() {
-      this.loading = true
+})
 
-      const closeMessage = this.$message.loading(
-        window.t('device.control.capture.progress', {
-          deviceName: window.t('common.device'),
-        }),
-      ).close
+const { loading, invoke: handleClick } = useScreenshotAction()
 
-      await allSettledWrapper(this.devices, (item) => {
-        return this.$refs.screenshotProxyRef.invoke(item, { silent: true })
-      })
+const taskStore = useTaskStore()
 
-      closeMessage()
-
-      ElMessage.success(window.t('common.success.batch'))
-
-      this.loading = false
-    },
-  },
-}
+taskStore.on('screenshot', (task) => {
+  taskStore.start({
+    task,
+    handler: handleClick,
+  })
+})
 </script>
 
 <style></style>

@@ -150,11 +150,6 @@ export default {
     WirelessAction,
     BatchActions,
   },
-  provide() {
-    return {
-      invokeTerminal: (...args) => this.$refs.terminalActionRef.invoke(...args),
-    }
-  },
   data() {
     return {
       loading: false,

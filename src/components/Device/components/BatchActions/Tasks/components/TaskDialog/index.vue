@@ -1,8 +1,8 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="定时任务"
-    width="60%"
+    :title="$t('device.task.name')"
+    width="70%"
     class="el-dialog-beautify"
     append-to-body
     destroy-on-close
@@ -12,13 +12,17 @@
       ref="formRef"
       :model="model"
       :rules="rules"
-      label-width="120px"
-      class="!pr-[120px] !pt-4"
+      label-width="180px"
+      class="!pr-24 !pt-4"
     >
-      <ele-form-item-col label="任务类型" :span="24" prop="taskType">
+      <ele-form-item-col
+        :label="$t('device.task.type')"
+        :span="24"
+        prop="taskType"
+      >
         <el-select
           v-model="model.taskType"
-          placeholder="请选择任务类型"
+          :placeholder="$t('common.select.please')"
           clearable
           filterable
           @change="onTaskChange"
@@ -32,21 +36,25 @@
           </el-option>
         </el-select>
       </ele-form-item-col>
-      <ele-form-item-col label="执行频率" :span="24" prop="timerType">
+      <ele-form-item-col
+        :label="$t('device.task.frequency')"
+        :span="24"
+        prop="timerType"
+      >
         <el-radio-group v-model="model.timerType">
           <el-radio
             v-for="(item, index) of timerModel"
             :key="index"
             :value="item.value"
           >
-            {{ item.label }}
+            {{ $t(item.label) }}
           </el-radio>
         </el-radio-group>
       </ele-form-item-col>
 
       <ele-form-item-col
         v-if="['timeout'].includes(model.timerType)"
-        label="执行时间"
+        :label="$t('device.task.timeout')"
         :span="24"
         prop="timeout"
       >
@@ -61,7 +69,7 @@
 
       <ele-form-item-col
         v-if="['interval'].includes(model.timerType)"
-        label="重复规则"
+        :label="$t('device.task.interval')"
         :span="24"
         prop="interval"
       >
@@ -74,14 +82,14 @@
           <template #append>
             <el-select
               v-model="model.intervalType"
-              placeholder="请选择时间单位"
+              :placeholder="$t('common.select.please')"
               filterable
-              class="!w-24"
+              class="!w-36"
             >
               <el-option
                 v-for="(item, index) of intervalModel"
                 :key="index"
-                :label="item.label"
+                :label="$t(item.label)"
                 :value="item.value"
               />
             </el-select>
@@ -91,7 +99,7 @@
 
       <ele-form-item-col
         v-if="['install'].includes(model.taskType)"
-        label="选择应用"
+        :label="$t('device.task.extra.app')"
         :span="24"
         prop="extra"
       >
@@ -112,7 +120,7 @@
 
       <ele-form-item-col
         v-if="['shell'].includes(model.taskType)"
-        label="选择脚本"
+        :label="$t('device.task.extra.shell')"
         :span="24"
         prop="extra"
       >
@@ -130,14 +138,20 @@
           }"
         />
       </ele-form-item-col>
+
+      <ele-form-item-col :span="24" label="">
+        <div class="text-red-200 hover:text-red-500 transition-colors">
+          {{ $t('device.task.tips') }}
+        </div>
+      </ele-form-item-col>
     </ele-form-row>
 
     <template #footer>
       <el-button @click="close">
-        取消
+        {{ $t('common.cancel') }}
       </el-button>
       <el-button :loading type="primary" @click="submit">
-        确定
+        {{ $t('common.confirm') }}
       </el-button>
     </template>
   </el-dialog>
@@ -173,14 +187,16 @@ const model = ref({
 
 const rules = computed(() =>
   Object.keys(model.value).reduce((obj, item) => {
-    obj[item] = [{ required: true, message: '该选项不能为空', trigger: 'blur' }]
+    obj[item] = [
+      { required: true, message: window.t('common.required'), trigger: 'blur' },
+    ]
 
     if (item === 'timeout') {
       obj[item].push({
         trigger: 'blur',
         validator: (rule, value, callback) => {
           if (value.getTime() <= Date.now()) {
-            callback(new Error('不能小于当前时间'))
+            callback(new Error(window.t('device.task.timeout.tips')))
           }
           else {
             callback()

@@ -2,8 +2,8 @@
   <div class="flex items-center space-x-4 relative z-10">
     <component
       :is="item.component || 'div'"
-      v-for="(item, index) in actionModel"
-      :key="index"
+      v-for="item in actionModel"
+      :key="item.label"
       class="flex-none"
       v-bind="{
         ...(item.command
@@ -13,12 +13,16 @@
           : {}),
       }"
     >
-      <template #default="{ loading = false } = {}">
-        <el-button
-          circle
-          size="small"
-          :title="$t(item.tips || item.label)"
-          :loading="loading"
+      <template #default="{ ...slotProps } = {}">
+        <EleTooltipButton
+          v-bind="{
+            text: true,
+            content: $t(item.tips || item.label),
+            circle: true,
+            size: 'small',
+            effect: 'light',
+            ...slotProps,
+          }"
         >
           <template #icon>
             <svg-icon
@@ -30,21 +34,27 @@
               <component :is="item.elIcon" />
             </el-icon>
           </template>
-        </el-button>
+        </EleTooltipButton>
       </template>
     </component>
   </div>
 </template>
 
 <script setup>
-import Search from './components/Search/index.vue'
-import Restart from './components/Restart/index.vue'
-import Log from './components/Log/index.vue'
+import Task from './components/Task/index.vue'
 import Terminal from './components/Terminal/index.vue'
+import Log from './components/Log/index.vue'
+import Restart from './components/Restart/index.vue'
+import Search from './components/Search/index.vue'
 
 const props = defineProps({})
 
 const actionModel = [
+  {
+    label: 'device.task.list',
+    elIcon: 'Clock',
+    component: Task,
+  },
   {
     label: 'device.terminal.name',
     svgIcon: 'command',

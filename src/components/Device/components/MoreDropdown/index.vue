@@ -25,7 +25,7 @@
               <el-icon class="is-loading">
                 <Loading />
               </el-icon>
-              {{ $t('common.progress') }}
+              {{ $t('common.starting') }}
             </template>
             <template v-else>
               {{ $t(item.label) }}

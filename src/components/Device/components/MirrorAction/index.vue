@@ -7,7 +7,7 @@
     :icon="loading ? '' : 'Monitor'"
     @click="handleClick(row)"
   >
-    {{ loading ? $t('common.progress') : $t('device.mirror.start') }}
+    {{ loading ? $t('common.starting') : $t('device.mirror.start') }}
   </el-button>
 </template>
 

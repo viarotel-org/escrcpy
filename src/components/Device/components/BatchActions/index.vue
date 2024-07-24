@@ -16,7 +16,6 @@
     >
       <template #default="{ loading = false } = {}">
         <el-button
-          type="primary"
           plain
           :title="$t(item.tips || item.label)"
           :loading="loading"
@@ -74,7 +73,7 @@ const actionModel = [
     component: Shell,
   },
   {
-    label: 'device.control.task.name',
+    label: 'device.task.name',
     elIcon: 'Clock',
     component: Tasks,
   },

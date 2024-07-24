@@ -160,7 +160,7 @@ export default {
           tips: 'device.control.shell.tips',
         },
         {
-          label: 'device.control.task.name',
+          label: 'device.task.name',
           elIcon: 'Clock',
           component: 'Tasks',
         },

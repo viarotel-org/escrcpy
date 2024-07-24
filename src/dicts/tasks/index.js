@@ -1,41 +1,41 @@
 export const timerType = [
   {
-    label: '单次执行',
+    label: 'device.task.frequency.timeout',
     value: 'timeout',
   },
   {
-    label: '周期重复',
+    label: 'device.task.frequency.interval',
     value: 'interval',
   },
 ]
 
 export const timeUnit = [
   {
-    label: '月',
+    label: 'time.unit.month',
     value: 'month',
   },
   {
-    label: '周',
+    label: 'time.unit.week',
     value: 'week',
   },
   {
-    label: '天',
+    label: 'time.unit.day',
     value: 'day',
   },
   {
-    label: '小时',
+    label: 'time.unit.hour',
     value: 'hour',
   },
   {
-    label: '分钟',
+    label: 'time.unit.minute',
     value: 'minute',
   },
   {
-    label: '秒',
+    label: 'time.unit.second',
     value: 'second',
   },
   {
-    label: '毫秒',
+    label: 'time.unit.millisecond',
     value: 'millisecond',
   },
 ]

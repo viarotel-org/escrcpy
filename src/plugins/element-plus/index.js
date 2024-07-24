@@ -10,9 +10,12 @@ import * as ElementPlusIcons from '@element-plus/icons-vue'
 
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 
-import EleIconLoading from './components/EleIconLoading/index.vue'
-import EleFormRow from './components/EleFormRow/index.vue'
-import EleFormItemCol from './components/EleFormItemCol/index.vue'
+import EleIconLoading from './expands/EleIconLoading/index.vue'
+import EleFormRow from './expands/EleFormRow/index.vue'
+import EleFormItemCol from './expands/EleFormItemCol/index.vue'
+import EleTooltipButton from './expands/EleTooltipButton/index.vue'
+import EleTagDict from './expands/EleTagDict/index.vue'
+import EleTagCollapse from './expands/EleTagCollapse/index.vue'
 
 export default {
   install(app) {
@@ -34,5 +37,8 @@ export default {
 
     app.component('EleFormRow', EleFormRow)
     app.component('EleFormItemCol', EleFormItemCol)
+    app.component('EleTooltipButton', EleTooltipButton)
+    app.component('EleTagDict', EleTagDict)
+    app.component('EleTagCollapse', EleTagCollapse)
   },
 }

@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.22.0](https://github.com/viarotel-org/escrcpy/compare/v1.21.4...v1.22.0) (2024-07-25)
+
+
+### Features
+
+* 🚀 Add a scheduled task list ([d72202b](https://github.com/viarotel-org/escrcpy/commit/d72202b3117fd5b98b5a96dd95fad37579fc7abe))
+* 🚀 Add basic timing task function ([04a7608](https://github.com/viarotel-org/escrcpy/commit/04a760897e7dccc91acc1d15af016fbcc1acc380))
+* 🚀 Add timing task entrance ([8393c85](https://github.com/viarotel-org/escrcpy/commit/8393c854b312abf616367f797c3d300217dcd9d3))
+* 🚀 添加定时任务入口 ([6ce66d4](https://github.com/viarotel-org/escrcpy/commit/6ce66d4d6349554333988505cf072f913d57532c))
+
+
+### Bug Fixes
+
+* 🐛 The internationalization problem of repairing path selector ([8e6af20](https://github.com/viarotel-org/escrcpy/commit/8e6af2087e86a649ff0b89394978add4dc2328e2))
+* 💄 Optimize wireless connection user interface ([50ae742](https://github.com/viarotel-org/escrcpy/commit/50ae7426c0d2c329173d9d7b8e160d1faddaef00))
+
+
+### Performance Improvements
+
+* 💄 Optimization of the operation bar at the top of the equipment list ([81bd3d9](https://github.com/viarotel-org/escrcpy/commit/81bd3d986bc091113cac3536af3e108653813b39))
+* 💄 Optimized operation button layout ([16f9535](https://github.com/viarotel-org/escrcpy/commit/16f953538b819b9cfaad59e9c8f3eb9d32d0f5b1))
+
 ## [1.21.4](https://github.com/viarotel-org/escrcpy/compare/v1.21.3...v1.21.4) (2024-07-14)
 
 

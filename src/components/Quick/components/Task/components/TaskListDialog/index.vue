@@ -95,7 +95,6 @@
         >
           <EleTagCollapse
             effect="light"
-            borderless
             :value="row.devices"
             :label="(item) => item.$remark || `${item.$name} (${item.id})`"
             class="justify-center"

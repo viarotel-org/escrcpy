@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.1](https://github.com/viarotel-org/escrcpy/compare/v1.22.0...v1.22.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* 🐛 Fixed asset publishing issues ([222f626](https://github.com/viarotel-org/escrcpy/commit/222f6260e12a8891e51ca9c86160d45c751dc255))
+
 ## [1.22.0](https://github.com/viarotel-org/escrcpy/compare/v1.21.4...v1.22.0) (2024-07-25)
 
 

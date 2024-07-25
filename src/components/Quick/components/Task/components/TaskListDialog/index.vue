@@ -30,7 +30,30 @@
           :label="$t('device.task.type')"
           align="center"
         >
-          {{ $t(getDictLabel(taskModel, row.taskType)) }}
+          <div class="h-full flex items-center justify-center">
+            <el-dropdown :key="row.id" trigger="hover" :disabled="!row.extra">
+              <span
+                :class="
+                  row.extra
+                    ? 'text-primary hover:underline'
+                    : 'text-[var(--el-table-text-color)]'
+                "
+              >
+                {{ $t(getDictLabel(taskModel, row.taskType)) }}
+              </span>
+
+              <template v-if="row.extra" #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-for="(item, index) of row.extra.split(',')"
+                    :key="index"
+                  >
+                    {{ item }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </el-table-column>
 
         <el-table-column

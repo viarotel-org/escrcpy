@@ -8,143 +8,147 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <ele-form-row
-      ref="formRef"
-      :model="model"
-      :rules="rules"
-      label-width="180px"
-      class="!pr-24 !pt-4"
-    >
-      <ele-form-item-col
-        :label="$t('device.task.type')"
-        :span="24"
-        prop="taskType"
+    <div class="pr-24 pt-4">
+      <ele-form-row
+        ref="formRef"
+        :model="model"
+        :rules="rules"
+        label-width="180px"
+        class=""
       >
-        <el-select
-          v-model="model.taskType"
-          :placeholder="$t('common.select.please')"
-          clearable
-          filterable
-          @change="onTaskChange"
+        <ele-form-item-col
+          :label="$t('device.task.type')"
+          :span="24"
+          prop="taskType"
         >
-          <el-option
-            v-for="item in taskModel"
-            :key="item.value"
-            :label="$t(item.label)"
-            :value="item.value"
+          <el-select
+            v-model="model.taskType"
+            :placeholder="$t('common.select.please')"
+            clearable
+            filterable
+            @change="onTaskChange"
           >
-          </el-option>
-        </el-select>
-      </ele-form-item-col>
-      <ele-form-item-col
-        :label="$t('device.task.frequency')"
-        :span="24"
-        prop="timerType"
-      >
-        <el-radio-group v-model="model.timerType">
-          <el-radio
-            v-for="(item, index) of timerModel"
-            :key="index"
-            :value="item.value"
-          >
-            {{ $t(item.label) }}
-          </el-radio>
-        </el-radio-group>
-      </ele-form-item-col>
-
-      <ele-form-item-col
-        v-if="['timeout'].includes(model.timerType)"
-        :label="$t('device.task.timeout')"
-        :span="24"
-        prop="timeout"
-      >
-        <el-date-picker
-          v-model="model.timeout"
-          type="datetime"
-          placeholder="0000-00-00 00:00:00"
-          clearable
-          v-bind="{ disabledDate, defaultTime }"
-        ></el-date-picker>
-      </ele-form-item-col>
-
-      <ele-form-item-col
-        v-if="['interval'].includes(model.timerType)"
-        :label="$t('device.task.interval')"
-        :span="24"
-        prop="interval"
-      >
-        <el-input
-          v-model="model.interval"
-          type="number"
-          placeholder="0"
-          clearable
-        >
-          <template #append>
-            <el-select
-              v-model="model.intervalType"
-              :placeholder="$t('common.select.please')"
-              filterable
-              class="!w-36"
+            <el-option
+              v-for="item in taskModel"
+              :key="item.value"
+              :label="$t(item.label)"
+              :value="item.value"
             >
-              <el-option
-                v-for="(item, index) of intervalModel"
-                :key="index"
-                :label="$t(item.label)"
-                :value="item.value"
-              />
-            </el-select>
-          </template>
-        </el-input>
-      </ele-form-item-col>
+            </el-option>
+          </el-select>
+        </ele-form-item-col>
+        <ele-form-item-col
+          :label="$t('device.task.frequency')"
+          :span="24"
+          prop="timerType"
+        >
+          <el-radio-group v-model="model.timerType">
+            <el-radio
+              v-for="(item, index) of timerModel"
+              :key="index"
+              :value="item.value"
+            >
+              {{ $t(item.label) }}
+            </el-radio>
+          </el-radio-group>
+        </ele-form-item-col>
 
-      <ele-form-item-col
-        v-if="['install'].includes(model.taskType)"
-        :label="$t('device.task.extra.app')"
-        :span="24"
-        prop="extra"
-      >
-        <InputPath
-          v-model="model.extra"
-          :placeholder="$t('device.control.install.placeholder')"
-          :data="{
-            properties: ['openFile', 'multiSelections'],
-            filters: [
-              {
-                name: $t('device.control.install.placeholder'),
-                extensions: ['apk'],
-              },
-            ],
-          }"
-        />
-      </ele-form-item-col>
+        <ele-form-item-col
+          v-if="['timeout'].includes(model.timerType)"
+          :label="$t('device.task.timeout')"
+          :span="24"
+          prop="timeout"
+        >
+          <el-date-picker
+            v-model="model.timeout"
+            type="datetime"
+            placeholder="0000-00-00 00:00:00"
+            clearable
+            v-bind="{ disabledDate, defaultTime }"
+          ></el-date-picker>
+        </ele-form-item-col>
 
-      <ele-form-item-col
-        v-if="['shell'].includes(model.taskType)"
-        :label="$t('device.task.extra.shell')"
-        :span="24"
-        prop="extra"
-      >
-        <InputPath
-          v-model="model.extra"
-          :placeholder="$t('device.control.shell.select')"
-          :data="{
-            properties: ['openFile'],
-            filters: [
-              {
-                name: $t('device.control.shell.select'),
-                extensions: ['sh'],
-              },
-            ],
-          }"
-        />
-      </ele-form-item-col>
+        <ele-form-item-col
+          v-if="['interval'].includes(model.timerType)"
+          :label="$t('device.task.interval')"
+          :span="24"
+          prop="interval"
+        >
+          <el-input
+            v-model="model.interval"
+            type="number"
+            placeholder="0"
+            clearable
+          >
+            <template #append>
+              <el-select
+                v-model="model.intervalType"
+                :placeholder="$t('common.select.please')"
+                filterable
+                class="!w-36"
+              >
+                <el-option
+                  v-for="(item, index) of intervalModel"
+                  :key="index"
+                  :label="$t(item.label)"
+                  :value="item.value"
+                />
+              </el-select>
+            </template>
+          </el-input>
+        </ele-form-item-col>
 
-      <ele-form-item-col :span="24" label="">
-        <div class="text-red-200 hover:text-red-500 transition-colors">
-          {{ $t('device.task.tips') }}
-        </div>
-      </ele-form-item-col>
-    </ele-form-row>
+        <ele-form-item-col
+          v-if="['install'].includes(model.taskType)"
+          :label="$t('device.task.extra.app')"
+          :span="24"
+          prop="extra"
+        >
+          <InputPath
+            v-model="model.extra"
+            :placeholder="$t('device.control.install.placeholder')"
+            :data="{
+              properties: ['openFile', 'multiSelections'],
+              filters: [
+                {
+                  name: $t('device.control.install.placeholder'),
+                  extensions: ['apk'],
+                },
+              ],
+            }"
+          />
+        </ele-form-item-col>
+
+        <ele-form-item-col
+          v-if="['shell'].includes(model.taskType)"
+          :label="$t('device.task.extra.shell')"
+          :span="24"
+          prop="extra"
+        >
+          <InputPath
+            v-model="model.extra"
+            :placeholder="$t('device.control.shell.select')"
+            :data="{
+              properties: ['openFile'],
+              filters: [
+                {
+                  name: $t('device.control.shell.select'),
+                  extensions: ['sh'],
+                },
+              ],
+            }"
+          />
+        </ele-form-item-col>
+
+        <ele-form-item-col :span="24" label="">
+          <div
+            class="text-red-200 dark:text-red-900 !hover:text-red-500 transition-colors"
+          >
+            {{ $t('device.task.tips') }}
+          </div>
+        </ele-form-item-col>
+      </ele-form-row>
+    </div>
 
     <template #footer>
       <el-button @click="close">

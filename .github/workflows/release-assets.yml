@@ -51,8 +51,8 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
           fail_on_unmatched_files: false
           files: |
             dist-release/*.exe

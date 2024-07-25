@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.22.2](https://github.com/viarotel-org/escrcpy/compare/v1.22.1...v1.22.2) (2024-07-25)
+
+
+### Performance Improvements
+
+* 💄 Optimize the display effect of the dark mode ([38f854b](https://github.com/viarotel-org/escrcpy/commit/38f854b6db8bf94b31a1f1f6db54fc55a99d8e8c))
+* 💄 Optimize the display effect of the quick operation bar ([7b3c4db](https://github.com/viarotel-org/escrcpy/commit/7b3c4db83a285dc14a5f440843a3c162cee2d163))
+* 💄 Optimize the display effect of the tabs bar ([5b2d41c](https://github.com/viarotel-org/escrcpy/commit/5b2d41c75a506edd25e4d6073bc4d1b12b593bf3))
+
 ## [1.22.1](https://github.com/viarotel-org/escrcpy/compare/v1.22.0...v1.22.1) (2024-07-25)
 
 

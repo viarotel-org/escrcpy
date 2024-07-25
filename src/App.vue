@@ -1,29 +1,37 @@
 <template>
   <el-config-provider :locale="locale">
-    <div class="absolute inset-0 px-4 pb-4 h-full">
-      <el-tabs
-        v-model="activeTab"
-        class="el-tabs-flex"
-        addable
-        @tab-change="onTabChange"
+    <div
+      class="absolute inset-0 h-full flex flex-col px-4 pb-4 pt-1 space-y-4 overflow-hidden"
+    >
+      <div
+        class="flex items-center flex-none border-b border-gray-200 dark:border-gray-700 pb-1"
       >
-        <template #add-icon>
+        <div class="flex-none">
+          <el-segmented
+            v-slot="{ item }"
+            v-model="activeTab"
+            :options="tabsModel"
+            @change="onTabChange"
+          >
+            <div class="">
+              {{ $t(item.label) }}
+            </div>
+          </el-segmented>
+        </div>
+        <div class="flex-1 w-0 flex items-center justify-end">
           <Quick />
-        </template>
-        <el-tab-pane
-          v-for="(item, index) of tabsModel"
-          :key="index"
-          :label="$t(item.label)"
-          :name="item.prop"
-          lazy
-        >
+        </div>
+      </div>
+
+      <div class="flex-1 h-0 overflow-auto">
+        <template v-for="item of tabsModel" :key="item.value">
           <component
             :is="item.component"
             v-if="isRender(item)"
-            :ref="item.prop"
-          />
-        </el-tab-pane>
-      </el-tabs>
+            v-show="item.value === activeTab"
+          ></component>
+        </template>
+      </div>
     </div>
   </el-config-provider>
 </template>
@@ -50,23 +58,23 @@ const locale = computed(() => {
   return value
 })
 
-const tabsModel = ref([
+const tabsModel = [
   {
     label: 'device.list',
-    prop: 'Device',
-    component: markRaw(Device),
+    value: 'Device',
+    component: Device,
   },
   {
     label: 'preferences.name',
-    prop: 'Preference',
-    component: markRaw(Preference),
+    value: 'Preference',
+    component: Preference,
   },
   {
     label: 'about.name',
-    prop: 'About',
-    component: markRaw(About),
+    value: 'About',
+    component: About,
   },
-])
+]
 
 const activeTab = ref('Device')
 provide('activeTab', activeTab)
@@ -105,7 +113,7 @@ async function showTips() {
 }
 
 function isRender(item) {
-  if (renderTab.value === item.prop) {
+  if (renderTab.value === item?.value) {
     return rendered.value
   }
 
@@ -126,12 +134,12 @@ function reRenderPost() {
   renderSign.value = true
 }
 
-async function onTabChange(prop) {
+async function onTabChange(value) {
   if (!renderSign.value) {
     return false
   }
 
-  if (['Device', 'Preference'].includes(prop)) {
+  if (['Device', 'Preference'].includes(value)) {
     reRender()
   }
 
@@ -146,15 +154,11 @@ defineExpose({
 
 <style lang="postcss" scoped>
 :deep() {
-  .el-tabs__header {
-    @apply !mb-3;
-  }
-  .el-tabs__new-tab {
-    @apply !absolute !inset-y-0 !right-0 !border-none !w-auto;
-  }
-
-  .el-tabs__nav-wrap:after {
-    @apply !h-px;
+  .el-segmented {
+    --el-border-radius-base: 5px;
+    --el-segmented-bg-color: transparent;
+    --el-segmented-item-selected-bg-color: var(--el-color-primary-light-9);
+    --el-segmented-item-selected-color: rgba(var(--color-primary-500), 1);
   }
 }
 </style>

@@ -16,9 +16,11 @@
       <template #default="{ ...slotProps } = {}">
         <EleTooltipButton
           v-bind="{
-            text: true,
+            type: 'default',
             content: $t(item.tips || item.label),
             circle: true,
+            plain: true,
+            borderless: true,
             size: 'small',
             effect: 'light',
             ...slotProps,

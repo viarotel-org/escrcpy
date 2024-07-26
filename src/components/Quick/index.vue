@@ -19,10 +19,10 @@
             type: 'default',
             content: $t(item.tips || item.label),
             circle: true,
-            plain: true,
             borderless: true,
             size: 'small',
             effect: 'light',
+            buttonClass: '!active:bg-primary-500 !active:text-white',
             ...slotProps,
           }"
         >

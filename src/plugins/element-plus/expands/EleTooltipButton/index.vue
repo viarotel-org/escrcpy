@@ -2,7 +2,7 @@
   <el-tooltip>
     <ElButton
       v-bind="{ ...$props }"
-      :class="{ '!border-none': borderless }"
+      :class="[{ '!border-none': borderless }, buttonClass]"
       @click="emit('click', $event)"
     >
       <slot name="icon"></slot>
@@ -21,6 +21,10 @@ const props = defineProps({
   borderless: {
     type: Boolean,
     default: false,
+  },
+  buttonClass: {
+    type: [String, Array, Object],
+    default: '',
   },
 })
 

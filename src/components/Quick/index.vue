@@ -22,7 +22,6 @@
             borderless: true,
             size: 'small',
             effect: 'light',
-            buttonClass: '!active:bg-primary-500 !active:text-white',
             ...slotProps,
           }"
         >

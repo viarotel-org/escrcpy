@@ -48,11 +48,10 @@
     "requestExecutionLevel": "user"
   },
   "appx": {
-    "identityName": "",
-    "publisher": "",
-    "applicationId": "",
+    "identityName": "viarotel.Escrcpy",
+    "publisher": "CN=E67CC10B-A1BE-413C-BC3B-6E1137E0742D",
     "publisherDisplayName": "viarotel",
-    "languages": ["zh-CN", "en-US"]
+    "languages": ["zh-CN", "en-US", "zh-TW"]
   },
   "mac": {
     "icon": "logo.icns",

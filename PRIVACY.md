@@ -1,6 +1,6 @@
 Privacy Policy for Escrcpy
 
-Effective Date: [2024-07-29]
+Effective Date: 2024-07-29
 
 1. Introduction
 

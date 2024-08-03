@@ -99,7 +99,7 @@ export const useTaskStore = defineStore(
       if (timerId) {
         clearTimer(timerType, timerId)
         Object.assign(task, {
-          id: void 0,
+          timerId: void 0,
           taskStatus: 'finished',
         })
       }

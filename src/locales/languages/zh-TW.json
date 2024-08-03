@@ -51,9 +51,9 @@
   "device.permission.error": "裝置權限錯誤，請重新連接裝置並允許 USB 偵錯",
   "device.terminal.name": "終端偵錯",
 
-  "device.task.name": "定時任務",
-  "device.task.tips": "注意：請確保您的電腦保持唤醒状态，否則定時任務將無法正常執行。",
-  "device.task.list": "定時任務列表",
+  "device.task.name": "計劃任務",
+  "device.task.tips": "注意：請確保您的電腦保持唤醒状态，否則計劃任務將無法正常執行。",
+  "device.task.list": "計劃任務列表",
   "device.task.type": "任務類型",
   "device.task.frequency": "執行頻率",
   "device.task.frequency.timeout": "單次執行",

@@ -110,28 +110,30 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ### General
 
-- Change theme
-- Adjust language
-- File storage path (for storing audio/video recordings and device screenshots)
-- ADB path
+- Theme
+- Language
+- File storage path
+- Adb path
 - Scrcpy path
 - Gnirehtet path
 - Scrcpy parameters
-- Auto-connect to historical devices
-- Gnirehtet Fix
-- Enable debugging
+- Auto-connect device
+- Auto-execute mirroring
+- Gnirehtet fix
+- Debug
 
 ### Video Control
 
+- Disable video forwarding
 - Maximum size
 - Video bitrate
 - Refresh rate
-- Video encoding
+- Video codec
 - Display orientation
-- Screen clipping
+- Screen cropping
 - Monitor
-- Video buffering
-- Receiver (v4l2) buffering
+- Video buffer
+- Receiver (v4l2) buffer
 
 ### Device Control
 
@@ -139,15 +141,15 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Keep awake
 - Turn off screen during control
 - Turn off screen after control
-- Disable auto-brightness during control
+- Disable auto screen on during control
 - Simulate auxiliary display
 
 ### Window Control
 
 - Window width
 - Window height
-- Window X coordinate
-- Window Y coordinate
+- Window X-coordinate
+- Window Y-coordinate
 - Borderless mode
 - Fullscreen mode
 - Always on top
@@ -155,19 +157,19 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ### Audio Control
 
+- Disable audio forwarding
+- Keep device audio
 - Audio source
-- Audio encoding
+- Audio codec
 - Audio bitrate
-- Audio buffering
-- Audio output buffering
+- Audio buffer
+- Audio output buffer
 
 ### Audio/Video Recording
 
-- Video recording format
-- Video recording orientation
+- Record video format
+- Record video orientation
 - Recording duration
-- Disable video recording
-- Disable audio recording
 - Disable video playback
 - Disable audio playback
 
@@ -181,8 +183,8 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 ### Camera Control
 
 - Camera source
-- Camera resolution
-- Camera aspect ratio
+- Camera size
+- Camera ratio
 - Camera frame rate
 
 ## Next Steps?

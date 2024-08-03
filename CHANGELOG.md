@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.22.4](https://github.com/viarotel-org/escrcpy/compare/v1.22.3...v1.22.4) (2024-08-03)
+
+
+### Bug Fixes
+
+* 🐛 plan task Remove operation bug ([5205935](https://github.com/viarotel-org/escrcpy/commit/520593554f7224a4bb143aaa4b84db52b077421d))
+
+
+### Performance Improvements
+
+* 💄 Dark mode effect ([00d3495](https://github.com/viarotel-org/escrcpy/commit/00d34953832eec22ee4ac44f61f1fbc029f4ed84))
+
 ## [1.22.3](https://github.com/viarotel-org/escrcpy/compare/v1.22.2...v1.22.3) (2024-08-03)
 
 

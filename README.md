@@ -296,6 +296,12 @@ Only support `Windows 10` and above versions.
 
 Please try `disabling audio forwarding` feature through the `preferences settings` to resolve this issue.
 
+### Microsoft Store version mirror startup error
+
+> This is caused by files in the installation directory lacking executable permissions.
+
+You need to customize the file paths for `scrcpy` and `adb` (ensuring they have executable permissions). If using reverse tethering, configure `gnirehtet` similarly.
+
 ## Getting Help
 
 > As this is an open source project run entirely by donations, support is limited and updates may not be on a fixed schedule.

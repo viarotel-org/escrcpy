@@ -5,7 +5,7 @@
         <WirelessGroup ref="wirelessGroupRef" :reload="getDeviceData" />
       </div>
 
-      <div class="w-px h-7 !mx-4 bg-gray-200 flex-none"></div>
+      <div class="w-px h-7 !mx-4 bg-gray-200 dark:bg-gray-600 flex-none"></div>
 
       <div class="flex-1 w-0 space-x-2">
         <el-button

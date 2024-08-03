@@ -11,6 +11,14 @@ export default {
       placeholder: 'preferences.audio.disable-audio.placeholder',
       tips: 'preferences.audio.disable-audio.tips',
     },
+    audioDup: {
+      label: 'preferences.audio.audioDup.name',
+      field: '--audio-dup',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.audio.audioDup.placeholder',
+      tips: 'preferences.audio.audioDup.tips',
+    },
     audioSource: {
       label: 'preferences.audio.audio-source.name',
       field: '--audio-source',

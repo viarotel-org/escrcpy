@@ -109,7 +109,7 @@
           <EleTooltipButton
             v-if="['progress'].includes(taskStatus)"
             text
-            type="danger"
+            type="warning"
             effect="light"
             :content="$t('common.stop')"
             icon="CircleClose"
@@ -126,13 +126,14 @@
             :content="$t('device.task.restart')"
             icon="RefreshLeft"
             circle
+            :disabled="!checkExpired(row)"
             @click="handleReStart(row)"
           >
           </EleTooltipButton>
 
           <EleTooltipButton
             text
-            type="info"
+            type="danger"
             effect="light"
             :content="$t('common.remove')"
             icon="Remove"
@@ -152,6 +153,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
+import dayjs from 'dayjs'
 
 import {
   timeUnit as intervalModel,
@@ -212,6 +214,14 @@ function handleReStart(row) {
 
 function handleRemove(row) {
   taskStore.remove(row)
+}
+
+function checkExpired(row) {
+  if (!row?.formatTimeout || ['interval'].includes(row.timerType)) {
+    return true
+  }
+
+  return dayjs(row.formatTimeout).unix() > dayjs().unix()
 }
 
 defineExpose({

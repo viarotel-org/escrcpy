@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 
 import { useEventBus } from '@vueuse/core'
 
+import { ElMessage } from 'element-plus'
 import { clearTimer, isIPWithPort, replaceIP, setTimer } from '$/utils/index.js'
 
 dayjs.extend(duration)
@@ -70,6 +71,11 @@ export const useTaskStore = defineStore(
       const files = task.extra ? task.extra.split(',') : void 0
 
       const timeout = getTimeout(task)
+
+      if (timeout < 0) {
+        ElMessage.warning(window.t('device.task.timeout.expired'))
+        return false
+      }
 
       task.timerId = setTimer(
         timerType,

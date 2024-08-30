@@ -1,5 +1,5 @@
 <div style="display:flex;">
-  <img src="./electron/resources/build/logo.png" alt="viarotel-escrcpy" style="width: 108px;">
+  <img src="./electron/resources/build/logo.png" alt="viarotel-escrcpy" width="108px">
 </div>
 
 # Escrcpy
@@ -7,7 +7,7 @@
 📱 Display and control your Android device with a graphical interface of Scrcpy powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="./screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" style="width: 100%;">
+  <img src="./screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## Features

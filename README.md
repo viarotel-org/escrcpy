@@ -324,10 +324,10 @@ This project would not be possible without the following open source projects:
 > If this project has helped you, you can buy me a coffee to keep me energized and improving the project! 😛
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" style="width: 30%;">
-  <img src="./screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" style="width: 30%;">
+  <img src="./screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
+  <img src="./screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" style="width: 30%;">
+    <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>
 </div>
 

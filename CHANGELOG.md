@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.23.0](https://github.com/viarotel-org/escrcpy/compare/v1.22.4...v1.23.0) (2024-09-07)
+
+
+### Features
+
+* ✨ Support graphic file manager ([8155723](https://github.com/viarotel-org/escrcpy/commit/815572303aef8400dc08b35c1bdce5608dfd2cb6))
+* 🚀 Initially add a new file manager ([94ee007](https://github.com/viarotel-org/escrcpy/commit/94ee0070efa19688e9ec3ec90c9301cc958bae35))
+
+
+### Performance Improvements
+
+* ➖ Remove copilot ([6ca7612](https://github.com/viarotel-org/escrcpy/commit/6ca7612c0244b7a7d92d96c723cc7faa2462928b))
+
 ## [1.22.4](https://github.com/viarotel-org/escrcpy/compare/v1.22.3...v1.22.4) (2024-08-03)
 
 

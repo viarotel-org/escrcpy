@@ -212,10 +212,9 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 19. Flexible mirroring launch ✅
 20. Batch processing ✅
 21. Scheduled tasks ✅
-22. Device grouping 🚧
-23. File transfer assistant 🚧
-24. Manage device files via interface 🚧
-25. Game key mapping 🚧
+22. Graphical file manager ✅ 
+23. Device grouping 🚧
+24. Game key mapping 🚧
 
 ## FAQ
 

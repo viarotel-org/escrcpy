@@ -1,9 +1,10 @@
 <template>
   <el-dialog
-    v-model="visible"
+    v-model="dialog.visible"
     :title="$t('device.control.file.name')"
     width="97%"
     append-to-body
+    destroy-on-close
     class="el-dialog--beautify"
     @closed="onClosed"
   >
@@ -40,88 +41,122 @@
       </el-breadcrumb>
 
       <div class="ml-auto">
-        <el-button text icon="Refresh" circle></el-button>
+        <el-button text icon="Refresh" circle @click="getTableData"></el-button>
       </div>
     </div>
 
-    <div class="mb-4 -ml-px">
-      <el-button type="default" icon="FolderAdd">
-        新建文件夹
+    <el-button-group class="mb-4 -ml-px">
+      <AddPopover @success="handleAdd">
+        <template #reference>
+          <el-button type="default" icon="FolderAdd">
+            {{ $t('device.control.file.manager.add') }}
+          </el-button>
+        </template>
+      </AddPopover>
+
+      <el-button
+        type="default"
+        icon="DocumentAdd"
+        v-bind="{ loading: fileActions.loading }"
+        @click="handleUpload(device)"
+      >
+        {{ $t('device.control.file.manager.upload') }}
       </el-button>
-      <el-button type="default" icon="DocumentAdd">
-        上传文件
+      <el-button
+        type="default"
+        icon="Download"
+        :disabled="!selectionRows.length"
+        @click="handleDownload()"
+      >
+        {{ $t('device.control.file.manager.download') }}
       </el-button>
-      <el-button type="default" icon="Download">
-        下载文件
-      </el-button>
-    </div>
+    </el-button-group>
 
     <el-table
       v-loading="loading"
       :data="tableData"
       stripe
+      size="small"
+      row-key="id"
       @selection-change="onSelectionChange"
     >
       <el-table-column
         type="selection"
+        reserve-selection
         width="50"
         align="left"
+        :selectable="(row) => ['file'].includes(row.type)"
       ></el-table-column>
 
-      <el-table-column prop="name" label="名称" sortable>
+      <el-table-column prop="name" :label="$t('common.name')" sortable>
         <template #default="{ row }">
           <div class="flex items-center">
-            <el-button
+            <el-link
               v-if="row.type === 'directory'"
-              text
+              type="default"
               icon="Folder"
-              class="!p-0 !bg-transparent"
+              class="!space-x-2"
               @click="handleDirectory(row)"
             >
               {{ row.name }}
-            </el-button>
-            <el-button
+            </el-link>
+            <el-link
               v-else
-              text
+              type="default"
               icon="Document"
-              class="!p-0 !bg-transparent"
-              @click="handleFile(row)"
+              class="!space-x-2"
+              @click="handleDownload(row)"
             >
               {{ row.name }}
-            </el-button>
+            </el-link>
           </div>
         </template>
       </el-table-column>
 
       <el-table-column
         prop="size"
-        label="大小"
+        :label="$t('common.size')"
+        sortable
         align="center"
-      ></el-table-column>
+      >
+      </el-table-column>
 
       <el-table-column
         prop="updateTime"
-        label="修改时间"
+        :label="$t('time.update')"
+        sortable
         align="center"
-      ></el-table-column>
+      >
+      </el-table-column>
 
-      <el-table-column label="操作" align="center">
+      <el-table-column :label="$t('device.control.name')" align="center">
         <template #default="{ row }">
-          <div class="">
-            <EleTooltipButton
-              v-if="['file'].includes(row.type)"
-              effect="light"
-              placement="top"
-              :offset="2"
-              :content="$t('common.download')"
-              text
-              type="primary"
-              icon="Download"
-              circle
-              @click="handleFile(row)"
-            >
-            </EleTooltipButton>
-          </div>
+          <EleTooltipButton
+            v-if="['file'].includes(row.type)"
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('common.download')"
+            text
+            type="primary"
+            icon="Download"
+            circle
+            @click="handleDownload(row)"
+          >
+          </EleTooltipButton>
+
+          <EleTooltipButton
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('common.delete')"
+            text
+            type="danger"
+            icon="Delete"
+            circle
+            @click="handleRemove(row)"
+          >
+          </EleTooltipButton>
         </template>
       </el-table-column>
     </el-table>
@@ -131,7 +166,18 @@
 </template>
 
 <script setup>
-const visible = ref(false)
+import { ElMessageBox } from 'element-plus'
+import AddPopover from './AddPopover/index.vue'
+
+import { usePreferenceStore } from '$/store'
+
+import { useDialog, useFileActions } from '$/composables/index.js'
+
+const preferenceStore = usePreferenceStore()
+
+const fileActions = reactive(useFileActions())
+
+const dialog = reactive(useDialog())
 
 const device = ref()
 
@@ -145,7 +191,10 @@ const breadcrumbModel = computed(() => {
   const pathList = currentPath.value.split('/')
 
   const value = pathList.map(item => ({
-    label: item === 'sdcard' ? '内部存储空间' : void 0,
+    label:
+      item === 'sdcard'
+        ? window.t('device.control.file.manager.storage')
+        : void 0,
     value: item,
   }))
 
@@ -153,17 +202,20 @@ const breadcrumbModel = computed(() => {
 })
 
 function open(args) {
-  visible.value = true
   device.value = args
+  dialog.open(args)
   getTableData()
 }
 
-function onClosed() {}
+function onClosed() {
+  currentPath.value = 'sdcard'
+  dialog.reset()
+}
 
 async function getTableData() {
   loading.value = true
 
-  const data = await window.adbkit.getFiles(device.value.id, currentPath.value)
+  const data = await window.adbkit.readdir(device.value.id, currentPath.value)
 
   loading.value = false
 
@@ -175,8 +227,6 @@ const selectionRows = ref([])
 function onSelectionChange(selection) {
   selectionRows.value = selection
 }
-
-function handleFile(row) {}
 
 function handleDirectory(row) {
   currentPath.value += `/${row.name}`
@@ -204,6 +254,84 @@ function handlePrev() {
   currentPath.value = value
 
   getTableData()
+}
+
+async function handleAdd(dirname) {
+  await window.adbkit.deviceShell(
+    device.value.id,
+    `mkdir ${currentPath.value}/${dirname}`,
+  )
+
+  getTableData()
+}
+
+async function handleRemove(row) {
+  try {
+    await ElMessageBox.confirm(
+      window.t('device.control.file.manager.delete.tips'),
+      window.t('common.tips'),
+      {
+        type: 'warning',
+      },
+    )
+  }
+  catch (error) {
+    return error.message
+  }
+
+  await window.adbkit.deviceShell(
+    device.value.id,
+    `rm -r ${currentPath.value}/${row.name}`,
+  )
+
+  getTableData()
+}
+
+async function handleUpload() {
+  await fileActions.send(device.value)
+  getTableData()
+}
+
+async function handleDownload(row) {
+  try {
+    await ElMessageBox.confirm(
+      window.t('device.control.file.manager.download.tips'),
+      window.t('common.tips'),
+      {
+        type: 'info',
+      },
+    )
+  }
+  catch (error) {
+    return error.message
+  }
+
+  const pathList = row
+    ? [row.id]
+    : selectionRows.value
+      .filter(item => item.type === 'file')
+      .map(item => item.id)
+
+  const deviceConfig = preferenceStore.getData(device.value.id)
+
+  const closeLoading = ElMessage.loading(window.t('common.downloading')).close
+
+  for (let index = 0; index < pathList.length; index++) {
+    const item = pathList[index]
+
+    const savePath = window.nodePath.resolve(
+      deviceConfig.savePath,
+      window.nodePath.basename(item),
+    )
+
+    await window.adbkit
+      .pull(device.value.id, item, { savePath })
+      .catch(e => console.warn(e?.message))
+  }
+
+  closeLoading()
+
+  ElMessage.success(window.t('common.success'))
 }
 
 defineExpose({

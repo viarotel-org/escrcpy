@@ -187,28 +187,6 @@ const clearOverlayDisplayDevices = async (deviceId) => {
   )
 }
 
-const push = async (
-  id,
-  filePath,
-  { progress, savePath = `/sdcard/Download/${path.basename(filePath)}` } = {},
-) => {
-  const res = await client.getDevice(id).push(filePath, savePath)
-
-  return new Promise((resolve, reject) => {
-    res.on('progress', (stats) => {
-      progress?.(stats)
-    })
-
-    res.on('end', () => {
-      resolve(savePath)
-    })
-
-    res.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
@@ -233,16 +211,61 @@ const watch = async (callback) => {
   return close
 }
 
-async function getFiles(id, path) {
-  const value = await client.getDevice(id).readdir(path)
+async function readdir(id, filePath) {
+  const value = await client.getDevice(id).readdir(filePath)
 
   return value.map(item => ({
     ...item,
+    id: [filePath, item.name].join('/'),
     type: item.isFile() ? 'file' : 'directory',
     name: item.name,
     size: formatFileSize(item.size),
     updateTime: dayjs(item.mtime).format('YYYY-MM-DD HH:mm:ss'),
   }))
+}
+
+async function push(id, filePath, args = {}) {
+  const { progress, savePath = `/sdcard/Download/${path.basename(filePath)}` }
+    = args
+
+  const transfer = await client.getDevice(id).push(filePath, savePath)
+
+  return new Promise((resolve, reject) => {
+    transfer.on('progress', (stats) => {
+      progress?.(stats)
+    })
+
+    transfer.on('end', () => {
+      resolve(savePath)
+    })
+
+    transfer.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
+async function pull(id, filePath, args = {}) {
+  const { progress, savePath = path.resolve('../', path.basename(filePath)) }
+    = args
+
+  const transfer = await client.getDevice(id).pull(filePath)
+
+  return new Promise((resolve, reject) => {
+    transfer.on('progress', (stats) => {
+      progress?.(stats)
+    })
+
+    transfer.on('end', () => {
+      resolve(savePath)
+    })
+
+    transfer.on('error', (err) => {
+      reject(err)
+    })
+
+    transfer.pipe(fs.createWriteStream(savePath))
+  })
 }
 
 export default () => {
@@ -269,7 +292,8 @@ export default () => {
     display,
     clearOverlayDisplayDevices,
     push,
+    pull,
     watch,
-    getFiles,
+    readdir,
   }
 }

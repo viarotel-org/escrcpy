@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import Record from './components/Record/index.vue'
-import Otg from './components/Otg/index.vue'
 import Camera from './components/Camera/index.vue'
 import Custom from './components/Custom/index.vue'
+import Otg from './components/Otg/index.vue'
+import Record from './components/Record/index.vue'
 
 export default {
   components: {

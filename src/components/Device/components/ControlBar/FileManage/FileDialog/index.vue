@@ -166,12 +166,12 @@
 </template>
 
 <script setup>
-import { ElMessageBox } from 'element-plus'
-import AddPopover from './AddPopover/index.vue'
-
+import { useDialog, useFileActions } from '$/composables/index.js'
 import { usePreferenceStore } from '$/store'
 
-import { useDialog, useFileActions } from '$/composables/index.js'
+import { ElMessageBox } from 'element-plus'
+
+import AddPopover from './AddPopover/index.vue'
 
 const preferenceStore = usePreferenceStore()
 

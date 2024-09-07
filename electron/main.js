@@ -1,22 +1,22 @@
-import path from 'node:path'
 import { createRequire } from 'node:module'
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { BrowserWindow, app, nativeTheme, shell } from 'electron'
-import { electronApp, optimizer } from '@electron-toolkit/utils'
-import contextMenu from 'electron-context-menu'
 import remote from '@electron/remote/main'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { app, BrowserWindow, shell } from 'electron'
+import contextMenu from 'electron-context-menu'
+
+import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
+import events from './events/index.js'
+
+import log from './helpers/log.js'
+import appStore from './helpers/store.js'
 
 // process.js 必须位于非依赖项的顶部
 import './helpers/process.js'
-import appStore from './helpers/store.js'
 
-import log from './helpers/log.js'
 import './helpers/console.js'
-
-import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
-
-import events from './events/index.js'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))

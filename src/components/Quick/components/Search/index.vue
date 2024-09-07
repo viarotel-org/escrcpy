@@ -5,9 +5,9 @@
 </template>
 
 <script setup>
-import { useMagicKeys, whenever } from '@vueuse/core'
-
 import { useThemeStore } from '$/store/theme/index.js'
+
+import { useMagicKeys, whenever } from '@vueuse/core'
 
 const themeStore = useThemeStore()
 

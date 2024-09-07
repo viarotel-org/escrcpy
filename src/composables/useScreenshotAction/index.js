@@ -1,8 +1,8 @@
-import { ElMessage } from 'element-plus'
+import { useDeviceStore, usePreferenceStore } from '$/store'
 
 import { allSettledWrapper } from '$/utils/index.js'
 
-import { useDeviceStore, usePreferenceStore } from '$/store'
+import { ElMessage } from 'element-plus'
 
 export function useScreenshotAction() {
   const deviceStore = useDeviceStore()

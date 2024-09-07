@@ -1,5 +1,5 @@
-import fs from 'fs-extra'
 import { dialog, ipcMain, shell } from 'electron'
+import fs from 'fs-extra'
 
 export default (mainWindow) => {
   ipcMain.handle(

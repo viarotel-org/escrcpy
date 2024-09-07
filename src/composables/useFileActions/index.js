@@ -1,6 +1,6 @@
-import { ElMessage } from 'element-plus'
-import { allSettledWrapper } from '$/utils'
 import { useDeviceStore } from '$/store'
+import { allSettledWrapper } from '$/utils'
+import { ElMessage } from 'element-plus'
 
 export function useFileActions() {
   const deviceStore = useDeviceStore()

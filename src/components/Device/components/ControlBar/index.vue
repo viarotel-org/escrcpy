@@ -65,15 +65,15 @@
 </template>
 
 <script>
-import Screenshot from './Screenshot/index.vue'
 import Application from './Application/index.vue'
+import FileManage from './FileManage/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import MirrorGroup from './MirrorGroup/index.vue'
 import Rotation from './Rotation/index.vue'
-import Volume from './Volume/index.vue'
-import FileManage from './FileManage/index.vue'
+import Screenshot from './Screenshot/index.vue'
 import Shell from './Shell/index.vue'
 import Tasks from './Tasks/index.vue'
+import Volume from './Volume/index.vue'
 
 export default {
   components: {

@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import { debounce } from 'lodash-es'
+import { usePreferenceStore } from '$/store/index.js'
 
-import ScopeSelect from './components/ScopeSelect/index.vue'
+import { debounce } from 'lodash-es'
 import PreferenceForm from './components/PreferenceForm/index.vue'
 
-import { usePreferenceStore } from '$/store/index.js'
+import ScopeSelect from './components/ScopeSelect/index.vue'
 
 export default {
   components: {

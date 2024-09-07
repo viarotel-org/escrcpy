@@ -1,6 +1,6 @@
-import { defineConfig, presetWind } from 'unocss'
 import transformerDirectives from '@unocss/transformer-directives'
 import { presetShades } from '@viarotel-org/unocss-preset-shades'
+import { defineConfig, presetWind } from 'unocss'
 import { primaryColor } from './src/configs/index.js'
 
 const presetMain = presetWind()

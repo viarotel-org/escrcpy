@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { ElForm } from 'element-plus'
 import { inheritComponentMethods } from '$/utils/index.js'
+import { ElForm } from 'element-plus'
 
 export default {
   name: 'ElFormRow',

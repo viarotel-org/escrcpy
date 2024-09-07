@@ -1,13 +1,13 @@
-import util from 'node:util'
 import { exec as _exec, spawn } from 'node:child_process'
-import path from 'node:path'
 import fs from 'node:fs'
-import dayjs from 'dayjs'
-import { Adb } from '@devicefarmer/adbkit'
-import { uniq } from 'lodash-es'
-import appStore from '$electron/helpers/store.js'
+import path from 'node:path'
+import util from 'node:util'
 import { adbPath } from '$electron/configs/index.js'
+import appStore from '$electron/helpers/store.js'
 import { formatFileSize } from '$renderer/utils/index'
+import { Adb } from '@devicefarmer/adbkit'
+import dayjs from 'dayjs'
+import { uniq } from 'lodash-es'
 
 const exec = util.promisify(_exec)
 

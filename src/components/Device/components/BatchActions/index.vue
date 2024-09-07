@@ -39,8 +39,8 @@
 
 <script setup>
 import Application from './Application/index.vue'
-import Screenshot from './Screenshot/index.vue'
 import FileManage from './FileManage/index.vue'
+import Screenshot from './Screenshot/index.vue'
 import Shell from './Shell/index.vue'
 import Tasks from './Tasks/index.vue'
 

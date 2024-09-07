@@ -1,13 +1,13 @@
 import { resolve } from 'node:path'
-import { defineConfig, mergeConfig } from 'vite'
-import useElectron from 'vite-plugin-electron/simple'
-import useRenderer from 'vite-plugin-electron-renderer'
-import { notBundle } from 'vite-plugin-electron/plugin'
-
+import useI18n from '@intlify/unplugin-vue-i18n/vite'
 import useVue from '@vitejs/plugin-vue'
 import useUnoCSS from 'unocss/vite'
+import { defineConfig, mergeConfig } from 'vite'
+
+import { notBundle } from 'vite-plugin-electron/plugin'
+import useElectron from 'vite-plugin-electron/simple'
+import useRenderer from 'vite-plugin-electron-renderer'
 import useSvg from 'vite-svg-loader'
-import useI18n from '@intlify/unplugin-vue-i18n/vite'
 
 import postcssConfig from './postcss.config.js'
 

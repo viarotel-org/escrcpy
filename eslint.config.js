@@ -56,6 +56,10 @@ export default antfu(
       'vue/custom-event-name-casing': 'off',
       'vue/no-use-v-if-with-v-for': 'off',
       'vue/component-tags-order': 'off',
+
+      'unicorn/consistent-function-scoping': 'off',
+      'regexp/no-unused-capturing-group': 'off',
+      'regexp/no-dupe-disjunctions': 'off',
     },
   },
 )

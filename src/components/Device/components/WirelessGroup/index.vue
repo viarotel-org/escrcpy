@@ -253,21 +253,21 @@ export default {
         await this.$confirm(
           `<div class="pt-4 pl-4">
             <div class="text-sm text-red-500 pb-4">${this.$t(
-              'device.wireless.connect.error.detail',
-            )}：${message}</div>
+    'device.wireless.connect.error.detail',
+  )}：${message}</div>
             <div>${this.$t('device.wireless.connect.error.reasons[0]')}：</div>
             <div>1. ${this.$t(
-              'device.wireless.connect.error.reasons[1]',
-            )} </div>
+    'device.wireless.connect.error.reasons[1]',
+  )} </div>
             <div>2. ${this.$t(
-              'device.wireless.connect.error.reasons[2]',
-            )} </div>
+    'device.wireless.connect.error.reasons[2]',
+  )} </div>
             <div>3. ${this.$t(
-              'device.wireless.connect.error.reasons[3]',
-            )} </div>
+    'device.wireless.connect.error.reasons[3]',
+  )} </div>
             <div>4. ${this.$t(
-              'device.wireless.connect.error.reasons[4]',
-            )} </div>
+    'device.wireless.connect.error.reasons[4]',
+  )} </div>
           </div>`,
           this.$t('device.wireless.connect.error.title'),
           {

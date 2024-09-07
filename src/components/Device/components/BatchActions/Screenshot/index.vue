@@ -5,9 +5,9 @@
 </template>
 
 <script setup>
-import { useTaskStore } from '$/store/index.js'
-
 import { useScreenshotAction } from '$/composables/useScreenshotAction/index.js'
+
+import { useTaskStore } from '$/store/index.js'
 
 const props = defineProps({
   devices: {

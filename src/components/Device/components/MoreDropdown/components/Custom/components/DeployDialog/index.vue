@@ -31,9 +31,9 @@
 </template>
 
 <script setup>
-import { usePreferenceStore } from '$/store/index.js'
-
 import PreferenceForm from '$/components/Preference/components/PreferenceForm/index.vue'
+
+import { usePreferenceStore } from '$/store/index.js'
 
 import { sleep } from '$/utils'
 

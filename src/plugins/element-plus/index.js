@@ -1,21 +1,21 @@
+import * as ElementPlusIcons from '@element-plus/icons-vue'
+import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
+import EleFormItemCol from './expands/EleFormItemCol/index.vue'
+import EleFormRow from './expands/EleFormRow/index.vue'
+
+import EleIconLoading from './expands/EleIconLoading/index.vue'
+import EleTagCollapse from './expands/EleTagCollapse/index.vue'
+
+import EleTagDict from './expands/EleTagDict/index.vue'
+
+import EleTooltipButton from './expands/EleTooltipButton/index.vue'
+
 import 'element-plus/theme-chalk/el-loading.css'
 import 'element-plus/theme-chalk/el-message.css'
 import 'element-plus/theme-chalk/el-message-box.css'
 import 'element-plus/theme-chalk/el-badge.css'
-
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './restyle.css'
-
-import * as ElementPlusIcons from '@element-plus/icons-vue'
-
-import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
-
-import EleIconLoading from './expands/EleIconLoading/index.vue'
-import EleFormRow from './expands/EleFormRow/index.vue'
-import EleFormItemCol from './expands/EleFormItemCol/index.vue'
-import EleTooltipButton from './expands/EleTooltipButton/index.vue'
-import EleTagDict from './expands/EleTagDict/index.vue'
-import EleTagCollapse from './expands/EleTagCollapse/index.vue'
 
 export default {
   install(app) {

@@ -4,9 +4,9 @@ import { buildResolve, extraResolve } from '$electron/helpers/index.js'
 
 export { adbPath } from './android-platform-tools/index.js'
 
-export { scrcpyPath } from './scrcpy/index.js'
+export { gnirehtetApkPath, gnirehtetPath } from './gnirehtet/index.js'
 
-export { gnirehtetPath, gnirehtetApkPath } from './gnirehtet/index.js'
+export { scrcpyPath } from './scrcpy/index.js'
 
 export const desktopPath = process.env.DESKTOP_PATH
 

@@ -42,11 +42,11 @@
 </template>
 
 <script setup>
-import Task from './components/Task/index.vue'
-import Terminal from './components/Terminal/index.vue'
 import Log from './components/Log/index.vue'
 import Restart from './components/Restart/index.vue'
 import Search from './components/Search/index.vue'
+import Task from './components/Task/index.vue'
+import Terminal from './components/Terminal/index.vue'
 
 const props = defineProps({})
 

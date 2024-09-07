@@ -1,16 +1,16 @@
-import '$/utils/console.js'
+import { replaceIP, restoreIP } from '$/utils/index.js'
 
 import { createApp, toRaw } from 'vue'
 import App from './App.vue'
 
-import store from './store/index.js'
-
-import plugins from './plugins/index.js'
 import icons from './icons/index.js'
 
 import { i18n, t } from './locales/index.js'
+import plugins from './plugins/index.js'
 
-import { replaceIP, restoreIP } from '$/utils/index.js'
+import store from './store/index.js'
+
+import '$/utils/console.js'
 
 import 'virtual:uno.css'
 import './styles/index.js'

@@ -1,8 +1,8 @@
-import util from 'node:util'
 import { exec as _exec, spawn } from 'node:child_process'
-import { replaceIP, sleep } from '$renderer/utils/index.js'
-import appStore from '$electron/helpers/store.js'
+import util from 'node:util'
 import { adbPath, scrcpyPath } from '$electron/configs/index.js'
+import appStore from '$electron/helpers/store.js'
+import { replaceIP, sleep } from '$renderer/utils/index.js'
 
 let adbkit
 

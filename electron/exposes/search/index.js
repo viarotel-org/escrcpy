@@ -1,6 +1,6 @@
+import { primaryColor } from '$renderer/configs/index.js'
 import remote from '@electron/remote'
 import { FindInPage } from 'electron-find-in-page'
-import { primaryColor } from '$renderer/configs/index.js'
 
 export default () => {
   const theme = {

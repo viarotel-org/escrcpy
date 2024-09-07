@@ -1,5 +1,5 @@
-import which from 'which'
 import { extraResolve } from '$electron/helpers/index.js'
+import which from 'which'
 
 export const getScrcpyPath = () => {
   switch (process.platform) {

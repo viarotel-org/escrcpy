@@ -1,10 +1,10 @@
 import { spawn } from 'node:child_process'
-import appStore from '$electron/helpers/store.js'
 import {
   adbPath,
   gnirehtetApkPath,
   gnirehtetPath,
 } from '$electron/configs/index.js'
+import appStore from '$electron/helpers/store.js'
 
 const appDebug = appStore.get('common.debug') || false
 

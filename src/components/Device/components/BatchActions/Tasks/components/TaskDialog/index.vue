@@ -162,7 +162,7 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
+import InputPath from '$/components/Preference/components/PreferenceForm/components/InputPath/index.vue'
 
 import {
   timeUnit as intervalModel,
@@ -172,7 +172,7 @@ import {
 import { useTaskStore } from '$/store/index.js'
 import { sleep } from '$/utils'
 
-import InputPath from '$/components/Preference/components/PreferenceForm/components/InputPath/index.vue'
+import { ElMessage } from 'element-plus'
 
 const taskStore = useTaskStore()
 

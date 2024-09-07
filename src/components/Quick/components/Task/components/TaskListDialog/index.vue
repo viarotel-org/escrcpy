@@ -156,18 +156,12 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
-import dayjs from 'dayjs'
-
-import {
-  timeUnit as intervalModel,
-  timerType as timerModel,
-} from '$/dicts/index.js'
+import { getDictLabel } from '$/dicts/helper'
 
 import { useTaskStore } from '$/store/index.js'
 import { sleep } from '$/utils'
 
-import { getDictLabel } from '$/dicts/helper'
+import dayjs from 'dayjs'
 
 const taskStore = useTaskStore()
 

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import DeployDialog from './components/DeployDialog/index.vue'
 import { sleep } from '$/utils'
+import DeployDialog from './components/DeployDialog/index.vue'
 
 export default {
   components: {

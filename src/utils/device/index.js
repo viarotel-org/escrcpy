@@ -1,5 +1,5 @@
-import { ElMessage } from 'element-plus'
 import { allSettledWrapper, sleep } from '$/utils'
+import { ElMessage } from 'element-plus'
 /**
  * 选择并将文件发送到设备
  */

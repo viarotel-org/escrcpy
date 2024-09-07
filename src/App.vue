@@ -37,18 +37,18 @@
 </template>
 
 <script setup>
+import { i18n } from '$/locales/index.js'
+
+import localeModel from '$/plugins/element-plus/locale.js'
+import { usePreferenceStore } from '$/store/preference/index.js'
+import { useThemeStore } from '$/store/theme/index.js'
 import { ElMessageBox } from 'element-plus'
 
-import Device from './components/Device/index.vue'
-import Preference from './components/Preference/index.vue'
 import About from './components/About/index.vue'
+import Device from './components/Device/index.vue'
+
+import Preference from './components/Preference/index.vue'
 import Quick from './components/Quick/index.vue'
-
-import { i18n } from '$/locales/index.js'
-import localeModel from '$/plugins/element-plus/locale.js'
-
-import { useThemeStore } from '$/store/theme/index.js'
-import { usePreferenceStore } from '$/store/preference/index.js'
 
 const locale = computed(() => {
   const i18nLocale = i18n.global.locale.value
@@ -101,8 +101,8 @@ async function showTips() {
   ElMessageBox.alert(
     `<div>
       ${window.t('dependencies.lack.content', {
-        name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
-      })}
+    name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
+  })}
     <div>`,
     window.t('dependencies.lack.title'),
     {

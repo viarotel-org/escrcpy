@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.2](https://github.com/viarotel-org/escrcpy/compare/v1.23.1...v1.23.2) (2024-09-07)
+
+
+### Performance Improvements
+
+* 🚀 Support file manager upload to the current directory ([737c2a3](https://github.com/viarotel-org/escrcpy/commit/737c2a36e263de69d5b7c6250bc2489eba11d6dd))
+
 ## [1.23.1](https://github.com/viarotel-org/escrcpy/compare/v1.23.0...v1.23.1) (2024-09-07)
 
 

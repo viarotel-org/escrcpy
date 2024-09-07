@@ -225,10 +225,13 @@ async function readdir(id, filePath) {
 }
 
 async function push(id, filePath, args = {}) {
-  const { progress, savePath = `/sdcard/Download/${path.basename(filePath)}` }
-    = args
+  const { progress, savePath = '/sdcard/Download' } = args
 
-  const transfer = await client.getDevice(id).push(filePath, savePath)
+  const fileName = path.basename(filePath)
+
+  const fullSavePath = `${savePath}/${fileName}`.replace(/\/+/g, '/')
+
+  const transfer = await client.getDevice(id).push(filePath, fullSavePath)
 
   return new Promise((resolve, reject) => {
     transfer.on('progress', (stats) => {
@@ -236,7 +239,7 @@ async function push(id, filePath, args = {}) {
     })
 
     transfer.on('end', () => {
-      resolve(savePath)
+      resolve(fullSavePath)
     })
 
     transfer.on('error', (err) => {
@@ -246,8 +249,11 @@ async function push(id, filePath, args = {}) {
 }
 
 async function pull(id, filePath, args = {}) {
-  const { progress, savePath = path.resolve('../', path.basename(filePath)) }
-    = args
+  const { progress, savePath = '../' } = args
+
+  const fileName = path.basename(filePath)
+
+  const fullSavePath = path.resolve(savePath, fileName)
 
   const transfer = await client.getDevice(id).pull(filePath)
 
@@ -257,14 +263,14 @@ async function pull(id, filePath, args = {}) {
     })
 
     transfer.on('end', () => {
-      resolve(savePath)
+      resolve(fullSavePath)
     })
 
     transfer.on('error', (err) => {
       reject(err)
     })
 
-    transfer.pipe(fs.createWriteStream(savePath))
+    transfer.pipe(fs.createWriteStream(fullSavePath))
   })
 }
 

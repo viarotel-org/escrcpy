@@ -1,5 +1,6 @@
 import { replaceIP, restoreIP } from '$/utils/index.js'
 import { cloneDeep, get, pickBy, set } from 'lodash-es'
+
 import { defineStore } from 'pinia'
 
 import {
@@ -10,7 +11,6 @@ import {
   mergeConfig,
   setStoreData,
 } from './helpers/index.js'
-
 import model from './model/index.js'
 
 const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}

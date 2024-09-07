@@ -168,9 +168,7 @@
 <script setup>
 import { useDialog, useFileActions } from '$/composables/index.js'
 import { usePreferenceStore } from '$/store'
-
 import { ElMessageBox } from 'element-plus'
-
 import AddPopover from './AddPopover/index.vue'
 
 const preferenceStore = usePreferenceStore()
@@ -288,7 +286,10 @@ async function handleRemove(row) {
 }
 
 async function handleUpload() {
-  await fileActions.send(device.value)
+  await fileActions.send(device.value, {
+    savePath: currentPath.value,
+  })
+
   getTableData()
 }
 
@@ -312,17 +313,12 @@ async function handleDownload(row) {
       .filter(item => item.type === 'file')
       .map(item => item.id)
 
-  const deviceConfig = preferenceStore.getData(device.value.id)
+  const savePath = preferenceStore.getData(device.value.id)?.savePath
 
   const closeLoading = ElMessage.loading(window.t('common.downloading')).close
 
   for (let index = 0; index < pathList.length; index++) {
     const item = pathList[index]
-
-    const savePath = window.nodePath.resolve(
-      deviceConfig.savePath,
-      window.nodePath.basename(item),
-    )
 
     await window.adbkit
       .pull(device.value.id, item, { savePath })

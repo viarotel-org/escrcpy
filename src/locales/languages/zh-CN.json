@@ -141,7 +141,7 @@
   "device.control.file.push.loading": "推送文件中...",
   "device.control.file.push.success.name": "推送文件成功",
   "device.control.file.push.success": "已成功将 {totalCount} 个文件推送到 {deviceName}，{successCount} 成功，{failCount} 失败。",
-  "device.control.file.push.success.single": "文件已成功推送到 {deviceName} 的 /sdcard/Download/ 目录",
+  "device.control.file.push.success.single": "文件已成功推送到 {deviceName}",
   "device.control.file.push.error": "推送文件失败，请检查文件后重试",
   "device.control.file.manager.storage": "内部存储空间",
   "device.control.file.manager.add": "新建文件夹",

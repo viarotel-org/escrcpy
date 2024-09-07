@@ -141,7 +141,7 @@
   "device.control.file.push.loading": "Push file...",
   "device.control.file.push.success.name": "Push files successfully",
   "device.control.file.push.success": "Successfully pushed {totalCount} files to {deviceName}, {successCount} succeeded, and {failCount} failed",
-  "device.control.file.push.success.single": "Files successfully pushed to the /sdcard/Download/ directory of {deviceName}",
+  "device.control.file.push.success.single": "Files successfully pushed to {deviceName}",
   "device.control.file.push.error": "Failed to push the file, please check the file and try again",
   "device.control.file.manager.storage": "Internal Storage",
   "device.control.file.manager.add": "New Folder",

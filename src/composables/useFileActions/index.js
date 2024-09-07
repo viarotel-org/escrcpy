@@ -41,7 +41,7 @@ export function useFileActions() {
     }
   }
 
-  async function singleSend(device, { files, silent = false } = {}) {
+  async function singleSend(device, { savePath, files, silent = false } = {}) {
     if (!files) {
       try {
         files = await selectFiles()
@@ -68,7 +68,7 @@ export function useFileActions() {
     let failCount = 0
 
     await allSettledWrapper(files, (item) => {
-      return window.adbkit.push(device.id, item).catch(() => {
+      return window.adbkit.push(device.id, item, { savePath }).catch(() => {
         ++failCount
       })
     })

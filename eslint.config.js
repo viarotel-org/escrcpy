@@ -33,6 +33,7 @@ export default antfu(
       'antfu/top-level-function': 'off',
 
       'import/default': 'off',
+      'import/order': 'off',
 
       'node/prefer-global/process': 'off',
 

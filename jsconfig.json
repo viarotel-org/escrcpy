@@ -3,12 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "$/*": ["src/*"],
-      "$copilot/*": ["copilot/*"],
       "$root/*": ["*"],
       "$electron/*": ["electron/*"],
       "$renderer/*": ["src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],
-  "include": ["src", "electron", "copilot"]
+  "include": ["src", "electron"]
 }

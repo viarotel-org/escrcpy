@@ -18,8 +18,6 @@ import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
 import events from './events/index.js'
 
-// import copilot from './copilot/index.js'
-
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -109,8 +107,6 @@ function createWindow() {
   }
 
   events(mainWindow)
-
-  // copilot(mainWindow)
 }
 
 app.whenReady().then(() => {

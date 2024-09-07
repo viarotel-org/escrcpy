@@ -33,7 +33,6 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "@electron/remote": "^2.1.2",
-    "@hono/node-server": "^1.11.1",
     "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@unocss/reset": "^0.59.4",
     "@unocss/transformer-directives": "^0.59.4",
@@ -52,7 +51,6 @@
     "eslint": "^8.57.0",
     "fix-path": "^4.0.0",
     "fs-extra": "^11.2.0",
-    "hono": "^4.3.2",
     "husky": "^9.0.11",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
@@ -68,7 +66,6 @@
     "vite-svg-loader": "^5.1.0",
     "vue-command": "^35.2.1",
     "vue-i18n": "^9.13.1",
-    "which": "^4.0.0",
-    "ws": "^8.17.0"
+    "which": "^4.0.0"
   }
 }

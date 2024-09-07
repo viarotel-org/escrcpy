@@ -35,14 +35,12 @@ export default args =>
         rollupOptions: {
           input: {
             main: resolve('index.html'),
-            copilot: resolve('copilot/index.html'),
           },
         },
       },
       resolve: {
         alias: {
           $: resolve('src'),
-          $copilot: resolve('copilot'),
           $electron: resolve('electron'),
         },
       },

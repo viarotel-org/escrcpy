@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.1](https://github.com/viarotel-org/escrcpy/compare/v1.23.0...v1.23.1) (2024-09-07)
+
+
+### Performance Improvements
+
+* ⬆️ Update dependencies ([8b03862](https://github.com/viarotel-org/escrcpy/commit/8b0386258a900d841e712413358f5df86457a021))
+
 ## [1.23.0](https://github.com/viarotel-org/escrcpy/compare/v1.22.4...v1.23.0) (2024-09-07)
 
 

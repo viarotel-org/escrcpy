@@ -1,14 +1,26 @@
 <template>
-  <el-tooltip>
+  <el-tooltip v-bind="{ offset: 8, ...$attrs }">
     <ElButton
       v-bind="{ ...$props }"
-      :class="[{ '!border-none': borderless }, buttonClass]"
+      :class="[
+        {
+          '!border-none': borderless,
+          'el-button-space-none': !$slots.default,
+        },
+        buttonClass,
+      ]"
       @click="emit('click', $event)"
     >
-      <slot name="icon"></slot>
+      <template #icon>
+        <slot name="icon"></slot>
+      </template>
+
       <slot></slot>
     </ElButton>
-    <slot name="content"></slot>
+
+    <template #content>
+      <slot name="content"></slot>
+    </template>
   </el-tooltip>
 </template>
 
@@ -22,6 +34,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+
   buttonClass: {
     type: [String, Array, Object],
     default: '',
@@ -31,4 +44,10 @@ const props = defineProps({
 const emit = defineEmits(['click'])
 </script>
 
-<style></style>
+<style lang="postcss">
+.el-button.el-button-space-none {
+  [class*='el-icon'] + span {
+    @apply ml-0;
+  }
+}
+</style>

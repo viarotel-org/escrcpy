@@ -1,18 +1,7 @@
 <template>
-  <el-dropdown :hide-on-click="false" :disabled="loading">
-    <div class="">
-      <slot :loading="loading" />
-    </div>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item @click="handlePush(devices)">
-          <span class="" title="/sdcard/Download/">
-            {{ $t('device.control.file.push') }}
-          </span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
+  <div class="" @click="handlePush(devices)">
+    <slot v-bind="{ loading }" />
+  </div>
 </template>
 
 <script setup>

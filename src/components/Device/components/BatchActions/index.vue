@@ -63,7 +63,7 @@ const actionModel = [
     component: Application,
   },
   {
-    label: 'device.control.file.name',
+    label: 'device.control.file.push',
     svgIcon: 'file-send',
     component: FileManage,
   },

@@ -57,7 +57,7 @@
   }
 }
 
-.el-dialog-beautify {
+.el-dialog--beautify {
   @apply !rounded-lg;
 
   .el-dialog__title {
@@ -67,5 +67,9 @@
       content: '';
       @apply absolute inset-x-0 bottom-0 h-2 bg-primary-500/30;
     }
+  }
+
+  .el-dialog__footer {
+    @apply min-h-8;
   }
 }

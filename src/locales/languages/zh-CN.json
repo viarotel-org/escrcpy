@@ -5,6 +5,7 @@
   "common.default": "默认",
   "common.tips": "提示",
   "common.open": "打开",
+  "common.download": "下载",
   "common.input.placeholder": "请填写",
   "common.success": "操作成功",
   "common.success.batch": "批量操作成功",

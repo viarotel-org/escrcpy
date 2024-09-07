@@ -3,7 +3,7 @@
     v-model="visible"
     :title="$t('device.task.list')"
     width="98%"
-    class="el-dialog-beautify"
+    class="el-dialog--beautify"
     append-to-body
     destroy-on-close
     @closed="onClosed"
@@ -108,6 +108,8 @@
         >
           <EleTooltipButton
             v-if="['progress'].includes(taskStatus)"
+            placement="top"
+            :offset="2"
             text
             type="warning"
             effect="light"
@@ -120,6 +122,8 @@
 
           <EleTooltipButton
             v-if="['finished'].includes(taskStatus)"
+            placement="top"
+            :offset="2"
             text
             type="primary"
             effect="light"
@@ -132,6 +136,8 @@
           </EleTooltipButton>
 
           <EleTooltipButton
+            placement="top"
+            :offset="2"
             text
             type="danger"
             effect="light"
@@ -145,9 +151,7 @@
       </el-table>
     </div>
 
-    <template #footer>
-      <div class="h-4"></div>
-    </template>
+    <template #footer></template>
   </el-dialog>
 </template>
 

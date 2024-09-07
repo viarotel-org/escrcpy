@@ -1,22 +1,12 @@
 <template>
-  <el-dropdown :hide-on-click="false" :disabled="loading">
-    <div class="">
-      <slot :loading="loading" />
-    </div>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item @click="handlePush(device)">
-          <span class="" title="/sdcard/Download/">
-            {{ $t('device.control.file.push') }}
-          </span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
+  <div class="" @click="handleFile(device)">
+    <slot />
+    <FileDialog ref="fileDialogRef" />
+  </div>
 </template>
 
 <script setup>
-import { useFileActions } from '$/composables/useFileActions/index.js'
+import FileDialog from './FileDialog/index.vue'
 
 const props = defineProps({
   device: {
@@ -25,7 +15,11 @@ const props = defineProps({
   },
 })
 
-const { loading, send: handlePush } = useFileActions()
+const fileDialogRef = ref()
+
+function handleFile(device) {
+  fileDialogRef.value.open(device)
+}
 </script>
 
 <style></style>

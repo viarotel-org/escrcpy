@@ -7,6 +7,7 @@ import { Adb } from '@devicefarmer/adbkit'
 import { uniq } from 'lodash-es'
 import appStore from '$electron/helpers/store.js'
 import { adbPath } from '$electron/configs/index.js'
+import { formatFileSize } from '$renderer/utils/index'
 
 const exec = util.promisify(_exec)
 
@@ -232,6 +233,18 @@ const watch = async (callback) => {
   return close
 }
 
+async function getFiles(id, path) {
+  const value = await client.getDevice(id).readdir(path)
+
+  return value.map(item => ({
+    ...item,
+    type: item.isFile() ? 'file' : 'directory',
+    name: item.name,
+    size: formatFileSize(item.size),
+    updateTime: dayjs(item.mtime).format('YYYY-MM-DD HH:mm:ss'),
+  }))
+}
+
 export default () => {
   const binPath = appStore.get('common.adbPath') || adbPath
 
@@ -257,5 +270,6 @@ export default () => {
     clearOverlayDisplayDevices,
     push,
     watch,
+    getFiles,
   }
 }

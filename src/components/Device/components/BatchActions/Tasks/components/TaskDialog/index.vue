@@ -3,7 +3,7 @@
     v-model="visible"
     :title="$t('device.task.name')"
     width="70%"
-    class="el-dialog-beautify"
+    class="el-dialog--beautify"
     append-to-body
     destroy-on-close
     @closed="onClosed"

@@ -1,11 +1,10 @@
 <template>
   <div
-    ref="wheelContainer"
-    class="bg-primary-100 dark:bg-gray-800 -my-[8px] flex flex-nowrap overflow-hidden scroll-smooth px-4 group"
+    class="bg-primary-100 dark:bg-gray-800 flex items-center group -my-[8px] h-9 overflow-hidden"
   >
     <el-button
       type="primary"
-      class="el-button-nav prev"
+      class="el-button-nav"
       title="Prev"
       @click="handlePrev"
     >
@@ -13,9 +12,50 @@
         <CaretLeft />
       </el-icon>
     </el-button>
+
+    <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
+      <component
+        :is="item.component || 'div'"
+        v-for="(item, index) in controlModel"
+        :key="index"
+        class="flex-none"
+        v-bind="{
+          device,
+          ...(item.command
+            ? {
+              onClick: () => handleShell(item),
+            }
+            : {}),
+        }"
+      >
+        <template #default="{ loading = false } = {}">
+          <el-button
+            type="primary"
+            plain
+            class="!border-none !mx-0 bg-transparent !rounded-0"
+            :disabled="device.$unauthorized"
+            :title="$t(item.tips || item.label)"
+            :loading="loading"
+          >
+            <template #icon>
+              <svg-icon
+                v-if="item.svgIcon"
+                :name="item.svgIcon"
+                :class="item.iconClass"
+              ></svg-icon>
+              <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+                <component :is="item.elIcon" />
+              </el-icon>
+            </template>
+            {{ $t(item.label) }}
+          </el-button>
+        </template>
+      </component>
+    </Scrollable>
+
     <el-button
       type="primary"
-      class="el-button-nav next"
+      class="el-button-nav"
       title="Next"
       @click="handleNext"
     >
@@ -23,44 +63,6 @@
         <CaretRight />
       </el-icon>
     </el-button>
-    <component
-      :is="item.component || 'div'"
-      v-for="(item, index) in controlModel"
-      :key="index"
-      class="flex-none"
-      v-bind="{
-        device,
-        ...(item.command
-          ? {
-            onClick: () => handleShell(item),
-          }
-          : {}),
-      }"
-    >
-      <template #default="{ loading = false } = {}">
-        <el-button
-          type="primary"
-          plain
-          class="!border-none !mx-0 bg-transparent !rounded-0"
-          :disabled="device.$unauthorized"
-          :title="$t(item.tips || item.label)"
-          :loading="loading"
-          @wheel.prevent="onWheel"
-        >
-          <template #icon>
-            <svg-icon
-              v-if="item.svgIcon"
-              :name="item.svgIcon"
-              :class="item.iconClass"
-            ></svg-icon>
-            <el-icon v-else-if="item.elIcon" :class="item.iconClass">
-              <component :is="item.elIcon" />
-            </el-icon>
-          </template>
-          {{ $t(item.label) }}
-        </el-button>
-      </template>
-    </component>
   </div>
 </template>
 
@@ -182,30 +184,11 @@ export default {
   },
   computed: {},
   methods: {
-    onWheel(event) {
-      const container = this.$refs.wheelContainer
-      container.scrollLeft += event.deltaY
-    },
     handlePrev() {
-      const container = this.$refs.wheelContainer
-
-      if (container.scrollLeft <= 0) {
-        return false
-      }
-
-      container.scrollLeft -= 100
+      this.$refs.scrollableRef.scrollBackward()
     },
     handleNext() {
-      const container = this.$refs.wheelContainer
-
-      if (
-        container.scrollLeft
-        >= container.scrollWidth - container.clientWidth
-      ) {
-        return false
-      }
-
-      container.scrollLeft += 100
+      this.$refs.scrollableRef.scrollForward()
     },
     handleShell(row) {
       this.$adb.deviceShell(this.device.id, row.command)
@@ -220,12 +203,6 @@ export default {
 }
 
 .el-button.el-button-nav {
-  @apply p-0 rounded-none border-0 absolute z-10 inset-y-0 flex items-center justify-center opacity-0 bg-primary-100 dark:bg-gray-800 !hover:bg-primary-300 active:bg-primary-500 text-primary-600 hover:text-white w-4 group-hover:opacity-100 transition-opacity;
-  &.prev {
-    @apply left-0;
-  }
-  &.next {
-    @apply right-0;
-  }
+  @apply flex-none p-0 rounded-none border-0 h-full flex items-center justify-center opacity-0 bg-primary-100 dark:bg-gray-800 !hover:bg-primary-300 active:bg-primary-500 text-primary-600 hover:text-white w-4 group-hover:opacity-100 transition-opacity;
 }
 </style>

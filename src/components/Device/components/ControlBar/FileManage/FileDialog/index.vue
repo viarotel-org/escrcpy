@@ -5,6 +5,7 @@
     width="97%"
     append-to-body
     destroy-on-close
+    :close-on-click-modal="false"
     class="el-dialog--beautify"
     @closed="onClosed"
   >
@@ -15,32 +16,26 @@
         text
         icon="Top"
         circle
-        class="mr-2"
+        class="mr-2 flex-none"
         @click="handlePrev"
       ></el-button>
 
-      <el-breadcrumb separator-icon="ArrowRight">
-        <el-breadcrumb-item>
-          <el-button
-            text
-            icon="Iphone"
-            class="!px-2"
-            @click="handleBreadcrumb(breadcrumbModel[0])"
-          ></el-button>
-        </el-breadcrumb-item>
+      <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
+        <el-breadcrumb separator-icon="ArrowRight" class="!flex">
+          <el-breadcrumb-item
+            v-for="item of breadcrumbModel"
+            :key="item.value"
+            class="!flex-none"
+            @click="handleBreadcrumb(item)"
+          >
+            <el-button text class="!px-2" :icon="item.icon" :title="item.label">
+              {{ item.label }}
+            </el-button>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </Scrollable>
 
-        <el-breadcrumb-item
-          v-for="item of breadcrumbModel"
-          :key="item.value"
-          @click="handleBreadcrumb(item)"
-        >
-          <el-button text class="!px-2">
-            {{ item.label || item.value }}
-          </el-button>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-
-      <div class="ml-auto">
+      <div class="flex-none">
         <el-button text icon="Refresh" circle @click="getTableData"></el-button>
       </div>
     </div>
@@ -88,28 +83,31 @@
         :selectable="(row) => ['file'].includes(row.type)"
       ></el-table-column>
 
-      <el-table-column prop="name" :label="$t('common.name')" sortable>
+      <el-table-column
+        prop="name"
+        :label="$t('common.name')"
+        sortable
+        show-overflow-tooltip
+      >
         <template #default="{ row }">
-          <div class="flex items-center">
-            <el-link
-              v-if="row.type === 'directory'"
-              type="default"
-              icon="Folder"
-              class="!space-x-2"
-              @click="handleDirectory(row)"
-            >
-              {{ row.name }}
-            </el-link>
-            <el-link
-              v-else
-              type="default"
-              icon="Document"
-              class="!space-x-2"
-              @click="handleDownload(row)"
-            >
-              {{ row.name }}
-            </el-link>
-          </div>
+          <el-link
+            v-if="row.type === 'directory'"
+            type="default"
+            icon="Folder"
+            class="!space-x-2"
+            @click="handleDirectory(row)"
+          >
+            {{ row.name }}
+          </el-link>
+          <el-link
+            v-else
+            type="default"
+            icon="Document"
+            class="!space-x-2"
+            @click="handleDownload(row)"
+          >
+            {{ row.name }}
+          </el-link>
         </template>
       </el-table-column>
 
@@ -185,15 +183,21 @@ const tableData = ref([])
 
 const currentPath = ref('sdcard')
 
-const breadcrumbModel = computed(() => {
-  const pathList = currentPath.value.split('/')
+const presetMap = {
+  sdcard: {
+    icon: 'Iphone',
+    label: window.t('device.control.file.manager.storage'),
+    value: 'sdcard',
+  },
+}
 
-  const value = pathList.map(item => ({
-    label:
-      item === 'sdcard'
-        ? window.t('device.control.file.manager.storage')
-        : void 0,
+const breadcrumbModel = computed(() => {
+  const list = currentPath.value.split('/')
+
+  const value = list.map(item => ({
+    label: item,
     value: item,
+    ...(presetMap[item] || {}),
   }))
 
   return value
@@ -226,9 +230,14 @@ function onSelectionChange(selection) {
   selectionRows.value = selection
 }
 
-function handleDirectory(row) {
+const scrollableRef = ref()
+
+async function handleDirectory(row) {
   currentPath.value += `/${row.name}`
   getTableData()
+
+  await nextTick()
+  scrollableRef.value.scrollToEnd()
 }
 
 function handleBreadcrumb(data) {

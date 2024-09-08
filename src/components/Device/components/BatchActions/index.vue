@@ -39,7 +39,7 @@
 
 <script setup>
 import Application from './Application/index.vue'
-import FileManage from './FileManage/index.vue'
+import FilePush from './FilePush/index.vue'
 import Screenshot from './Screenshot/index.vue'
 import Shell from './Shell/index.vue'
 import Tasks from './Tasks/index.vue'
@@ -65,7 +65,7 @@ const actionModel = [
   {
     label: 'device.control.file.push',
     svgIcon: 'file-send',
-    component: FileManage,
+    component: FilePush,
   },
   {
     label: 'device.control.shell.name',

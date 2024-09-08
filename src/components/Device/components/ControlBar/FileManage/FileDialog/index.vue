@@ -29,7 +29,7 @@
             @click="handleBreadcrumb(item)"
           >
             <el-button text class="!px-2" :icon="item.icon" :title="item.label">
-              {{ item.label }}
+              {{ $t(item.label) }}
             </el-button>
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -183,13 +183,13 @@ const tableData = ref([])
 
 const currentPath = ref('sdcard')
 
-const presetMap = {
+const presetMap = ref({
   sdcard: {
     icon: 'Iphone',
-    label: window.t('device.control.file.manager.storage'),
+    label: 'device.control.file.manager.storage',
     value: 'sdcard',
   },
-}
+})
 
 const breadcrumbModel = computed(() => {
   const list = currentPath.value.split('/')
@@ -197,7 +197,7 @@ const breadcrumbModel = computed(() => {
   const value = list.map(item => ({
     label: item,
     value: item,
-    ...(presetMap[item] || {}),
+    ...(presetMap.value[item] || {}),
   }))
 
   return value

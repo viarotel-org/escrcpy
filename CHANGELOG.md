@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.3](https://github.com/viarotel-org/escrcpy/compare/v1.23.2...v1.23.3) (2024-09-08)
+
+
+### Performance Improvements
+
+* ♻️ Optimize the performance of equipment interaction column and file manager ([41ffcf5](https://github.com/viarotel-org/escrcpy/commit/41ffcf56603d799f41b0a2292267b504e200de12))
+
 ## [1.23.2](https://github.com/viarotel-org/escrcpy/compare/v1.23.1...v1.23.2) (2024-09-07)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.4](https://github.com/viarotel-org/escrcpy/compare/v1.23.3...v1.23.4) (2024-09-08)
+
+
+### Bug Fixes
+
+* 🐛 Repair part of internationalization Lost dynamics ([d18444f](https://github.com/viarotel-org/escrcpy/commit/d18444f28ba1046018bc419e0068ce12c73b2d48))
+
 ## [1.23.3](https://github.com/viarotel-org/escrcpy/compare/v1.23.2...v1.23.3) (2024-09-08)
 
 

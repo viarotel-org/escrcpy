@@ -183,13 +183,13 @@ const tableData = ref([])
 
 const currentPath = ref('sdcard')
 
-const presetMap = ref({
+const presetMap = {
   sdcard: {
     icon: 'Iphone',
     label: 'device.control.file.manager.storage',
     value: 'sdcard',
   },
-})
+}
 
 const breadcrumbModel = computed(() => {
   const list = currentPath.value.split('/')
@@ -197,7 +197,7 @@ const breadcrumbModel = computed(() => {
   const value = list.map(item => ({
     label: item,
     value: item,
-    ...(presetMap.value[item] || {}),
+    ...(presetMap[item] || {}),
   }))
 
   return value

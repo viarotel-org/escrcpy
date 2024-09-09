@@ -117,7 +117,6 @@ const getDeviceIP = async (id) => {
   }
   catch (error) {
     console.warn('adbkit.getDeviceIP.error', error.message)
-    return false
   }
 }
 
@@ -279,6 +278,7 @@ export default () => {
 
   client = Adb.createClient({
     bin: binPath,
+    timeout: 5 * 1000,
   })
 
   return {

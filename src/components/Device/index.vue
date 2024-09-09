@@ -258,16 +258,21 @@ export default {
         this.deviceList = data
       }
       catch (error) {
-        console.warn(error)
-        if (error?.message || error?.cause?.message) {
-          this.$message.warning(error?.message || error?.cause?.message)
+        const message = error?.message || error?.cause?.message
+
+        console.warn(message)
+
+        if (message && !message.includes('daemon not running')) {
+          this.$message.warning(message)
         }
+
         this.deviceList = []
 
         if (resetResolve) {
           this.handleReset()
         }
       }
+
       this.loading = false
     },
   },

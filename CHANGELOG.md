@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.5](https://github.com/viarotel-org/escrcpy/compare/v1.23.4...v1.23.5) (2024-09-09)
+
+
+### Performance Improvements
+
+* ♻️ Improve ADB connection stability ([7655ba6](https://github.com/viarotel-org/escrcpy/commit/7655ba637c21500e6aaf633aa8ab8132d3687b33))
+
 ## [1.23.4](https://github.com/viarotel-org/escrcpy/compare/v1.23.3...v1.23.4) (2024-09-08)
 
 

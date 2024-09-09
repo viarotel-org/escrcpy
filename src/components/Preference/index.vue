@@ -3,14 +3,14 @@
     <div
       class="mr-4 pb-2 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
     >
-      <div class="">
+      <div class="flex-none">
         <ScopeSelect
           v-model="deviceScope"
           @change="onScopeChange"
           @device-change="onDeviceChange"
         />
       </div>
-      <div class="">
+      <el-button-group class="flex-none">
         <el-button type="" icon="Upload" plain @click="handleImport">
           {{ $t('preferences.config.import.name') }}
         </el-button>
@@ -23,7 +23,7 @@
         <el-button type="" icon="RefreshRight" plain @click="handleReset">
           {{ $t('preferences.config.reset.name') }}
         </el-button>
-      </div>
+      </el-button-group>
     </div>
 
     <div class="pr-2 pt-4 flex-1 h-0 overflow-auto">

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.23.6](https://github.com/viarotel-org/escrcpy/compare/v1.23.5...v1.23.6) (2024-09-09)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the problem of minimizing the visibility of tray icons ([b0f42aa](https://github.com/viarotel-org/escrcpy/commit/b0f42aa474686649fc7eb4736329539530a3b85a))
+* 🐛 Repair ADB timeout problems ([b5bffc5](https://github.com/viarotel-org/escrcpy/commit/b5bffc562df339851ae68baf3e78cf4dd2ea2cf0))
+
 ## [1.23.5](https://github.com/viarotel-org/escrcpy/compare/v1.23.4...v1.23.5) (2024-09-09)
 
 

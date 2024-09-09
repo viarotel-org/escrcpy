@@ -212,7 +212,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 19. Flexible mirroring launch ✅
 20. Batch processing ✅
 21. Scheduled tasks ✅
-22. Graphical file manager ✅ 
+22. Graphical file manager ✅
 23. Device grouping 🚧
 24. Game key mapping 🚧
 
@@ -225,12 +225,17 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 ### Unable to enter Chinese
 
-This issue is known - Scrcpy doesn't seem to have tested and supported direct Chinese input. It's recommended to install a third-party input method on the phone that can well support, such as:
+> In Scrcpy@2.4+ and above, the solution is as follows:
 
-- Sogou Input
-- QQ Input
-- Google Pinyin Input
-- Gboard
+1. Escrcpy Settings: Go to `Preferences` → `Input Control` → `Keyboard Mode` and select `uhid` mode.
+2. Device Input Method Preparation: Install an input method that supports physical keyboards (WeChat Input Method is recommended) and complete the setup.
+3. Start Mirroring: Click `Start Mirroring` in Escrcpy. Verification: The device’s `Settings` → `System` → `Language & Input` should display options for `Physical Keyboard` and `On-screen Keyboard`.
+4. Device Input Settings: Enable WeChat Input Method in the `On-screen Keyboard` settings. Configure the keyboard layout in the `Physical Keyboard` settings to match the computer keyboard (only needs to be done once).
+5. Computer Input Preparation: Set the input mode to English (important).
+6. Switch Input Language: Use `Ctrl` + `Shift` to switch between English and Chinese.
+7. Start Using.
+
+[Download WeChat Input Method](https://z.weixin.qq.com/)
 
 ### Wireless connection prompts: The target computer actively refuses access
 
@@ -242,7 +247,9 @@ Please click again, or click refresh devices. Generally it will not exceed two c
 
 ### Why is the device interaction control bar not designed as an automatically sticking floating menu?
 
-Adopting the floating menu approach will inevitably increase coupling with Scrcpy and difficulty in synchronization updates. Many similar ScrcpyGUI softwares had to invest a lot of effort in this approach and eventually gave up development due to update difficulties. Therefore, taking overall considerations, we decided to adopt the existing approach and look forward to Scrcpy's native support for an interaction control bar in the future.
+It is important to note that, in principle, Escrcpy is just a GUI version based on Scrcpy, although it does extend some functionality. However, these extensions do not affect the core of Scrcpy. To implement this particular feature, I would have to modify the underlying Scrcpy code, which would make it more difficult for Escrcpy to stay in sync with Scrcpy's updates, and the drawbacks would outweigh the benefits.
+
+Therefore, after careful consideration, we have decided to adopt the existing solution and look forward to Scrcpy adding native support for an interactive control bar in the future.
 
 ### Some devices can see screenshots after connecting but cannot operate
 

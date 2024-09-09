@@ -278,7 +278,6 @@ export default () => {
 
   client = Adb.createClient({
     bin: binPath,
-    timeout: 5 * 1000,
   })
 
   return {

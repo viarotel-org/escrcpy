@@ -6,17 +6,15 @@ import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow, shell } from 'electron'
 import contextMenu from 'electron-context-menu'
-
-import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
-import events from './events/index.js'
-
+/** process.js 必须位于非依赖项的顶部 */
+import { isPackaged } from './helpers/process.js'
 import log from './helpers/log.js'
+import './helpers/console.js'
 import appStore from './helpers/store.js'
 
-// process.js 必须位于非依赖项的顶部
-import './helpers/process.js'
+import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
 
-import './helpers/console.js'
+import events from './events/index.js'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -28,7 +26,7 @@ const debug = !!appStore.get('common.debug')
 if (!debug) {
   log.warn(
     'Debug Tips:',
-    'If you need to generate and view the running log, please start the debugging function on the preference setting page',
+    'If you need to generate and view the running log, please start the debugging function on the preference setting page'
   )
 }
 
@@ -37,7 +35,7 @@ contextMenu({
   showSelectAll: false,
   showSearchWithGoogle: false,
   showSaveImageAs: true,
-  showInspectElement: !app.isPackaged,
+  showInspectElement: !isPackaged,
 })
 
 // The built directory structure
@@ -61,14 +59,13 @@ function createWindow() {
 
   if (process.platform === 'win32') {
     icon = icoLogoPath
-  }
-  else if (process.platform === 'darwin') {
+  } else if (process.platform === 'darwin') {
     icon = icnsLogoPath
   }
 
   mainWindow = new BrowserWindow({
     // 这里设置的图标仅在开发模式生效，打包后将使用应用程序图标
-    ...(!app.isPackaged
+    ...(!isPackaged
       ? {
           icon,
         }
@@ -101,8 +98,7 @@ function createWindow() {
 
   if (VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(VITE_DEV_SERVER_URL)
-  }
-  else {
+  } else {
     mainWindow.loadFile(path.join(process.env.DIST, 'index.html'))
   }
 

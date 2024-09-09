@@ -2,12 +2,14 @@ import { resolve } from 'node:path'
 import { contextBridge } from 'electron'
 import { cloneDeep } from 'lodash-es'
 
-export const isPackaged = process.env.IS_PACKAGED === 'true'
+export const isPackaged = ['true'].includes(process.env.IS_PACKAGED)
 
-export const extraResolve = (value) => {
-  return isPackaged
-    ? resolve(process.resourcesPath, `extra/${value}`)
-    : resolve(`electron/resources/extra/${value}`)
+export const extraResolve = (filePath) => {
+  const basePath = isPackaged ? process.resourcesPath : 'electron/resources'
+
+  const value = resolve(basePath, 'extra', filePath)
+
+  return value
 }
 
 export const buildResolve = value =>

@@ -16,6 +16,7 @@ export default antfu(
       'dist',
       'dist-electron',
       'dist-release',
+      'electron/main.js',
     ],
   },
   {
@@ -47,6 +48,7 @@ export default antfu(
       'no-new': 'off',
       'prefer-promise-reject-errors': 'off',
       'no-unused-expressions': 'off',
+      'sort-imports': 'off',
 
       'vue/html-self-closing': 'off',
       'vue/block-order': 'off',

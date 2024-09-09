@@ -41,12 +41,11 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 import { usePreferenceStore } from '$/store/preference/index.js'
+
 import { useThemeStore } from '$/store/theme/index.js'
 import { ElMessageBox } from 'element-plus'
-
 import About from './components/About/index.vue'
 import Device from './components/Device/index.vue'
-
 import Preference from './components/Preference/index.vue'
 import Quick from './components/Quick/index.vue'
 

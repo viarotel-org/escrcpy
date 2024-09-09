@@ -8,8 +8,10 @@ if (process.platform === 'darwin') {
   fixPath()
 }
 
-process.env.IS_PACKAGED = JSON.stringify(app.isPackaged)
+process.env.IS_PACKAGED = String(app.isPackaged)
 
 process.env.DESKTOP_PATH = app.getPath('desktop')
 
 process.env.CWD = process.cwd()
+
+export const isPackaged = ['true'].includes(process.env.IS_PACKAGED)

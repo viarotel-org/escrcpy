@@ -4,6 +4,7 @@
 
 <script>
 import { sleep } from '$/utils'
+import { openFloatControl } from '$/utils/device/index.js'
 
 export default {
   props: {
@@ -48,6 +49,8 @@ export default {
         await sleep(1 * 1000)
 
         this.loading = false
+
+        openFloatControl(toRaw(this.row))
 
         await recording
 

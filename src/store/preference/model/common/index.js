@@ -129,6 +129,13 @@ export default {
       placeholder: 'preferences.common.gnirehtet.fix.placeholder',
       tips: 'preferences.common.gnirehtet.fix.tips',
     },
+    floatControl: {
+      label: 'preferences.common.floatControl.name',
+      field: 'floatControl',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.floatControl.placeholder',
+    },
     debug: {
       label: 'preferences.common.debug.name',
       field: 'debug',

@@ -10,6 +10,7 @@ if (isEqual(appStore.store, {})) {
 }
 
 export default {
+  ...appStore,
   ...createProxy(appStore, [
     'set',
     'get',
@@ -21,7 +22,6 @@ export default {
     'onDidAnyChange',
     'openInEditor',
   ]),
-  ...appStore,
   getAll: () => appStore.store,
   setAll: value => (appStore.store = value),
 }

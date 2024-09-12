@@ -13,6 +13,7 @@
 
 <script>
 import { sleep } from '$/utils'
+import { openFloatControl } from '$/utils/device/index.js'
 
 export default {
   props: {
@@ -52,6 +53,8 @@ export default {
 
         this.loading = false
 
+        openFloatControl(toRaw(this.row))
+
         await mirroring
       }
       catch (error) {
@@ -63,6 +66,7 @@ export default {
         }
       }
     },
+
     onStdout() {},
     onStderr() {},
   },

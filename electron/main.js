@@ -12,9 +12,13 @@ import log from './helpers/log.js'
 import './helpers/console.js'
 import appStore from './helpers/store.js'
 
-import { icnsLogoPath, icoLogoPath, logoPath } from './configs/index.js'
+import { getLogoPath } from './configs/index.js'
 
 import events from './events/index.js'
+
+import control from '$control/electron/main.js'
+
+import { loadPage } from './helpers/index.js'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -51,25 +55,10 @@ contextMenu({
 process.env.DIST = path.join(__dirname, '../dist')
 
 let mainWindow
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
-const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
 function createWindow() {
-  let icon = logoPath
-
-  if (process.platform === 'win32') {
-    icon = icoLogoPath
-  } else if (process.platform === 'darwin') {
-    icon = icnsLogoPath
-  }
-
   mainWindow = new BrowserWindow({
-    // 这里设置的图标仅在开发模式生效，打包后将使用应用程序图标
-    ...(!isPackaged
-      ? {
-          icon,
-        }
-      : {}),
+    icon: getLogoPath(),
     show: false,
     width: 1200,
     height: 800,
@@ -96,13 +85,11 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-  if (VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(VITE_DEV_SERVER_URL)
-  } else {
-    mainWindow.loadFile(path.join(process.env.DIST, 'index.html'))
-  }
+  loadPage(mainWindow)
 
   events(mainWindow)
+
+  control(mainWindow)
 }
 
 app.whenReady().then(() => {

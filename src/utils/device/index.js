@@ -72,3 +72,13 @@ export async function selectAndSendFileToDevice(
 
   return successFiles
 }
+
+export function openFloatControl(deviceInfo) {
+  const floatControl = window.appStore.get('common.floatControl')
+
+  if (!floatControl) {
+    return false
+  }
+
+  window.electron.ipcRenderer.send('open-control-window', deviceInfo)
+}

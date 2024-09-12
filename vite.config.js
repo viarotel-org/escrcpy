@@ -13,35 +13,35 @@ import postcssConfig from './postcss.config.js'
 
 import useAutoImports from './src/plugins/auto.js'
 
-const merge = (config, { command = '' } = {}) =>
-  mergeConfig(
+const alias = {
+  $: resolve('src'),
+  $root: resolve(),
+  $renderer: resolve('src'),
+  $electron: resolve('electron'),
+  $control: resolve('control'),
+}
+
+function mergeCommon(config, { command = '' } = {}) {
+  return mergeConfig(
     {
       resolve: {
-        alias: {
-          $root: resolve(),
-          $electron: resolve('electron'),
-          $renderer: resolve('src'),
-        },
+        alias,
       },
       plugins: [...(command === 'serve' ? [notBundle()] : [])],
     },
     config,
   )
+}
 
-export default args =>
-  merge(
+export default function (args) {
+  return mergeCommon(
     defineConfig({
       build: {
         rollupOptions: {
           input: {
             main: resolve('index.html'),
+            control: resolve('control/index.html'),
           },
-        },
-      },
-      resolve: {
-        alias: {
-          $: resolve('src'),
-          $electron: resolve('electron'),
         },
       },
       plugins: [
@@ -54,11 +54,11 @@ export default args =>
         useElectron({
           main: {
             entry: 'electron/main.js',
-            vite: merge({}, args),
+            vite: mergeCommon({}, args),
           },
           preload: {
             input: 'electron/preload.js',
-            vite: merge({}, args),
+            vite: mergeCommon({}, args),
           },
         }),
         useRenderer(),
@@ -69,3 +69,4 @@ export default args =>
       },
     }),
   )
+}

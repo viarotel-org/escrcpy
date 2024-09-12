@@ -237,6 +237,8 @@
   "preferences.common.gnirehtet.fix.name": "Gnirehtet Fix",
   "preferences.common.gnirehtet.fix.placeholder": "Turning this on will try to fix reverse tethering issues on some devices",
   "preferences.common.gnirehtet.fix.tips": "Note: May cause duplicate gnirehtet client installations",
+  "preferences.common.floatControl.name": "Floating Control Bar",
+  "preferences.common.floatControl.placeholder": "Once enabled, the device floating control bar will automatically open during mirroring",
   "preferences.common.auto-connect.name": "Auto Connect",
   "preferences.common.auto-connect.placeholder": "When enabled, the software will attempt to automatically connect to historical devices upon startup.",
   "preferences.common.auto-mirror.name": "Auto Mirror",

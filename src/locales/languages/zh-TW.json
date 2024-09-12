@@ -237,6 +237,8 @@
   "preferences.common.gnirehtet.fix.name": "gnirehtet 修復",
   "preferences.common.gnirehtet.fix.placeholder": "開啟將嘗試修復某些機型二次開啟反向網路分享功能失敗的問題",
   "preferences.common.gnirehtet.fix.tips": "注意：可能導致 gnirehtet 客戶端重複安裝",
+  "preferences.common.floatControl.name": "浮動操控欄",
+  "preferences.common.floatControl.placeholder": "啟用後，鏡像時將會自動開啟設備浮動操控欄",
   "preferences.common.auto-connect.name": "自動連接裝置",
   "preferences.common.auto-connect.placeholder": "啟用後，該軟體將在啟動時嘗試自動連接到歷史無線裝置",
   "preferences.common.auto-mirror.name": "自動執行鏡像",

@@ -63,6 +63,7 @@ export default antfu(
       'unicorn/consistent-function-scoping': 'off',
       'regexp/no-unused-capturing-group': 'off',
       'regexp/no-dupe-disjunctions': 'off',
+      'perfectionist/sort-imports': 'off',
     },
   },
 )

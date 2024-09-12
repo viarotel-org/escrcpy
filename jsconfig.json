@@ -5,7 +5,8 @@
       "$/*": ["src/*"],
       "$root/*": ["*"],
       "$electron/*": ["electron/*"],
-      "$renderer/*": ["src/*"]
+      "$renderer/*": ["src/*"],
+      "$control/*": ["control/*"]
     }
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],

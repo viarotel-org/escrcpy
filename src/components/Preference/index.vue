@@ -74,6 +74,7 @@ export default {
     'preferenceData.theme': {
       handler(value) {
         this.$store.theme.update(value)
+        window.electron.ipcRenderer.send('theme-change', value)
       },
     },
     'preferenceData.adbPath': {

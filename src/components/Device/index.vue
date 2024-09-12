@@ -106,7 +106,7 @@
           </template>
 
           <template #default="{ row }">
-            <ControlBar :device="row" />
+            <ControlBar :device="row" class="-my-[8px]" />
           </template>
         </el-table-column>
       </el-table>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-primary-100 dark:bg-gray-800 flex items-center group -my-[8px] h-9 overflow-hidden"
+    class="bg-primary-100 dark:bg-gray-800 flex items-center group h-9 overflow-hidden"
   >
     <el-button
       type="primary"

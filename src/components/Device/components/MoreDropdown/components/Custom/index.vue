@@ -6,6 +6,8 @@
 
 <script>
 import { sleep } from '$/utils'
+import { openFloatControl } from '$/utils/device/index.js'
+
 import DeployDialog from './components/DeployDialog/index.vue'
 
 export default {
@@ -58,6 +60,8 @@ export default {
 
         this.loading = false
 
+        openFloatControl(toRaw(this.row))
+
         await mirroring
       }
       catch (error) {
@@ -69,6 +73,7 @@ export default {
         }
       }
     },
+
     onStdout() {},
     onStderr() {},
   },

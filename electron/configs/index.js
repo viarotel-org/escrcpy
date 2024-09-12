@@ -22,3 +22,16 @@ export const trayPath
     : extraResolve('common/tray/icon.png')
 
 export const logPath = process.env.LOG_PATH
+
+export function getLogoPath() {
+  let icon = logoPath
+
+  if (process.platform === 'win32') {
+    icon = icoLogoPath
+  }
+  else if (process.platform === 'darwin') {
+    icon = icnsLogoPath
+  }
+
+  return logoPath
+}

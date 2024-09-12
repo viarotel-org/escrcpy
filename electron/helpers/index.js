@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+import { join, resolve } from 'node:path'
 import { contextBridge } from 'electron'
 import { cloneDeep } from 'lodash-es'
 
@@ -54,5 +54,17 @@ export async function executeI18n(mainWindow, value) {
   catch (error) {
     console.warn(error?.message || error)
     return value
+  }
+}
+
+export function loadPage(win, prefix = '') {
+  // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
+  const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+
+  if (VITE_DEV_SERVER_URL) {
+    win.loadURL(join(VITE_DEV_SERVER_URL, prefix))
+  }
+  else {
+    win.loadFile(join(process.env.DIST, prefix, 'index.html'))
   }
 }

@@ -37,7 +37,7 @@
       ></div>
 
       <div class="flex-1 w-0 overflow-hidden h-full">
-        <ControlBar class="!h-full" :device="deviceInfo" />
+        <ControlBar class="!h-full" :device="deviceInfo" floating />
       </div>
 
       <div

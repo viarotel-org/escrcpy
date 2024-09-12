@@ -24,6 +24,9 @@
   "common.delete": "Delete",
   "common.name": "Name",
   "common.size": "Size",
+  "common.warning": "Warning",
+  "common.info": "Message",
+  "common.danger": "Error",
 
   "common.language.name": "Language",
   "common.language.placeholder": "Select language",

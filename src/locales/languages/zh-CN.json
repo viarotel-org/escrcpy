@@ -24,6 +24,9 @@
   "common.delete": "删除",
   "common.name": "名称",
   "common.size": "大小",
+  "common.warning": "警告",
+  "common.info": "消息",
+  "common.danger": "错误",
 
   "common.language.name": "语言",
   "common.language.placeholder": "选择你需要的语言",

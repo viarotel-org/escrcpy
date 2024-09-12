@@ -21,6 +21,7 @@
         class="flex-none"
         v-bind="{
           device,
+          floating,
           ...(item.command
             ? {
               onClick: () => handleShell(item),
@@ -94,36 +95,48 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    floating: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
-    return {
-      controlModel: [
+    return {}
+  },
+  computed: {
+    controlModel() {
+      const value = [
         {
           label: 'device.control.switch',
           elIcon: 'Switch',
           command: 'input keyevent 187',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.home',
           svgIcon: 'home',
           command: 'input keyevent 3',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.return',
           elIcon: 'Back',
           command: 'input keyevent 4',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.notification',
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.power',
           elIcon: 'SwitchButton',
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.rotation.name',
@@ -139,16 +152,19 @@ export default {
           label: 'device.control.capture',
           elIcon: 'Crop',
           component: 'Screenshot',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.reboot',
           elIcon: 'RefreshLeft',
           command: 'reboot',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.install',
           svgIcon: 'install',
           component: 'Application',
+          visibleList: ['floating'],
         },
         {
           label: 'device.control.file.name',
@@ -179,10 +195,14 @@ export default {
           component: 'MirrorGroup',
           tips: 'device.control.mirror-group.tips',
         },
-      ],
-    }
+      ]
+
+      return value.filter(
+        item =>
+          !this.floating || (item.visibleList ?? []).includes('floating'),
+      )
+    },
   },
-  computed: {},
   methods: {
     handlePrev() {
       this.$refs.scrollableRef.scrollBackward()

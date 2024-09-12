@@ -6,12 +6,17 @@
 
 <script>
 import { allSettledWrapper } from '$/utils'
+import { adaptiveMessage } from '$/utils/modal/index.js'
 
 export default {
   props: {
     device: {
       type: Object,
       default: () => ({}),
+    },
+    floating: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data() {
@@ -41,18 +46,24 @@ export default {
           if (error.message) {
             const message
               = error.message?.match(/Error: (.*)/)?.[1] || error.message
-            this.$message.warning(message)
+
+            adaptiveMessage(message, { type: 'warning', system: this.floating })
           }
+
           return false
         }
       }
 
       let closeLoading = null
       if (!silent) {
-        closeLoading = this.$message.loading(
+        closeLoading = adaptiveMessage(
           this.$t('device.control.install.progress', {
             deviceName: this.$store.device.getLabel(device),
           }),
+          {
+            type: 'loading',
+            system: this.floating,
+          },
         ).close
       }
 
@@ -69,33 +80,44 @@ export default {
         return false
       }
 
-      closeLoading()
+      closeLoading?.()
 
       const totalCount = files.length
       const successCount = totalCount - failCount
 
       if (successCount) {
         if (totalCount > 1) {
-          this.$message.success(
+          adaptiveMessage(
             this.$t('device.control.install.success', {
               deviceName: this.$store.device.getLabel(device),
               totalCount,
               successCount,
               failCount,
             }),
+            {
+              type: 'success',
+              system: this.floating,
+            },
           )
         }
         else {
-          this.$message.success(
+          adaptiveMessage(
             this.$t('device.control.install.success.single', {
               deviceName: this.$store.device.getLabel(device),
             }),
+            {
+              type: 'success',
+              system: this.floating,
+            },
           )
         }
         return false
       }
 
-      this.$message.warning(this.$t('device.control.install.error'))
+      adaptiveMessage(this.$t('device.control.install.error'), {
+        type: 'warning',
+        system: this.floating,
+      })
     },
   },
 }

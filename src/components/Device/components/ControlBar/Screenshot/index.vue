@@ -12,9 +12,15 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  floating: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const { loading, invoke: handleClick } = useScreenshotAction()
+const { loading, invoke: handleClick } = useScreenshotAction({
+  floating: props.floating,
+})
 </script>
 
 <style></style>

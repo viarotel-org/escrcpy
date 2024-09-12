@@ -1,10 +1,11 @@
 import { useDeviceStore, usePreferenceStore } from '$/store'
 
 import { allSettledWrapper } from '$/utils/index.js'
+import { adaptiveMessage } from '$/utils/modal/index.js'
 
 import { ElMessage } from 'element-plus'
 
-export function useScreenshotAction() {
+export function useScreenshotAction({ floating } = {}) {
   const deviceStore = useDeviceStore()
   const preferenceStore = usePreferenceStore()
 
@@ -23,7 +24,7 @@ export function useScreenshotAction() {
   async function singleInvoke(device, { silent = false } = {}) {
     let closeLoading
 
-    if (!silent) {
+    if (!silent && !floating) {
       closeLoading = ElMessage.loading(
         window.t('device.control.capture.progress', {
           deviceName: deviceStore.getLabel(device),
@@ -53,12 +54,15 @@ export function useScreenshotAction() {
       return false
     }
 
-    closeLoading()
+    closeLoading?.()
 
-    ElMessage.success(
-      `${window.t('device.control.capture.success.message.title')}: ${savePath}`,
-    )
+    const successMessage = `${window.t(
+      'device.control.capture.success.message.title',
+    )}: ${savePath}`
+
+    adaptiveMessage(successMessage, { type: 'success', system: floating })
   }
+
   async function multipleInvoke(devices) {
     loading.value = true
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.24.0](https://github.com/viarotel-org/escrcpy/compare/v1.23.6...v1.24.0) (2024-09-12)
+
+
+### Features
+
+* ✨ Support floating control bar ([8807e50](https://github.com/viarotel-org/escrcpy/commit/8807e5041399acd228ee739c610778272e431bdd))
+
+
+### Performance Improvements
+
+* ✅ Support switching devices on the floating control bar ([50440f5](https://github.com/viarotel-org/escrcpy/commit/50440f5f4b98eed2ceabd0c4fda706ef66eabedd))
+* 💄 Optimize preference setting button layout ([47ae53d](https://github.com/viarotel-org/escrcpy/commit/47ae53d623bf0c8f7a08df2cc2cc5a54bfc8a917))
+
 ## [1.23.6](https://github.com/viarotel-org/escrcpy/compare/v1.23.5...v1.23.6) (2024-09-09)
 
 

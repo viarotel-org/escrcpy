@@ -1,56 +1,41 @@
-import { BrowserWindow, ipcMain, Menu } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import { initControlWindow, openControlWindow } from './helpers/index.js'
+
+import { devices, gnirehtet, rotation, volume } from './events/index.js'
+
+function onControlMounted(controlWindow) {
+  ipcMain.on('language-change', (event, data) => {
+    controlWindow.webContents.send('language-change', data)
+  })
+
+  ipcMain.on('theme-change', (event, data) => {
+    controlWindow.webContents.send('theme-change', data)
+  })
+
+  rotation(controlWindow)
+  devices(controlWindow)
+  volume(controlWindow)
+  gnirehtet(controlWindow)
+}
 
 export default (mainWindow) => {
   let controlWindow
 
-  ipcMain.on('open-control-window', (event, data) => {
+  ipcMain.handle('open-control-window', (event, data) => {
     controlWindow = BrowserWindow.getAllWindows().find(
       win => win.customId === 'control',
     )
 
-    if (!controlWindow) {
-      controlWindow = initControlWindow(mainWindow)
-
-      ipcMain.on('control-mounted', () => {
-        openControlWindow(controlWindow, data)
-      })
-
+    if (controlWindow) {
+      openControlWindow(controlWindow, data)
       return false
     }
 
-    openControlWindow(controlWindow, data)
-  })
+    controlWindow = initControlWindow(mainWindow)
 
-  ipcMain.on('language-change', (event, data) => {
-    if (controlWindow) {
-      controlWindow.webContents.send('language-change', data)
-    }
-  })
-
-  ipcMain.on('theme-change', (event, data) => {
-    if (controlWindow) {
-      controlWindow.webContents.send('theme-change', data)
-    }
-  })
-
-  ipcMain.on('show-device-list', (event, deviceList) => {
-    const template = deviceList.map((item) => {
-      let label = item.$remark || item.$name
-
-      if (item.$wifi) {
-        label += ` (WIFI)`
-      }
-
-      return {
-        label,
-        click: () => {
-          openControlWindow(controlWindow, item)
-        },
-      }
+    ipcMain.on('control-mounted', () => {
+      onControlMounted(controlWindow)
+      openControlWindow(controlWindow, data)
     })
-
-    const menu = Menu.buildFromTemplate(template)
-    menu.popup(BrowserWindow.fromWebContents(event.sender))
   })
 }

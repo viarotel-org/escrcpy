@@ -119,14 +119,14 @@ const record = async (
   )
 }
 
-const mirrorGroup = async (serial, { open = 1, ...options } = {}) => {
+const mirrorGroup = async (serial, { openNum = 1, ...options } = {}) => {
   const overlayDisplay
     = appStore.get(`scrcpy.${replaceIP(serial)}.--display-overlay`)
     || appStore.get('scrcpy.global.--display-overlay')
     || '1080x1920/320,secure'
 
   const command = `settings put global overlay_display_devices "${[
-    ...Array.from({ length: open }).keys(),
+    ...Array.from({ length: openNum }).keys(),
   ]
     .map(() => overlayDisplay)
     .join(';')}"`

@@ -1,20 +1,18 @@
 <template>
-  <el-dropdown @command="handleCommand">
-    <div class="">
-      <slot :loading="loading" />
-    </div>
+  <el-dropdown :disabled="loading" @command="handleCommand">
+    <slot :loading />
     <template #dropdown>
       <el-dropdown-menu>
         <template v-if="!loading">
-          <el-dropdown-item v-for="item of 4" :key="item" :command="item">
-            {{ $t("device.control.mirror-group.open", { num: item }) }}
+          <el-dropdown-item
+            v-for="item of options"
+            :key="item"
+            :command="item.value"
+            :title="item.title"
+          >
+            {{ item.label }}
           </el-dropdown-item>
         </template>
-        <el-dropdown-item v-else command="close">
-          <span class="" :title="$t('device.control.mirror-group.close.tips')">
-            {{ $t("device.control.mirror-group.close") }}
-          </span>
-        </el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
@@ -34,6 +32,29 @@ export default {
     return {
       loading: false,
     }
+  },
+  computed: {
+    options() {
+      const value = []
+
+      if (this.loading) {
+        value.push({
+          label: window.t('device.control.mirror-group.close'),
+          value: 'close',
+          title: window.t('device.control.mirror-group.close.tips'),
+        })
+      }
+      else {
+        value.push(
+          ...[1, 2, 3, 4].map(item => ({
+            label: this.$t('device.control.mirror-group.open', { num: item }),
+            value: item,
+          })),
+        )
+      }
+
+      return value
+    },
   },
   methods: {
     scrcpyArgs(...args) {
@@ -55,7 +76,7 @@ export default {
 
       try {
         const res = await this.$scrcpy.mirrorGroup(this.device.id, {
-          open: command,
+          openNum: command,
           title: ({ displayId }) =>
             `${this.$store.device.getLabel(
               this.device,

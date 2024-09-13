@@ -80,5 +80,5 @@ export function openFloatControl(deviceInfo) {
     return false
   }
 
-  window.electron.ipcRenderer.send('open-control-window', deviceInfo)
+  window.electron.ipcRenderer.invoke('open-control-window', deviceInfo)
 }

@@ -10,5 +10,5 @@
     }
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],
-  "include": ["src", "electron"]
+  "include": ["src", "electron", "control"]
 }

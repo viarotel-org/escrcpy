@@ -1,6 +1,11 @@
 <template>
-  <el-dropdown>
-    <div class="" :title="device.$gnirehtetLoadingText" @click="handleStart">
+  <el-dropdown :disabled="floating">
+    <div
+      class=""
+      :title="device.$gnirehtetLoadingText"
+      @click="handleStart"
+      @mouseenter="onMouseenter"
+    >
       <slot :loading="device.$gnirehtetLoading" />
     </div>
 
@@ -16,12 +21,17 @@
 
 <script>
 import { sleep } from '$/utils'
+import { adaptiveMessage } from '$/utils/modal/index.js'
 
 export default {
   props: {
     device: {
       type: Object,
       default: () => ({}),
+    },
+    floating: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -36,10 +46,41 @@ export default {
     }
   },
   methods: {
+    onMouseenter() {
+      if (!this.floating) {
+        return false
+      }
+
+      if (!this.device.$gnirehtetLoading) {
+        return false
+      }
+
+      window.electron.ipcRenderer.once(
+        'stop-device-gnirehtet',
+        (event, data) => {
+          this.handleStop()
+        },
+      )
+
+      const options = [
+        {
+          label: window.t('device.control.gnirehtet.stop'),
+          value: 'stop-device-gnirehtet',
+        },
+      ]
+
+      window.electron.ipcRenderer.invoke('open-device-gnirehtet-menu', {
+        options,
+      })
+    },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
     },
     async handleStart() {
+      if (this.device.$gnirehtetLoading) {
+        return false
+      }
+
       this.device.$gnirehtetLoadingText = this.$t(
         'device.control.gnirehtet.running',
       )
@@ -48,7 +89,10 @@ export default {
       try {
         await this.$gnirehtet.run(this.device.id)
         await sleep()
-        this.$message.success(this.$t('device.control.gnirehtet.start.success'))
+        adaptiveMessage(this.$t('device.control.gnirehtet.start.success'), {
+          system: this.floating,
+          type: 'success',
+        })
       }
       catch (error) {
         this.$message.warning(error.message || 'Start service failure')
@@ -64,10 +108,16 @@ export default {
       try {
         await this.$gnirehtet.stop(this.device.id)
         await sleep()
-        this.$message.success(this.$t('common.success'))
+        adaptiveMessage(this.$t('common.success'), {
+          system: this.floating,
+          type: 'success',
+        })
       }
       catch (error) {
-        this.$message.warning(error.message || 'Stop service failure')
+        adaptiveMessage(error.message || 'Stop service failure', {
+          system: this.floating,
+          type: 'warning',
+        })
       }
 
       this.device.$gnirehtetLoading = false

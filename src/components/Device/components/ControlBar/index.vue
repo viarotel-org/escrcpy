@@ -22,14 +22,9 @@
         v-bind="{
           device,
           floating,
-          ...(item.command
-            ? {
-              onClick: () => handleShell(item),
-            }
-            : {}),
         }"
       >
-        <template #default="{ loading = false } = {}">
+        <template #default="{ loading = false, trigger } = {}">
           <el-button
             type="primary"
             plain
@@ -37,6 +32,7 @@
             :disabled="device.$unauthorized"
             :title="$t(item.tips || item.label)"
             :loading="loading"
+            @click="handleClick(item, trigger)"
           >
             <template #icon>
               <svg-icon
@@ -71,7 +67,7 @@
 import Application from './Application/index.vue'
 import FileManage from './FileManage/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
-import MirrorGroup from './MirrorGroup/index.vue'
+import Synergy from './Synergy/index.vue'
 import Rotation from './Rotation/index.vue'
 import Screenshot from './Screenshot/index.vue'
 import Shell from './Shell/index.vue'
@@ -83,7 +79,7 @@ export default {
     Screenshot,
     Application,
     Gnirehtet,
-    MirrorGroup,
+    Synergy,
     Rotation,
     Volume,
     FileManage,
@@ -110,33 +106,28 @@ export default {
           label: 'device.control.switch',
           elIcon: 'Switch',
           command: 'input keyevent 187',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.home',
           svgIcon: 'home',
           command: 'input keyevent 3',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.return',
           elIcon: 'Back',
           command: 'input keyevent 4',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.notification',
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.power',
           elIcon: 'SwitchButton',
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.rotation.name',
@@ -152,35 +143,35 @@ export default {
           label: 'device.control.capture',
           elIcon: 'Crop',
           component: 'Screenshot',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.reboot',
           elIcon: 'RefreshLeft',
           command: 'reboot',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.install',
           svgIcon: 'install',
           component: 'Application',
-          visibleList: ['floating'],
         },
         {
           label: 'device.control.file.name',
           svgIcon: 'file-send',
           component: 'FileManage',
+          hiddenKeys: ['floating'],
         },
         {
           label: 'device.control.shell.name',
           svgIcon: 'command',
           component: 'Shell',
           tips: 'device.control.shell.tips',
+          hiddenKeys: ['floating'],
         },
         {
           label: 'device.task.name',
           elIcon: 'Clock',
           component: 'Tasks',
+          hiddenKeys: ['floating'],
         },
         {
           label: 'device.control.gnirehtet',
@@ -192,15 +183,16 @@ export default {
           label: 'device.control.mirror-group.name',
           svgIcon: 'multi-screen',
           iconClass: '',
-          component: 'MirrorGroup',
+          component: 'Synergy',
           tips: 'device.control.mirror-group.tips',
+          hiddenKeys: ['floating'],
         },
       ]
 
-      return value.filter(
-        item =>
-          !this.floating || (item.visibleList ?? []).includes('floating'),
-      )
+      const handler = item =>
+        !(item.hiddenKeys || []).some(key => this.$props[key])
+
+      return value.filter(item => handler(item))
     },
   },
   methods: {
@@ -210,8 +202,15 @@ export default {
     handleNext() {
       this.$refs.scrollableRef.scrollForward()
     },
-    handleShell(row) {
-      this.$adb.deviceShell(this.device.id, row.command)
+    handleClick(row, trigger) {
+      if (row?.command) {
+        this.$adb.deviceShell(this.device.id, row.command)
+        return false
+      }
+
+      if (trigger) {
+        trigger(row)
+      }
     },
   },
 }

@@ -1,8 +1,7 @@
 <template>
-  <el-dropdown :disabled="loading" @command="handleCommand">
-    <div class="">
-      <slot :loading="loading" />
-    </div>
+  <el-dropdown :disabled="loading || floating" @command="handleCommand">
+    <slot :loading :trigger="handleTrigger" />
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -26,6 +25,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    floating: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -39,27 +42,51 @@ export default {
         disable:
           'content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0',
       },
-      options: [
+    }
+  },
+  computed: {
+    options() {
+      const value = [
         {
-          label: 'device.control.rotation.vertically',
+          label: this.$t('device.control.rotation.vertically'),
           value: 'vertically',
         },
         {
-          label: 'device.control.rotation.horizontally',
+          label: this.$t('device.control.rotation.horizontally'),
           value: 'horizontally',
         },
         {
-          label: 'device.control.rotation.auto',
+          label: this.$t('device.control.rotation.auto'),
           value: 'auto',
         },
         {
-          label: 'device.control.rotation.disable',
+          label: this.$t('device.control.rotation.disable'),
           value: 'disable',
         },
-      ],
-    }
+      ]
+      return value
+    },
   },
   methods: {
+    handleTrigger() {
+      if (!this.floating) {
+        return false
+      }
+
+      window.electron.ipcRenderer.once(
+        'execute-device-rotation-shell',
+        (event, data) => {
+          this.handleCommand(data)
+        },
+      )
+
+      const options = toRaw(this.options)
+
+      window.electron.ipcRenderer.invoke('open-device-rotation-menu', {
+        options,
+      })
+    },
+
     async handleCommand(value) {
       this.loading = true
 

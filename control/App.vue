@@ -25,7 +25,7 @@
           type="primary"
           text
           class="!px-2 !h-full"
-          icon="Switch"
+          icon="ArrowDown"
           @click="switchDevice"
         >
           <span class="mr-2">{{ deviceInfo.$remark || deviceInfo.$name }}</span>
@@ -107,7 +107,7 @@ async function switchDevice(e) {
 
   const data = await deviceStore.getList()
 
-  window.electron.ipcRenderer.send('show-device-list', data)
+  window.electron.ipcRenderer.invoke('open-control-device-menu', data)
 }
 </script>
 

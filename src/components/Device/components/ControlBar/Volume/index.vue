@@ -1,8 +1,11 @@
 <template>
-  <el-dropdown :hide-on-click="false" @command="handleCommand">
-    <div class="">
-      <slot :loading="loading" />
-    </div>
+  <el-dropdown
+    :hide-on-click="false"
+    :disabled="loading || floating"
+    @command="handleCommand"
+  >
+    <slot :loading :trigger="handleTrigger" />
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -24,6 +27,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    floating: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -33,23 +40,46 @@ export default {
         'volume-up': 'input keyevent KEYCODE_VOLUME_UP',
         'volume-mute': 'input keyevent KEYCODE_VOLUME_MUTE',
       },
-      options: [
+    }
+  },
+  computed: {
+    options() {
+      const value = [
         {
-          label: 'device.control.volume-up.name',
+          label: this.$t('device.control.volume-up.name'),
           value: 'volume-up',
         },
         {
-          label: 'device.control.volume-down.name',
+          label: this.$t('device.control.volume-down.name'),
           value: 'volume-down',
         },
         {
-          label: 'device.control.volume-mute.name',
+          label: this.$t('device.control.volume-mute.name'),
           value: 'volume-mute',
         },
-      ],
-    }
+      ]
+      return value
+    },
   },
   methods: {
+    handleTrigger() {
+      if (!this.floating) {
+        return false
+      }
+
+      window.electron.ipcRenderer.once(
+        'execute-device-volume-shell',
+        (event, data) => {
+          this.handleCommand(data)
+        },
+      )
+
+      const options = toRaw(this.options)
+
+      window.electron.ipcRenderer.invoke('open-device-volume-menu', {
+        options,
+      })
+    },
     async handleCommand(value) {
       this.loading = true
 

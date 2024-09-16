@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.24.1](https://github.com/viarotel-org/escrcpy/compare/v1.24.0...v1.24.1) (2024-09-16)
+
+
+### Performance Improvements
+
+* ✨ Update to scrcpy@2.7 to support the gamepad ([0053e87](https://github.com/viarotel-org/escrcpy/commit/0053e87f1a345502430f8f1ce94a59d1c399ddda))
+* ⬆️ Optimize the performance of the floating control bar ([a1c60ec](https://github.com/viarotel-org/escrcpy/commit/a1c60ecd787d2c05bd15109d71a557eb8d58e443))
+* 🚀 Extended floating control bar function ([790e703](https://github.com/viarotel-org/escrcpy/commit/790e70349ac8b938a77cbde3560c410c8fc2a05b))
+
 ## [1.24.0](https://github.com/viarotel-org/escrcpy/compare/v1.23.6...v1.24.0) (2024-09-12)
 
 

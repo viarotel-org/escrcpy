@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.2](https://github.com/viarotel-org/escrcpy/compare/v1.24.1...v1.24.2) (2024-09-16)
+
+
+### Bug Fixes
+
+* 🐛 Fix the mirror group bug ([cd7d9cd](https://github.com/viarotel-org/escrcpy/commit/cd7d9cdd3c006f7d73bc70a1730870f277cb0dff))
+
 ## [1.24.1](https://github.com/viarotel-org/escrcpy/compare/v1.24.0...v1.24.1) (2024-09-16)
 
 

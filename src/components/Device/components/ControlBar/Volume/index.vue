@@ -76,7 +76,7 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.invoke('open-device-volume-menu', {
+      window.electron.ipcRenderer.send('open-device-volume-menu', {
         options,
       })
     },

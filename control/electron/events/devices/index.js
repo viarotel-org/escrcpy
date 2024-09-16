@@ -2,7 +2,7 @@ import { BrowserWindow, ipcMain, Menu } from 'electron'
 import { openControlWindow } from '$control/electron/helpers/index.js'
 
 export default function (controlWindow) {
-  ipcMain.handle('open-control-device-menu', (event, deviceList) => {
+  ipcMain.on('open-control-device-menu', (event, deviceList) => {
     const template = deviceList.map((item) => {
       let label = item.$remark || item.$name
 

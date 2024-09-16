@@ -34,8 +34,8 @@ export default (mainWindow) => {
     controlWindow = initControlWindow(mainWindow)
 
     ipcMain.on('control-mounted', () => {
-      onControlMounted(controlWindow)
       openControlWindow(controlWindow, data)
+      onControlMounted(controlWindow)
     })
   })
 }

@@ -68,12 +68,6 @@ import { ElMessage } from 'element-plus'
 const themeStore = useThemeStore()
 const deviceStore = useDeviceStore()
 
-themeStore.init()
-
-onMounted(() => {
-  window.electron.ipcRenderer.send('control-mounted')
-})
-
 const locale = computed(() => {
   const i18nLocale = i18n.global.locale.value
 
@@ -84,31 +78,37 @@ const locale = computed(() => {
 
 const deviceInfo = ref({})
 
-window.electron.ipcRenderer.on('device-change', (event, data) => {
-  deviceInfo.value = data
-})
-
-window.electron.ipcRenderer.on('language-change', (event, data) => {
-  i18n.global.locale.value = data
-})
-
-window.electron.ipcRenderer.on('theme-change', (event, data) => {
-  themeStore.update(data)
-})
+const deviceList = ref([])
 
 function handleClose() {
   window.electron.ipcRenderer.send('hide-active-window')
 }
-
-const deviceList = ref([])
 
 async function switchDevice(e) {
   e.preventDefault()
 
   const data = await deviceStore.getList()
 
-  window.electron.ipcRenderer.invoke('open-control-device-menu', data)
+  window.electron.ipcRenderer.send('open-control-device-menu', data)
 }
+
+onMounted(() => {
+  window.electron.ipcRenderer.send('control-mounted')
+
+  themeStore.init()
+
+  window.electron.ipcRenderer.on('device-change', (event, data) => {
+    deviceInfo.value = data
+  })
+
+  window.electron.ipcRenderer.on('language-change', (event, data) => {
+    i18n.global.locale.value = data
+  })
+
+  window.electron.ipcRenderer.on('theme-change', (event, data) => {
+    themeStore.update(data)
+  })
+})
 </script>
 
 <style lang="postcss">

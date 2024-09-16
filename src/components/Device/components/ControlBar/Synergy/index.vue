@@ -1,6 +1,7 @@
 <template>
   <el-dropdown :disabled="loading" @command="handleCommand">
     <slot :loading />
+
     <template #dropdown>
       <el-dropdown-menu>
         <template v-if="!loading">

@@ -82,7 +82,7 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.invoke('open-device-rotation-menu', {
+      window.electron.ipcRenderer.send('open-device-rotation-menu', {
         options,
       })
     },

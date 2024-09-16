@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
 export default function (controlWindow) {
-  ipcMain.handle('open-device-volume-menu', openDeviceVolumeMenu)
+  ipcMain.on('open-device-volume-menu', openDeviceVolumeMenu)
 
   function openDeviceVolumeMenu(event, args = {}) {
     const { options = [] } = args

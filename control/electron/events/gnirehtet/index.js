@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
 export default function (controlWindow) {
-  ipcMain.handle('open-device-gnirehtet-menu', openDeviceGnirehtetMenu)
+  ipcMain.on('open-device-gnirehtet-menu', openDeviceGnirehtetMenu)
 
   function openDeviceGnirehtetMenu(event, args = {}) {
     const { options = [] } = args

@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
 export default function (controlWindow) {
-  ipcMain.handle('open-device-rotation-menu', openDeviceRotationMenu)
+  ipcMain.on('open-device-rotation-menu', openDeviceRotationMenu)
 
   function openDeviceRotationMenu(event, args = {}) {
     const { options = [] } = args

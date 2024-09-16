@@ -69,7 +69,7 @@ export default {
         },
       ]
 
-      window.electron.ipcRenderer.invoke('open-device-gnirehtet-menu', {
+      window.electron.ipcRenderer.send('open-device-gnirehtet-menu', {
         options,
       })
     },

@@ -370,6 +370,9 @@
   "preferences.input.keyboard.inject.tips": "設定鍵盤文字輸入優先選項",
   "preferences.input.keyboard.inject.options[0].placeholder": "將字母作為文字輸入",
   "preferences.input.keyboard.inject.options[1].placeholder": "強制始終輸入原始按鍵事件",
+  "preferences.input.gamepad.name": "遊戲手柄",
+  "preferences.input.gamepad.placeholder": "停用",
+  "preferences.input.gamepad.tips": "此選項允許將遊戲手柄（PS4/PS5或Xbox）連接到您的電腦以玩安卓遊戲。注意：所玩的遊戲必須支持遊戲手柄輸入。",
 
   "preferences.camera.name": "鏡頭控制",
   "preferences.camera.camera-facing.name": "鏡頭來源",

@@ -370,6 +370,9 @@
   "preferences.input.keyboard.inject.tips": "Set keyboard text injection first option",
   "preferences.input.keyboard.inject.options[0].placeholder": "Inject letters as text",
   "preferences.input.keyboard.inject.options[1].placeholder": "Force always inject the original button event",
+  "preferences.input.gamepad.name": "Gamepad",
+  "preferences.input.gamepad.placeholder": "Disabled",
+  "preferences.input.gamepad.tips": "This option allows connecting a gamepad (PS4/PS5 or Xbox) to your computer to play Android games. Note: The game being played must support gamepad input.",
 
   "preferences.camera.name": "Camera",
   "preferences.camera.camera-facing.name": "Camera Source",

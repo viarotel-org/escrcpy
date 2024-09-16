@@ -10,7 +10,7 @@ export default {
       props: {
         clearable: true,
       },
-      value: undefined,
+      value: void 0,
       placeholder: 'preferences.input.mouse.placeholder',
       tips: 'preferences.input.mouse.tips',
       options: [
@@ -51,7 +51,7 @@ export default {
       props: {
         clearable: true,
       },
-      value: undefined,
+      value: void 0,
       placeholder: 'preferences.input.keyboard.placeholder',
       tips: 'preferences.input.keyboard.tips',
       options: [
@@ -81,7 +81,7 @@ export default {
       label: 'preferences.input.keyboard.inject.name',
       field: '--keyboard-inject',
       type: 'KeyboardInjectSelect',
-      value: undefined,
+      value: void 0,
       placeholder: 'preferences.input.keyboard.inject.placeholder',
       tips: 'preferences.input.keyboard.inject.tips',
       options: [
@@ -108,12 +108,36 @@ export default {
     videoCodec: {
       hidden: true,
       field: '--prefer-text',
-      value: undefined,
+      value: void 0,
     },
     videoEncoder: {
       hidden: true,
       field: '--raw-key-events',
-      value: undefined,
+      value: void 0,
+    },
+    gamepad: {
+      label: 'preferences.input.gamepad.name',
+      field: '--gamepad',
+      type: 'Select',
+      value: void 0,
+      placeholder: 'preferences.input.gamepad.placeholder',
+      tips: 'preferences.input.gamepad.tips',
+      options: [
+        {
+          label: 'disabled',
+          value: '',
+        },
+        {
+          label: 'uhid',
+          value: 'uhid',
+          placeholder: 'preferences.input.keyboard.options[1].placeholder',
+        },
+        {
+          label: 'aoa',
+          value: 'aoa',
+          placeholder: 'preferences.input.keyboard.options[2].placeholder',
+        },
+      ],
     },
   },
 }

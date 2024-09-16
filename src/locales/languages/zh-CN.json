@@ -370,6 +370,9 @@
   "preferences.input.keyboard.inject.tips": "设置键盘文本注入首选项",
   "preferences.input.keyboard.inject.options[0].placeholder": "将字母作为文本注入",
   "preferences.input.keyboard.inject.options[1].placeholder": "强制始终注入原始按键事件",
+  "preferences.input.gamepad.name": "游戏手柄",
+  "preferences.input.gamepad.placeholder": "禁用",
+  "preferences.input.gamepad.tips": "该选项将允许将游戏手柄（ PS4/PS5 或 XBox）连接到你的电脑来玩安卓游戏。注意：所玩的游戏必须支持游戏手柄输入。",
 
   "preferences.camera.name": "摄像控制",
   "preferences.camera.camera-facing.name": "摄像源",

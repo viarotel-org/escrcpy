@@ -6,7 +6,7 @@ export default {
       label: 'preferences.record.format.name',
       field: '--record-format',
       type: 'Select',
-      value: 'mp4',
+      value: void 0,
       placeholder: 'preferences.record.format.placeholder',
       options: [
         {

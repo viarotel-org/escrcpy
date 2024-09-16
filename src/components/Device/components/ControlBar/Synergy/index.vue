@@ -1,19 +1,19 @@
 <template>
-  <el-dropdown :disabled="loading" @command="handleCommand">
-    <slot :loading />
+  <el-dropdown @command="handleCommand">
+    <div class="">
+      <slot v-bind="{ loading }" />
+    </div>
 
     <template #dropdown>
       <el-dropdown-menu>
-        <template v-if="!loading">
-          <el-dropdown-item
-            v-for="item of options"
-            :key="item"
-            :command="item.value"
-            :title="item.title"
-          >
-            {{ item.label }}
-          </el-dropdown-item>
-        </template>
+        <el-dropdown-item
+          v-for="item of options"
+          :key="item.value"
+          :command="item.value"
+          :title="item.title"
+        >
+          {{ item.label }}
+        </el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>

@@ -121,6 +121,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Auto-execute mirroring
 - Gnirehtet fix
 - Debug
+- Floating control bar
 
 ### Video Control
 
@@ -179,6 +180,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Mouse binding
 - Keyboard mode
 - Keyboard injection method
+- Gamepad
 
 ### Camera Control
 

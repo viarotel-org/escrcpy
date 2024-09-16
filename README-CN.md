@@ -123,6 +123,7 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 - 自动执行镜像
 - Gnirehtet 修复
 - 调试
+- 浮动控制栏
 
 ### 视频控制
 
@@ -181,6 +182,7 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 - 鼠标绑定
 - 键盘模式
 - 键盘注入方式
+- 游戏手柄
 
 ### 摄像控制
 

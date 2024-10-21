@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.3](https://github.com/viarotel-org/escrcpy/compare/v1.24.2...v1.24.3) (2024-10-21)
+
+
+### Performance Improvements
+
+* 💄 Optimize Russian display effect ([5ca39ae](https://github.com/viarotel-org/escrcpy/commit/5ca39ae188ba15af8000a573fc015b51e8c615d0))
+
 ## [1.24.2](https://github.com/viarotel-org/escrcpy/compare/v1.24.1...v1.24.2) (2024-09-16)
 
 

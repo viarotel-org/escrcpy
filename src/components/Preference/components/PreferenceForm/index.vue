@@ -35,7 +35,7 @@
           <el-form
             ref="elForm"
             :model="preferenceData"
-            label-width="225px"
+            label-width="250px"
             class="pr-8 pt-4"
           >
             <el-row :gutter="20">
@@ -63,9 +63,11 @@
                         >
                         </el-link>
                       </el-tooltip>
-                      <span class="" :title="$t(item_1.placeholder)">{{
-                        $t(item_1.label)
-                      }}</span>
+                      <div class="truncate max-w-56" :title="$t(item_1.label)">
+                        {{
+                          $t(item_1.label)
+                        }}
+                      </div>
                     </div>
                   </template>
 

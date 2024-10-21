@@ -51,6 +51,10 @@ export default {
           label: 'common.language.en-US',
           value: 'en-US',
         },
+        {
+          label: 'common.language.ru-RU',
+          value: 'ru-RU',
+        },
       ],
     },
     savePath: {

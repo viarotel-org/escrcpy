@@ -45,7 +45,9 @@
     "pair ${this.formData.host}:${this.formData.port} ${this.formData.pair}",
     "${item.decoder} & ${item.encoder}",
     " & ",
-    "${key}=${value}"
+    "${key}=${value}",
+    "npm install",
+    "npm run build"
   ],
   "cSpell.words": [
     "bhsn"

@@ -14,7 +14,7 @@ import appStore from './helpers/store.js'
 
 import { getLogoPath } from './configs/index.js'
 
-import events from './events/index.js'
+import ipc from './ipc/index.js'
 
 import control from '$control/electron/main.js'
 
@@ -87,7 +87,7 @@ function createWindow() {
 
   loadPage(mainWindow)
 
-  events(mainWindow)
+  ipc(mainWindow)
 
   control(mainWindow)
 }

@@ -16,7 +16,6 @@
     "build:win": "vite build && electron-builder --win",
     "build:mac": "vite build && electron-builder --mac",
     "build:linux": "vite build && electron-builder --linux",
-    "preview": "vite preview",
     "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps",
     "prepare": "husky install"
@@ -57,6 +56,8 @@
     "postcss": "8.4.38",
     "postcss-nested": "6.0.1",
     "postcss-scss": "4.0.9",
+    "rimraf": "^6.0.1",
+    "simple-git": "^3.27.0",
     "unocss": "0.62.3",
     "unplugin-auto-import": "0.18.2",
     "unplugin-vue-components": "0.27.4",

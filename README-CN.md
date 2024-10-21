@@ -7,7 +7,7 @@
 📱 使用图形界面的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。[English Document](https://github.com/viarotel-org/escrcpy/blob/main/README.md)
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-CN/overview.jpg" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/overview.jpg" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## 特点
@@ -334,10 +334,10 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 > 如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
-  <img src="./screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
+    <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>
 </div>
 

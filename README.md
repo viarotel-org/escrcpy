@@ -7,7 +7,7 @@
 📱 Display and control your Android device with a graphical interface of Scrcpy powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="./screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/en-US/overview.jpg" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## Features
@@ -333,10 +333,10 @@ This project would not be possible without the following open source projects:
 > If this project has helped you, you can buy me a coffee to keep me energized and improving the project! 😛
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
-  <img src="./screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="./screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
+    <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>
 </div>
 

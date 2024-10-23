@@ -13,6 +13,8 @@ import {
 } from './helpers/index.js'
 import model from './model/index.js'
 
+import command from '$/utils/command/index.js'
+
 const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
 
 export const usePreferenceStore = defineStore({
@@ -130,7 +132,7 @@ export const usePreferenceStore = defineStore({
       return value
     },
 
-    getScrcpyArgs(
+    scrcpyParameter(
       scope = this.deviceScope,
       { isRecord = false, isCamera = false, isOtg = false, excludes = [] } = {},
     ) {
@@ -140,54 +142,30 @@ export const usePreferenceStore = defineStore({
         return ''
       }
 
-      const valueList = Object.entries(data).reduce((arr, [key, value]) => {
-        if (!value && typeof value !== 'number') {
-          return arr
+      const params = Object.entries(data).reduce((obj, [key, value]) => {
+        const shouldExclude
+          = (!value && typeof value !== 'number')
+          || this.excludeKeys.includes(key)
+          || (!isRecord && this.recordKeys.includes(key))
+          || (!isCamera && this.cameraKeys.includes(key))
+          || (!isOtg && this.otgKeys.includes(key))
+          || excludes.includes(key)
+          || excludes.includes(`${key}=${value}`)
+
+        if (shouldExclude) {
+          return obj
         }
 
-        if (this.excludeKeys.includes(key)) {
-          return arr
-        }
+        obj[key] = value
 
-        if (!isRecord) {
-          if (this.recordKeys.includes(key)) {
-            return arr
-          }
-        }
+        return obj
+      }, {})
 
-        if (!isCamera) {
-          if (this.cameraKeys.includes(key)) {
-            return arr
-          }
-        }
-
-        if (!isOtg) {
-          if (this.otgKeys.includes(key)) {
-            return arr
-          }
-        }
-
-        if (excludes.includes(key) || excludes.includes(`${key}=${value}`)) {
-          return arr
-        }
-
-        if (typeof value === 'boolean') {
-          arr.push(key)
-        }
-        else {
-          arr.push(`${key}="${value}"`)
-        }
-
-        return arr
-      }, [])
+      let value = command.stringify(params)
 
       if (data.scrcpyAppend) {
-        valueList.push(...data.scrcpyAppend.split(' '))
+        value += ` ${data.scrcpyAppend}`
       }
-
-      const value = valueList.join(' ')
-
-      // console.log('value', value)
 
       return value
     },

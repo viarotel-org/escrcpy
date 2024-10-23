@@ -3,12 +3,13 @@ import util from 'node:util'
 import { adbPath, scrcpyPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
 import { replaceIP, sleep } from '$renderer/utils/index.js'
+import commandHelper from '$renderer/utils/command/index.js'
 
 let adbkit
 
 const exec = util.promisify(_exec)
 
-const shell = async (command, { stdout, stderr } = {}) => {
+async function shell(command, { stdout, stderr } = {}) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
@@ -58,7 +59,7 @@ const shell = async (command, { stdout, stderr } = {}) => {
   })
 }
 
-const execShell = async (command) => {
+async function execShell(command) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
@@ -71,7 +72,7 @@ const execShell = async (command) => {
   return res
 }
 
-const getEncoders = async (serial) => {
+async function getEncoders(serial) {
   const res = await execShell(`--serial="${serial}" --list-encoders`)
   const stdout = res.stdout
 
@@ -97,29 +98,26 @@ const getEncoders = async (serial) => {
   return value
 }
 
-const mirror = async (
+async function mirror(
   serial,
   { title, args = '', exec = false, ...options } = {},
-) => {
-  const mirrorShell = exec ? execShell : shell
+) {
+  const currentShell = exec ? execShell : shell
 
-  return mirrorShell(
+  return currentShell(
     `--serial="${serial}" --window-title="${title}" ${args}`,
     options,
   )
 }
 
-const record = async (
-  serial,
-  { title, args = '', savePath, ...options } = {},
-) => {
+async function record(serial, { title, args = '', savePath, ...options } = {}) {
   return shell(
     `--serial="${serial}" --window-title="${title}" --record="${savePath}" ${args}`,
     options,
   )
 }
 
-const mirrorGroup = async (serial, { openNum = 1, ...options } = {}) => {
+async function mirrorGroup(serial, { openNum = 1, ...options } = {}) {
   const overlayDisplay
     = appStore.get(`scrcpy.${replaceIP(serial)}.--display-overlay`)
     || appStore.get('scrcpy.global.--display-overlay')
@@ -170,6 +168,17 @@ const mirrorGroup = async (serial, { openNum = 1, ...options } = {}) => {
   return Promise.allSettled(results)
 }
 
+async function control(serial, { command, exec = true, ...options } = {}) {
+  const currentShell = exec ? execShell : shell
+
+  const stringCommand = commandHelper.stringify(command)
+
+  return currentShell(
+    `--serial="${serial}" --no-video --no-audio ${stringCommand}`,
+    options,
+  )
+}
+
 export default (options = {}) => {
   adbkit = options.adbkit
 
@@ -180,5 +189,6 @@ export default (options = {}) => {
     mirror,
     record,
     mirrorGroup,
+    control,
   }
 }

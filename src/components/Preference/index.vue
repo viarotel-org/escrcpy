@@ -173,6 +173,7 @@ export default {
 
     handleSave() {
       this.preferenceStore.setData(this.preferenceData)
+
       this.$message({
         message: this.$t('preferences.config.save.placeholder'),
         type: 'success',

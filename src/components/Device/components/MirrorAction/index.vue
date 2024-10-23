@@ -37,7 +37,7 @@ export default {
 
       this.toggleRowExpansion(row, true)
 
-      const args = this.$store.preference.getScrcpyArgs(row.id, {
+      const args = this.$store.preference.scrcpyParameter(row.id, {
         excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
       })
 

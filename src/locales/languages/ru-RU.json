@@ -127,8 +127,9 @@
   "device.record.success.message": "Открыть место сохранения записи?",
   "device.actions.more.name": "Дополнительные действия",
   "device.actions.more.record.name": "Начать запись",
+  "device.actions.more.camera.name": "Запустить камеры",
+  "device.actions.more.recordCamera.name": "Запись камеры",
   "device.actions.more.otg.name": "Запустить OTG",
-  "device.actions.more.camera.name": "Запустить камеру",
   "device.actions.more.custom.name": "Пользовательский запуск",
 
   "device.control.name": "Управление",

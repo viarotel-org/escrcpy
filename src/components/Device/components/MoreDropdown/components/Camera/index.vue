@@ -29,7 +29,7 @@ export default {
 
       this.toggleRowExpansion(row, true)
 
-      const args = `--video-source=camera ${this.$store.preference.getScrcpyArgs(
+      const args = `--video-source=camera ${this.$store.preference.scrcpyParameter(
         row.id,
         {
           excludes: [

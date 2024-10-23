@@ -127,8 +127,9 @@
   "device.record.success.message": "是否前往录制位置进行查看？",
   "device.actions.more.name": "更多操作",
   "device.actions.more.record.name": "开始录制",
+  "device.actions.more.camera.name": "启动相机",
+  "device.actions.more.recordCamera.name": "录制相机",
   "device.actions.more.otg.name": "启动OTG",
-  "device.actions.more.camera.name": "启动摄像",
   "device.actions.more.custom.name": "灵活启动",
 
   "device.control.name": "操作",

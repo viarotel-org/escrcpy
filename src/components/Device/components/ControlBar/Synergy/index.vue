@@ -58,8 +58,8 @@ export default {
     },
   },
   methods: {
-    scrcpyArgs(...args) {
-      return this.$store.preference.getScrcpyArgs(...args)
+    scrcpyParams(...args) {
+      return this.$store.preference.scrcpyParameter(...args)
     },
     preferenceData(...args) {
       return this.$store.preference.getData(...args)
@@ -82,7 +82,7 @@ export default {
             `${this.$store.device.getLabel(
               this.device,
             )}-displayId-${displayId}`,
-          args: this.scrcpyArgs(this.device.id),
+          args: this.scrcpyParams(this.device.id),
         })
 
         res.forEach((item) => {

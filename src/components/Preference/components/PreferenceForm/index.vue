@@ -160,7 +160,7 @@ function handleReset(type) {
 }
 
 async function generateCommand() {
-  const value = await preferenceStore.getScrcpyArgs(preferenceData.value, {
+  const value = await preferenceStore.scrcpyParameter(preferenceData.value, {
     isRecord: true,
     isCamera: true,
     isOtg: true,

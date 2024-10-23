@@ -32,10 +32,12 @@ export default {
 
       const savePath = this.getRecordPath(row)
 
-      const args = this.$store.preference.scrcpyParameter(row.id, {
+      let args = this.$store.preference.scrcpyParameter(row.id, {
         isRecord: true,
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa', '--video-source'],
       })
+
+      args += ' --video-source=camera'
 
       try {
         const recording = this.$scrcpy.record(row.id, {

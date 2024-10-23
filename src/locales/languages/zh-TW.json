@@ -127,8 +127,9 @@
   "device.record.success.message": "是否前往錄製位置進行檢視？",
   "device.actions.more.name": "更多操作",
   "device.actions.more.record.name": "開始錄製",
-  "device.actions.more.otg.name": "啟動 OTG",
   "device.actions.more.camera.name": "啟動鏡頭",
+  "device.actions.more.recordCamera.name": "錄製鏡頭",
+  "device.actions.more.otg.name": "啟動 OTG",
   "device.actions.more.custom.name": "靈活啟動",
 
   "device.control.name": "操作",

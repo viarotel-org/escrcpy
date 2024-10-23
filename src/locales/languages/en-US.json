@@ -127,8 +127,9 @@
   "device.record.success.message": "Open record location?",
   "device.actions.more.name": "More Operation",
   "device.actions.more.record.name": "Start Recording",
-  "device.actions.more.otg.name": "Startup OTG",
   "device.actions.more.camera.name": "Startup Camera",
+  "device.actions.more.recordCamera.name": "Record Camera",
+  "device.actions.more.otg.name": "Startup OTG",
   "device.actions.more.custom.name": "Custom Startup",
 
   "device.control.name": "Control",

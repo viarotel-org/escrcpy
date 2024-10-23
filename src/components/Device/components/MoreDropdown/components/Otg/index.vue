@@ -29,7 +29,7 @@ export default {
 
       this.toggleRowExpansion(row, true)
 
-      const args = `--otg ${this.$store.preference.getScrcpyArgs(row.id, {
+      const args = `--otg ${this.$store.preference.scrcpyParameter(row.id, {
         excludes: [
           '--mouse=uhid',
           '--keyboard=uhid',

@@ -38,16 +38,18 @@
 </template>
 
 <script>
-import Camera from './components/Camera/index.vue'
-import Custom from './components/Custom/index.vue'
-import Otg from './components/Otg/index.vue'
 import Record from './components/Record/index.vue'
+import Camera from './components/Camera/index.vue'
+import RecordCamera from './components/RecordCamera/index.vue'
+import Otg from './components/Otg/index.vue'
+import Custom from './components/Custom/index.vue'
 
 export default {
   components: {
     Record,
-    Otg,
     Camera,
+    RecordCamera,
+    Otg,
     Custom,
   },
   props: {
@@ -64,12 +66,16 @@ export default {
           component: 'Record',
         },
         {
-          label: 'device.actions.more.otg.name',
-          component: 'Otg',
-        },
-        {
           label: 'device.actions.more.camera.name',
           component: 'Camera',
+        },
+        {
+          label: 'device.actions.more.recordCamera.name',
+          component: 'RecordCamera',
+        },
+        {
+          label: 'device.actions.more.otg.name',
+          component: 'Otg',
         },
         {
           label: 'device.actions.more.custom.name',

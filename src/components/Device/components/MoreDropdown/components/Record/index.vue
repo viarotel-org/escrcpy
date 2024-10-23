@@ -34,7 +34,7 @@ export default {
 
       const args = this.$store.preference.scrcpyParameter(row.id, {
         isRecord: true,
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa', '--show-touches'],
       })
 
       try {

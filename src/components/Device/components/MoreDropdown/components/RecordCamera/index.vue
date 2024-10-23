@@ -34,7 +34,7 @@ export default {
 
       let args = this.$store.preference.scrcpyParameter(row.id, {
         isRecord: true,
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa', '--video-source'],
+        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa', '--video-source', '--show-touches'],
       })
 
       args += ' --video-source=camera'

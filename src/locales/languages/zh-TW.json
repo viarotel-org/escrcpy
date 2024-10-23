@@ -166,6 +166,8 @@
   "device.control.capture.success.message": "是否前往截圖位置進行檢視？",
   "device.control.capture.success.message.title": "截圖成功",
   "device.control.reboot": "重啟裝置",
+  "device.control.turnScreenOff": "關閉螢幕",
+  "device.control.turnScreenOff.tips": "關閉螢幕而不影響控制",
   "device.control.power": "電源鍵",
   "device.control.power.tips": "可以用來開啟或關閉螢幕",
   "device.control.notification": "通知欄",

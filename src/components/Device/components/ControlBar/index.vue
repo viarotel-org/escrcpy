@@ -118,6 +118,12 @@ export default {
           command: 'input keyevent 4',
         },
         {
+          label: 'device.control.turnScreenOff',
+          elIcon: 'TurnOff',
+          scrcpyCommand: '--turn-screen-off',
+          tips: 'device.control.turnScreenOff.tips',
+        },
+        {
           label: 'device.control.notification',
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
@@ -203,13 +209,16 @@ export default {
       this.$refs.scrollableRef.scrollForward()
     },
     handleClick(row, trigger) {
-      if (row?.command) {
-        this.$adb.deviceShell(this.device.id, row.command)
+      if (trigger) {
+        trigger(row)
         return false
       }
 
-      if (trigger) {
-        trigger(row)
+      if (row?.command) {
+        this.$adb.deviceShell(this.device.id, row.command)
+      }
+      else if (row?.scrcpyCommand) {
+        this.$scrcpy.control(this.device.id, { command: row.scrcpyCommand })
       }
     },
   },

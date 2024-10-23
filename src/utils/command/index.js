@@ -4,9 +4,12 @@
  * @returns {string} The formatted command line arguments string
  */
 function stringify(options) {
+  if (typeof options === 'string') {
+    return options
+  }
+
   if (!options || typeof options !== 'object' || Array.isArray(options)) {
-    console.warn('Options must be a plain object')
-    return ''
+    throw new TypeError('Options must be a plain object')
   }
 
   const args = []

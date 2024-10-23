@@ -86,7 +86,7 @@
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
-          min-width="300"
+          min-width="250"
           align="left"
         >
           <MirrorAction

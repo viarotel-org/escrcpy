@@ -72,7 +72,7 @@
   "device.task.timeout.tips": "Не может быть раньше текущего времени",
   "device.task.timeout.expired": "Задача истекла",
   "device.task.interval": "Интервал повторения",
-  "device.task.devices": "Задействованные устройства",
+  "device.task.devices": "Устройство",
   "device.task.noRepeat": "Без повторения",
   "device.task.restart": "Выполнить снова",
   "device.task.extra.app": "Выберите приложение",

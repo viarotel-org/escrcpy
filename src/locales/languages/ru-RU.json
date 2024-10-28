@@ -167,7 +167,7 @@
   "device.control.capture.success.message.title": "Скриншот успешно создан",
   "device.control.reboot": "Перезагрузить",
   "device.control.turnScreenOff": "Выключить экран",
-  "device.control.turnScreenOff.tips": "Выключить экран без потери управления",
+  "device.control.turnScreenOff.tips": "Отключение экрана с сохранением контроля (экспериментально): это действие создаст процесс EscrcpyHelper; при ручном завершении этого процесса экран снова включится.",
   "device.control.power": "Питание",
   "device.control.power.tips": "Включить/выключить экран",
   "device.control.notification": "Уведомление",

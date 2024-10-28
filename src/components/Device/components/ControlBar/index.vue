@@ -16,7 +16,7 @@
     <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
       <component
         :is="item.component || 'div'"
-        v-for="(item, index) in controlModel"
+        v-for="(item, index) of controlModel"
         :key="index"
         class="flex-none"
         v-bind="{
@@ -32,7 +32,7 @@
             :disabled="device.$unauthorized"
             :title="$t(item.tips || item.label)"
             :loading="loading"
-            @click="handleClick(item, trigger)"
+            @click="handleClick(item, trigger || item.trigger)"
           >
             <template #icon>
               <svg-icon
@@ -120,8 +120,10 @@ export default {
         {
           label: 'device.control.turnScreenOff',
           elIcon: 'TurnOff',
-          scrcpyCommand: '--turn-screen-off',
           tips: 'device.control.turnScreenOff.tips',
+          trigger: () => {
+            window.scrcpy.helper(this.device.id, '--turn-screen-off')
+          },
         },
         {
           label: 'device.control.notification',

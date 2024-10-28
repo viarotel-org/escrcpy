@@ -67,7 +67,7 @@ function stringify(options) {
   // Process each option
   for (const [key, value] of Object.entries(options)) {
     // Skip null or undefined values
-    if ([null, undefined, false].includes(value)) {
+    if ([null, undefined, false, ''].includes(value)) {
       continue
     }
 
@@ -87,10 +87,10 @@ function stringify(options) {
         continue // 跳过空数组
       }
       value.forEach((item) => {
-        if (item !== null && item !== undefined) {
+        if (![null, undefined, false, ''].includes(item)) {
           const formattedValue = formatValue(item)
           if (formattedValue) {
-            args.push(`${paramName} ${formattedValue}`)
+            args.push(`${paramName}=${formattedValue}`)
           }
         }
       })

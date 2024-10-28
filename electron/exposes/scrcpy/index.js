@@ -9,7 +9,7 @@ let adbkit
 
 const exec = util.promisify(_exec)
 
-async function shell(command, { stdout, stderr } = {}) {
+async function shell(command, { stdout, stderr, ...options } = {}) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
@@ -18,6 +18,7 @@ async function shell(command, { stdout, stderr } = {}) {
     env: { ...process.env, ADB },
     shell: true,
     encoding: 'utf8',
+    ...options,
   })
 
   scrcpyProcess.stdout.on('data', (data) => {
@@ -168,13 +169,17 @@ async function mirrorGroup(serial, { openNum = 1, ...options } = {}) {
   return Promise.allSettled(results)
 }
 
-async function control(serial, { command, exec = true, ...options } = {}) {
-  const currentShell = exec ? execShell : shell
-
+async function helper(
+  serial,
+  command = '',
+  { hiddenWindow = false, ...options } = {},
+) {
   const stringCommand = commandHelper.stringify(command)
 
-  return currentShell(
-    `--serial="${serial}" --no-video --no-audio ${stringCommand}`,
+  return execShell(
+    `--serial="${serial}" --window-title="EscrcpyHelper" ${
+      hiddenWindow ? '--window-x=-300 --window-y=-300' : ''
+    } --no-video --no-audio --mouse=disabled ${stringCommand}`,
     options,
   )
 }
@@ -189,6 +194,6 @@ export default (options = {}) => {
     mirror,
     record,
     mirrorGroup,
-    control,
+    helper,
   }
 }

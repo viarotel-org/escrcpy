@@ -19,6 +19,39 @@ export default {
         },
       ],
     },
+    audioRecordFormat: {
+      label: 'preferences.record.format.audio.name',
+      field: '--audio-record-format',
+      type: 'Select',
+      value: void 0,
+      placeholder: 'preferences.record.format.audio.placeholder',
+      options: [
+        {
+          label: 'opus',
+          value: 'opus',
+        },
+        {
+          label: 'wav',
+          value: 'wav',
+        },
+        {
+          label: 'mka',
+          value: 'mka',
+        },
+        {
+          label: 'flac',
+          value: 'flac',
+        },
+        {
+          label: 'aac',
+          value: 'aac',
+        },
+        {
+          label: 'm4a',
+          value: 'm4a',
+        },
+      ],
+    },
     lockVideoOrientation: {
       label: 'preferences.record.lock-video-orientation.name',
       field: '--lock-video-orientation',

@@ -82,15 +82,18 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 
 - Mirror
 - Recording
-- OTG
+- Recording Camera
+- Recording Audio
 - Camera
 - Custom
+- OTG
 
 ### Device Interaction Bar
 
 - Switch
 - Home
 - Back
+- Turn off screen (experimental)
 - Notification
 - Power
 - Rotation
@@ -310,6 +313,10 @@ Please try `disabling audio forwarding` feature through the `preferences setting
 > This is caused by files in the installation directory lacking executable permissions.
 
 You need to customize the file paths for `scrcpy` and `adb` (ensuring they have executable permissions). If using reverse tethering, configure `gnirehtet` similarly.
+
+### Could not execute "adb start-server"
+
+This might be due to Chinese or special characters in the installation path. Please try changing the installation path.
 
 ## Getting Help
 

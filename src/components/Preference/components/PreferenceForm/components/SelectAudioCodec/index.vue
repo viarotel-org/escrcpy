@@ -1,6 +1,6 @@
 <template>
   <el-select
-    v-bind="{ ...(data.props || {}) }"
+    v-bind="{ clearable: true, ...(data.props || {}) }"
     v-model="selectValue"
     class="!w-full"
   >

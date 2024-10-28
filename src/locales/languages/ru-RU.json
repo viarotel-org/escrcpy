@@ -129,6 +129,7 @@
   "device.actions.more.record.name": "Начать запись",
   "device.actions.more.camera.name": "Запустить камеры",
   "device.actions.more.recordCamera.name": "Запись камеры",
+  "device.actions.more.recordAudio.name": "Записать аудио",
   "device.actions.more.otg.name": "Запустить OTG",
   "device.actions.more.custom.name": "Пользовательский запуск",
 
@@ -317,9 +318,11 @@
 
   "preferences.record.name": "Запись",
   "preferences.record.format.name": "Формат",
+  "preferences.record.format.placeholder": "mp4",
+  "preferences.record.format.audio.name": "Аудио формат",
+  "preferences.record.format.audio.placeholder": "opus",
   "preferences.record.time-limit.name": "Ограничение времени записи",
   "preferences.record.time-limit.placeholder": "Без ограничения времени",
-  "preferences.record.format.placeholder": "mp4",
   "preferences.record.lock-video-orientation.name": "Ориентация видео",
   "preferences.record.lock-video-orientation.placeholder": "Ориентация устройства",
   "preferences.record.no-video-playback.name": "Отключить воспроизведение видео",

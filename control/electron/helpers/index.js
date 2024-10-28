@@ -10,7 +10,6 @@ export function initControlWindow(mainWindow) {
 
   const controlWindow = new BrowserWindow({
     icon: getLogoPath(),
-    parent: mainWindow,
     width: 700,
     minWidth: 700,
     height: 28,

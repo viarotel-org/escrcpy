@@ -6,6 +6,7 @@
 import { sleep } from '$/utils'
 
 export default {
+  inheritAttrs: false,
   props: {
     row: {
       type: Object,

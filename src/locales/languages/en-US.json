@@ -129,6 +129,7 @@
   "device.actions.more.record.name": "Start Recording",
   "device.actions.more.camera.name": "Startup Camera",
   "device.actions.more.recordCamera.name": "Record Camera",
+  "device.actions.more.recordAudio.name": "Record Audio",
   "device.actions.more.otg.name": "Startup OTG",
   "device.actions.more.custom.name": "Custom Startup",
 
@@ -317,9 +318,11 @@
 
   "preferences.record.name": "Recording",
   "preferences.record.format.name": "Format",
+  "preferences.record.format.placeholder": "mp4",
+  "preferences.record.format.audio.name": "Audio Format",
+  "preferences.record.format.audio.placeholder": "opus",
   "preferences.record.time-limit.name": "Recording Time Limit",
   "preferences.record.time-limit.placeholder": "No time limit",
-  "preferences.record.format.placeholder": "mp4",
   "preferences.record.lock-video-orientation.name": "Video Direction",
   "preferences.record.lock-video-orientation.placeholder": "Device Orientation",
   "preferences.record.no-video-playback.name": "Disable Video Playback",

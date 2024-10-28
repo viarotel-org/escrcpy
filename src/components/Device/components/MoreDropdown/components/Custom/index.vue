@@ -14,6 +14,7 @@ export default {
   components: {
     DeployDialog,
   },
+  inheritAttrs: false,
   props: {
     row: {
       type: Object,

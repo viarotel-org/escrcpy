@@ -46,6 +46,7 @@ export const usePreferenceStore = defineStore({
         '--video-code',
         '--audio-code',
         '--keyboard-inject',
+        '--audio-record-format',
         ...getOtherFields('scrcpy'),
       ],
       recordKeys,

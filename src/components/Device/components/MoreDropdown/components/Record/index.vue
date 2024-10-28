@@ -6,8 +6,31 @@
 import { sleep } from '$/utils'
 import { openFloatControl } from '$/utils/device/index.js'
 
+const recordModel = {
+  default: {
+    excludes: '',
+    command: '',
+    extname: config => config['--record-format'] || 'mp4',
+  },
+  audio: {
+    excludes: ['--video-source', '--no-audio', '--mouse'],
+    commands: ['--no-video', '--mouse=disabled'],
+    extname: config => config['--audio-record-format'] || 'opus',
+  },
+  camera: {
+    excludes: ['--video-source'],
+    commands: ['--video-source=camera'],
+    extname: config => config['--record-format'] || 'mp4',
+  },
+}
+
 export default {
+  inheritAttrs: false,
   props: {
+    recordType: {
+      type: String,
+      default: 'default',
+    },
     row: {
       type: Object,
       default: () => ({}),
@@ -22,6 +45,11 @@ export default {
       loading: false,
     }
   },
+  computed: {
+    activeModel() {
+      return recordModel[this.recordType]
+    },
+  },
   methods: {
     async handleClick() {
       const row = this.row
@@ -32,25 +60,36 @@ export default {
 
       const savePath = this.getRecordPath(row)
 
-      const args = this.$store.preference.scrcpyParameter(row.id, {
-        isRecord: true,
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa', '--show-touches'],
+      let args = this.$store.preference.scrcpyParameter(row.id, {
+        isRecord: ['default', 'audio'].includes(this.recordType),
+        isCamera: ['camera'].includes(this.recordType),
+        excludes: [
+          '--otg',
+          '--mouse=aoa',
+          '--keyboard=aoa',
+          '--show-touches',
+          ...this.activeModel.excludes,
+        ],
       })
+
+      args += ` ${this.activeModel.commands.join(' ')}`
+
+      console.log('args', args)
 
       try {
         const recording = this.$scrcpy.record(row.id, {
           title: this.$store.device.getLabel(row, 'recording'),
           savePath,
           args,
-          stdout: this.onStdout,
-          stderr: this.onStderr,
         })
 
         await sleep(1 * 1000)
 
         this.loading = false
 
-        openFloatControl(toRaw(this.row))
+        if (['default'].includes(this.$props.type)) {
+          openFloatControl(toRaw(this.row))
+        }
 
         await recording
 
@@ -65,20 +104,21 @@ export default {
         }
       }
     },
-    onStdout() {},
-    onStderr() {},
     getRecordPath(row) {
-      const config = this.$store.preference.getData(row.id)
-      const basePath = config.savePath
-      const extension = config['--record-format'] || 'mp4'
+      const deviceConfig = this.$store.preference.getData(this.row.id)
+
+      const savePath = deviceConfig.savePath
+
+      const extension = this.activeModel.extname(deviceConfig)
 
       const fileName = this.$store.device.getLabel(
         row,
         ({ time }) => `record-${time}.${extension}`,
       )
 
-      const joinValue = this.$path.join(basePath, fileName)
-      const value = this.$path.normalize(joinValue)
+      const filePath = this.$path.join(savePath, fileName)
+
+      const value = this.$path.normalize(filePath)
 
       return value
     },

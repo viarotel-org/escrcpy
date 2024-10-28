@@ -129,6 +129,7 @@
   "device.actions.more.record.name": "開始錄製",
   "device.actions.more.camera.name": "啟動鏡頭",
   "device.actions.more.recordCamera.name": "錄製鏡頭",
+  "device.actions.more.recordAudio.name": "錄製音訊",
   "device.actions.more.otg.name": "啟動 OTG",
   "device.actions.more.custom.name": "靈活啟動",
 
@@ -316,8 +317,10 @@
   "preferences.window.position.y.placeholder": "相對於桌面中心",
 
   "preferences.record.name": "影片錄製",
-  "preferences.record.format.name": "錄製影片格式",
+  "preferences.record.format.name": "影片格式",
   "preferences.record.format.placeholder": "mp4",
+  "preferences.record.format.audio.name": "音訊格式",
+  "preferences.record.format.audio.placeholder": "opus",
   "preferences.record.time-limit.name": "錄製時長",
   "preferences.record.time-limit.placeholder": "不限時長",
   "preferences.record.lock-video-orientation.name": "錄製影片方向",

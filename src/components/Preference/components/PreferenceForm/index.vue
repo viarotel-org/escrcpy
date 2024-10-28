@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="elForm" :model="preferenceData" label-width="225px" class="">
+  <el-form ref="elForm" :model="preferenceData" label-width="250px" class="">
     <el-collapse
       v-model="collapseValue"
       v-bind="{
@@ -31,61 +31,52 @@
             </div>
           </div>
         </template>
-        <div class="pt-4">
-          <el-form
-            ref="elForm"
-            :model="preferenceData"
-            label-width="250px"
-            class="pr-8 pt-4"
-          >
-            <el-row :gutter="20">
-              <el-col
-                v-for="(item_1, name_1) of subModel(item)"
-                :key="name_1"
-                :span="item_1.span || 12"
-                :offset="item_1.offset || 0"
-              >
-                <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
-                  <template #label>
-                    <div class="flex items-center">
-                      <el-tooltip
-                        v-if="item_1.tips"
-                        popper-class="max-w-96"
-                        effect="dark"
-                        :content="$t(item_1.tips)"
-                        placement="bottom"
+        <div class="pr-8 pt-4">
+          <el-row :gutter="20">
+            <el-col
+              v-for="(item_1, name_1) of subModel(item)"
+              :key="name_1"
+              :span="item_1.span || 12"
+              :offset="item_1.offset || 0"
+            >
+              <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
+                <template #label>
+                  <div class="flex items-center">
+                    <el-tooltip
+                      v-if="item_1.tips"
+                      popper-class="max-w-96"
+                      effect="dark"
+                      :content="$t(item_1.tips)"
+                      placement="bottom"
+                    >
+                      <el-link
+                        class="mr-1 !text-base"
+                        icon="InfoFilled"
+                        type="warning"
+                        :underline="false"
                       >
-                        <el-link
-                          class="mr-1 !text-base"
-                          icon="InfoFilled"
-                          type="warning"
-                          :underline="false"
-                        >
-                        </el-link>
-                      </el-tooltip>
-                      <div class="truncate max-w-56" :title="$t(item_1.label)">
-                        {{
-                          $t(item_1.label)
-                        }}
-                      </div>
+                      </el-link>
+                    </el-tooltip>
+                    <div class="truncate max-w-56" :title="$t(item_1.label)">
+                      {{ $t(item_1.label) }}
                     </div>
-                  </template>
+                  </div>
+                </template>
 
-                  <component
-                    :is="inputModel[item_1.type]"
-                    v-model="preferenceData[item_1.field]"
-                    v-bind="{
-                      preferenceData,
-                      deviceScope,
-                      title: $t(item_1.placeholder),
-                      placeholder: $t(item_1.placeholder),
-                      data: item_1,
-                    }"
-                  ></component>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
+                <component
+                  :is="inputModel[item_1.type]"
+                  v-model="preferenceData[item_1.field]"
+                  v-bind="{
+                    preferenceData,
+                    deviceScope,
+                    title: $t(item_1.placeholder),
+                    placeholder: $t(item_1.placeholder),
+                    data: item_1,
+                  }"
+                ></component>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -93,9 +84,12 @@
 </template>
 
 <script setup>
+import { i18n } from '$/locales/index.js'
+
 import { usePreferenceStore } from '$/store/index.js'
 
 import { omit } from 'lodash-es'
+import { computed } from 'vue'
 
 import { inputModel } from './components/index.js'
 
@@ -113,6 +107,8 @@ const props = defineProps({
     default: () => [],
   },
 })
+
+const locale = computed(() => i18n.global.locale.value)
 
 const preferenceData = defineModel('modelValue', {
   type: Object,

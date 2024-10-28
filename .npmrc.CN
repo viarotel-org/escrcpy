@@ -1,0 +1,8 @@
+shamefully-hoist=true
+virtual-store-dir-max-length=70
+
+
+registry=https://registry.npmmirror.com/
+ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+ELECTRON_CUSTOM_DIR="{{ version }}"
+ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/

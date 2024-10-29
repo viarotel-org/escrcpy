@@ -18,7 +18,7 @@ const recordModel = {
     extname: config => config['--audio-record-format'] || 'opus',
   },
   camera: {
-    excludes: ['--video-source'],
+    excludes: ['--video-source', '--turn-screen-off'],
     commands: ['--video-source=camera'],
     extname: config => config['--record-format'] || 'mp4',
   },

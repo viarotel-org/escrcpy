@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.25.3](https://github.com/viarotel-org/escrcpy/compare/v1.25.2...v1.25.3) (2024-10-29)
+
+
+### Bug Fixes
+
+* 🔧 Camera recording and screen off configuration conflict ([4508758](https://github.com/viarotel-org/escrcpy/commit/4508758fb3c7304ccba8936a9b1cecaf001bc6ba))
+
+
+### Performance Improvements
+
+* 🔧 Temporarily disable scheduled tasks that are too far away ([be5e639](https://github.com/viarotel-org/escrcpy/commit/be5e6396e13a86ec1ae0cf09012c954b8a256c4c))
+
 ## [1.25.2](https://github.com/viarotel-org/escrcpy/compare/v1.25.1...v1.25.2) (2024-10-29)
 
 

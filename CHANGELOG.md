@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.2](https://github.com/viarotel-org/escrcpy/compare/v1.25.1...v1.25.2) (2024-10-29)
+
+
+### Bug Fixes
+
+* 🐛 Resolve default recording error ([358064e](https://github.com/viarotel-org/escrcpy/commit/358064ecd487dd69b635531eb0e2611f14ae5c7c))
+
 ## [1.25.1](https://github.com/viarotel-org/escrcpy/compare/v1.25.0...v1.25.1) (2024-10-28)
 
 

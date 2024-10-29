@@ -10,14 +10,14 @@ export const timerType = [
 ]
 
 export const timeUnit = [
-  {
-    label: 'time.unit.month',
-    value: 'month',
-  },
-  {
-    label: 'time.unit.week',
-    value: 'week',
-  },
+  // {
+  //   label: 'time.unit.month',
+  //   value: 'month',
+  // },
+  // {
+  //   label: 'time.unit.week',
+  //   value: 'week',
+  // },
   {
     label: 'time.unit.day',
     value: 'day',

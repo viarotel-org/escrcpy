@@ -29,7 +29,7 @@
     <div class="pt-4 flex-1 h-0 overflow-hidden">
       <el-table
         ref="elTable"
-        v-loading="loading"
+        v-loading="loading && !deviceList.length"
         :element-loading-text="$t('common.loading')"
         :data="deviceList"
         style="width: 100%"
@@ -213,8 +213,10 @@ export default {
       this.$refs.wirelessGroupRef.connect(...args)
     },
 
-    handleRefresh() {
-      this.getDeviceData({ resetResolve: true })
+    async handleRefresh() {
+      this.loading = true
+      await sleep(500)
+      this.getDeviceData({ resetResolve: true, unloading: true })
     },
 
     async handleReset() {
@@ -247,10 +249,12 @@ export default {
       }
     },
 
-    async getDeviceData({ resetResolve = false } = {}) {
-      this.loading = true
+    async getDeviceData(options = {}) {
+      const { resetResolve = false, unloading = false } = options
 
-      await sleep(500)
+      if (!unloading) {
+        this.loading = true
+      }
 
       try {
         const data = await this.$store.device.getList()

@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.25.2](https://github.com/viarotel-org/escrcpy/compare/v1.25.1...v1.25.2) (2024-10-29)
+
+
+### Bug Fixes
+
+* 🐛 Resolve default recording error ([358064e](https://github.com/viarotel-org/escrcpy/commit/358064ecd487dd69b635531eb0e2611f14ae5c7c))
+
+## [1.25.1](https://github.com/viarotel-org/escrcpy/compare/v1.25.0...v1.25.1) (2024-10-28)
+
+
+### Miscellaneous Chores
+
+* release 1.25.1 ([f60245b](https://github.com/viarotel-org/escrcpy/commit/f60245b11d9f38d5a61d9e3c59932de95ecef4b0))
+
+## [1.25.0](https://github.com/viarotel-org/escrcpy/compare/v1.24.3...v1.25.0) (2024-10-28)
+
+
+### Features
+
+* ✨ Support to close the device screen when controlling ([a84c775](https://github.com/viarotel-org/escrcpy/commit/a84c775fa1ca507f551c4b0a1499d40d9bc2aedd))
+* 📸 Enhanced recording ([7f10161](https://github.com/viarotel-org/escrcpy/commit/7f10161ad7be72ddcdfcb8bda2aa075e6d748932))
+
+
+### Performance Improvements
+
+* ♻️ Optimize camera recording ([4be2cf4](https://github.com/viarotel-org/escrcpy/commit/4be2cf4f144ffe5694a4abbb35f14dc5bac0bace))
+* ♻️ Script and directory structure optimization ([68378ef](https://github.com/viarotel-org/escrcpy/commit/68378efb51c89095e6b2802bf9936608a156d17a))
+* ⚗️ Experimental support for turning off screen controls ([9555f58](https://github.com/viarotel-org/escrcpy/commit/9555f58df5f1c4bc4a263ddf586c605785a094ef))
+* ⚡️ Optimize scrcpy parameter conversion performance ([18dcd24](https://github.com/viarotel-org/escrcpy/commit/18dcd24e656801fbb811ccc46496e4037d28a137))
+* 💄 Improved Russian display ([ca79e1b](https://github.com/viarotel-org/escrcpy/commit/ca79e1b57d507ba0fc4b2c3dd2411682b3b87105))
+* 📸 Recording camera support ([10d0370](https://github.com/viarotel-org/escrcpy/commit/10d0370b663bc08028633e9dad910a637ea373b6))
+
 ## [1.24.3](https://github.com/viarotel-org/escrcpy/compare/v1.24.2...v1.24.3) (2024-10-21)
 
 

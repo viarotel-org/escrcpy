@@ -1,0 +1,10 @@
+# 国内用户如果遇到无法安装依赖的情况，请将该文件中的配置覆盖到 .npmrc 中
+
+shamefully-hoist=true
+virtual-store-dir-max-length=70
+
+
+registry=https://registry.npmmirror.com/
+ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+ELECTRON_CUSTOM_DIR="{{ version }}"
+ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/

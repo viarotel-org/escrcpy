@@ -8,8 +8,8 @@ import { openFloatControl } from '$/utils/device/index.js'
 
 const recordModel = {
   default: {
-    excludes: '',
-    command: '',
+    excludes: [],
+    commands: [],
     extname: config => config['--record-format'] || 'mp4',
   },
   audio: {
@@ -64,17 +64,21 @@ export default {
         isRecord: ['default', 'audio'].includes(this.recordType),
         isCamera: ['camera'].includes(this.recordType),
         excludes: [
-          '--otg',
-          '--mouse=aoa',
-          '--keyboard=aoa',
-          '--show-touches',
-          ...this.activeModel.excludes,
+          ...new Set([
+            '--otg',
+            '--mouse=aoa',
+            '--keyboard=aoa',
+            '--show-touches',
+            ...this.activeModel.excludes,
+          ]),
         ],
       })
 
-      args += ` ${this.activeModel.commands.join(' ')}`
+      const commands = this.activeModel.commands || []
 
-      console.log('args', args)
+      if (commands.length) {
+        args += ` ${commands.join(' ')}`
+      }
 
       try {
         const recording = this.$scrcpy.record(row.id, {

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.1](https://github.com/viarotel-org/escrcpy/compare/v1.25.0...v1.25.1) (2024-10-28)
+
+
+### Miscellaneous Chores
+
+* release 1.25.1 ([f60245b](https://github.com/viarotel-org/escrcpy/commit/f60245b11d9f38d5a61d9e3c59932de95ecef4b0))
+
 ## [1.25.0](https://github.com/viarotel-org/escrcpy/compare/v1.24.3...v1.25.0) (2024-10-28)
 
 

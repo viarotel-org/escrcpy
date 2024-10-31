@@ -49,14 +49,12 @@ export const useDeviceStore = defineStore({
           'mirror',
           'camera',
           'custom',
-          'recording',
           'synergy',
         ]
           .reduce((obj, type) => {
             obj[type] = createPreset(type)
             return obj
           }, {}),
-        recorded: `Record-${deviceName}-${currentTime}`,
         screenshot: `Screenshot-${deviceName}-${currentTime}`,
       }
 

@@ -11,16 +11,19 @@ const recordModel = {
     excludes: [],
     commands: [],
     extname: config => config['--record-format'] || 'mp4',
+    label: 'Recording',
   },
   audio: {
     excludes: ['--video-source', '--no-audio', '--mouse'],
     commands: ['--no-video', '--mouse=disabled'],
     extname: config => config['--audio-record-format'] || 'opus',
+    label: 'RecordingAudio',
   },
   camera: {
     excludes: ['--video-source', '--turn-screen-off', '--show-touches', '--no-power-on', '--stay-awake', '--power-off-on-close'],
     commands: ['--video-source=camera'],
     extname: config => config['--record-format'] || 'mp4',
+    label: 'RecordingCamera',
   },
 }
 
@@ -81,7 +84,7 @@ export default {
 
       try {
         const recording = this.$scrcpy.record(row.id, {
-          title: this.$store.device.getLabel(row, 'recording'),
+          title: this.$store.device.getLabel(row, ({ appName, deviceName }) => `${appName}${this.activeModel.label}-${deviceName}`),
           savePath,
           args,
         })
@@ -114,10 +117,7 @@ export default {
 
       const extension = this.activeModel.extname(deviceConfig)
 
-      const fileName = `${this.$store.device.getLabel(
-        row,
-        'recorded',
-      )}.${extension}`
+      const fileName = this.$store.device.getLabel(row, ({ currentTime, deviceName }) => `${this.activeModel.label}-${deviceName}-${currentTime}.${extension}`)
 
       const filePath = this.$path.join(savePath, fileName)
 

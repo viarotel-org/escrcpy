@@ -18,7 +18,7 @@ const recordModel = {
     extname: config => config['--audio-record-format'] || 'opus',
   },
   camera: {
-    excludes: ['--video-source', '--turn-screen-off'],
+    excludes: ['--video-source', '--turn-screen-off', '--show-touches', '--no-power-on'],
     commands: ['--video-source=camera'],
     extname: config => config['--record-format'] || 'mp4',
   },
@@ -61,14 +61,13 @@ export default {
       const savePath = this.getRecordPath(row)
 
       let args = this.$store.preference.scrcpyParameter(row.id, {
-        isRecord: ['default', 'audio'].includes(this.recordType),
+        isRecord: true,
         isCamera: ['camera'].includes(this.recordType),
         excludes: [
           ...new Set([
             '--otg',
             '--mouse=aoa',
             '--keyboard=aoa',
-            '--show-touches',
             ...this.activeModel.excludes,
           ]),
         ],
@@ -115,10 +114,10 @@ export default {
 
       const extension = this.activeModel.extname(deviceConfig)
 
-      const fileName = this.$store.device.getLabel(
+      const fileName = `${this.$store.device.getLabel(
         row,
-        ({ time }) => `record-${time}.${extension}`,
-      )
+        'recorded',
+      )}.${extension}`
 
       const filePath = this.$path.join(savePath, fileName)
 

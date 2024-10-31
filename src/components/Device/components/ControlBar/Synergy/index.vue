@@ -81,7 +81,8 @@ export default {
           title: ({ displayId }) =>
             `${this.$store.device.getLabel(
               this.device,
-            )}-displayId-${displayId}`,
+              'synergy',
+            )}-${displayId}`,
           args: this.scrcpyParams(this.device.id),
         })
 

@@ -46,11 +46,9 @@ export default {
         },
       )}`
 
-      console.log('args', args)
-
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.$store.device.getLabel(row),
+          title: this.$store.device.getLabel(row, 'camera'),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,

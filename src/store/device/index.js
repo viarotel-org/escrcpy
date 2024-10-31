@@ -1,8 +1,9 @@
-import { t } from '$/locales/index.js'
+import { defineStore } from 'pinia'
+import dayjs from 'dayjs'
+import { capitalize } from 'lodash-es'
 import { isIPWithPort, replaceIP } from '$/utils/index.js'
 
-import dayjs from 'dayjs'
-import { defineStore } from 'pinia'
+import { name as packageName } from '$root/package.json'
 
 const $appStore = window.appStore
 
@@ -24,7 +25,7 @@ export const useDeviceStore = defineStore({
 
       return this.config
     },
-    getLabel(device, param) {
+    getLabel(device, params) {
       if (!device) {
         return ''
       }
@@ -33,21 +34,43 @@ export const useDeviceStore = defineStore({
         ? device
         : this.list.find(item => item.id === device)
 
-      const labels = [data.$remark, data.$name, replaceIP(data.id)]
+      const appName = capitalize(packageName)
 
-      const model = {
-        recording: `🎥${t('device.record.progress')}...`,
-        time: dayjs().format('YYYY_MM_DD_HH_mm_ss'),
+      const deviceName = `${data.$remark || data.$name}${data.$wifi ? '(WIFI)' : ''}`
+
+      const currentTime = dayjs().format('YYYYMMDDHHmmss')
+
+      let value = `${appName}-${deviceName}`
+
+      const createPreset = type => `${appName}${capitalize(type)}-${deviceName}`
+
+      const presets = {
+        ...[
+          'mirror',
+          'camera',
+          'custom',
+          'recording',
+          'synergy',
+        ]
+          .reduce((obj, type) => {
+            obj[type] = createPreset(type)
+            return obj
+          }, {}),
+        recorded: `Record-${deviceName}-${currentTime}`,
+        screenshot: `Screenshot-${deviceName}-${currentTime}`,
       }
 
-      if (typeof param === 'function') {
-        labels.push(param(model))
+      if (typeof params === 'function') {
+        value = params({
+          data,
+          appName,
+          deviceName,
+          currentTime,
+        })
       }
-      else if (param && typeof param === 'string') {
-        labels.push(model[param])
+      else if (params && typeof params === 'string') {
+        value = presets[params]
       }
-
-      const value = labels.filter(item => !!item).join('-')
 
       return value
     },

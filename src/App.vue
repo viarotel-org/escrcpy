@@ -100,8 +100,8 @@ async function showTips() {
   ElMessageBox.alert(
     `<div>
       ${window.t('dependencies.lack.content', {
-    name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
-  })}
+        name: '<a class="hover:underline text-primary-500" href="https://github.com/Genymobile/scrcpy" target="_blank">scrcpy</a>',
+      })}
     <div>`,
     window.t('dependencies.lack.title'),
     {

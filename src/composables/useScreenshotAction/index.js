@@ -32,10 +32,10 @@ export function useScreenshotAction({ floating } = {}) {
       ).close
     }
 
-    const fileName = deviceStore.getLabel(
+    const fileName = `${deviceStore.getLabel(
       device,
-      ({ time }) => `screenshot-${time}.jpg`,
-    )
+      'screenshot',
+    )}.jpg`
 
     const deviceConfig = preferenceStore.getData(device.id)
     const savePath = window.nodePath.resolve(deviceConfig.savePath, fileName)

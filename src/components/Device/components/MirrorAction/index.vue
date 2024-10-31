@@ -43,7 +43,7 @@ export default {
 
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.$store.device.getLabel(row),
+          title: this.$store.device.getLabel(row, 'mirror'),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,

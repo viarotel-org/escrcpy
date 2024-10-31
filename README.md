@@ -352,8 +352,8 @@ This project would not be possible without the following open source projects:
 
 Thanks for all their contributions!
 
-<a href="https://github.com/viarotel-org/escrcpy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=viarotel-org/escrcpy" alt="contributors" />
+<a href="https://github.com/viarotel/escrcpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=viarotel/escrcpy" alt="contributors" />
 </a>
 
 ## Star History

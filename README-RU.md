@@ -352,8 +352,8 @@ Gnirehtet встроен в приложения для Windows и Linux, что
 
 Спасибо всем за их вклад!
 
-<a href="https://github.com/viarotel-org/escrcpy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=viarotel-org/escrcpy" alt="contributors" />
+<a href="https://github.com/viarotel/escrcpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=viarotel/escrcpy" alt="contributors" />
 </a>
 
 ## История звезд

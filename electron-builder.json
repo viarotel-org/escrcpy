@@ -59,10 +59,6 @@
       {
         "target": "dmg",
         "arch": ["universal", "x64", "arm64"]
-      },
-      {
-        "target": "zip",
-        "arch": ["universal", "x64", "arm64"]
       }
     ],
     "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
@@ -84,7 +80,6 @@
   },
   "linux": {
     "icon": "logo.icns",
-    "desktop": "logo",
     "maintainer": "viarotel@qq.com",
     "category": "Utility",
     "target": [

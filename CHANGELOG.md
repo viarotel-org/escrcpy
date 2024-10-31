@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.25.4](https://github.com/viarotel-org/escrcpy/compare/v1.25.3...v1.25.4) (2024-10-31)
+
+
+### Performance Improvements
+
+* ♻️ Enhance recording stability ([3dd7525](https://github.com/viarotel-org/escrcpy/commit/3dd75252591b8ea24ff2c02f12355b01b888c650))
+* ♻️ Optimize camera recording stability ([952b2a7](https://github.com/viarotel-org/escrcpy/commit/952b2a72508cc0d9e32089c7c5a17fdb61ec84de))
+* 💄 Normalize control window titles and generated file names ([ccc7f0e](https://github.com/viarotel-org/escrcpy/commit/ccc7f0e734c8ac98d3917a7cc5aefd086d46523f))
+
 ## [1.25.3](https://github.com/viarotel-org/escrcpy/compare/v1.25.2...v1.25.3) (2024-10-29)
 
 

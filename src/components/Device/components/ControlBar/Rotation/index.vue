@@ -73,8 +73,10 @@ export default {
         return false
       }
 
+      const channel = 'rotationScreen'
+
       window.electron.ipcRenderer.once(
-        'execute-device-rotation-shell',
+        channel,
         (event, data) => {
           this.handleCommand(data)
         },
@@ -82,7 +84,8 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.send('open-device-rotation-menu', {
+      window.electron.ipcRenderer.send('open-system-menu', {
+        channel,
         options,
       })
     },
@@ -96,6 +99,8 @@ export default {
         await this.$adb.deviceShell(this.device.id, this.commandMap.disable)
         await sleep(500)
       }
+
+      console.log('command', command)
 
       this.$adb.deviceShell(this.device.id, command)
 

@@ -2,7 +2,9 @@
   <el-dropdown
     :hide-on-click="false"
     :disabled="loading || floating"
+    max-height="300px"
     @command="handleCommand"
+    @mouseenter="getAppData"
   >
     <slot :loading :trigger="handleTrigger" />
 
@@ -35,44 +37,37 @@ export default {
   data() {
     return {
       loading: false,
-      commandMap: {
-        'volume-down': 'input keyevent KEYCODE_VOLUME_DOWN',
-        'volume-up': 'input keyevent KEYCODE_VOLUME_UP',
-        'volume-mute': 'input keyevent KEYCODE_VOLUME_MUTE',
-      },
+      appList: [],
     }
   },
   computed: {
     options() {
-      const value = [
-        {
-          label: this.$t('device.control.volume-up.name'),
-          value: 'volume-up',
-        },
-        {
-          label: this.$t('device.control.volume-down.name'),
-          value: 'volume-down',
-        },
-        {
-          label: this.$t('device.control.volume-mute.name'),
-          value: 'volume-mute',
-        },
-      ]
+      const value = this.appList.map(item => ({
+        ...item,
+        label: item.name,
+        value: item.packageName,
+      }))
       return value
     },
   },
+  created() {
+    this.getAppData()
+  },
   methods: {
+    async getAppData() {
+      const data = await window.scrcpy.getAppList(this.device.id)
+
+      this.appList = data || []
+    },
     handleTrigger() {
       if (!this.floating) {
         return false
       }
-
-      const channel = 'changeVolume'
+      const channel = 'startApp'
 
       window.electron.ipcRenderer.once(
         channel,
         (event, data) => {
-          console.log('data')
           this.handleCommand(data)
         },
       )
@@ -87,9 +82,13 @@ export default {
     async handleCommand(value) {
       this.loading = true
 
-      const command = this.commandMap[value]
+      const title = this.$store.device.getLabel(this.device, 'mirror')
 
-      this.$adb.deviceShell(this.device.id, command)
+      const commands = this.$store.preference.scrcpyParameter(this.device.id, {
+        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+      })
+
+      await window.scrcpy.startApp(this.device.id, { title, commands, packageName: value })
 
       this.loading = false
     },

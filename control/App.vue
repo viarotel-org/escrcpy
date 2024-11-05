@@ -28,7 +28,7 @@
           icon="ArrowDown"
           @click="switchDevice"
         >
-          <span class="mr-2">{{ deviceInfo.$remark || deviceInfo.$name }}</span>
+          <span class="mr-2">{{ deviceName }}</span>
         </el-button>
       </div>
 
@@ -79,6 +79,8 @@ const deviceInfo = ref({})
 
 const deviceList = ref([])
 
+const deviceName = computed(() => deviceStore.getLabel(deviceInfo.value, ({ deviceName }) => deviceName))
+
 function handleClose() {
   window.electron.ipcRenderer.send('hide-active-window')
 }
@@ -88,7 +90,17 @@ async function switchDevice(e) {
 
   const data = await deviceStore.getList()
 
-  window.electron.ipcRenderer.send('open-control-device-menu', data)
+  const options = data.map((item) => {
+    return {
+      label: deviceStore.getLabel(item, ({ deviceName }) => deviceName),
+      value: item,
+    }
+  })
+
+  window.electron.ipcRenderer.send('open-system-menu', {
+    channel: 'device-change',
+    options,
+  })
 }
 
 onMounted(() => {

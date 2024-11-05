@@ -1,19 +1,16 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
 export default function (controlWindow) {
-  ipcMain.on('open-device-rotation-menu', openDeviceRotationMenu)
+  ipcMain.on('open-system-menu', openSystemMenu)
 
-  function openDeviceRotationMenu(event, args = {}) {
-    const { options = [] } = args
+  function openSystemMenu(event, args = {}) {
+    const { options = [], channel = 'system-menu-click' } = args
 
     const template = options.map((item) => {
       return {
         label: item.label,
-        click: () => {
-          controlWindow.webContents.send(
-            'execute-device-rotation-shell',
-            item.value,
-          )
+        click() {
+          controlWindow.webContents.send(channel, item.value)
         },
       }
     })

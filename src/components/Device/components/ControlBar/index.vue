@@ -64,10 +64,11 @@
 </template>
 
 <script>
+// import Synergy from './Synergy/index.vue'
 import Application from './Application/index.vue'
+import ApplicationStart from './ApplicationStart/index.vue'
 import FileManage from './FileManage/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
-import Synergy from './Synergy/index.vue'
 import Rotation from './Rotation/index.vue'
 import Screenshot from './Screenshot/index.vue'
 import Shell from './Shell/index.vue'
@@ -76,10 +77,11 @@ import Volume from './Volume/index.vue'
 
 export default {
   components: {
+    // Synergy,
     Screenshot,
     Application,
+    ApplicationStart,
     Gnirehtet,
-    Synergy,
     Rotation,
     Volume,
     FileManage,
@@ -124,6 +126,11 @@ export default {
           trigger: () => {
             window.scrcpy.helper(this.device.id, '--turn-screen-off')
           },
+        },
+        {
+          label: 'device.control.startApp',
+          elIcon: 'Files',
+          component: 'ApplicationStart',
         },
         {
           label: 'device.control.notification',
@@ -187,14 +194,14 @@ export default {
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
         },
-        {
-          label: 'device.control.mirror-group.name',
-          svgIcon: 'multi-screen',
-          iconClass: '',
-          component: 'Synergy',
-          tips: 'device.control.mirror-group.tips',
-          hiddenKeys: ['floating'],
-        },
+        // {
+        //   label: 'device.control.mirror-group.name',
+        //   svgIcon: 'multi-screen',
+        //   iconClass: '',
+        //   component: 'Synergy',
+        //   tips: 'device.control.mirror-group.tips',
+        //   hiddenKeys: ['floating'],
+        // },
       ]
 
       const handler = item =>

@@ -169,6 +169,7 @@
   "device.control.reboot": "Reboot",
   "device.control.turnScreenOff": "Turn screen off",
   "device.control.turnScreenOff.tips": "Turn off the screen while maintaining control (Experimental): This action will create an EscrcpyHelper process; manually closing this process will reopen the screen.",
+  "device.control.startApp": "Start APP",
   "device.control.power": "Power",
   "device.control.power.tips": "Turn screen on/off",
   "device.control.notification": "Notification",

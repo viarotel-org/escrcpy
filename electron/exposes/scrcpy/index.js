@@ -5,11 +5,13 @@ import appStore from '$electron/helpers/store.js'
 import { replaceIP, sleep } from '$renderer/utils/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
+import { parseScrcpyAppList } from './helper.js'
+
 let adbkit
 
 const exec = util.promisify(_exec)
 
-async function shell(command, { stdout, stderr, ...options } = {}) {
+async function shell(command, { stdout, stderr, signal, ...options } = {}) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
   const args = command.split(' ')
@@ -21,28 +23,35 @@ async function shell(command, { stdout, stderr, ...options } = {}) {
     ...options,
   })
 
-  scrcpyProcess.stdout.on('data', (data) => {
-    const stringData = data.toString()
-
-    if (stdout) {
-      stdout(stringData, scrcpyProcess)
-    }
-  })
-
   const stderrList = []
-  scrcpyProcess.stderr.on('data', (data) => {
-    const stringData = data.toString()
-
-    stderrList.push(stringData)
-
-    console.error('scrcpyProcess.stderr.data:', stringData)
-
-    if (stderr) {
-      stderr(stringData, scrcpyProcess)
-    }
-  })
 
   return new Promise((resolve, reject) => {
+    scrcpyProcess.stdout.on('data', (data) => {
+      const stringData = data.toString()
+
+      if (stdout) {
+        stdout(stringData, scrcpyProcess)
+      }
+
+      const matchList = stringData.match(signal)
+
+      if (matchList) {
+        resolve(matchList, stringData, scrcpyProcess)
+      }
+    })
+
+    scrcpyProcess.stderr.on('data', (data) => {
+      const stringData = data.toString()
+
+      stderrList.push(stringData)
+
+      console.error('scrcpyProcess.stderr.data:', stringData)
+
+      if (stderr) {
+        stderr(stringData, scrcpyProcess)
+      }
+    })
+
     scrcpyProcess.on('close', (code) => {
       if (code === 0) {
         resolve()
@@ -184,6 +193,31 @@ async function helper(
   )
 }
 
+async function getAppList(serial) {
+  const res = await execShell(`--serial="${serial}" --list-apps`)
+
+  const stdout = res.stdout
+  const value = parseScrcpyAppList(stdout)
+
+  return value
+}
+
+async function startApp(serial, args = {}) {
+  let { commands, packageName, ...options } = args
+
+  commands += ` --new-display --start-app=${packageName}`
+
+  const res = await mirror(serial, { ...options, args: commands, signal: /display id: (\d+)/i })
+
+  const displayId = res?.[1]
+
+  if (!displayId) {
+    throw new Error('The display ID was not obtained.')
+  }
+
+  return displayId
+}
+
 export default (options = {}) => {
   adbkit = options.adbkit
 
@@ -195,5 +229,7 @@ export default (options = {}) => {
     record,
     mirrorGroup,
     helper,
+    getAppList,
+    startApp,
   }
 }

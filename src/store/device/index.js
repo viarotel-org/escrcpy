@@ -26,7 +26,7 @@ export const useDeviceStore = defineStore({
       return this.config
     },
     getLabel(device, params) {
-      if (!device) {
+      if (!device.id) {
         return ''
       }
 
@@ -36,7 +36,7 @@ export const useDeviceStore = defineStore({
 
       const appName = capitalize(packageName)
 
-      const deviceName = `${data.$remark || data.$name}${data.$wifi ? '(WIFI)' : ''}`
+      const deviceName = `${data?.$remark || data.$name}${data.$wifi ? '(WIFI)' : ''}`
 
       const currentTime = dayjs().format('YYYYMMDDHHmmss')
 

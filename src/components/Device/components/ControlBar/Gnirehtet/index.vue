@@ -55,8 +55,10 @@ export default {
         return false
       }
 
+      const channel = 'stop-device-gnirehtet'
+
       window.electron.ipcRenderer.once(
-        'stop-device-gnirehtet',
+        channel,
         (event, data) => {
           this.handleStop()
         },
@@ -65,11 +67,11 @@ export default {
       const options = [
         {
           label: window.t('device.control.gnirehtet.stop'),
-          value: 'stop-device-gnirehtet',
         },
       ]
 
-      window.electron.ipcRenderer.send('open-device-gnirehtet-menu', {
+      window.electron.ipcRenderer.send('open-system-menu', {
+        channel,
         options,
       })
     },

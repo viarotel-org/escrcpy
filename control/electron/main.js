@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { initControlWindow, openControlWindow } from './helpers/index.js'
 
-import { devices, gnirehtet, rotation, volume } from './events/index.js'
+import { menu } from './events/index.js'
 
 function onControlMounted(controlWindow) {
   ipcMain.on('language-change', (event, data) => {
@@ -12,10 +12,7 @@ function onControlMounted(controlWindow) {
     controlWindow.webContents.send('theme-change', data)
   })
 
-  rotation(controlWindow)
-  devices(controlWindow)
-  volume(controlWindow)
-  gnirehtet(controlWindow)
+  menu(controlWindow)
 }
 
 export default (mainWindow) => {

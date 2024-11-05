@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.5](https://github.com/viarotel-org/escrcpy/compare/v1.25.4...v1.25.5) (2024-11-05)
+
+
+### Performance Improvements
+
+* ⚡️ Optimize the stability of options that need to dynamically obtain parameters in preference settings ([39bbc98](https://github.com/viarotel-org/escrcpy/commit/39bbc9850bde77aa21d9fdc4f58119541cde2b8f))
+
 ## [1.25.4](https://github.com/viarotel-org/escrcpy/compare/v1.25.3...v1.25.4) (2024-10-31)
 
 

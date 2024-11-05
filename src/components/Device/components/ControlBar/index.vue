@@ -120,17 +120,17 @@ export default {
           command: 'input keyevent 4',
         },
         {
+          label: 'device.control.startApp',
+          elIcon: 'Files',
+          component: 'ApplicationStart',
+        },
+        {
           label: 'device.control.turnScreenOff',
           elIcon: 'TurnOff',
           tips: 'device.control.turnScreenOff.tips',
           trigger: () => {
             window.scrcpy.helper(this.device.id, '--turn-screen-off')
           },
-        },
-        {
-          label: 'device.control.startApp',
-          elIcon: 'Files',
-          component: 'ApplicationStart',
         },
         {
           label: 'device.control.notification',

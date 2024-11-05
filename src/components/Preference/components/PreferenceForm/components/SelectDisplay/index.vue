@@ -6,6 +6,7 @@
     }"
     v-model="selectValue"
     class="!w-full"
+    @click="getDeviceOptions"
   >
     <el-option
       v-for="(item, index) in options"
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import { getDeviceId } from '../helper.js'
+
 export default {
   props: {
     modelValue: {
@@ -56,21 +59,16 @@ export default {
       },
     },
   },
-  watch: {
-    deviceScope: {
-      handler(value) {
-        if (value === 'global') {
-          this.deviceOptions = []
-          return
-        }
-
-        this.getDeviceOptions()
-      },
-    },
-  },
   methods: {
     async getDeviceOptions() {
-      const res = await this.$adb.display(this.deviceScope)
+      const deviceId = getDeviceId(this.deviceScope)
+
+      if (!deviceId) {
+        this.deviceOptions = []
+        return false
+      }
+
+      const res = await this.$adb.display(deviceId)
 
       this.deviceOptions
         = res?.map((item) => {

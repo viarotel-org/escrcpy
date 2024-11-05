@@ -15,6 +15,7 @@
         v-bind="{
           collapseProps: { accordion: true },
           excludes: ['common'],
+          deviceScope: device.id,
         }"
       />
     </div>

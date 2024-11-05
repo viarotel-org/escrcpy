@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.25.4",
   "private": true,
-  "packageManager": "pnpm@9.4.0+sha1.9217c800d4ab947a7aee520242a7b70d64fc7638",
+  "packageManager": "pnpm@9.12.3",
   "description": "Scrcpy Powered by Electron",
   "author": "viarotel",
   "homepage": "https://github.com/viarotel-org/escrcpy",

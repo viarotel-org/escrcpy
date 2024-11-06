@@ -96,7 +96,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["common", "linux", "linux-${arch}", "linux-${target}"]
+      "filter": ["common", "linux", "linux-${arch}"]
     }
   },
   "asar": true,

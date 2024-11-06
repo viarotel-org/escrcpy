@@ -26,7 +26,6 @@
 
 <script>
 import { openFloatControl } from '$/utils/device/index.js'
-import { toRaw } from 'vue'
 
 export default {
   props: {

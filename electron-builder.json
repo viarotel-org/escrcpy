@@ -58,7 +58,7 @@
     "target": [
       {
         "target": "dmg",
-        "arch": ["universal", "x64", "arm64"]
+        "arch": ["x64", "arm64"]
       }
     ],
     "artifactName": "${productName}-${version}-mac-${arch}.${ext}",

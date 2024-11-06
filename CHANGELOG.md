@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/viarotel-org/escrcpy/compare/v1.26.0...v1.26.1) (2024-11-06)
+
+
+### Performance Improvements
+
+* ♻️ No longer building universal packages for macOS ([db5deb4](https://github.com/viarotel-org/escrcpy/commit/db5deb4183ac2a024e054443aee4003237167c58))
+
 ## [1.26.0](https://github.com/viarotel-org/escrcpy/compare/v1.25.5...v1.26.0) (2024-11-06)
 
 

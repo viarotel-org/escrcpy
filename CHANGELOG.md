@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.26.0](https://github.com/viarotel-org/escrcpy/compare/v1.25.5...v1.26.0) (2024-11-06)
+
+
+### Features
+
+* ✨ Integrate scrcpy binaries for macos ([85bf096](https://github.com/viarotel-org/escrcpy/commit/85bf0961e5886db80e622cc512d32cff1c83524c))
+* ✨ Supports starting applications for mirroring ([d19e781](https://github.com/viarotel-org/escrcpy/commit/d19e78147152550b0d9f006765e09c955ab0951e))
+
+
+### Bug Fixes
+
+* 🐛 Rename --display-buffer to --video-buffer ([b2bb0ae](https://github.com/viarotel-org/escrcpy/commit/b2bb0aeb72e8359523bf9f108ec6bd4c7823a22c))
+* 🐛 Repair floating action bar start application error ([487e7e2](https://github.com/viarotel-org/escrcpy/commit/487e7e2ec4dc57e6b17132210804f1e2021d67d4))
+* 🩹 Restore the windows build configuration ([9491069](https://github.com/viarotel-org/escrcpy/commit/9491069716a7bf1a79dbfa97b3aa066116951feb))
+
+
+### Performance Improvements
+
+* ♻️ Adjust the position of the start application button ([9833932](https://github.com/viarotel-org/escrcpy/commit/9833932be3fa0e49cf5ba5bfbe5247e0d467aa90))
+* ♻️ When the application fails to start, display the error message ([dbc34d6](https://github.com/viarotel-org/escrcpy/commit/dbc34d63add3cd05ca9327831509e21d7513a04c))
+* ⚡️ Improve the start APP experience ([29e5e1b](https://github.com/viarotel-org/escrcpy/commit/29e5e1b6ebf73777b61e36e223905998a219daa9))
+
 ## [1.25.5](https://github.com/viarotel-org/escrcpy/compare/v1.25.4...v1.25.5) (2024-11-05)
 
 

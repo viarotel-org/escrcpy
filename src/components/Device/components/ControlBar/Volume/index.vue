@@ -72,7 +72,6 @@ export default {
       window.electron.ipcRenderer.once(
         channel,
         (event, data) => {
-          console.log('data')
           this.handleCommand(data)
         },
       )

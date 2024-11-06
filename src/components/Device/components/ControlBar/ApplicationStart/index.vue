@@ -25,6 +25,9 @@
 </template>
 
 <script>
+import { openFloatControl } from '$/utils/device/index.js'
+import { toRaw } from 'vue'
+
 export default {
   props: {
     device: {
@@ -80,8 +83,8 @@ export default {
 
       window.electron.ipcRenderer.once(
         channel,
-        (event, data) => {
-          this.handleCommand(data)
+        (event, value, item) => {
+          this.handleCommand(item)
         },
       )
 
@@ -102,6 +105,8 @@ export default {
       })
 
       await window.scrcpy.startApp(this.device.id, { title, commands, packageName: value })
+
+      openFloatControl(toRaw(this.device))
 
       this.loading = false
     },

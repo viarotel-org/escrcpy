@@ -10,7 +10,7 @@ export default function (controlWindow) {
       return {
         label: item.label,
         click() {
-          controlWindow.webContents.send(channel, item.value)
+          controlWindow.webContents.send(channel, item.value, item)
         },
       }
     })

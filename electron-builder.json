@@ -13,25 +13,13 @@
       {
         "target": "nsis",
         "arch": ["x64", "arm64"]
-      },
-      {
-        "target": "zip",
-        "arch": ["x64", "arm64"]
-      },
-      {
-        "target": "portable",
-        "arch": ["x64", "arm64"]
-      },
-      {
-        "target": "appx",
-        "arch": ["x64", "arm64"]
       }
     ],
     "artifactName": "${productName}-${version}-win-${arch}.${ext}",
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["common", "win"]
+      "filter": ["common", "win", "win-${arch}"]
     }
   },
   "nsis": {
@@ -65,7 +53,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["common", "mac"]
+      "filter": ["common", "mac", "mac-${arch}"]
     },
     "x64ArchFiles": "Contents/Resources/extra/**/*",
     "entitlementsInherit": "entitlements.mac.plist",
@@ -96,7 +84,7 @@
     "extraResources": {
       "from": "electron/resources/extra",
       "to": "extra",
-      "filter": ["common", "linux"]
+      "filter": ["common", "linux", "linux-${arch}", "linux-${target}"]
     }
   },
   "asar": true,

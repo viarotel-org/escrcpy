@@ -104,6 +104,13 @@ export default {
       })
 
       await window.scrcpy.startApp(this.device.id, { title, commands, packageName: value })
+        .catch((e) => {
+          console.error('mirror.commands', commands)
+          console.error('mirror.error', e)
+          if (e.message) {
+            this.$message.warning(e.message)
+          }
+        })
 
       openFloatControl(toRaw(this.device))
 

@@ -128,9 +128,9 @@ export default {
         allowCreate: true,
       },
     },
-    displayBuffer: {
+    videoBuffer: {
       label: 'preferences.video.video-buffer.name',
-      field: '--display-buffer',
+      field: '--video-buffer',
       type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.video-buffer.placeholder',

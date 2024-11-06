@@ -3,7 +3,6 @@
     :hide-on-click="false"
     :disabled="loading || floating"
     max-height="300px"
-    @command="handleCommand"
     @mouseenter="getAppData"
   >
     <slot :loading :trigger="handleTrigger" />
@@ -14,6 +13,9 @@
           v-for="item of options"
           :key="item.value"
           :command="item.value"
+          :divided="item.divided"
+          :icon="item.icon"
+          @click="handleCommand(item)"
         >
           {{ $t(item.label) }}
         </el-dropdown-item>
@@ -47,6 +49,17 @@ export default {
         label: item.name,
         value: item.packageName,
       }))
+
+      value.unshift({
+        label: this.$t('device.control.home'),
+        value: '',
+        icon: 'HomeFilled',
+      })
+
+      if (value[1]) {
+        value[1].divided = true
+      }
+
       return value
     },
   },
@@ -79,10 +92,10 @@ export default {
         options,
       })
     },
-    async handleCommand(value) {
+    async handleCommand({ label, value }) {
       this.loading = true
 
-      const title = this.$store.device.getLabel(this.device, 'mirror')
+      const title = `${this.$store.device.getLabel(this.device, 'synergy')}-${label}`
 
       const commands = this.$store.preference.scrcpyParameter(this.device.id, {
         excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],

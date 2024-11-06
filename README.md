@@ -93,6 +93,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Switch
 - Home
 - Back
+- Start APP
 - Turn off screen (experimental)
 - Notification
 - Power
@@ -105,7 +106,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Execution Script
 - Scheduled Task
 - Gnirehtet
-- Mirror Group
+- Mirror Group (discard)
 
 ## Preferences
 
@@ -220,8 +221,9 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 22. Graphical file manager ✅
 23. Floating control bar ✅
 24. Enhanced recording ✅
-25. Device grouping 🚧
-26. Game key mapping 🚧
+25. Start APP(Multi-threaded) ✅
+26. Device grouping 🚧
+27. Game key mapping 🚧
 
 ## FAQ
 

@@ -135,7 +135,7 @@
 
   "device.control.name": "Control",
   "device.control.more": "More Controls",
-  "device.control.install": "Install App",
+  "device.control.install": "Install APP",
   "device.control.install.placeholder": "Select app to install",
   "device.control.install.progress": "Installing app to {deviceName}...",
   "device.control.install.success": "Successfully installed {totalCount} apps to {deviceName}, {successCount} succeeded, {failCount} failed",
@@ -294,8 +294,8 @@
   "preferences.device.control-in-stop-charging.placeholder": "Stop charging when controlling",
   "preferences.device.control-in-stop-charging.tips": "Stop charging when controlling",
   "preferences.device.display-overlay.name": "Simulated Display",
-  "preferences.device.display-overlay.placeholder": "1080x1920/320,secure",
-  "preferences.device.display-overlay.tips": "Size and resolution of simulated secondary display, Mirroring group relies on this option",
+  "preferences.device.display-overlay.placeholder": "Device Size, Format: 1920x1080/420, 1920x1080, /240",
+  "preferences.device.display-overlay.tips": "Used to adjust the size and resolution of simulated auxiliary displays, launching applications and multi-screen collaboration (mirroring group) depend on this option",
 
   "preferences.window.name": "Window",
   "preferences.window.borderless.name": "Borderless",

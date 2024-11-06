@@ -135,7 +135,7 @@
 
   "device.control.name": "操作",
   "device.control.more": "裝置互動",
-  "device.control.install": "安裝應用程式",
+  "device.control.install": "安裝APP",
   "device.control.install.placeholder": "請選擇要安裝的應用程式",
   "device.control.install.progress": "正在為 {deviceName} 安裝應用程式中...",
   "device.control.install.success": "已成功將應用程式安裝到 {deviceName} 中，共 {totalCount} 個，成功 {successCount} 個，失敗 {failCount} 個",
@@ -169,7 +169,7 @@
   "device.control.reboot": "重啟裝置",
   "device.control.turnScreenOff": "關閉螢幕",
   "device.control.turnScreenOff.tips": "關閉螢幕且保持控制（實驗功能）：此操作將創建一個 EscrcpyHelper 進程，手動關閉該進程將重新打開螢幕。",
-  "device.control.startApp": "Start APP",
+  "device.control.startApp": "啟動APP",
   "device.control.power": "電源鍵",
   "device.control.power.tips": "可以用來開啟或關閉螢幕",
   "device.control.notification": "通知欄",
@@ -294,8 +294,8 @@
   "preferences.device.control-in-stop-charging.placeholder": "開啟後控制裝置時將停用自動亮螢幕",
   "preferences.device.control-in-stop-charging.tips": "開啟後控制裝置時將停用自動亮螢幕",
   "preferences.device.display-overlay.name": "模擬輔助顯示器",
-  "preferences.device.display-overlay.placeholder": "1080x1920/320,secure",
-  "preferences.device.display-overlay.tips": "用於調整模擬輔助顯示器的大小和解析度，多螢幕協同（鏡像群組）相依於此選項",
+  "preferences.device.display-overlay.placeholder": "設備大小，格式：1920x1080/420，1920x1080，/240",
+  "preferences.device.display-overlay.tips": "用於調整模擬輔助顯示器的大小和解析度，啟動應用程式、多螢幕協同（鏡像組）依賴於此選項",
 
   "preferences.window.name": "視窗控制",
   "preferences.window.borderless.name": "無邊框模式",

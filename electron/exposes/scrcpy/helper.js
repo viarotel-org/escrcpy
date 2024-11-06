@@ -1,3 +1,6 @@
+import appStore from '$electron/helpers/store.js'
+import { replaceIP } from '$renderer/utils/index.js'
+
 /**
  * Parse scrcpy app list output into structured data
  * @param {string} rawText - Raw text output from scrcpy --list-apps command
@@ -40,4 +43,16 @@ export function parseScrcpyAppList(rawText) {
     console.error('Error parsing scrcpy app list:', error)
     return []
   }
+}
+
+/**
+ * Get the --display-overlay value
+ * @param {*} serial
+ * @returns {string}
+ */
+export function getDisplayOverlay(serial) {
+  const value = appStore.get(`scrcpy.${replaceIP(serial)}.--display-overlay`)
+    || appStore.get('scrcpy.global.--display-overlay')
+    || ''
+  return value
 }

@@ -2,10 +2,10 @@ import { exec as _exec, spawn } from 'node:child_process'
 import util from 'node:util'
 import { adbPath, scrcpyPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
-import { replaceIP, sleep } from '$renderer/utils/index.js'
+import { sleep } from '$renderer/utils/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
-import { parseScrcpyAppList } from './helper.js'
+import { getDisplayOverlay, parseScrcpyAppList } from './helper.js'
 
 let adbkit
 
@@ -128,15 +128,12 @@ async function record(serial, { title, args = '', savePath, ...options } = {}) {
 }
 
 async function mirrorGroup(serial, { openNum = 1, ...options } = {}) {
-  const overlayDisplay
-    = appStore.get(`scrcpy.${replaceIP(serial)}.--display-overlay`)
-    || appStore.get('scrcpy.global.--display-overlay')
-    || '1080x1920/320,secure'
+  const displayOverlay = getDisplayOverlay(serial)
 
   const command = `settings put global overlay_display_devices "${[
     ...Array.from({ length: openNum }).keys(),
   ]
-    .map(() => overlayDisplay)
+    .map(() => displayOverlay)
     .join(';')}"`
 
   await adbkit.deviceShell(serial, command)
@@ -205,7 +202,17 @@ async function getAppList(serial) {
 async function startApp(serial, args = {}) {
   let { commands, packageName, ...options } = args
 
-  commands += ` --new-display --start-app=${packageName}`
+  const displayOverlay = getDisplayOverlay(serial)
+
+  commands += ` --new-display`
+
+  if (displayOverlay) {
+    commands += `=${displayOverlay}`
+  }
+
+  if (packageName) {
+    commands += ` --start-app=${packageName}`
+  }
 
   const res = await mirror(serial, { ...options, args: commands, signal: /display id: (\d+)/i })
 

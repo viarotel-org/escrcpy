@@ -135,7 +135,7 @@
 
   "device.control.name": "Управление",
   "device.control.more": "Дополнительные элементы управления",
-  "device.control.install": "Установить приложение",
+  "device.control.install": "Установить APP",
   "device.control.install.placeholder": "Выберите приложение для установки",
   "device.control.install.progress": "Установка приложения на {deviceName}...",
   "device.control.install.success": "Успешно установлено {totalCount} приложений на {deviceName}, успешно: {successCount}, неудачно: {failCount}",
@@ -169,7 +169,7 @@
   "device.control.reboot": "Перезагрузить",
   "device.control.turnScreenOff": "Выключить экран",
   "device.control.turnScreenOff.tips": "Отключение экрана с сохранением контроля (экспериментально): это действие создаст процесс EscrcpyHelper; при ручном завершении этого процесса экран снова включится.",
-  "device.control.startApp": "Start APP",
+  "device.control.startApp": "Запустить APP",
   "device.control.power": "Питание",
   "device.control.power.tips": "Включить/выключить экран",
   "device.control.notification": "Уведомление",
@@ -294,8 +294,8 @@
   "preferences.device.control-in-stop-charging.placeholder": "Остановить зарядку при управлении",
   "preferences.device.control-in-stop-charging.tips": "Остановить зарядку при управлении",
   "preferences.device.display-overlay.name": "Эмуляция дисплея",
-  "preferences.device.display-overlay.placeholder": "1080x1920/320, secure",
-  "preferences.device.display-overlay.tips": "Размер и разрешение эмулируемого вторичного дисплея, функция группы зеркалирования зависит от этой опции",
+  "preferences.device.display-overlay.placeholder": "Размер устройства, Формат: 1920x1080/420, 1920x1080, /240",
+  "preferences.device.display-overlay.tips": "Используется для настройки размера и разрешения симулируемых вспомогательных дисплеев, запуск приложений и многоэкранное взаимодействие (группа зеркалирования) зависят от этой опции",
 
   "preferences.window.name": "Окно",
   "preferences.window.borderless.name": "Без рамки",

@@ -66,6 +66,10 @@
 
 Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设备的反向供网功能。
 
+## 开发人员
+
+如果你是开发人员，希望运行或帮助改进该项目请参阅 [开发文档](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
+
 ## 快捷键
 
 请参阅 [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
@@ -323,10 +327,6 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 ### Could not execute "adb start-server"
 
 这可能是因为安装路径中包含中文或特殊字符导致的，请尝试更改安装路径。
-
-## 开发人员
-
-如果你是开发人员，希望运行或帮助改进该项目请参阅 [开发文档](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
 
 ## 获得帮助
 

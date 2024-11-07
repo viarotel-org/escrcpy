@@ -64,6 +64,10 @@
 
 Gnirehtet is built into the Windows and Linux apps to provide reverse tethering from PC to Android devices.
 
+## Developers
+
+If you are a developer and would like to run or help improve this project please see the [development documentation](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
+
 ## Shortcuts
 
 Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
@@ -322,10 +326,6 @@ You need to customize the file paths for `scrcpy` and `adb` (ensuring they have 
 ### Could not execute "adb start-server"
 
 This might be due to Chinese or special characters in the installation path. Please try changing the installation path.
-
-## Developers
-
-If you are a developer and would like to run or help improve this project please see the [development documentation](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
 
 ## Getting Help
 

@@ -64,6 +64,10 @@
 
 Gnirehtet встроен в приложения для Windows и Linux, чтобы обеспечить обратный тетеринг с ПК на Android-устройства.
 
+## Разработчики
+
+Если вы разработчик и хотите запустить или помочь улучшить этот проект, ознакомьтесь с [документацией по разработке](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
+
 ## Горячие клавиши
 
 См. [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master/doc/shortcuts.md)
@@ -322,10 +326,6 @@ Gnirehtet встроен в приложения для Windows и Linux, что
 ### Could not execute "adb start-server"
 
 Это может быть вызвано наличием китайских или специальных символов в пути установки. Попробуйте изменить путь установки.
-
-## Разработчики
-
-Если вы разработчик и хотите запустить или помочь улучшить этот проект, ознакомьтесь с [документацией по разработке](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
 
 ## Получение помощи
 

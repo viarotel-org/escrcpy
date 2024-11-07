@@ -69,31 +69,25 @@ export function parseScrcpyCodecList(rawText) {
       audio: [],
     }
 
-    // 分行处理
     const lines = rawText.split('\n')
 
-    // 遍历每一行
     for (const line of lines) {
       const trimmedLine = line.trim()
 
-      // 跳过空行和不包含编码器信息的行
       if (!trimmedLine || !trimmedLine.startsWith('--')) {
         continue
       }
 
-      // 提取所有的键值对
       const pairs = trimmedLine.match(/--[\w-]+=[\w.-]+/g)
       if (!pairs || pairs.length < 2)
         continue
 
-      // 将键值对转换为对象
       const info = pairs.reduce((acc, pair) => {
         const [key, value] = pair.substring(2).split('=')
         acc[key] = value
         return acc
       }, {})
 
-      // 根据键名判断类型并保存数据
       if (info['video-codec'] && info['video-encoder']) {
         result.video.push({
           type: 'video',
@@ -110,7 +104,6 @@ export function parseScrcpyCodecList(rawText) {
       }
     }
 
-    // 验证结果是否为空
     if (result.video.length === 0 && result.audio.length === 0) {
       throw new Error('No valid codec information found in the log content')
     }

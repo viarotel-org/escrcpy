@@ -321,6 +321,10 @@ You need to customize the file paths for `scrcpy` and `adb` (ensuring they have 
 
 This might be due to Chinese or special characters in the installation path. Please try changing the installation path.
 
+## Developers
+
+If you are a developer and would like to run or help improve this project please see the [development documentation](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
+
 ## Getting Help
 
 > As this is an open source project run entirely by donations, support is limited and updates may not be on a fixed schedule.

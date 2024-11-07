@@ -322,6 +322,10 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 
 这可能是因为安装路径中包含中文或特殊字符导致的，请尝试更改安装路径。
 
+## 开发人员
+
+如果你是开发人员，希望运行或帮助改进该项目请参阅 [开发文档](https://github.com/viarotel-org/escrcpy/blob/main/develop.md)
+
 ## 获得帮助
 
 > 因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定

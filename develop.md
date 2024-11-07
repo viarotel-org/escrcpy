@@ -103,6 +103,12 @@ pnpm build:linux    # Build for Linux
 - [Adbkit](https://github.com/DeviceFarmer/adbkit)
 - [Gnirehtet](https://github.com/Genymobile/gnirehtet/)
 
+## FAQ
+
+### Specific area "throw new Error('Electron failed to install correctly, please delete node_modules/electron and try installing again')"
+
+Overwrite the contents of `.npmrc.CN` in the project with `.npmrc`, then delete `node_modules` and reinstall dependencies. Or you can also use [electron-fix](https://github.com/pangxieju/electron-fix)
+
 ## Support and Contact
 
 - Bug Reports: [GitHub Issues](https://github.com/viarotel-org/escrcpy/issues)

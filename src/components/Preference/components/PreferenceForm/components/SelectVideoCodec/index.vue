@@ -53,8 +53,8 @@ export default {
       },
       set(value) {
         this.$emit('update:model-value', value)
-        const [decoder, encoder] = value.split(' & ')
-        this.preferenceData['--video-codec'] = decoder
+        const [codec, encoder] = value.split(' & ')
+        this.preferenceData['--video-codec'] = codec
         this.preferenceData['--video-encoder'] = encoder
       },
     },
@@ -71,7 +71,7 @@ export default {
       const res = await this.$scrcpy.getEncoders(deviceId)
 
       this.deviceOptions = res?.video?.map((item) => {
-        const value = `${item.decoder} & ${item.encoder}`
+        const value = `${item.codec} & ${item.encoder}`
         return {
           label: value,
           value,

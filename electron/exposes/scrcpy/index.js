@@ -5,7 +5,7 @@ import appStore from '$electron/helpers/store.js'
 import { sleep } from '$renderer/utils/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
-import { getDisplayOverlay, parseScrcpyAppList } from './helper.js'
+import { getDisplayOverlay, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
 
 let adbkit
 
@@ -84,26 +84,12 @@ async function execShell(command) {
 
 async function getEncoders(serial) {
   const res = await execShell(`--serial="${serial}" --list-encoders`)
+
   const stdout = res.stdout
 
-  // 提取视频编码器列表
-  const videoEncoderRegex
-    = /--video-codec=([\w-]+)\s+--video-encoder='([^']+)'/g
-  const videoEncoders = [...stdout.matchAll(videoEncoderRegex)].map(
-    ([, codec, encoder]) => ({ decoder: codec, encoder }),
-  )
+  const value = parseScrcpyCodecList(stdout)
 
-  // 提取音频编码器列表
-  const audioEncoderRegex
-    = /--audio-codec=([\w-]+)\s+--audio-encoder='([^']+)'/g
-  const audioEncoders = [...stdout.matchAll(audioEncoderRegex)].map(
-    ([, codec, encoder]) => ({ decoder: codec, encoder }),
-  )
-
-  const value = {
-    audio: audioEncoders,
-    video: videoEncoders,
-  }
+  console.log('value', value)
 
   return value
 }

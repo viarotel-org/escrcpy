@@ -107,3 +107,27 @@ pnpm build:linux    # Build for Linux
 
 - Bug Reports: [GitHub Issues](https://github.com/viarotel-org/escrcpy/issues)
 - Contact: viarotel@qq.com
+
+## Packaging Problem
+
+- Error of electron module
+  ![image](https://github.com/user-attachments/assets/d404a1b2-3668-459f-9ddb-ce8e64514f63)
+
+- First, install the electron-fix with global option
+```shell
+ pnpm install electron-fix -g
+```
+
+- Second, add this script in package.json file
+```shell
+ "fix": "electron-fix start",
+```
+
+- Third, run command on the `Git Bash` terminal (if use CMD/POWERSHELL terminal, it will hava an error with unrecognized command of 'unzip')
+```shell
+ pnpm fix
+```
+![image](https://github.com/user-attachments/assets/d9417f78-8d37-4879-9afe-e7ed652e35c6)
+
+
+- Then you can successfully start this project by `pnpm dev`!

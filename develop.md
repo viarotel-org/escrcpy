@@ -48,23 +48,23 @@ pnpm build:linux    # Build for Linux
  ┣ 📂.github              # GitHub workflows and configurations
  ┣ 📂.husky              # Git hooks settings
  ┣ 📂.vscode             # VSCode editor settings
- ┣ 📂control             # Main application interface
- ┃ ┣ 📂electron          # Electron main process
- ┃ ┣ 📂src               # Application source code
- ┃ ┃ ┣ 📂assets         # Static resources
- ┃ ┃ ┣ 📂components     # Vue components
- ┃ ┃ ┃ ┣ 📂Device      # Device management
- ┃ ┃ ┃ ┣ 📂Preference  # Settings interface
- ┃ ┃ ┃ ┗ 📂Quick       # Quick access features
- ┃ ┃ ┣ 📂composables   # Vue composition functions
- ┃ ┃ ┣ 📂configs       # App configurations
- ┃ ┃ ┣ 📂dicts         # Constants and enums
- ┃ ┃ ┣ 📂icons         # Icon assets
- ┃ ┃ ┣ 📂locales       # Internationalization
- ┃ ┃ ┣ 📂plugins       # Vue plugins
- ┃ ┃ ┣ 📂store         # State management
- ┃ ┃ ┣ 📂styles        # Global styles
- ┃ ┃ ┗ 📂utils         # Helper functions
+ ┣ 📂control             # Device floating control bar
+ ┣ 📂electron          # Electron main process
+ ┣ 📂src               # Main renderer process
+ ┃ ┣ 📂assets         # Static resources
+ ┃ ┣ 📂components     # Vue components
+ ┃ ┃ ┣ 📂Device      # Device management
+ ┃ ┃ ┣ 📂Preference  # Settings interface
+ ┃ ┃ ┗ 📂Quick       # Quick access features
+ ┃ ┣ 📂composables   # Vue composition functions
+ ┃ ┣ 📂configs       # App configurations
+ ┃ ┣ 📂dicts         # Constants and enums
+ ┃ ┣ 📂icons         # Icon assets
+ ┃ ┣ 📂locales       # Internationalization
+ ┃ ┣ 📂plugins       # Vue plugins
+ ┃ ┣ 📂store         # State management
+ ┃ ┣ 📂styles        # Global styles
+ ┃ ┗ 📂utils         # Helper functions
  ┣ 📂public             # Public assets
  ┣ 📂screenshots        # Application screenshots
  ┣ 📂scripts           # Build scripts

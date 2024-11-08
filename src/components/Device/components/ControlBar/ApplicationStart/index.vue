@@ -1,18 +1,19 @@
 <template>
   <el-dropdown
-    :hide-on-click="false"
     :disabled="loading || floating"
     max-height="300px"
     trigger="click"
     @visible-change="onVisibleChange"
+    @mouseenter="getAppData"
   >
     <slot :loading :trigger="handleTrigger" />
 
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="search" @click.stop>
-          <el-input v-model="keyword" class="!w-[calc(100%+18px)] !-mx-[9px] !-mt-1" :placeholder="$t('common.search')" prefix-icon="Search"></el-input>
-        </el-dropdown-item>
+        <div class="sticky top-0 px-2 pt-2 pb-2 bg-white border-b">
+          <el-input v-model="keyword" class="!w-full" :placeholder="$t('common.search')" prefix-icon="Search"></el-input>
+        </div>
+
         <el-dropdown-item
           v-for="item of options"
           :key="item.value"
@@ -66,8 +67,6 @@ export default {
         icon: 'HomeFilled',
       })
 
-      value[0].divided = true
-
       if (this.keyword) {
         return value.filter((item) => {
           const pinyinLabel = pinyin(item.label, { toneType: 'none' })
@@ -77,9 +76,6 @@ export default {
 
       return value
     },
-  },
-  created() {
-    this.getAppData()
   },
   methods: {
     async onVisibleChange(val) {

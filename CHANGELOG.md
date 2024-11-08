@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.26.3](https://github.com/viarotel-org/escrcpy/compare/v1.26.2...v1.26.3) (2024-11-08)
+
+
+### Bug Fixes
+
+* 🐛 Fix device support audio and video encoding cannot be parsed ([9b7f6a9](https://github.com/viarotel-org/escrcpy/commit/9b7f6a98c28b44fcb9cc8cc8d9011ebe335ba73a))
+* 🐛 Restore the --display-buffer parameter to solve the mirroring problem ([0f3d869](https://github.com/viarotel-org/escrcpy/commit/0f3d869d07ab379e3d735e6c910be19c8c2fb5f1))
+
+
+### Performance Improvements
+
+* ♻️ Support interruption during waiting for wireless connection ([344b385](https://github.com/viarotel-org/escrcpy/commit/344b385d33010d9fcfc53e8759e9f6419bbbfba3))
+* ♻️ Supports retrieving a list of applications ([b1a6ba7](https://github.com/viarotel-org/escrcpy/commit/b1a6ba7ae46f74ef0c9bef3b9a88df0ad65db33f))
+* ⚡️ Optimize startup application performance ([8e94494](https://github.com/viarotel-org/escrcpy/commit/8e94494e43945a611edeef0466d5c4d581b25e05))
+
 ## [1.26.2](https://github.com/viarotel-org/escrcpy/compare/v1.26.1...v1.26.2) (2024-11-06)
 
 

@@ -349,8 +349,8 @@ Gnirehtet встроен в приложения для Windows и Linux, что
 > Если этот проект помог вам, вы можете купить мне кофе, чтобы поддержать меня в улучшении проекта! 😛
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-wepay.jpg" alt="viarotel-wepay" width="30%">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/zh-CN/viarotel-alipay.jpg" alt="viarotel-alipay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/donate/viarotel-wepay.png" alt="viarotel-wepay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/donate/viarotel-alipay.png" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
     <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>

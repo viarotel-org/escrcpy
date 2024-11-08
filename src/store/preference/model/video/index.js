@@ -130,7 +130,8 @@ export default {
     },
     videoBuffer: {
       label: 'preferences.video.video-buffer.name',
-      field: '--video-buffer',
+      // field: '--video-buffer',
+      field: '--display-buffer',
       type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.video-buffer.placeholder',

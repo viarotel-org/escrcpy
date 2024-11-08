@@ -3,12 +3,16 @@
     :hide-on-click="false"
     :disabled="loading || floating"
     max-height="300px"
-    @mouseenter="getAppData"
+    trigger="click"
+    @visible-change="onVisibleChange"
   >
     <slot :loading :trigger="handleTrigger" />
 
     <template #dropdown>
       <el-dropdown-menu>
+        <el-dropdown-item command="search" @click.stop>
+          <el-input v-model="keyword" class="!w-[calc(100%+18px)] !-mx-[9px] !-mt-1" :placeholder="$t('common.search')" prefix-icon="Search"></el-input>
+        </el-dropdown-item>
         <el-dropdown-item
           v-for="item of options"
           :key="item.value"
@@ -27,6 +31,9 @@
 <script>
 import { openFloatControl } from '$/utils/device/index.js'
 
+import { pinyin } from 'pinyin-pro'
+import { sleep } from '$/utils'
+
 export default {
   props: {
     device: {
@@ -42,6 +49,7 @@ export default {
     return {
       loading: false,
       appList: [],
+      keyword: '',
     }
   },
   computed: {
@@ -58,8 +66,13 @@ export default {
         icon: 'HomeFilled',
       })
 
-      if (value[1]) {
-        value[1].divided = true
+      value[0].divided = true
+
+      if (this.keyword) {
+        return value.filter((item) => {
+          const pinyinLabel = pinyin(item.label, { toneType: 'none' })
+          return (item.label + pinyinLabel).includes(this.keyword)
+        })
       }
 
       return value
@@ -69,6 +82,12 @@ export default {
     this.getAppData()
   },
   methods: {
+    async onVisibleChange(val) {
+      if (!val) {
+        await sleep()
+        this.keyword = ''
+      }
+    },
     async getAppData() {
       const data = await window.scrcpy.getAppList(this.device.id)
 

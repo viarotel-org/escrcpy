@@ -53,6 +53,7 @@
     "husky": "9.0.11",
     "lodash-es": "4.17.21",
     "pinia": "2.1.7",
+    "pinyin-pro": "^3.26.0",
     "postcss": "8.4.38",
     "postcss-nested": "6.0.1",
     "postcss-scss": "4.0.9",

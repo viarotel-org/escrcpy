@@ -56,15 +56,27 @@
     >
     </el-input>
 
-    <el-button
-      type="primary"
-      :icon="loading ? '' : 'Connection'"
-      :loading="loading"
-      class="flex-none"
-      @click="handleConnect()"
-    >
-      {{ $t('device.wireless.connect.name') }}
-    </el-button>
+    <el-button-group>
+      <el-button
+        type="primary"
+        :icon="loading ? '' : 'Connection'"
+        :loading="loading"
+        class="flex-none"
+        @click="handleConnect()"
+      >
+        {{ $t('device.wireless.connect.name') }}
+      </el-button>
+
+      <el-button
+        v-if="loading"
+        type="default"
+        plain
+        class="flex-none"
+        @click="handleUnConnect()"
+      >
+        {{ $t('common.cancel') }}
+      </el-button>
+    </el-button-group>
 
     <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
@@ -209,6 +221,10 @@ export default {
       this.$message.warning(this.$t('device.wireless.connect.batch.error'))
     },
 
+    handleUnConnect() {
+      this.loading = false
+    },
+
     async handleConnect(params = this.formData) {
       if (!params.host) {
         this.$message.warning(
@@ -227,7 +243,9 @@ export default {
         this.handleSave(params)
       }
       catch (error) {
-        this.handleError(error?.message || error?.cause?.message || error)
+        if (this.loading) {
+          this.handleError(error?.message || error?.cause?.message || error)
+        }
       }
 
       this.loading = false

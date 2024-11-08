@@ -352,7 +352,7 @@ Gnirehtet встроен в приложения для Windows и Linux, что
   <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/donate/viarotel-wepay.png" alt="viarotel-wepay" width="30%">
   <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/donate/viarotel-alipay.png" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/screenshots/en-US/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
+    <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/donate/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>
 </div>
 

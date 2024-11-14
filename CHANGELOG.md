@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.4](https://github.com/viarotel-org/escrcpy/compare/v1.26.3...v1.26.4) (2024-11-14)
+
+
+### Bug Fixes
+
+* 🐛 Temporarily disable scrcpy integration in macOS ([9bf4d5c](https://github.com/viarotel-org/escrcpy/commit/9bf4d5cfed66466d1c8111cf8b0a44050e727f2a))
+
 ## [1.26.3](https://github.com/viarotel-org/escrcpy/compare/v1.26.2...v1.26.3) (2024-11-08)
 
 

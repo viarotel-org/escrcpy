@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.27.0](https://github.com/viarotel-org/escrcpy/compare/v1.26.4...v1.27.0) (2024-11-21)
+
+
+### Features
+
+* ✨ Support edge hiding function ([14a81de](https://github.com/viarotel-org/escrcpy/commit/14a81de211ec19b9533c8fa57180ba3bf4d8ae3d))
+
+
+### Performance Improvements
+
+* ⬆️ Optimize edge hiding performance ([74a91a4](https://github.com/viarotel-org/escrcpy/commit/74a91a4058692165aaaac77d753df6c78c6e5901))
+
 ## [1.26.4](https://github.com/viarotel-org/escrcpy/compare/v1.26.3...v1.26.4) (2024-11-14)
 
 

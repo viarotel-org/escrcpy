@@ -38,6 +38,9 @@ export class Edger {
     this.handleWindowBlur = this.handleWindowBlur.bind(this)
     this.handleWindowFocus = this.handleWindowFocus.bind(this)
 
+    // Add mouse tracking timer reference
+    this.mouseTrackingTimer = null
+
     this.initialize()
   }
 
@@ -104,8 +107,9 @@ export class Edger {
   }
 
   showWindow() {
-    if (!this.isHidden || this.isAnimating)
+    if (!this.window || this.window.isDestroyed() || !this.isHidden || this.isAnimating)
       return
+
     clearTimeout(this.hideDebounceTimer)
 
     if (this.showDebounceTimer)
@@ -119,8 +123,9 @@ export class Edger {
   }
 
   hideWindow() {
-    if (this.isHidden || this.isAnimating)
+    if (!this.window || this.window.isDestroyed() || this.isHidden || this.isAnimating)
       return
+
     clearTimeout(this.showDebounceTimer)
 
     if (this.hideDebounceTimer)
@@ -166,6 +171,11 @@ export class Edger {
     if (this.window.isAlwaysOnTop()) {
       this.wasAlwaysOnTop = true
     }
+
+    // Add window close event listener
+    this.window.on('closed', () => {
+      this.destroy()
+    })
   }
 
   handleWindowBlur() {
@@ -182,7 +192,9 @@ export class Edger {
 
   setAlwaysOnTop(value) {
     try {
-      // 某些系统上可能需要特定的参数
+      if (!this.window || this.window.isDestroyed())
+        return
+
       if (process.platform === 'darwin') {
         this.window.setAlwaysOnTop(value, 'floating')
       }
@@ -263,32 +275,45 @@ export class Edger {
   }
 
   destroy() {
+    // Clear all timers
     this.cleanupAnimation()
     if (this.showDebounceTimer) {
       clearTimeout(this.showDebounceTimer)
+      this.showDebounceTimer = null
     }
     if (this.hideDebounceTimer) {
       clearTimeout(this.hideDebounceTimer)
+      this.hideDebounceTimer = null
+    }
+    if (this.mouseTrackingTimer) {
+      clearInterval(this.mouseTrackingTimer)
+      this.mouseTrackingTimer = null
     }
 
-    // 清理事件监听
-    if (this.window) {
+    // Clean up event listeners
+    if (this.window && !this.window.isDestroyed()) {
       this.window.removeListener('blur', this.handleWindowBlur)
       this.window.removeListener('focus', this.handleWindowFocus)
       this.window.removeAllListeners()
 
-      // 恢复原始置顶状态
+      // Restore original always on top state
       if (this.window.isAlwaysOnTop() !== this.wasAlwaysOnTop) {
         this.setAlwaysOnTop(this.wasAlwaysOnTop)
       }
     }
 
     this.mouseMovementBuffer = []
+    this.window = null
+    this.dockEdge = null
+    this.originalBounds = null
+    this.isHidden = false
+    this.isDragging = false
+    this.isAnimating = false
   }
 
   startMouseTracking() {
     const trackMouse = () => {
-      if (!this.dockEdge)
+      if (!this.dockEdge || !this.window || this.window.isDestroyed())
         return
 
       const currentTime = Date.now()
@@ -297,24 +322,30 @@ export class Edger {
       // Update mouse movement buffer
       this.updateMouseBuffer(mousePos, currentTime)
 
-      const windowBounds = this.window.getBounds()
-      const display = screen.getDisplayNearestPoint(mousePos)
-      const screenBounds = display.workArea
+      try {
+        const windowBounds = this.window.getBounds()
+        const display = screen.getDisplayNearestPoint(mousePos)
+        const screenBounds = display.workArea
 
-      // Check that the mouse is stable
-      if (this.isMouseStable()) {
-        if (this.isMouseNearEdge(mousePos, windowBounds, screenBounds)) {
-          this.showWindow()
+        // Check that the mouse is stable
+        if (this.isMouseStable()) {
+          if (this.isMouseNearEdge(mousePos, windowBounds, screenBounds)) {
+            this.showWindow()
+          }
+          else if (this.isMouseOutsideWindow(mousePos, windowBounds)) {
+            this.hideWindow()
+          }
         }
-        else if (this.isMouseOutsideWindow(mousePos, windowBounds)) {
-          this.hideWindow()
-        }
+
+        this.lastMousePosition = mousePos
       }
-
-      this.lastMousePosition = mousePos
+      catch (err) {
+        // Window was destroyed, clean up
+        this.destroy()
+      }
     }
 
-    setInterval(trackMouse, 16)
+    this.mouseTrackingTimer = setInterval(trackMouse, 16)
   }
 
   updateMouseBuffer(mousePos, currentTime) {

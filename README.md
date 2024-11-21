@@ -226,10 +226,11 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 23. Floating control bar ✅
 24. Enhanced recording ✅
 25. Start APP(Multi-threaded) ✅
-26. Improved history device connection experience 🚧  
-27. File management supports upload directory and progress display 🚧
-28. Device grouping 🚧
-29. Game key mapping 🚧
+26. Main window edge hidden ✅
+27. Improved history device connection experience 🚧  
+28. File management supports upload directory and progress display 🚧
+29. Device grouping 🚧
+30. Game key mapping 🚧
 
 ## FAQ
 

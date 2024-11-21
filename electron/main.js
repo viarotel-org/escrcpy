@@ -20,6 +20,8 @@ import control from '$control/electron/main.js'
 
 import { loadPage } from './helpers/index.js'
 
+import { Edger } from './helpers/edger/index.js'
+
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -75,6 +77,8 @@ function createWindow() {
 
   remote.enable(mainWindow.webContents)
   remote.initialize()
+
+  new Edger(mainWindow);
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

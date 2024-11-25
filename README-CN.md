@@ -55,6 +55,7 @@
 ### macOS && Linux
 
 > 注意：这些平台没有集成 [Scrcpy](https://github.com/Genymobile/scrcpy) 需要手动安装
+> 更新：Escrcpy@1.27.1+ 中已初步集成 scrcpy 二进制文件，无需再手动安装 scrcpy
 
 1. Linux 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 2. macOS 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md)

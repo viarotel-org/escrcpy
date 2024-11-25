@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.27.1](https://github.com/viarotel-org/escrcpy/compare/v1.27.0...v1.27.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* 🐛 Make StartApp compatible with scrcpy v3.0 ([1082e0d](https://github.com/viarotel-org/escrcpy/commit/1082e0d6623a5e91af37ff206c4dc4e6023b64fa))
+
+
+### Performance Improvements
+
+* 🚀 Adjust options to support scrcpy v3.0 ([0602676](https://github.com/viarotel-org/escrcpy/commit/0602676a3e6b06ae1de1a8d7dd2d365646222245))
+* 🚀 Update to scrcpy v3.0 ([bf06382](https://github.com/viarotel-org/escrcpy/commit/bf06382b3a66a7efbf01975f1eac0b092e78d034))
+
 ## [1.27.0](https://github.com/viarotel-org/escrcpy/compare/v1.26.4...v1.27.0) (2024-11-21)
 
 

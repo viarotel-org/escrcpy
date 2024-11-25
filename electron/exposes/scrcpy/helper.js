@@ -11,38 +11,26 @@ import { replaceIP } from '$renderer/utils/index.js'
  * }>} Array of parsed app objects
  */
 export function parseScrcpyAppList(rawText) {
-  try {
-    // Split by lines and filter out non-app lines
-    const lines = rawText.split('\n').filter((line) => {
-      const trimmed = line.trim()
-      return trimmed.startsWith('*') || trimmed.startsWith('-')
-    })
+  if (typeof rawText !== 'string') {
+    throw new TypeError('scrcpy content must be a string')
+  }
 
-    return lines.map((line) => {
-      // Remove leading * or - and trim
-      const cleanLine = line.trim().replace(/^[*\-]\s+/, '')
-
-      // Extract app name and package name using a more precise regex
-      // Matches any characters up to the last [ followed by package name and ]
-      const match = cleanLine.match(/^([^[]+)\[([^\]]+)\]$/)
-
-      if (!match) {
-        return null
-      }
-
-      const [, name, packageName] = match
+  return rawText
+    .split('\n')
+    .filter(line => line.startsWith(' * ') || line.startsWith(' - '))
+    .map((line) => {
+      const isSystemApp = line.startsWith(' * ')
+      // Remove prefix and trim
+      const content = line.substring(3).trim()
+      // Find last space to separate name and package
+      const lastSpaceIndex = content.lastIndexOf(' ')
 
       return {
-        name: name.trim(),
-        packageName: packageName.trim(),
-        isSystemApp: line.trim().startsWith('*'),
+        name: content.substring(0, lastSpaceIndex).trim(),
+        packageName: content.substring(lastSpaceIndex + 1).trim(),
+        isSystemApp,
       }
-    }).filter(item => item !== null)
-  }
-  catch (error) {
-    console.error('Error parsing scrcpy app list:', error)
-    return []
-  }
+    })
 }
 
 /**

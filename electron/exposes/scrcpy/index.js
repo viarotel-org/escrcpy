@@ -200,7 +200,7 @@ async function startApp(serial, args = {}) {
     commands += ` --start-app=${packageName}`
   }
 
-  const res = await mirror(serial, { ...options, args: commands, signal: /display id: (\d+)/i })
+  const res = await mirror(serial, { ...options, args: commands, signal: /New display:.+?\(id=(\d+)\)/i })
 
   const displayId = res?.[1]
 

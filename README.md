@@ -53,7 +53,8 @@
 ### macOS && Linux
 
 > Note: These platforms do not come with integrated [Scrcpy](https://github.com/Genymobile/scrcpy), you need to install them manually
-> Update: In Escrcpy@1.27.1+ scrcpy binary files are preliminarily integrated, eliminating the need for manual scrcpy installation.
+
+**In Escrcpy@1.27.1+ scrcpy binary files are preliminarily integrated, eliminating the need for manual scrcpy installation.**
 
 1. Refer to the [installation document](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md) for Linux
 2. Refer to the [installation document](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md) for macOS

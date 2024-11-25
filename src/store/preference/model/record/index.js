@@ -52,12 +52,12 @@ export default {
         },
       ],
     },
-    lockVideoOrientation: {
-      label: 'preferences.record.lock-video-orientation.name',
-      field: '--lock-video-orientation',
+    recordOrientation: {
+      label: 'preferences.record.orientation.name',
+      field: '--record-orientation',
       type: 'Select',
       value: undefined,
-      placeholder: 'preferences.record.lock-video-orientation.placeholder',
+      placeholder: 'preferences.record.orientation.placeholder',
       options: [
         { label: '0°', value: '0' },
         { label: '90°', value: '90' },

@@ -107,6 +107,15 @@ export default {
         { label: 'flip-270°', value: 'flip270' },
       ],
     },
+    angle: {
+      label: 'preferences.video.angle.name',
+      field: '--angle',
+      type: 'InputNumber',
+      value: undefined,
+      placeholder: 'preferences.video.angle.placeholder',
+      tips: 'preferences.video.angle.tips',
+      append: 'deg',
+    },
     crop: {
       label: 'preferences.video.screen-cropping.name',
       field: '--crop',
@@ -130,8 +139,7 @@ export default {
     },
     videoBuffer: {
       label: 'preferences.video.video-buffer.name',
-      // field: '--video-buffer',
-      field: '--display-buffer',
+      field: '--video-buffer',
       type: 'InputNumber',
       value: undefined,
       placeholder: 'preferences.video.video-buffer.placeholder',

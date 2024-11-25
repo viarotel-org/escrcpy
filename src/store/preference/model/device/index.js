@@ -2,13 +2,22 @@ export default {
   label: 'preferences.device.name',
   field: 'scrcpy',
   children: {
-    showTouches: {
-      label: 'preferences.device.show-touch.name',
-      field: '--show-touches',
-      type: 'Switch',
+    screenOffTimeout: {
+      label: 'preferences.device.screenOffTimeout.name',
+      field: '--screen-off-timeout',
+      type: 'InputNumber',
       value: undefined,
-      placeholder: 'preferences.device.show-touch.placeholder',
-      tips: 'preferences.device.show-touch.tips',
+      placeholder: 'preferences.device.screenOffTimeout.placeholder',
+      tips: 'preferences.device.screenOffTimeout.tips',
+      append: 's',
+    },
+    overlayDisplay: {
+      label: 'preferences.device.display-overlay.name',
+      field: '--display-overlay',
+      type: 'Input',
+      value: undefined,
+      placeholder: 'preferences.device.display-overlay.placeholder',
+      tips: 'preferences.device.display-overlay.tips',
     },
     stayAwake: {
       label: 'preferences.device.stay-awake.name',
@@ -19,11 +28,11 @@ export default {
       tips: 'preferences.device.stay-awake.tips',
     },
     turnScreenOff: {
-      label: 'preferences.device.control-in-close-screen.name',
+      label: 'preferences.device.turnScreenOff.name',
       field: '--turn-screen-off',
       type: 'Switch',
       value: undefined,
-      placeholder: 'preferences.device.control-in-close-screen.placeholder',
+      placeholder: 'preferences.device.turnScreenOff.placeholder',
     },
     powerOffOnClose: {
       label: 'preferences.device.control-end-video.name',
@@ -40,13 +49,13 @@ export default {
       placeholder: 'preferences.device.control-in-stop-charging.placeholder',
       tips: 'preferences.device.control-in-stop-charging.tips',
     },
-    overlayDisplay: {
-      label: 'preferences.device.display-overlay.name',
-      field: '--display-overlay',
-      type: 'Input',
+    showTouches: {
+      label: 'preferences.device.show-touch.name',
+      field: '--show-touches',
+      type: 'Switch',
       value: undefined,
-      placeholder: 'preferences.device.display-overlay.placeholder',
-      tips: 'preferences.device.display-overlay.tips',
+      placeholder: 'preferences.device.show-touch.placeholder',
+      tips: 'preferences.device.show-touch.tips',
     },
   },
 }

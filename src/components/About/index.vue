@@ -1,43 +1,45 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-full -mt-8 space-y-4">
-    <a class="block" :href="escrcpyURL" target="_blank">
-      <img src="$electron/resources/build/logo.png" class="h-48" alt="" />
-    </a>
+  <div class="h-full">
+    <div class="h-full flex flex-col items-center justify-center space-y-4 -mt-8">
+      <a class="block" :href="escrcpyURL" target="_blank">
+        <img src="$electron/resources/build/logo.png" class="h-48" alt="" />
+      </a>
 
-    <div class="text-xl text-center italic text-gray-700 dark:text-white">
-      {{ $t("about.description") }}
-    </div>
+      <div class="text-xl text-center italic text-gray-700 dark:text-white">
+        {{ $t("about.description") }}
+      </div>
 
-    <div class="pt-8">
-      <el-button
-        :loading="loading"
-        type="primary"
-        size="large"
-        @click="handleUpdate"
-      >
-        {{
-          loading && percent
-            ? `${$t("about.update.progress")}...（${percent.toFixed(1)}%）`
-            : $t("about.update")
-        }}
-      </el-button>
+      <div class="pt-8">
+        <el-button
+          :loading="loading"
+          type="primary"
+          size="large"
+          @click="handleUpdate"
+        >
+          {{
+            loading && percent
+              ? `${$t("about.update.progress")}...（${percent.toFixed(1)}%）`
+              : $t("about.update")
+          }}
+        </el-button>
 
-      <el-button size="large" class="group" @click="handleSponsor">
-        <span class="group-hover:animate-rubber-band">♥</span>
-        <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
-      </el-button>
-    </div>
+        <el-button size="large" class="group" @click="handleSponsor">
+          <span class="group-hover:animate-rubber-band">♥</span>
+          <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
+        </el-button>
+      </div>
 
-    <div class="text-sm">
-      Supported by
+      <div class="text-sm">
+        Supported by
 
-      <a
-        class="hover:underline text-primary-500"
-        href="https://viarotel.github.io/"
-        target="_blank"
-      >Viarotel</a>
+        <a
+          class="hover:underline text-primary-500"
+          href="https://viarotel.github.io/"
+          target="_blank"
+        >Viarotel</a>
 
-      v{{ version }}
+        v{{ version }}
+      </div>
     </div>
 
     <SponsorDialog ref="sponsorDialogRef" />

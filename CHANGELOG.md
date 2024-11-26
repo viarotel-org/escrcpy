@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.2](https://github.com/viarotel-org/escrcpy/compare/v1.27.1...v1.27.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* 🐛 Start app to adapt to dark mode ([ae13fde](https://github.com/viarotel-org/escrcpy/commit/ae13fdea07e33953973a8561c6bc4e458811560e))
+
 ## [1.27.1](https://github.com/viarotel-org/escrcpy/compare/v1.27.0...v1.27.1) (2024-11-25)
 
 

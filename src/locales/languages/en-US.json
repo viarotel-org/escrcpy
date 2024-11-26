@@ -412,5 +412,7 @@
   "about.update-downloaded.confirm": "Update",
   "about.update-available.title": "Update Available",
   "about.update-available.confirm": "Update",
-  "about.update.progress": "Updating..."
+  "about.update.progress": "Updating...",
+  "about.sponsor.title": "Sponsor Project",
+  "about.sponsor.description": "If this project has helped you, you can buy me a coffee to keep me energized to improve it 😛"
 }

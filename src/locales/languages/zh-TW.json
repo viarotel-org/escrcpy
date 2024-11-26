@@ -412,5 +412,7 @@
   "about.update-downloaded.confirm": "更新",
   "about.update-available.title": "發現新版本",
   "about.update-available.confirm": "更新",
-  "about.update.progress": "正在更新"
+  "about.update.progress": "正在更新",
+  "about.sponsor.title": "贊助項目",
+  "about.sponsor.description": "如果該項目幫到你的話，可以請我喝杯咖啡，讓我更有精神完善該項目 😛"
 }

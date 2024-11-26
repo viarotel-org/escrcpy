@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-full -mt-8">
+  <div class="flex flex-col items-center justify-center h-full -mt-8 space-y-4">
     <a class="block" :href="escrcpyURL" target="_blank">
       <img src="$electron/resources/build/logo.png" class="h-48" alt="" />
     </a>
 
-    <div class="pt-4 text-xl text-center italic text-gray-700 dark:text-white">
+    <div class="text-xl text-center italic text-gray-700 dark:text-white">
       {{ $t("about.description") }}
     </div>
 
-    <div class="pt-12 pb-4">
+    <div class="pt-8">
       <el-button
         :loading="loading"
         type="primary"
@@ -20,6 +20,11 @@
             ? `${$t("about.update.progress")}...（${percent.toFixed(1)}%）`
             : $t("about.update")
         }}
+      </el-button>
+
+      <el-button size="large" class="group" @click="handleSponsor">
+        <span class="group-hover:animate-rubber-band">♥</span>
+        <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
       </el-button>
     </div>
 
@@ -34,13 +39,19 @@
 
       v{{ version }}
     </div>
+
+    <SponsorDialog ref="sponsorDialogRef" />
   </div>
 </template>
 
 <script>
 import { version } from '/package.json'
+import SponsorDialog from './components/SponsorDialog/index.vue'
 
 export default {
+  components: {
+    SponsorDialog,
+  },
   data() {
     return {
       loading: false,
@@ -57,6 +68,9 @@ export default {
     this.onUpdateError()
   },
   methods: {
+    handleSponsor() {
+      this.$refs.sponsorDialogRef.open()
+    },
     handleUpdate() {
       this.loading = true
       this.$electron.ipcRenderer.send('check-for-update')

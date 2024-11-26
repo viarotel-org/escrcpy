@@ -107,7 +107,14 @@ pnpm build:linux    # Build for Linux
 
 ### Specific area "throw new Error('Electron failed to install correctly, please delete node_modules/electron and try installing again')"
 
-Overwrite the contents of `.npmrc.CN` in the project to `.npmrc`, then delete `node_modules` and reinstall dependencies. Alternatively, you can use [electron-fix](https://github.com/pangxieju/electron-fix)
+Overwrite the contents of `.npmrc.CN` in the project to `.npmrc`, then delete `node_modules` and reinstall dependencies.
+
+Alternatively, you can use [electron-fix](https://github.com/pangxieju/electron-fix)
+
+```shell
+  # Run in this project directory
+  npx electron-fix start
+```
 
 ## Support and Contact
 

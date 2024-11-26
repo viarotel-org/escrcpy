@@ -10,7 +10,7 @@
 
     <template #dropdown>
       <el-dropdown-menu>
-        <div class="sticky top-0 px-2 pt-2 pb-2 bg-white border-b">
+        <div class="sticky top-0 z-10 px-2 pt-2 pb-2 bg-[var(--el-bg-color-overlay)] border-b dark:border-gray-700">
           <el-input v-model="keyword" class="!w-full" :placeholder="$t('common.search')" prefix-icon="Search"></el-input>
         </div>
 

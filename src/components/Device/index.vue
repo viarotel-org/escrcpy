@@ -266,7 +266,7 @@ export default {
 
         console.warn(message)
 
-        if (message.includes('daemon not running')) {
+        if (message.includes('failed to start daemon')) {
           this.getDeviceData()
           return false
         }

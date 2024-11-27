@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { sleep } from '$/utils'
 import PairDialog from './PairDialog/index.vue'
 
 export default {
@@ -90,7 +91,7 @@ export default {
     PairDialog,
   },
   props: {
-    reload: {
+    handleRefresh: {
       type: Function,
       default: () => () => false,
     },
@@ -117,7 +118,7 @@ export default {
     const autoConnect = this.$store.preference.data.autoConnect
     if (autoConnect) {
       await this.handleBatch()
-      this.reload()
+      this.handleRefresh()
     }
   },
   methods: {
@@ -237,6 +238,7 @@ export default {
 
       try {
         await this.$adb.connect(params.host, params.port || 5555)
+        await sleep()
 
         this.$message.success(this.$t('device.wireless.connect.success'))
 
@@ -247,6 +249,8 @@ export default {
           this.handleError(error?.message || error?.cause?.message || error)
         }
       }
+
+      this.handleRefresh()
 
       this.loading = false
     },

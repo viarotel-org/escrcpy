@@ -43,6 +43,10 @@ export default {
       type: Function,
       default: () => () => false,
     },
+    handleRefresh: {
+      type: Function,
+      default: () => () => false,
+    },
   },
   data() {
     return {
@@ -89,6 +93,8 @@ export default {
         if (error.message)
           this.$message.warning(error.message)
       }
+
+      this.handleRefresh()
 
       this.stopLoading = false
     },

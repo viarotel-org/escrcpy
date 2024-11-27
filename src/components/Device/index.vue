@@ -2,7 +2,7 @@
   <div class="h-full flex flex-col">
     <div class="flex-none flex items-center py-1 overflow-x-auto">
       <div class="flex-none">
-        <WirelessGroup ref="wirelessGroupRef" :reload="getDeviceData" />
+        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
       </div>
 
       <div class="w-px h-7 !mx-4 bg-gray-200 dark:bg-gray-600 flex-none"></div>
@@ -96,7 +96,7 @@
 
           <MoreDropdown v-bind="{ row, toggleRowExpansion, handleReset }" />
 
-          <WirelessAction v-bind="{ row, handleConnect }" />
+          <WirelessAction v-bind="{ row, handleConnect, handleRefresh }" />
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
@@ -215,7 +215,7 @@ export default {
 
     async handleRefresh() {
       this.loading = true
-      await sleep(500)
+      await sleep()
       this.getDeviceData({ resetResolve: true, unloading: true })
     },
 
@@ -262,11 +262,16 @@ export default {
         this.deviceList = data
       }
       catch (error) {
-        const message = error?.message || error?.cause?.message
+        const message = error?.message || error?.cause?.message || ''
 
         console.warn(message)
 
-        if (message && !message.includes('daemon not running')) {
+        if (message.includes('daemon not running')) {
+          this.getDeviceData()
+          return false
+        }
+
+        if (message) {
           this.$message.warning(message)
         }
 

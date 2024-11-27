@@ -4,6 +4,10 @@
 
 # Escrcpy
 
+[![GitCode](https://img.shields.io/badge/GitCode-GStar-red)](https://gitcode.com/viarotel-org/escrcpy)
+[![Gitee](https://gitee.com/viarotel-org/escrcpy/badge/star.svg?theme=dark)](https://gitee.com/viarotel-org/escrcpy)
+[![GitHub](https://img.shields.io/github/stars/viarotel-org/escrcpy?label=Github%20Stars)](https://github.com/viarotel-org/escrcpy)
+
 📱 Отображение и управление вашим Android-устройством с графическим интерфейсом Scrcpy на базе Electron. [English](https://github.com/viarotel-org/escrcpy/blob/main/README.md)
 
 <div style="display:flex;">

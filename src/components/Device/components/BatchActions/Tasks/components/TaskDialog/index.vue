@@ -127,12 +127,12 @@
         >
           <InputPath
             v-model="model.extra"
-            :placeholder="$t('device.control.shell.select')"
+            :placeholder="$t('device.control.terminal.script.select')"
             :data="{
               properties: ['openFile'],
               filters: [
                 {
-                  name: $t('device.control.shell.select'),
+                  name: $t('device.control.terminal.script.select'),
                   extensions: ['sh'],
                 },
               ],

@@ -43,7 +43,7 @@
 import Application from './Application/index.vue'
 import FilePush from './FilePush/index.vue'
 import Screenshot from './Screenshot/index.vue'
-import Shell from './Shell/index.vue'
+import Script from './Script/index.vue'
 import Tasks from './Tasks/index.vue'
 
 const props = defineProps({
@@ -70,9 +70,9 @@ const actionModel = [
     component: FilePush,
   },
   {
-    label: 'device.control.shell.name',
+    label: 'device.control.terminal.script.name',
     svgIcon: 'command',
-    component: Shell,
+    component: Script,
   },
   {
     label: 'device.task.name',

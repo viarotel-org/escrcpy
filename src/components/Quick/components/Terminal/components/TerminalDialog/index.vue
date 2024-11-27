@@ -123,7 +123,7 @@ function close() {
   visible.value = false
 }
 
-async function invoke(command) {
+async function invoke(command, options = {}) {
   visible.value = true
 
   const shell = await getShell()
@@ -132,7 +132,9 @@ async function invoke(command) {
 
   await focus()
 
-  ElMessage.info(window.t('device.control.shell.enter'))
+  if (options.message) {
+    ElMessage.info(options.message)
+  }
 }
 
 async function focus() {
@@ -169,7 +171,7 @@ function onClosed() {
 }
 
 taskStore.on('terminal', (task) => {
-  invoke(task.command)
+  invoke(task.command, { message: task.message })
 })
 
 defineExpose({

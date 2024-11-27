@@ -19,14 +19,16 @@ export function useShellAction() {
     return singleInvoke(...args)
   }
 
-  async function singleInvoke(device, { files } = {}) {
+  async function singleInvoke(device, { files, actionType } = {}) {
+    loading.value = true
+
     if (!files) {
       try {
         files = await selectAndSendFileToDevice(device.id, {
           extensions: ['sh'],
-          selectText: window.t('device.control.shell.select'),
-          loadingText: window.t('device.control.shell.push.loading'),
-          successText: window.t('device.control.shell.push.success'),
+          selectText: window.t('device.control.terminal.script.select'),
+          loadingText: window.t('device.control.terminal.script.push.loading'),
+          successText: window.t('device.control.terminal.script.push.success'),
         })
       }
       catch (error) {
@@ -36,25 +38,25 @@ export function useShellAction() {
       }
     }
 
-    loading.value = true
-
     const filePath = files[0]
 
     const command = `adb -s ${device.id} shell sh ${filePath}`
 
-    taskStore.emit('terminal', { command })
+    taskStore.emit('terminal', { command, message: window.t('device.control.terminal.script.enter') })
 
     loading.value = false
   }
 
   async function multipleInvoke(devices, { files } = {}) {
+    loading.value = true
+
     if (!files) {
       try {
         files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
           properties: ['openFile'],
           filters: [
             {
-              name: window.t('device.control.shell.select'),
+              name: window.t('device.control.terminal.script.select'),
               extensions: ['sh'],
             },
           ],
@@ -65,14 +67,14 @@ export function useShellAction() {
           const message = error.message?.match(/Error: (.*)/)?.[1]
           ElMessage.warning(message || error.message)
         }
+
+        loading.value = false
         return false
       }
     }
 
-    loading.value = true
-
     const closeLoading = ElMessage.loading(
-      window.t('device.control.shell.push.loading'),
+      window.t('device.control.terminal.script.push.loading'),
     ).close
 
     const failFiles = []
@@ -108,7 +110,7 @@ export function useShellAction() {
 
     closeLoading()
 
-    await ElMessage.success(window.t('device.control.shell.success'))
+    await ElMessage.success(window.t('device.control.terminal.script.success'))
 
     loading.value = false
   }

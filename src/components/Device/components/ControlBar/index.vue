@@ -64,20 +64,18 @@
 </template>
 
 <script>
-// import Synergy from './Synergy/index.vue'
 import Application from './Application/index.vue'
 import ApplicationStart from './ApplicationStart/index.vue'
 import FileManage from './FileManage/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import Rotation from './Rotation/index.vue'
 import Screenshot from './Screenshot/index.vue'
-import Shell from './Shell/index.vue'
+import Terminal from './Terminal/index.vue'
 import Tasks from './Tasks/index.vue'
 import Volume from './Volume/index.vue'
 
 export default {
   components: {
-    // Synergy,
     Screenshot,
     Application,
     ApplicationStart,
@@ -85,7 +83,7 @@ export default {
     Rotation,
     Volume,
     FileManage,
-    Shell,
+    Terminal,
     Tasks,
   },
   props: {
@@ -176,10 +174,9 @@ export default {
           hiddenKeys: ['floating'],
         },
         {
-          label: 'device.control.shell.name',
+          label: 'device.terminal.name',
           svgIcon: 'command',
-          component: 'Shell',
-          tips: 'device.control.shell.tips',
+          component: 'Terminal',
           hiddenKeys: ['floating'],
         },
         {

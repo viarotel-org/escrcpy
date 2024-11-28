@@ -24,7 +24,7 @@
         </el-button>
 
         <el-button size="large" class="group" @click="handleSponsor">
-          <span class="group-hover:animate-rubber-band">♥</span>
+          <span class="group-hover:animate-rubber-band text-red-500">♥</span>
           <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
         </el-button>
       </div>

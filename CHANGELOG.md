@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.27.3](https://github.com/viarotel-org/escrcpy/compare/v1.27.2...v1.27.3) (2024-11-28)
+
+
+### Bug Fixes
+
+* 🐛 Fix for built-in scrcpy not supporting x64 macos ([0d60655](https://github.com/viarotel-org/escrcpy/commit/0d606550d437aaf81094a0783ff4986a8135d74a))
+
+
+### Performance Improvements
+
+* ♻️ Improved device connection stability ([1d603ab](https://github.com/viarotel-org/escrcpy/commit/1d603abb3e591bc0a0a3fed9b7e6c104525e186e))
+* ♻️ Optimized the adb daemon startup failure detection mechanism ([ca6be85](https://github.com/viarotel-org/escrcpy/commit/ca6be8590199f851e09bdf9a61daa0ee8a20bde3))
+* 🧑‍💻 Improve device-based terminal experience ([88a0356](https://github.com/viarotel-org/escrcpy/commit/88a03564a5d7affd5b827b19bf4abfc2e76e4c39))
+
 ## [1.27.2](https://github.com/viarotel-org/escrcpy/compare/v1.27.1...v1.27.2) (2024-11-26)
 
 

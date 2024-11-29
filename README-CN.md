@@ -32,11 +32,11 @@
 
 ## 安装
 
-1. 通过发布的软件包手动安装
+### 通过发布的软件包手动安装
 
 [查看发布地址](https://github.com/viarotel-org/escrcpy/releases)
 
-2. macOS 可以通过 Homebrew 安装
+### macOS 可以通过 Homebrew 安装
 
 请参阅 [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 

@@ -32,11 +32,11 @@
 
 ## Установка
 
-1. Ручная установка через выпущенные пакеты
+### Ручная установка через выпущенные пакеты
 
 [Просмотреть адрес выпуска](https://github.com/viarotel-org/escrcpy/releases)
 
-2. macOS можно установить через Homebrew
+### macOS можно установить через Homebrew
 
 См. [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 

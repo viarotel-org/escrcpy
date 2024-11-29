@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.27.4](https://github.com/viarotel-org/escrcpy/compare/v1.27.3...v1.27.4) (2024-11-29)
+
+
+### Bug Fixes
+
+* 🐛 Fix automatic release ([c2254aa](https://github.com/viarotel-org/escrcpy/commit/c2254aa27dc0a3ea0223dceb79ac64440a085e33))
+* 🐛 Fixed an issue where macos built-in updates failed ([432eceb](https://github.com/viarotel-org/escrcpy/commit/432ecebea6c8c8c6236fb5ebf9ad84e84201046d))
+
 ## [1.27.3](https://github.com/viarotel-org/escrcpy/compare/v1.27.2...v1.27.3) (2024-11-28)
 
 

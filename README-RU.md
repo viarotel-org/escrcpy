@@ -34,7 +34,7 @@
 
 ### Ручная установка через выпущенные пакеты
 
-[Просмотреть адрес выпуска](https://github.com/viarotel-org/escrcpy/releases)
+Просмотреть [адрес выпуска](https://github.com/viarotel-org/escrcpy/releases)
 
 ### macOS можно установить через Homebrew
 

@@ -34,7 +34,7 @@
 
 ### 通过发布的软件包手动安装
 
-[查看发布地址](https://github.com/viarotel-org/escrcpy/releases)
+查看 [发布地址](https://github.com/viarotel-org/escrcpy/releases)
 
 ### macOS 可以通过 Homebrew 安装
 

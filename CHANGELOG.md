@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.5](https://github.com/viarotel-org/escrcpy/compare/v1.27.4...v1.27.5) (2024-11-29)
+
+
+### Performance Improvements
+
+* ➖ Remove redundant console ([9a67142](https://github.com/viarotel-org/escrcpy/commit/9a67142af64820495da46f46891e222968beeacc))
+
 ## [1.27.4](https://github.com/viarotel-org/escrcpy/compare/v1.27.3...v1.27.4) (2024-11-29)
 
 

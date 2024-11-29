@@ -317,7 +317,7 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 > 这个通常是因为软件包本身没有签名导致的，可以尝试以下解决方法
 
 1. 终端中执行 `sudo spctl --master-disable` 以允许任何来源
-2. 终端中执行 `sudo xattr -r -d com.apple.quarantine [AppPath]` 以尝试修复提示软件包损坏
+2. 终端中执行 `sudo xattr -r -d com.apple.quarantine /Applications/Escrcpy.app` 以尝试修复提示软件包损坏
 
 ### 无法定位程序输入点 DiscardVirtualMemory 于动态链接库 KERNEL32.dll 上。
 

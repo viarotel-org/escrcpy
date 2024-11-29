@@ -89,8 +89,6 @@ async function getEncoders(serial) {
 
   const value = parseScrcpyCodecList(stdout)
 
-  console.log('value', value)
-
   return value
 }
 

@@ -100,8 +100,6 @@ export default {
         await sleep(500)
       }
 
-      console.log('command', command)
-
       this.$adb.deviceShell(this.device.id, command)
 
       this.loading = false

@@ -30,9 +30,15 @@
 - 🤩 User benefits: No account, no ads, no internet required
 - 🗽 Free and open source
 
-## Get Software Packages
+## Installation
 
-[Check release addresses](https://github.com/viarotel-org/escrcpy/releases)
+1. Manual installation via released packages
+
+[View release address](https://github.com/viarotel-org/escrcpy/releases)
+
+2. macOS can be installed via Homebrew
+
+See [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 ## Quick Start
 

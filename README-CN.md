@@ -30,9 +30,15 @@
 - 🤩 用户收益：无需账户、无广告、无需互联网连接
 - 🗽 自由：免费且开源软件
 
-## 获取软件包
+## 安装
+
+1. 通过发布的软件包手动安装
 
 [查看发布地址](https://github.com/viarotel-org/escrcpy/releases)
+
+2. macOS 可以通过 Homebrew 安装
+
+请参阅 [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 ## 快速上手
 
@@ -58,9 +64,7 @@
 
 ### macOS && Linux
 
-> 注意：这些平台没有集成 [Scrcpy](https://github.com/Genymobile/scrcpy) 需要手动安装
-
-**在 Escrcpy@1.27.1+ 中初步集成了 scrcpy 二进制文件，无需手动安装 scrcpy。**
+> 注意：在 Escrcpy@1.27.1+ 中初步集成了 scrcpy 二进制文件，无需手动安装 scrcpy。
 
 1. Linux 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md)
 2. macOS 可参阅的 [安装文档](https://github.com/Genymobile/scrcpy/blob/master/doc/macos.md)

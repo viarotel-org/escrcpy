@@ -1,6 +1,7 @@
 name: release-assets
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*.*.*

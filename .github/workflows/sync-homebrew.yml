@@ -13,4 +13,4 @@ jobs:
         tap: viarotel-org/escrcpy
         cask: escrcpy
         livecheck: true
-        dryrun: true
+        dryrun: false

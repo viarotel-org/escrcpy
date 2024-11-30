@@ -1,0 +1,16 @@
+name: sync-homebrew
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync-homebrew:
+    runs-on: macos-latest
+    steps:
+    - uses: macauley/action-homebrew-bump-cask@v1
+      with:
+        token: ${{secrets.GH_TOKEN}}
+        tap: viarotel-org/escrcpy
+        cask: escrcpy
+        livecheck: true
+        dryrun: true

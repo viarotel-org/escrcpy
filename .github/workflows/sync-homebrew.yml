@@ -1,7 +1,10 @@
 name: sync-homebrew
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ['release-assets']
+    types:
+      - completed
 
 jobs:
   sync-homebrew:

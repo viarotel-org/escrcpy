@@ -339,6 +339,14 @@ Windows 及 Linux 端内部集成了 Gnirehtet， 用于提供 PC 到安卓设�
 
 这可能是因为安装路径中包含中文或特殊字符导致的，请尝试更改安装路径。
 
+### Linux 系统中安装后无法打开
+
+> 一些流行的发行版（如 Ubuntu 24.04）对 AppImage 应用程序实施了新的限制，限制了沙箱的使用。临时解决方法如下：
+
+```shell
+sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
+```
+
 ## 获得帮助
 
 > 因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定

@@ -2,12 +2,9 @@ import { exec as _exec, spawn } from 'node:child_process'
 import util from 'node:util'
 import { adbPath, scrcpyPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
-import { sleep } from '$renderer/utils/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
 import { getDisplayOverlay, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
-
-let adbkit
 
 const exec = util.promisify(_exec)
 
@@ -111,54 +108,6 @@ async function record(serial, { title, args = '', savePath, ...options } = {}) {
   )
 }
 
-async function mirrorGroup(serial, { openNum = 1, ...options } = {}) {
-  const displayOverlay = getDisplayOverlay(serial)
-
-  const command = `settings put global overlay_display_devices "${[
-    ...Array.from({ length: openNum }).keys(),
-  ]
-    .map(() => displayOverlay)
-    .join(';')}"`
-
-  await adbkit.deviceShell(serial, command)
-
-  await sleep()
-
-  const displayList = await adbkit.display(serial)
-
-  const filterList = displayList.filter(item => item !== '0')
-
-  const results = []
-
-  for (let index = 0; index < filterList.length; index++) {
-    const displayId = filterList[index]
-
-    let args = options.args || ''
-
-    if (args.includes('--display-id')) {
-      args = args.replace(/(--display-id=)"[^"]*"/, `$1"${displayId}"`)
-    }
-    else {
-      args += ` --display-id="${displayId}"`
-    }
-
-    const title = options?.title?.({ displayId, index }) || options?.title
-
-    const promise = mirror(serial, {
-      ...options,
-      title,
-      args,
-      exec: true,
-    })
-
-    results.push(promise)
-
-    await sleep(1500)
-  }
-
-  return Promise.allSettled(results)
-}
-
 async function helper(
   serial,
   command = '',
@@ -209,18 +158,13 @@ async function startApp(serial, args = {}) {
   return displayId
 }
 
-export default (options = {}) => {
-  adbkit = options.adbkit
-
-  return {
-    shell,
-    execShell,
-    getEncoders,
-    mirror,
-    record,
-    mirrorGroup,
-    helper,
-    getAppList,
-    startApp,
-  }
+export default {
+  shell,
+  execShell,
+  getEncoders,
+  mirror,
+  record,
+  helper,
+  getAppList,
+  startApp,
 }

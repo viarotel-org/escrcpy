@@ -47,7 +47,7 @@ export async function selectAndSendFileToDevice(
   const failFiles = []
 
   await allSettledWrapper(files, async (item) => {
-    const ret = await window.adbkit.push(deviceId, item).catch((e) => {
+    const ret = await window.adb.push(deviceId, item).catch((e) => {
       console.warn(e?.message)
       failFiles.push(`${deviceId}-${item}`)
     })

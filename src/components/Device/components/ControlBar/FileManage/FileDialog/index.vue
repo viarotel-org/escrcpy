@@ -217,7 +217,7 @@ function onClosed() {
 async function getTableData() {
   loading.value = true
 
-  const data = await window.adbkit.readdir(device.value.id, currentPath.value)
+  const data = await window.adb.readdir(device.value.id, currentPath.value)
 
   loading.value = false
 
@@ -264,7 +264,7 @@ function handlePrev() {
 }
 
 async function handleAdd(dirname) {
-  await window.adbkit.deviceShell(
+  await window.adb.deviceShell(
     device.value.id,
     `mkdir ${currentPath.value}/${dirname}`,
   )
@@ -286,7 +286,7 @@ async function handleRemove(row) {
     return error.message
   }
 
-  await window.adbkit.deviceShell(
+  await window.adb.deviceShell(
     device.value.id,
     `rm -r ${currentPath.value}/${row.name}`,
   )
@@ -329,7 +329,7 @@ async function handleDownload(row) {
   for (let index = 0; index < pathList.length; index++) {
     const item = pathList[index]
 
-    await window.adbkit
+    await window.adb
       .pull(device.value.id, item, { savePath })
       .catch(e => console.warn(e?.message))
   }

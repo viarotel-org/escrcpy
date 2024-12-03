@@ -2,7 +2,7 @@ import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
 import { useFixCursor } from './helper.js'
 
-const $adb = window.adbkit
+const $adb = window.adb
 
 export function useAdb({ vShell, history, loading } = {}) {
   const adb = async (args) => {

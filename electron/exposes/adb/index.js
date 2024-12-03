@@ -116,7 +116,7 @@ const getDeviceIP = async (id) => {
     return value
   }
   catch (error) {
-    console.warn('adbkit.getDeviceIP.error', error.message)
+    console.warn('adb.getDeviceIP.error', error.message)
   }
 }
 
@@ -177,13 +177,6 @@ const display = async (deviceId) => {
   }
 
   return value
-}
-
-const clearOverlayDisplayDevices = async (deviceId) => {
-  return deviceShell(
-    deviceId,
-    'settings put global overlay_display_devices none',
-  )
 }
 
 const watch = async (callback) => {
@@ -273,32 +266,32 @@ async function pull(id, filePath, args = {}) {
   })
 }
 
-export default () => {
-  const binPath = appStore.get('common.adbPath') || adbPath
+function init() {
+  const bin = appStore.get('common.adbPath') || adbPath
 
   client = Adb.createClient({
-    bin: binPath,
+    bin,
   })
+}
 
-  return {
-    shell,
-    spawnShell,
-    getDevices,
-    deviceShell,
-    kill,
-    connect,
-    disconnect,
-    getDeviceIP,
-    tcpip,
-    screencap,
-    install,
-    isInstalled,
-    version,
-    display,
-    clearOverlayDisplayDevices,
-    push,
-    pull,
-    watch,
-    readdir,
-  }
+export default {
+  init,
+  shell,
+  spawnShell,
+  getDevices,
+  deviceShell,
+  kill,
+  connect,
+  disconnect,
+  getDeviceIP,
+  tcpip,
+  screencap,
+  install,
+  isInstalled,
+  version,
+  display,
+  push,
+  pull,
+  watch,
+  readdir,
 }

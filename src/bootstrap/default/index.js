@@ -32,7 +32,7 @@ export default (App) => {
   app.config.globalProperties.$appLog = window.appLog
   app.config.globalProperties.$electron = window.electron
 
-  app.config.globalProperties.$adb = window.adbkit
+  app.config.globalProperties.$adb = window.adb
   app.config.globalProperties.$scrcpy = window.scrcpy
   app.config.globalProperties.$gnirehtet = window.gnirehtet
 

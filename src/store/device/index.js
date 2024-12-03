@@ -76,7 +76,7 @@ export const useDeviceStore = defineStore({
       this.list = data
     },
     async getList() {
-      const res = await window.adbkit.getDevices()
+      const res = await window.adb.getDevices()
 
       const data
         = res?.map(item => ({

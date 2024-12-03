@@ -65,7 +65,7 @@ export function useInstallAction() {
     let failCount = 0
 
     await allSettledWrapper(files, (item) => {
-      return window.adbkit.install(device.id, item).catch((e) => {
+      return window.adb.install(device.id, item).catch((e) => {
         console.warn(e)
         ++failCount
       })

@@ -41,7 +41,7 @@ export function useScreenshotAction({ floating } = {}) {
     const savePath = window.nodePath.resolve(deviceConfig.savePath, fileName)
 
     try {
-      await window.adbkit.screencap(device.id, { savePath })
+      await window.adb.screencap(device.id, { savePath })
     }
     catch (error) {
       if (error.message) {

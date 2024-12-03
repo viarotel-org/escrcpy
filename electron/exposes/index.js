@@ -3,7 +3,7 @@ import path from 'node:path'
 import * as configs from '$electron/configs/index.js'
 import appLog from '$electron/helpers/log.js'
 import store from '$electron/helpers/store.js'
-import adbkit from './adbkit/index.js'
+import adb from './adb/index.js'
 import electron from './electron/index.js'
 import gnirehtet from './gnirehtet/index.js'
 import scrcpy from './scrcpy/index.js'
@@ -12,6 +12,8 @@ import '$electron/helpers/console.js'
 
 export default {
   init(expose) {
+    adb.init()
+
     expose('nodePath', path)
 
     expose('appLog', appLog)
@@ -23,14 +25,12 @@ export default {
       configs,
     })
 
-    const adbkitExecute = adbkit()
+    expose('adb', adb)
 
-    expose('adbkit', adbkitExecute)
+    expose('scrcpy', scrcpy)
 
-    expose('scrcpy', scrcpy({ adbkit: adbkitExecute }))
+    expose('gnirehtet', gnirehtet)
 
-    expose('gnirehtet', gnirehtet({ adbkit: adbkitExecute }))
-
-    expose('findInPageModal', search())
+    expose('findInPageModal', search)
   },
 }

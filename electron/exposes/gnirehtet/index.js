@@ -6,9 +6,9 @@ import {
 } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
 
-const appDebug = appStore.get('common.debug') || false
+import adb from '$electron/exposes/adb/index.js'
 
-let adbkit = null
+const appDebug = appStore.get('common.debug') || false
 
 const shell = async (command, { debug = false, stdout, stderr } = {}) => {
   const spawnPath = appStore.get('common.gnirehtetPath') || gnirehtetPath
@@ -80,7 +80,7 @@ const stop = deviceId => shell(`stop "${deviceId}"`)
 const tunnel = deviceId => shell(`tunnel "${deviceId}"`)
 
 const installed = async (deviceId) => {
-  const res = await adbkit.isInstalled(deviceId, 'com.genymobile.gnirehtet')
+  const res = await adb.isInstalled(deviceId, 'com.genymobile.gnirehtet')
   return res
 }
 
@@ -122,7 +122,7 @@ const run = async (deviceId) => {
   })
 
   const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
-  const isInstalled = installed(deviceId)
+  const isInstalled = await installed(deviceId)
 
   if (gnirehtetFix || !isInstalled) {
     await install(deviceId).catch((error) => {
@@ -141,17 +141,13 @@ window.addEventListener('beforeunload', () => {
   stopRelayProcess()
 })
 
-export default (options = {}) => {
-  adbkit = options.adbkit
-
-  return {
-    shell,
-    relay,
-    install,
-    installed,
-    start,
-    stop,
-    tunnel,
-    run,
-  }
+export default {
+  shell,
+  relay,
+  install,
+  installed,
+  start,
+  stop,
+  tunnel,
+  run,
 }

@@ -91,7 +91,7 @@ export function useShellAction() {
       const filePath = successFiles?.[0]
 
       if (filePath) {
-        window.adbkit.deviceShell(device.id, `sh ${filePath}`)
+        window.adb.deviceShell(device.id, `sh ${filePath}`)
       }
     })
 

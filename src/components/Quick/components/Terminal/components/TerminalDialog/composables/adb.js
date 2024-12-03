@@ -1,6 +1,6 @@
 import { createStderr, createStdout } from 'vue-command'
 
-const $adb = window.adbkit
+const $adb = window.adb
 
 export function useAdb({ loading }) {
   const adb = async (args) => {

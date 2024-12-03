@@ -68,7 +68,7 @@ export function useFileActions() {
     let failCount = 0
 
     await allSettledWrapper(files, (item) => {
-      return window.adbkit.push(device.id, item, { savePath }).catch(() => {
+      return window.adb.push(device.id, item, { savePath }).catch(() => {
         ++failCount
       })
     })

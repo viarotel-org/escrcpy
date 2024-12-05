@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import TaskDialog from '$/components/Device/components/BatchActions/Tasks/components/TaskDialog/index.vue'
+import TaskDialog from '$/components/TaskDialog/index.vue'
 
 const props = defineProps({
   device: {

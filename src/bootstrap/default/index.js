@@ -15,8 +15,12 @@ import '$/utils/console.js'
 import 'virtual:uno.css'
 import '$/styles/index.js'
 
-export default (App) => {
+export default (App, { router } = {}) => {
   const app = createApp(App)
+
+  if (router) {
+    app.use(router)
+  }
 
   app.use(store)
 
@@ -45,4 +49,6 @@ export default (App) => {
     // Remove Preload scripts loading
     postMessage({ payload: 'removeLoading' }, '*')
   })
+
+  return app
 }

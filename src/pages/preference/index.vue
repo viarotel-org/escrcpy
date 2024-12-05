@@ -39,14 +39,15 @@
 </template>
 
 <script>
+import { debounce } from 'lodash-es'
+
 import { usePreferenceStore } from '$/store/index.js'
 
-import { debounce } from 'lodash-es'
-import PreferenceForm from './components/PreferenceForm/index.vue'
-
+import PreferenceForm from '$/components/PreferenceForm/index.vue'
 import ScopeSelect from './components/ScopeSelect/index.vue'
 
 export default {
+  name: 'Preference',
   components: {
     ScopeSelect,
     PreferenceForm,
@@ -77,15 +78,13 @@ export default {
         window.electron.ipcRenderer.send('theme-change', value)
       },
     },
-    'preferenceData.adbPath': {
-      handler() {
-        this.handleDevices()
-      },
-    },
   },
   created() {
     this.handleSave = debounce(this.handleSave, 1000)
-    this.handleDevices = debounce(this.handleDevices, 1000)
+  },
+  activated() {
+    this.preferenceData = this.preferenceStore.data
+    this.deviceScope = this.preferenceStore.deviceScope
   },
   methods: {
     onDeviceChange(options) {
@@ -100,9 +99,6 @@ export default {
       this.deviceScope = 'global'
       this.preferenceStore.setScope(this.deviceScope)
       this.preferenceData = this.preferenceStore.data
-    },
-    handleDevices() {
-      this.$root.reRenderPost()
     },
     handleReset() {
       this.preferenceStore.reset(this.deviceScope)

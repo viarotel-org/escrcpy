@@ -22,6 +22,7 @@ export default antfu(
   {
     languageOptions: {
       globals: {
+        definePage: 'readonly',
         ...autoImport.globals,
       },
     },

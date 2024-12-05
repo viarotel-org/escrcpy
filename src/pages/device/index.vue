@@ -117,7 +117,7 @@
 <script>
 import { isIPWithPort, sleep } from '$/utils/index.js'
 import BatchActions from './components/BatchActions/index.vue'
-import ControlBar from './components/ControlBar/index.vue'
+import ControlBar from '$/components/ControlBar/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import Remark from './components/Remark/index.vue'
@@ -126,6 +126,7 @@ import WirelessAction from './components/WirelessAction/index.vue'
 import WirelessGroup from './components/WirelessGroup/index.vue'
 
 export default {
+  name: 'Device',
   components: {
     WirelessGroup,
     ControlBar,
@@ -154,6 +155,9 @@ export default {
   },
   beforeUnmount() {
     this?.unAdbWatch?.()
+  },
+  activated() {
+    this.getDeviceData()
   },
   methods: {
     onSelectionChange(rows) {
@@ -237,8 +241,6 @@ export default {
         )
 
         this.$store.preference.reset()
-
-        this.$root.reRender('Preference')
 
         this.$message.success(this.$t('device.reset.success'))
       }

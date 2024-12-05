@@ -28,5 +28,4 @@ dist
 dist-ssr
 dist-electron
 dist-release
-components.d.ts
-auto-imports.d.ts
+*.d.ts

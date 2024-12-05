@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import TaskListDialog from './components/TaskListDialog/index.vue'
+import TaskListDialog from '$/components/TaskListDialog/index.vue'
 
 const taskListDialogRef = ref(null)
 

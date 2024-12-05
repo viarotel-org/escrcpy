@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import ControlBar from '$/components/Device/components/ControlBar/index.vue'
+import ControlBar from '$/components/ControlBar/index.vue'
 
 import { i18n } from '$/locales/index.js'
 

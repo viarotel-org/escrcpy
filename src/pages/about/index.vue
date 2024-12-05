@@ -51,6 +51,7 @@ import { version } from '/package.json'
 import SponsorDialog from './components/SponsorDialog/index.vue'
 
 export default {
+  name: 'About',
   components: {
     SponsorDialog,
   },

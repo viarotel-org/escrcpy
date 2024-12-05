@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import useI18n from '@intlify/unplugin-vue-i18n/vite'
+import useVueRouter from 'unplugin-vue-router/vite'
 import useVue from '@vitejs/plugin-vue'
 import useUnoCSS from 'unocss/vite'
 import { defineConfig, mergeConfig } from 'vite'
@@ -47,6 +48,9 @@ export default function (args) {
       plugins: [
         useUnoCSS(),
         useSvg(),
+        useVueRouter({
+          exclude: ['src/pages/**/components'],
+        }),
         useVue(),
         useI18n({
           include: [resolve('src/locales/languages/**')],

@@ -162,7 +162,7 @@
 </template>
 
 <script setup>
-import InputPath from '$/components/Preference/components/PreferenceForm/components/InputPath/index.vue'
+import InputPath from '$/components/PreferenceForm/components/InputPath/index.vue'
 
 import {
   timeUnit as intervalModel,

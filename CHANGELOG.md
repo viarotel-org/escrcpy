@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.27.6](https://github.com/viarotel-org/escrcpy/compare/v1.27.5...v1.27.6) (2024-12-05)
+
+
+### Bug Fixes
+
+* ♻️ Fixed repeated dependency issues ([9777622](https://github.com/viarotel-org/escrcpy/commit/9777622830e2160ce84511052a79951638ff0771))
+
+
+### Performance Improvements
+
+* ♻️ Optimized contextBridge related improvements for stability ([0e098c3](https://github.com/viarotel-org/escrcpy/commit/0e098c37393b1410584f793bc15d1f76d246c05f))
+* ♻️ Reduce build package size by removing redundant dependencies ([7b61b25](https://github.com/viarotel-org/escrcpy/commit/7b61b25f4e5eadff28bf112e6039b648491d36c1))
+* 🚀 Update to scrcpy v3.0.2 ([7510548](https://github.com/viarotel-org/escrcpy/commit/75105484ab1d2e31b9bce70f8fc03b7c543e190a))
+
 ## [1.27.5](https://github.com/viarotel-org/escrcpy/compare/v1.27.4...v1.27.5) (2024-11-29)
 
 

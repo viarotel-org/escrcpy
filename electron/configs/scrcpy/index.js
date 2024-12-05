@@ -1,20 +1,18 @@
-import { extraResolve } from '$electron/helpers/index.js'
+import { archResolve, extraResolve } from '$electron/helpers/index.js'
 import which from 'which'
 
-export const getScrcpyPath = () => {
-  if (['win32'].includes(process.platform)) {
-    return extraResolve('win/scrcpy/scrcpy.exe')
-  }
-  else if (['darwin'].includes(process.platform)) {
-    if (['arm64'].includes(process.arch)) {
-      return extraResolve(`mac/scrcpy/scrcpy`)
-    }
-  }
-  else if (['linux'].includes(process.platform)) {
-    return extraResolve('linux/scrcpy/scrcpy')
-  }
+export function getScrcpyPath() {
+  switch (process.platform) {
+    case 'win32':
+      return extraResolve(archResolve('win#{arch}/scrcpy/scrcpy.exe'))
+    case 'darwin':
+      return extraResolve(archResolve('mac#{arch}/scrcpy/scrcpy'))
+    case 'linux':
+      return extraResolve(archResolve('linux#{arch}/scrcpy/scrcpy'))
 
-  return which.sync('scrcpy', { nothrow: true })
+    default:
+      return which.sync('scrcpy', { nothrow: true })
+  }
 }
 
 export const scrcpyPath = getScrcpyPath()

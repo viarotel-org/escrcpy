@@ -68,3 +68,10 @@ export function loadPage(win, prefix = '') {
     win.loadFile(join(process.env.DIST, prefix, 'index.html'))
   }
 }
+
+export function archResolve(filePath = '', { template = '#{arch}', defaultArch = 'x64' } = {}) {
+  const arch = ![defaultArch].includes(process.arch) ? `-${process.arch}` : ''
+
+  const value = filePath.replaceAll(template, arch)
+  return value
+}

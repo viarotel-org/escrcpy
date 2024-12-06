@@ -57,6 +57,27 @@ export default {
         },
       ],
     },
+    appCloseCode: {
+      label: 'appClose.name',
+      field: 'appCloseCode',
+      type: 'Select',
+      value: window.appStore.get('common.appCloseCode') ?? -1,
+      placeholder: 'common.select.please',
+      options: [
+        {
+          label: 'appClose.question',
+          value: -1,
+        },
+        {
+          label: 'appClose.quit',
+          value: 0,
+        },
+        {
+          label: 'appClose.minimize',
+          value: 1,
+        },
+      ],
+    },
     savePath: {
       label: 'preferences.common.file.name',
       field: 'savePath',
@@ -76,16 +97,6 @@ export default {
       properties: ['openFile'],
       filters: [{ name: 'preferences.common.adb.name', extensions: ['*'] }],
     },
-    scrcpyPath: {
-      label: 'preferences.common.scrcpy.name',
-      field: 'scrcpyPath',
-      value: scrcpyPath,
-      type: 'PathInput',
-      placeholder: 'preferences.common.scrcpy.placeholder',
-      tips: 'preferences.common.scrcpy.tips',
-      properties: ['openFile'],
-      filters: [{ name: 'preferences.common.scrcpy.name', extensions: ['*'] }],
-    },
     gnirehtetPath: {
       label: 'preferences.common.gnirehtet.name',
       field: 'gnirehtetPath',
@@ -98,6 +109,16 @@ export default {
         { name: 'preferences.common.gnirehtet.name', extensions: ['*'] },
       ],
     },
+    scrcpyPath: {
+      label: 'preferences.common.scrcpy.name',
+      field: 'scrcpyPath',
+      value: scrcpyPath,
+      type: 'PathInput',
+      placeholder: 'preferences.common.scrcpy.placeholder',
+      tips: 'preferences.common.scrcpy.tips',
+      properties: ['openFile'],
+      filters: [{ name: 'preferences.common.scrcpy.name', extensions: ['*'] }],
+    },
     scrcpyAppend: {
       label: 'preferences.common.scrcpy.append.name',
       field: 'scrcpyAppend',
@@ -105,11 +126,11 @@ export default {
       type: 'Input',
       placeholder: 'preferences.common.scrcpy.append.placeholder',
       tips: 'preferences.common.scrcpy.append.tips',
+      span: 24,
       props: {
         type: 'textarea',
         rows: 4,
       },
-      span: 24,
     },
     autoConnect: {
       label: 'preferences.common.auto-connect.name',

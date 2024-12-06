@@ -72,7 +72,7 @@ export default (mainWindow) => {
           },
         },
         {
-          label: await t('close.quit'),
+          label: await t('appClose.quit'),
           click: () => {
             quitApp()
           },
@@ -95,30 +95,23 @@ export default (mainWindow) => {
 
     event.preventDefault()
 
-    const appCloseCode = appStore.get('appCloseCode')
+    let appCloseCode = appStore.get('common.appCloseCode')
 
-    if (typeof appCloseCode === 'number') {
-      closeApp(appCloseCode)
-      return true
+    if (![0, 1].includes(appCloseCode)) {
+      const { response } = await dialog.showMessageBox({
+        type: 'question',
+        buttons: [
+          await t('appClose.quit'),
+          await t('appClose.minimize'),
+          await t('appClose.quit.cancel'),
+        ],
+        title: await t('common.tips'),
+        message: await t('appClose.message'),
+      })
+
+      appCloseCode = response
     }
 
-    const { response, checkboxChecked } = await dialog.showMessageBox({
-      type: 'question',
-      buttons: [
-        await t('close.quit'),
-        await t('close.minimize'),
-        await t('close.quit.cancel'),
-      ],
-      title: await t('common.tips'),
-      message: await t('close.message'),
-      checkboxChecked: false,
-      checkboxLabel: await t('close.remember'),
-    })
-
-    if (checkboxChecked && [0, 1].includes(response)) {
-      appStore.set('appCloseCode', response)
-    }
-
-    closeApp(response)
+    closeApp(appCloseCode)
   })
 }

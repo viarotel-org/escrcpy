@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip v-bind="{ offset: 8, ...$attrs }">
+  <el-tooltip v-bind="{ offset: 1, effect: 'light', ...$attrs }">
     <ElButton
       v-bind="{ ...$props }"
       :class="[

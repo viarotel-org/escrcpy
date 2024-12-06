@@ -119,6 +119,14 @@ export default {
       properties: ['openFile'],
       filters: [{ name: 'preferences.common.scrcpy.name', extensions: ['*'] }],
     },
+    gnirehtetFix: {
+      label: 'preferences.common.gnirehtet.fix.name',
+      field: 'gnirehtetFix',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.gnirehtet.fix.placeholder',
+      tips: 'preferences.common.gnirehtet.fix.tips',
+    },
     scrcpyAppend: {
       label: 'preferences.common.scrcpy.append.name',
       field: 'scrcpyAppend',
@@ -145,14 +153,6 @@ export default {
       type: 'Switch',
       value: undefined,
       placeholder: 'preferences.common.auto-mirror.placeholder',
-    },
-    gnirehtetFix: {
-      label: 'preferences.common.gnirehtet.fix.name',
-      field: 'gnirehtetFix',
-      type: 'Switch',
-      value: undefined,
-      placeholder: 'preferences.common.gnirehtet.fix.placeholder',
-      tips: 'preferences.common.gnirehtet.fix.tips',
     },
     floatControl: {
       label: 'preferences.common.floatControl.name',

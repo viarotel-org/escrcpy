@@ -1,16 +1,17 @@
 <template>
-  <el-button
+  <EleTooltipButton
     v-if="!row.$wifi"
     type="primary"
     text
     :disabled="row.$unauthorized"
+    placement="top"
+    :content="$t('device.wireless.mode')"
     @click="handleWifi(row)"
   >
     <template #icon>
-      <svg-icon name="wifi"></svg-icon>
+      <svg-icon name="wifi" class=""></svg-icon>
     </template>
-    {{ $t('device.wireless.mode') }}
-  </el-button>
+  </EleTooltipButton>
 
   <el-button
     v-if="row.$wifi"

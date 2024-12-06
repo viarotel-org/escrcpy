@@ -1,14 +1,15 @@
 <template>
-  <el-button
+  <EleTooltipButton
     type="primary"
     text
     :disabled="row.$unauthorized"
     :loading="loading"
-    :icon="loading ? '' : 'Monitor'"
+    :icon="loading ? '' : 'VideoPlay'"
+    placement="top"
+    :content="loading ? $t('common.starting') : $t('device.mirror.start')"
     @click="handleClick(row)"
   >
-    {{ loading ? $t('common.starting') : $t('device.mirror.start') }}
-  </el-button>
+  </EleTooltipButton>
 </template>
 
 <script>

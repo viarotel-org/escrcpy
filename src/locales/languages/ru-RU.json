@@ -219,7 +219,6 @@
   "preferences.config.export.success": "Экспорт успешно выполнен",
   "preferences.config.edit.name": "Редактировать",
   "preferences.config.reset.name": "Сброс",
-  "preferences.config.save.placeholder": "Конфигурация сохранена",
 
   "preferences.common.name": "Общие",
   "preferences.common.theme.name": "Тема",

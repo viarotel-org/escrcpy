@@ -8,12 +8,12 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <div class="pr-24 pt-4">
+    <div class="pr-12 pt-4">
       <ele-form-row
         ref="formRef"
         :model="model"
         :rules="rules"
-        label-width="180px"
+        label-width="120px"
         class=""
       >
         <ele-form-item-col

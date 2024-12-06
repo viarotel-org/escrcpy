@@ -219,7 +219,6 @@
   "preferences.config.export.success": "Export success",
   "preferences.config.edit.name": "Edit",
   "preferences.config.reset.name": "Reset",
-  "preferences.config.save.placeholder": "Config saved",
 
   "preferences.common.name": "Common",
   "preferences.common.theme.name": "Theme",

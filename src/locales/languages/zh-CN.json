@@ -219,7 +219,6 @@
   "preferences.config.export.success": "导出成功",
   "preferences.config.edit.name": "编辑",
   "preferences.config.reset.name": "重置",
-  "preferences.config.save.placeholder": "自动保存配置成功",
 
   "preferences.common.name": "通用设置",
   "preferences.common.theme.name": "主题",

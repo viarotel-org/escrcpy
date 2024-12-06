@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center flex-none space-x-2">
-    <div class="w-86 flex-none">
+    <div class="w-72 flex-none">
       <el-autocomplete
         v-if="!showAutocomplete"
         ref="elAutocompleteRef"

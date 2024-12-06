@@ -219,7 +219,6 @@
   "preferences.config.export.success": "匯出成功",
   "preferences.config.edit.name": "編輯",
   "preferences.config.reset.name": "重設",
-  "preferences.config.save.placeholder": "自動儲存設定成功",
 
   "preferences.common.name": "一般設定",
   "preferences.common.theme.name": "主題",

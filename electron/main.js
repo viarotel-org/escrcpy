@@ -62,10 +62,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     icon: getLogoPath(),
     show: false,
-    width: 1200,
-    height: 800,
-    minWidth: 1200,
-    minHeight: 800,
+    width: 700,
+    minWidth: 700,
+    height: 600,
+    minHeight: 600,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),

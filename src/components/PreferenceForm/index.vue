@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="elForm" :model="preferenceData" label-width="250px" class="">
+  <el-form ref="elForm" :model="preferenceData" label-width="200px" class="">
     <el-collapse
       v-model="collapseValue"
       v-bind="{
@@ -36,7 +36,9 @@
             <el-col
               v-for="(item_1, name_1) of subModel(item)"
               :key="name_1"
-              :span="item_1.span || 12"
+              :span="item_1.span || 24"
+              :md="item_1.span || 12"
+              :lg="item_1.span || 8"
               :offset="item_1.offset || 0"
             >
               <el-form-item :label="$t(item_1.label)" :prop="item_1.field">
@@ -57,7 +59,7 @@
                       >
                       </el-link>
                     </el-tooltip>
-                    <div class="truncate max-w-56" :title="$t(item_1.label)">
+                    <div class="truncate max-w-42" :title="$t(item_1.label)">
                       {{ $t(item_1.label) }}
                     </div>
                   </div>
@@ -89,7 +91,6 @@ import { i18n } from '$/locales/index.js'
 import { usePreferenceStore } from '$/store/index.js'
 
 import { omit } from 'lodash-es'
-import { computed } from 'vue'
 
 import { inputModel } from './components/index.js'
 

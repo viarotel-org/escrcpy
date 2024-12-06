@@ -57,7 +57,7 @@
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="150"
+          min-width="200"
         >
           <template #default="{ row }">
             <div class="flex items-center">
@@ -86,8 +86,9 @@
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
-          min-width="250"
+          fixed="right"
           align="left"
+          width="200"
         >
           <MirrorAction
             :ref="(value) => getMirrorActionRefs(value, $index)"
@@ -98,7 +99,7 @@
 
           <WirelessAction v-bind="{ row, handleConnect, handleRefresh }" />
         </el-table-column>
-        <el-table-column type="expand">
+        <el-table-column type="expand" fixed="right">
           <template #header>
             <el-icon class="" :title="$t('device.control.more')">
               <Operation class="" />

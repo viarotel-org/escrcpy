@@ -30,7 +30,7 @@
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="100"
+          min-width="150"
         />
         <el-table-column
           :label="$t('device.name')"
@@ -68,7 +68,7 @@
           :label="$t('device.control.name')"
           fixed="right"
           align="left"
-          width="200"
+          width="160"
         >
           <MirrorAction
             :ref="(value) => getMirrorActionRefs(value, $index)"

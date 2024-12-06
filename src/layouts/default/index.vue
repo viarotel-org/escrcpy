@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute inset-0 h-full flex flex-col px-4 pb-4 pt-1 space-y-4 overflow-hidden"
+    class="absolute inset-0 h-full flex flex-col px-4 pt-1 space-y-4 overflow-hidden"
   >
     <div
       class="flex items-center flex-none border-b border-gray-200 dark:border-gray-700 pb-1"

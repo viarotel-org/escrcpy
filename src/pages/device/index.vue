@@ -1,32 +1,12 @@
 <template>
   <div class="h-full flex flex-col">
-    <div class="flex-none flex items-center py-1 overflow-x-auto">
-      <div class="flex-none">
-        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
-      </div>
-
-      <div class="w-px h-7 !mx-4 bg-gray-200 dark:bg-gray-600 flex-none"></div>
-
-      <div class="flex-1 w-0 space-x-2">
-        <el-button
-          type="primary"
-          plain
-          :icon="loading ? '' : 'Refresh'"
-          :loading="loading"
-          @click="handleRefresh"
-        >
-          {{ $t('device.refresh.name') }}
-        </el-button>
-      </div>
-    </div>
-
     <BatchActions
       class="overflow-hidden transition-all"
-      :class="isMultipleRow ? 'h-12 opacity-100 mt-3' : 'h-0 opacity-0 mt-0'"
+      :class="isMultipleRow ? 'h-12 opacity-100' : 'h-0 opacity-0'"
       :devices="selectionRows"
     />
 
-    <div class="pt-4 flex-1 h-0 overflow-hidden">
+    <div class="flex-1 h-0 overflow-hidden">
       <el-table
         ref="elTable"
         v-loading="loading && !deviceList.length"
@@ -111,6 +91,25 @@
           </template>
         </el-table-column>
       </el-table>
+    </div>
+
+    <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
+      <div class="flex-none">
+        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
+      </div>
+
+      <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
+        <EleTooltipButton
+          type="default"
+          :icon="loading ? '' : 'Refresh'"
+          :loading="loading"
+          placement="right"
+          circle
+          :content="$t('device.refresh.name')"
+          @click="handleRefresh"
+        >
+        </EleTooltipButton>
+      </div>
     </div>
   </div>
 </template>

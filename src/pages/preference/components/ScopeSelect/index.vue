@@ -3,7 +3,7 @@
     :placeholder="$t('preferences.scope.placeholder')"
     :no-data-text="$t('preferences.scope.no-data')"
     filterable
-    class="!w-90"
+    class="!w-72"
   >
     <template #prefix>
       <el-tooltip class="" effect="dark" placement="bottom-start">

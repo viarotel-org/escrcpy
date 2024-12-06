@@ -6,8 +6,8 @@
     append-to-body
     destroy-on-close
   >
-    <div class="pt-4 pr-24">
-      <el-form ref="elForm" :model="formData" label-width="160px" class="">
+    <div class="pt-4 pr-12">
+      <el-form ref="elForm" :model="formData" label-width="120px" class="">
         <el-form-item
           :label="$t('device.wireless.pair.address')"
           prop="host"

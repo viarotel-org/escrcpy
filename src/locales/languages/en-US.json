@@ -57,15 +57,15 @@
 
   "device.list": "Devices",
   "device.list.empty": "No devices detected",
-  "device.id": "Device ID",
-  "device.name": "Device Name",
+  "device.id": "ID",
+  "device.name": "Name",
   "device.remark": "Remark",
   "device.permission.error": "Device permission error, please reconnect device and allow USB debugging",
   "device.terminal.name": "Terminal",
 
   "device.task.name": "Scheduled Task",
   "device.task.tips": " Note: Please ensure that your computer stays awake, otherwise scheduled tasks will not be executed properly.",
-  "device.task.list": "Scheduled Task List",
+  "device.task.list": "Task List",
   "device.task.type": "Task Type",
   "device.task.frequency": "Execution Frequency",
   "device.task.frequency.timeout": "Single execution",

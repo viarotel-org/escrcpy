@@ -65,7 +65,7 @@
 
   "device.task.name": "计划任务",
   "device.task.tips": " 注意：请确保你的计算机保持唤醒状态，否则计划任务将无法被正常执行。",
-  "device.task.list": "计划任务列表",
+  "device.task.list": "任务列表",
   "device.task.type": "任务类型",
   "device.task.frequency": "执行频率",
   "device.task.frequency.timeout": "单次执行",

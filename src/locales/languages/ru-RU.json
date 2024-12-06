@@ -57,15 +57,15 @@
 
   "device.list": "Устройства",
   "device.list.empty": "Устройства не обнаружены",
-  "device.id": "ID устройства",
-  "device.name": "Имя устройства",
+  "device.id": "ID",
+  "device.name": "Имя",
   "device.remark": "Примечание",
   "device.permission.error": "Ошибка разрешения устройства, пожалуйста, переподключите устройство и разрешите отладку по USB",
   "device.terminal.name": "Терминал",
 
   "device.task.name": "Запланированная задача",
   "device.task.tips": "Примечание: Пожалуйста, убедитесь, что ваш компьютер не переходит в спящий режим, иначе запланированные задачи не будут выполнены правильно.",
-  "device.task.list": "Список запланированных задач",
+  "device.task.list": "список задач",
   "device.task.type": "Тип задачи",
   "device.task.frequency": "Частота выполнения",
   "device.task.frequency.timeout": "Однократное выполнение",

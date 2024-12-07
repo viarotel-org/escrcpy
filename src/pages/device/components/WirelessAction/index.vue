@@ -13,21 +13,20 @@
     </template>
   </EleTooltipButton>
 
-  <el-button
+  <EleTooltipButton
     v-if="row.$wifi"
     type="danger"
     text
     :loading="stopLoading"
     :disabled="row.$unauthorized"
     :icon="stopLoading ? '' : 'CircleClose'"
+    placement="top"
+    :content="stopLoading
+      ? $t('device.wireless.disconnect.progress')
+      : $t('device.wireless.disconnect.start')"
     @click="handleStop(row)"
   >
-    {{
-      stopLoading
-        ? $t('device.wireless.disconnect.progress')
-        : $t('device.wireless.disconnect.start')
-    }}
-  </el-button>
+  </EleTooltipButton>
 </template>
 
 <script>

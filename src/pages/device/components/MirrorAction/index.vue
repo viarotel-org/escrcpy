@@ -4,7 +4,7 @@
     text
     :disabled="row.$unauthorized"
     :loading="loading"
-    :icon="loading ? '' : 'VideoPlay'"
+    :icon="loading ? '' : 'Link'"
     placement="top"
     :content="loading ? $t('common.starting') : $t('device.mirror.start')"
     @click="handleClick(row)"

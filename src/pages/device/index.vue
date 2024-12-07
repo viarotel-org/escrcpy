@@ -66,7 +66,6 @@
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
-          fixed="right"
           align="left"
           width="160"
         >
@@ -79,7 +78,7 @@
 
           <WirelessAction v-bind="{ row, handleConnect, handleRefresh }" />
         </el-table-column>
-        <el-table-column type="expand" fixed="right">
+        <el-table-column type="expand">
           <template #header>
             <el-icon class="" :title="$t('device.control.more')">
               <Operation class="" />

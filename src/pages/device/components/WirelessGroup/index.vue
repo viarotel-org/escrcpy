@@ -61,7 +61,7 @@
         type="primary"
         :icon="loading ? '' : 'Connection'"
         :loading="loading"
-        class="flex-none"
+        class="flex-none !border-none"
         @click="handleConnect()"
       >
         {{ $t('device.wireless.connect.name') }}

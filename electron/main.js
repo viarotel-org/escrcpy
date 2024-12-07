@@ -59,13 +59,16 @@ process.env.DIST = path.join(__dirname, '../dist')
 let mainWindow
 
 function createWindow() {
+  const bounds = appStore.get('common.bounds') || {}
+
   mainWindow = new BrowserWindow({
     icon: getLogoPath(),
     show: false,
-    width: 700,
-    minWidth: 700,
-    height: 500,
-    minHeight: 500,
+    width: 768,
+    minWidth: 768,
+    height: 600,
+    minHeight: 450,
+    ...bounds,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
@@ -82,6 +85,18 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  mainWindow.on('resize', () => {
+    if(mainWindow.isMaximized()) {
+      return false
+    }
+
+    const bounds = mainWindow.getBounds();
+    appStore.set('common.bounds', {
+      ...bounds,
+      isMaximized: false
+    })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

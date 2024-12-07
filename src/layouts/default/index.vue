@@ -11,7 +11,7 @@
           v-model="activeTab"
           :options="tabsModel"
         >
-          <div class="">
+          <div class="text-sm lg:text-base">
             {{ $t(item.label) }}
           </div>
         </el-segmented>

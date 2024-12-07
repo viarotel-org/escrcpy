@@ -5,7 +5,7 @@
         <img src="$electron/resources/build/logo.png" class="h-48" alt="" />
       </a>
 
-      <div class="text-xl text-center italic text-gray-700 dark:text-white">
+      <div class="text-lg lg:text-xl text-center italic text-gray-700 dark:text-white">
         {{ $t("about.description") }}
       </div>
 
@@ -13,7 +13,7 @@
         <el-button
           :loading="loading"
           type="primary"
-          size="large"
+          :size="grid.lg ? 'large' : 'default'"
           @click="handleUpdate"
         >
           {{
@@ -23,7 +23,7 @@
           }}
         </el-button>
 
-        <el-button size="large" class="group" @click="handleSponsor">
+        <el-button :size="grid.lg ? 'large' : 'default'" class="group" @click="handleSponsor">
           <span class="group-hover:animate-rubber-band text-red-500">♥</span>
           <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
         </el-button>
@@ -49,11 +49,18 @@
 <script>
 import { version } from '/package.json'
 import SponsorDialog from './components/SponsorDialog/index.vue'
+import { useGrid } from 'vue-screen'
 
 export default {
   name: 'About',
   components: {
     SponsorDialog,
+  },
+  setup() {
+    const grid = useGrid('tailwind')
+    return {
+      grid,
+    }
   },
   data() {
     return {

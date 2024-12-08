@@ -80,6 +80,7 @@ export default {
     keyboardInject: {
       label: 'preferences.input.keyboard.inject.name',
       field: '--keyboard-inject',
+      customized: true,
       type: 'KeyboardInjectSelect',
       value: void 0,
       placeholder: 'preferences.input.keyboard.inject.placeholder',

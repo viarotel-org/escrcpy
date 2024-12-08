@@ -172,10 +172,6 @@ export default {
 </script>
 
 <style scoped lang="postcss">
-:deep(.el-collapse-item__header) {
-  @apply h-13 leading-13;
-}
-
 :deep(.el-collapse-item__arrow) {
   @apply w-2em;
 }

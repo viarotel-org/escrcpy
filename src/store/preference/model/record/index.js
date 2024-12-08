@@ -22,6 +22,7 @@ export default {
     audioRecordFormat: {
       label: 'preferences.record.format.audio.name',
       field: '--audio-record-format',
+      customized: true,
       type: 'Select',
       value: void 0,
       placeholder: 'preferences.record.format.audio.placeholder',

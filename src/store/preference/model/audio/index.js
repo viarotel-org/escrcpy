@@ -34,6 +34,7 @@ export default {
     audioCode: {
       label: 'preferences.audio.audio-code.name',
       field: '--audio-code',
+      customized: true,
       type: 'AudioCodecSelect',
       value: undefined,
       placeholder: 'preferences.audio.audio-code.placeholder',

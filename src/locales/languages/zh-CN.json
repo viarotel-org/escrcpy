@@ -62,6 +62,9 @@
   "device.remark": "备注",
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",
   "device.terminal.name": "终端调试",
+  "device.status": "状态",
+  "device.status.unauthorized": "未授权",
+  "device.status.connected": "已连接",
 
   "device.task.name": "计划任务",
   "device.task.tips": " 注意：请确保你的计算机保持唤醒状态，否则计划任务将无法被正常执行。",

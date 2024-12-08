@@ -4,8 +4,8 @@
       <el-autocomplete
         v-if="!showAutocomplete"
         ref="elAutocompleteRef"
-        v-model="formData.host"
-        placeholder="192.168.0.1"
+        v-model="fullHost"
+        placeholder="192.168.0.1:5555"
         clearable
         :fetch-suggestions="fetchSuggestions"
         class="!w-full"
@@ -41,20 +41,6 @@
         </template>
       </el-autocomplete>
     </div>
-
-    <div class="text-gray-500 text-sm flex-none">
-      :
-    </div>
-
-    <el-input
-      v-model.number="formData.port"
-      type="number"
-      placeholder="5555"
-      :min="0"
-      clearable
-      class="!w-32 flex-none"
-    >
-    </el-input>
 
     <el-button-group>
       <el-button
@@ -113,6 +99,22 @@ export default {
 
       showAutocomplete: false,
     }
+  },
+  computed: {
+    fullHost: {
+      get() {
+        if (!this.formData.host) {
+          return ''
+        }
+
+        return [this.formData.host, this.formData.port].join(':')
+      },
+      set(value) {
+        const [host, port] = value.split(':')
+        this.formData.host = host
+        this.formData.port = port
+      },
+    },
   },
   async created() {
     const autoConnect = this.$store.preference.data.autoConnect

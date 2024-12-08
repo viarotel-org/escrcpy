@@ -1,19 +1,19 @@
 <template>
   <div class="h-full">
-    <div class="h-full flex flex-col items-center justify-center space-y-4 -mt-8">
+    <div class="h-full flex flex-col items-center justify-center space-y-[4vh] -mt-[4vh]">
       <a class="block" :href="escrcpyURL" target="_blank">
-        <img src="$electron/resources/build/logo.png" class="h-48" alt="" />
+        <img src="$electron/resources/build/logo.png" class="h-[32vh] max-h-72" alt="" />
       </a>
 
-      <div class="text-lg lg:text-xl text-center italic text-gray-700 dark:text-white">
+      <div class="text-lg lg:text-xl xl:text-2xl text-center italic text-gray-700 dark:text-white">
         {{ $t("about.description") }}
       </div>
 
-      <div class="pt-8">
+      <div class="pt-[4vh]">
         <el-button
           :loading="loading"
           type="primary"
-          :size="grid.lg ? 'large' : 'default'"
+          :size="$grid.lg ? 'large' : 'default'"
           @click="handleUpdate"
         >
           {{
@@ -23,7 +23,7 @@
           }}
         </el-button>
 
-        <el-button :size="grid.lg ? 'large' : 'default'" class="group" @click="handleSponsor">
+        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="handleSponsor">
           <span class="group-hover:animate-rubber-band text-red-500">♥</span>
           <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
         </el-button>
@@ -49,18 +49,11 @@
 <script>
 import { version } from '/package.json'
 import SponsorDialog from './components/SponsorDialog/index.vue'
-import { useGrid } from 'vue-screen'
 
 export default {
   name: 'About',
   components: {
     SponsorDialog,
-  },
-  setup() {
-    const grid = useGrid('tailwind')
-    return {
-      grid,
-    }
   },
   data() {
     return {

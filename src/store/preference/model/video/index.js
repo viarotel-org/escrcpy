@@ -54,6 +54,7 @@ export default {
     videoCode: {
       label: 'preferences.video.video-code.name',
       field: '--video-code',
+      customized: true,
       type: 'VideoCodecSelect',
       value: undefined,
       placeholder: 'preferences.video.video-code.placeholder',

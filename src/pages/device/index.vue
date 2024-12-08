@@ -25,14 +25,6 @@
         <el-table-column type="selection"></el-table-column>
 
         <el-table-column
-          prop="id"
-          :label="$t('device.id')"
-          sortable
-          show-overflow-tooltip
-          align="left"
-          min-width="150"
-        />
-        <el-table-column
           :label="$t('device.name')"
           sortable
           show-overflow-tooltip
@@ -41,17 +33,11 @@
         >
           <template #default="{ row }">
             <div class="flex items-center">
-              <el-tooltip
-                v-if="row.$unauthorized"
-                :content="$t('device.permission.error')"
-                placement="top-start"
-              >
-                <el-icon class="mr-1 text-red-600 text-lg">
-                  <WarningFilled />
-                </el-icon>
-              </el-tooltip>
+              <DevicePopover :device="row" />
 
-              {{ row.$name }}
+              <span class="">
+                {{ row.$name }}
+              </span>
 
               <div class="ml-2">
                 <Remark :device="row" class="" />
@@ -63,6 +49,33 @@
             </div>
           </template>
         </el-table-column>
+
+        <el-table-column
+          v-slot="{ row }"
+          :label="$t('device.status')"
+          prop="status"
+          align="left"
+          sortable
+          show-overflow-tooltip
+          width="150"
+          :filters="statusFilters"
+          :filter-method="filterMethod"
+        >
+          <el-tag :type="getDictLabel('deviceStatus', row.status, { labelKey: 'tagType' })">
+            <div class="flex items-center">
+              <el-tooltip
+                v-if="['unauthorized'].includes(row.status)"
+                :content="$t('device.permission.error')"
+                placement="top"
+              >
+                <el-link type="danger" :underline="false" icon="WarningFilled" class="mr-1 flex-none"></el-link>
+              </el-tooltip>
+
+              <span class="flex-none">{{ $t(getDictLabel('deviceStatus', row.status)) || '-' }}</span>
+            </div>
+          </el-tag>
+        </el-table-column>
+
         <el-table-column
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
@@ -86,7 +99,7 @@
           </template>
 
           <template #default="{ row }">
-            <ControlBar :device="row" class="-my-[8px]" />
+            <ControlBar :device="row" class="-my-[4px] lg:-my-[8px]" />
           </template>
         </el-table-column>
       </el-table>
@@ -124,6 +137,12 @@ import WirelessAction from './components/WirelessAction/index.vue'
 
 import WirelessGroup from './components/WirelessGroup/index.vue'
 
+import DevicePopover from './components/DevicePopover/index.vue'
+
+import { getDictLabel } from '$/dicts/helper'
+
+import { deviceStatus } from '$/dicts/index.js'
+
 export default {
   name: 'Device',
   components: {
@@ -134,6 +153,7 @@ export default {
     MoreDropdown,
     WirelessAction,
     BatchActions,
+    DevicePopover,
   },
   data() {
     return {
@@ -147,6 +167,14 @@ export default {
     isMultipleRow() {
       return this.selectionRows.length > 0
     },
+    statusFilters() {
+      const value = deviceStatus.map(item => ({
+        text: window.t(item.label),
+        value: item.value,
+      }))
+
+      return value
+    },
   },
   async created() {
     this.getDeviceData()
@@ -159,6 +187,11 @@ export default {
     this.getDeviceData()
   },
   methods: {
+    getDictLabel,
+    filterMethod(value, row, column) {
+      const property = column.property
+      return row[property] === value
+    },
     onSelectionChange(rows) {
       this.selectionRows = rows
     },
@@ -294,5 +327,7 @@ export default {
   .el-table .el-table__row .cell {
     @apply py-1;
   }
+
+  --el-empty-image-width: 24vh
 }
 </style>

@@ -61,14 +61,17 @@ let mainWindow
 function createWindow() {
   const bounds = appStore.get('common.bounds') || {}
 
+  const baseWidth = 640
+  const baseHeight = Number((baseWidth / 1.57).toFixed())
+
   mainWindow = new BrowserWindow({
-    icon: getLogoPath(),
-    show: false,
-    width: 768,
-    minWidth: 768,
-    height: 600,
-    minHeight: 450,
+    width: baseWidth,
+    minWidth: baseWidth,
+    height: baseHeight,
+    minHeight: baseHeight,
     ...bounds,
+    show: false,
+    icon: getLogoPath(),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
@@ -81,21 +84,22 @@ function createWindow() {
   remote.enable(mainWindow.webContents)
   remote.initialize()
 
-  new Edger(mainWindow);
+  new Edger(mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
-  mainWindow.on('resize', () => {
-    if(mainWindow.isMaximized()) {
-      return false
-    }
-
-    const bounds = mainWindow.getBounds();
-    appStore.set('common.bounds', {
-      ...bounds,
-      isMaximized: false
+  ;['resize', 'move'].forEach((eventName) => {
+    mainWindow.on(eventName, () => {
+      if(mainWindow.isMaximized()) {
+        return false
+      }
+  
+      const bounds = mainWindow.getBounds()
+      appStore.set('common.bounds', {
+        ...bounds
+      })
     })
   })
 

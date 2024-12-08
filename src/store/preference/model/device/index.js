@@ -14,6 +14,7 @@ export default {
     overlayDisplay: {
       label: 'preferences.device.display-overlay.name',
       field: '--display-overlay',
+      customized: true,
       type: 'Input',
       value: undefined,
       placeholder: 'preferences.device.display-overlay.placeholder',

@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale :size>
+  <el-config-provider :locale :size="getSize($grid)">
     <Layouts />
   </el-config-provider>
 </template>
@@ -12,7 +12,6 @@ import localeModel from '$/plugins/element-plus/locale.js'
 
 import { usePreferenceStore } from '$/store/preference/index.js'
 import { useThemeStore } from '$/store/theme/index.js'
-import { useGrid } from 'vue-screen'
 
 import Layouts from './layouts/index.vue'
 
@@ -24,16 +23,6 @@ const locale = computed(() => {
   return value
 })
 
-const grid = useGrid('tailwind')
-
-const size = computed(() => {
-  if (['sm', 'md'].includes(grid.breakpoint)) {
-    return 'small'
-  }
-
-  return 'default'
-})
-
 const themeStore = useThemeStore()
 const preferenceStore = usePreferenceStore()
 
@@ -41,6 +30,12 @@ themeStore.init()
 preferenceStore.init()
 
 showTips()
+
+function getSize(grid) {
+  const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
+
+  return value
+}
 
 async function showTips() {
   const { scrcpyPath } = window.electron?.configs || {}

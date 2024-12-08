@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 
 import {
   getDefaultData,
-  getOtherFields,
+  getScrcpyExcludeKeys,
   getStoreData,
   getTopFields,
   mergeConfig,
@@ -40,15 +40,8 @@ export const usePreferenceStore = defineStore({
       model: cloneDeep(model),
       data: { ...getDefaultData() },
       deviceScope,
-      excludeKeys: [
-        '--display-overlay',
-        '--camera',
-        '--video-code',
-        '--audio-code',
-        '--keyboard-inject',
-        '--audio-record-format',
-        ...getOtherFields('scrcpy'),
-      ],
+
+      scrcpyExcludeKeys: getScrcpyExcludeKeys(),
       recordKeys,
       cameraKeys,
       otgKeys,
@@ -146,7 +139,7 @@ export const usePreferenceStore = defineStore({
       const params = Object.entries(data).reduce((obj, [key, value]) => {
         const shouldExclude
           = (!value && typeof value !== 'number')
-          || this.excludeKeys.includes(key)
+          || this.scrcpyExcludeKeys.includes(key)
           || (!isRecord && this.recordKeys.includes(key))
           || (!isCamera && this.cameraKeys.includes(key))
           || (!isOtg && this.otgKeys.includes(key))

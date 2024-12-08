@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="elForm" :model="preferenceData" :label-width="grid['2xl'] ? '240px' : '160px'" class="">
+  <el-form ref="elForm" :model="preferenceData" :label-width="$grid.lg ? '240px' : '140px'" class="">
     <el-collapse
       v-model="collapseValue"
       v-bind="{
@@ -58,7 +58,7 @@
                       >
                       </el-link>
                     </el-tooltip>
-                    <div class="truncate max-w-[120px] 2xl:max-w-[200px]" :title="$t(item_1.label)">
+                    <div class="truncate max-w-[100px] lg:max-w-[200px]" :title="$t(item_1.label)">
                       {{ $t(item_1.label) }}
                     </div>
                   </div>
@@ -93,8 +93,6 @@ import { omit } from 'lodash-es'
 
 import { inputModel } from './components/index.js'
 
-import { useGrid } from 'vue-screen'
-
 const props = defineProps({
   deviceScope: {
     type: String,
@@ -111,8 +109,6 @@ const props = defineProps({
 })
 
 const locale = computed(() => i18n.global.locale.value)
-
-const grid = useGrid('tailwind')
 
 const preferenceData = defineModel('modelValue', {
   type: Object,
@@ -176,7 +172,7 @@ defineExpose({
 
 <style scoped lang="postcss">
 :deep(.el-collapse-item__header) {
-  @apply h-13 leading-13;
+  @apply h-10 leading-10 md:h-12 md:leading-12;
 }
 
 :deep(.el-collapse-item__arrow) {

@@ -1,7 +1,7 @@
 {
   "name": "escrcpy",
   "type": "module",
-  "version": "1.27.5",
+  "version": "1.27.7",
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "description": "Scrcpy Powered by Electron",

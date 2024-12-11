@@ -29,7 +29,7 @@
             type="primary"
             plain
             class="!border-none !mx-0 bg-transparent !rounded-0"
-            :disabled="device.$unauthorized"
+            :disabled="device.unauthorized"
             :title="$t(item.tips || item.label)"
             :loading="loading"
             @click="handleClick(item, trigger || item.trigger)"

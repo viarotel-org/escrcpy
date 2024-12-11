@@ -1,9 +1,9 @@
 <template>
   <EleTooltipButton
-    v-if="!row.$wifi"
+    v-if="!row.wifi"
     type="primary"
     text
-    :disabled="row.$unauthorized"
+    :disabled="row.unauthorized"
     placement="top"
     :content="$t('device.wireless.mode')"
     @click="handleWifi(row)"
@@ -14,11 +14,11 @@
   </EleTooltipButton>
 
   <EleTooltipButton
-    v-if="row.$wifi"
+    v-if="row.wifi"
     type="danger"
     text
     :loading="stopLoading"
-    :disabled="row.$unauthorized"
+    :disabled="row.unauthorized"
     :icon="stopLoading ? '' : 'CircleClose'"
     placement="top"
     :content="stopLoading

@@ -1,9 +1,18 @@
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
+
 import { capitalize } from 'lodash-es'
-import { isIPWithPort, replaceIP } from '$/utils/index.js'
+
+import { replaceIP } from '$/utils/index.js'
 
 import { name as packageName } from '$root/package.json'
+
+import {
+  getCurrentDevices,
+  getHistoryDevices,
+  mergeDevices,
+  saveDevicesToStore,
+} from './helpers/index.js'
 
 const $appStore = window.appStore
 
@@ -36,7 +45,7 @@ export const useDeviceStore = defineStore({
 
       const appName = capitalize(packageName)
 
-      const deviceName = `${data?.$remark || data.$name}${data.$wifi ? '(WIFI)' : ''}`
+      const deviceName = `${data?.remark || data.name}${data.wifi ? '(WIFI)' : ''}`
 
       const currentTime = dayjs().format('YYYYMMDDHHmmss')
 
@@ -75,23 +84,22 @@ export const useDeviceStore = defineStore({
     setList(data) {
       this.list = data
     },
+    /**
+     * 获取设备列表
+     * @returns {Promise<Array>} 合并后的设备列表
+     */
     async getList() {
-      const res = await window.adb.getDevices()
+      const historyDevices = getHistoryDevices()
 
-      const data
-        = res?.map(item => ({
-          ...item,
-          id: item.id,
-          status: item.type,
-          $name: item.model ? item.model.split(':')[1] : '未授权设备',
-          $unauthorized: item.type === 'unauthorized',
-          $wifi: isIPWithPort(item.id),
-          $remark: this.getRemark(item.id),
-        })) || []
+      const currentDevices = await getCurrentDevices()
 
-      this.list = data
+      const mergedDevices = mergeDevices(historyDevices, currentDevices)
 
-      return data
+      saveDevicesToStore(mergedDevices)
+
+      this.list = mergedDevices
+
+      return mergedDevices
     },
     setConfig(value, key = 'device') {
       $appStore.set(key, value)
@@ -100,10 +108,6 @@ export const useDeviceStore = defineStore({
     setRemark(deviceId, value) {
       $appStore.set(`device.${replaceIP(deviceId)}.remark`, value)
       this.init()
-    },
-    getRemark(deviceId) {
-      const value = $appStore.get(`device.${replaceIP(deviceId)}.remark`)
-      return value
     },
   },
 })

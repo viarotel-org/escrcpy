@@ -96,7 +96,7 @@
           <EleTagCollapse
             effect="light"
             :value="row.devices"
-            :label="(item) => item.$remark || `${item.$name} (${item.id})`"
+            :label="(item) => item.remark || `${item.name} (${item.id})`"
             class="justify-center"
           />
         </el-table-column>

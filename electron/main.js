@@ -61,7 +61,7 @@ let mainWindow
 function createWindow() {
   const bounds = appStore.get('common.bounds') || {}
 
-  const baseWidth = 640
+  const baseWidth = 768
   const baseHeight = Number((baseWidth / 1.57).toFixed())
 
   mainWindow = new BrowserWindow({

@@ -9,7 +9,7 @@
       <el-button
         type="primary"
         text
-        :disabled="row.$unauthorized"
+        :disabled="row.unauthorized"
         icon="CirclePlus"
       >
       </el-button>

@@ -8,7 +8,7 @@
 
     <div class="flex-1 h-0 overflow-hidden">
       <el-table
-        ref="elTable"
+        ref="tableRef"
         v-loading="loading && !deviceList.length"
         :element-loading-text="$t('common.loading')"
         :data="deviceList"
@@ -36,14 +36,14 @@
               <DevicePopover :device="row" />
 
               <span class="">
-                {{ row.$name }}
+                {{ row.name }}
               </span>
 
               <div class="ml-2">
                 <Remark :device="row" class="" />
               </div>
 
-              <el-tag v-if="row.$wifi" effect="light" class="ml-2">
+              <el-tag v-if="row.wifi" effect="light" class="ml-2">
                 WIFI
               </el-tag>
             </div>
@@ -242,7 +242,7 @@ export default {
     },
 
     toggleRowExpansion(...args) {
-      this.$refs.elTable.toggleRowExpansion(...args)
+      this.$refs.tableRef.toggleRowExpansion(...args)
     },
 
     handleConnect(...args) {

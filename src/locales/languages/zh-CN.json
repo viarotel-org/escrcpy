@@ -63,6 +63,7 @@
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",
   "device.terminal.name": "终端调试",
   "device.status": "状态",
+  "device.status.offline": "已离线",
   "device.status.unauthorized": "未授权",
   "device.status.connected": "已连接",
 

@@ -17,14 +17,6 @@ export function isIPWithPort(ip) {
   return regex.test(ip)
 }
 
-export function replaceIP(value) {
-  return value.replaceAll('.', '_').replaceAll(':', '-')
-}
-
-export function restoreIP(value) {
-  return value.replaceAll('_', '.').replaceAll('-', ':')
-}
-
 /**
  * 创建一个代理对象，将目标对象的指定方法转发并执行。
  *

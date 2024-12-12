@@ -86,7 +86,7 @@ export default {
   methods: {
     onDeviceChange(options) {
       const device = options.some(
-        item => this.$replaceIP(item.value) === this.deviceScope,
+        item => item.value === this.deviceScope,
       )
 
       if (device) {

@@ -8,8 +8,6 @@ import plugins from '$/plugins/index.js'
 
 import store from '$/store/index.js'
 
-import { replaceIP, restoreIP } from '$/utils/index.js'
-
 import '$/utils/console.js'
 
 import 'virtual:uno.css'
@@ -39,9 +37,6 @@ export default (App, { router } = {}) => {
   app.config.globalProperties.$adb = window.adb
   app.config.globalProperties.$scrcpy = window.scrcpy
   app.config.globalProperties.$gnirehtet = window.gnirehtet
-
-  app.config.globalProperties.$replaceIP = replaceIP
-  app.config.globalProperties.$restoreIP = restoreIP
 
   app.config.globalProperties.$toRaw = toRaw
 

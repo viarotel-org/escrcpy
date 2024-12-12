@@ -1,8 +1,8 @@
 export const deviceStatus = [
   {
-    label: 'device.status.offline',
-    value: 'offline',
-    tagType: 'info',
+    label: 'device.status.connected',
+    value: 'device',
+    tagType: 'success',
   },
   {
     label: 'device.status.unauthorized',
@@ -10,8 +10,8 @@ export const deviceStatus = [
     tagType: 'danger',
   },
   {
-    label: 'device.status.connected',
-    value: 'device',
-    tagType: 'success',
+    label: 'device.status.offline',
+    value: 'offline',
+    tagType: 'info',
   },
 ]

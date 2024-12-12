@@ -84,9 +84,10 @@ export function setStoreData(data, scope) {
 
   const storeList = Object.entries(storeModel).reduce((arr, [field, value]) => {
     arr.push({
-      field: field === 'scrcpy' ? `scrcpy.${scope}` : field,
+      field: field === 'scrcpy' ? ['scrcpy', scope] : field,
       value,
     })
+
     return arr
   }, [])
 

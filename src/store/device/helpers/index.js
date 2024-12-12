@@ -1,5 +1,6 @@
 import { defaultsDeep, keyBy, omit } from 'lodash-es'
-import { isIPWithPort, replaceIP } from '$/utils/index.js'
+import { isIPWithPort } from '$/utils/index.js'
+import { deviceStatus as deviceStatusDict } from '$/dicts/device/index.js'
 
 /**
  * 获取设备名称
@@ -12,7 +13,7 @@ export function getDeviceName(device) {
  * 获取备注名称
  */
 export function getRemark(deviceId) {
-  const value = window.appStore.get(`device.${replaceIP(deviceId)}.remark`)
+  const value = window.appStore.get('device')?.[deviceId]?.remark
   return value
 }
 
@@ -20,20 +21,23 @@ export function getRemark(deviceId) {
  * 获取历史设备列表
  */
 export function getHistoryDevices() {
-  const devices = window.appStore.get('devices') || []
-  return devices.map(device => ({
+  const devices = window.appStore.get('device') || {}
+
+  const value = Object.values(devices).map(device => ({
     ...device,
     status: 'offline',
   }))
+
+  return value
 }
 
 /**
  * 获取当前连接的设备
  */
 export async function getCurrentDevices() {
-  const rawDevices = await window.adb.getDevices() || []
+  const devices = await window.adb.getDevices() || []
 
-  return rawDevices.map(device => ({
+  return devices.map(device => ({
     ...device,
     id: device.id,
     status: device.type,
@@ -51,7 +55,15 @@ export function mergeDevices(historyDevices, currentDevices) {
   const historyMap = keyBy(historyDevices, 'id')
   const currentMap = keyBy(currentDevices, 'id')
 
-  return Object.values(defaultsDeep(currentMap, historyMap))
+  const sortModel = deviceStatusDict.reduce((obj, item, index) => {
+    obj[item.value] = index
+    return obj
+  }, {})
+
+  const value = Object.values(defaultsDeep(currentMap, historyMap))
+    .sort((a, b) => sortModel[a.status] - sortModel[b.status])
+
+  return value
 }
 
 /**
@@ -61,5 +73,5 @@ export function saveDevicesToStore(devices) {
   const cleanedDevices = devices.map(device =>
     omit(device, ['status', 'unauthorized']),
   )
-  window.appStore.set('devices', cleanedDevices)
+  window.appStore.set('device', keyBy(cleanedDevices, 'id'))
 }

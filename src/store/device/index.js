@@ -3,8 +3,6 @@ import dayjs from 'dayjs'
 
 import { capitalize } from 'lodash-es'
 
-import { replaceIP } from '$/utils/index.js'
-
 import { name as packageName } from '$root/package.json'
 
 import {
@@ -26,7 +24,6 @@ export const useDeviceStore = defineStore({
   },
   getters: {},
   actions: {
-    replaceIP,
     init() {
       this.config = {
         ...($appStore.get('device') || {}),
@@ -106,7 +103,7 @@ export const useDeviceStore = defineStore({
       this.init()
     },
     setRemark(deviceId, value) {
-      $appStore.set(`device.${replaceIP(deviceId)}.remark`, value)
+      $appStore.set(['device', deviceId, 'remark'], value)
       this.init()
     },
   },

@@ -1,4 +1,3 @@
-import { replaceIP, restoreIP } from '$/utils/index.js'
 import { cloneDeep, get, pickBy, set } from 'lodash-es'
 
 import { defineStore } from 'pinia'
@@ -20,9 +19,7 @@ const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
 export const usePreferenceStore = defineStore({
   id: 'app-preference',
   state() {
-    const deviceScope = restoreIP(
-      window.appStore.get('scrcpy.deviceScope') || 'global',
-    )
+    const deviceScope = window.appStore.get('scrcpy.deviceScope') || 'global'
 
     const recordKeys = Object.values(model?.record?.children || {}).map(
       item => item.field,
@@ -56,7 +53,7 @@ export const usePreferenceStore = defineStore({
       return this.data
     },
     setScope(value) {
-      this.deviceScope = replaceIP(value)
+      this.deviceScope = value
       window.appStore.set('scrcpy.deviceScope', this.deviceScope)
       this.init()
     },
@@ -78,7 +75,7 @@ export const usePreferenceStore = defineStore({
         delete pickData.gnirehtetPath
       }
 
-      setStoreData(pickData, replaceIP(scope))
+      setStoreData(pickData, scope)
 
       this.init(scope)
     },
@@ -92,7 +89,7 @@ export const usePreferenceStore = defineStore({
         fields.forEach((key) => {
           if (key === 'scrcpy') {
             this.deviceScope = scope
-            window.appStore.set(`scrcpy.${replaceIP(scope)}`, {})
+            window.appStore.set(['scrcpy', 'scope'], {})
             return false
           }
           window.appStore.set(key, {})
@@ -120,7 +117,7 @@ export const usePreferenceStore = defineStore({
       let value = mergeConfig(getDefaultData(), getStoreData())
 
       if (scope !== 'global') {
-        value = mergeConfig(value, getStoreData(replaceIP(scope)))
+        value = mergeConfig(value, getStoreData(scope))
       }
 
       return value

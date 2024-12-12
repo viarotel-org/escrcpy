@@ -3,7 +3,7 @@
     v-if="!row.wifi"
     type="primary"
     text
-    :disabled="row.unauthorized"
+    :disabled="['unauthorized', 'offline'].includes(row.status)"
     placement="top"
     :content="$t('device.wireless.mode')"
     @click="handleWifi(row)"
@@ -18,7 +18,7 @@
     type="danger"
     text
     :loading="stopLoading"
-    :disabled="row.unauthorized"
+    :disabled="['unauthorized', 'offline'].includes(row.status)"
     :icon="stopLoading ? '' : 'CircleClose'"
     placement="top"
     :content="stopLoading

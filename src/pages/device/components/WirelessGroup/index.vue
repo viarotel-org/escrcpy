@@ -71,6 +71,7 @@
 <script>
 import { sleep } from '$/utils'
 import PairDialog from './PairDialog/index.vue'
+import { useDeviceStore } from '$/store/device/index.js'
 
 export default {
   components: {
@@ -83,24 +84,31 @@ export default {
     },
   },
   data() {
-    const wirelessList = this.$appStore.get('history.wireless') || []
-
-    const lastIndex = wirelessList.length - 1
-    const lastWireless = wirelessList[lastIndex] || {}
-
     return {
       loading: false,
-      wirelessList,
-
-      formData: {
-        host: lastWireless.host,
-        port: lastWireless.port,
-      },
-
+      formData: {},
       showAutocomplete: false,
     }
   },
   computed: {
+    wirelessList() {
+      const value = this.$store.device.list.reduce((arr, item) => {
+        if (item.wifi) {
+          const [host, port] = item.id.split(':')
+          if (host && port) {
+            arr.push({
+              id: item.id,
+              host,
+              port,
+            })
+          }
+        }
+
+        return arr
+      }, [])
+
+      return value
+    },
     fullHost: {
       get() {
         if (!this.formData.host) {
@@ -114,6 +122,20 @@ export default {
         this.formData.host = host
         this.formData.port = port
       },
+    },
+  },
+  watch: {
+    wirelessList: {
+      handler(val) {
+        const lastIndex = val.length - 1
+        const lastWireless = val[lastIndex] || {}
+
+        this.formData = {
+          host: lastWireless.host,
+          port: lastWireless.port,
+        }
+      },
+      immediate: true,
     },
   },
   async created() {
@@ -156,7 +178,7 @@ export default {
     },
     handleRemove(info) {
       const index = this.wirelessList.findIndex(
-        item => info.host === item.host && item.port === info.port,
+        item => info.id === item.id,
       )
 
       if (index === -1) {
@@ -164,8 +186,6 @@ export default {
       }
 
       this.wirelessList.splice(index, 1)
-
-      this.$appStore.set('history.wireless', this.$toRaw(this.wirelessList))
 
       this.reRenderAutocomplete()
     },
@@ -243,8 +263,6 @@ export default {
         await sleep()
 
         this.$message.success(this.$t('device.wireless.connect.success'))
-
-        this.handleSave(params)
       }
       catch (error) {
         if (this.loading) {
@@ -255,22 +273,6 @@ export default {
       this.handleRefresh()
 
       this.loading = false
-    },
-    handleSave(params) {
-      const someValue = this.wirelessList.some(
-        item => item.host === params.host,
-      )
-
-      if (someValue) {
-        return false
-      }
-
-      this.wirelessList.push({
-        host: params.host,
-        port: params.port,
-      })
-
-      this.$appStore.set('history.wireless', this.$toRaw(this.wirelessList))
     },
     async handleError(message) {
       try {

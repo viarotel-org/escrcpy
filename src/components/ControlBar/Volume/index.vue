@@ -1,7 +1,7 @@
 <template>
   <el-dropdown
     :hide-on-click="false"
-    :disabled="loading || floating"
+    :disabled="loading || floating || ['unauthorized', 'offline'].includes(device.status)"
     @command="handleCommand"
   >
     <slot :loading :trigger="handleTrigger" />

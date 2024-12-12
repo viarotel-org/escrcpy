@@ -27,6 +27,8 @@
   "common.warning": "警告",
   "common.info": "消息",
   "common.danger": "错误",
+  "common.connect": "连接",
+  "common.connecting": "连接中",
 
   "common.language.name": "语言",
   "common.language.placeholder": "选择你需要的语言",

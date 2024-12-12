@@ -7,11 +7,9 @@
   >
     <template #reference>
       <el-tag effect="light" class="cursor-pointer">
-        <div class="flex items-center">
-          <el-icon>
-            <EditPen />
-          </el-icon>
-          <span class="pl-1">{{ device.remark || $t('device.remark') }}</span>
+        <div class="flex items-center space-x-1">
+          <el-icon><EditPen /></el-icon>
+          <span class="">{{ device.remark || $t('device.remark') }}</span>
         </div>
       </el-tag>
     </template>

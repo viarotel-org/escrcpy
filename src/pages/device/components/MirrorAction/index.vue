@@ -2,7 +2,7 @@
   <EleTooltipButton
     type="primary"
     text
-    :disabled="row.unauthorized"
+    :disabled="['unauthorized', 'offline'].includes(row.status)"
     :loading="loading"
     :icon="loading ? '' : 'Link'"
     placement="top"

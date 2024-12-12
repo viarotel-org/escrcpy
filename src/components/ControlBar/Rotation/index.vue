@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown :disabled="loading || floating" @command="handleCommand">
+  <el-dropdown :disabled="loading || floating || ['unauthorized', 'offline'].includes(device.status)" @command="handleCommand">
     <slot :loading :trigger="handleTrigger" />
 
     <template #dropdown>

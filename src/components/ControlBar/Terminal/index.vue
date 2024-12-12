@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown>
+  <el-dropdown :disabled="['unauthorized', 'offline'].includes(device.status)">
     <slot :loading />
 
     <template #dropdown>

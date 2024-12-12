@@ -29,7 +29,8 @@
             type="primary"
             plain
             class="!border-none !mx-0 bg-transparent !rounded-0"
-            :disabled="device.unauthorized"
+            :class="['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : ''"
+            :disabled="['unauthorized', 'offline'].includes(device.status)"
             :title="$t(item.tips || item.label)"
             :loading="loading"
             @click="handleClick(item, trigger || item.trigger)"

@@ -42,7 +42,6 @@ export async function getCurrentDevices() {
     id: device.id,
     status: device.type,
     name: getDeviceName(device),
-    unauthorized: device.type === 'unauthorized',
     wifi: isIPWithPort(device.id),
     remark: getRemark(device.id),
   }))
@@ -71,7 +70,7 @@ export function mergeDevices(historyDevices, currentDevices) {
  */
 export function saveDevicesToStore(devices) {
   const cleanedDevices = devices.map(device =>
-    omit(device, ['status', 'unauthorized']),
+    omit(device, ['status']),
   )
   window.appStore.set('device', keyBy(cleanedDevices, 'id'))
 }

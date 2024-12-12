@@ -29,24 +29,35 @@
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="200"
+          min-width="150"
         >
           <template #default="{ row }">
-            <div class="flex items-center">
+            <div class="flex items-center space-x-2">
               <DevicePopover :device="row" />
 
               <span class="">
                 {{ row.name }}
               </span>
 
-              <div class="ml-2">
-                <Remark :device="row" class="" />
-              </div>
-
-              <el-tag v-if="row.wifi" effect="light" class="ml-2">
+              <el-tag v-if="row.wifi" effect="light" class="">
                 WIFI
               </el-tag>
             </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          :label="$t('device.remark')"
+          prop="remark"
+          sortable
+          show-overflow-tooltip
+          align="left"
+          min-width="200"
+          :filters="remarkFilters"
+          :filter-method="filterMethod"
+        >
+          <template #default="{ row }">
+            <Remark :device="row" class="" />
           </template>
         </el-table-column>
 
@@ -57,7 +68,7 @@
           align="left"
           sortable
           show-overflow-tooltip
-          width="150"
+          width="100"
           :filters="statusFilters"
           :filter-method="filterMethod"
         >
@@ -80,16 +91,25 @@
           v-slot="{ row, $index }"
           :label="$t('device.control.name')"
           align="left"
-          width="160"
+          width="150"
         >
           <MirrorAction
+            v-if="['device', 'unauthorized'].includes(row.status)"
             :ref="(value) => getMirrorActionRefs(value, $index)"
             v-bind="{ row, toggleRowExpansion, handleReset }"
           />
 
-          <MoreDropdown v-bind="{ row, toggleRowExpansion, handleReset }" />
+          <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion, handleReset }" />
 
-          <WirelessAction v-bind="{ row, handleConnect, handleRefresh }" />
+          <WirelessAction v-if="['device', 'unauthorized'].includes(row.status)" v-bind="{ row, handleConnect, handleRefresh }" />
+
+          <ConnectAction
+            v-if="['offline'].includes(row.status) && row.wifi"
+            v-bind="{
+              device: row,
+              handleConnect,
+            }"
+          />
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
@@ -134,6 +154,7 @@ import MirrorAction from './components/MirrorAction/index.vue'
 import MoreDropdown from './components/MoreDropdown/index.vue'
 import Remark from './components/Remark/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
+import ConnectAction from './components/ConnectAction/index.vue'
 
 import WirelessGroup from './components/WirelessGroup/index.vue'
 
@@ -152,6 +173,7 @@ export default {
     MirrorAction,
     MoreDropdown,
     WirelessAction,
+    ConnectAction,
     BatchActions,
     DevicePopover,
   },
@@ -171,6 +193,14 @@ export default {
       const value = deviceStatus.map(item => ({
         text: window.t(item.label),
         value: item.value,
+      }))
+
+      return value
+    },
+    remarkFilters() {
+      const value = this.deviceList.filter(item => !!item.remark).map(item => ({
+        text: item.remark,
+        value: item.remark,
       }))
 
       return value

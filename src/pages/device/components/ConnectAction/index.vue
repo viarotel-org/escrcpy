@@ -5,7 +5,7 @@
     :loading="loading"
     :icon="loading ? '' : 'Connection'"
     placement="top"
-    :content="loading ? $t('common.connecting') : $t('common.connect')"
+    :content="loading ? $t('common.connecting') : $t('device.wireless.connect.name')"
     @click="handleClick(device)"
   >
   </EleTooltipButton>

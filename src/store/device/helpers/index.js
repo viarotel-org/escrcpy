@@ -69,8 +69,9 @@ export function mergeDevices(historyDevices, currentDevices) {
  * 保存设备信息到存储
  */
 export function saveDevicesToStore(devices) {
-  const cleanedDevices = devices.map(device =>
-    omit(device, ['status']),
-  )
+  const cleanedDevices = devices
+    .filter(device => !['unauthorized'].includes(device.status))
+    .map(device => omit(device, ['status']))
+
   window.appStore.set('device', keyBy(cleanedDevices, 'id'))
 }

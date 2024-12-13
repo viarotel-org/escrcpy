@@ -27,7 +27,6 @@
   "common.warning": "警告",
   "common.info": "消息",
   "common.danger": "错误",
-  "common.connect": "连接",
   "common.connecting": "连接中",
 
   "common.language.name": "语言",
@@ -89,6 +88,7 @@
   "device.wireless.name": "无线",
   "device.wireless.mode": "无线模式",
   "device.wireless.mode.error": "没有获取到局域网连接地址，请检查网络",
+  "device.wireless.connect.qr": "二维码连接",
   "device.wireless.connect.name": "连接设备",
   "device.wireless.connect.error.title": "连接设备失败",
   "device.wireless.connect.error.detail": "错误详情",

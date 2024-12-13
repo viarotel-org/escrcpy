@@ -64,6 +64,8 @@
       </el-button>
     </el-button-group>
 
+    <QrAction v-bind="{ handleRefresh }" />
+
     <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
 </template>
@@ -71,11 +73,12 @@
 <script>
 import { sleep } from '$/utils'
 import PairDialog from './PairDialog/index.vue'
-import { useDeviceStore } from '$/store/device/index.js'
+import QrAction from './QrAction/index.vue'
 
 export default {
   components: {
     PairDialog,
+    QrAction,
   },
   props: {
     handleRefresh: {
@@ -86,8 +89,13 @@ export default {
   data() {
     return {
       loading: false,
-      formData: {},
       showAutocomplete: false,
+
+      formData: {
+        id: void 0,
+        host: void 0,
+        port: void 0,
+      },
     }
   },
   computed: {
@@ -111,16 +119,15 @@ export default {
     },
     fullHost: {
       get() {
-        if (!this.formData.host) {
-          return ''
-        }
-
-        return [this.formData.host, this.formData.port].join(':')
+        return this.formData.id
       },
       set(value) {
+        this.formData.id = value
+
         const [host, port] = value.split(':')
+
         this.formData.host = host
-        this.formData.port = port
+        this.formData.port = port || 5555
       },
     },
   },
@@ -132,7 +139,7 @@ export default {
 
         this.formData = {
           host: lastWireless.host,
-          port: lastWireless.port,
+          port: lastWireless.port || 5555,
         }
       },
       immediate: true,

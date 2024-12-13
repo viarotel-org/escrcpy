@@ -8,6 +8,7 @@ import { formatFileSize } from '$renderer/utils/index'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { uniq } from 'lodash-es'
+import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -266,6 +267,20 @@ async function pull(id, filePath, args = {}) {
   })
 }
 
+async function pair(host, port, code) {
+  return shell(`pair ${host}:${port} ${code}`)
+}
+
+async function connectCode(password) {
+  return adbConnectionMonitor.startQrCodeScanning({
+    password,
+    adb: {
+      pair,
+      connect,
+    },
+  })
+}
+
 function init() {
   const bin = appStore.get('common.adbPath') || adbPath
 
@@ -281,6 +296,7 @@ export default {
   getDevices,
   deviceShell,
   kill,
+  pair,
   connect,
   disconnect,
   getDeviceIP,
@@ -294,4 +310,5 @@ export default {
   pull,
   watch,
   readdir,
+  connectCode,
 }

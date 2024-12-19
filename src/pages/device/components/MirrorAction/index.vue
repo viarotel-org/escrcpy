@@ -4,7 +4,7 @@
     text
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :loading="loading"
-    :icon="loading ? '' : 'Link'"
+    :icon="loading ? '' : 'Monitor'"
     placement="top"
     :content="loading ? $t('common.starting') : $t('device.mirror.start')"
     @click="handleClick(row)"

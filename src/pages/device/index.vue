@@ -2,7 +2,7 @@
   <div class="h-full flex flex-col">
     <BatchActions
       class="overflow-hidden transition-all"
-      :class="isMultipleRow ? 'h-12 opacity-100' : 'h-0 opacity-0'"
+      :class="isMultipleRow ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 mb-0'"
       :devices="selectionRows"
     />
 
@@ -68,7 +68,7 @@
           align="left"
           sortable
           show-overflow-tooltip
-          width="100"
+          width="150"
           :filters="statusFilters"
           :filter-method="filterMethod"
         >

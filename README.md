@@ -19,6 +19,7 @@
 - 🏃 Synchronous: Benefit from web technologies to synchronize with Scrcpy faster
 - 🤖 Automation: Auto-connect devices, auto-execute images, custom scripts, scheduled tasks
 - 💡 Customization: Multi-device management, independent configurations, custom notes, config import/export
+- 📡 Wireless: Quick connect by scanning QR code
 - 🔗 Reverse tethering: Gnirehtet reverse tethering
 - 🎨 Themes: Light mode, dark mode, system-based switching
 - 😎 Lightweight: Native support, only display device screen
@@ -53,12 +54,23 @@ See [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 ### WIFI Connection
 
-> Note: Wireless debugging needs to be enabled on your phone's wireless debugging page to get the IP address (usually the IP assigned when connecting to WIFI) and port number (default 5555) of the device
+#### Scan QR Code to Connect
 
-1. Follow steps 1-2 in USB Connection
-2. Input the device IP address and port number obtained to Escrcpy and click connect device
-3. The device list in Escrcpy should have detected your phone, click start mirroring
-4. Enjoy!
+1. Follow steps 1-2 from USB connection
+2. Enable and enter wireless debugging in developer mode
+3. Click "Pair device using QR code"
+4. Start enjoying!
+
+#### Connect via IP Address
+
+> Note: If initial wireless connection fails, you may need wireless pairing. Please refer to [FAQ](#FAQ)
+>
+> Note: You need to enable wireless debugging and obtain your device's wireless address (usually the IP address assigned when connecting to WiFi) and port number (default is 5555) from the wireless debugging page
+
+1. Follow steps 1-2 from USB connection
+2. Enter the obtained device IP address and port number in Escrcpy, then click connect device
+3. At this point, Escrcpy device list should detect your phone, click start mirroring
+4. Start enjoying!
 
 ### macOS && Linux
 
@@ -109,7 +121,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Switch
 - Home
 - Back
-- Start APP
+- Start APP (Mirror Group)
 - Turn off screen (experimental)
 - Notification
 - Power
@@ -122,7 +134,6 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Execution Script
 - Scheduled Task
 - Gnirehtet
-- Mirror Group (discard)
 
 ## Preferences
 
@@ -151,6 +162,7 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 - Refresh rate
 - Video codec
 - Display orientation
+- Rotation angle
 - Screen cropping
 - Monitor
 - Video buffer
@@ -239,9 +251,9 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 24. Enhanced recording ✅
 25. Start APP(Multi-threaded) ✅
 26. Main window edge hidden ✅
-27. Improved history device connection experience 🚧  
-28. File management supports upload directory and progress display 🚧
-29. Device grouping 🚧
+27. Group devices (by filtering remarks) ✅
+28. Improved history device connection experience ✅  
+29. File management supports upload directory and progress display 🚧
 30. Game key mapping 🚧
 
 ## FAQ

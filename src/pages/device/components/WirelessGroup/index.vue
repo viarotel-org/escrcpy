@@ -131,25 +131,25 @@ export default {
       },
     },
   },
-  watch: {
-    wirelessList: {
-      handler(val) {
-        const lastIndex = val.length - 1
-        const lastWireless = val[lastIndex] || {}
+  async created() {
+    if (this.wirelessList?.length) {
+      const lastIndex = this.wirelessList.length - 1
+      const lastWireless = this.wirelessList[lastIndex]
 
+      if (lastWireless) {
         this.formData = {
           host: lastWireless.host,
-          port: lastWireless.port || 5555,
+          port: lastWireless.port,
+          id: `${lastWireless.host}:${lastWireless.port}`,
         }
-      },
-      immediate: true,
-    },
-  },
-  async created() {
-    const autoConnect = this.$store.preference.data.autoConnect
-    if (autoConnect) {
-      await this.handleBatch()
-      this.handleRefresh()
+      }
+
+      const autoConnect = this.$store.preference.data.autoConnect
+
+      if (autoConnect) {
+        await this.handleBatch()
+        this.handleRefresh()
+      }
     }
   },
   methods: {

@@ -32,14 +32,14 @@
           min-width="150"
         >
           <template #default="{ row }">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center">
               <DevicePopover :device="row" />
 
               <span class="">
                 {{ row.name }}
               </span>
 
-              <el-tag v-if="row.wifi" effect="light" class="">
+              <el-tag v-if="row.wifi" effect="light" class="!ml-1">
                 WIFI
               </el-tag>
             </div>
@@ -52,7 +52,7 @@
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="200"
+          min-width="150"
           :filters="remarkFilters"
           :filter-method="filterMethod"
         >
@@ -93,23 +93,33 @@
           align="left"
           width="150"
         >
-          <MirrorAction
-            v-if="['device', 'unauthorized'].includes(row.status)"
-            :ref="(value) => getMirrorActionRefs(value, $index)"
-            v-bind="{ row, toggleRowExpansion, handleReset }"
-          />
+          <div class="flex items-center !space-x-0">
+            <MirrorAction
+              v-if="['device', 'unauthorized'].includes(row.status)"
+              :ref="(value) => getMirrorActionRefs(value, $index)"
+              v-bind="{ row, toggleRowExpansion, handleReset }"
+            />
 
-          <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion, handleReset }" />
+            <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion, handleReset }" />
 
-          <WirelessAction v-if="['device', 'unauthorized'].includes(row.status)" v-bind="{ row, handleConnect, handleRefresh }" />
+            <WirelessAction v-if="['device', 'unauthorized'].includes(row.status)" v-bind="{ row, handleConnect, handleRefresh }" />
 
-          <ConnectAction
-            v-if="['offline'].includes(row.status) && row.wifi"
-            v-bind="{
-              device: row,
-              handleConnect,
-            }"
-          />
+            <ConnectAction
+              v-if="['offline'].includes(row.status) && row.wifi"
+              v-bind="{
+                device: row,
+                handleConnect,
+              }"
+            />
+
+            <RemoveAction
+              v-if="['offline'].includes(row.status)"
+              v-bind="{
+                device: row,
+                handleRefresh,
+              }"
+            />
+          </div>
         </el-table-column>
         <el-table-column type="expand">
           <template #header>
@@ -127,7 +137,7 @@
 
     <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
       <div class="flex-none">
-        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
+        <WirelessGroup :key="deviceList.length" ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
       </div>
 
       <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
@@ -155,6 +165,7 @@ import MoreDropdown from './components/MoreDropdown/index.vue'
 import Remark from './components/Remark/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
 import ConnectAction from './components/ConnectAction/index.vue'
+import RemoveAction from './components/RemoveAction/index.vue'
 
 import WirelessGroup from './components/WirelessGroup/index.vue'
 
@@ -163,6 +174,7 @@ import DevicePopover from './components/DevicePopover/index.vue'
 import { getDictLabel } from '$/dicts/helper'
 
 import { deviceStatus } from '$/dicts/index.js'
+import { uniqBy } from 'lodash-es'
 
 export default {
   name: 'Device',
@@ -176,6 +188,7 @@ export default {
     ConnectAction,
     BatchActions,
     DevicePopover,
+    RemoveAction,
   },
   data() {
     return {
@@ -203,7 +216,7 @@ export default {
         value: item.remark,
       }))
 
-      return value
+      return uniqBy(value, 'value')
     },
   },
   async created() {

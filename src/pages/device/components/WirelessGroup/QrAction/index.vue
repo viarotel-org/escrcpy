@@ -14,7 +14,7 @@
         class="flex-none !border-none"
         @click="handleClick"
       >
-        {{ loading ? $t('common.connecting') : $t('device.wireless.connect.qr') }}
+        {{ loading ? loadingText : $t('device.wireless.connect.qr') }}
       </el-button>
     </template>
 
@@ -24,6 +24,7 @@
 
 <script setup>
 import { generateAdbPairingQR } from '$/utils/device/generateAdbPairingQR/index.js'
+import { computed } from 'vue'
 
 const props = defineProps({
   handleRefresh: {
@@ -36,6 +37,12 @@ const dataUrl = ref('')
 
 const loading = ref(false)
 
+const loadingText = ref('')
+
+function onStatus(type) {
+  loadingText.value = window.t(`device.wireless.connect.qr.${type}`)
+}
+
 async function handleClick() {
   const data = await generateAdbPairingQR()
   dataUrl.value = data.dataUrl
@@ -43,7 +50,9 @@ async function handleClick() {
   loading.value = true
 
   try {
-    await window.adb.connectCode(data.password)
+    await window.adb.connectCode(data.password, {
+      onStatus,
+    })
   }
   catch (error) {
     console.warn(error.message)

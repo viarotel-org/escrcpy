@@ -42,7 +42,7 @@ export async function getCurrentDevices() {
     id: device.id,
     status: device.type,
     name: getDeviceName(device),
-    wifi: isIPWithPort(device.id),
+    wifi: device.id.includes('.'),
     remark: getRemark(device.id),
   }))
 }

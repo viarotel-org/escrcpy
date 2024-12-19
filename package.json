@@ -49,7 +49,6 @@
     "fs-extra": "11.2.0",
     "husky": "9.0.11",
     "lodash-es": "4.17.21",
-    "multicast-dns": "^7.2.5",
     "nanoid": "5.0.7",
     "pinia": "2.1.7",
     "pinia-plugin-persistedstate": "3.2.1",

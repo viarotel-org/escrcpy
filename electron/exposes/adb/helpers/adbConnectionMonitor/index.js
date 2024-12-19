@@ -1,5 +1,6 @@
 import { Bonjour } from 'bonjour-service'
 import net from 'node:net'
+import appStore from '$electron/helpers/store.js'
 
 export const MDNS_CONFIG = {
   PAIRING_TYPE: 'adb-tls-pairing',
@@ -78,6 +79,7 @@ export class AdbConnectionMonitor {
     this.deviceScanner = new DeviceScanner()
     this.isActive = false
     this.adb = null
+    this.onStatus = () => {}
   }
 
   async startQrCodeScanning(options) {
@@ -87,20 +89,38 @@ export class AdbConnectionMonitor {
       adb,
       password,
       onStatus = () => {},
-      onError = () => {},
     } = options
 
     this.adb = adb
     this.isActive = true
+    this.onStatus = onStatus
 
     try {
-      const device = await this.scanForDevice(onStatus)
+      this.onStatus('pairing')
+      const device = await this.scanForDevice()
       await this.pairWithDevice(device, password)
-      onStatus('Paired successfully, waiting to connect...')
 
-      const connectDevice = await this.waitForDeviceConnect(device)
-      console.log('connectDevice', connectDevice)
-      await this.connectToDevice(connectDevice)
+      this.onStatus('connecting')
+      try {
+        const connectDevice = await this.waitForDeviceConnect(device)
+        await this.connectToDevice(connectDevice)
+      }
+      catch (error) {
+        if (error.code === ERROR_CODES.TIMEOUT) {
+          this.onStatus('connecting-fallback')
+          // 使用回退端口尝试连接
+          const fallbackPort = this.getBackPort(device)
+          await this.connectToDevice({
+            ...device,
+            port: fallbackPort,
+          })
+        }
+        else {
+          throw error
+        }
+      }
+
+      this.onStatus('connected')
 
       return {
         success: true,
@@ -108,7 +128,8 @@ export class AdbConnectionMonitor {
       }
     }
     catch (error) {
-      onError(error.message)
+      this.onStatus('error', error.message)
+
       return {
         success: false,
         error: error.message,
@@ -134,9 +155,7 @@ export class AdbConnectionMonitor {
     }
   }
 
-  async scanForDevice(onStatus) {
-    onStatus('Waiting for device to scan QR code...')
-
+  async scanForDevice() {
     return new Promise((resolve, reject) => {
       const timeoutHandle = setTimeout(() => {
         this.dispose()
@@ -203,6 +222,19 @@ export class AdbConnectionMonitor {
         `Failed to connect to device: ${error.message}`,
       )
     }
+  }
+
+  getBackPort(device) {
+    const devices = appStore.get('device')
+
+    const value = Object.entries(devices).reduce((port, [key, value]) => {
+      if (key.includes(device.address)) {
+        port = key.split(':')[1]
+      }
+      return port
+    }, 5555)
+
+    return value
   }
 
   dispose() {

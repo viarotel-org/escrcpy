@@ -1,5 +1,6 @@
 import * as qrCode from 'qrcode'
 import { primaryColor } from '$/configs/index.js'
+import { useThemeStore } from '$/store/theme/index.js'
 
 /**
  * Generates a QR code data URL for ADB wireless pairing
@@ -16,13 +17,15 @@ export async function generateAdbPairingQR(options = {}) {
   // Format the ADB pairing text
   const pairingText = `WIFI:T:ADB;S:ADBQR-connectPhoneOverWifi;P:${password};;`
 
+  const themeStore = useThemeStore()
+
   // Generate QR code
   const dataUrl = await qrCode.toDataURL(pairingText, {
     type: 'image/webp',
     rendererOpts: { quality: 1 },
     color: {
       dark: primaryColor,
-      light: '#ffffff',
+      light: themeStore.isDark ? '#1d1e1f' : '#ffffff',
     },
     margin: 0,
   })

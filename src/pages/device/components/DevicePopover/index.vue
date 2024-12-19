@@ -2,7 +2,7 @@
   <el-popover
     ref="popoverRef"
     placement="right"
-    :width="300"
+    :width="450"
     trigger="hover"
     popper-class="!p-0 !overflow-hidden !rounded-xl"
   >
@@ -10,7 +10,7 @@
       <el-link type="primary" :underline="false" icon="InfoFilled" class="mr-1"></el-link>
     </template>
 
-    <el-descriptions class="!w-full" border>
+    <el-descriptions class="!w-full" border label-width="80">
       <el-descriptions-item :label="$t('device.id')">
         {{ device.id }}
       </el-descriptions-item>

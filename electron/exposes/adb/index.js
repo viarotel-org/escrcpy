@@ -271,13 +271,14 @@ async function pair(host, port, code) {
   return shell(`pair ${host}:${port} ${code}`)
 }
 
-async function connectCode(password) {
+async function connectCode(password, options = {}) {
   return adbConnectionMonitor.startQrCodeScanning({
     password,
     adb: {
       pair,
       connect,
     },
+    ...options
   })
 }
 

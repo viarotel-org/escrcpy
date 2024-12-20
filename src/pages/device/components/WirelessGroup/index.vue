@@ -96,6 +96,8 @@ export default {
         host: void 0,
         port: void 0,
       },
+
+      firstFlag: true,
     }
   },
   computed: {
@@ -131,8 +133,41 @@ export default {
       },
     },
   },
+  watch: {
+    'wirelessList.length': {
+      handler(val) {
+        if (val) {
+          this.getFormData()
+        }
+      },
+      immediate: true,
+    },
+  },
   async created() {
-    if (this.wirelessList?.length) {
+    const unwatch = this.$watch('wirelessList', async (val) => {
+      unwatch()
+      if (!val) {
+        return false
+      }
+
+      this.getFormData()
+
+      if (this.firstFlag) {
+        this.firstFlag = false
+        this.handleConnectAuto()
+      }
+    })
+  },
+  methods: {
+    async handleConnectAuto() {
+      const autoConnect = this.$store.preference.data.autoConnect
+
+      if (autoConnect) {
+        await this.handleBatch()
+        this.handleRefresh()
+      }
+    },
+    getFormData() {
       const lastIndex = this.wirelessList.length - 1
       const lastWireless = this.wirelessList[lastIndex]
 
@@ -143,16 +178,7 @@ export default {
           id: `${lastWireless.host}:${lastWireless.port}`,
         }
       }
-
-      const autoConnect = this.$store.preference.data.autoConnect
-
-      if (autoConnect) {
-        await this.handleBatch()
-        this.handleRefresh()
-      }
-    }
-  },
-  methods: {
+    },
     connect(...args) {
       return this.handleConnect(...args)
     },
@@ -233,22 +259,6 @@ export default {
       this.loading = true
       await Promise.allSettled(promises)
       this.loading = false
-
-      const successCount = totalCount - failCount
-
-      if (successCount) {
-        this.$message({
-          message: this.$t('device.wireless.connect.batch.success', {
-            totalCount,
-            successCount,
-            failCount,
-          }),
-          type: totalCount === successCount ? 'success' : 'warning',
-        })
-        return
-      }
-
-      this.$message.warning(this.$t('device.wireless.connect.batch.error'))
     },
 
     handleUnConnect() {

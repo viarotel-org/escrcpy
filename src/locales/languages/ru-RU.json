@@ -107,8 +107,6 @@
   "device.wireless.connect.error.no-address": "Адрес беспроводной отладки не может быть пустым",
   "device.wireless.connect.success": "Успешное подключение",
   "device.wireless.connect.batch.name": "Подключить все устройства из истории",
-  "device.wireless.connect.batch.success": "Подключено {totalCount} устройств из истории, успешно: {successCount}, неудачно: {failCount}",
-  "device.wireless.connect.batch.error": "Не удалось подключить устройства из истории",
   "device.wireless.disconnect.start": "Отключить",
   "device.wireless.disconnect.progress": "Отключение",
   "device.wireless.disconnect.success": "Отключено",

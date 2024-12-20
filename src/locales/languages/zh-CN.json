@@ -108,8 +108,6 @@
   "device.wireless.connect.error.no-address": "无线调试地址不能为空",
   "device.wireless.connect.success": "连接设备成功",
   "device.wireless.connect.batch.name": "连接所有历史设备",
-  "device.wireless.connect.batch.success": "连接历史设备成功，共 {totalCount}个，成功 {successCount}个，失败 {failCount}个",
-  "device.wireless.connect.batch.error": "连接历史设备失败",
   "device.wireless.disconnect.start": "断开连接",
   "device.wireless.disconnect.progress": "正在断开",
   "device.wireless.disconnect.success": "断开连接成功",

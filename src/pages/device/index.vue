@@ -137,7 +137,7 @@
 
     <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
       <div class="flex-none">
-        <WirelessGroup :key="deviceList.length" ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
+        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
       </div>
 
       <div class="flex-1 w-0 space-x-2 flex items-center justify-end">

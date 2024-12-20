@@ -59,8 +59,12 @@ export function mergeDevices(historyDevices, currentDevices) {
     return obj
   }, {})
 
-  const value = Object.values(defaultsDeep(currentMap, historyMap))
-    .sort((a, b) => sortModel[a.status] - sortModel[b.status])
+  const mergeList = Object.values(defaultsDeep(currentMap, historyMap))
+
+  const excludedKeywords = ['_adb-tls-connect', '_tcp']
+  const filterList = mergeList.filter(({ id = '' }) => !excludedKeywords.some(keyword => id.includes(keyword)))
+
+  const value = filterList.sort((a, b) => sortModel[a.status] - sortModel[b.status])
 
   return value
 }

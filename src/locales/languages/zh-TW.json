@@ -108,8 +108,6 @@
   "device.wireless.connect.error.no-address": "無線偵錯位址不能為空",
   "device.wireless.connect.success": "連接裝置成功",
   "device.wireless.connect.batch.name": "連接所有歷史裝置",
-  "device.wireless.connect.batch.success": "連接歷史裝置成功，共 {totalCount} 個，{successCount} 個成功，{failCount} 個失敗",
-  "device.wireless.connect.batch.error": "連接歷史裝置失敗",
   "device.wireless.disconnect.start": "斷開連接",
   "device.wireless.disconnect.progress": "正在斷開",
   "device.wireless.disconnect.success": "斷開連接成功",

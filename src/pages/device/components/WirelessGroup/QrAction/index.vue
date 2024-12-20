@@ -1,5 +1,6 @@
 <template>
   <el-popover
+    ref="popoverRef"
     placement="top"
     :width="200"
     trigger="click"
@@ -39,6 +40,8 @@ const loading = ref(false)
 
 const loadingText = ref('')
 
+const popoverRef = ref()
+
 function onStatus(type) {
   loadingText.value = window.t(`device.wireless.connect.qr.${type}`)
 }
@@ -58,7 +61,9 @@ async function handleClick() {
     console.warn(error.message)
   }
 
-  props.handleRefresh()
+  await props.handleRefresh()
+
+  popoverRef.value.hide()
 
   loading.value = false
 }

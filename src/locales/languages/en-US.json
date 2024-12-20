@@ -91,6 +91,7 @@
   "device.wireless.connect.qr": "QR Code Connection",
   "device.wireless.connect.qr.pairing": "Pairing",
   "device.wireless.connect.qr.connecting": "Connecting",
+  "device.wireless.connect.qr.connecting-fallback": "Connecting",
   "device.wireless.connect.qr.connected": "Connection Successful",
   "device.wireless.connect.qr.error": "QR Code Connection",
   "device.wireless.connect.name": "Connect",

@@ -91,6 +91,7 @@
   "device.wireless.connect.qr": "Подключение по QR-коду",
   "device.wireless.connect.qr.pairing": "Сопряжение",
   "device.wireless.connect.qr.connecting": "Подключение",
+  "device.wireless.connect.qr.connecting-fallback": "Подключение",
   "device.wireless.connect.qr.connected": "Подключение успешно",
   "device.wireless.connect.qr.error": "Подключение по QR-коду",
   "device.wireless.connect.name": "Подключиться",

@@ -91,6 +91,7 @@
   "device.wireless.connect.qr": "二维码连接",
   "device.wireless.connect.qr.pairing": "配对中",
   "device.wireless.connect.qr.connecting": "连接中",
+  "device.wireless.connect.qr.connecting-fallback": "连接中",
   "device.wireless.connect.qr.connected": "连接成功",
   "device.wireless.connect.qr.error": "二维码连接",
   "device.wireless.connect.name": "连接设备",

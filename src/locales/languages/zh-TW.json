@@ -91,6 +91,7 @@
   "device.wireless.connect.qr": "二維碼連接",
   "device.wireless.connect.qr.pairing": "配對中",
   "device.wireless.connect.qr.connecting": "連接中",
+  "device.wireless.connect.qr.connecting-fallback": "連接中",
   "device.wireless.connect.qr.connected": "連接成功",
   "device.wireless.connect.qr.error": "二維碼連接",
   "device.wireless.connect.name": "連接裝置",

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.28.0](https://github.com/viarotel-org/escrcpy/compare/v1.27.7...v1.28.0) (2024-12-20)
+
+
+### Features
+
+* ✨ Support pairing and connecting to devices via QR code ([14306b2](https://github.com/viarotel-org/escrcpy/commit/14306b2353b2d70999c6b13ea8715dcf19314be5))
+* 🚀 Supports connecting historical devices via device list ([e0687e8](https://github.com/viarotel-org/escrcpy/commit/e0687e895a5092ed79f6fad3a03fe33f4205c18e))
+
+
+### Bug Fixes
+
+* 🐛 Solve the problem of Windows disabling video forwarding and crashing ([10b902a](https://github.com/viarotel-org/escrcpy/commit/10b902a97bcd86f4f43866279e269ab8be84d2df))
+
+
+### Performance Improvements
+
+* ♻️ Update mirror icon ([c214e5a](https://github.com/viarotel-org/escrcpy/commit/c214e5add6746cf7ec299158cf0e77c7eed21f12))
+* ✅ A new method is adopted to solve the problem of IP type configuration storage ([5488a1e](https://github.com/viarotel-org/escrcpy/commit/5488a1e826e795fbd644a4204ea018f8662adf2e))
+* 🚀 Optimize device connection experience ([0690f2d](https://github.com/viarotel-org/escrcpy/commit/0690f2d4c07b50a162b5c1aa3fdf2d21fe2a83f9))
+* 🚀 Supports display of offline devices ([dcf817f](https://github.com/viarotel-org/escrcpy/commit/dcf817feeeb306a6b1b534c8b7f85e1223af5420))
+
 ## [1.27.7](https://github.com/viarotel-org/escrcpy/compare/v1.27.6...v1.27.7) (2024-12-10)
 
 

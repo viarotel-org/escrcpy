@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.1](https://github.com/viarotel-org/escrcpy/compare/v1.28.0...v1.28.1) (2024-12-20)
+
+
+### Performance Improvements
+
+* ♻️ Optimize QR code connection experience ([86f5e69](https://github.com/viarotel-org/escrcpy/commit/86f5e6909b9db949c8611496940aeb9599ced2ec))
+
 ## [1.28.0](https://github.com/viarotel-org/escrcpy/compare/v1.27.7...v1.28.0) (2024-12-20)
 
 

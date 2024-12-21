@@ -389,9 +389,7 @@ sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
 
 感谢他们的所做的一切贡献！
 
-<a href="https://github.com/viarotel/escrcpy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=viarotel/escrcpy" alt="contributors" />
-</a>
+[Contributors](https://github.com/viarotel/escrcpy/graphs/contributors)
 
 ## Star 历史
 

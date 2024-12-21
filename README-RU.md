@@ -392,9 +392,7 @@ sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
 
 Спасибо всем за их вклад!
 
-<a href="https://github.com/viarotel/escrcpy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=viarotel/escrcpy" alt="contributors" />
-</a>
+[Contributors](https://github.com/viarotel/escrcpy/graphs/contributors)
 
 ## История звезд
 

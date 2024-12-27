@@ -18,6 +18,8 @@ export class Edger {
     this.lastMousePosition = null
     this.mouseMovementBuffer = []
     this.lastAnimationTime = 0
+    this.isMaximized = window.isMaximized()
+    this.lastMaximizedState = this.isMaximized
 
     // Animation configs
     this.animationDuration = 300
@@ -176,6 +178,25 @@ export class Edger {
     this.window.on('closed', () => {
       this.destroy()
     })
+
+    // Listening to maximize event
+    this.window.on('maximize', () => {
+      this.isMaximized = true
+      this.lastMaximizedState = true
+      // 如果之前已贴边，则取消贴边状态
+      if (this.dockEdge) {
+        this.undock()
+      }
+    })
+
+    // Listening to restore event
+    this.window.on('unmaximize', () => {
+      this.isMaximized = false
+      // Add a short delay to avoid triggering welt checks
+      setTimeout(() => {
+        this.lastMaximizedState = false
+      }, 100)
+    })
   }
 
   handleWindowBlur() {
@@ -207,7 +228,7 @@ export class Edger {
     }
   }
 
-  // 改进获取隐藏位置的方法，确保窗口边缘始终可见
+  // Improved access to hidden location method to ensure that the window edge is always visible
   getHiddenBounds() {
     const currentBounds = this.window.getBounds()
     const display = screen.getDisplayNearestPoint({
@@ -217,7 +238,7 @@ export class Edger {
     const screenBounds = display.workArea
 
     let hiddenBounds = { ...currentBounds }
-    const minVisiblePixels = 3 // 确保至少有3个像素可见
+    const minVisiblePixels = 3 // To ensure that at least three pixels is visible
 
     switch (this.dockEdge) {
       case 'right':
@@ -231,7 +252,7 @@ export class Edger {
         break
     }
 
-    // 确保窗口不会完全隐藏
+    // Make sure the window does not completely hidden
     hiddenBounds = {
       x: Math.round(hiddenBounds.x),
       y: Math.round(hiddenBounds.y),
@@ -242,7 +263,7 @@ export class Edger {
     return hiddenBounds
   }
 
-  // 添加窗口位置恢复方法
+  // Add the window position recovery method
   restoreWindowPosition() {
     if (!this.dockEdge || !this.originalBounds)
       return
@@ -253,7 +274,7 @@ export class Edger {
     })
     const screenBounds = display.workArea
 
-    // 确保窗口在屏幕范围内
+    // Make sure the window within the scope of the screen
     const restoredBounds = { ...this.originalBounds }
 
     switch (this.dockEdge) {
@@ -557,6 +578,11 @@ export class Edger {
   }
 
   checkEdgeSnap() {
+    // If the window is maximized state or just recover from maximization, do not perform welt
+    if (this.isMaximized || this.lastMaximizedState) {
+      return
+    }
+
     if (this.isDragging && this.dockEdge) {
       this.checkUndock()
       return
@@ -588,6 +614,11 @@ export class Edger {
   }
 
   dockToEdge(edge, bounds) {
+    // If the maximum window does not perform welt
+    if (this.isMaximized) {
+      return
+    }
+
     this.dockEdge = edge
     this.originalBounds = bounds
 

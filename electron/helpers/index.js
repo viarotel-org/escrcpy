@@ -1,4 +1,5 @@
 import { join, resolve } from 'node:path'
+import { Buffer } from 'node:buffer'
 import { contextBridge } from 'electron'
 import { cloneDeep } from 'lodash-es'
 
@@ -67,4 +68,20 @@ export function loadPage(win, prefix = '') {
   else {
     win.loadFile(join(process.env.DIST, prefix, 'index.html'))
   }
+}
+
+export function streamToBase64(stream) {
+  return new Promise((resolve, reject) => {
+    const chunks = []
+    stream.on('data', (chunk) => {
+      chunks.push(chunk)
+    })
+    stream.on('end', () => {
+      const buffer = Buffer.concat(chunks)
+      resolve(buffer.toString('base64'))
+    })
+    stream.on('error', (error) => {
+      reject(error)
+    })
+  })
 }

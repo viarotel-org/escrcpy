@@ -1,4 +1,6 @@
 {
+  "common.yes": "是",
+  "common.no": "否",
   "common.cancel": "取消",
   "common.confirm": "确认",
   "common.restart": "重启",
@@ -67,6 +69,11 @@
   "device.status.offline": "已离线",
   "device.status.unauthorized": "未授权",
   "device.status.connected": "已连接",
+  "device.battery": "设备电量",
+  "device.isCharging": "充电状态",
+  "device.temperature": "设备温度",
+  "device.powerSource": "驱动来源",
+  "device.voltage": "设备电压",
 
   "device.task.name": "计划任务",
   "device.task.tips": " 注意：请确保你的计算机保持唤醒状态，否则计划任务将无法被正常执行。",

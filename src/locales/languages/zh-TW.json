@@ -1,4 +1,6 @@
 {
+  "common.yes": "是",
+  "common.no": "否",
   "common.cancel": "取消",
   "common.confirm": "確認",
   "common.restart": "重新啟動",
@@ -67,6 +69,11 @@
   "device.status.connected": "已連接",
   "device.status.offline": "已離線",
   "device.status.unauthorized": "未授權",
+  "device.battery": "設備電量",
+  "device.isCharging": "充電狀態",
+  "device.temperature": "設備溫度",
+  "device.powerSource": "驅動來源",
+  "device.voltage": "設備電壓",
 
   "device.task.name": "計劃任務",
   "device.task.tips": "注意：請確保您的電腦保持唤醒状态，否則計劃任務將無法正常執行。",

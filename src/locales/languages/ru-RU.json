@@ -1,4 +1,6 @@
 {
+  "common.yes": "Да",
+  "common.no": "Нет",
   "common.cancel": "Отмена",
   "common.confirm": "Подтвердить",
   "common.restart": "Перезапустить",
@@ -67,6 +69,11 @@
   "device.status.connected": "Подключено",
   "device.status.offline": "Не в сети",
   "device.status.unauthorized": "Не авторизован",
+  "device.battery": "Уровень заряда устройства",
+  "device.isCharging": "Состояние зарядки",
+  "device.temperature": "Температура устройства",
+  "device.powerSource": "Источник питания",
+  "device.voltage": "Напряжение устройства",
 
   "device.task.name": "Запланированная задача",
   "device.task.tips": "Примечание: Пожалуйста, убедитесь, что ваш компьютер не переходит в спящий режим, иначе запланированные задачи не будут выполнены правильно.",

@@ -1,4 +1,6 @@
 {
+  "common.yes": "Yes",
+  "common.no": "No",
   "common.cancel": "Cancel",
   "common.confirm": "Confirm",
   "common.restart": "Restart",
@@ -67,6 +69,11 @@
   "device.status.connected": "Connected",
   "device.status.offline": "Offline",
   "device.status.unauthorized": "Unauthorized",
+  "device.battery": "Device Battery",
+  "device.isCharging": "Charging Status",
+  "device.temperature": "Device Temperature",
+  "device.powerSource": "Power Source",
+  "device.voltage": "Device Voltage",
 
   "device.task.name": "Scheduled Task",
   "device.task.tips": " Note: Please ensure that your computer stays awake, otherwise scheduled tasks will not be executed properly.",

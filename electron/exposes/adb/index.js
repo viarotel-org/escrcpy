@@ -9,6 +9,8 @@ import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { uniq } from 'lodash-es'
 import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
+import { streamToBase64 } from '$electron/helpers/index.js'
+import { parseBatteryDump } from './helpers/battery/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -124,6 +126,8 @@ const getDeviceIP = async (id) => {
 const tcpip = async (id, port = 5555) => client.getDevice(id).tcpip(port)
 
 const screencap = async (deviceId, options = {}) => {
+  const { returnBase64 = false } = options
+
   let fileStream = null
   try {
     const device = client.getDevice(deviceId)
@@ -136,6 +140,11 @@ const screencap = async (deviceId, options = {}) => {
 
   if (!fileStream) {
     return false
+  }
+
+  if (returnBase64) {
+    const base64 = await streamToBase64(fileStream)
+    return base64
   }
 
   const fileName = `Screencap-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.png`
@@ -278,8 +287,22 @@ async function connectCode(password, options = {}) {
       pair,
       connect,
     },
-    ...options
+    ...options,
   })
+}
+
+async function battery(id) {
+  try {
+    const res = await deviceShell(id, 'dumpsys battery')
+
+    const value = parseBatteryDump(res)
+
+    return value
+  }
+  catch (error) {
+    console.warn(error?.message || error)
+    return {}
+  }
 }
 
 function init() {
@@ -312,4 +335,5 @@ export default {
   watch,
   readdir,
   connectCode,
+  battery,
 }

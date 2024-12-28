@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.3](https://github.com/viarotel-org/escrcpy/compare/v1.28.2...v1.28.3) (2024-12-28)
+
+
+### Performance Improvements
+
+* ♻️ Optimize device details performance ([38d1433](https://github.com/viarotel-org/escrcpy/commit/38d1433a82d6c22c9bb6db681533c93e788e4cff))
+
 ## [1.28.2](https://github.com/viarotel-org/escrcpy/compare/v1.28.1...v1.28.2) (2024-12-27)
 
 

@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "3.8.0",
-    "@devicefarmer/adbkit": "3.2.6",
+    "@devicefarmer/adbkit": "3.3.8",
     "@electron-toolkit/preload": "3.0.1",
     "@electron-toolkit/utils": "3.0.0",
     "@electron/remote": "2.1.2",

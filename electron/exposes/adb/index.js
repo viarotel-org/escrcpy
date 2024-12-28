@@ -128,18 +128,12 @@ const tcpip = async (id, port = 5555) => client.getDevice(id).tcpip(port)
 const screencap = async (deviceId, options = {}) => {
   const { returnBase64 = false } = options
 
-  let fileStream = null
-  try {
-    const device = client.getDevice(deviceId)
-    fileStream = await device.screencap()
-  }
-  catch (error) {
-    console.warn(error?.message || error)
-    return false
-  }
+  const device = client.getDevice(deviceId)
+
+  const fileStream = await device.screencap()
 
   if (!fileStream) {
-    return false
+    throw new Error('Failed to obtain screenshot data')
   }
 
   if (returnBase64) {
@@ -292,17 +286,11 @@ async function connectCode(password, options = {}) {
 }
 
 async function battery(id) {
-  try {
-    const res = await deviceShell(id, 'dumpsys battery')
+  const res = await deviceShell(id, 'dumpsys battery')
 
-    const value = parseBatteryDump(res)
+  const value = parseBatteryDump(res)
 
-    return value
-  }
-  catch (error) {
-    console.warn(error?.message || error)
-    return {}
-  }
+  return value
 }
 
 function init() {

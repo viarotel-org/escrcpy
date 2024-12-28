@@ -33,7 +33,7 @@
         >
           <template #default="{ row }">
             <div class="flex items-center">
-              <DevicePopover :device="row" />
+              <DevicePopover :key="row.status" :device="row" />
 
               <span class="">
                 {{ row.name }}
@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import { isIPWithPort, sleep } from '$/utils/index.js'
+import { sleep } from '$/utils/index.js'
 import BatchActions from './components/BatchActions/index.vue'
 import ControlBar from '$/components/ControlBar/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
@@ -219,7 +219,7 @@ export default {
       return uniqBy(value, 'value')
     },
   },
-  async created() {
+  async mounted() {
     this.getDeviceData()
     this.unAdbWatch = await this.$adb.watch(this.onAdbWatch)
   },
@@ -241,13 +241,6 @@ export default {
     async onAdbWatch(type, ret) {
       if (ret && ret.id) {
         this.getDeviceData()
-      }
-
-      if (type === 'add' && !isIPWithPort(ret.id) && ret.$host) {
-        this.formData = {
-          ...this.formData,
-          host: ret.$host,
-        }
       }
 
       if (type === 'remove') {

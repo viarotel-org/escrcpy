@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.28.3](https://github.com/viarotel-org/escrcpy/compare/v1.28.2...v1.28.3) (2024-12-28)
+
+
+### Performance Improvements
+
+* ♻️ Optimize device details performance ([38d1433](https://github.com/viarotel-org/escrcpy/commit/38d1433a82d6c22c9bb6db681533c93e788e4cff))
+
+## [1.28.2](https://github.com/viarotel-org/escrcpy/compare/v1.28.1...v1.28.2) (2024-12-27)
+
+
+### Performance Improvements
+
+* 👷 Optimize the edge hiding function ([d5caaa9](https://github.com/viarotel-org/escrcpy/commit/d5caaa915c5e979c2217357cf74efe20d477c5ba))
+* 📸 Support viewing real-time images and power information of the device ([d262adf](https://github.com/viarotel-org/escrcpy/commit/d262adf54df2a28c734b3db1a5d17bbccd983db9))
+
 ## [1.28.1](https://github.com/viarotel-org/escrcpy/compare/v1.28.0...v1.28.1) (2024-12-20)
 
 

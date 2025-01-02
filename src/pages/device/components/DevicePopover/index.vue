@@ -3,10 +3,10 @@
     ref="popoverRef"
     placement="right"
     :width="500"
-    trigger="click"
+    trigger="hover"
     popper-class="!p-0 !overflow-hidden !rounded-xl"
     @before-enter="onBeforeEnter"
-    @hide="onHide"
+    @after-leave="onAfterLeave"
   >
     <template #reference>
       <el-link type="primary" :underline="false" icon="InfoFilled" class="mr-1"></el-link>
@@ -14,7 +14,7 @@
 
     <div v-loading="loading" :element-loading-text="$t('common.loading')" :class="connectFlag ? 'h-60' : ''" class="flex items-stretch p-2 space-x-2">
       <div v-if="connectFlag" class="flex-none pb-1">
-        <el-image :src="deviceInfo.screencap" :preview-src-list="[deviceInfo.screencap]" class="!h-full !overflow-hidden !rounded-xl !shadow" />
+        <img :src="deviceInfo.screencap" class="!h-full !overflow-hidden !rounded-xl !shadow min-w-24 max-w-56 bg-gray-200 dark:bg-black object-contain cursor-pointer" alt="" @click="handlePreview" />
       </div>
 
       <div class="flex-1 w-0 overflow-auto">
@@ -43,6 +43,8 @@
         </el-descriptions>
       </div>
     </div>
+
+    <el-image-viewer v-if="imageViewerProps.visible" :url-list="[deviceInfo.screencap]" @close="onViewerClose" />
   </el-popover>
 </template>
 
@@ -67,6 +69,18 @@ const connectFlag = computed(() => ['device'].includes(props.device.status))
 
 const screencapTimer = ref()
 
+const imageViewerProps = ref({
+  visible: false,
+})
+
+function handlePreview() {
+  imageViewerProps.value.visible = true
+}
+
+function onViewerClose() {
+  imageViewerProps.value.visible = false
+}
+
 async function onBeforeEnter() {
   Object.assign(deviceInfo.value, { ...props.device })
 
@@ -74,37 +88,58 @@ async function onBeforeEnter() {
     return false
   }
 
-  loading.value = true
-
-  await Promise.allSettled([getScreencap(), getBattery()])
+  if (!deviceInfo.value.screencap) {
+    loading.value = true
+  }
 
   screencapTimer.value = setInterval(() => {
     getScreencap()
     getBattery()
   }, 5 * 1000)
 
+  await Promise.allSettled([getScreencap(), getBattery()])
+
   loading.value = false
 }
 
 async function getScreencap() {
-  const screencap = await window.adb.screencap(props.device.id, { returnBase64: true })
-
-  Object.assign(deviceInfo.value, { screencap: `data:image/png;base64,${screencap}` })
+  try {
+    const screencap = await window.adb.screencap(props.device.id, { returnBase64: true })
+    Object.assign(deviceInfo.value, { screencap: `data:image/png;base64,${screencap}` })
+  }
+  catch (error) {
+    onError()
+    console.warn(error?.message || error)
+  }
 }
 
 async function getBattery() {
-  const battery = await window.adb.battery(props.device.id)
-
-  Object.assign(deviceInfo.value, { battery: battery.computed })
+  try {
+    const battery = await window.adb.battery(props.device.id)
+    Object.assign(deviceInfo.value, { battery: battery.computed })
+  }
+  catch (error) {
+    onError()
+    console.warn(error?.message || error)
+  }
 }
 
-function onHide() {
+function onAfterLeave() {
   clearInterval(screencapTimer.value)
 
-  deviceInfo.value = {}
+  onViewerClose()
 
   loading.value = false
 }
+
+function onError() {
+  clearInterval(screencapTimer.value)
+  props.device.status = 'offline'
+}
+
+onBeforeUnmount(() => {
+  onAfterLeave()
+})
 </script>
 
 <style lang="postcss" scoped>

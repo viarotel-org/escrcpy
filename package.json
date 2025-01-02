@@ -48,6 +48,7 @@
     "fix-path": "4.0.0",
     "fs-extra": "11.2.0",
     "husky": "9.0.11",
+    "ip-regex": "^5.0.0",
     "lodash-es": "4.17.21",
     "nanoid": "5.0.7",
     "pinia": "2.1.7",

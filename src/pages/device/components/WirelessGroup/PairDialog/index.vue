@@ -113,8 +113,7 @@ export default {
     async handleSubmit() {
       try {
         await this.$refs.elForm.validate()
-        const command = `pair ${this.formData.host}:${this.formData.port} ${this.formData.pair}`
-        await this.$adb.shell(command)
+        await this.$adb.pair(this.formData.host, this.formData.port, this.formData.pair)
         this.$emit('success')
         this.handleClose()
       }

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { sleep } from '$/utils'
+import { parseDeviceId, sleep } from '$/utils'
 
 export default {
   inheritAttrs: false,
@@ -82,7 +82,7 @@ export default {
     async handleStop(row) {
       this.stopLoading = true
 
-      const [host, port] = row.id.split(':')
+      const { host, port } = parseDeviceId(row.id)
 
       try {
         await this.$adb.disconnect(host, port)

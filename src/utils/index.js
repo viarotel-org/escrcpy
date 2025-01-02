@@ -136,3 +136,31 @@ export function formatFileSize(bytes) {
 
   return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`
 }
+
+/**
+ * Parsing the device ID
+ * @param {*} string
+ * @returns
+ */
+export function parseDeviceId(string = '') {
+  const splitList = string.split(':')
+
+  const value = {
+    host: string,
+    port: 5555,
+  }
+
+  if (splitList?.length < 2) {
+    return value
+  }
+
+  const port = Number.parseInt(splitList[splitList.length - 1])
+
+  if (!Number.isNaN(port) && port <= 65535) {
+    value.port = port
+  }
+
+  value.host = string.replace(/\[|\]/g, '').replace(`:${port}`, '')
+
+  return value
+}

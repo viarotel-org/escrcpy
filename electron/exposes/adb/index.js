@@ -11,6 +11,7 @@ import { uniq } from 'lodash-es'
 import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
+import { ipv6Wrapper } from './helpers/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -104,10 +105,6 @@ const deviceShell = async (id, command) => {
 }
 
 const kill = async (...params) => client.kill(...params)
-
-const connect = async (...params) => client.connect(...params)
-
-const disconnect = async (...params) => client.disconnect(...params)
 
 const getDeviceIP = async (id) => {
   try {
@@ -276,10 +273,6 @@ async function pull(id, filePath, args = {}) {
   })
 }
 
-async function pair(host, port, code) {
-  return shell(`pair ${host}:${port} ${code}`)
-}
-
 async function connectCode(password, options = {}) {
   return adbConnectionMonitor.startQrCodeScanning({
     password,
@@ -303,6 +296,18 @@ async function battery(id) {
     console.warn(error?.message || error)
     return {}
   }
+}
+
+async function pair(host, port, code) {
+  return shell(`pair ${ipv6Wrapper(host)}:${port} ${code}`)
+}
+
+async function connect(host, port = 5555) {
+  return shell(`connect ${ipv6Wrapper(host)}:${port}`)
+}
+
+async function disconnect(host, port = 5555) {
+  return shell(`disconnect ${ipv6Wrapper(host)}:${port}`)
 }
 
 function init() {

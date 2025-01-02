@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { sleep } from '$/utils'
+import { parseDeviceId, sleep } from '$/utils'
 import PairDialog from './PairDialog/index.vue'
 import QrAction from './QrAction/index.vue'
 
@@ -104,14 +104,13 @@ export default {
     wirelessList() {
       const value = this.$store.device.list.reduce((arr, item) => {
         if (item.wifi) {
-          const [host, port] = item.id.split(':')
-          if (host && port) {
-            arr.push({
-              id: item.id,
-              host,
-              port,
-            })
-          }
+          const { host, port } = parseDeviceId(item.id)
+
+          arr.push({
+            id: item.id,
+            host,
+            port,
+          })
         }
 
         return arr
@@ -126,10 +125,10 @@ export default {
       set(value) {
         this.formData.id = value
 
-        const [host, port] = value.split(':')
+        const { host, port } = parseDeviceId(value)
 
         this.formData.host = host
-        this.formData.port = port || 5555
+        this.formData.port = port
       },
     },
   },

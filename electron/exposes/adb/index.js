@@ -287,15 +287,39 @@ async function battery(id) {
 }
 
 async function pair(host, port, code) {
-  return shell(`pair ${ipv6Wrapper(host)}:${port} ${code}`)
+  const { stderr, stdout } = await shell(`pair ${ipv6Wrapper(host)}:${port} ${code}`)
+
+  if (stderr) {
+    throw stderr
+  }
+
+  return stdout
 }
 
 async function connect(host, port = 5555) {
-  return shell(`connect ${ipv6Wrapper(host)}:${port}`)
+  const { stderr, stdout } = await shell(`connect ${ipv6Wrapper(host)}:${port}`)
+
+  if (stderr) {
+    throw stderr
+  }
+
+  const errorKeys = ['cannot', 'failed']
+
+  if (errorKeys.some(item => stdout.includes(item))) {
+    throw stdout
+  }
+
+  return stdout
 }
 
 async function disconnect(host, port = 5555) {
-  return shell(`disconnect ${ipv6Wrapper(host)}:${port}`)
+  const { stderr, stdout } = await shell(`disconnect ${ipv6Wrapper(host)}:${port}`)
+
+  if (stderr) {
+    throw stderr
+  }
+
+  return stdout
 }
 
 function init() {

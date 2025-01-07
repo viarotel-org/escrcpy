@@ -11,7 +11,7 @@ import { uniq } from 'lodash-es'
 import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
-import { ipv6Wrapper } from './helpers/index.js'
+import { ipv6Wrapper, isIpv6 } from './helpers/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -297,6 +297,10 @@ async function pair(host, port, code) {
 }
 
 async function connect(host, port = 5555) {
+  if (!isIpv6(host) && client) {
+    return client.connect(host, port)
+  }
+
   const { stderr, stdout } = await shell(`connect ${ipv6Wrapper(host)}:${port}`)
 
   if (stderr) {
@@ -313,6 +317,10 @@ async function connect(host, port = 5555) {
 }
 
 async function disconnect(host, port = 5555) {
+  if (!isIpv6(host) && client) {
+    return client.disconnect(host, port)
+  }
+
   const { stderr, stdout } = await shell(`disconnect ${ipv6Wrapper(host)}:${port}`)
 
   if (stderr) {

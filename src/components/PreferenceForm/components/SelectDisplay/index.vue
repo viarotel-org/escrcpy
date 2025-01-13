@@ -24,8 +24,8 @@ import { getDeviceId } from '../helper.js'
 export default {
   props: {
     modelValue: {
-      type: String,
-      value: '',
+      type: [String, Number],
+      value: void 0,
     },
     data: {
       type: Object,

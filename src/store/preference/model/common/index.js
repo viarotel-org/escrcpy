@@ -161,6 +161,14 @@ export default {
       value: undefined,
       placeholder: 'preferences.common.floatControl.placeholder',
     },
+    edgeHidden: {
+      label: 'preferences.common.edgeHidden.name',
+      field: 'edgeHidden',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.edgeHidden.placeholder',
+      tips: 'preferences.common.edgeHidden.tips',
+    },
     debug: {
       label: 'preferences.common.debug.name',
       field: 'debug',

@@ -84,11 +84,19 @@ function createWindow() {
   remote.enable(mainWindow.webContents)
   remote.initialize()
 
-  new Edger(mainWindow)
-
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
+
+  const edgeHidden = appStore.get('common.edgeHidden')
+  if(edgeHidden) {
+    new Edger(mainWindow)
+  }
 
   ;['resize', 'move'].forEach((eventName) => {
     mainWindow.on(eventName, () => {
@@ -101,11 +109,6 @@ function createWindow() {
         ...bounds
       })
     })
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
   })
 
   loadPage(mainWindow)

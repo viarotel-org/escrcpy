@@ -269,6 +269,9 @@
   "preferences.common.auto-connect.placeholder": "啟用後，該軟體將在啟動時嘗試自動連接到歷史無線裝置",
   "preferences.common.auto-mirror.name": "自動執行鏡像",
   "preferences.common.auto-mirror.placeholder": "啟用後，裝置列表中的裝置將自動執行鏡像",
+  "preferences.common.edgeHidden.name": "主面板貼邊隱藏",
+  "preferences.common.edgeHidden.placeholder": "啟用後，當滑鼠靠近螢幕邊緣離開面板時，主面板將自動隱藏",
+  "preferences.common.edgeHidden.tips": "注意：更改此選項後，需要重啟應用程式才能生效",
 
   "preferences.video.name": "影片控制",
   "preferences.video.disable-video.name": "停用影片轉發",

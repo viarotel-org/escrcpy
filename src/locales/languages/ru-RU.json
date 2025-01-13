@@ -269,6 +269,9 @@
   "preferences.common.auto-connect.placeholder": "При включении программа попытается автоматически подключиться к историческим устройствам при запуске.",
   "preferences.common.auto-mirror.name": "Автозеркалирование",
   "preferences.common.auto-mirror.placeholder": "При включении устройства в списке устройств будут автоматически зеркалироваться.",
+  "preferences.common.edgeHidden.name": "Автоскрытие главной панели",
+  "preferences.common.edgeHidden.placeholder": "При включении главная панель будет автоматически скрываться, когда курсор приближается к краю экрана",
+  "preferences.common.edgeHidden.tips": "Примечание: Изменения вступят в силу после перезапуска приложения",
 
   "preferences.video.name": "Видео",
   "preferences.video.disable-video.name": "Отключить передачу видео",

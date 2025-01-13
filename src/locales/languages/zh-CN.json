@@ -269,6 +269,9 @@
   "preferences.common.auto-connect.placeholder": "启用后，该软件将在启动时尝试自动连接到历史无线设备",
   "preferences.common.auto-mirror.name": "自动执行镜像",
   "preferences.common.auto-mirror.placeholder": "启用后，设备列表中的设备将自动运行镜像",
+  "preferences.common.edgeHidden.name": "主面板贴边隐藏",
+  "preferences.common.edgeHidden.placeholder": "启用后，当鼠标靠近屏幕边缘离开面板时，主面板将自动隐藏。",
+  "preferences.common.edgeHidden.tips": "注意：更改此选项后，需要重启应用才能生效",
 
   "preferences.video.name": "视频控制",
   "preferences.video.disable-video.name": "禁用视频转发",

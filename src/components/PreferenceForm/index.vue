@@ -46,7 +46,7 @@
                     <el-tooltip
                       v-if="item_1.tips"
                       popper-class="max-w-96"
-                      effect="dark"
+                      effect="light"
                       :content="$t(item_1.tips)"
                       placement="bottom"
                     >

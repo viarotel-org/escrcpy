@@ -269,6 +269,9 @@
   "preferences.common.auto-connect.placeholder": "When enabled, the software will attempt to automatically connect to historical devices upon startup.",
   "preferences.common.auto-mirror.name": "Auto Mirror",
   "preferences.common.auto-mirror.placeholder": "When enabled, devices in the device list will automatically execution the mirror.",
+  "preferences.common.edgeHidden.name": "Auto-hide Main Panel",
+  "preferences.common.edgeHidden.placeholder": "When enabled, the main panel will automatically hide when mouse moves near screen edge",
+  "preferences.common.edgeHidden.tips": "Note: Changes require application restart to take effect",
 
   "preferences.video.name": "Video",
   "preferences.video.disable-video.name": "Disable Video Forwarding",

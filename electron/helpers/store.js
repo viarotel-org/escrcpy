@@ -2,7 +2,7 @@ import Store from 'electron-store'
 import { isEqual, set } from 'lodash-es'
 import { createProxy } from './index.js'
 
-const appStore = new Store()
+const appStore = new Store({ watch: true })
 
 // 如果没有数据则手动设置值，以保证配置文件生成成功
 if (isEqual(appStore.store, {})) {

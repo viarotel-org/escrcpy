@@ -7,7 +7,6 @@ import appStore from '$electron/helpers/store.js'
 import { formatFileSize } from '$renderer/utils/index'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
-import { uniq } from 'lodash-es'
 import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
@@ -159,26 +158,6 @@ const install = async (id, path) => client.getDevice(id).install(path)
 const isInstalled = async (id, pkg) => client.getDevice(id).isInstalled(pkg)
 
 const version = async () => client.version()
-
-const display = async (deviceId) => {
-  let value = []
-  try {
-    const res = await deviceShell(deviceId, 'dumpsys display')
-
-    const regex = /Display Id=(\d+)/g
-
-    const match = res.match(regex) || []
-
-    const mapValue = match.map(item => item.split('=')[1])
-
-    value = uniq(mapValue)
-  }
-  catch (error) {
-    console.warn(error?.message || error)
-  }
-
-  return value
-}
 
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
@@ -354,7 +333,6 @@ export default {
   install,
   isInstalled,
   version,
-  display,
   push,
   pull,
   watch,

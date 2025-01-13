@@ -68,7 +68,7 @@ export default {
         return false
       }
 
-      const res = await this.$adb.display(deviceId)
+      const res = await this.$scrcpy.getDisplayIds(deviceId)
 
       this.deviceOptions
         = res?.map((item) => {

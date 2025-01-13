@@ -4,7 +4,7 @@ import { adbPath, scrcpyPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
-import { getDisplayOverlay, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
+import { getDisplayOverlay, parseDisplayIds, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
 
 const exec = util.promisify(_exec)
 
@@ -132,6 +132,15 @@ async function getAppList(serial) {
   return value
 }
 
+async function getDisplayIds(serial) {
+  const res = await execShell(`--serial="${serial}" --list-displays`)
+
+  const stdout = res.stdout
+  const value = parseDisplayIds(stdout)
+
+  return value
+}
+
 async function startApp(serial, args = {}) {
   let { commands, packageName, ...options } = args
 
@@ -167,4 +176,5 @@ export default {
   helper,
   getAppList,
   startApp,
+  getDisplayIds,
 }

@@ -106,3 +106,30 @@ export function parseScrcpyCodecList(rawText) {
     }
   }
 }
+
+/**
+ * Gets a list of available display ids
+ * @param {*} text
+ * @returns
+ */
+export function parseDisplayIds(text) {
+  if (!text || typeof text !== 'string') {
+    return []
+  }
+
+  try {
+    const displayIdPattern = /--display-id=(\d+)/g
+
+    const matches = Array.from(text.matchAll(displayIdPattern))
+
+    const displayIds = matches.map(match => Number.parseInt(match[1], 10))
+
+    const uniqueDisplayIds = [...new Set(displayIds)].filter(id => !Number.isNaN(id))
+
+    return uniqueDisplayIds.sort((a, b) => a - b)
+  }
+  catch (error) {
+    console.error('Error parsing display IDs:', error)
+    return []
+  }
+}

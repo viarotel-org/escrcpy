@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.28.4](https://github.com/viarotel-org/escrcpy/compare/v1.28.3...v1.28.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* 🐛 Fix the display ID value type error ([2b7ee79](https://github.com/viarotel-org/escrcpy/commit/2b7ee795a077a6e9197d0a5db3a847aee8144ea8))
+* 🐛 Solve the problem of IPV6 address connection failure ([1a95325](https://github.com/viarotel-org/escrcpy/commit/1a95325884845441987113fbb17c58289a816346))
+
+
+### Performance Improvements
+
+* ♻️ Improve wireless connection stability ([85be898](https://github.com/viarotel-org/escrcpy/commit/85be8980d441c0046ae0854a6fdc88998be7b24c))
+* ⚡️ Optimize the method of obtaining the available displays of the device ([9e31c84](https://github.com/viarotel-org/escrcpy/commit/9e31c847fe91e0d5ccad512e863f9a2746554383))
+* 🐛 Improve wireless connection verification method ([69fecc3](https://github.com/viarotel-org/escrcpy/commit/69fecc3bc59f8f4a968368e48f1f06174255e62c))
+* 👷 Added edge hiding function switch ([d25714a](https://github.com/viarotel-org/escrcpy/commit/d25714a43f0676ab35204d6b4bc7564464eeb3c2))
+
 ## [1.28.3](https://github.com/viarotel-org/escrcpy/compare/v1.28.2...v1.28.3) (2024-12-28)
 
 

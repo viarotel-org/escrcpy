@@ -170,6 +170,7 @@
   "device.control.file.manager.storage": "內部儲存空間",
   "device.control.file.manager.add": "新增資料夾",
   "device.control.file.manager.upload": "上傳檔案",
+  "device.control.file.manager.upload.directory": "上傳目錄",
   "device.control.file.manager.download": "下載檔案",
   "device.control.file.manager.download.tips": "確定要下載所選內容嗎？",
   "device.control.file.manager.delete.tips": "確定要刪除所選內容嗎？",

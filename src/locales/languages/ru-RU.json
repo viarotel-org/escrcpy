@@ -170,6 +170,7 @@
   "device.control.file.manager.storage": "Внутреннее хранилище",
   "device.control.file.manager.add": "Новая папка",
   "device.control.file.manager.upload": "Загрузить файл",
+  "device.control.file.manager.upload.directory": "Загрузить каталог",
   "device.control.file.manager.download": "Скачать файл",
   "device.control.file.manager.download.tips": "Вы уверены, что хотите скачать выбранный контент?",
   "device.control.file.manager.delete.tips": "Вы уверены, что хотите удалить выбранный контент?",

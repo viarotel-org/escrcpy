@@ -11,6 +11,7 @@ import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ipv6Wrapper, isIpv6 } from './helpers/index.js'
+import { ADBUploader } from './helpers/uploader/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -309,6 +310,24 @@ async function disconnect(host, port = 5555) {
   return stdout
 }
 
+async function uploader(options = {}) {
+  const { deviceId, localPaths, remotePath = '/sdcard/Download', ...initialOptions } = options
+
+  const uploader = new ADBUploader({
+    adb: client,
+    onError: (error, file) => {
+      console.error(`Error uploading ${file}:`, error)
+    },
+    ...initialOptions,
+  })
+
+  return uploader.uploadTo(
+    remotePath,
+    localPaths,
+    deviceId,
+  )
+}
+
 function init() {
   const bin = appStore.get('common.adbPath') || adbPath
 
@@ -339,4 +358,5 @@ export default {
   readdir,
   connectCode,
   battery,
+  uploader,
 }

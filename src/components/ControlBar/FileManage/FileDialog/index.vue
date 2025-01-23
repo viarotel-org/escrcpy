@@ -51,12 +51,22 @@
 
       <el-button
         type="default"
-        icon="DocumentAdd"
+        icon="DocumentChecked"
         v-bind="{ loading: fileActions.loading }"
         @click="handleUpload(device)"
       >
         {{ $t('device.control.file.manager.upload') }}
       </el-button>
+
+      <el-button
+        type="default"
+        icon="FolderChecked"
+        v-bind="{ loading: fileActions.loading }"
+        @click="handleUpload(device, 'openDirectory')"
+      >
+        {{ $t('device.control.file.manager.upload.directory') }}
+      </el-button>
+
       <el-button
         type="default"
         icon="Download"
@@ -288,15 +298,16 @@ async function handleRemove(row) {
 
   await window.adb.deviceShell(
     device.value.id,
-    `rm -r ${currentPath.value}/${row.name}`,
+    `rm -r "/${currentPath.value}/${row.name}"`,
   )
 
   getTableData()
 }
 
-async function handleUpload() {
-  await fileActions.send(device.value, {
-    savePath: currentPath.value,
+async function handleUpload(device, openType) {
+  await fileActions.send(device, {
+    openType,
+    remotePath: `/${currentPath.value}`,
   })
 
   getTableData()

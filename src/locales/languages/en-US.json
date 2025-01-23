@@ -170,6 +170,7 @@
   "device.control.file.manager.storage": "Internal Storage",
   "device.control.file.manager.add": "New Folder",
   "device.control.file.manager.upload": "Upload File",
+  "device.control.file.manager.upload.directory": "Upload Directory",
   "device.control.file.manager.download": "Download File",
   "device.control.file.manager.download.tips": "Are you sure you want to download the selected content?",
   "device.control.file.manager.delete.tips": "Are you sure you want to delete the selected content?",

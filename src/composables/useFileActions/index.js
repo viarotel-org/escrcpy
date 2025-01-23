@@ -7,51 +7,28 @@ export function useFileActions() {
 
   const loading = ref(false)
 
-  function send(...args) {
-    const [devices] = args
-
-    if (Array.isArray(devices)) {
-      return multipleSend(...args)
-    }
-
-    return singleSend(...args)
-  }
-
-  async function selectFiles() {
-    try {
-      const files = await window.electron.ipcRenderer.invoke(
-        'show-open-dialog',
-        {
-          properties: ['openFile', 'multiSelections'],
-          filters: [
-            {
-              name: window.t('device.control.file.push.placeholder'),
-              extensions: ['*'],
-            },
-          ],
-        },
-      )
-
-      return files
-    }
-    catch (error) {
-      const message = error.message?.match(/Error: (.*)/)?.[1] || error.message
-
-      throw new Error(message)
-    }
-  }
-
-  async function singleSend(device, { savePath, files, silent = false } = {}) {
-    if (!files) {
+  async function send(devices, options = {}) {
+    if (!options.localPaths) {
       try {
-        files = await selectFiles()
+        options.localPaths = await selectLocals({ openType: options.openType })
       }
       catch (error) {
         ElMessage.warning(error.message)
-
         return false
       }
     }
+
+    if (Array.isArray(devices)) {
+      return multipleSend(devices, options)
+    }
+
+    return singleSend(devices, options)
+  }
+
+  async function singleSend(device, options = {}) {
+    options.remotePath = options.remotePath || options.savePath
+
+    const { remotePath, silent = false, openType = 'openFile', localPaths, ...uploaderOptions } = options
 
     loading.value = true
 
@@ -65,63 +42,43 @@ export function useFileActions() {
       ).close
     }
 
-    let failCount = 0
+    try {
+      const res = await window.adb.uploader({ ...uploaderOptions, deviceId: device.id, localPaths, remotePath })
 
-    await allSettledWrapper(files, (item) => {
-      return window.adb.push(device.id, item, { savePath }).catch(() => {
-        ++failCount
-      })
-    })
+      const totalCount = res.results.length
+      const successCount = res.results.filter(item => item.success).length
+      const failCount = totalCount - successCount
 
-    loading.value = false
-
-    if (silent) {
-      return false
+      if (!silent) {
+        if (failCount) {
+          ElMessage.success(
+            window.t('device.control.file.push.success', {
+              deviceName: deviceStore.getLabel(device),
+              totalCount,
+              successCount,
+              failCount,
+            }),
+          )
+        }
+        else {
+          ElMessage.success(
+            window.t('device.control.file.push.success.single', {
+              deviceName: deviceStore.getLabel(device),
+            }),
+          )
+        }
+      }
     }
-
-    const totalCount = files.length
-    const successCount = totalCount - failCount
-
-    if (successCount) {
+    catch (error) {
+      ElMessage.warning(error.message)
+    }
+    finally {
+      loading.value = false
       closeLoading()
-
-      if (totalCount > 1) {
-        ElMessage.success(
-          window.t('device.control.file.push.success', {
-            deviceName: deviceStore.getLabel(device),
-            totalCount,
-            successCount,
-            failCount,
-          }),
-        )
-      }
-      else {
-        ElMessage.success(
-          window.t('device.control.file.push.success.single', {
-            deviceName: deviceStore.getLabel(device),
-          }),
-        )
-      }
-
-      return false
     }
-
-    closeLoading()
-    ElMessage.warning(window.t('device.control.file.push.error'))
   }
 
-  async function multipleSend(devices, { files } = {}) {
-    if (!files) {
-      try {
-        files = await selectFiles()
-      }
-      catch (error) {
-        ElMessage.warning(error.message)
-
-        return false
-      }
-    }
-
+  async function multipleSend(devices, options = {}) {
     loading.value = true
 
     const closeMessage = ElMessage.loading(
@@ -129,7 +86,7 @@ export function useFileActions() {
     ).close
 
     await allSettledWrapper(devices, (item) => {
-      return singleSend(item, { files, silent: true })
+      return singleSend(item, { ...options, silent: true })
     })
 
     closeMessage()
@@ -142,8 +99,33 @@ export function useFileActions() {
   return {
     loading,
     send,
-    selectFiles,
     singleSend,
     multipleSend,
+  }
+}
+
+export async function selectLocals(options = {}) {
+  const { openType = 'openFile' } = options
+
+  try {
+    const files = await window.electron.ipcRenderer.invoke(
+      'show-open-dialog',
+      {
+        properties: [openType, 'multiSelections'],
+        filters: [
+          {
+            name: window.t('device.control.file.push.placeholder'),
+            extensions: ['*'],
+          },
+        ],
+      },
+    )
+
+    return files
+  }
+  catch (error) {
+    const message = error.message?.match(/Error: (.*)/)?.[1] || error.message
+
+    throw new Error(message)
   }
 }

@@ -254,7 +254,10 @@ Refer to [scrcpy/doc/shortcuts](https://github.com/Genymobile/scrcpy/blob/master
 27. Group devices (by filtering remarks) ✅
 28. Improved history device connection experience ✅  
 29. File management supports uploading directories ✅
-30. Better feature progress display 🚧
+30. Better operation progress display 🚧
+31. Improved method for setting the position and size of the mirroring window 🚧
+32. Support for batch starting devices 🚧
+33. Improved experience for batch connecting devices 🚧
 
 ## FAQ
 

@@ -162,7 +162,7 @@
   "device.control.file.name": "檔案管理",
   "device.control.file.push": "推送檔案",
   "device.control.file.push.placeholder": "請選擇要推送的檔案",
-  "device.control.file.push.loading": "推送檔案中...",
+  "device.control.file.push.loading": "推送檔案中",
   "device.control.file.push.success.name": "推送檔案成功",
   "device.control.file.push.success": "已成功將 {totalCount} 個檔案推送到 {deviceName}，{successCount} 成功，{failCount} 失敗。",
   "device.control.file.push.success.single": "檔案已成功推送到 {deviceName}",

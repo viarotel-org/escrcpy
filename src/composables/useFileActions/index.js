@@ -1,6 +1,7 @@
+import { ElMessage } from 'element-plus'
 import { useDeviceStore } from '$/store'
 import { allSettledWrapper } from '$/utils'
-import { ElMessage } from 'element-plus'
+import { useMessageLoading } from '$/composables/index.js'
 
 export function useFileActions() {
   const deviceStore = useDeviceStore()
@@ -10,7 +11,7 @@ export function useFileActions() {
   async function send(devices, options = {}) {
     if (!options.localPaths) {
       try {
-        options.localPaths = await selectLocals({ openType: options.openType })
+        options.localPaths = await selectFiles({ openType: options.openType })
       }
       catch (error) {
         ElMessage.warning(error.message)
@@ -32,18 +33,29 @@ export function useFileActions() {
 
     loading.value = true
 
-    let closeLoading
+    let messageLoading
+
+    const messageText = `${deviceStore.getLabel(device)}: ${window.t(
+      'device.control.file.push.loading',
+    )}`
+
+    const onProgress = ({ total }) => {
+      messageLoading?.update?.(`${messageText}(${total.percent}%)`)
+    }
+
+    const uploader = window.adb.uploader({ deviceId: device.id, localPaths, remotePath, onProgress, ...uploaderOptions })
 
     if (!silent) {
-      closeLoading = ElMessage.loading(
-        `${deviceStore.getLabel(device)}: ${window.t(
-          'device.control.file.push.loading',
-        )}`,
-      ).close
+      messageLoading = useMessageLoading(messageText, {
+        showClose: true,
+        onCancel: () => {
+          uploader.cancel()
+        },
+      })
     }
 
     try {
-      const res = await window.adb.uploader({ ...uploaderOptions, deviceId: device.id, localPaths, remotePath })
+      const res = await uploader.start()
 
       const totalCount = res.results.length
       const successCount = res.results.filter(item => item.success).length
@@ -74,24 +86,55 @@ export function useFileActions() {
     }
     finally {
       loading.value = false
-      closeLoading()
+      messageLoading?.close?.()
     }
   }
 
   async function multipleSend(devices, options = {}) {
     loading.value = true
 
-    const closeMessage = ElMessage.loading(
-      window.t('device.control.file.push.loading'),
-    ).close
+    const messageText = window.t('device.control.file.push.loading')
+    const totalDevices = devices.length
+    let completedDevices = 0
+    let currentProgress = 0
 
-    await allSettledWrapper(devices, (item) => {
-      return singleSend(item, { ...options, silent: true })
+    let cancelFlag = false
+
+    const messageLoading = useMessageLoading(messageText, {
+      showClose: true,
+      onCancel: () => {
+        cancelFlag = true
+      },
     })
 
-    closeMessage()
+    const onDeviceProgress = (progress) => {
+      const deviceWeight = 1 / totalDevices
+      const deviceProgress = progress?.total?.percent || 1
+      currentProgress = ((completedDevices / totalDevices) + (deviceProgress / 100 * deviceWeight)) * 100
+      messageLoading.update(`${messageText}(${Math.floor(currentProgress)}%)`)
+    }
 
-    ElMessage.success(window.t('common.success.batch'))
+    await allSettledWrapper(devices, async (item, index) => {
+      if (cancelFlag) {
+        return
+      }
+
+      await singleSend(item, {
+        ...options,
+        silent: true,
+        onProgress: onDeviceProgress,
+      })
+
+      completedDevices++
+
+      onDeviceProgress({ total: { percent: 100 } })
+    })
+
+    messageLoading.close()
+
+    if (!cancelFlag) {
+      ElMessage.success(window.t('common.success.batch'))
+    }
 
     loading.value = false
   }
@@ -104,7 +147,7 @@ export function useFileActions() {
   }
 }
 
-export async function selectLocals(options = {}) {
+export async function selectFiles(options = {}) {
   const { openType = 'openFile' } = options
 
   try {

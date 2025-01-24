@@ -162,7 +162,7 @@
   "device.control.file.name": "Файловый менеджер",
   "device.control.file.push": "Отправить файл",
   "device.control.file.push.placeholder": "Пожалуйста, выберите файл для отправки",
-  "device.control.file.push.loading": "Отправка файла...",
+  "device.control.file.push.loading": "Отправка файла",
   "device.control.file.push.success.name": "Файлы успешно отправлены",
   "device.control.file.push.success": "Успешно отправлено {totalCount} файлов на {deviceName}, успешно: {successCount}, неудачно: {failCount}",
   "device.control.file.push.success.single": "Файлы успешно отправлены на {deviceName}",

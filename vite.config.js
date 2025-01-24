@@ -2,6 +2,7 @@ import { resolve } from 'node:path'
 import useI18n from '@intlify/unplugin-vue-i18n/vite'
 import useVueRouter from 'unplugin-vue-router/vite'
 import useVue from '@vitejs/plugin-vue'
+import useVueJsx from '@vitejs/plugin-vue-jsx'
 import useUnoCSS from 'unocss/vite'
 import { defineConfig, mergeConfig } from 'vite'
 
@@ -52,6 +53,7 @@ export default function (args) {
           exclude: ['src/pages/**/components'],
         }),
         useVue(),
+        useVueJsx(),
         useI18n({
           include: [resolve('src/locales/languages/**')],
         }),

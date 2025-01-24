@@ -162,7 +162,7 @@
   "device.control.file.name": "File Manager",
   "device.control.file.push": "Push File",
   "device.control.file.push.placeholder": "Please select the file to push",
-  "device.control.file.push.loading": "Push file...",
+  "device.control.file.push.loading": "Push file",
   "device.control.file.push.success.name": "Push files successfully",
   "device.control.file.push.success": "Successfully pushed {totalCount} files to {deviceName}, {successCount} succeeded, and {failCount} failed",
   "device.control.file.push.success.single": "Files successfully pushed to {deviceName}",

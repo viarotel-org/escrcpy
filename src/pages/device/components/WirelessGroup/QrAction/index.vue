@@ -53,7 +53,7 @@ async function handleClick() {
   loading.value = true
 
   try {
-    await window.adb.connectCode(data.password, {
+    await window.adb.scannerConnect(data.password, {
       onStatus,
     })
   }

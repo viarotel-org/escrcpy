@@ -7,10 +7,10 @@ import appStore from '$electron/helpers/store.js'
 import { formatFileSize } from '$renderer/utils/index'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
-import adbConnectionMonitor from './helpers/adbConnectionMonitor/index.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ipv6Wrapper, isIpv6 } from './helpers/index.js'
+import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 
 const exec = util.promisify(_exec)
@@ -163,8 +163,7 @@ const version = async () => client.version()
 const watch = async (callback) => {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
-    const host = await getDeviceIP(ret.id)
-    callback('add', { ...ret, $host: host })
+    callback('add', ret)
   })
 
   tracker.on('remove', (device) => {
@@ -247,12 +246,13 @@ async function pull(id, filePath, args = {}) {
   })
 }
 
-async function connectCode(password, options = {}) {
-  return adbConnectionMonitor.startQrCodeScanning({
+async function scannerConnect(password, options = {}) {
+  return adbScanner.connect({
     password,
     adb: {
       pair,
       connect,
+      shell,
     },
     ...options,
   })
@@ -310,7 +310,7 @@ async function disconnect(host, port = 5555) {
   return stdout
 }
 
-async function uploader(options = {}) {
+function uploader(options = {}) {
   const { deviceId, localPaths, remotePath = '/sdcard/Download', ...initialOptions } = options
 
   const uploader = new ADBUploader({
@@ -321,11 +321,15 @@ async function uploader(options = {}) {
     ...initialOptions,
   })
 
-  return uploader.uploadTo(
-    remotePath,
-    localPaths,
-    deviceId,
-  )
+  return {
+    context: uploader,
+    start: () => uploader.uploadTo(
+      remotePath,
+      localPaths,
+      deviceId,
+    ),
+    cancel: () => uploader.cancel(),
+  }
 }
 
 function init() {
@@ -356,7 +360,7 @@ export default {
   pull,
   watch,
   readdir,
-  connectCode,
+  scannerConnect,
   battery,
   uploader,
 }

@@ -1,6 +1,7 @@
 import { Bonjour } from 'bonjour-service'
 import net from 'node:net'
 import appStore from '$electron/helpers/store.js'
+import { parseDeviceId } from '$/utils/index.js'
 
 export const MDNS_CONFIG = {
   PAIRING_TYPE: 'adb-tls-pairing',
@@ -74,7 +75,7 @@ export class DeviceScanner {
   }
 }
 
-export class AdbConnectionMonitor {
+export class AdbScanner {
   constructor() {
     this.deviceScanner = new DeviceScanner()
     this.isActive = false
@@ -82,7 +83,7 @@ export class AdbConnectionMonitor {
     this.onStatus = () => {}
   }
 
-  async startQrCodeScanning(options) {
+  async connect(options) {
     this.validateOptions(options)
 
     const {
@@ -101,23 +102,40 @@ export class AdbConnectionMonitor {
       await this.pairWithDevice(device, password)
 
       this.onStatus('connecting')
+
+      // 先尝试使用历史端口连接
+      const backPort = this.getBackPort(device)
+
+      if (backPort && ![5555].includes(backPort)) {
+        try {
+          await this.connectToDevice({
+            ...device,
+            port: backPort,
+          })
+          this.onStatus('connected')
+          return {
+            success: true,
+            device,
+          }
+        }
+        catch (error) {
+          // The historical port connection failed. Continue to use the standard procedure
+          console.log('Fallback port connection failed, trying standard flow')
+        }
+      }
+
+      // Standard connection process
       try {
         const connectDevice = await this.waitForDeviceConnect(device)
         await this.connectToDevice(connectDevice)
       }
       catch (error) {
-        if (error.code === ERROR_CODES.TIMEOUT) {
-          this.onStatus('connecting-fallback')
-          // 使用回退端口尝试连接
-          const fallbackPort = this.getBackPort(device)
-          await this.connectToDevice({
-            ...device,
-            port: fallbackPort,
-          })
-        }
-        else {
-          throw error
-        }
+        this.onStatus('connecting-fallback')
+        // Last attempt
+        await this.connectToDevice({
+          ...device,
+          port: 5555,
+        })
       }
 
       this.onStatus('connected')
@@ -129,7 +147,6 @@ export class AdbConnectionMonitor {
     }
     catch (error) {
       this.onStatus('error', error.message)
-
       return {
         success: false,
         error: error.message,
@@ -229,8 +246,9 @@ export class AdbConnectionMonitor {
 
     const value = Object.entries(devices).reduce((port, [key, value]) => {
       if (key.includes(device.address)) {
-        port = key.split(':')[1]
+        port = parseDeviceId(key).port
       }
+
       return port
     }, 5555)
 
@@ -243,4 +261,4 @@ export class AdbConnectionMonitor {
   }
 }
 
-export default new AdbConnectionMonitor()
+export default new AdbScanner()

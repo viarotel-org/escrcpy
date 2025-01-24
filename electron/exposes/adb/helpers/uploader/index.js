@@ -18,6 +18,14 @@ export class ADBUploader {
       ...options,
     }
     this.isCancelled = false
+
+    this.stats = {
+      totalBytes: 0,
+      uploadedBytes: 0,
+      startTime: 0,
+    }
+
+    this._lastBytes = 0
   }
 
   /**
@@ -45,9 +53,11 @@ export class ADBUploader {
 
   async uploadTo(remoteDir, localPaths, deviceId = null) {
     this.isCancelled = false
-    const startTime = Date.now()
-    let totalBytes = 0
-    let uploadedBytes = 0
+    this.stats = {
+      totalBytes: 0,
+      uploadedBytes: 0,
+      startTime: Date.now(),
+    }
 
     try {
       const paths = Array.isArray(localPaths) ? localPaths : [localPaths]
@@ -58,10 +68,10 @@ export class ADBUploader {
           const stats = await fs.stat(localPath)
           if (stats.isDirectory()) {
             const files = await this._getFileList(localPath)
-            totalBytes += files.reduce((acc, file) => acc + file.size, 0)
+            this.stats.totalBytes += files.reduce((acc, file) => acc + file.size, 0)
           }
           else {
-            totalBytes += stats.size
+            this.stats.totalBytes += stats.size
           }
         }
       }
@@ -102,33 +112,19 @@ export class ADBUploader {
             // 目录或文件开始上传回调
             this.options.onDirectoryStart(localPath, {
               isDirectory,
-              totalBytes,
-              uploadedBytes,
-              startTime,
+              ...this.stats,
             })
 
             const success = isDirectory
-              ? await this._uploadSingleDirectory(sync, localPath, targetRemotePath, {
-                totalBytes,
-                uploadedBytes,
-                startTime,
-                onProgress: bytes => uploadedBytes += bytes,
-              })
-              : await this._uploadSingleFile(sync, localPath, targetRemotePath, {
-                totalBytes,
-                uploadedBytes,
-                startTime,
-                onProgress: bytes => uploadedBytes += bytes,
-              })
+              ? await this._uploadSingleDirectory(sync, localPath, targetRemotePath)
+              : await this._uploadSingleFile(sync, localPath, targetRemotePath)
 
             results.push({ localPath, success })
 
             this.options.onDirectoryComplete(localPath, success, {
               isDirectory,
-              totalBytes,
-              uploadedBytes,
-              startTime,
-              duration: Date.now() - startTime,
+              ...this.stats,
+              duration: Date.now() - this.stats.startTime,
             })
           }
           catch (error) {
@@ -145,9 +141,8 @@ export class ADBUploader {
           success: results.every(r => r.success),
           results,
           stats: {
-            totalBytes,
-            uploadedBytes,
-            duration: Date.now() - startTime,
+            ...this.stats,
+            duration: Date.now() - this.stats.startTime,
           },
         }
       }
@@ -163,26 +158,25 @@ export class ADBUploader {
         error: error.message,
         results: [],
         stats: {
-          totalBytes,
-          uploadedBytes,
-          duration: Date.now() - startTime,
+          ...this.stats,
+          duration: Date.now() - this.stats.startTime,
         },
       }
     }
   }
 
-  async _uploadSingleFile(sync, localPath, remotePath, stats) {
+  async _uploadSingleFile(sync, localPath, remotePath) {
     if (this.options.validateFile) {
       await this.options.validateFile(localPath)
     }
 
-    this.options.onFileStart(localPath, stats)
-    await this._uploadFileWithRetry(sync, localPath, remotePath, stats)
-    this.options.onFileComplete(localPath, stats)
+    this.options.onFileStart(localPath, this.stats)
+    await this._uploadFileWithRetry(sync, localPath, remotePath)
+    this.options.onFileComplete(localPath, this.stats)
     return true
   }
 
-  async _uploadSingleDirectory(sync, localDir, remoteDir, stats) {
+  async _uploadSingleDirectory(sync, localDir, remoteDir) {
     const files = await this._getFileList(localDir)
 
     for (const file of files) {
@@ -194,10 +188,7 @@ export class ADBUploader {
       }
 
       const remotePath = path.posix.join(remoteDir, file.relativePath)
-      await this._uploadSingleFile(sync, file.localPath, remotePath, {
-        ...stats,
-        fileSize: file.size,
-      })
+      await this._uploadSingleFile(sync, file.localPath, remotePath)
     }
     return true
   }
@@ -232,7 +223,7 @@ export class ADBUploader {
     return fileList
   }
 
-  async _uploadFileWithRetry(sync, localPath, remotePath, stats) {
+  async _uploadFileWithRetry(sync, localPath, remotePath) {
     let lastError = null
 
     for (let attempt = 0; attempt < this.options.retries; attempt++) {
@@ -241,29 +232,30 @@ export class ADBUploader {
 
       try {
         await new Promise((resolve, reject) => {
+          const fileSize = fs.statSync(localPath).size
           const transfer = sync.pushFile(localPath, remotePath)
 
           transfer.on('end', resolve)
           transfer.on('error', reject)
 
-          // More granular progress callbacks
           transfer.on('progress', (progressStats) => {
-            const { bytesTransferred, bytesTotal } = progressStats
-            stats.onProgress(bytesTransferred - (this._lastBytes || 0))
+            const bytesTransferred = progressStats.bytesTransferred
+            const deltaBytes = bytesTransferred - (this._lastBytes || 0)
+            this.stats.uploadedBytes += deltaBytes
             this._lastBytes = bytesTransferred
 
             this.options.onProgress({
               file: {
                 path: localPath,
-                size: bytesTotal,
+                size: fileSize,
                 uploaded: bytesTransferred,
-                percent: Math.round((bytesTransferred / bytesTotal) * 100),
+                percent: Math.round((bytesTransferred / fileSize) * 100),
               },
               total: {
-                size: stats.totalBytes,
-                uploaded: stats.uploadedBytes,
-                percent: Math.round((stats.uploadedBytes / stats.totalBytes) * 100),
-                elapsed: Date.now() - stats.startTime,
+                size: this.stats.totalBytes,
+                uploaded: this.stats.uploadedBytes,
+                percent: Math.round((this.stats.uploadedBytes / this.stats.totalBytes) * 100),
+                elapsed: Date.now() - this.stats.startTime,
               },
             })
           })

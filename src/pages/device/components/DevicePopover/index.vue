@@ -2,7 +2,7 @@
   <el-popover
     ref="popoverRef"
     placement="right"
-    :width="500"
+    :width="horizontalFlag ? 350 : 500"
     trigger="hover"
     popper-class="!p-0 !overflow-hidden !rounded-xl"
     @before-enter="onBeforeEnter"
@@ -12,12 +12,10 @@
       <el-link type="primary" :underline="false" icon="InfoFilled" class="mr-1"></el-link>
     </template>
 
-    <div v-loading="loading" :element-loading-text="$t('common.loading')" :class="connectFlag ? 'h-60' : ''" class="flex items-stretch p-2 space-x-2">
-      <div v-if="connectFlag" class="flex-none pb-1">
-        <img :src="deviceInfo.screencap" class="!h-full !overflow-hidden !rounded-xl !shadow min-w-24 max-w-56 bg-gray-200 dark:bg-black object-contain cursor-pointer" alt="" @click="handlePreview" />
-      </div>
+    <div v-loading="loading" :element-loading-text="$t('common.loading')" class="flex items-stretch p-2" :class="[horizontalFlag ? 'flex-col space-y-2' : 'space-x-2 h-60', { '!h-auto': !connectFlag }]">
+      <img v-if="connectFlag" :src="deviceInfo.screencap" :class="[horizontalFlag ? 'w-full' : 'h-full']" class="flex-none overflow-hidden rounded-xl shadow bg-gray-200 dark:bg-black object-contain cursor-pointer" alt="" @load="onScreencapLoad" @click="handlePreview" />
 
-      <div class="flex-1 w-0 overflow-auto">
+      <div class="overflow-auto" :class="[horizontalFlag ? 'flex-none max-h-56' : 'h-full flex-1 w-0']">
         <el-descriptions border :column="1" class="el-descriptions--custom">
           <el-descriptions-item :label="$t('device.id')">
             {{ deviceInfo.id }}
@@ -79,6 +77,13 @@ function handlePreview() {
 
 function onViewerClose() {
   imageViewerProps.value.visible = false
+}
+
+const horizontalFlag = ref(false)
+
+function onScreencapLoad(event) {
+  const { naturalHeight, naturalWidth } = event.target
+  horizontalFlag.value = naturalWidth > naturalHeight
 }
 
 async function onBeforeEnter() {

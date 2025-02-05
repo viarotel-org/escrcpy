@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.28.5](https://github.com/viarotel-org/escrcpy/compare/v1.28.4...v1.28.5) (2025-02-05)
+
+
+### Performance Improvements
+
+* ✅ File management supports selecting directories for uploading ([fd2e639](https://github.com/viarotel-org/escrcpy/commit/fd2e639d1b04f1e3b65b04eb02343830d1302238))
+* ⬆️ Improve QR code connection performance ([b413889](https://github.com/viarotel-org/escrcpy/commit/b413889ed32d1b39387cbdb2844a18fb0349f17b))
+
 ## [1.28.4](https://github.com/viarotel-org/escrcpy/compare/v1.28.3...v1.28.4) (2025-01-13)
 
 

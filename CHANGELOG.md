@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.6](https://github.com/viarotel-org/escrcpy/compare/v1.28.5...v1.28.6) (2025-02-05)
+
+
+### Bug Fixes
+
+* 🐛 Resolving build errors ([d21fa29](https://github.com/viarotel-org/escrcpy/commit/d21fa290dcaa7fbe7bb61979542feb6b22b2c863))
+
 ## [1.28.5](https://github.com/viarotel-org/escrcpy/compare/v1.28.4...v1.28.5) (2025-02-05)
 
 

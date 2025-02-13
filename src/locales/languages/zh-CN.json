@@ -69,6 +69,7 @@
   "device.status.offline": "已离线",
   "device.status.unauthorized": "未授权",
   "device.status.connected": "已连接",
+  "device.status.authorizing": "授权中",
   "device.battery": "设备电量",
   "device.isCharging": "充电状态",
   "device.temperature": "设备温度",

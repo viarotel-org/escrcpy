@@ -88,7 +88,7 @@
         </el-table-column>
 
         <el-table-column
-          v-slot="{ row, $index }"
+          v-slot="{ row }"
           :label="$t('device.control.name')"
           align="left"
           width="150"
@@ -96,7 +96,7 @@
           <div class="flex items-center !space-x-0">
             <MirrorAction
               v-if="['device', 'unauthorized'].includes(row.status)"
-              :ref="(value) => getMirrorActionRefs(value, $index)"
+              :ref="getMirrorActionRefs"
               v-bind="{ row, toggleRowExpansion, handleReset }"
             />
 
@@ -240,6 +240,7 @@ export default {
     },
     async onAdbWatch(type, ret) {
       if (ret && ret.id) {
+        await sleep(1000)
         this.getDeviceData()
       }
 
@@ -249,7 +250,7 @@ export default {
         )
       }
     },
-    async getMirrorActionRefs(ref, index) {
+    async getMirrorActionRefs(ref) {
       await this.$nextTick()
 
       if (!ref?.row?.id) {
@@ -264,11 +265,11 @@ export default {
         return false
       }
 
+      const length = this.mirrorActionRefs.length
+
       this.mirrorActionRefs.push(ref)
 
-      const secondNum = index
-
-      await sleep(secondNum * 2000)
+      await sleep(length * 1000)
 
       const autoMirror = this.$store.preference.data.autoMirror
 

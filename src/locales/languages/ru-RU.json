@@ -67,6 +67,7 @@
   "device.terminal.name": "Терминал",
   "device.status": "Статус",
   "device.status.connected": "Подключено",
+  "device.status.authorizing": "Авторизация",
   "device.status.offline": "Не в сети",
   "device.status.unauthorized": "Не авторизован",
   "device.battery": "Уровень заряда устройства",

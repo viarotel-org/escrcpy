@@ -1,6 +1,11 @@
 export const deviceStatus = [
   {
     label: 'device.status.connected',
+    value: 'emulator',
+    tagType: 'success',
+  },
+  {
+    label: 'device.status.connected',
     value: 'device',
     tagType: 'success',
   },
@@ -13,5 +18,10 @@ export const deviceStatus = [
     label: 'device.status.offline',
     value: 'offline',
     tagType: 'info',
+  },
+  {
+    label: 'device.status.authorizing',
+    value: 'authorizing',
+    tagType: 'warning',
   },
 ]

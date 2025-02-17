@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.28.7](https://github.com/viarotel-org/escrcpy/compare/v1.28.6...v1.28.7) (2025-02-17)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue of duplicate filter conditions in the device list ([6c4242c](https://github.com/viarotel-org/escrcpy/commit/6c4242c40a878472862170ef3514870881c30b11))
+* 🐛 Solved the problem that the main window could not be restored after being moved off the screen in some cases ([d054f8d](https://github.com/viarotel-org/escrcpy/commit/d054f8df6c78bd678589164acaa5847016740953))
+
+
+### Performance Improvements
+
+* ⬆️ Improved performance of automated mirroring ([33a03c3](https://github.com/viarotel-org/escrcpy/commit/33a03c3f636c0a7d7010ddffec381b44612a2534))
+* 💄 Optimize the display effect of horizontal screen screenshots ([90c7163](https://github.com/viarotel-org/escrcpy/commit/90c716302d58c7484cc6aba4a55e54a103d5f8ef))
+* 🚀 The main panel supports single instance startup ([c49d22c](https://github.com/viarotel-org/escrcpy/commit/c49d22cabf17d4539549db01914fddb44b73530f))
+
 ## [1.28.6](https://github.com/viarotel-org/escrcpy/compare/v1.28.5...v1.28.6) (2025-02-05)
 
 

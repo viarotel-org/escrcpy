@@ -203,10 +203,12 @@ export default {
       return this.selectionRows.length > 0
     },
     statusFilters() {
-      const value = deviceStatus.map(item => ({
-        text: window.t(item.label),
-        value: item.value,
-      }))
+      const value = deviceStatus
+        .map(item => ({
+          text: window.t(item.label),
+          value: item.value,
+        }))
+        .filter(item => !['emulator'].includes(item.value))
 
       return value
     },

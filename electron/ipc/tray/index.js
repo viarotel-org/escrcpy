@@ -1,12 +1,17 @@
+import { app, dialog, Menu, Tray } from 'electron'
 import { trayPath } from '$electron/configs/index.js'
 import { executeI18n } from '$electron/helpers/index.js'
 import appStore from '$electron/helpers/store.js'
-import { app, dialog, Menu, Tray } from 'electron'
+import { eventEmitter } from '$electron/helpers/emitter.js'
 
 export default (mainWindow) => {
   const t = value => executeI18n(mainWindow, value)
 
   let tray = null
+
+  eventEmitter.on('tray:destroy', () => {
+    tray?.destroy?.()
+  })
 
   const showApp = () => {
     if (process.platform === 'darwin') {

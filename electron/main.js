@@ -22,6 +22,9 @@ import { loadPage } from './helpers/index.js'
 
 import { Edger } from './helpers/edger/index.js'
 
+import { ensureSingleInstance } from './helpers/single.js'
+import { eventEmitter } from './helpers/emitter.js'
+
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -122,26 +125,38 @@ function createWindow() {
   control(mainWindow)
 }
 
-app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.viarotel.escrcpy')
-
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
+function onWhenReady() {
+  app.whenReady().then(() => {
+    electronApp.setAppUserModelId('com.viarotel.escrcpy')
+  
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window)
+    })
+  
+    createWindow()
+  
+    // macOS 中应用被激活
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+        return
+      }
+  
+      app.dock.show()
+      mainWindow.show()
+    })
   })
+}
 
-  createWindow()
-
-  // macOS 中应用被激活
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-      return
-    }
-
-    app.dock.show()
-    mainWindow.show()
-  })
+ensureSingleInstance({
+  onSuccess() {
+    onWhenReady()
+  },
+  onShowWindow() {
+    eventEmitter.emit('tray:destroy')
+  }
 })
+
 
 app.on('window-all-closed', () => {
   app.isQuiting = true

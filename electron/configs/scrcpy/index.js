@@ -4,7 +4,7 @@ import which from 'which'
 export function getScrcpyPath() {
   switch (process.platform) {
     case 'win32':
-      return extraResolve('win/scrcpy/scrcpy.exe')
+      return extraResolve(`win-${process.arch}/scrcpy/scrcpy.exe`)
     case 'darwin':
       return extraResolve(`mac-${process.arch}/scrcpy/scrcpy`)
     case 'linux':

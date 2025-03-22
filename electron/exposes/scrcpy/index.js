@@ -1,12 +1,21 @@
 import { exec as _exec, spawn } from 'node:child_process'
 import util from 'node:util'
+import { electronAPI } from '@electron-toolkit/preload'
 import { adbPath, scrcpyPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
+import { ProcessManager } from '$electron/helpers/index.js'
+
 import { getDisplayOverlay, parseDisplayIds, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
 
 const exec = util.promisify(_exec)
+
+const processManager = new ProcessManager()
+
+electronAPI.ipcRenderer.on('quit-before', () => {
+  processManager.kill()
+})
 
 async function shell(command, { stdout, stderr, signal, ...options } = {}) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
@@ -19,6 +28,8 @@ async function shell(command, { stdout, stderr, signal, ...options } = {}) {
     encoding: 'utf8',
     ...options,
   })
+
+  processManager.add(scrcpyProcess)
 
   const stderrList = []
 
@@ -70,13 +81,15 @@ async function execShell(command) {
   const spawnPath = appStore.get('common.scrcpyPath') || scrcpyPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
-  const res = exec(`"${spawnPath}" ${command}`, {
+  const scrcpyProcess = exec(`"${spawnPath}" ${command}`, {
     env: { ...process.env, ADB },
     shell: true,
     encoding: 'utf8',
   })
 
-  return res
+  processManager.add(scrcpyProcess.child)
+
+  return scrcpyProcess
 }
 
 async function getEncoders(serial) {

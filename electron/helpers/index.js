@@ -2,6 +2,7 @@ import { join, resolve } from 'node:path'
 import { Buffer } from 'node:buffer'
 import { contextBridge } from 'electron'
 import { cloneDeep } from 'lodash-es'
+import treeKill from 'tree-kill'
 
 export const isPackaged = ['true'].includes(process.env.IS_PACKAGED)
 
@@ -84,4 +85,30 @@ export function streamToBase64(stream) {
       reject(error)
     })
   })
+}
+
+/**
+ * Process Manager
+ */
+export class ProcessManager {
+  constructor() {
+    this.processList = []
+  }
+
+  add(process) {
+    this.processList.push(process)
+  }
+
+  kill(process) {
+    if (!process) {
+      this.processList.forEach(item => treeKill(item.pid))
+      this.processList = []
+      return this
+    }
+
+    const pid = process?.pid || process
+    treeKill(pid)
+    this.processList = this.processList.filter(item => item.pid !== pid)
+    return this
+  }
 }

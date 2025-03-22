@@ -52,6 +52,7 @@
   "appClose.minimize": "Minimize to Tray",
   "appClose.quit": "Exit Directly",
   "appClose.quit.cancel": "Cancel Exit",
+  "appClose.quit.loading": "Stopping the service...",
   "appClose.message": "Are you sure you want to exit?",
   "appClose.remember": "Remember the Choice?",
 

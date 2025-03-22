@@ -52,6 +52,7 @@
   "appClose.minimize": "Свернуть в трей",
   "appClose.quit": "Выйти сразу",
   "appClose.quit.cancel": "Отменить выход",
+  "appClose.quit.loading": "Остановка сервиса...",
   "appClose.message": "Вы уверены, что хотите выйти?",
   "appClose.remember": "Запомнить выбор?",
 

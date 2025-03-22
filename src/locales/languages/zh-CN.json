@@ -52,6 +52,7 @@
   "appClose.minimize": "最小化到托盘",
   "appClose.quit": "直接退出",
   "appClose.quit.cancel": "取消退出",
+  "appClose.quit.loading": "正在停止服务...",
   "appClose.message": "确定要退出吗？",
   "appClose.remember": "是否记住选择？",
 

@@ -7,20 +7,22 @@ import appStore from '$electron/helpers/store.js'
 import { formatFileSize } from '$renderer/utils/index'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
-import { streamToBase64 } from '$electron/helpers/index.js'
+import { ProcessManager, streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ipv6Wrapper, isIpv6 } from './helpers/index.js'
 import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
+import { electronAPI } from '@electron-toolkit/preload'
 
 const exec = util.promisify(_exec)
 
+const processManager = new ProcessManager()
+
 let client = null
 
-window.addEventListener('beforeunload', () => {
-  if (client) {
-    client.kill()
-  }
+electronAPI.ipcRenderer.on('quit-before', () => {
+  client?.kill?.()
+  processManager.kill()
 })
 
 appStore.onDidChange('common.adbPath', async (value, oldValue) => {
@@ -42,10 +44,15 @@ appStore.onDidChange('common.adbPath', async (value, oldValue) => {
 
 const shell = async (command) => {
   const execPath = appStore.get('common.adbPath') || adbPath
-  return exec(`"${execPath}" ${command}`, {
+
+  const adbProcess = exec(`"${execPath}" ${command}`, {
     env: { ...process.env },
     shell: true,
   })
+
+  processManager.add(adbProcess.child)
+
+  return adbProcess
 }
 
 const spawnShell = async (command, { stdout, stderr } = {}) => {
@@ -57,6 +64,8 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
     shell: true,
     encoding: 'utf8',
   })
+
+  processManager.add(spawnProcess)
 
   spawnProcess.stdout.on('data', (data) => {
     const stringData = data.toString()

@@ -3,6 +3,7 @@ import { trayPath } from '$electron/configs/index.js'
 import { executeI18n } from '$electron/helpers/index.js'
 import appStore from '$electron/helpers/store.js'
 import { eventEmitter } from '$electron/helpers/emitter.js'
+import { sleep } from '$/utils'
 
 export default (mainWindow) => {
   const t = value => executeI18n(mainWindow, value)
@@ -38,8 +39,12 @@ export default (mainWindow) => {
     return true
   }
 
-  const quitApp = () => {
+  const quitApp = async () => {
     app.isQuiting = true
+
+    mainWindow.webContents.send('quit-before')
+
+    await sleep(3 * 1000)
 
     app.quit()
 

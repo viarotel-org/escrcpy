@@ -52,6 +52,7 @@
   "appClose.minimize": "最小化到工具列",
   "appClose.quit": "直接結束",
   "appClose.quit.cancel": "取消結束",
+  "appClose.quit.loading": "正在停止服務...",
   "appClose.message": "確定要結束嗎？",
   "appClose.remember": "是否記住選擇？",
 

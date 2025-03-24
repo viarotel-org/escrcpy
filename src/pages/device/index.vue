@@ -137,7 +137,7 @@
 
     <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
       <div class="flex-none">
-        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
+        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" @auto-connected="onAutoConnected" />
       </div>
 
       <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
@@ -222,7 +222,8 @@ export default {
     },
   },
   async mounted() {
-    this.getDeviceData()
+    await this.getDeviceData()
+
     this.unAdbWatch = await this.$adb.watch(this.onAdbWatch)
   },
   beforeUnmount() {
@@ -233,6 +234,9 @@ export default {
   },
   methods: {
     getDictLabel,
+
+    onAutoConnected() {},
+
     filterMethod(value, row, column) {
       const property = column.property
       return row[property] === value
@@ -340,7 +344,7 @@ export default {
         console.warn(message)
 
         if (message.includes('failed to start daemon')) {
-          this.getDeviceData()
+          await this.getDeviceData()
           return false
         }
 

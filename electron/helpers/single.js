@@ -102,16 +102,23 @@ function ensureSingleInstance(options = {}) {
         const windows = BrowserWindow.getAllWindows()
         const mainWindow = windows.length ? windows[0] : null
 
-        // 处理窗口焦点
-        onShowWindow?.(mainWindow, commandLine)
+        const showWindowNext = () => {
+          if (mainWindow) {
+            if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
+              mainWindow.show()
+            }
+            if (forceFocus) {
+              mainWindow.focus()
+            }
+          }
+        }
 
-        if (mainWindow) {
-          if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
-            mainWindow.show()
-          }
-          if (forceFocus) {
-            mainWindow.focus()
-          }
+        // 处理窗口焦点
+        if (onShowWindow) {
+          onShowWindow?.(mainWindow, commandLine, showWindowNext)
+        }
+        else {
+          showWindowNext()
         }
 
         // 调用用户自定义的回调

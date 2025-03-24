@@ -44,7 +44,7 @@ export default (mainWindow) => {
 
     mainWindow.webContents.send('quit-before')
 
-    await sleep(3 * 1000)
+    await sleep(1 * 1000)
 
     app.quit()
 

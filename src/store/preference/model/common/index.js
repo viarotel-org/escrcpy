@@ -144,7 +144,7 @@ export default {
       label: 'preferences.common.auto-connect.name',
       field: 'autoConnect',
       type: 'Switch',
-      value: undefined,
+      value: true,
       placeholder: 'preferences.common.auto-connect.placeholder',
     },
     autoMirror: {

@@ -32,7 +32,7 @@ export const useDeviceStore = defineStore({
       return this.config
     },
     getLabel(device, params) {
-      if (!device.id) {
+      if (!device) {
         return ''
       }
 
@@ -46,9 +46,9 @@ export const useDeviceStore = defineStore({
 
       const currentTime = dayjs().format('YYYYMMDDHHmmss')
 
-      let value = `${appName}-${deviceName}`
+      let value = `${deviceName}-${appName}`
 
-      const createPreset = type => `${appName}${capitalize(type)}-${deviceName}`
+      const createPreset = type => `${capitalize(type)}-${deviceName}-${appName}`
 
       const presets = {
         ...[

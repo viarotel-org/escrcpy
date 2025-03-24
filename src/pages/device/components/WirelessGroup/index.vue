@@ -86,6 +86,7 @@ export default {
       default: () => () => false,
     },
   },
+  emits: ['auto-connected'],
   data() {
     return {
       loading: false,
@@ -164,6 +165,7 @@ export default {
       if (autoConnect) {
         await this.handleBatch()
         this.handleRefresh()
+        this.$emit('auto-connected')
       }
     },
     getFormData() {

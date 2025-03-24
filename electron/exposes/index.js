@@ -8,6 +8,7 @@ import electron from './electron/index.js'
 import gnirehtet from './gnirehtet/index.js'
 import scrcpy from './scrcpy/index.js'
 import search from './search/index.js'
+import desktop from './desktop/index.js'
 import '$electron/helpers/console.js'
 
 export default {
@@ -32,5 +33,7 @@ export default {
     expose('gnirehtet', gnirehtet)
 
     expose('findInPageModal', search)
+
+    expose('desktop', desktop)
   },
 }

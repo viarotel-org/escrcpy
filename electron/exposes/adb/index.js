@@ -341,6 +341,12 @@ function uploader(options = {}) {
   }
 }
 
+async function waitForDevice(id) {
+  const device = client.getDevice(id)
+
+  return device.waitForDevice()
+}
+
 function init() {
   const bin = appStore.get('common.adbPath') || adbPath
 
@@ -372,4 +378,5 @@ export default {
   scannerConnect,
   battery,
   uploader,
+  waitForDevice,
 }

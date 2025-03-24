@@ -13,6 +13,8 @@ import localeModel from '$/plugins/element-plus/locale.js'
 import { usePreferenceStore } from '$/store/preference/index.js'
 import { useThemeStore } from '$/store/theme/index.js'
 
+import { useStartApp } from '$/composables/index.js'
+
 import Layouts from './layouts/index.vue'
 
 window.electron.ipcRenderer.on('quit-before', async () => {
@@ -20,6 +22,16 @@ window.electron.ipcRenderer.on('quit-before', async () => {
     lock: true,
     text: window.t('appClose.quit.loading'),
   })
+})
+
+const startApp = useStartApp()
+
+window.electron.ipcRenderer.on('execute-arguments-change', async (event, params) => {
+  startApp.open(params)
+})
+
+onMounted(() => {
+  startApp.open()
 })
 
 const locale = computed(() => {

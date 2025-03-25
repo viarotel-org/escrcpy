@@ -26,7 +26,7 @@
             {{ $t(item.label) }}
           </div>
 
-          <div v-if="['win32', 'linux'].includes(platform)" class="absolute inset-y-center right-0 z-5">
+          <div v-if="['win32'].includes(platform)" class="absolute inset-y-center right-0 z-5">
             <el-link type="primary" :underline="false" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
           </div>
         </el-dropdown-item>

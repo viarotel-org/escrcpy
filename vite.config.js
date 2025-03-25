@@ -6,7 +6,6 @@ import useVueJsx from '@vitejs/plugin-vue-jsx'
 import useUnoCSS from 'unocss/vite'
 import { defineConfig, mergeConfig } from 'vite'
 
-import { notBundle } from 'vite-plugin-electron/plugin'
 import useElectron from 'vite-plugin-electron/simple'
 import useRenderer from 'vite-plugin-electron-renderer'
 import useSvg from 'vite-svg-loader'
@@ -29,7 +28,6 @@ function mergeCommon(config, { command = '' } = {}) {
       resolve: {
         alias,
       },
-      plugins: [...(command === 'serve' ? [notBundle()] : [])],
     },
     config,
   )

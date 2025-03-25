@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { initControlWindow, openControlWindow } from './helpers/index.js'
 
-import { menu } from './events/index.js'
+import { focus, menu } from './events/index.js'
 
 function onControlMounted(controlWindow) {
   ipcMain.on('language-change', (event, data) => {
@@ -13,6 +13,8 @@ function onControlMounted(controlWindow) {
   })
 
   menu(controlWindow)
+
+  focus(controlWindow)
 }
 
 export default (mainWindow) => {

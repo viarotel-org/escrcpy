@@ -32,13 +32,13 @@ export const useDeviceStore = defineStore({
       return this.config
     },
     getLabel(device, params) {
-      if (!device) {
-        return ''
-      }
-
       const data = device?.id
         ? device
         : this.list.find(item => item.id === device)
+
+      if (!data) {
+        return ''
+      }
 
       const appName = capitalize(packageName)
 

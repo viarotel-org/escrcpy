@@ -9,6 +9,8 @@ export function initControlWindow(mainWindow) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
   const controlWindow = new BrowserWindow({
+    transparent: true,
+    backgroundColor: '#00000000',
     icon: getLogoPath(),
     width: 700,
     minWidth: 700,

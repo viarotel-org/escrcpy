@@ -87,8 +87,10 @@ function install(deviceId) {
   return shell(`install "${deviceId}"`)
 }
 
-function start(deviceId) {
-  return shell(`start "${deviceId}"`)
+function start(deviceId, options = {}) {
+  const append = options.append ? ` ${options.append}` : ''
+
+  return shell(`start "${deviceId}"${append}`)
 }
 
 function stop(deviceId) {
@@ -138,7 +140,9 @@ async function run(deviceId) {
     })
   }
 
-  await start(deviceId).catch((error) => {
+  const gnirehtetAppend = appStore.get('common.gnirehtetAppend')
+
+  await start(deviceId, { append: gnirehtetAppend }).catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Start fail')
   })
 }

@@ -30,6 +30,10 @@ export const useTaskStore = defineStore(
         label: 'device.control.terminal.script.name',
         value: 'shell',
       },
+      {
+        label: 'device.mirror.start',
+        value: 'mirror',
+      },
     ])
 
     const list = ref([])

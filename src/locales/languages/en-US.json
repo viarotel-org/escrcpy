@@ -10,6 +10,7 @@
   "common.input.placeholder": "Please input",
   "common.success": "Operation successful",
   "common.success.batch": "Batch operation success",
+  "common.fail": "Operation Failed",
   "common.starting": "Starting",
   "common.loading": "Loading",
   "common.search": "Search",

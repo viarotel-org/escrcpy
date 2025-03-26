@@ -10,6 +10,7 @@
   "common.input.placeholder": "請輸入",
   "common.success": "操作成功",
   "common.success.batch": "批次操作成功",
+  "common.fail": "操作失敗",
   "common.starting": "啟動中",
   "common.loading": "載入中",
   "common.search": "搜尋",

@@ -10,6 +10,7 @@
   "common.input.placeholder": "请填写",
   "common.success": "操作成功",
   "common.success.batch": "批量操作成功",
+  "common.fail": "操作失败",
   "common.starting": "启动中",
   "common.loading": "加载中",
   "common.search": "搜索",

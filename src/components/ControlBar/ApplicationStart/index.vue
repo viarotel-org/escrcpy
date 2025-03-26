@@ -141,11 +141,18 @@ export default {
     onShortcutClick(item) {
       const desktopName = this.$store.device.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)
 
-      this.$desktop.createShortcuts({
+      const result = this.$desktop.createShortcuts({
         name: desktopName,
         comment: desktopName,
         arguments: `--device-id=${this.device.id} --app-name=${item.label} --package-name=${item.value}`,
       })
+
+      if (result) {
+        this.$message.success(this.$t('common.success'))
+        return false
+      }
+
+      this.$message.warning(this.$t('common.fail'))
     },
   },
 }

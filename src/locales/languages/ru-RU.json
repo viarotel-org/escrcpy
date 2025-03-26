@@ -10,6 +10,7 @@
   "common.input.placeholder": "Пожалуйста, введите",
   "common.success": "Операция успешно выполнена",
   "common.success.batch": "Пакетная операция выполнена успешно",
+  "common.fail": "Не удалось выполнить операцию",
   "common.starting": "Запуск",
   "common.loading": "Загрузка",
   "common.search": "Поиск",

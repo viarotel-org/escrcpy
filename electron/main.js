@@ -78,6 +78,8 @@ function createWindow(callback) {
     },
   })
 
+  mainWindow.customId = 'mainWindow'
+
   remote.enable(mainWindow.webContents)
   remote.initialize()
 

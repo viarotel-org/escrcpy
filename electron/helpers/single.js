@@ -100,7 +100,8 @@ function ensureSingleInstance(options = {}) {
       try {
         // 获取所有窗口
         const windows = BrowserWindow.getAllWindows()
-        const mainWindow = windows.length ? windows[0] : null
+
+        const mainWindow = windows.find(item => item.customId === 'mainWindow')
 
         const showWindowNext = () => {
           if (mainWindow) {

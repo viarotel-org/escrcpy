@@ -141,10 +141,16 @@ export default {
     onShortcutClick(item) {
       const desktopName = this.$store.device.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)
 
+      let shortcutArguments = `--device-id=${this.device.id} --app-name=${item.label}`
+
+      if (item.value) {
+        shortcutArguments += ` --package-name=${item.value}`
+      }
+
       const result = this.$desktop.createShortcuts({
         name: desktopName,
         comment: desktopName,
-        arguments: `--device-id=${this.device.id} --app-name=${item.label} --package-name=${item.value}`,
+        arguments: shortcutArguments,
       })
 
       if (result) {

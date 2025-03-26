@@ -61,7 +61,7 @@
 
   "device.list": "设备列表",
   "device.list.empty": "没有检测到设备",
-  "device.id": "设备 ID",
+  "device.serial": "设备标识",
   "device.name": "设备名称",
   "device.remark": "备注",
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",

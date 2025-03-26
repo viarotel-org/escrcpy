@@ -61,7 +61,7 @@
 
   "device.list": "裝置列表",
   "device.list.empty": "未偵測到裝置",
-  "device.id": "裝置 ID",
+  "device.serial": "裝置標識",
   "device.name": "裝置名稱",
   "device.remark": "備註",
   "device.permission.error": "裝置權限錯誤，請重新連線裝置並允許 USB 偵錯",

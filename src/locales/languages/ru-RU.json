@@ -61,7 +61,7 @@
 
   "device.list": "Устройства",
   "device.list.empty": "Устройства не обнаружены",
-  "device.id": "ID",
+  "device.serial": "сериал",
   "device.name": "Имя",
   "device.remark": "Примечание",
   "device.permission.error": "Ошибка разрешения устройства, пожалуйста, переподключите устройство и разрешите отладку по USB",

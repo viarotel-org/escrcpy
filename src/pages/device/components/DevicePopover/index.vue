@@ -5,11 +5,12 @@
     :width="horizontalFlag ? 350 : 500"
     trigger="hover"
     popper-class="!p-0 !overflow-hidden !rounded-xl"
+    :disabled="!connectFlag"
     @before-enter="onBeforeEnter"
     @after-leave="onAfterLeave"
   >
     <template #reference>
-      <el-link type="primary" :underline="false" icon="InfoFilled" class="mr-1"></el-link>
+      <el-link type="primary" :underline="false" icon="InfoFilled" :disabled="!connectFlag" class="flex-none"></el-link>
     </template>
 
     <div v-loading="loading" :element-loading-text="$t('common.loading')" class="flex items-stretch p-2" :class="[horizontalFlag ? 'flex-col space-y-2' : 'space-x-2 h-60', { '!h-auto': !connectFlag }]">
@@ -17,7 +18,7 @@
 
       <div class="overflow-auto" :class="[horizontalFlag ? 'flex-none max-h-56' : 'h-full flex-1 w-0']">
         <el-descriptions border :column="1" class="el-descriptions--custom">
-          <el-descriptions-item :label="$t('device.id')">
+          <el-descriptions-item :label="$t('device.serial')">
             {{ deviceInfo.id }}
           </el-descriptions-item>
 
@@ -63,7 +64,7 @@ const deviceInfo = ref({
   battery: void 0,
 })
 
-const connectFlag = computed(() => ['device'].includes(props.device.status))
+const connectFlag = computed(() => ['device', 'emulator'].includes(props.device.status))
 
 const screencapTimer = ref()
 

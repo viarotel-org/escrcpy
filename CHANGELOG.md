@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.29.0](https://github.com/viarotel-org/escrcpy/compare/v1.28.7...v1.29.0) (2025-03-27)
+
+
+### Features
+
+* 🚀 Support adding the open application action to the desktop shortcut. (Not supported on macOS) ([add251f](https://github.com/viarotel-org/escrcpy/commit/add251ff1d88f62559f8ff1e6cb728bdb04c49eb))
+* 🚚 Support batch startup mirroring ([fcfd78e](https://github.com/viarotel-org/escrcpy/commit/fcfd78e3b77d81655b4c03e709b630d70ab20d64))
+
+
+### Bug Fixes
+
+* 🐛 Solve the conflict between floating navigation bar and quick APP launch ([460aca1](https://github.com/viarotel-org/escrcpy/commit/460aca1ef0c26d8cf86fb19ba526802a88c6fe54))
+* 🐛 Solve the problem of startup error of development mode under Linux ([5c4f65e](https://github.com/viarotel-org/escrcpy/commit/5c4f65e3b025d0f85594ea1863dd57c53986e40b))
+
+
+### Performance Improvements
+
+* ✨ The floating control bar supports transparent display when inactive ([34f27c5](https://github.com/viarotel-org/escrcpy/commit/34f27c52ca6821ee3bed17e7a57afa3c53d8a98e))
+* 👷 Explicitly clean up unnecessary child processes on exit ([0549dda](https://github.com/viarotel-org/escrcpy/commit/0549ddabb6020f670aece6e628bd08327b679c5c))
+* 👽️ Experimental support for adding open application actions to linux desktop shortcuts ([6897c0e](https://github.com/viarotel-org/escrcpy/commit/6897c0e16c4d5fb0f9154aac3ce0b274bdc95a2a))
+* 👽️ Experimentally add linux arm64 support ([5b033fd](https://github.com/viarotel-org/escrcpy/commit/5b033fd2a1a6c9cf397b2a9178f3cde03df83266))
+* 💄 Optimization of display effect of device list page ([305187d](https://github.com/viarotel-org/escrcpy/commit/305187dcca3d654697fcb597e9a8c4cad1ffe3cb))
+* 💫 Support appending gnirehtet custom parameters in configuration ([206a030](https://github.com/viarotel-org/escrcpy/commit/206a030d73f7344d2b6fecf791d1b76fe645d143))
+* 🚀 Provide feedback on the application shortcut addition ([d7eca8d](https://github.com/viarotel-org/escrcpy/commit/d7eca8df930b3e66ba38964a49a81d71db8e6035))
+
 ## [1.28.7](https://github.com/viarotel-org/escrcpy/compare/v1.28.6...v1.28.7) (2025-02-17)
 
 

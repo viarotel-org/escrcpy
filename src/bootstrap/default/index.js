@@ -38,6 +38,8 @@ export default (App, { router } = {}) => {
   app.config.globalProperties.$scrcpy = window.scrcpy
   app.config.globalProperties.$gnirehtet = window.gnirehtet
 
+  app.config.globalProperties.$desktop = window.desktop
+
   app.config.globalProperties.$toRaw = toRaw
 
   app.mount('#app').$nextTick(() => {

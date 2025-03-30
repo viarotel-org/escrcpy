@@ -1,7 +1,8 @@
 <template>
   <el-config-provider :locale="locale">
     <div
-      class="flex items-center bg-primary-100 dark:bg-gray-800 absolute inset-0 h-full"
+      class="flex items-center bg-primary-100 dark:bg-gray-800 absolute inset-0 h-full rounded-md overflow-hidden transition-opacity"
+      :class="focusFlag ? 'opacity-100' : 'opacity-50'"
     >
       <div class="flex-none h-full">
         <el-button
@@ -103,6 +104,8 @@ async function switchDevice(e) {
   })
 }
 
+const focusFlag = ref(false)
+
 onMounted(() => {
   window.electron.ipcRenderer.send('control-mounted')
 
@@ -119,11 +122,19 @@ onMounted(() => {
   window.electron.ipcRenderer.on('theme-change', (event, data) => {
     themeStore.update(data)
   })
+
+  window.electron.ipcRenderer.on('window-focus', (event, value) => {
+    focusFlag.value = value
+  })
 })
 </script>
 
 <style lang="postcss">
 .app-region-drag {
   -webkit-app-region: drag;
+}
+
+html,body {
+  background-color: transparent;
 }
 </style>

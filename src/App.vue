@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ElMessageBox } from 'element-plus'
+import { ElLoading, ElMessageBox } from 'element-plus'
 
 import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
@@ -13,7 +13,26 @@ import localeModel from '$/plugins/element-plus/locale.js'
 import { usePreferenceStore } from '$/store/preference/index.js'
 import { useThemeStore } from '$/store/theme/index.js'
 
+import { useStartApp } from '$/composables/index.js'
+
 import Layouts from './layouts/index.vue'
+
+window.electron.ipcRenderer.on('quit-before', async () => {
+  ElLoading.service({
+    lock: true,
+    text: window.t('appClose.quit.loading'),
+  })
+})
+
+const startApp = useStartApp()
+
+window.electron.ipcRenderer.on('execute-arguments-change', async (event, params) => {
+  startApp.open(params)
+})
+
+onMounted(() => {
+  startApp.open()
+})
 
 const locale = computed(() => {
   const i18nLocale = i18n.global.locale.value

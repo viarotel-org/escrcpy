@@ -137,14 +137,29 @@ export default {
       span: 24,
       props: {
         type: 'textarea',
-        rows: 4,
+        autosize: true,
+        rows: 1,
+      },
+    },
+    gnirehtetAppend: {
+      label: 'preferences.common.gnirehtet.append.name',
+      field: 'gnirehtetAppend',
+      value: undefined,
+      type: 'Input',
+      placeholder: 'preferences.common.gnirehtet.append.placeholder',
+      tips: 'preferences.common.gnirehtet.append.tips',
+      span: 24,
+      props: {
+        type: 'textarea',
+        autosize: true,
+        rows: 1,
       },
     },
     autoConnect: {
       label: 'preferences.common.auto-connect.name',
       field: 'autoConnect',
       type: 'Switch',
-      value: undefined,
+      value: true,
       placeholder: 'preferences.common.auto-connect.placeholder',
     },
     autoMirror: {

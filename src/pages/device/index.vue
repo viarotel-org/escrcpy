@@ -25,29 +25,29 @@
         <el-table-column type="selection"></el-table-column>
 
         <el-table-column
-          :label="$t('device.name')"
+          :label="$t('device.serial')"
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="150"
+          min-width="200"
         >
           <template #default="{ row }">
-            <div class="flex items-center">
-              <DevicePopover :key="row.status" :device="row" />
+            <div class="flex items-center space-x-2 relative">
+              <DevicePopover :key="row.status" :device="row" class="" />
 
-              <span class="">
-                {{ row.name }}
-              </span>
+              <div class="flex-none max-w-[75%] truncate">
+                {{ row.id }}
+              </div>
 
-              <el-tag v-if="row.wifi" effect="light" class="!ml-1">
-                WIFI
-              </el-tag>
+              <el-link type="primary" :underline="false" title="WIFI" class="flex-none">
+                <svg-icon v-if="row.wifi" name="wifi" class=""></svg-icon>
+              </el-link>
             </div>
           </template>
         </el-table-column>
 
         <el-table-column
-          :label="$t('device.remark')"
+          :label="$t('device.name')"
           prop="remark"
           sortable
           show-overflow-tooltip
@@ -137,7 +137,7 @@
 
     <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
       <div class="flex-none">
-        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" />
+        <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" @auto-connected="onAutoConnected" />
       </div>
 
       <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
@@ -222,7 +222,8 @@ export default {
     },
   },
   async mounted() {
-    this.getDeviceData()
+    await this.getDeviceData()
+
     this.unAdbWatch = await this.$adb.watch(this.onAdbWatch)
   },
   beforeUnmount() {
@@ -233,6 +234,9 @@ export default {
   },
   methods: {
     getDictLabel,
+
+    onAutoConnected() {},
+
     filterMethod(value, row, column) {
       const property = column.property
       return row[property] === value
@@ -340,7 +344,7 @@ export default {
         console.warn(message)
 
         if (message.includes('failed to start daemon')) {
-          this.getDeviceData()
+          await this.getDeviceData()
           return false
         }
 

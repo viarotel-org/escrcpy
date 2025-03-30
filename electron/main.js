@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import minimist from 'minimist'
 
 import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
@@ -24,20 +25,13 @@ import { Edger } from './helpers/edger/index.js'
 
 import { ensureSingleInstance } from './helpers/single.js'
 import { eventEmitter } from './helpers/emitter.js'
+import { snakeCase, toUpper } from 'lodash-es'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 log.initialize({ preload: true })
 
-const debug = !!appStore.get('common.debug')
-
-if (!debug) {
-  log.warn(
-    'Debug Tips:',
-    'If you need to generate and view the running log, please start the debugging function on the preference setting page'
-  )
-}
 
 contextMenu({
   showCopyImage: false,
@@ -61,10 +55,10 @@ process.env.DIST = path.join(__dirname, '../dist')
 
 let mainWindow
 
-function createWindow() {
+function createWindow(callback) {
   const bounds = appStore.get('common.bounds') || {}
 
-  const baseWidth = 768
+  const baseWidth = 800
   const baseHeight = Number((baseWidth / 1.57).toFixed())
 
   mainWindow = new BrowserWindow({
@@ -83,6 +77,8 @@ function createWindow() {
       spellcheck: false,
     },
   })
+
+  mainWindow.customId = 'mainWindow'
 
   remote.enable(mainWindow.webContents)
   remote.initialize()
@@ -123,9 +119,11 @@ function createWindow() {
   ipc(mainWindow)
 
   control(mainWindow)
+
+  callback?.(mainWindow)
 }
 
-function onWhenReady() {
+function onWhenReady(callback) {
   app.whenReady().then(() => {
     electronApp.setAppUserModelId('com.viarotel.escrcpy')
   
@@ -133,7 +131,7 @@ function onWhenReady() {
       optimizer.watchWindowShortcuts(window)
     })
   
-    createWindow()
+    createWindow(callback)
   
     // macOS 中应用被激活
     app.on('activate', () => {
@@ -150,13 +148,42 @@ function onWhenReady() {
 
 ensureSingleInstance({
   onSuccess() {
-    onWhenReady()
+    onWhenReady((mainWindow)=> {
+      runExecuteArguments(mainWindow, process.argv)
+    })
   },
-  onShowWindow() {
-    eventEmitter.emit('tray:destroy')
+  onShowWindow(mainWindow, commandLine, next) {
+    const executeArgs = runExecuteArguments(mainWindow, commandLine)
+    
+    if(!executeArgs['device-id']) {
+      next()
+      eventEmitter.emit('tray:destroy')
+    }
   }
 })
 
+function runExecuteArguments(mainWindow, commandLine) {
+  // TEST
+  // commandLine = [
+  //   '--device-id=192.168.0.88:5555',
+  //   '--package-name=com.android.mms',
+  //   '--app-name=消息',
+  // ]
+
+  const executeArgs = minimist(commandLine)
+
+  Object.entries(executeArgs).forEach(([key, value]) => {
+    process.env[`EXECUTE_ARG_${toUpper(snakeCase(key))}`] = value
+  })
+
+  mainWindow.webContents.send('execute-arguments-change', {
+    deviceId: executeArgs['device-id'],
+    appName: executeArgs['app-name'],
+    packageName: executeArgs['package-name'],
+  })
+
+  return executeArgs
+}
 
 app.on('window-all-closed', () => {
   app.isQuiting = true

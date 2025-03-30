@@ -31,7 +31,7 @@
                 <component :is="item.elIcon" />
               </el-icon>
             </template>
-            {{ $t('common.batch') }}-{{ $t(item.label) }}
+            {{ $t(item.label) }}
           </el-button>
         </template>
       </component>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+import Mirror from './Mirror/index.vue'
 import Application from './Application/index.vue'
 import FilePush from './FilePush/index.vue'
 import Screenshot from './Screenshot/index.vue'
@@ -54,6 +55,11 @@ const props = defineProps({
 })
 
 const actionModel = [
+  {
+    label: 'device.mirror.start',
+    elIcon: 'Monitor',
+    component: Mirror,
+  },
   {
     label: 'device.control.capture',
     elIcon: 'Crop',

@@ -22,7 +22,13 @@
           :icon="item.icon"
           @click="handleCommand(item)"
         >
-          {{ $t(item.label) }}
+          <div class="pr-4">
+            {{ $t(item.label) }}
+          </div>
+
+          <div v-if="['win32'].includes(platform)" class="absolute inset-y-center right-0 z-5">
+            <el-link type="primary" :underline="false" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
+          </div>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -35,6 +41,8 @@ import { openFloatControl } from '$/utils/device/index.js'
 import { pinyin } from 'pinyin-pro'
 import { sleep } from '$/utils'
 
+import { useStartApp } from '$/composables/index.js'
+
 export default {
   props: {
     device: {
@@ -45,6 +53,14 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    const startApp = useStartApp()
+
+    return {
+      startApp,
+      platform: window.electron?.process?.platform,
+    }
   },
   data() {
     return {
@@ -112,24 +128,37 @@ export default {
     async handleCommand({ label, value }) {
       this.loading = true
 
-      const title = `${this.$store.device.getLabel(this.device, 'synergy')}-${label}`
-
-      const commands = this.$store.preference.scrcpyParameter(this.device.id, {
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+      await this.startApp.open({
+        deviceId: this.device.id,
+        appName: label,
+        packageName: value,
       })
-
-      await window.scrcpy.startApp(this.device.id, { title, commands, packageName: value })
-        .catch((e) => {
-          console.error('mirror.commands', commands)
-          console.error('mirror.error', e)
-          if (e.message) {
-            this.$message.warning(e.message)
-          }
-        })
 
       openFloatControl(toRaw(this.device))
 
       this.loading = false
+    },
+    onShortcutClick(item) {
+      const desktopName = this.$store.device.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)
+
+      let shortcutArguments = `--device-id=${this.device.id} --app-name=${item.label}`
+
+      if (item.value) {
+        shortcutArguments += ` --package-name=${item.value}`
+      }
+
+      const result = this.$desktop.createShortcuts({
+        name: desktopName,
+        comment: desktopName,
+        arguments: shortcutArguments,
+      })
+
+      if (result) {
+        this.$message.success(this.$t('common.success'))
+        return false
+      }
+
+      this.$message.warning(this.$t('common.fail'))
     },
   },
 }

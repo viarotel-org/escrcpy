@@ -10,6 +10,7 @@
   "common.input.placeholder": "请填写",
   "common.success": "操作成功",
   "common.success.batch": "批量操作成功",
+  "common.fail": "操作失败",
   "common.starting": "启动中",
   "common.loading": "加载中",
   "common.search": "搜索",
@@ -52,6 +53,7 @@
   "appClose.minimize": "最小化到托盘",
   "appClose.quit": "直接退出",
   "appClose.quit.cancel": "取消退出",
+  "appClose.quit.loading": "正在停止服务...",
   "appClose.message": "确定要退出吗？",
   "appClose.remember": "是否记住选择？",
 
@@ -60,7 +62,7 @@
 
   "device.list": "设备列表",
   "device.list.empty": "没有检测到设备",
-  "device.id": "设备 ID",
+  "device.serial": "设备标识",
   "device.name": "设备名称",
   "device.remark": "备注",
   "device.permission.error": "设备可能未授权成功，请重新插拔设备并点击允许USB调试",
@@ -265,6 +267,9 @@
   "preferences.common.gnirehtet.fix.name": "gnirehtet 修复",
   "preferences.common.gnirehtet.fix.placeholder": "开启将尝试修复某些机型二次开启反向供网功能失败的问题",
   "preferences.common.gnirehtet.fix.tips": "注意：可能导致 gnirehtet 客户端重复安装",
+  "preferences.common.gnirehtet.append.name": "gnirehtet 参数",
+  "preferences.common.gnirehtet.append.placeholder": "为 gnirehtet 命令追加额外的参数",
+  "preferences.common.gnirehtet.append.tips": "注意：录入参数将会直接附加到 gnirehtet 命令中，如果存在重复的参数，并不会自动进行过滤。",
   "preferences.common.floatControl.name": "浮动操控栏",
   "preferences.common.floatControl.placeholder": "启用后，镜像时将会自动打开设备浮动操控栏",
   "preferences.common.auto-connect.name": "自动连接设备",
@@ -436,5 +441,7 @@
   "about.update-available.confirm": "更新",
   "about.update.progress": "正在更新中",
   "about.sponsor.title": "赞助项目",
-  "about.sponsor.description": "如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛"
+  "about.sponsor.description": "如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛",
+
+  "desktop.shortcut.add": "添加到桌面快捷方式"
 }

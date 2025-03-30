@@ -10,6 +10,7 @@
   "common.input.placeholder": "請輸入",
   "common.success": "操作成功",
   "common.success.batch": "批次操作成功",
+  "common.fail": "操作失敗",
   "common.starting": "啟動中",
   "common.loading": "載入中",
   "common.search": "搜尋",
@@ -52,6 +53,7 @@
   "appClose.minimize": "最小化到工具列",
   "appClose.quit": "直接結束",
   "appClose.quit.cancel": "取消結束",
+  "appClose.quit.loading": "正在停止服務...",
   "appClose.message": "確定要結束嗎？",
   "appClose.remember": "是否記住選擇？",
 
@@ -60,7 +62,7 @@
 
   "device.list": "裝置列表",
   "device.list.empty": "未偵測到裝置",
-  "device.id": "裝置 ID",
+  "device.serial": "裝置標識",
   "device.name": "裝置名稱",
   "device.remark": "備註",
   "device.permission.error": "裝置權限錯誤，請重新連線裝置並允許 USB 偵錯",
@@ -264,6 +266,9 @@
   "preferences.common.gnirehtet.fix.name": "gnirehtet 修復",
   "preferences.common.gnirehtet.fix.placeholder": "開啟將嘗試修復某些機型二次開啟反向網路分享功能失敗的問題",
   "preferences.common.gnirehtet.fix.tips": "注意：可能導致 gnirehtet 客戶端重複安裝",
+  "preferences.common.gnirehtet.append.name": "gnirehtet 參數",
+  "preferences.common.gnirehtet.append.placeholder": "為 gnirehtet 命令加上額外的參數",
+  "preferences.common.gnirehtet.append.tips": "注意：錄入參數將會直接附加到 gnirehtet 命令中，如果存在重複的參數，並不會自動進行過濾。",
   "preferences.common.floatControl.name": "浮動操控欄",
   "preferences.common.floatControl.placeholder": "啟用後，鏡像時將會自動開啟裝置浮動操控欄",
   "preferences.common.auto-connect.name": "自動連線裝置",
@@ -435,5 +440,7 @@
   "about.update-available.confirm": "更新",
   "about.update.progress": "正在更新",
   "about.sponsor.title": "贊助專案",
-  "about.sponsor.description": "如果覺得這個專案有幫到您的話，可以考慮請我喝杯咖啡，讓我更有精神持續改進此專案 😛"
+  "about.sponsor.description": "如果覺得這個專案有幫到您的話，可以考慮請我喝杯咖啡，讓我更有精神持續改進此專案 😛",
+
+  "desktop.shortcut.add": "加入桌面快捷方式"
 }

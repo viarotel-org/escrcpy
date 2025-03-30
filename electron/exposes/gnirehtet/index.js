@@ -1,4 +1,6 @@
 import { spawn } from 'node:child_process'
+import { electronAPI } from '@electron-toolkit/preload'
+
 import {
   adbPath,
   gnirehtetApkPath,
@@ -8,9 +10,17 @@ import appStore from '$electron/helpers/store.js'
 
 import adb from '$electron/exposes/adb/index.js'
 
+import { ProcessManager } from '$electron/helpers/index.js'
+
 const appDebug = appStore.get('common.debug') || false
 
-const shell = async (command, { debug = false, stdout, stderr } = {}) => {
+const processManager = new ProcessManager()
+
+electronAPI.ipcRenderer.on('quit-before', async () => {
+  processManager.kill()
+})
+
+async function shell(command, { debug = false, stdout, stderr } = {}) {
   const spawnPath = appStore.get('common.gnirehtetPath') || gnirehtetPath
   const ADB = appStore.get('common.adbPath') || adbPath
 
@@ -29,6 +39,8 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
     shell: true,
     encoding: 'utf8',
   })
+
+  processManager.add(gnirehtetProcess)
 
   gnirehtetProcess.stdout.on('data', (data) => {
     const stringData = data.toString()
@@ -71,40 +83,36 @@ const shell = async (command, { debug = false, stdout, stderr } = {}) => {
   })
 }
 
-const install = deviceId => shell(`install "${deviceId}"`)
+function install(deviceId) {
+  return shell(`install "${deviceId}"`)
+}
 
-const start = deviceId => shell(`start "${deviceId}"`)
+function start(deviceId, options = {}) {
+  const append = options.append ? ` ${options.append}` : ''
 
-const stop = deviceId => shell(`stop "${deviceId}"`)
+  return shell(`start "${deviceId}"${append}`)
+}
 
-const tunnel = deviceId => shell(`tunnel "${deviceId}"`)
+function stop(deviceId) {
+  processManager.kill()
+  return shell(`stop "${deviceId}"`)
+}
 
-const installed = async (deviceId) => {
+function tunnel(deviceId) {
+  return shell(`tunnel "${deviceId}"`)
+}
+
+async function installed(deviceId) {
   const res = await adb.isInstalled(deviceId, 'com.genymobile.gnirehtet')
   return res
 }
 
-let relayProcess = null
-const stopRelayProcess = () => {
-  if (!relayProcess) {
-    return
-  }
-
-  relayProcess?.kill()
-  relayProcess = null
-}
-
-const relay = async (args) => {
-  stopRelayProcess()
-
+async function relay(args) {
   return new Promise((resolve, reject) => {
     shell('relay', {
       ...args,
       debug: appDebug,
       stdout: (_, process) => {
-        if (!relayProcess) {
-          relayProcess = process
-        }
         resolve(process)
       },
       stderr: (error) => {
@@ -116,7 +124,9 @@ const relay = async (args) => {
   })
 }
 
-const run = async (deviceId) => {
+async function run(deviceId) {
+  processManager.kill()
+
   await relay().catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Relay fail')
   })
@@ -130,16 +140,12 @@ const run = async (deviceId) => {
     })
   }
 
-  await start(deviceId).catch((error) => {
+  const gnirehtetAppend = appStore.get('common.gnirehtetAppend')
+
+  await start(deviceId, { append: gnirehtetAppend }).catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Start fail')
   })
 }
-
-window.addEventListener('beforeunload', () => {
-  stop()
-
-  stopRelayProcess()
-})
 
 export default {
   shell,

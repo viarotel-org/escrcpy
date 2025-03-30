@@ -100,18 +100,26 @@ function ensureSingleInstance(options = {}) {
       try {
         // 获取所有窗口
         const windows = BrowserWindow.getAllWindows()
-        const mainWindow = windows.length ? windows[0] : null
+
+        const mainWindow = windows.find(item => item.customId === 'mainWindow')
+
+        const showWindowNext = () => {
+          if (mainWindow) {
+            if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
+              mainWindow.show()
+            }
+            if (forceFocus) {
+              mainWindow.focus()
+            }
+          }
+        }
 
         // 处理窗口焦点
-        onShowWindow?.(mainWindow, commandLine)
-
-        if (mainWindow) {
-          if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
-            mainWindow.show()
-          }
-          if (forceFocus) {
-            mainWindow.focus()
-          }
+        if (onShowWindow) {
+          onShowWindow?.(mainWindow, commandLine, showWindowNext)
+        }
+        else {
+          showWindowNext()
         }
 
         // 调用用户自定义的回调

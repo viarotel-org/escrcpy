@@ -8,8 +8,8 @@
     <template #reference>
       <el-tag effect="light" class="cursor-pointer">
         <div class="flex items-center space-x-1">
+          <span class="">{{ device.remark || device.name }}</span>
           <el-icon><EditPen /></el-icon>
-          <span class="">{{ device.remark || $t('device.remark') }}</span>
         </div>
       </el-tag>
     </template>

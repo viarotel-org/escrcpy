@@ -10,6 +10,7 @@
   "common.input.placeholder": "Please input",
   "common.success": "Operation successful",
   "common.success.batch": "Batch operation success",
+  "common.fail": "Operation Failed",
   "common.starting": "Starting",
   "common.loading": "Loading",
   "common.search": "Search",
@@ -52,6 +53,7 @@
   "appClose.minimize": "Minimize to Tray",
   "appClose.quit": "Exit Directly",
   "appClose.quit.cancel": "Cancel Exit",
+  "appClose.quit.loading": "Stopping the service...",
   "appClose.message": "Are you sure you want to exit?",
   "appClose.remember": "Remember the Choice?",
 
@@ -60,7 +62,7 @@
 
   "device.list": "Devices",
   "device.list.empty": "No devices detected",
-  "device.id": "ID",
+  "device.serial": "Serial",
   "device.name": "Name",
   "device.remark": "Remark",
   "device.permission.error": "Device permission error, please reconnect device and allow USB debugging",
@@ -265,6 +267,9 @@
   "preferences.common.gnirehtet.fix.name": "Gnirehtet Fix",
   "preferences.common.gnirehtet.fix.placeholder": "Turning this on will try to fix reverse tethering issues on some devices",
   "preferences.common.gnirehtet.fix.tips": "Note: May cause duplicate gnirehtet client installations",
+  "preferences.common.gnirehtet.append.name": "Gnirehtet Arguments",
+  "preferences.common.gnirehtet.append.placeholder": "Append additional arguments to the gnirehtet command",
+  "preferences.common.gnirehtet.append.tips": "Note: The entered arguments will be directly appended to the gnirehtet command without filtering duplicate arguments.",
   "preferences.common.floatControl.name": "Floating Control Bar",
   "preferences.common.floatControl.placeholder": "Once enabled, the device floating control bar will automatically open during mirroring",
   "preferences.common.auto-connect.name": "Auto Connect",
@@ -436,5 +441,7 @@
   "about.update-available.confirm": "Update",
   "about.update.progress": "Updating...",
   "about.sponsor.title": "Sponsor Project",
-  "about.sponsor.description": "If this project has helped you, you can buy me a coffee to keep me energized to improve it 😛"
+  "about.sponsor.description": "If this project has helped you, you can buy me a coffee to keep me energized to improve it 😛",
+
+  "desktop.shortcut.add": "Add to Desktop Shortcut"
 }

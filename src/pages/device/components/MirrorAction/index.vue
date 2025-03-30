@@ -54,7 +54,7 @@ export default {
 
         this.loading = false
 
-        openFloatControl(toRaw(this.row))
+        openFloatControl(toRaw(row))
 
         await mirroring
       }

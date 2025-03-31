@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.2](https://github.com/viarotel-org/escrcpy/compare/v1.29.1...v1.29.2) (2025-03-31)
+
+
+### Performance Improvements
+
+* 🔨 Fixed the problem that some models could not reversely supply the network due to the blocking of installation detection when using Gnirehtet ([c5369af](https://github.com/viarotel-org/escrcpy/commit/c5369afc8a1160de5cacc306bd228e11846082f1))
+
 ## [1.29.1](https://github.com/viarotel-org/escrcpy/compare/v1.29.0...v1.29.1) (2025-03-31)
 
 

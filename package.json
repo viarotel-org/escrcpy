@@ -19,7 +19,7 @@
     "electron-fix": "npx electron-fix start",
     "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@antfu/eslint-config": "3.8.0",

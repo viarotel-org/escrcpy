@@ -103,8 +103,14 @@ function tunnel(deviceId) {
 }
 
 async function installed(deviceId) {
-  const res = await adb.isInstalled(deviceId, 'com.genymobile.gnirehtet')
-  return res
+  try {
+    const res = await adb.isInstalled(deviceId, 'com.genymobile.gnirehtet')
+    return res
+  }
+  catch (error) {
+    console.warn(error?.message || error)
+    return false
+  }
 }
 
 async function relay(args) {

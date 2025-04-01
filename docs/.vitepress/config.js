@@ -35,7 +35,10 @@ const vitePressConfig = {
       },
     ],
   ],
+
+  base: '/base/',
   outDir: '../dist-docs',
+
   cleanUrls: true,
   lastUpdated: true,
 

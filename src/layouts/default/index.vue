@@ -32,8 +32,6 @@
 </template>
 
 <script setup>
-import { ElMessageBox } from 'element-plus'
-
 import QuickBar from '$/components/QuickBar/index.vue'
 import { computed } from 'vue'
 

@@ -48,8 +48,6 @@
 </template>
 
 <script setup>
-import { getDictLabel } from '$/dicts/helper'
-
 const props = defineProps({
   device: {
     type: Object,

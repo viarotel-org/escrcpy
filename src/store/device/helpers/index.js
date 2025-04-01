@@ -1,5 +1,4 @@
 import { defaultsDeep, keyBy, omit } from 'lodash-es'
-import { isIPWithPort } from '$/utils/index.js'
 import { deviceStatus as deviceStatusDict } from '$/dicts/device/index.js'
 
 /**

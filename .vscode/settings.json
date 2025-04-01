@@ -1,4 +1,5 @@
 {
+  "vue.server.includeLanguages": ["vue", "markdown"],
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },

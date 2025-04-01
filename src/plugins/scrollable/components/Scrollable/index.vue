@@ -103,7 +103,7 @@ const onWheel = (e) => {
     = props.direction === 'horizontal' ? e.deltaX || e.deltaY : e.deltaY
   const newScroll
     = (props.direction === 'horizontal' ? scrollLeft.value : scrollTop.value)
-    + delta * props.speed
+      + delta * props.speed
 
   if (props.direction === 'horizontal') {
     scrollLeft.value = Math.max(

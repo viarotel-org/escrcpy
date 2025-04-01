@@ -1,4 +1,3 @@
-import { app } from 'electron'
 import createDesktopShortcuts from 'create-desktop-shortcuts'
 import { extraResolve } from '$root/electron/helpers'
 

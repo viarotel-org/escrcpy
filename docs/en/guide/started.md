@@ -36,7 +36,7 @@ See [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 ### Connect via IP Address
 
-> Note: If initial wireless connection fails, you may need wireless pairing. Please refer to [FAQ](/FAQ/)
+> Note: If initial wireless connection fails, you may need wireless pairing. Please refer to [FAQ](/help/)
 >
 > Note: You need to enable wireless debugging and obtain your device's wireless address (usually the IP address assigned when connecting to WiFi) and port number (default is 5555) from the wireless debugging page
 

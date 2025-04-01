@@ -150,7 +150,7 @@ java.lang.SecurityException: Injecting input events requires the caller (or the 
 
 ## 资源
 
- - [常见问题](/FAQ/)
+ - [常见问题](/help/)
  - [翻译][wiki]（可能未及时更新）
  - [构建指南](/zhHans/reference/scrcpy/build)
  - [开发者](/zhHans/reference/scrcpy/develop)
@@ -172,7 +172,7 @@ java.lang.SecurityException: Injecting input events requires the caller (or the 
 
 可通过[issue]提交错误报告、功能请求或一般问题。
 
-提交错误报告前，请先阅读[常见问题](/FAQ/scrcpy)，可能已包含解决方案。
+提交错误报告前，请先阅读[常见问题](/help/scrcpy)，可能已包含解决方案。
 
 [issue]: https://github.com/Genymobile/scrcpy/issues
 

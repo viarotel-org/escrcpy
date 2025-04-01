@@ -45,7 +45,7 @@ It only works if the device is connected over USB.
 
 ## OTG issues on Windows
 
-See [FAQ](/FAQ/scrcpy#otg-issues-on-windows).
+See [FAQ](/help/scrcpy#otg-issues-on-windows).
 
 
 ## Control only

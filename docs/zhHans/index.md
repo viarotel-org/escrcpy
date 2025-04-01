@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: 快速上手 👉
-      link: /guide/started
+      link: /zhHans/guide/started
     - theme: alt
-      text: 常见问题
-      link: /FAQ/escrcpy
+      text: 帮助
+      link: /zhHans/help/escrcpy
     - theme: alt
       text: Github
       link: https://github.com/viarotel-org/escrcpy

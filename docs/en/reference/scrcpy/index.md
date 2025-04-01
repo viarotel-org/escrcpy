@@ -164,7 +164,7 @@ documented in the following pages:
 
 ## Resources
 
- - [FAQ](/FAQ/)
+ - [FAQ](/help/)
  - [Translations][wiki] (not necessarily up to date)
  - [Build instructions](/reference/scrcpy/build)
  - [Developers](/reference/scrcpy/develop)
@@ -186,7 +186,7 @@ documented in the following pages:
 
 You can open an [issue] for bug reports, feature requests or general questions.
 
-For bug reports, please read the [FAQ](/FAQ/scrcpy) first, you might find a solution
+For bug reports, please read the [FAQ](/help/scrcpy) first, you might find a solution
 to your problem immediately.
 
 [issue]: https://github.com/Genymobile/scrcpy/issues

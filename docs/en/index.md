@@ -14,8 +14,8 @@ hero:
       text: Get Started 👉
       link: /guide/started
     - theme: alt
-      text: FAQ
-      link: /FAQ/escrcpy
+      text: Help
+      link: /help/escrcpy
     - theme: alt
       text: Github
       link: https://github.com/viarotel-org/escrcpy

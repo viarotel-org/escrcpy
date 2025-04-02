@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.29.3](https://github.com/viarotel-org/escrcpy/compare/v1.29.2...v1.29.3) (2025-04-02)
+
+
+### Performance Improvements
+
+* 📝 Add docs entry to the program ([db5d157](https://github.com/viarotel-org/escrcpy/commit/db5d1576a90c00b8ac3d8c9f42616c9850f5801e))
+* 🚚 Reduce some unnecessary verifications and increase the speed at which equipment starts reverse network supply ([c17aaba](https://github.com/viarotel-org/escrcpy/commit/c17aabaf4d0b792111ce975c269072b69c6ef734))
+
 ## [1.29.2](https://github.com/viarotel-org/escrcpy/compare/v1.29.1...v1.29.2) (2025-03-31)
 
 

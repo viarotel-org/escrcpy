@@ -234,7 +234,7 @@ The video and audio streams are decoded by [FFmpeg].
 The client parses the command line arguments, then [runs one of two code
 paths][run]:
  - scrcpy in "normal" mode ([`scrcpy.c`])
- - scrcpy in [OTG mode](otg.md) ([`scrcpy_otg.c`])
+ - scrcpy in [OTG mode](/reference/scrcpy/otg) ([`scrcpy_otg.c`])
 
 [run]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/main.c#L81-L82
 [`scrcpy.c`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/scrcpy.c#L292-L293
@@ -278,7 +278,7 @@ recording, they are _muxed_ (asynchronously) into a container (MKV or MP4) on
 the client side.
 
 Video frames are sent to the screen/display to be rendered in the scrcpy window.
-They may also be sent to a [V4L2 sink](v4l2.md).
+They may also be sent to a [V4L2 sink](/reference/scrcpy/v4l2).
 
 Audio "frames" (an array of decoded samples) are sent to the audio player.
 

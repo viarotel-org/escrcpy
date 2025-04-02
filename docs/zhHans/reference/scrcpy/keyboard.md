@@ -1,136 +1,114 @@
-# Keyboard
+---
+title: keyboard（键盘）
+---
 
-Several keyboard input modes are available:
+# 键盘
 
- - `--keyboard=sdk` (default)
- - `--keyboard=uhid` (or `-K`): simulates a physical HID keyboard using the UHID
-   kernel module on the device
- - `--keyboard=aoa`: simulates a physical HID keyboard using the AOAv2 protocol
- - `--keyboard=disabled`
+提供多种键盘输入模式：
 
-By default, `sdk` is used, but if you use scrcpy regularly, it is recommended to
-use [`uhid`](#uhid) and configure the keyboard layout once and for all.
+- `--keyboard=sdk`（默认模式）
+- `--keyboard=uhid`（或简写为 `-K`）：通过设备的 UHID 内核模块模拟物理 HID 键盘
+- `--keyboard=aoa`：通过 AOAv2 协议模拟物理 HID 键盘
+- `--keyboard=disabled` 禁用键盘输入
 
+默认使用 `sdk` 模式，但如果经常使用 scrcpy，建议切换到 [`uhid`](#uhid) 模式并一次性配置键盘布局。
 
-## SDK keyboard
+---
 
-In this mode (`--keyboard=sdk`, or if the parameter is omitted), keyboard input
-events are injected at the Android API level. It works everywhere, but it is
-limited to ASCII and some other characters.
+## SDK 键盘模式
 
-Note that on some devices, an additional option must be enabled in developer
-options for this keyboard mode to work. See
-[prerequisites](/reference/scrcpy/#prerequisites).
+在此模式下（`--keyboard=sdk` 或省略参数时），键盘输入事件通过 Android API 层级注入。该模式通用性强，但仅支持 ASCII 和部分其他字符。
 
-Additional parameters (specific to `--keyboard=sdk`) described below allow to
-customize the behavior.
+注意：某些设备需在开发者选项中启用额外设置才能使此模式正常工作，详见[前提条件](/reference/scrcpy/#prerequisites)。
 
+以下参数（专用于 `--keyboard=sdk`）可自定义行为：
 
-### Text injection preference
+### 文本注入偏好
 
-Two kinds of [events][textevents] are generated when typing text:
- - _key events_, signaling that a key is pressed or released;
- - _text events_, signaling that a text has been entered.
+输入文本时会生成两种[事件][textevents]：
+- **按键事件**：表示按键的按下或释放；
+- **文本事件**：表示文本的输入。
 
-By default, numbers and "special characters" are inserted using text events, but
-letters are injected using key events, so that the keyboard behaves as expected
-in games (typically for WASD keys).
+默认情况下，数字和“特殊字符”通过文本事件插入，而字母通过按键事件注入（以便在游戏中正常响应 WASD 等按键）。
 
-But this may [cause issues][prefertext]. If you encounter such a problem, you
-can inject letters as text (or just switch to [UHID](#uhid)):
+但此行为可能导致[问题][prefertext]。若遇到此类问题，可强制将字母作为文本注入（或直接切换至 [UHID](#uhid) 模式）：
 
 ```bash
 scrcpy --prefer-text
 ```
 
-(but this will break keyboard behavior in games)
+（但这会破坏游戏中的键盘行为）
 
-On the contrary, you could force to always inject raw key events:
+反之，也可强制始终使用原始按键事件：
 
 ```bash
 scrcpy --raw-key-events
 ```
 
-[textevents]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-text-input
-[prefertext]: https://github.com/Genymobile/scrcpy/issues/650#issuecomment-512945343
+[textevents]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-text-input  
+[prefertext]: https://github.com/Genymobile/scrcpy/issues/650#issuecomment-512945343  
 
+### 按键重复
 
-### Key repeat
+默认情况下，长按按键会生成重复的按键事件。某些游戏中这些事件无用且可能导致性能问题。
 
-By default, holding a key down generates repeated key events. Ths can cause
-performance problems in some games, where these events are useless anyway.
-
-To avoid forwarding repeated key events:
+禁用重复按键事件转发：
 
 ```bash
 scrcpy --no-key-repeat
 ```
 
+---
 
-## Physical keyboard simulation
+## 物理键盘模拟
 
-Two modes allow to simulate a physical HID keyboard on the device.
+两种模式可在设备上模拟物理 HID 键盘。为确保正常工作，需在设备上一次性配置与计算机匹配的键盘布局。
 
-To work properly, it is necessary to configure (once and for all) the keyboard
-layout on the device to match that of the computer.
+可通过以下方式打开配置页面：
+- 使用 `uhid` 或 `aoa` 模式时，在 scrcpy 窗口中按 <kbd>MOD</kbd>+<kbd>k</kbd>（见[快捷键](/zhHans/reference/scrcpy/shortcuts)）
+- 在设备上进入：设置 → 系统 → 语言与输入 → 物理键盘
+- 通过计算机终端执行：  
+  ```bash  
+  adb shell am start -a android.settings.HARD_KEYBOARD_SETTINGS  
+  ```
 
-The configuration page can be opened in one of the following ways:
- - from the scrcpy window (when `uhid` or `aoa` is used), by pressing
-   <kbd>MOD</kbd>+<kbd>k</kbd> (see [shortcuts](shortcuts.md))
- - from the device, in Settings → System → Languages and input → Physical
-   devices
- - from a terminal on the computer, by executing `adb shell am start -a
-   android.settings.HARD_KEYBOARD_SETTINGS`
+在此配置页面中，还可启用或禁用屏幕键盘。
 
-From this configuration page, it is also possible to enable or disable on-screen
-keyboard.
+### UHID 模式
 
+此模式通过设备的 [UHID] 内核模块模拟物理 HID 键盘。
 
-### UHID
+[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt  
 
-This mode simulates a physical HID keyboard using the [UHID] kernel module on the
-device.
-
-[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt
-
-To enable UHID keyboard, use:
+启用 UHID 键盘：
 
 ```bash
 scrcpy --keyboard=uhid
-scrcpy -K  # short version
+scrcpy -K  # 简写形式
 ```
 
-Once the keyboard layout is configured (see above), it is the best mode for
-using the keyboard while mirroring:
+配置键盘布局后（见上文），这是镜像时使用键盘的最佳模式：
+- 支持所有字符和输入法（与 `--keyboard=sdk` 不同）
+- 可禁用屏幕键盘（与 `--keyboard=sdk` 不同）
+- 支持 TCP/IP 无线连接（与 `--keyboard=aoa` 不同）
+- 在 Windows 上无兼容问题（与 `--keyboard=aoa` 不同）
 
- - it works for all characters and IME (contrary to `--keyboard=sdk`)
- - the on-screen keyboard can be disabled (contrary to `--keyboard=sdk`)
- - it works over TCP/IP (wirelessly) (contrary to `--keyboard=aoa`)
- - there are no issues on Windows (contrary to `--keyboard=aoa`)
+缺点是由于权限问题，旧版 Android 可能无法使用此模式。
 
-One drawback is that it may not work on old Android versions due to permission
-errors.
+### AOA 模式
 
+此模式通过 [AOAv2] 协议模拟物理 HID 键盘。
 
-### AOA
+[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support  
 
-This mode simulates a physical HID keyboard using the [AOAv2] protocol.
-
-[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support
-
-To enable AOA keyboard, use:
+启用 AOA 键盘：
 
 ```bash
 scrcpy --keyboard=aoa
 ```
 
-Contrary to the other modes, it works at the USB level directly (so it only
-works over USB).
+与其他模式不同，AOA 直接在 USB 层级工作（仅支持有线连接）。
 
-It does not use the scrcpy server, and does not require `adb` (USB debugging).
-Therefore, it is possible to control the device (but not mirror) even with USB
-debugging disabled (see [OTG](otg.md)).
+它不使用 scrcpy 服务端，且无需 `adb`（USB 调试）。因此，即使关闭 USB 调试，仍可控制设备（但不支持镜像，见 [OTG](/zhHans/reference/scrcpy/otg)）。
 
-Note: On Windows, it may only work in [OTG mode](otg.md), not while mirroring
-(it is not possible to open a USB device if it is already open by another
-process like the _adb daemon_).
+注意：在 Windows 上，此模式可能仅支持 [OTG 模式](/zhHans/reference/scrcpy/otg)，镜像时无法使用（若 USB 设备已被其他进程如 _adb 守护进程_ 占用，则无法重复打开）。

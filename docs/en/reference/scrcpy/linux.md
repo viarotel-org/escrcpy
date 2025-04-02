@@ -71,7 +71,7 @@ _Note that this simplified process only works for released versions (it
 downloads a prebuilt server binary), so for example you can't use it for testing
 the development branch (`dev`)._
 
-_See [build.md](build.md) to build and install the app manually._
+_See [build.md](/reference/scrcpy/build) to build and install the app manually._
 
 
 ## Run

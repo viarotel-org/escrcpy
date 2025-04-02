@@ -4,7 +4,7 @@ import DefaultTheme from 'vitepress/theme'
 
 import './rainbow.css'
 import './vars.css'
-// import './overrides.css'
+import './overrides.css'
 
 /** @type {import('vitepress').Theme} */
 export default {

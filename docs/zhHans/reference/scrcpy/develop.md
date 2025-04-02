@@ -1,114 +1,77 @@
-# scrcpy for developers
+---
+title: develop（开发者指南）
+---
 
-## Overview
+# 开发者指南：scrcpy
 
-This application is composed of two parts:
- - the server (`scrcpy-server`), to be executed on the device,
- - the client (the `scrcpy` binary), executed on the host computer.
+## 概述
 
-The client is responsible to push the server to the device and start its
-execution.
+该应用由两部分组成：
+- 服务端（`scrcpy-server`），在设备上执行；
+- 客户端（`scrcpy` 可执行文件），在主机上执行。
 
-The client and the server establish communication using separate sockets for
-video, audio and controls. Any of them may be disabled (but not all), so
-there are 1, 2 or 3 socket(s).
+客户端负责将服务端推送到设备并启动其执行。
 
-The server initially sends the device name on the first socket (it is used for
-the scrcpy window title), then each socket is used for its own purpose. All
-reads and writes are performed from a dedicated thread for each socket, both on
-the client and on the server.
+客户端和服务端通过独立的套接字进行视频、音频和控制通信。这些功能可以单独禁用（但不能全部禁用），因此可能使用 1、2 或 3 个套接字。
 
-If video is enabled, then the server sends a raw video stream (H.264 by default)
-of the device screen, with some additional headers for each packet. The client
-decodes the video frames, and displays them as soon as possible, without
-buffering (unless `--video-buffer=delay` is specified) to minimize latency. The
-client is not aware of the device rotation (which is handled by the server), it
-just knows the dimensions of the video frames it receives.
+服务端首先在第一个套接字上发送设备名称（用于 scrcpy 窗口标题），随后每个套接字分别用于其特定用途。客户端和服务端均为每个套接字分配专用线程进行读写操作。
 
-Similarly, if audio is enabled, then the server sends a raw audio stream (OPUS
-by default) of the device audio output (or the microphone if
-`--audio-source=mic` is specified), with some additional headers for each
-packet. The client decodes the stream, attempts to keep a minimal latency by
-maintaining an average buffering. The [blog post][scrcpy2] of the scrcpy v2.0
-release gives more details about the audio feature.
+如果启用了视频功能，服务端会发送设备屏幕的原始视频流（默认为 H.264 编码），每个数据包附带额外头部信息。客户端解码视频帧并尽快显示，不进行缓冲（除非指定 `--video-buffer=delay`）以最小化延迟。客户端不感知设备旋转（由服务端处理），仅知道接收到的视频帧尺寸。
 
-If control is enabled, then the client captures relevant keyboard and mouse
-events, that it transmits to the server, which injects them to the device. This
-is the only socket which is used in both direction: input events are sent from
-the client to the device, and when the device clipboard changes, the new content
-is sent from the device to the client to support seamless copy-paste.
+类似地，如果启用了音频功能，服务端会发送设备音频输出（或通过 `--audio-source=mic` 指定麦克风输入）的原始音频流（默认为 OPUS 编码），每个数据包附带额外头部信息。客户端解码音频流，尝试通过保持最小缓冲来降低延迟。[scrcpy v2.0 发布的博客文章][scrcpy2]详细介绍了音频功能。
+
+如果启用了控制功能，客户端会捕获相关的键盘和鼠标事件，并将其传输到服务端，由服务端注入到设备中。这是唯一一个双向使用的套接字：输入事件从客户端发送到设备，而当设备剪贴板内容变化时，新内容会从设备发送到客户端，以实现无缝复制粘贴。
 
 [scrcpy2]: https://blog.rom1v.com/2023/03/scrcpy-2-0-with-audio/
 
-Note that the client-server roles are expressed at the application level:
+需要注意的是，客户端和服务端的角色是从应用层面定义的：
+- 服务端提供视频和音频流，并处理客户端的请求；
+- 客户端通过服务端控制设备。
 
- - the server _serves_ video and audio streams, and handle requests from the
-   client,
- - the client _controls_ the device through the server.
+然而，默认情况下（未设置 `--force-adb-forward` 时），网络层面的角色是相反的：
+- 客户端在启动服务端之前打开服务器套接字并监听端口；
+- 服务端连接到客户端。
 
-However, by default (when `--force-adb-forward` is not set), the roles are
-reversed at the network level:
+这种角色反转避免了因竞态条件导致的连接失败，而无需轮询。
 
- - the client opens a server socket and listen on a port before starting the
-   server,
- - the server connects to the client.
+---
 
-This role inversion guarantees that the connection will not fail due to race
-conditions without polling.
+## 服务端
 
+### 权限
 
-## Server
+捕获屏幕需要一些权限，这些权限已授予 `shell` 用户。
 
-
-### Privileges
-
-Capturing the screen requires some privileges, which are granted to `shell`.
-
-The server is a Java application (with a [`public static void main(String...
-args)`][main] method), compiled against the Android framework, and executed as
-`shell` on the Android device.
+服务端是一个 Java 应用程序（包含 [`public static void main(String... args)`][main] 方法），针对 Android 框架编译，并在 Android 设备上以 `shell` 用户身份执行。
 
 [main]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Server.java#L193
 
-To run such a Java application, the classes must be [_dexed_][dex] (typically,
-to `classes.dex`). If `my.package.MainClass` is the main class, compiled to
-`classes.dex`, pushed to the device in `/data/local/tmp`, then it can be run
-with:
+要运行这样的 Java 应用程序，类必须被 [_dexed_][dex]（通常是 `classes.dex`）。如果 `my.package.MainClass` 是主类，编译为 `classes.dex` 并推送到设备的 `/data/local/tmp` 目录，则可以通过以下命令运行：
 
-    adb shell CLASSPATH=/data/local/tmp/classes.dex app_process / my.package.MainClass
+```bash
+adb shell CLASSPATH=/data/local/tmp/classes.dex app_process / my.package.MainClass
+```
 
-_The path `/data/local/tmp` is a good candidate to push the server, since it's
-readable and writable by `shell`, but not world-writable, so a malicious
-application may not replace the server just before the client executes it._
+_路径 `/data/local/tmp` 是推送服务端的理想选择，因为它对 `shell` 用户可读写，但对其他用户不可写，因此恶意应用无法在客户端执行前替换服务端。_
 
-Instead of a raw _dex_ file, `app_process` accepts a _jar_ containing
-`classes.dex` (e.g. an [APK]). For simplicity, and to benefit from the gradle
-build system, the server is built to an (unsigned) APK (renamed to
-`scrcpy-server.jar`).
+除了原始的 _dex_ 文件，`app_process` 还接受包含 `classes.dex` 的 _jar_ 文件（例如 [APK]）。为了简化操作并利用 gradle 构建系统，服务端被构建为一个（未签名的）APK（重命名为 `scrcpy-server.jar`）。
 
 [dex]: https://en.wikipedia.org/wiki/Dalvik_(software)
 [apk]: https://en.wikipedia.org/wiki/Android_application_package
 
+### 隐藏方法
 
-### Hidden methods
+尽管针对 Android 框架编译，[隐藏][hidden]方法和类无法直接访问（且不同 Android 版本可能有所不同）。
 
-Although compiled against the Android framework, [hidden] methods and classes are
-not directly accessible (and they may differ from one Android version to
-another).
-
-They can be called using reflection though. The communication with hidden
-components is provided by [_wrappers_ classes][wrappers] and [aidl].
+可以通过反射调用这些方法。与隐藏组件的通信由 [_wrapper_ 类][wrappers] 和 [aidl] 提供。
 
 [hidden]: https://stackoverflow.com/a/31908373/1987178
 [wrappers]: https://github.com/Genymobile/scrcpy/tree/master/server/src/main/java/com/genymobile/scrcpy/wrappers
 [aidl]: https://github.com/Genymobile/scrcpy/tree/master/server/src/main/aidl
 
+### 执行
 
-
-### Execution
-
-The server is started by the client basically by executing the following
-commands:
+客户端通过以下命令启动服务端：
 
 ```bash
 adb push scrcpy-server /data/local/tmp/scrcpy-server.jar
@@ -116,143 +79,105 @@ adb forward tcp:27183 localabstract:scrcpy
 adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobile.scrcpy.Server 2.1
 ```
 
-The first argument (`2.1` in the example) is the client scrcpy version. The
-server fails if the client and the server do not have the exact same version.
-The protocol between the client and the server may change from version to
-version (see [protocol](#protocol) below), and there is no backward or forward
-compatibility (there is no point to use different client and server versions).
-This check allows to detect misconfiguration (running an older or newer server
-by mistake).
+第一个参数（示例中的 `2.1`）是客户端的 scrcpy 版本。如果客户端和服务端版本不完全一致，服务端会失败。客户端和服务端之间的协议可能因版本而异（参见[协议](#协议)部分），且没有向后或向前兼容性（使用不同版本的服务端和客户端毫无意义）。此检查用于检测配置错误（意外运行旧版或新版服务端）。
 
-It is followed by any number of arguments, in the form of `key=value` pairs.
-Their order is irrelevant. The possible keys and associated value types can be
-found in the [server][server-options] and [client][client-options] code.
+随后可以跟随任意数量的参数，形式为 `key=value` 对，顺序无关。可能的键及其值类型可以在[服务端][server-options]和[客户端][client-options]代码中找到。
 
 [server-options]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Options.java#L181
 [client-options]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/server.c#L226
 
-For example, if we execute `scrcpy -m1920 --no-audio`, then the server
-execution will look like this:
+例如，如果执行 `scrcpy -m1920 --no-audio`，则服务端的执行如下：
 
 ```bash
-# scid is a random number to identify different clients running on the same device
+# scid 是一个随机数，用于区分同一设备上运行的不同客户端
 adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobile.scrcpy.Server 2.1 scid=12345678 log_level=info audio=false max_size=1920
 ```
 
-### Components
+### 组件
 
-When executed, its [`main()`][main] method is executed (on the "main" thread).
-It parses the arguments, establishes the connection with the client and starts
-the other "components":
- - the **video** streamer: it captures the video screen and send encoded video
-   packets on the _video_ socket (from the _video_ thread).
- - the **audio** streamer: it uses several threads to capture raw packets,
-   submits them to encoding and retrieve encoded packets, which it sends on the
-   _audio_ socket.
- - the **controller**: it receives _control messages_ (typically input events)
-   on the _control_ socket from one thread, and sends _device messages_ (e.g. to
-   transmit the device clipboard content to the client) on the same _control
-   socket_ from another thread. Thus, the _control_ socket is used in both
-   directions (contrary to the _video_ and _audio_ sockets).
+执行时，其 [`main()`][main] 方法（在“主”线程中运行）会解析参数，建立与客户端的连接，并启动其他“组件”：
+- **视频**流：捕获屏幕视频并通过 _video_ 套接字发送编码后的视频数据包（从 _video_ 线程）。
+- **音频**流：使用多个线程捕获原始数据包，提交编码并获取编码后的数据包，通过 _audio_ 套接字发送。
+- **控制器**：从一个线程接收 _control_ 套接字上的控制消息（通常是输入事件），并从另一个线程通过同一 _control_ 套接字发送设备消息（例如将设备剪贴板内容传输到客户端）。因此，_control_ 套接字是双向使用的（与 _video_ 和 _audio_ 套接字不同）。
 
+### 屏幕视频编码
 
-### Screen video encoding
+编码由 [`ScreenEncoder`] 管理。
 
-The encoding is managed by [`ScreenEncoder`].
-
-The video is encoded using the [`MediaCodec`] API. The codec encodes the content
-of a `Surface` associated to the display, and writes the encoding packets to the
-client (on the _video_ socket).
+视频使用 [`MediaCodec`] API 编码。编码器编码与显示关联的 `Surface` 内容，并将编码后的数据包写入客户端（通过 _video_ 套接字）。
 
 [`ScreenEncoder`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java
 [`MediaCodec`]: https://developer.android.com/reference/android/media/MediaCodec.html
 
-On device rotation (or folding), the encoding session is [reset] and restarted.
+在设备旋转（或折叠）时，编码会话会[重置][reset]并重新启动。
 
-New frames are produced only when changes occur on the surface. This avoids to
-send unnecessary frames, but by default there might be drawbacks:
+仅当 Surface 发生变化时才会生成新帧。这避免了发送不必要的帧，但默认情况下可能存在以下问题：
+- 如果设备屏幕未变化，启动时不会发送任何帧；
+- 快速运动变化后，最后一帧的质量可能较差。
 
- - it does not send any frame on start if the device screen does not change,
- - after fast motion changes, the last frame may have poor quality.
-
-Both problems are [solved][repeat] by the flag
-[`KEY_REPEAT_PREVIOUS_FRAME_AFTER`][repeat-flag].
+这两个问题通过标志 [`KEY_REPEAT_PREVIOUS_FRAME_AFTER`][repeat-flag] [解决][repeat]。
 
 [reset]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java#L179
-[rotation]: https://github.com/Genymobile/scrcpy/blob/ffe0417228fb78ab45b7ee4e202fc06fc8875bf3/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java#L90
 [repeat]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java#L246-L247
 [repeat-flag]: https://developer.android.com/reference/android/media/MediaFormat.html#KEY_REPEAT_PREVIOUS_FRAME_AFTER
 
+### 音频编码
 
-### Audio encoding
+类似地，音频通过 [`AudioRecord`] [捕获][captured]，并使用 [`MediaCodec`] 异步 API [编码][encoded]。
 
-Similarly, the audio is [captured] using an [`AudioRecord`], and [encoded] using
-the [`MediaCodec`] asynchronous API.
-
-More details are available on the [blog post][scrcpy2] introducing the audio feature.
+更多细节请参阅介绍音频功能的[博客文章][scrcpy2]。
 
 [captured]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/AudioCapture.java
 [encoded]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/AudioEncoder.java
 [`AudioRecord`]: https://developer.android.com/reference/android/media/AudioRecord
 
+### 输入事件注入
 
-### Input events injection
+_控制消息_ 由客户端通过 [`Controller`]（在单独线程中运行）接收。输入事件有多种类型：
+- 键码（参考 [`KeyEvent`]）；
+- 文本（特殊字符可能无法直接通过键码处理）；
+- 鼠标移动/点击；
+- 鼠标滚动；
+- 其他命令（例如开关屏幕或复制剪贴板）。
 
-_Control messages_ are received from the client by the [`Controller`] (run in a
-separate thread). There are several types of input events:
- - keycode (cf [`KeyEvent`]),
- - text (special characters may not be handled by keycodes directly),
- - mouse motion/click,
- - mouse scroll,
- - other commands (e.g. to switch the screen on or to copy the clipboard).
-
-Some of them need to inject input events to the system. To do so, they use the
-_hidden_ method [`InputManager.injectInputEvent()`] (exposed by the
-[`InputManager` wrapper][inject-wrapper]).
+其中一些需要通过系统注入输入事件。为此，它们使用 _隐藏_ 方法 [`InputManager.injectInputEvent()`]（由 [`InputManager` 包装器][inject-wrapper] 暴露）。
 
 [`Controller`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Controller.java
 [`KeyEvent`]: https://developer.android.com/reference/android/view/KeyEvent.html
-[`MotionEvent`]: https://developer.android.com/reference/android/view/MotionEvent.html
 [`InputManager.injectInputEvent()`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/wrappers/InputManager.java#L34
 [inject-wrapper]: https://github.com/Genymobile/scrcpy/blob/ffe0417228fb78ab45b7ee4e202fc06fc8875bf3/server/src/main/java/com/genymobile/scrcpy/wrappers/InputManager.java#L27
 
+---
 
+## 客户端
 
-## Client
+客户端依赖 [SDL]，它提供了跨平台的 UI、输入事件、线程等 API。
 
-The client relies on [SDL], which provides cross-platform API for UI, input
-events, threading, etc.
-
-The video and audio streams are decoded by [FFmpeg].
+视频和音频流由 [FFmpeg] 解码。
 
 [SDL]: https://www.libsdl.org
 [ffmpeg]: https://ffmpeg.org/
 
+### 初始化
 
-### Initialization
-
-The client parses the command line arguments, then [runs one of two code
-paths][run]:
- - scrcpy in "normal" mode ([`scrcpy.c`])
- - scrcpy in [OTG mode](otg.md) ([`scrcpy_otg.c`])
+客户端解析命令行参数后，[运行以下两种代码路径之一][run]：
+- scrcpy 的“正常”模式（[`scrcpy.c`]）；
+- scrcpy 的 [OTG 模式](/zhHans/reference/scrcpy/otg)（[`scrcpy_otg.c`]）。
 
 [run]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/main.c#L81-L82
 [`scrcpy.c`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/scrcpy.c#L292-L293
 [`scrcpy_otg.c`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/usb/scrcpy_otg.c#L51-L52
 
-In the remaining of this document, we assume that the "normal" mode is used
-(read the code for the OTG mode).
+在本文档的剩余部分，我们假设使用的是“正常”模式（OTG 模式的代码请自行阅读）。
 
-On startup, the client:
- - opens the _video_, _audio_ and _control_ sockets;
- - pushes and starts the server on the device;
- - initializes its components (demuxers, decoders, recorder…).
+启动时，客户端：
+- 打开 _video_、_audio_ 和 _control_ 套接字；
+- 推送并启动设备上的服务端；
+- 初始化其组件（解复用器、解码器、录制器等）。
 
+### 视频和音频流
 
-### Video and audio streams
-
-Depending on the arguments passed to `scrcpy`, several components may be used.
-Here is an overview of the video and audio components:
+根据传递给 `scrcpy` 的参数，可能会使用多个组件。以下是视频和音频组件的概述：
 
 ```
                                                  V4L2 sink
@@ -268,109 +193,83 @@ Here is an overview of the video and audio components:
                                        decoder --- audio player
 ```
 
-The _demuxer_ is responsible to extract video and audio packets (read some
-header, split the video stream into packets at correct boundaries, etc.).
+_解复用器_ 负责提取视频和音频数据包（读取头部信息，在正确边界处拆分视频流等）。
 
-The demuxed packets may be sent to a _decoder_ (one per stream, to produce
-frames) and to a recorder (receiving both video and audio stream to record a
-single file). The packets are encoded on the device (by `MediaCodec`), but when
-recording, they are _muxed_ (asynchronously) into a container (MKV or MP4) on
-the client side.
+解复用后的数据包可能发送到 _解码器_（每个流一个，用于生成帧）和录制器（接收视频和音频流以录制单个文件）。数据包在设备上编码（通过 `MediaCodec`），但在录制时，它们会在客户端异步 _复用_ 到容器（MKV 或 MP4）中。
 
-Video frames are sent to the screen/display to be rendered in the scrcpy window.
-They may also be sent to a [V4L2 sink](v4l2.md).
+视频帧发送到屏幕/显示器以在 scrcpy 窗口中渲染，也可能发送到 [V4L2 sink](/zhHans/reference/scrcpy/v4l2)。
 
-Audio "frames" (an array of decoded samples) are sent to the audio player.
+音频“帧”（解码后的样本数组）发送到音频播放器。
 
+### 控制器
 
-### Controller
+_控制器_ 负责向设备发送 _控制消息_。它在单独的线程中运行，以避免在主线程上进行 I/O 操作。
 
-The _controller_ is responsible to send _control messages_ to the device. It
-runs in a separate thread, to avoid I/O on the main thread.
+在主线程上接收 SDL 事件时，_输入管理器_ 会创建相应的 _控制消息_。它负责将 SDL 事件转换为 Android 事件，然后将 _控制消息_ 推送到控制器持有的队列中。控制器在自己的线程中从队列中取出消息，序列化后发送到客户端。
 
-On SDL event, received on the main thread, the _input manager_ creates
-appropriate _control messages_. It is responsible to convert SDL events to
-Android events. It then pushes the _control messages_ to a queue hold by the
-controller. On its own thread, the controller takes messages from the queue,
-that it serializes and sends to the client.
+---
 
+## 协议
 
-## Protocol
+客户端和服务端之间的协议应视为 _内部_：它可能（并且将会）因任何原因随时更改。所有内容（套接字数量、套接字打开顺序、数据格式等）都可能因版本而异。客户端必须始终与匹配的服务端版本一起运行。
 
-The protocol between the client and the server must be considered _internal_: it
-may (and will) change at any time for any reason. Everything may change (the
-number of sockets, the order in which the sockets must be opened, the data
-format on the wire…) from version to version. A client must always be run with a
-matching server version.
+本节记录了 scrcpy v2.1 的当前协议。
 
-This section documents the current protocol in scrcpy v2.1.
+### 连接
 
-### Connection
-
-Firstly, the client sets up an adb tunnel:
+首先，客户端设置 adb 隧道：
 
 ```bash
-# By default, a reverse redirection: the computer listens, the device connects
+# 默认情况下是反向重定向：计算机监听，设备连接
 adb reverse localabstract:scrcpy_<SCID> tcp:27183
 
-# As a fallback (or if --force-adb forward is set), a forward redirection:
-# the device listens, the computer connects
+# 作为回退（或设置了 --force-adb forward 时），是正向重定向：
+# 设备监听，计算机连接
 adb forward tcp:27183 localabstract:scrcpy_<SCID>
 ```
 
-(`<SCID>` is a 31-bit random number, so that it does not fail when several
-scrcpy instances start "at the same time" for the same device.)
+（`<SCID>` 是一个 31 位随机数，以避免同一设备上同时启动多个 scrcpy 实例时失败。）
 
-Then, up to 3 sockets are opened, in that order:
- - a _video_ socket
- - an _audio_ socket
- - a _control_ socket
+随后，按顺序打开最多 3 个套接字：
+- _video_ 套接字；
+- _audio_ 套接字；
+- _control_ 套接字。
 
-Each one may be disabled (respectively by `--no-video`, `--no-audio` and
-`--no-control`, directly or indirectly). For example, if `--no-audio` is set,
-then the _video_ socket is opened first, then the _control_ socket.
+每个套接字都可以禁用（分别通过 `--no-video`、`--no-audio` 和 `--no-control`，直接或间接）。例如，如果设置了 `--no-audio`，则首先打开 _video_ 套接字，然后是 _control_ 套接字。
 
-On the _first_ socket opened (whichever it is), if the tunnel is _forward_, then
-a [dummy byte] is sent from the device to the client. This allows to detect a
-connection error (the client connection does not fail as long as there is an adb
-forward redirection, even if nothing is listening on the device side).
+在打开的 _第一个_ 套接字上（无论哪个），如果隧道是 _正向_ 的，则设备会向客户端发送一个[虚拟字节][dummy byte]。这用于检测连接错误（只要存在 adb 正向重定向，客户端连接就不会失败，即使设备端没有监听）。
 
-Still on this _first_ socket, the device sends some [metadata][device meta] to
-the client (currently only the device name, used as the window title, but there
-might be other fields in the future).
+仍然在此 _第一个_ 套接字上，设备向客户端发送一些[元数据][device meta]（目前仅设备名称，用作窗口标题，但未来可能包含其他字段）。
 
 [dummy byte]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/DesktopConnection.java#L93
 [device meta]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/DesktopConnection.java#L151
 
-You can read the [client][client-connection] and [server][server-connection]
-code for more details.
+更多细节请阅读[客户端][client-connection]和[服务端][server-connection]代码。
 
 [client-connection]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/server.c#L465-L466
 [server-connection]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/DesktopConnection.java#L63
 
-Then each socket is used for its intended purpose.
+随后，每个套接字用于其预定用途。
 
-### Video and audio
+### 视频和音频
 
-On the _video_ and _audio_ sockets, the device first sends some [codec
-metadata]:
- - On the _video_ socket, 12 bytes:
-   - the codec id (`u32`) (H264, H265 or AV1)
-   - the initial video width (`u32`)
-   - the initial video height (`u32`)
- - On the _audio_ socket, 4 bytes:
-   - the codec id (`u32`) (OPUS, AAC or RAW)
+在 _video_ 和 _audio_ 套接字上，设备首先发送一些[编解码器元数据][codec metadata]：
+- 在 _video_ 套接字上，12 字节：
+  - 编解码器 ID（`u32`）（H264、H265 或 AV1）；
+  - 初始视频宽度（`u32`）；
+  - 初始视频高度（`u32`）。
+- 在 _audio_ 套接字上，4 字节：
+  - 编解码器 ID（`u32`）（OPUS、AAC 或 RAW）。
 
 [codec metadata]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Streamer.java#L33-L51
 
-Then each packet produced by `MediaCodec` is sent, prefixed by a 12-byte [frame
-header]:
- - config packet flag (`u1`)
- - key frame flag (`u1`)
- - PTS (`u62`)
- - packet size (`u32`)
+随后，每个由 `MediaCodec` 生成的数据包会附带一个 12 字节的[帧头部][frame header]：
+- 配置包标志（`u1`）；
+- 关键帧标志（`u1`）；
+- PTS（`u62`）；
+- 数据包大小（`u32`）。
 
-Here is a schema describing the frame header:
+以下是帧头部的结构描述：
 
 ```
     [. . . . . . . .|. . . .]. . . . . . . . . . . . . . . ...
@@ -380,46 +279,42 @@ Here is a schema describing the frame header:
      <--------------------->
            frame header
 
-The most significant bits of the PTS are used for packet flags:
+PTS 的最高位用于数据包标志：
 
      byte 7   byte 6   byte 5   byte 4   byte 3   byte 2   byte 1   byte 0
     CK...... ........ ........ ........ ........ ........ ........ ........
     ^^<------------------------------------------------------------------->
     ||                                PTS
-    | `- key frame
-     `-- config packet
+    | `- 关键帧
+     `-- 配置包
 ```
 
 [frame header]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Streamer.java#L83
 
+### 控制
 
-### Controls
+控制消息通过自定义二进制协议发送。
 
-Controls messages are sent via a custom binary protocol.
+该协议的唯一文档是双方的单元测试：
+- `ControlMessage`（从客户端到设备）：[序列化](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_control_msg_serialize.c) | [反序列化](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/ControlMessageReaderTest.java)；
+- `DeviceMessage`（从设备到客户端）：[序列化](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/DeviceMessageWriterTest.java) | [反序列化](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_device_msg_deserialize.c)。
 
-The only documentation for this protocol is the set of unit tests on both sides:
- - `ControlMessage` (from client to device): [serialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_control_msg_serialize.c) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/ControlMessageReaderTest.java)
- - `DeviceMessage` (from device to client) [serialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/DeviceMessageWriterTest.java) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_device_msg_deserialize.c)
+---
 
+## 独立服务端
 
-## Standalone server
+尽管服务端设计用于 scrcpy 客户端，但它可以与任何使用相同协议的客户端一起使用。
 
-Although the server is designed to work for the scrcpy client, it can be used
-with any client which uses the same protocol.
-
-For simplicity, some [server-specific options] have been added to produce raw
-streams easily:
- - `send_device_meta=false`: disable the device metata (in practice, the device
-   name) sent on the _first_ socket
- - `send_frame_meta=false`: disable the 12-byte header for each packet
- - `send_dummy_byte`: disable the dummy byte sent on forward connections
- - `send_codec_meta`: disable the codec information (and initial device size for
-   video)
- - `raw_stream`: disable all the above
+为了简化操作，添加了一些[服务端特定选项][server-specific options]以轻松生成原始流：
+- `send_device_meta=false`：禁用通过 _第一个_ 套接字发送的设备元数据（实际为设备名称）；
+- `send_frame_meta=false`：禁用每个数据包的 12 字节头部；
+- `send_dummy_byte`：禁用正向连接时发送的虚拟字节；
+- `send_codec_meta`：禁用编解码信息（以及视频的初始设备尺寸）；
+- `raw_stream`：禁用上述所有内容。
 
 [server-specific options]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Options.java#L309-L329
 
-Concretely, here is how to expose a raw H.264 stream on a TCP socket:
+具体来说，以下是如何在 TCP 套接字上暴露原始 H.264 流：
 
 ```bash
 adb push scrcpy-server-v2.1 /data/local/tmp/scrcpy-server-manual.jar
@@ -430,63 +325,57 @@ adb shell CLASSPATH=/data/local/tmp/scrcpy-server-manual.jar \
     raw_stream=true max_size=1920
 ```
 
-As soon as a client connects over TCP on port 1234, the device will start
-streaming the video. For example, VLC can play the video (although you will
-experience a very high latency, more details [here][vlc-0latency]):
+一旦客户端通过 TCP 连接到端口 1234，设备就会开始流式传输视频。例如，VLC 可以播放视频（尽管会有很高的延迟，更多细节[在此][vlc-0latency]）：
 
-```
+```bash
 vlc -Idummy --demux=h264 --network-caching=0 tcp://localhost:1234
 ```
 
 [vlc-0latency]: https://code.videolan.org/rom1v/vlc/-/merge_requests/20
 
+---
 
-## Hack
+## 黑客指南
 
-For more details, go read the code!
+更多细节，请阅读代码！
 
-If you find a bug, or have an awesome idea to implement, please discuss and
-contribute ;-)
+如果发现错误或有绝妙的想法，欢迎讨论和贡献 ;-)
 
+### 调试服务端
 
-### Debug the server
+服务端由客户端在启动时推送到设备。
 
-The server is pushed to the device by the client on startup.
-
-To debug it, enable the server debugger during configuration:
+要调试它，请在配置时启用服务端调试器：
 
 ```bash
 meson setup x -Dserver_debugger=true
-# or, if x is already configured
+# 或者，如果 x 已配置
 meson configure x -Dserver_debugger=true
 ```
 
-Then recompile, and run scrcpy.
+然后重新编译并运行 scrcpy。
 
-For Android < 11, it will start a debugger on port 5005 on the device and wait:
-Redirect that port to the computer:
+对于 Android < 11，它会在设备的 5005 端口启动调试器并等待。将该端口重定向到计算机：
 
 ```bash
 adb forward tcp:5005 tcp:5005
 ```
 
-For Android >= 11, first find the listening port:
+对于 Android >= 11，首先找到监听端口：
 
 ```bash
 adb jdwp
-# press Ctrl+C to interrupt
+# 按 Ctrl+C 中断
 ```
 
-Then redirect the resulting PID:
+然后重定向结果 PID：
 
 ```bash
-adb forward tcp:5005 jdwp:XXXX  # replace XXXX
+adb forward tcp:5005 jdwp:XXXX  # 替换 XXXX
 ```
 
-In Android Studio, _Run_ > _Debug_ > _Edit configurations..._ On the left, click
-on `+`, _Remote_, and fill the form:
+在 Android Studio 中，_Run_ > _Debug_ > _Edit configurations..._，在左侧点击 `+`，选择 _Remote_，并填写表单：
+- Host: `localhost`；
+- Port: `5005`。
 
- - Host: `localhost`
- - Port: `5005`
-
-Then click on _Debug_.
+然后点击 _Debug_。

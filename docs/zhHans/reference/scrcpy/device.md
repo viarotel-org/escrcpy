@@ -1,184 +1,167 @@
-# Device
+---
+title: device（设备控制）
+---
 
-Some command line arguments perform actions on the device itself while scrcpy is
-running.
+# 设备控制
 
-## Stay awake
+某些命令行参数可以在scrcpy运行时对设备本身执行操作。
 
-To prevent the device from sleeping after a delay **when the device is plugged
-in**:
+## 保持唤醒
+
+当设备通过有线连接时，防止设备延迟休眠：
 
 ```bash
 scrcpy --stay-awake
-scrcpy -w
+scrcpy -w  # 简写形式
 ```
 
-The initial state is restored when _scrcpy_ is closed.
+scrcpy关闭时将恢复初始状态。
 
-If the device is not plugged in (i.e. only connected over TCP/IP),
-`--stay-awake` has no effect (this is the Android behavior).
+如果设备未通过有线连接（即仅通过TCP/IP连接），`--stay-awake`参数无效（这是Android系统的特性）。
 
-This changes the value of [`stay_on_while_plugged_in`], setting which can be
-changed manually:
+该功能通过修改[`stay_on_while_plugged_in`]设置实现，也可手动调整：
 
 [`stay_on_while_plugged_in`]: https://developer.android.com/reference/android/provider/Settings.Global#STAY_ON_WHILE_PLUGGED_IN
 
-
 ```bash
-# get the current show_touches value
+# 获取当前stay_on_while_plugged_in值
 adb shell settings get global stay_on_while_plugged_in
-# enable for AC/USB/wireless chargers
+# 为AC/USB/无线充电器启用保持唤醒
 adb shell settings put global stay_on_while_plugged_in 7
-# disable
+# 禁用保持唤醒
 adb shell settings put global stay_on_while_plugged_in 0
 ```
 
+## 屏幕关闭超时
 
-## Screen off timeout
+Android屏幕会在一定延迟后自动关闭。
 
-The Android screen automatically turns off after some delay.
-
-To change this delay while scrcpy is running:
+在scrcpy运行时修改此延迟：
 
 ```bash
-scrcpy --screen-off-timeout=300  # 300 seconds (5 minutes)
+scrcpy --screen-off-timeout=300  # 300秒（5分钟）
 ```
 
-The initial value is restored on exit.
+退出时将恢复原始值。
 
-It is possible to change this setting manually:
+也可手动修改此设置：
 
 ```bash
-# get the current screen_off_timeout value
+# 获取当前screen_off_timeout值
 adb shell settings get system screen_off_timeout
-# set a new value (in milliseconds)
+# 设置新值（单位毫秒）
 adb shell settings put system screen_off_timeout 30000
 ```
 
-Note that the Android value is in milliseconds, but the scrcpy command line
-argument is in seconds.
+注意：Android系统值的单位是毫秒，而scrcpy命令行参数的单位是秒。
 
+## 关闭屏幕
 
-## Turn screen off
-
-It is possible to turn the device screen off while mirroring on start with a
-command-line option:
+可以在镜像开始时通过命令行选项关闭设备屏幕：
 
 ```bash
 scrcpy --turn-screen-off
-scrcpy -S   # short version
+scrcpy -S  # 简写形式
 ```
 
-Or by pressing <kbd>MOD</kbd>+<kbd>o</kbd> at any time (see
-[shortcuts](shortcuts.md)).
+或随时按下<kbd>MOD</kbd>+<kbd>o</kbd>组合键（参见[快捷键](/zhHans/reference/scrcpy/shortcuts)）。
 
-To turn it back on, press <kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>o</kbd>.
+按<kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>o</kbd>可重新打开屏幕。
 
-On Android, the `POWER` button always turns the screen on. For convenience, if
-`POWER` is sent via _scrcpy_ (via right-click or <kbd>MOD</kbd>+<kbd>p</kbd>),
-it will force to turn the screen off after a small delay (on a best effort
-basis). The physical `POWER` button will still cause the screen to be turned on.
+在Android设备上，物理`POWER`键总是会唤醒屏幕。为方便起见，通过scrcpy发送`POWER`指令（右键点击或<kbd>MOD</kbd>+<kbd>p</kbd>）会强制在一小段延迟后关闭屏幕（尽力而为）。物理`POWER`键仍会唤醒屏幕。
 
-It can also be useful to prevent the device from sleeping:
+此功能也可用于防止设备休眠：
 
 ```bash
 scrcpy --turn-screen-off --stay-awake
-scrcpy -Sw   # short version
+scrcpy -Sw  # 简写形式
 ```
 
-Since Android 15, it is possible to change this setting manually:
+从Android 15开始，可以手动修改此设置：
 
-```
-# turn screen off (0 for main display)
+```bash
+# 关闭屏幕（0表示主显示屏）
 adb shell cmd display power-off 0
-# turn screen on
+# 打开屏幕
 adb shell cmd display power-on 0
 ```
 
+## 显示触摸痕迹
 
-## Show touches
+在进行演示时，显示物理触摸痕迹（在物理设备上）可能很有用。Android在开发者选项中提供了此功能。
 
-For presentations, it may be useful to show physical touches (on the physical
-device). Android exposes this feature in _Developers options_.
-
-_Scrcpy_ provides an option to enable this feature on start and restore the
-initial value on exit:
+scrcpy提供了在启动时启用此功能并在退出时恢复初始值的选项：
 
 ```bash
 scrcpy --show-touches
-scrcpy -t   # short version
+scrcpy -t  # 简写形式
 ```
 
-Note that it only shows _physical_ touches (by a finger on the device).
+注意：此功能仅显示物理触摸痕迹（手指在设备上的触摸）。
 
-It is possible to change this setting manually:
+可以手动修改此设置：
 
 ```bash
-# get the current show_touches value
+# 获取当前show_touches值
 adb shell settings get system show_touches
-# enable show_touches
+# 启用show_touches
 adb shell settings put system show_touches 1
-# disable show_touches
+# 禁用show_touches
 adb shell settings put system show_touches 0
 ```
 
-## Power off on close
+## 关闭时断电
 
-To turn the device screen off when closing _scrcpy_:
+在关闭scrcpy时关闭设备屏幕：
 
 ```bash
 scrcpy --power-off-on-close
 ```
 
-## Power on on start
+## 启动时通电
 
-By default, on start, the device is powered on. To prevent this behavior:
+默认情况下，启动时会唤醒设备。禁用此行为：
 
 ```bash
 scrcpy --no-power-on
 ```
 
+## 启动Android应用
 
-## Start Android app
-
-To list the Android apps installed on the device:
+列出设备上安装的Android应用：
 
 ```bash
 scrcpy --list-apps
 ```
 
-An app, selected by its package name, can be launched on start:
+可以通过包名在启动时运行指定应用：
 
-```
+```bash
 scrcpy --start-app=org.mozilla.firefox
 ```
 
-This feature can be used to run an app in a [virtual
-display](virtual_display.md):
+此功能可用于在[虚拟显示器](virtual_display.md)中运行应用：
 
-```
+```bash
 scrcpy --new-display=1920x1080 --start-app=org.videolan.vlc
 ```
 
-The app can be optionally forced-stop before being started, by adding a `+`
-prefix:
+可以在启动应用前强制停止它，只需添加`+`前缀：
 
-```
+```bash
 scrcpy --start-app=+org.mozilla.firefox
 ```
 
-For convenience, it is also possible to select an app by its name, by adding a
-`?` prefix:
+为方便起见，也可以通过应用名称选择应用，需添加`?`前缀：
 
-```
+```bash
 scrcpy --start-app=?firefox
 ```
 
-But retrieving app names may take some time (sometimes several seconds), so
-passing the package name is recommended.
+但检索应用名称可能需要一些时间（有时需要几秒），因此建议直接使用包名。
 
-The `+` and `?` prefixes can be combined (in that order):
+`+`和`?`前缀可以组合使用（按此顺序）：
 
-```
+```bash
 scrcpy --start-app=+?firefox
 ```

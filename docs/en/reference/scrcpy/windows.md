@@ -44,7 +44,7 @@ scoop install adb    # if you don't have it yet
 [Chocolatey]: https://chocolatey.org/
 [Scoop]: https://scoop.sh
 
-_See [build.md](build.md) to build and install the app manually._
+_See [build.md](/reference/scrcpy/build) to build and install the app manually._
 
 
 ## Run

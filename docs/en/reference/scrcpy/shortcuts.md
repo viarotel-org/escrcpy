@@ -57,7 +57,7 @@ _<kbd>[Super]</kbd> is typically the <kbd>Windows</kbd> or <kbd>Cmd</kbd> key._
  | Tilt vertically (slide with 2 fingers)      | <kbd>Shift</kbd>+_click-and-move_
  | Tilt horizontally (slide with 2 fingers)    | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+_click-and-move_
  | Drag & drop APK file                        | Install APK from computer
- | Drag & drop non-APK file                    | [Push file to device](control.md#push-file-to-device)
+ | Drag & drop non-APK file                    | [Push file to device](/reference/scrcpy/control#push-file-to-device)
 
 _¹Double-click on black borders to remove them._  
 _²Right-click turns the screen on if it was off, presses BACK otherwise._  

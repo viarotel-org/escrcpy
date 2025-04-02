@@ -20,7 +20,7 @@ title: 快速上手
 
 > 注意：若手机弹出调试授权提示，请点击允许
 
-1. 在安卓设备上启用开发者模式和USB调试功能
+1. 在安卓设备上[启用开发者模式](https://www.bing.com/search?q=启用安卓开发者模式)和[USB调试](https://www.bing.com/search?q=启用安卓USB调试)功能
 2. 启动Escrcpy并将安卓设备通过USB连接电脑
 3. Escrcpy设备列表应已检测到您的设备，点击"开始镜像"
 4. 开始使用！

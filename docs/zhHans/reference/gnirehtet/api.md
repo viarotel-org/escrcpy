@@ -1,5 +1,5 @@
 ---
-title: 接口文档
+title: API（接口文档）
 ---
 
 # Gnirehtet API

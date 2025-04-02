@@ -1,146 +1,124 @@
-# Mouse
+---
+title: Mouse（鼠标）
+---
 
-Several mouse input modes are available:
+# 鼠标  
 
- - `--mouse=sdk` (default)
- - `--mouse=uhid` (or `-M`): simulates a physical HID mouse using the UHID
-   kernel module on the device
- - `--mouse=aoa`: simulates a physical HID mouse using the AOAv2 protocol
- - `--mouse=disabled`
+提供多种鼠标输入模式：  
 
+ - `--mouse=sdk`（默认模式）  
+ - `--mouse=uhid`（或 `-M`）：通过设备的 UHID 内核模块模拟物理 HID 鼠标  
+ - `--mouse=aoa`：通过 AOAv2 协议模拟物理 HID 鼠标  
+ - `--mouse=disabled`  
 
-## SDK mouse
+## SDK 鼠标模式  
 
-In this mode (`--mouse=sdk`, or if the parameter is omitted), mouse input events
-are injected at the Android API level with absolute coordinates.
+在此模式下（`--mouse=sdk` 或省略参数时），鼠标输入事件会以绝对坐标的形式通过 Android API 注入设备。  
 
-Note that on some devices, an additional option must be enabled in developer
-options for this mouse mode to work. See
-[prerequisites](/reference/scrcpy/#prerequisites).
+注意：在某些设备上，开发者选项中需启用额外选项才能使此模式生效。详见[前提条件](/zhHans/reference/scrcpy/#prerequisites)。  
 
-### Mouse hover
+### 鼠标悬停  
 
-By default, mouse hover (mouse motion without any clicks) events are forwarded
-to the device. This can be disabled with:
+默认情况下，鼠标悬停（无点击的鼠标移动）事件会被转发到设备。可通过以下命令禁用：  
 
-```
-scrcpy --no-mouse-hover
-```
+```  
+scrcpy --no-mouse-hover  
+```  
 
-## Physical mouse simulation
+## 物理鼠标模拟  
 
-Two modes allow to simulate a physical HID mouse on the device.
+有两种模式可在设备上模拟物理 HID 鼠标。  
 
-In these modes, the computer mouse is "captured": the mouse pointer disappears
-from the computer and appears on the Android device instead.
+在这些模式下，计算机鼠标会被“捕获”：鼠标指针从计算机消失，转而出现在 Android 设备上。  
 
-The [shortcut mod](/reference/scrcpy/shortcuts) (either <kbd>Alt</kbd> or <kbd>Super</kbd> by
-default) toggle (disable or enable) the mouse capture. Use one of them to give
-the control of the mouse back to the computer.
+通过[快捷键修饰键](/zhHans/reference/scrcpy/shortcuts)（默认为 <kbd>Alt</kbd> 或 <kbd>Super</kbd>）可切换（禁用或启用）鼠标捕获功能。使用其中之一可将鼠标控制权交还给计算机。  
 
+### UHID 模式  
 
-### UHID
+此模式通过设备的 [UHID] 内核模块模拟物理 HID 鼠标。  
 
-This mode simulates a physical HID mouse using the [UHID] kernel module on the
-device.
+[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt  
 
-[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt
+启用 UHID 鼠标模式的命令：  
 
-To enable UHID mouse, use:
+```bash  
+scrcpy --mouse=uhid  
+scrcpy -M  # 简写形式  
+```  
 
-```bash
-scrcpy --mouse=uhid
-scrcpy -M  # short version
-```
+注意：由于权限问题，UHID 在旧版 Android 上可能无法工作。  
 
-Note: UHID may not work on old Android versions due to permission errors.
+### AOA 模式  
 
+此模式通过 [AOAv2] 协议模拟物理 HID 鼠标。  
 
-### AOA
+[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support  
 
-This mode simulates a physical HID mouse using the [AOAv2] protocol.
+启用 AOA 鼠标模式的命令：  
 
-[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support
+```bash  
+scrcpy --mouse=aoa  
+```  
 
-To enable AOA mouse, use:
+与其他模式不同，此模式直接在 USB 层面工作（因此仅支持 USB 连接）。  
 
-```bash
-scrcpy --mouse=aoa
-```
+它不使用 scrcpy 服务端，也不依赖 `adb`（USB 调试）。因此，即使 USB 调试被禁用，仍可控制设备（但无法镜像）。详见 [OTG](/zhHans/reference/scrcpy/otg)。  
 
-Contrary to the other modes, it works at the USB level directly (so it only
-works over USB).
+注意：在 Windows 上，此模式可能仅在 [OTG 模式](/zhHans/reference/scrcpy/otg)下有效，镜像时无效（如果 USB 设备已被其他进程如 _adb 守护进程_ 占用，则无法打开）。  
 
-It does not use the scrcpy server, and does not require `adb` (USB debugging).
-Therefore, it is possible to control the device (but not mirror) even with USB
-debugging disabled (see [OTG](/reference/scrcpy/otg)).
+## 鼠标按键绑定  
 
-Note: On Windows, it may only work in [OTG mode](/reference/scrcpy/otg), not while mirroring
-(it is not possible to open a USB device if it is already open by another
-process like the _adb daemon_).
+默认情况下，在 SDK 鼠标模式下：  
+ - 右键触发 `BACK`（或点亮屏幕）  
+ - 中键触发 `HOME`  
+ - 第四键触发 `APP_SWITCH`  
+ - 第五键展开通知面板  
 
+通过按住 <kbd>Shift</kbd> 键，可将次要点击事件转发到设备（例如 <kbd>Shift</kbd>+右键会向设备注入右键点击）。  
 
-## Mouse bindings
+在 AOA 和 UHID 鼠标模式下，默认绑定相反：所有点击默认被转发，按住 <kbd>Shift</kbd> 可触发快捷键（由于光标由设备端处理，在此模式下默认转发所有鼠标按键更合理）。  
 
-By default, with SDK mouse:
- - right-click triggers `BACK` (or `POWER` on)
- - middle-click triggers `HOME`
- - the 4th click triggers `APP_SWITCH`
- - the 5th click expands the notification panel
+可通过 `--mouse-bind=xxxx:xxxx` 配置任何鼠标模式的快捷键。参数必须为一或两组（用 `:` 分隔）共 4 个字符的序列，分别对应每次次要点击：  
 
-The secondary clicks may be forwarded to the device instead by pressing the
-<kbd>Shift</kbd> key (e.g. <kbd>Shift</kbd>+right-click injects a right click to
-the device).
+```  
+                .---- Shift + 右键  
+       次要绑定 |.--- Shift + 中键  
+               ||.-- Shift + 第四键  
+               |||.- Shift + 第五键  
+               ||||  
+               vvvv  
+--mouse-bind=xxxx:xxxx  
+             ^^^^  
+             ||||  
+   主要绑定   ||| `- 第五键  
+             || `-- 第四键  
+             | `--- 中键  
+              `---- 右键  
+```  
 
-In AOA and UHID mouse modes, the default bindings are reversed: all clicks are
-forwarded by default, and pressing <kbd>Shift</kbd> gives access to the
-shortcuts (since the cursor is handled on the device side, it makes more sense
-to forward all mouse buttons by default in these modes).
+每个字符必须为以下之一：  
 
-The shortcuts can be configured using `--mouse-bind=xxxx:xxxx` for any mouse
-mode. The argument must be one or two sequences (separated by `:`) of exactly 4
-characters, one for each secondary click:
+ - `+`：转发点击到设备  
+ - `-`：忽略点击  
+ - `b`：触发快捷键 `BACK`（或点亮屏幕）  
+ - `h`：触发快捷键 `HOME`  
+ - `s`：触发快捷键 `APP_SWITCH`  
+ - `n`：触发快捷键“展开通知面板”  
 
-```
-                  .---- Shift + right click
-       SECONDARY  |.--- Shift + middle click
-        BINDINGS  ||.-- Shift + 4th click
-                  |||.- Shift + 5th click
-                  ||||
-                  vvvv
---mouse-bind=xxxx:xxxx
-             ^^^^
-             ||||
-   PRIMARY   ||| `- 5th click
-  BINDINGS   || `-- 4th click
-             | `--- middle click
-              `---- right click
-```
+例如：  
 
-Each character must be one of the following:
+```bash  
+scrcpy --mouse-bind=bhsn:++++  # SDK 鼠标的默认模式  
+scrcpy --mouse-bind=++++:bhsn  # AOA 和 UHID 的默认模式  
+scrcpy --mouse-bind=++bh:++sn  # 转发右键和中键点击，  
+                               # 使用第四键和第五键触发 BACK 和 HOME，  
+                               # 使用 Shift+第四键 和 Shift+第五键 触发  
+                               # APP_SWITCH 和展开通知面板  
+```  
 
- - `+`: forward the click to the device
- - `-`: ignore the click
- - `b`: trigger shortcut `BACK` (or turn screen on if off)
- - `h`: trigger shortcut `HOME`
- - `s`: trigger shortcut `APP_SWITCH`
- - `n`: trigger shortcut "expand notification panel"
+第二组绑定可省略。此时其内容与第一组相同：  
 
-For example:
-
-```bash
-scrcpy --mouse-bind=bhsn:++++  # the default mode for SDK mouse
-scrcpy --mouse-bind=++++:bhsn  # the default mode for AOA and UHID
-scrcpy --mouse-bind=++bh:++sn  # forward right and middle clicks,
-                               # use 4th and 5th for BACK and HOME,
-                               # use Shift+4th and Shift+5th for APP_SWITCH
-                               # and expand notification panel
-```
-
-The second sequence of bindings may be omitted. In that case, it is the same as
-the first one:
-
-```bash
-scrcpy --mouse-bind=bhsn
-scrcpy --mouse-bind=bhsn:bhsn  # equivalent
-```
+```bash  
+scrcpy --mouse-bind=bhsn  
+scrcpy --mouse-bind=bhsn:bhsn  # 等效  
+```  

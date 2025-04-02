@@ -20,7 +20,7 @@ On some devices, a launcher is available in the virtual display.
 When no launcher is available (or if is explicitly disabled by
 [`--no-vd-system-decorations`](#system-decorations)), the virtual display is
 empty. In that case, you must [start an Android
-app](device.md#start-android-app).
+app](/reference/scrcpy/device#start-android-app).
 
 For example:
 

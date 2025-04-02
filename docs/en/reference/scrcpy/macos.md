@@ -45,7 +45,7 @@ sudo port install scrcpy
 
 [MacPorts]: https://www.macports.org/
 
-_See [build.md](build.md) to build and install the app manually._
+_See [build.md](/reference/scrcpy/build) to build and install the app manually._
 
 
 ## Run

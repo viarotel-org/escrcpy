@@ -53,7 +53,7 @@ scrcpy --record=file --record-format=mkv
 ## Rotation
 
 The video can be recorded rotated. See [video
-orientation](video.md#orientation).
+orientation](/reference/scrcpy/video#orientation).
 
 
 ## No playback

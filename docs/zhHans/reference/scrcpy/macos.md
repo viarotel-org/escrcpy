@@ -1,29 +1,32 @@
-# On macOS
+---
+title: MacOS（平台指南）
+---
 
-## Install
+# 在 macOS 上使用 scrcpy
 
-### From the official release
+## 安装
 
-Download a static build of the [latest release]:
+### 从官方发布版本安装
 
- - [`scrcpy-macos-aarch64-v3.2.tar.gz`][direct-macos-aarch64] (aarch64)  
-   <sub>SHA-256: `f6d1f3c5f74d4d46f5080baa5b56b69f5edbf698d47e0cf4e2a1fd5058f9507b`</sub>
+下载[最新版本]的静态构建包：
 
- - [`scrcpy-macos-x86_64-v3.2.tar.gz`][direct-macos-x86_64] (x86_64)  
-   <sub>SHA-256: `e337d5cf0ba4e1281699c338ce5f104aee96eb7b2893dc851399b6643eb4044e`</sub>
+- [`scrcpy-macos-aarch64-v3.2.tar.gz`][direct-macos-aarch64] (aarch64 架构)  
+  <sub>SHA-256: `f6d1f3c5f74d4d46f5080baa5b56b69f5edbf698d47e0cf4e2a1fd5058f9507b`</sub>
 
-[latest release]: https://github.com/Genymobile/scrcpy/releases/latest
+- [`scrcpy-macos-x86_64-v3.2.tar.gz`][direct-macos-x86_64] (x86_64 架构)  
+  <sub>SHA-256: `e337d5cf0ba4e1281699c338ce5f104aee96eb7b2893dc851399b6643eb4044e`</sub>
+
+[最新版本]: https://github.com/Genymobile/scrcpy/releases/latest
 [direct-macos-aarch64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-macos-aarch64-v3.2.tar.gz
 [direct-macos-x86_64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-macos-x86_64-v3.2.tar.gz
 
-and extract it.
+下载完成后解压即可。
 
-_Static builds of scrcpy for macOS are still experimental._
+_注意：macOS 版的 scrcpy 静态构建包仍处于实验阶段。_
 
+### 通过包管理器安装
 
-### From a package manager
-
-Scrcpy is available in [Homebrew]:
+Scrcpy 可通过 [Homebrew] 安装：
 
 ```bash
 brew install scrcpy
@@ -31,13 +34,13 @@ brew install scrcpy
 
 [Homebrew]: https://brew.sh/
 
-You need `adb`, accessible from your `PATH`. If you don't have it yet:
+你需要确保 `adb` 工具已在 `PATH` 环境变量中。如果尚未安装：
 
 ```bash
 brew install --cask android-platform-tools
 ```
 
-Alternatively, Scrcpy is also available in [MacPorts], which sets up `adb` for you:
+此外，Scrcpy 也可通过 [MacPorts] 安装，该工具会自动配置 `adb`：
 
 ```bash
 sudo port install scrcpy
@@ -45,26 +48,25 @@ sudo port install scrcpy
 
 [MacPorts]: https://www.macports.org/
 
-_See [build.md](build.md) to build and install the app manually._
+_如需手动构建和安装，请参阅 [build](/zhHans/reference/scrcpy/build)。_
 
+## 运行
 
-## Run
+_请确保你的设备满足[使用前提](/zhHans/reference/scrcpy/#prerequisites)。_
 
-_Make sure that your device meets the [prerequisites](/reference/scrcpy/#prerequisites)._
-
-Once installed, run from a terminal:
+安装完成后，在终端中运行：
 
 ```bash
 scrcpy
 ```
 
-or with arguments (here to disable audio and record to `file.mkv`):
+或带参数运行（以下示例为禁用音频并录制到 `file.mkv`）：
 
 ```bash
 scrcpy --no-audio --record=file.mkv
 ```
 
-Documentation for command line arguments is available:
- - `man scrcpy`
- - `scrcpy --help`
- - on [github](/reference/scrcpy/)
+命令行参数的文档可通过以下方式查看：
+- `man scrcpy`
+- `scrcpy --help`
+- [GitHub 上的文档](/zhHans/reference/scrcpy/)

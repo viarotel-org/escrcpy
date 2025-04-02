@@ -1,132 +1,119 @@
-# Connection
+---
+title: Connection（连接）
+---
 
-## Selection
+# 连接
 
-If exactly one device is connected (i.e. listed by `adb devices`), then it is
-automatically selected.
+## 设备选择
 
-However, if there are multiple devices connected, you must specify the one to
-use in one of 4 ways:
- - by its serial:
-   ```bash
-   scrcpy --serial=0123456789abcdef
-   scrcpy -s 0123456789abcdef   # short version
+如果仅有一台设备已连接（即通过 `adb devices` 列出），则该设备会被自动选中。  
 
-   # the serial is the ip:port if connected over TCP/IP (same behavior as adb)
-   scrcpy --serial=192.168.1.1:5555
-   ```
- - the one connected over USB (if there is exactly one):
-   ```bash
-   scrcpy --select-usb
-   scrcpy -d   # short version
-   ```
- - the one connected over TCP/IP (if there is exactly one):
-   ```bash
-   scrcpy --select-tcpip
-   scrcpy -e   # short version
-   ```
- - a device already listening on TCP/IP (see [below](#tcpip-wireless)):
-   ```bash
-   scrcpy --tcpip=192.168.1.1:5555
-   scrcpy --tcpip=192.168.1.1        # default port is 5555
-   ```
+但如果有多台设备连接，您需要通过以下4种方式之一指定要使用的设备：  
+ - 通过设备序列号：  
+   ```bash  
+   scrcpy --serial=0123456789abcdef  
+   scrcpy -s 0123456789abcdef   # 简写形式  
 
-The serial may also be provided via the environment variable `ANDROID_SERIAL`
-(also used by `adb`):
+   # 如果通过 TCP/IP 连接，序列号为 IP:端口（与 adb 行为一致）  
+   scrcpy --serial=192.168.1.1:5555  
+   ```  
+ - 选择通过 USB 连接的设备（仅限一台）：  
+   ```bash  
+   scrcpy --select-usb  
+   scrcpy -d   # 简写形式  
+   ```  
+ - 选择通过 TCP/IP 连接的设备（仅限一台）：  
+   ```bash  
+   scrcpy --select-tcpip  
+   scrcpy -e   # 简写形式  
+   ```  
+ - 选择已监听 TCP/IP 连接的设备（见[下文](#tcpip-无线连接)）：  
+   ```bash  
+   scrcpy --tcpip=192.168.1.1:5555  
+   scrcpy --tcpip=192.168.1.1        # 默认端口为 5555  
+   ```  
 
-```bash
-# in bash
-export ANDROID_SERIAL=0123456789abcdef
-scrcpy
-```
+设备序列号也可以通过环境变量 `ANDROID_SERIAL` 提供（该变量同样被 `adb` 使用）：  
 
-```cmd
-:: in cmd
-set ANDROID_SERIAL=0123456789abcdef
-scrcpy
-```
+```bash  
+# 在 bash 中  
+export ANDROID_SERIAL=0123456789abcdef  
+scrcpy  
+```  
 
-```powershell
-# in PowerShell
-$env:ANDROID_SERIAL = '0123456789abcdef'
-scrcpy
-```
+```cmd  
+:: 在 cmd 中  
+set ANDROID_SERIAL=0123456789abcdef  
+scrcpy  
+```  
 
-
-## TCP/IP (wireless)
-
-_Scrcpy_ uses `adb` to communicate with the device, and `adb` can [connect] to a
-device over TCP/IP. The device must be connected on the same network as the
-computer.
-
-[connect]: https://developer.android.com/studio/command-line/adb.html#wireless
+```powershell  
+# 在 PowerShell 中  
+$env:ANDROID_SERIAL = '0123456789abcdef'  
+scrcpy  
+```  
 
 
-### Automatic
+## TCP/IP（无线连接）
 
-An option `--tcpip` allows to configure the connection automatically. There are
-two variants.
+_Scrcpy_ 使用 `adb` 与设备通信，而 `adb` 可以通过 TCP/IP [连接] 设备。设备必须与计算机连接在同一网络中。  
 
-If _adb_ TCP/IP mode is disabled on the device (or if you don't know the IP
-address), connect the device over USB, then run:
-
-```bash
-scrcpy --tcpip   # without arguments
-```
-
-It will automatically find the device IP address and adb port, enable TCP/IP
-mode if necessary, then connect to the device before starting.
-
-If the device (accessible at 192.168.1.1 in this example) already listens on a
-port (typically 5555) for incoming _adb_ connections, then run:
-
-```bash
-scrcpy --tcpip=192.168.1.1       # default port is 5555
-scrcpy --tcpip=192.168.1.1:5555
-```
-
-Prefix the address with a '+' to force a reconnection:
-
-```bash
-scrcpy --tcpip=+192.168.1.1
-```
+[连接]: https://developer.android.com/studio/command-line/adb.html#wireless  
 
 
-### Manual
+### 自动连接
 
-Alternatively, it is possible to enable the TCP/IP connection manually using
-`adb`:
+选项 `--tcpip` 支持自动配置连接。它有两种使用方式。  
 
-1. Plug the device into a USB port on your computer.
-2. Connect the device to the same Wi-Fi network as your computer.
-3. Get your device IP address, in Settings → About phone → Status, or by
-   executing this command:
+如果设备未启用 _adb_ TCP/IP 模式（或您不知道设备的 IP 地址），请先通过 USB 连接设备，然后运行：  
 
-    ```bash
-    adb shell ip route | awk '{print $9}'
-    ```
+```bash  
+scrcpy --tcpip   # 不带参数  
+```  
 
-4. Enable `adb` over TCP/IP on your device: `adb tcpip 5555`.
-5. Unplug your device.
-6. Connect to your device: `adb connect DEVICE_IP:5555` _(replace `DEVICE_IP`
-with the device IP address you found)_.
-7. Run `scrcpy` as usual.
-8. Run `adb disconnect` once you're done.
+该命令会自动查找设备的 IP 地址和 adb 端口，必要时启用 TCP/IP 模式，并在启动前连接到设备。  
 
-Since Android 11, a [wireless debugging option][adb-wireless] allows you to
-bypass having to physically connect your device to your computer.
+如果设备（本例中为 192.168.1.1）已监听某个端口（通常为 5555）以接收 _adb_ 连接，则直接运行：  
 
-[adb-wireless]: https://developer.android.com/studio/command-line/adb#wireless-android11-command-line
+```bash  
+scrcpy --tcpip=192.168.1.1       # 默认端口为 5555  
+scrcpy --tcpip=192.168.1.1:5555  
+```  
+
+在地址前添加 '+' 可强制重新连接：  
+
+```bash  
+scrcpy --tcpip=+192.168.1.1  
+```  
 
 
-## Autostart
+### 手动连接
 
-A small tool (by the scrcpy author) allows you to run arbitrary commands
-whenever a new Android device is connected: [AutoAdb]. It can be used to start
-scrcpy:
+您也可以手动通过 `adb` 启用 TCP/IP 连接：  
 
-```bash
+1. 将设备通过 USB 连接到计算机。  
+2. 将设备与计算机连接到同一 Wi-Fi 网络。  
+3. 获取设备 IP 地址，可通过“设置 → 关于手机 → 状态”查看，或执行以下命令：  
+    ```bash  
+    adb shell ip route | awk '{print $9}'  
+    ```  
+4. 在设备上启用 TCP/IP 模式的 `adb`：`adb tcpip 5555`。  
+5. 拔掉设备 USB 线。  
+6. 连接到设备：`adb connect 设备IP:5555`（将 `设备IP` 替换为实际的 IP 地址）。  
+7. 像往常一样运行 `scrcpy`。  
+8. 完成后运行 `adb disconnect`。  
+
+从 Android 11 开始，[无线调试选项][adb-wireless] 允许您无需物理连接设备即可完成操作。  
+
+[adb-wireless]: https://developer.android.com/studio/command-line/adb#wireless-android11-command-line  
+
+
+## 自动启动
+
+_scrcpy_ 作者开发的一个小工具 [AutoAdb] 可以在检测到新 Android 设备连接时自动运行任意命令。您可以用它来启动 scrcpy：
+
+```bash  
 autoadb scrcpy -s '{}'
-```
+```  
 
 [AutoAdb]: https://github.com/rom1v/autoadb

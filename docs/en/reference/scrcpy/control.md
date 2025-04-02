@@ -12,7 +12,7 @@ scrcpy -n   # short version
 
 ## Keyboard and mouse
 
-Read [keyboard](keyboard.md) and [mouse](mouse.md).
+Read [keyboard](/reference/scrcpy/keyboard) and [mouse](/reference/scrcpy/mouse).
 
 
 ## Control only

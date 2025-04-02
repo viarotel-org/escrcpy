@@ -24,7 +24,7 @@ To disable audio:
 scrcpy --no-audio
 ```
 
-To disable only the audio playback, see [no playback](video.md#no-playback).
+To disable only the audio playback, see [no playback](/reference/scrcpy/video#no-playback).
 
 ## Audio only
 
@@ -180,7 +180,7 @@ Note that this option changes the _target_ buffering. It is possible that this
 target buffering might not be reached (on frequent buffer underflow typically).
 
 If you don't interact with the device (to watch a video for example), a higher
-latency (for both [video](video.md#buffering) and audio) might be preferable to
+latency (for both [video](/reference/scrcpy/video#buffering) and audio) might be preferable to
 avoid glitches and smooth the playback:
 
 ```

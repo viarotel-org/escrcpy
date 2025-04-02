@@ -1,281 +1,241 @@
-# Video
+---
+title: Video（视频）
+---
 
-## Source
+# 视频
 
-By default, scrcpy mirrors the device screen.
+## 源
 
-It is possible to capture the device camera instead.
+默认情况下，scrcpy 会镜像显示设备屏幕。
 
-See the dedicated [camera](camera.md) page.
+也可以选择捕获设备摄像头画面。
 
+详见专门的 [摄像头](/zhHans/reference/scrcpy/camera) 页面。
 
-## Size
+## 尺寸
 
-By default, scrcpy attempts to mirror at the Android device resolution.
+默认情况下，scrcpy 会尝试以 Android 设备的分辨率进行镜像。
 
-It might be useful to mirror at a lower definition to increase performance. To
-limit both width and height to some maximum value (here 1024):
+为了提升性能，可以降低分辨率进行镜像。以下命令将宽度和高度限制在最大值（此处为 1024）：
 
 ```bash
 scrcpy --max-size=1024
-scrcpy -m 1024   # short version
+scrcpy -m 1024   # 简写版本
 ```
 
-The other dimension is computed so that the Android device aspect ratio is
-preserved. That way, a device in 1920×1080 will be mirrored at 1024×576.
+另一边的尺寸会按比例计算，以保持 Android 设备的宽高比。例如，1920×1080 的设备会被镜像为 1024×576。
 
-If encoding fails, scrcpy automatically tries again with a lower definition
-(unless `--no-downsize-on-error` is enabled).
+如果编码失败，scrcpy 会自动尝试降低分辨率（除非启用了 `--no-downsize-on-error`）。
 
-For camera mirroring, the `--max-size` value is used to select the camera source
-size instead (among the available resolutions).
+对于摄像头镜像，`--max-size` 值用于选择摄像头源尺寸（在可用分辨率中）。
 
+## 比特率
 
-## Bit rate
-
-The default video bit rate is 8 Mbps. To change it:
+默认视频比特率为 8 Mbps。可以通过以下命令修改：
 
 ```bash
 scrcpy --video-bit-rate=2M
-scrcpy --video-bit-rate=2000000  # equivalent
-scrcpy -b 2M                     # short version
+scrcpy --video-bit-rate=2000000  # 等效
+scrcpy -b 2M                     # 简写版本
 ```
 
+## 帧率
 
-## Frame rate
-
-The capture frame rate can be limited:
+可以限制捕获帧率：
 
 ```bash
 scrcpy --max-fps=15
 ```
 
-The actual capture frame rate may be printed to the console:
+实际捕获帧率可以通过以下命令打印到控制台：
 
-```
+```bash
 scrcpy --print-fps
 ```
 
-It may also be enabled or disabled at anytime with <kbd>MOD</kbd>+<kbd>i</kbd>
-(see [shortcuts](shortcuts.md)).
+也可以通过快捷键 <kbd>MOD</kbd>+<kbd>i</kbd> 随时启用或禁用（见 [快捷键](/zhHans/reference/scrcpy/shortcuts)）。
 
-The frame rate is intrinsically variable: a new frame is produced only when the
-screen content changes. For example, if you play a fullscreen video at 24fps on
-your device, you should not get more than 24 frames per second in scrcpy.
+帧率本质上是可变的：只有当屏幕内容发生变化时才会生成新帧。例如，如果在设备上全屏播放 24fps 的视频，scrcpy 的帧率不会超过 24 帧每秒。
 
+## 编解码器
 
-## Codec
-
-The video codec can be selected. The possible values are `h264` (default),
-`h265` and `av1`:
+可以选择视频编解码器，可选值为 `h264`（默认）、`h265` 和 `av1`：
 
 ```bash
-scrcpy --video-codec=h264  # default
+scrcpy --video-codec=h264  # 默认
 scrcpy --video-codec=h265
 scrcpy --video-codec=av1
 ```
 
-H265 may provide better quality, but H264 should provide lower latency.
-AV1 encoders are not common on current Android devices.
+H265 可能提供更好的画质，但 H264 的延迟更低。当前 Android 设备上 AV1 编码器并不常见。
 
-For advanced usage, to pass arbitrary parameters to the [`MediaFormat`],
-check `--video-codec-options` in the manpage or in `scrcpy --help`.
+高级用法中，可以通过 `--video-codec-options` 传递任意参数给 [`MediaFormat`]，详见手册或 `scrcpy --help`。
 
 [`MediaFormat`]: https://developer.android.com/reference/android/media/MediaFormat
 
+## 编码器
 
-## Encoder
-
-Several encoders may be available on the device. They can be listed by:
+设备上可能有多个编码器可用，可以通过以下命令列出：
 
 ```bash
 scrcpy --list-encoders
 ```
 
-Sometimes, the default encoder may have issues or even crash, so it is useful to
-try another one:
+有时，默认编码器可能存在问题甚至崩溃，因此可以尝试其他编码器：
 
 ```bash
 scrcpy --video-codec=h264 --video-encoder=OMX.qcom.video.encoder.avc
 ```
 
+## 方向
 
-## Orientation
+方向可以在三个不同层级上设置：
+- 快捷键 <kbd>MOD</kbd>+<kbd>r</kbd> 会请求设备在竖屏和横屏之间切换（当前运行的应用程序可能会拒绝，如果不支持请求的方向）。
+- `--capture-orientation` 改变镜像方向（从设备发送到电脑的视频方向），这会影响录制。
+- `--orientation` 在客户端应用，影响显示和录制。对于显示，可以通过 [快捷键](/zhHans/reference/scrcpy/shortcuts) 动态改变。
 
-The orientation may be applied at 3 different levels:
- - The [shortcut](shortcuts.md) <kbd>MOD</kbd>+<kbd>r</kbd> requests the
-   device to switch between portrait and landscape (the current running app may
-   refuse, if it does not support the requested orientation).
- - `--capture-orientation` changes the mirroring orientation (the orientation
-   of the video sent from the device to the computer). This affects the
-   recording.
- - `--orientation` is applied on the client side, and affects display and
-   recording. For the display, it can be changed dynamically using
-   [shortcuts](shortcuts.md).
-
-To capture the video with a specific orientation:
+以特定方向捕获视频：
 
 ```bash
 scrcpy --capture-orientation=0
-scrcpy --capture-orientation=90       # 90° clockwise
+scrcpy --capture-orientation=90       # 顺时针 90°
 scrcpy --capture-orientation=180      # 180°
-scrcpy --capture-orientation=270      # 270° clockwise
-scrcpy --capture-orientation=flip0    # hflip
-scrcpy --capture-orientation=flip90   # hflip + 90° clockwise
-scrcpy --capture-orientation=flip180  # hflip + 180°
-scrcpy --capture-orientation=flip270  # hflip + 270° clockwise
+scrcpy --capture-orientation=270      # 顺时针 270°
+scrcpy --capture-orientation=flip0    # 水平翻转
+scrcpy --capture-orientation=flip90   # 水平翻转 + 顺时针 90°
+scrcpy --capture-orientation=flip180  # 水平翻转 + 180°
+scrcpy --capture-orientation=flip270  # 水平翻转 + 顺时针 270°
 ```
 
-The capture orientation can be locked by using `@`, so that a physical device
-rotation does not change the captured video orientation:
+可以通过 `@` 锁定捕获方向，使物理设备旋转不会改变捕获的视频方向：
 
 ```bash
-scrcpy --capture-orientation=@         # locked to the initial orientation
-scrcpy --capture-orientation=@0        # locked to 0°
-scrcpy --capture-orientation=@90       # locked to 90° clockwise
-scrcpy --capture-orientation=@180      # locked to 180°
-scrcpy --capture-orientation=@270      # locked to 270° clockwise
-scrcpy --capture-orientation=@flip0    # locked to hflip
-scrcpy --capture-orientation=@flip90   # locked to hflip + 90° clockwise
-scrcpy --capture-orientation=@flip180  # locked to hflip + 180°
-scrcpy --capture-orientation=@flip270  # locked to hflip + 270° clockwise
+scrcpy --capture-orientation=@         # 锁定为初始方向
+scrcpy --capture-orientation=@0        # 锁定为 0°
+scrcpy --capture-orientation=@90       # 锁定为顺时针 90°
+scrcpy --capture-orientation=@180      # 锁定为 180°
+scrcpy --capture-orientation=@270      # 锁定为顺时针 270°
+scrcpy --capture-orientation=@flip0    # 锁定为水平翻转
+scrcpy --capture-orientation=@flip90   # 锁定为水平翻转 + 顺时针 90°
+scrcpy --capture-orientation=@flip180  # 锁定为水平翻转 + 180°
+scrcpy --capture-orientation=@flip270  # 锁定为水平翻转 + 顺时针 270°
 ```
 
-The capture orientation transform is applied after `--crop`, but before
-`--angle`.
+捕获方向变换在 `--crop` 之后应用，但在 `--angle` 之前。
 
-To orient the video (on the client side):
+设置视频方向（客户端）：
 
 ```bash
 scrcpy --orientation=0
-scrcpy --orientation=90       # 90° clockwise
+scrcpy --orientation=90       # 顺时针 90°
 scrcpy --orientation=180      # 180°
-scrcpy --orientation=270      # 270° clockwise
-scrcpy --orientation=flip0    # hflip
-scrcpy --orientation=flip90   # hflip + 90° clockwise
-scrcpy --orientation=flip180  # vflip (hflip + 180°)
-scrcpy --orientation=flip270  # hflip + 270° clockwise
+scrcpy --orientation=270      # 顺时针 270°
+scrcpy --orientation=flip0    # 水平翻转
+scrcpy --orientation=flip90   # 水平翻转 + 顺时针 90°
+scrcpy --orientation=flip180  # 垂直翻转（水平翻转 + 180°）
+scrcpy --orientation=flip270  # 水平翻转 + 顺时针 270°
 ```
 
-The orientation can be set separately for display and record if necessary, via
-`--display-orientation` and `--record-orientation`.
+如果需要，可以通过 `--display-orientation` 和 `--record-orientation` 分别设置显示和录制的方向。
 
-The rotation is applied to a recorded file by writing a display transformation
-to the MP4 or MKV target file. Flipping is not supported, so only the 4 first
-values are allowed when recording.
+旋转通过向 MP4 或 MKV 目标文件写入显示变换来实现。翻转不支持，因此录制时仅允许前四个值。
 
+## 角度
 
-## Angle
+按自定义角度（顺时针，单位为度）旋转视频内容：
 
-To rotate the video content by a custom angle (in degrees, clockwise):
-
-```
+```bash
 scrcpy --angle=23
 ```
 
-The center of rotation is the center of the visible area.
+旋转中心为可见区域的中心。
 
-This transformation is applied after `--crop` and `--capture-orientation`.
+此变换在 `--crop` 和 `--capture-orientation` 之后应用。
 
+## 裁剪
 
-## Crop
+可以裁剪设备屏幕，仅镜像部分区域。
 
-The device screen may be cropped to mirror only part of the screen.
-
-This is useful, for example, to mirror only one eye of the Oculus Go:
+例如，仅镜像 Oculus Go 的一只眼睛：
 
 ```bash
-scrcpy --crop=1224:1440:0:0   # 1224x1440 at offset (0,0)
+scrcpy --crop=1224:1440:0:0   # 1224x1440，偏移 (0,0)
 ```
 
-The values are expressed in the device natural orientation (portrait for a
-phone, landscape for a tablet).
+值以设备的自然方向表示（手机为竖屏，平板为横屏）。
 
-Cropping is performed before `--capture-orientation` and `--angle`.
+裁剪在 `--capture-orientation` 和 `--angle` 之前应用。
 
-For display mirroring, `--max-size` is applied after cropping. For camera,
-`--max-size` is applied first (because it selects the source size rather than
-resizing the content).
+对于显示镜像，`--max-size` 在裁剪后应用。对于摄像头，`--max-size` 首先应用（因为它选择源尺寸而非调整内容大小）。
 
+## 显示
 
-## Display
-
-If several displays are available on the Android device, it is possible to
-select the display to mirror:
+如果 Android 设备有多个显示器，可以选择镜像的显示器：
 
 ```bash
 scrcpy --display-id=1
 ```
 
-The list of display ids can be retrieved by:
+可以通过以下命令获取显示器 ID 列表：
 
 ```bash
 scrcpy --list-displays
 ```
 
-A secondary display may only be controlled if the device runs at least Android
-10 (otherwise it is mirrored as read-only).
+只有设备运行 Android 10 或更高版本时，才能控制副显示器（否则为只读镜像）。
 
-It is also possible to create a [virtual display](virtual_display.md).
+也可以创建 [虚拟显示器](/zhHans/reference/scrcpy/virtual_display)。
 
+## 缓冲
 
-## Buffering
+默认情况下，视频无缓冲，以实现最低延迟。
 
-By default, there is no video buffering, to get the lowest possible latency.
-
-Buffering can be added to delay the video stream and compensate for jitter to
-get a smoother playback (see [#2464]).
+可以添加缓冲以延迟视频流并补偿抖动，获得更平滑的播放（见 [#2464]）。
 
 [#2464]: https://github.com/Genymobile/scrcpy/issues/2464
 
-The configuration is available independently for the display,
-[v4l2 sinks](video.md#video4linux) and [audio](audio.md#buffering) playback.
+配置可独立用于显示、[v4l2 接收端](/zhHans/reference/scrcpy/video#video4linux) 和 [音频](/zhHans/reference/scrcpy/audio#buffering) 播放。
 
 ```bash
-scrcpy --video-buffer=50     # add 50ms buffering for video playback
-scrcpy --audio-buffer=200    # set 200ms buffering for audio playback
-scrcpy --v4l2-buffer=300     # add 300ms buffering for v4l2 sink
+scrcpy --video-buffer=50     # 为视频播放添加 50ms 缓冲
+scrcpy --audio-buffer=200    # 为音频播放设置 200ms 缓冲
+scrcpy --v4l2-buffer=300     # 为 v4l2 接收端添加 300ms 缓冲
 ```
 
-They can be applied simultaneously:
+可以同时应用：
 
 ```bash
 scrcpy --video-buffer=50 --v4l2-buffer=300
 ```
 
+## 无播放
 
-## No playback
-
-It is possible to capture an Android device without playing video or audio on
-the computer. This option is useful when [recording](recording.md) or when
-[v4l2](#video4linux) is enabled:
+可以在不播放视频或音频的情况下捕获 Android 设备。此选项在 [录制](/zhHans/reference/scrcpy/recording) 或启用 [v4l2](/zhHans/reference/scrcpy/#eo4linux) 时有用：
 
 ```bash
 scrcpy --v4l2-sink=/dev/video2 --no-playback
 scrcpy --record=file.mkv --no-playback
-# interrupt with Ctrl+C
+# 按 Ctrl+C 中断
 ```
 
-It is also possible to disable video and audio playback separately:
+也可以分别禁用视频和音频播放：
 
 ```bash
-# Send video to V4L2 sink without playing it, but keep audio playback
+# 将视频发送到 V4L2 接收端但不播放，保留音频播放
 scrcpy --v4l2-sink=/dev/video2 --no-video-playback
 
-# Record both video and audio, but only play video
+# 录制视频和音频，但仅播放视频
 scrcpy --record=file.mkv --no-audio-playback
 ```
 
+## 无视频
 
-## No video
+完全禁用视频转发，仅转发音频：
 
-To disable video forwarding completely, so that only audio is forwarded:
-
-```
+```bash
 scrcpy --no-video
 ```
 
-
 ## Video4Linux
 
-See the dedicated [Video4Linux](v4l2.md) page.
+详见专门的 [Video4Linux](/zhHans/reference/scrcpy/v4l2) 页面。

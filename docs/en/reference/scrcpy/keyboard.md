@@ -76,7 +76,7 @@ layout on the device to match that of the computer.
 
 The configuration page can be opened in one of the following ways:
  - from the scrcpy window (when `uhid` or `aoa` is used), by pressing
-   <kbd>MOD</kbd>+<kbd>k</kbd> (see [shortcuts](shortcuts.md))
+   <kbd>MOD</kbd>+<kbd>k</kbd> (see [shortcuts](/reference/scrcpy/shortcuts))
  - from the device, in Settings → System → Languages and input → Physical
    devices
  - from a terminal on the computer, by executing `adb shell am start -a
@@ -129,8 +129,8 @@ works over USB).
 
 It does not use the scrcpy server, and does not require `adb` (USB debugging).
 Therefore, it is possible to control the device (but not mirror) even with USB
-debugging disabled (see [OTG](otg.md)).
+debugging disabled (see [OTG](/reference/scrcpy/otg)).
 
-Note: On Windows, it may only work in [OTG mode](otg.md), not while mirroring
+Note: On Windows, it may only work in [OTG mode](/reference/scrcpy/otg), not while mirroring
 (it is not possible to open a USB device if it is already open by another
 process like the _adb daemon_).

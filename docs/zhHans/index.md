@@ -8,7 +8,7 @@ hero:
   tagline: Powered by electron.
   image:
     src: /images/logo@1024x1024.png
-    alt: VitePress
+    alt: Escrcpy
   actions:
     - theme: brand
       text: 快速上手 👉

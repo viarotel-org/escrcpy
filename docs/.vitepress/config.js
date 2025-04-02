@@ -115,6 +115,7 @@ const vitePressI18nConfig = {
         { text: 'Reference', link: '/reference' },
         { text: 'Help', link: '/help' },
         { text: 'Changelog', link: '/changelog' },
+        { text: 'Donate', link: '/donate' },
         { text: 'Contact', link: '/contact' },
         { text: 'Blog', link: 'https://viarotel.eu.org/' },
       ],
@@ -125,6 +126,7 @@ const vitePressI18nConfig = {
         { text: '参考', link: '/zhHans/reference' },
         { text: '帮助', link: '/zhHans/help' },
         { text: '变更日志', link: '/zhHans/changelog' },
+        { text: '捐赠', link: '/zhHans/donate' },
         { text: '联系', link: '/zhHans/contact' },
         { text: '博客', link: 'https://viarotel.eu.org/' },
       ],
@@ -144,7 +146,7 @@ const vitePressSidebarConfig = [
     useFolderLinkFromIndexFile: true,
     includeFolderIndexFile: false,
     useFolderTitleFromIndexFile: true,
-    manualSortFileNameByPriority: ['index.md', 'guide', 'reference', 'help', 'changelog.md', 'contact.md', 'started.md', 'milestones.md'],
+    manualSortFileNameByPriority: ['index.md', 'guide', 'reference', 'help', 'changelog.md', 'donate.md', 'contact.md', 'started.md', 'milestones.md'],
   })),
 ]
 

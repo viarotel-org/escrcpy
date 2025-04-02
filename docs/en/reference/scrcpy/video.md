@@ -6,7 +6,7 @@ By default, scrcpy mirrors the device screen.
 
 It is possible to capture the device camera instead.
 
-See the dedicated [camera](camera.md) page.
+See the dedicated [camera](/reference/scrcpy/camera) page.
 
 
 ## Size
@@ -57,7 +57,7 @@ scrcpy --print-fps
 ```
 
 It may also be enabled or disabled at anytime with <kbd>MOD</kbd>+<kbd>i</kbd>
-(see [shortcuts](shortcuts.md)).
+(see [shortcuts](/reference/scrcpy/shortcuts)).
 
 The frame rate is intrinsically variable: a new frame is produced only when the
 screen content changes. For example, if you play a fullscreen video at 24fps on
@@ -103,7 +103,7 @@ scrcpy --video-codec=h264 --video-encoder=OMX.qcom.video.encoder.avc
 ## Orientation
 
 The orientation may be applied at 3 different levels:
- - The [shortcut](shortcuts.md) <kbd>MOD</kbd>+<kbd>r</kbd> requests the
+ - The [shortcut](/reference/scrcpy/shortcuts) <kbd>MOD</kbd>+<kbd>r</kbd> requests the
    device to switch between portrait and landscape (the current running app may
    refuse, if it does not support the requested orientation).
  - `--capture-orientation` changes the mirroring orientation (the orientation
@@ -111,7 +111,7 @@ The orientation may be applied at 3 different levels:
    recording.
  - `--orientation` is applied on the client side, and affects display and
    recording. For the display, it can be changed dynamically using
-   [shortcuts](shortcuts.md).
+   [shortcuts](/reference/scrcpy/shortcuts).
 
 To capture the video with a specific orientation:
 
@@ -216,7 +216,7 @@ scrcpy --list-displays
 A secondary display may only be controlled if the device runs at least Android
 10 (otherwise it is mirrored as read-only).
 
-It is also possible to create a [virtual display](virtual_display.md).
+It is also possible to create a [virtual display](/reference/scrcpy/virtual_display).
 
 
 ## Buffering
@@ -229,7 +229,7 @@ get a smoother playback (see [#2464]).
 [#2464]: https://github.com/Genymobile/scrcpy/issues/2464
 
 The configuration is available independently for the display,
-[v4l2 sinks](video.md#video4linux) and [audio](audio.md#buffering) playback.
+[v4l2 sinks](/reference/scrcpy/video#video4linux) and [audio](/reference/scrcpy/audio#buffering) playback.
 
 ```bash
 scrcpy --video-buffer=50     # add 50ms buffering for video playback
@@ -247,7 +247,7 @@ scrcpy --video-buffer=50 --v4l2-buffer=300
 ## No playback
 
 It is possible to capture an Android device without playing video or audio on
-the computer. This option is useful when [recording](recording.md) or when
+the computer. This option is useful when [recording](/reference/scrcpy/recording) or when
 [v4l2](#video4linux) is enabled:
 
 ```bash
@@ -278,4 +278,4 @@ scrcpy --no-video
 
 ## Video4Linux
 
-See the dedicated [Video4Linux](v4l2.md) page.
+See the dedicated [Video4Linux](/reference/scrcpy/v4l2) page.

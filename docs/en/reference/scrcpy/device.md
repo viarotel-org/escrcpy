@@ -70,7 +70,7 @@ scrcpy -S   # short version
 ```
 
 Or by pressing <kbd>MOD</kbd>+<kbd>o</kbd> at any time (see
-[shortcuts](shortcuts.md)).
+[shortcuts](/reference/scrcpy/shortcuts)).
 
 To turn it back on, press <kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>o</kbd>.
 
@@ -154,7 +154,7 @@ scrcpy --start-app=org.mozilla.firefox
 ```
 
 This feature can be used to run an app in a [virtual
-display](virtual_display.md):
+display](/reference/scrcpy/virtual_display):
 
 ```
 scrcpy --new-display=1920x1080 --start-app=org.videolan.vlc

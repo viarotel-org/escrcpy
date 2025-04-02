@@ -20,7 +20,7 @@ See [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 > Note: If the phone prompts for debugging authorization, click allow
 
-1. Enable developer mode and USB debugging on your Android phone
+1. [Enable developer mode](https://www.bing.com/search?q=Enable+developer+mode+android) and [USB debugging](https://www.bing.com/search?q=USB+debugging+android) on your Android phone
 2. Open Escrcpy and connect your Android phone to your computer
 3. The device list in Escrcpy should have detected your phone, click start mirroring
 4. Enjoy!

@@ -48,11 +48,11 @@ over USB).
 
 It does not use the scrcpy server, and does not require `adb` (USB debugging).
 Therefore, it is possible to control the device (but not mirror) even with USB
-debugging disabled (see [OTG](otg.md)).
+debugging disabled (see [OTG](/reference/scrcpy/otg)).
 
 Note: For some reason, in this mode, Android detects multiple physical gamepads
 as a single misbehaving one. Use UHID if you need multiple gamepads.
 
-Note: On Windows, it may only work in [OTG mode](otg.md), not while mirroring
+Note: On Windows, it may only work in [OTG mode](/reference/scrcpy/otg), not while mirroring
 (it is not possible to open a USB device if it is already open by another
 process like the _adb daemon_).

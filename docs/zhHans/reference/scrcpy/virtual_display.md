@@ -1,35 +1,35 @@
-# Virtual display
+---
+title: VirtualDisplay（虚拟显示）
+---
 
-## New display
+# 虚拟显示屏
 
-To mirror a new virtual display instead of the device screen:
+## 新建虚拟显示屏
+
+将画面镜像到新建的虚拟显示屏（而非设备主屏幕）：
 
 ```bash
 scrcpy --new-display=1920x1080
-scrcpy --new-display=1920x1080/420  # force 420 dpi
-scrcpy --new-display         # use the main display size and density
-scrcpy --new-display=/240    # use the main display size and 240 dpi
+scrcpy --new-display=1920x1080/420  # 强制设为420 dpi
+scrcpy --new-display         # 使用主屏幕尺寸和像素密度
+scrcpy --new-display=/240    # 使用主屏幕尺寸和240 dpi
 ```
 
-The new virtual display is destroyed on exit.
+虚拟显示屏会在程序退出时销毁。
 
-## Start app
+## 启动应用
 
-On some devices, a launcher is available in the virtual display.
+部分设备会在虚拟显示屏中显示启动器。
 
-When no launcher is available (or if is explicitly disabled by
-[`--no-vd-system-decorations`](#system-decorations)), the virtual display is
-empty. In that case, you must [start an Android
-app](device.md#start-android-app).
+若设备未提供启动器（或通过 [`--no-vd-system-decorations`](#系统装饰) 参数显式禁用），虚拟显示屏将显示空白内容。此时需要[启动安卓应用](/zhHans/reference/scrcpy/device#启动安卓应用)。
 
-For example:
+例如：
 
 ```bash
 scrcpy --new-display=1920x1080 --start-app=org.videolan.vlc
 ```
 
-The app may itself be a launcher. For example, to run the open source [Fossify
-Launcher]:
+也可以直接启动启动器应用。例如运行开源启动器 [Fossify Launcher]：
 
 ```bash
 scrcpy --new-display=1920x1080 --no-vd-system-decorations --start-app=org.fossify.home
@@ -37,39 +37,33 @@ scrcpy --new-display=1920x1080 --no-vd-system-decorations --start-app=org.fossif
 
 [Fossify Launcher]: https://f-droid.org/en/packages/org.fossify.home/
 
+## 系统装饰
 
-## System decorations
+默认启用虚拟显示屏的系统装饰元素。禁用请使用 `--no-vd-system-decorations`：
 
-By default, virtual display system decorations are enabled. To disable them, use
-`--no-vd-system-decorations`:
-
-```
+```bash
 scrcpy --new-display --no-vd-system-decorations
 ```
 
-This is useful for some devices which might display a broken UI, or to disable
-any default launcher UI available in virtual displays.
+该参数适用于解决某些设备可能出现的UI异常，或禁用虚拟显示屏中默认的启动器界面。
 
-Note that if no app is started, no content will be rendered, so no video frame
-will be produced at all.
+注意：若未启动任何应用，虚拟显示屏将不会渲染任何内容，因此不会产生视频帧。
 
+## 关闭时销毁
 
-## Destroy on close
+默认情况下，关闭虚拟显示屏时，正在运行的应用会被销毁。
 
-By default, when the virtual display is closed, the running apps are destroyed.
+若要将应用转移至主屏幕显示，请使用：
 
-To move them to the main display instead, use:
-
-```
+```bash
 scrcpy --new-display --no-vd-destroy-content
 ```
 
+## 输入法策略
 
-## Display IME policy
+默认情况下，虚拟显示屏的输入法会显示在默认屏幕上。
 
-By default, the virtual display IME appears on the default display.
-
-To make it appear on the local display, use `--display-ime-policy=local`:
+若要在本地显示屏显示输入法，请使用 `--display-ime-policy=local`：
 
 ```bash
 scrcpy --display-id=1 --display-ime-policy=local

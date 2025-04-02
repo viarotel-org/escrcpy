@@ -8,7 +8,7 @@ To capture the camera instead of the device screen:
 scrcpy --video-source=camera
 ```
 
-By default, it automatically switches [audio source](audio.md#source) to
+By default, it automatically switches [audio source](/reference/scrcpy/audio#source) to
 microphone (as if `--audio-source=mic` were also passed).
 
 ```bash
@@ -114,7 +114,7 @@ scrcpy --video-source=camera --camera-size=1920x1080 -m3000  # error
 
 ## Rotation
 
-To rotate the captured video, use the [video orientation](video.md#orientation)
+To rotate the captured video, use the [video orientation](/reference/scrcpy/video#orientation)
 option:
 
 ```
@@ -167,5 +167,5 @@ scrcpy --video-source=camera --camera-facing=back --camera-ar=16:9 --camera-high
 
 ## Webcam
 
-Combined with the [V4L2](v4l2.md) feature on Linux, the Android device camera
+Combined with the [V4L2](/reference/scrcpy/v4l2) feature on Linux, the Android device camera
 may be used as a webcam on the computer.

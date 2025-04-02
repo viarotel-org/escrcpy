@@ -3,13 +3,13 @@ import { extraResolve } from '$electron/helpers/index.js'
 export const getAdbPath = () => {
   switch (process.platform) {
     case 'win32':
-      return extraResolve('win/android-platform-tools/adb.exe')
+      return extraResolve('win/scrcpy/adb.exe')
 
     case 'darwin':
-      return extraResolve('mac/android-platform-tools/adb')
+      return extraResolve(`mac-${process.arch}/scrcpy/adb`)
 
     case 'linux':
-      return extraResolve(`linux-${process.arch}/android-platform-tools/adb`)
+      return extraResolve(`linux-${process.arch}/scrcpy/adb`)
   }
 }
 

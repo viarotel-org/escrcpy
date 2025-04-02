@@ -4,10 +4,14 @@
     "paths": {
       "$/*": ["src/*"],
       "$root/*": ["*"],
+      "$docs/*": ["docs/*"],
       "$electron/*": ["electron/*"],
       "$renderer/*": ["src/*"],
       "$control/*": ["control/*"]
     }
+  },
+  "vueCompilerOptions": {
+    "vitePressExtensions": [".md"]
   },
   "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],
   "include": ["src", "electron", "control"]

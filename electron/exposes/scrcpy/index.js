@@ -124,14 +124,12 @@ async function record(serial, { title, args = '', savePath, ...options } = {}) {
 async function helper(
   serial,
   command = '',
-  { hiddenWindow = false, ...options } = {},
+  options = {},
 ) {
   const stringCommand = commandHelper.stringify(command)
 
   return execShell(
-    `--serial="${serial}" --window-title="EscrcpyHelper" ${
-      hiddenWindow ? '--window-x=-300 --window-y=-300' : ''
-    } --no-video --no-audio --mouse=disabled ${stringCommand}`,
+    `--serial="${serial}" --no-window --no-video --no-audio ${stringCommand}`,
     options,
   )
 }
@@ -166,7 +164,7 @@ async function startApp(serial, args = {}) {
   }
 
   if (packageName) {
-    commands += ` --start-app=${packageName}`
+    commands += ` --display-ime-policy=local --start-app=${packageName}`
   }
 
   const res = await mirror(serial, { ...options, args: commands, signal: /New display:.+?\(id=(\d+)\)/i })

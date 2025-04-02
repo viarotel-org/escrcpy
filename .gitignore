@@ -24,8 +24,12 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 *.local
+*.d.ts
+**/.vitepress/cache
+
+# Dist
 dist
 dist-ssr
 dist-electron
 dist-release
-*.d.ts
+dist-docs

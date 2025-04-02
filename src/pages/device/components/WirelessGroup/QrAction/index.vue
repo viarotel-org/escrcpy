@@ -25,7 +25,6 @@
 
 <script setup>
 import { generateAdbPairingQR } from '$/utils/device/generateAdbPairingQR/index.js'
-import { computed } from 'vue'
 
 const props = defineProps({
   handleRefresh: {

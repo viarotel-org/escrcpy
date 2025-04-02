@@ -330,8 +330,8 @@ async function handleDownload(row) {
   const pathList = row
     ? [row.id]
     : selectionRows.value
-      .filter(item => item.type === 'file')
-      .map(item => item.id)
+        .filter(item => item.type === 'file')
+        .map(item => item.id)
 
   const savePath = preferenceStore.getData(device.value.id)?.savePath
 

@@ -17,6 +17,7 @@ import useAutoImports from './src/plugins/auto.js'
 const alias = {
   $: resolve('src'),
   $root: resolve(),
+  $docs: resolve('docs'),
   $renderer: resolve('src'),
   $electron: resolve('electron'),
   $control: resolve('control'),

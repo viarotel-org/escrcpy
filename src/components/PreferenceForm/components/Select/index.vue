@@ -2,6 +2,8 @@
   <el-select
     v-bind="{
       clearable: true,
+      filterable: true,
+      allowCreate: true,
       ...(data.props || {}),
     }"
     class="!w-full"
@@ -11,7 +13,7 @@
       :key="index"
       :label="$t(item.label)"
       :value="item.value"
-      :title="$t(item.placeholder || item.label)"
+      :title="$t(item.message || item.placeholder || item.label)"
     >
     </el-option>
   </el-select>

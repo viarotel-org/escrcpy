@@ -136,12 +136,12 @@ export const usePreferenceStore = defineStore({
       const params = Object.entries(data).reduce((obj, [key, value]) => {
         const shouldExclude
           = (!value && typeof value !== 'number')
-          || this.scrcpyExcludeKeys.includes(key)
-          || (!isRecord && this.recordKeys.includes(key))
-          || (!isCamera && this.cameraKeys.includes(key))
-          || (!isOtg && this.otgKeys.includes(key))
-          || excludes.includes(key)
-          || excludes.includes(`${key}=${value}`)
+            || this.scrcpyExcludeKeys.includes(key)
+            || (!isRecord && this.recordKeys.includes(key))
+            || (!isCamera && this.cameraKeys.includes(key))
+            || (!isOtg && this.otgKeys.includes(key))
+            || excludes.includes(key)
+            || excludes.includes(`${key}=${value}`)
 
         if (shouldExclude) {
           return obj

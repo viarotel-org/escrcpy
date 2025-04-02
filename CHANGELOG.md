@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.29.2](https://github.com/viarotel-org/escrcpy/compare/v1.29.1...v1.29.2) (2025-03-31)
+
+
+### Performance Improvements
+
+* 🔨 Fixed the problem that some models could not reversely supply the network due to the blocking of installation detection when using Gnirehtet ([c5369af](https://github.com/viarotel-org/escrcpy/commit/c5369afc8a1160de5cacc306bd228e11846082f1))
+
+## [1.29.1](https://github.com/viarotel-org/escrcpy/compare/v1.29.0...v1.29.1) (2025-03-31)
+
+
+### Performance Improvements
+
+* 🔊 Expanded audio source options ([fc91f07](https://github.com/viarotel-org/escrcpy/commit/fc91f0706022bf93b8efca5c5c4211cc5a8950ff))
+* 🩹 Closing a screen via the control bar no longer requires creating a help window ([84c7be7](https://github.com/viarotel-org/escrcpy/commit/84c7be784e3e7808af0ac020ec961687d61db5a9))
+* 🚀 Update to scrcpy v3.2 ([57c11af](https://github.com/viarotel-org/escrcpy/commit/57c11afc1c4984ef930ee83f8d2eb12001a27429))
+
 ## [1.29.0](https://github.com/viarotel-org/escrcpy/compare/v1.28.7...v1.29.0) (2025-03-27)
 
 

@@ -34,9 +34,12 @@ appStore.onDidChange('common.adbPath', async (value, oldValue) => {
     return false
   }
 
-  if (client) {
-    await client.kill().catch(e => console.warn(e))
-    client = null
+  try {
+    await client?.kill?.()
+    await processManager.kill()
+  }
+  catch (error) {
+    console.warn(error.message)
   }
 
   client = Adb.createClient({ bin: value || adbPath })

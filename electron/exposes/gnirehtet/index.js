@@ -102,7 +102,7 @@ function tunnel(deviceId) {
   return shell(`tunnel "${deviceId}"`)
 }
 
-async function installed(deviceId) {
+async function isInstalled(deviceId) {
   try {
     const res = await adb.isInstalled(deviceId, 'com.genymobile.gnirehtet')
     return res
@@ -138,9 +138,14 @@ async function run(deviceId) {
   })
 
   const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
-  const isInstalled = await installed(deviceId)
 
-  if (gnirehtetFix || !isInstalled) {
+  let installed = false
+
+  if (gnirehtetFix) {
+    installed = await isInstalled(deviceId)
+  }
+
+  if (!installed) {
     await install(deviceId).catch((error) => {
       throw new Error(error?.message || 'Gnirehtet Install Client fail')
     })
@@ -157,7 +162,7 @@ export default {
   shell,
   relay,
   install,
-  installed,
+  isInstalled,
   start,
   stop,
   tunnel,

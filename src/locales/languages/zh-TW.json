@@ -448,8 +448,9 @@
   "about.update-available.title": "發現新版本",
   "about.update-available.confirm": "更新",
   "about.update.progress": "正在更新",
-  "about.sponsor.title": "贊助專案",
-  "about.sponsor.description": "如果覺得這個專案有幫到您的話，可以考慮請我喝杯咖啡，讓我更有精神持續改進此專案 😛",
+  "about.donate.title": "捐贈",
+  "about.donate.description": "如果覺得這個專案有幫到您的話，可以考慮請我喝杯咖啡，讓我更有精神持續改進此專案 😛",
+  "about.docs.name": "幫助文件",
 
   "desktop.shortcut.add": "加入桌面快捷方式"
 }

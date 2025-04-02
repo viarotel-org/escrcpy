@@ -1,7 +1,7 @@
 <template>
-  <el-dialog v-model="visible" :title="$t('about.sponsor.title')" width="98%" @closed="onClosed">
+  <el-dialog v-model="visible" :title="$t('about.donate.title')" width="98%" @closed="onClosed">
     <div class="pt-4 pb-8">
-      {{ $t('about.sponsor.description') }}
+      {{ $t('about.donate.description') }}
     </div>
 
     <div class="flex space-x-4">

@@ -23,9 +23,13 @@
           }}
         </el-button>
 
-        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="handleSponsor">
+        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onClickDocs">
+          <span class="pl-1">{{ $t('about.docs.name') }}</span>
+        </el-button>
+
+        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onClickDonate">
           <span class="group-hover:animate-rubber-band text-red-500">♥</span>
-          <span class="pl-1">{{ $t('about.sponsor.title') }}</span>
+          <span class="pl-1">{{ $t('about.donate.title') }}</span>
         </el-button>
       </div>
 
@@ -71,8 +75,11 @@ export default {
     this.onUpdateError()
   },
   methods: {
-    handleSponsor() {
+    onClickDonate() {
       this.$refs.sponsorDialogRef.open()
+    },
+    onClickDocs() {
+      window.open('https://escrcpy.viarotel.eu.org/')
     },
     handleUpdate() {
       this.loading = true

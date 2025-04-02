@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: Escrcpy
-  text: 使用图形化的 scrcpy 控制你的安卓设备
+  text: 使用图形化的 scrcpy 显示和控制你的安卓设备
   tagline: Powered by electron.
   image:
     src: /images/logo@1024x1024.png

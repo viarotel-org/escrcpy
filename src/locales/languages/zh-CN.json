@@ -438,7 +438,7 @@
   "preferences.camera.camera-fps.placeholder": "设备摄像帧率",
 
   "about.name": "关于",
-  "about.description": "📱 使用图形化的 Scrcpy 显示和控制您的 Android 设备,由 Electron 驱动",
+  "about.description": "📱 使用图形化的 Scrcpy 显示和控制您的 Android 设备, 由 Electron 驱动",
   "about.update": "检查并更新",
   "about.update-not-available": "已经是最新版本",
   "about.update-error.title": "检查更新失败",

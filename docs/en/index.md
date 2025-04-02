@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: Escrcpy
-  text: Graphical Scrcpy to display and control Android
+  text: Display and control your Android device graphically with scrcpy
   tagline: Powered by electron.
   image:
     src: /images/logo@1024x1024.png

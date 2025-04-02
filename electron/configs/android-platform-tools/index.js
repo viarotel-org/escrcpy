@@ -3,7 +3,7 @@ import { extraResolve } from '$electron/helpers/index.js'
 export const getAdbPath = () => {
   switch (process.platform) {
     case 'win32':
-      return extraResolve('win/scrcpy/adb.exe')
+      return extraResolve(`win-${process.arch}/scrcpy/adb.exe`)
 
     case 'darwin':
       return extraResolve(`mac-${process.arch}/scrcpy/adb`)

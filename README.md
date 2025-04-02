@@ -55,7 +55,7 @@ If you are a developer and wish to run or help improve this project, refer to th
 
 ## Get Help
 
-> As an open-source project powered by passion, support is limited, and updates are irregular.
+As an open-source project powered by passion, support is limited, and updates are irregular.
 
 - [FAQ](https://escrcpy.viarotel.eu.org/help/escrcpy)
 - [Report Issues](https://github.com/viarotel-org/escrcpy/issues)
@@ -77,7 +77,7 @@ This project owes its existence to the following open-source projects:
 
 ## Donate
 
-> If this project has helped you, consider buying me a coffee to keep me motivated for further improvements 😛
+If this project has helped you, consider buying me a coffee to keep me motivated for further improvements 😛
 
 <div style="display:flex;">
   <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/sponsor/viarotel-wepay.png" alt="viarotel-wepay" width="30%">

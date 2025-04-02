@@ -55,7 +55,7 @@
 
 ## 获得帮助
 
-> 因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定
+因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定
 
 - [常见问题](https://escrcpy.viarotel.eu.org/zhHans/help/escrcpy)
 - [反馈问题](https://github.com/viarotel-org/escrcpy/issues)
@@ -77,7 +77,7 @@
 
 ## 捐赠项目
 
-> 如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛
+如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛
 
 <div style="display:flex;">
   <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/src/assets/sponsor/viarotel-wepay.png" alt="viarotel-wepay" width="30%">

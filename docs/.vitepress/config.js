@@ -117,7 +117,7 @@ const vitePressI18nConfig = {
         { text: 'Changelog', link: '/changelog' },
         { text: 'Donate', link: '/donate' },
         { text: 'Contact', link: '/contact' },
-        { text: 'Blog', link: 'https://viarotel.eu.org/' },
+        { text: 'Blog', link: 'https://viarotel.eu.org/en' },
       ],
     },
     zhHans: {

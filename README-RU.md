@@ -8,7 +8,7 @@
 [![Gitee](https://gitee.com/viarotel-org/escrcpy/badge/star.svg?theme=dark)](https://gitee.com/viarotel-org/escrcpy)
 [![GitHub](https://img.shields.io/github/stars/viarotel-org/escrcpy?label=Github%20Stars)](https://github.com/viarotel-org/escrcpy)
 
-📱 Отображайте и управляйте своими Android-устройствами с графическим интерфейсом для Scrcpy, работающим на Electron. [Документация на китайском](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
+📱 Отображайте и управляйте своим Android-устройством с помощью Scrcpy в графическом режиме, работающим на Electron. [Документация на китайском](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
   <img src="./screenshots/zh-CN/overview.jpg" alt="viarotel-escrcpy" width="100%">

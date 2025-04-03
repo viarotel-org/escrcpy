@@ -61,6 +61,6 @@ features:
     title: User benefits
     details: No account, no ads, no internet required
   - icon: 🗽
-    title: Free and open source
-    details: 
+    title: Freedom
+    details: Free and open-source software
 ---

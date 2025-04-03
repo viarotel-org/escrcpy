@@ -53,11 +53,17 @@
 <script>
 import { version } from '/package.json'
 import SponsorDialog from './components/SponsorDialog/index.vue'
+import { i18n } from '$/locales/index.js'
 
 export default {
   name: 'About',
   components: {
     SponsorDialog,
+  },
+  setup() {
+    return {
+      locale: i18n.global.locale,
+    }
   },
   data() {
     return {
@@ -79,7 +85,11 @@ export default {
       this.$refs.sponsorDialogRef.open()
     },
     onClickDocs() {
-      window.open('https://escrcpy.viarotel.eu.org/')
+      const locale = {
+        'zh-CN': 'zhHans',
+      }[this.locale] || ''
+
+      window.open(`https://escrcpy.viarotel.eu.org/${locale}`)
     },
     handleUpdate() {
       this.loading = true

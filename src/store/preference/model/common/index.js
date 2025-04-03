@@ -184,6 +184,14 @@ export default {
       placeholder: 'preferences.common.edgeHidden.placeholder',
       tips: 'preferences.common.edgeHidden.tips',
     },
+    imeFix: {
+      label: 'preferences.common.imeFix.name',
+      field: 'imeFix',
+      type: 'Switch',
+      value: true,
+      placeholder: 'preferences.common.imeFix.placeholder',
+      tips: 'preferences.common.imeFix.tips',
+    },
     debug: {
       label: 'preferences.common.debug.name',
       field: 'debug',

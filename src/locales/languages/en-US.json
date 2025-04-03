@@ -279,6 +279,9 @@
   "preferences.common.edgeHidden.name": "Auto-hide Main Panel",
   "preferences.common.edgeHidden.placeholder": "When enabled, the main panel will automatically hide when mouse moves near screen edge",
   "preferences.common.edgeHidden.tips": "Note: Changes require application restart to take effect",
+  "preferences.common.imeFix.name": "Start APP Keyboard Fix",
+  "preferences.common.imeFix.placeholder": "When enabled, this will resolve the issue where the input method cannot be displayed in the current mirror window when the APP starts.",
+  "preferences.common.imeFix.tips": "Note: This feature is only supported in scrcpy v3.2 and above. Using it with lower versions will cause errors.",
 
   "preferences.video.name": "Video",
   "preferences.video.disable-video.name": "Disable Video Forwarding",

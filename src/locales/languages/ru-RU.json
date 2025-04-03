@@ -279,6 +279,9 @@
   "preferences.common.edgeHidden.name": "Автоскрытие главной панели",
   "preferences.common.edgeHidden.placeholder": "При включении главная панель будет автоматически скрываться, когда курсор приближается к краю экрана",
   "preferences.common.edgeHidden.tips": "Примечание: Изменения вступят в силу после перезапуска приложения",
+  "preferences.common.imeFix.name": "Исправление клавиатуры при запуске приложения",
+  "preferences.common.imeFix.placeholder": "При включении будет решена проблема, когда метод ввода не отображается в текущем зеркальном окне при запуске приложения.",
+  "preferences.common.imeFix.tips": "Примечание: Эта функция поддерживается только в scrcpy v3.2 и выше. Использование в более ранних версиях вызовет ошибки.",
 
   "preferences.video.name": "Видео",
   "preferences.video.disable-video.name": "Отключить передачу видео",

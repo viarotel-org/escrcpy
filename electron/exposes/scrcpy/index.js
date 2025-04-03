@@ -163,8 +163,14 @@ async function startApp(serial, args = {}) {
     commands += `=${displayOverlay}`
   }
 
+  const imeFix = appStore.get('common.imeFix')
+
+  if (imeFix) {
+    commands += ` --display-ime-policy=local`
+  }
+
   if (packageName) {
-    commands += ` --display-ime-policy=local --start-app=${packageName}`
+    commands += ` --start-app=${packageName}`
   }
 
   const res = await mirror(serial, { ...options, args: commands, signal: /New display:.+?\(id=(\d+)\)/i })

@@ -279,6 +279,9 @@
   "preferences.common.edgeHidden.name": "主面板贴边隐藏",
   "preferences.common.edgeHidden.placeholder": "启用后，当鼠标靠近屏幕边缘离开面板时，主面板将自动隐藏。",
   "preferences.common.edgeHidden.tips": "注意：更改此选项后，需要重启应用才能生效",
+  "preferences.common.imeFix.name": "启动APP键盘修复",
+  "preferences.common.imeFix.placeholder": "启用后，将解决APP启动时输入法无法在当前镜像窗口显示的问题。",
+  "preferences.common.imeFix.tips": "注意：此功能仅支持 scrcpy v3.2 及以上版本，低版本使用时会报错。",
 
   "preferences.video.name": "视频控制",
   "preferences.video.disable-video.name": "禁用视频转发",

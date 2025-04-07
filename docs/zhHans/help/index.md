@@ -6,5 +6,5 @@ title: 帮助
 
 本节为Escrcpy和Scrcpy用户提供了解决常见问题的解决方案。
 
-- [Escrcpy](/help/escrcpy)
-- [Scrcpy](/help/scrcpy)
+- [Escrcpy](/zhHans/help/escrcpy)
+- [Scrcpy](/zhHans/help/scrcpy)

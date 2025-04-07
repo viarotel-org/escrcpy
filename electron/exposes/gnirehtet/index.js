@@ -137,11 +137,11 @@ async function run(deviceId) {
     throw new Error(error?.message || 'Gnirehtet Relay fail')
   })
 
-  const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
-
   let installed = false
 
-  if (gnirehtetFix) {
+  const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
+
+  if (!gnirehtetFix) {
     installed = await isInstalled(deviceId)
   }
 

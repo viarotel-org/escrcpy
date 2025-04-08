@@ -3,7 +3,7 @@ title: Scrcpy
 ---
 
 > [!IMPORTANT]
-> Scrcpy基于以下开源项目构建。相关内容仅供参考，将定期更新。
+> Escrcpy基于以下开源项目构建。相关内容仅供参考，将定期更新。
 
 # scrcpy (v3.2)
 

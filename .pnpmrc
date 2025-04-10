@@ -1,4 +1,2 @@
-# 国内用户如果遇到无法安装依赖的情况，请将 .pnpmrc.zh 中的配置覆盖到本文件中
-
 shamefully-hoist=true
 virtual-store-dir-max-length=70

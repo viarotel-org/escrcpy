@@ -60,7 +60,7 @@ export const usePreferenceStore = defineStore({
     setData(data, scope = this.deviceScope) {
       const pickData = pickBy(
         data,
-        value => !!value || typeof value === 'number',
+        value => !['', void 0].includes(value),
       )
 
       if (data.adbPath === adbPath) {

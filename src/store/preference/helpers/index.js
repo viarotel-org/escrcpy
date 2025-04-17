@@ -103,10 +103,10 @@ export function mergeConfig(object, sources) {
   const customizer = (objValue, srcValue, key) => {
     let value
 
-    if (srcValue) {
+    if (![void 0].includes(srcValue)) {
       value = srcValue
     }
-    else if (objValue) {
+    else {
       value = objValue
     }
 

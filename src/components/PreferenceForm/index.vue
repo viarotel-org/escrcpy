@@ -85,8 +85,6 @@
 </template>
 
 <script setup>
-import { i18n } from '$/locales/index.js'
-
 import { usePreferenceStore } from '$/store/index.js'
 
 import { omit } from 'lodash-es'
@@ -107,8 +105,6 @@ const props = defineProps({
     default: () => [],
   },
 })
-
-const locale = computed(() => i18n.global.locale.value)
 
 const preferenceData = defineModel('modelValue', {
   type: Object,

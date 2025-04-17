@@ -23,10 +23,15 @@ export async function generateAdbPairingQR(options = {}) {
   const dataUrl = await qrCode.toDataURL(pairingText, {
     type: 'image/webp',
     rendererOpts: { quality: 1 },
-    color: {
-      dark: primaryColor,
-      light: themeStore.isDark ? '#1d1e1f' : '#ffffff',
-    },
+    color: themeStore.isDark
+      ? {
+          dark: '#000000',
+          light: primaryColor,
+        }
+      : {
+          dark: primaryColor,
+          light: '#ffffff',
+        },
     margin: 0,
   })
 

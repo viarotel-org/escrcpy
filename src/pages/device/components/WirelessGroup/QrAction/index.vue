@@ -4,7 +4,7 @@
     placement="top"
     :width="200"
     trigger="click"
-    popper-class=""
+    popper-class="el-popover--scanner"
     @hide="onHide"
   >
     <template #reference>
@@ -72,4 +72,10 @@ function onHide() {
 }
 </script>
 
-<style></style>
+<style lang="postcss">
+.dark .el-popover--scanner {
+  &, .el-popper__arrow::before {
+    @apply !bg-primary-500;
+  }
+}
+</style>

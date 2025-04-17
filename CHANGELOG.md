@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.5](https://github.com/viarotel-org/escrcpy/compare/v1.29.4...v1.29.5) (2025-04-17)
+
+
+### Bug Fixes
+
+* 🐛 Fix the problem of build failure caused by missing dependencies ([e34e1c2](https://github.com/viarotel-org/escrcpy/commit/e34e1c295a0e9567f87a9b5141e80fec65ce2dc1))
+
 ## [1.29.4](https://github.com/viarotel-org/escrcpy/compare/v1.29.3...v1.29.4) (2025-04-17)
 
 

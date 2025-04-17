@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.29.4](https://github.com/viarotel-org/escrcpy/compare/v1.29.3...v1.29.4) (2025-04-17)
+
+
+### Bug Fixes
+
+* 🐛 Fixed an issue where some options in preferences could not be turned off ([269bd29](https://github.com/viarotel-org/escrcpy/commit/269bd29d1edf445be8d11353bc93438591be5f3e))
+
+
+### Performance Improvements
+
+* 💫 Adjust gnirehtet configuration behavior to make it consistent with user operation habits ([7507915](https://github.com/viarotel-org/escrcpy/commit/75079150ee92fb91dd34cbe4189404bc6ae6f932))
+* 🔍️ Optimize QR code style to avoid scanning problems on some devices ([dd3ad6c](https://github.com/viarotel-org/escrcpy/commit/dd3ad6cc5c91659f163e6e906f711c291fafc28b))
+* 🩹 Add an option to enable keyboard fix on app startup to be compatible with older versions of scrcpy ([be89b36](https://github.com/viarotel-org/escrcpy/commit/be89b360f891350710527fcb49dd920183d696b2))
+
 ## [1.29.3](https://github.com/viarotel-org/escrcpy/compare/v1.29.2...v1.29.3) (2025-04-02)
 
 

@@ -24,7 +24,7 @@ jobs:
       - name: Enable corepack and pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@9.12.3 --activate
+          corepack prepare pnpm@9.13.2 --activate
 
       - name: Install and Build
         run: |

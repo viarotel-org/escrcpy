@@ -1,0 +1,457 @@
+{
+  "common.yes": "نعم",
+  "common.no": "لا",
+  "common.cancel": "إلغاء",
+  "common.confirm": "تأكيد",
+  "common.restart": "إعادة التشغيل",
+  "common.default": "الافتراضي",
+  "common.tips": "توضيح",
+  "common.open": "فتح",
+  "common.input.placeholder": "يرجى الإدخال...",
+  "common.success": "نجحت العملية",
+  "common.success.batch": "نجاح العملية المجمعة",
+  "common.fail": "فشلت العملية",
+  "common.starting": "بدء التشغيل",
+  "common.loading": "جارٍ التحميل",
+  "common.search": "بحث",
+  "common.batch": "مجموعة",
+  "common.device": "الجهاز",
+  "common.progress": "قيد التنفيذ",
+  "common.finished": "تم الانتهاء",
+  "common.stop": "إيقاف",
+  "common.remove": "إزالة",
+  "common.select.please": "يرجى الاختيار",
+  "common.required": "هذا الحقل مطلوب",
+  "common.download": "تنزيل",
+  "common.downloading": "جارٍ التنزيل",
+  "common.delete": "حذف",
+  "common.name": "الاسم",
+  "common.size": "الحجم",
+  "common.warning": "تحذير",
+  "common.info": "رسالة",
+  "common.danger": "خطأ",
+  "common.connecting": "جارٍ الاتصال",
+
+  "common.language.name": "اللغة",
+  "common.language.placeholder": "اختر اللغة",
+  "common.language.zh-CN": "الصينية",
+  "common.language.zh-TW": "الصينية التقليدية",
+  "common.language.en-US": "الإنجليزية",
+  "common.language.ru-RU": "الروسية",
+
+  "time.update": "وقت التحديث",
+  "time.unit.month": "شهر",
+  "time.unit.week": "أسبوع",
+  "time.unit.day": "يوم",
+  "time.unit.hour": "ساعة",
+  "time.unit.minute": "دقيقة",
+  "time.unit.second": "ثانية",
+  "time.unit.millisecond": "ميلي ثانية",
+
+  "appClose.name": "إغلاق اللوحة الرئيسية",
+  "appClose.question": "السؤال في كل مرة",
+  "appClose.minimize": "تصغير إلى شريط المهام",
+  "appClose.quit": "الخروج مباشرة",
+  "appClose.quit.cancel": "إلغاء الخروج",
+  "appClose.quit.loading": "جارٍ إيقاف الخدمة...",
+  "appClose.message": "هل أنت متأكد أنك تريد الخروج؟",
+  "appClose.remember": "تذكر الاختيار؟",
+
+  "dependencies.lack.title": "تنويه",
+  "dependencies.lack.content": "يعتمد هذا البرنامج على {name}. يرجى التأكد من تثبيت التبعيات المذكورة بشكل صحيح، أو ضبط مكان التبعيات يدويًا في التفضيلات.",
+
+  "device.list": "الأجهزة",
+  "device.list.empty": "لم يتم اكتشاف أي أجهزة",
+  "device.serial": "عنوان الاتصال",
+  "device.name": "الاسم",
+  "device.remark": "ملاحظة",
+  "device.permission.error": "خطأ في إذن الوصول الى الجهاز، يرجى إعادة توصيل الجهاز والسماح بتصحيح أخطاء USB",
+  "device.terminal.name": "الطرفية",
+  "device.status": "الحالة",
+  "device.status.connected": "متصل",
+  "device.status.offline": "غير متصل",
+  "device.status.unauthorized": "غير مصرح",
+  "device.status.authorizing": "بانتظار منح الإذن",
+  "device.battery": "بطارية الجهاز",
+  "device.isCharging": "وضع الشحن",
+  "device.temperature": "درجة حرارة الجهاز",
+  "device.powerSource": "مصدر الطاقة",
+  "device.voltage": "جهد الجهاز",
+
+  "device.task.name": "مهمة مجدولة",
+  "device.task.tips": "ملاحظة: يرجى التأكد من بقاء جهاز الكمبيوتر الخاص بك في حالة نشاط، وإلا فلن يتم تنفيذ المهام المجدولة بشكل صحيح.",
+  "device.task.list": "قائمة المهام",
+  "device.task.type": "نوع المهمة",
+  "device.task.frequency": "تكرار التنفيذ",
+  "device.task.frequency.timeout": "تنفيذ لمرة واحدة",
+  "device.task.frequency.interval": "تكرار دوري",
+  "device.task.timeout": "وقت التنفيذ",
+  "device.task.timeout.tips": "لا يمكن أن يكون قبل الوقت الحالي",
+  "device.task.timeout.expired": "انتهت صلاحية المهمة",
+  "device.task.interval": "الفاصل الزمني للتكرار",
+  "device.task.devices": "الأجهزة المشمولة",
+  "device.task.noRepeat": "بدون تكرار",
+  "device.task.restart": "تنفيذ مجددًا",
+  "device.task.extra.app": "اختر تطبيق",
+  "device.task.extra.shell": "اختر نص برمجي",
+
+  "device.wireless.name": "لاسلكي",
+  "device.wireless.mode": "لاسلكي",
+  "device.wireless.mode.error": "تعذر الحصول على عنوان اتصال الشبكة المحلية، يرجى التحقق من الشبكة",
+  "device.wireless.connect.qr": "اتصال عبر رمز QR",
+  "device.wireless.connect.qr.pairing": "جارٍ الاقتران",
+  "device.wireless.connect.qr.connecting": "جارٍ الاتصال",
+  "device.wireless.connect.qr.connecting-fallback": "جارٍ الاتصال",
+  "device.wireless.connect.qr.connected": "نجح الاتصال",
+  "device.wireless.connect.qr.error": "اتصال عبر رمز QR",
+  "device.wireless.connect.name": "اتصال",
+  "device.wireless.connect.error.title": "فشل الاتصال",
+  "device.wireless.connect.error.detail": "تفاصيل الخطأ",
+  "device.wireless.connect.error.reasons[0]": "الأسباب المحتملة:",
+  "device.wireless.connect.error.reasons[1]": "عنوان IP أو المنفذ غير صحيح",
+  "device.wireless.connect.error.reasons[2]": "الجهاز غير مقترن",
+  "device.wireless.connect.error.reasons[3]": "عنوان IP ليس في نفس الشبكة الفرعية",
+  "device.wireless.connect.error.reasons[4]": "مسار adb خاطئ",
+  "device.wireless.connect.error.reasons[5]": "خطأ غير معروف",
+  "device.wireless.connect.error.confirm": "اقتران لاسلكي",
+  "device.wireless.connect.error.cancel": "@:common.cancel",
+  "device.wireless.connect.error.no-address": "عنوان تصحيح الأخطاء اللاسلكي مطلوب",
+  "device.wireless.connect.success": "تم الاتصال",
+  "device.wireless.connect.batch.name": "الاتصال بجميع الأجهزة السابقة",
+  "device.wireless.disconnect.start": "قطع الاتصال",
+  "device.wireless.disconnect.progress": "جارٍ قطع الاتصال",
+  "device.wireless.disconnect.success": "تم قطع الاتصال",
+  "device.wireless.pair": "اقتران لاسلكي",
+  "device.wireless.pair.tips": "احصل على المعلومات التالية من خيارات المطور -> تصحيح الأخطاء اللاسلكي -> إقران الجهاز",
+  "device.wireless.pair.address": "عنوان IP الاقتران",
+  "device.wireless.pair.address.message": "عنوان الاقتران مطلوب",
+  "device.wireless.pair.address.placeholder": "أدخل عنوان IP للاقتران",
+  "device.wireless.pair.port": "منفذ الاقتران",
+  "device.wireless.pair.port.message": "يرجى ادخال منفذ الاقتران",
+  "device.wireless.pair.port.placeholder": "أدخل منفذ الاقتران",
+  "device.wireless.pair.code": "رمز الاقتران",
+  "device.wireless.pair.code.message": "رمز الاقتران مطلوب",
+  "device.wireless.pair.code.placeholder": "أدخل رمز الاقتران",
+
+  "device.reset.title": "فشلت العملية",
+  "device.reset.reasons[0]": "عادةً ما يحدث هذا بسبب إعدادات غير متوافقة. هل تريد إعادة تعيين التفضيلات؟",
+  "device.reset.reasons[1]": "ملاحظة: بعد إعادة التعيين، سيتم مسح أي إعدادات تم حفظها مسبقًا، لذلك يستحسن إجراء نسخ احتياطي للإعدادات قبل القيام بإعادة التعيين.",
+  "device.reset.confirm": "إعادة تعيين التفضيلات",
+  "device.reset.cancel": "@:common.cancel",
+  "device.reset.success": "نجح الأمر، يرجى المحاولة مرة أخرى",
+  "device.refresh.name": "تحديث",
+  "device.restart.name": "إعادة التشغيل",
+  "device.log.name": "السجلات",
+  "device.mirror.start": "اتصال",
+  "device.record.progress": "جارٍ التسجيل",
+  "device.record.success.title": "تم التسجيل بنجاح",
+  "device.record.success.message": "فتح مكان حفظ التسجيل؟",
+  "device.actions.more.name": "إضافي",
+  "device.actions.more.record.name": "بدء التسجيل",
+  "device.actions.more.camera.name": "تشغيل الكاميرا",
+  "device.actions.more.recordCamera.name": "تسجيل الكاميرا",
+  "device.actions.more.recordAudio.name": "تسجيل الصوت",
+  "device.actions.more.otg.name": "تشغيل OTG",
+  "device.actions.more.custom.name": "بدء تشغيل مخصص",
+
+  "device.control.name": "التحكم",
+  "device.control.more": "عناصر تحكم إضافية",
+  "device.control.install": "تثبيت تطبيق",
+  "device.control.install.placeholder": "اختر تطبيقًا لتثبيته",
+  "device.control.install.progress": "جارٍ تثبيت التطبيق على {deviceName}...",
+  "device.control.install.success": "تم تثبيت {totalCount} من التطبيقات على {deviceName}، نجح {successCount} وفشل {failCount}",
+  "device.control.install.success.single": "تم تثبيت التطبيق بنجاح على {deviceName}",
+  "device.control.install.error": "فشل التثبيت، يرجى التحقق من التطبيق والمحاولة مرة أخرى",
+  "device.control.file.name": "مدير الملفات",
+  "device.control.file.push": "إرسال ملف",
+  "device.control.file.push.placeholder": "حدد الملف الذي تريد إرساله",
+  "device.control.file.push.loading": "جارٍ الإرسال",
+  "device.control.file.push.success.name": "تم إرسال الملف/ات بنجاح",
+  "device.control.file.push.success": "تم إرسال {tototalCount} من الملفات إلى {deviceName}، نجح {successCount} وفشل {failCount}",
+  "device.control.file.push.success.single": "تم إرسال الملف بنجاح إلى {deviceName}",
+  "device.control.file.push.error": "فشل إرسال الملف، يرجى التحقق من الملف والمحاولة مرة أخرى",
+  "device.control.file.manager.storage": "وحدة التخزين الداخلية",
+  "device.control.file.manager.add": "مجلد جديد",
+  "device.control.file.manager.upload": "رفع ملف",
+  "device.control.file.manager.upload.directory": "رفع مجلد",
+  "device.control.file.manager.download": "تنزيل ملف",
+  "device.control.file.manager.download.tips": "هل أنت متأكد أنك تريد تنزيل المحتوى المحدد؟",
+  "device.control.file.manager.delete.tips": "هل أنت متأكد أنك تريد حذف المحتوى المحدد؟",
+  "device.control.terminal.command.name": "تنفيذ أمر",
+  "device.control.terminal.script.name": "تنفيذ نص برمجي",
+  "device.control.terminal.script.select": "اختر النص البرمجي المراد تنفيذه",
+  "device.control.terminal.script.push.loading": "جارٍ إرسال النص البرمجي...",
+  "device.control.terminal.script.push.success": "تم إرسال النص البرمجي بنجاح",
+  "device.control.terminal.script.enter": "يرجى الضغط على مفتاح Enter لتأكيد إجراء تنفيذ النص البرمجي",
+  "device.control.terminal.script.success": "تم تنفيذ النص البرمجي بنجاح",
+  "device.control.capture": "لقطة شاشة",
+  "device.control.capture.progress": "جارٍ التقاط لقطة شاشة لـ {deviceName}...",
+  "device.control.capture.success.message": "فتح مكان حفظ لقطة الشاشة؟",
+  "device.control.capture.success.message.title": "تم اخذ لقطة شاشة بنجاح",
+  "device.control.reboot": "إعادة التشغيل",
+  "device.control.turnScreenOff": "إطفاء الشاشة",
+  "device.control.turnScreenOff.tips": "إطفاء الشاشة مع الحفاظ على التحكم ( ميزة تجريبية): سينشئ هذا الإجراء عملية EscrcpyHelper؛ سيؤدي إغلاق هذه العملية يدويًا إلى إعادة فتح الشاشة.",
+  "device.control.startApp": "فتح تطبيق",
+  "device.control.power": "زر التشغيل",
+  "device.control.power.tips": "تشغيل/إطفاء الشاشة",
+  "device.control.notification": "الإشعارات",
+  "device.control.notification.tips": "فتح لوحة الإشعارات",
+  "device.control.return": "رجوع",
+  "device.control.home": "الرئيسية",
+  "device.control.switch": "تبديل",
+  "device.control.gnirehtet": "Gnirehtet",
+  "device.control.gnirehtet.tips": "يوفر Gnirehtet الربط العكسي لنظام Android؛ ملاحظة: يتطلب الاتصال الأولي الحصول على تفويض على الجهاز.",
+  "device.control.gnirehtet.start": "بدء الخدمة",
+  "device.control.gnirehtet.start.success": "تم تشغيل ميزة الربط العكسي عبر Gnirehtet بنجاح",
+  "device.control.gnirehtet.stop": "إيقاف الخدمة",
+  "device.control.gnirehtet.stop.success": "تم إيقاف الخدمة بنجاح",
+  "device.control.gnirehtet.running": "الخدمة قيد التشغيل",
+  "device.control.gnirehtet.stopping": "جارٍ إيقاف الخدمة",
+  "device.control.mirror-group.name": "مجموعة العرض المتزامن",
+  "device.control.mirror-group.tips": "عند التمكين، يمكن عرض شاشات محاكاة ثانوية متعددة وتحقيق تعاون متعدد الشاشات من خلال التحكم بكل نافذة معروضة. لاحظ أن هذا يتطلب دعم ROM  وتمكين وضع سطح المكتب.",
+  "device.control.mirror-group.open": "فتح {num} من النوافذ",
+  "device.control.mirror-group.close": "إغلاق أجهزة العرض الثانوية",
+  "device.control.mirror-group.appClose.tips": "تستخدم لحل مشكلة فشل الإغلاق التلقائي بعد خروج بعض الأجهزة من جميع نوافذ التحكم.",
+  "device.control.volume.name": "الصوت",
+  "device.control.volume-up.name": "رفع الصوت",
+  "device.control.volume-down.name": "خفض الصوت",
+  "device.control.volume-mute.name": "كتم",
+  "device.control.rotation.name": "تدوير",
+  "device.control.rotation.vertically": "عمودي",
+  "device.control.rotation.horizontally": "أفقي",
+  "device.control.rotation.auto": "تلقائي",
+  "device.control.rotation.disable": "تعطيل",
+
+  "preferences.name": "التفضيلات",
+  "preferences.reset": "إعادة التعيين إلى الوضع الافتراضي",
+  "preferences.scope.global": "عام",
+  "preferences.scope.placeholder": "نطاق التفضيلات",
+  "preferences.scope.no-data": "لا توجد أي بيانات",
+  "preferences.scope.details[0]": "تعيين تفضيلات عامة أو مخصصة لكل جهاز",
+  "preferences.scope.details[1]": "عام: تسري على جميع الأجهزة",
+  "preferences.scope.details[2]": "مخصصة لكل جهاز: تجاوز الإعدادات العامة لجهاز معين",
+  "preferences.config.import.name": "استيراد",
+  "preferences.config.import.placeholder": "اختر ملف التكوين",
+  "preferences.config.import.success": "تم الاستيراد بنجاح",
+  "preferences.config.export.name": "تصدير",
+  "preferences.config.export.message": "تصدير إلى ملف تكوين",
+  "preferences.config.export.placeholder": "اختر مكان التصدير",
+  "preferences.config.export.success": "تم التصدير بنجاح",
+  "preferences.config.edit.name": "تعديل",
+  "preferences.config.reset.name": "إعادة تعيين",
+
+  "preferences.common.name": "شائع",
+  "preferences.common.theme.name": "السمة",
+  "preferences.common.theme.placeholder": "اختر السمة",
+  "preferences.common.theme.options[0]": "الوضع الفاتح",
+  "preferences.common.theme.options[1]": "الوضع الداكن",
+  "preferences.common.theme.options[2]": "اتباع النظام",
+  "preferences.common.debug.name": "تصحيح الأخطاء",
+  "preferences.common.debug.placeholder": "تفعيل وضع تصحيح الأخطاء",
+  "preferences.common.debug.tips": "إظهار معلومات تصحيح الأخطاء في السجلات. تعطيل هذا الخيار سيؤدي إلى تحسين الأداء (يتطلب الأمر إعادة التشغيل).",
+  "preferences.common.file.name": "مكان الملفات",
+  "preferences.common.file.placeholder": "سطح مكتب المستخدم",
+  "preferences.common.file.tips": "مكان حفظ لقطات الشاشة والتسجيلات",
+  "preferences.common.adb.name": "مسار Adb",
+  "preferences.common.adb.placeholder": "مسار مخصص لـ adb",
+  "preferences.common.adb.tips": "مسار adb لوصل الجهاز",
+  "preferences.common.scrcpy.name": "مسار Scrcpy",
+  "preferences.common.scrcpy.placeholder": "مسار مخصص لـ Scrcpy",
+  "preferences.common.scrcpy.tips": "مسار scrcpy للتحكم في الجهاز",
+  "preferences.common.scrcpy.append.name": "خيارات Scrcpy",
+  "preferences.common.scrcpy.append.placeholder": "إلحاق خيارات إضافية لأمر scrcpy",
+  "preferences.common.scrcpy.append.tips": "ملاحظة: سيتم إلحاق الخيارات المدخلة مباشرةً لأمر scrcpy دون إزالة الخيارات المكررة.",
+  "preferences.common.gnirehtet.name": "مسار Gnirehtet",
+  "preferences.common.gnirehtet.placeholder": "مسار مخصص لـ Gnirehtet",
+  "preferences.common.gnirehtet.tips": "مسار gnirehtet الذي يستخدم لتوفير ميزة التوصيل العكسي للأجهزة.",
+  "preferences.common.gnirehtet.fix.name": "إصلاح Gnirehtet",
+  "preferences.common.gnirehtet.fix.placeholder": "بعد تفعيل هذا الخيار سوف يتم محاولة إصلاح المشكلة التي تحدث عندما تقوم بعض الأجهزة بإعادة تثبيت قاعدة التوصيل العكسي عند تفعيلها للمرة الثانية.",
+  "preferences.common.gnirehtet.fix.tips": "ملاحظة: قد تؤدي هذه العملية إلى إطالة وقت بدء تشغيل gnirehtet.",
+  "preferences.common.gnirehtet.append.name": "خيارات Gnirehtet",
+  "preferences.common.gnirehtet.append.placeholder": "إلحاق خيارات إضافية لأمر gnirehtet",
+  "preferences.common.gnirehtet.append.tips": "ملاحظة: سيتم إلحاق الخيارات المدخلة مباشرةً لأمر gnirehtet دون إزالة الخيارات المكررة.",
+  "preferences.common.floatControl.name": "شريط التحكم العائم",
+  "preferences.common.floatControl.placeholder": "عند تفعيل هذا الخيار، سيتم فتح شريط التحكم العائم للجهاز تلقائيًا خلال عرض الشاشة",
+  "preferences.common.auto-connect.name": "توصيل تلقائي",
+  "preferences.common.auto-connect.placeholder": "عند تفعيل هذا الخيار، سيحاول البرنامج الاتصال تلقائيًا بالأجهزة المستخدمة سابقاً عند بدء التشغيل.",
+  "preferences.common.auto-mirror.name": "عرض تلقائي",
+  "preferences.common.auto-mirror.placeholder": "عند تفعيل هذا الخيار، سوف يتم عرض الأجهزة الموجودة في القائمة تلقائيًا.",
+  "preferences.common.edgeHidden.name": "إخفاء تلقائي للوحة الرئيسية",
+  "preferences.common.edgeHidden.placeholder": "عند تفعيل هذا الخيار، ستختفي اللوحة الرئيسية تلقائيًا عند اقتراب الماوس من حدود الشاشة",
+  "preferences.common.edgeHidden.tips": "ملاحظة: يتطلب الأمر إعادة تشغيل البرنامج",
+
+  "preferences.video.name": "الفيديو",
+  "preferences.video.disable-video.name": "تعطيل إعادة توجيه الفيديو",
+  "preferences.video.disable-video.placeholder": "عند تفعيل هذا الخيار، سيتم تعطيل إعادة توجيه الفيديو",
+  "preferences.video.video-source.name": "مصدر الفيديو",
+  "preferences.video.video-source.placeholder": "شاشة عرض الجهاز",
+  "preferences.video.video-source.display": "الشاشة",
+  "preferences.video.video-source.camera": "الكاميرا",
+  "preferences.video.resolution.name": "الحد الأقصى للدقة",
+  "preferences.video.resolution.placeholder": "دقة الجهاز، مثال: 1080",
+  "preferences.video.bit.name": "معدل البت للفيديو",
+  "preferences.video.bit.placeholder": "قيمة 8000000 يمكن تمثيلها أما بـ 8M أو 8000000",
+  "preferences.video.video-code.name": "ترميز الفيديو",
+  "preferences.video.video-code.placeholder": "h.264",
+  "preferences.video.refresh-rate.name": "معدل الإطارات",
+  "preferences.video.refresh-rate.placeholder": "60",
+  "preferences.video.display-orientation.name": "اتجاه العرض",
+  "preferences.video.display-orientation.placeholder": "اتجاه الجهاز",
+  "preferences.video.angle.name": "زاوية التدوير",
+  "preferences.video.angle.placeholder": "بدون تدوير، مثال: 15",
+  "preferences.video.angle.tips": "ملاحظة: يسري هذا الخيار أيضاً أثناء التسجيل",
+  "preferences.video.screen-cropping.name": "اقتصاص",
+  "preferences.video.screen-cropping.placeholder": "بدون اقتصاص، مثال: 1224:1440:0:0",
+  "preferences.video.display.name": "العرض",
+  "preferences.video.display.placeholder": "الشاشة الرئيسية",
+  "preferences.video.video-buffer.name": "التخزين المؤقت للفيديو",
+  "preferences.video.video-buffer.placeholder": "0",
+  "preferences.video.receiver-buffer.name": "ذاكرة التخزين المؤقت للمستقبل (v412)",
+  "preferences.video.receiver-buffer.placeholder": "0",
+
+  "preferences.device.name": "الجهاز",
+  "preferences.device.show-touch.name": "عرض اللمسات",
+  "preferences.device.show-touch.placeholder": "إظهار نقاط اللمس على الشاشة",
+  "preferences.device.show-touch.tips": "للجهاز الحقيقي فقط",
+  "preferences.device.stay-awake.name": "البقاء مستيقظًا",
+  "preferences.device.stay-awake.placeholder": "منع سكون الجهاز",
+  "preferences.device.stay-awake.tips": "للاجهزة الموصولة عبر سلك الشحن فقط",
+  "preferences.device.turnScreenOff.name": "إطفاء الشاشة",
+  "preferences.device.turnScreenOff.placeholder": "إطفاء شاشة الجهاز أثناء التحكم",
+  "preferences.device.screenOffTimeout.name": "مهلة إطفاء الشاشة",
+  "preferences.device.screenOffTimeout.placeholder": "الافتراضي للجهاز",
+  "preferences.device.screenOffTimeout.tips": "تعديل إعداد مهلة إطفاءالشاشة واستعادة الإعداد الافتراضي للجهاز عند الخروج",
+  "preferences.device.control-end-video.name": "إطفاء الشاشة عند انتهاء الفيديو",
+  "preferences.device.control-end-video.placeholder": "إطفاء الشاشة عند انتهاء التحكم",
+  "preferences.device.control-in-stop-charging.name": "إيقاف الشحن",
+  "preferences.device.control-in-stop-charging.placeholder": "إيقاف الشحن أثناء التحكم",
+  "preferences.device.control-in-stop-charging.tips": "إيقاف الشحن أثناء التحكم",
+  "preferences.device.display-overlay.name": "عرض افتراضي",
+  "preferences.device.display-overlay.placeholder": "دقة الجهاز، مثال: 1920x1080/420, 1920x1080, /240",
+  "preferences.device.display-overlay.tips": "يستخدم هذا الخيار لضبط حجم ودقة شاشات العرض الثانوية، ويعتمد تشغيل التطبيقات والتعاون متعدد الشاشات (مجموعة العرض المتزامن) على هذا الخيار",
+
+  "preferences.window.name": "النافذة",
+  "preferences.window.borderless.name": "بدون حدود",
+  "preferences.window.borderless.placeholder": "نافذة تحكم بدون حدود",
+  "preferences.window.full-screen.name": "ملء الشاشة",
+  "preferences.window.full-screen.placeholder": "نافذة تحكم في وضع ملء الشاشة",
+  "preferences.window.always-top.name": "دائماً في الأعلى",
+  "preferences.window.always-top.placeholder": "إبقاء نافذة التحكم فوق غيرها من النوافذ",
+  "preferences.window.disable-screen-saver.name": "تعطيل شاشة التوقف",
+  "preferences.window.disable-screen-saver.placeholder": "تعطيل شاشة توقف جهاز الحاسوب",
+  "preferences.window.size.width": "عرض النافذة",
+  "preferences.window.size.width.placeholder": "عرض الجهاز",
+  "preferences.window.size.width.tips": "ملاحظة: قد يؤدي تغيير هذا الإعداد إلى شاشة عرض مغبشة.",
+  "preferences.window.size.height": "ارتفاع النافذة",
+  "preferences.window.size.height.placeholder": "ارتفاع الجهاز",
+  "preferences.window.size.height.tips": "ملاحظة: قد يؤدي تغيير هذا الإعداد إلى شاشة عرض مغبشة.",
+  "preferences.window.position.x": "موضع النافذة الأفقي",
+  "preferences.window.position.x.placeholder": "نسبة لمركز الشاشة",
+  "preferences.window.position.y": "موضع النافذة العمودي",
+  "preferences.window.position.y.placeholder": "بالنسبة إلى مركز سطح المكتب",
+
+  "preferences.record.name": "التسجيل",
+  "preferences.record.format.name": "الصيغة",
+  "preferences.record.format.placeholder": "mp4",
+  "preferences.record.format.audio.name": "صيغة الصوت",
+  "preferences.record.format.audio.placeholder": "opus",
+  "preferences.record.time-limit.name": "المدة الزمنية المحددة للتسجيل",
+  "preferences.record.time-limit.placeholder": "بدون حد زمني",
+  "preferences.record.orientation.name": "اتجاه الفيديو",
+  "preferences.record.orientation.placeholder": "اتجاه الجهاز",
+  "preferences.record.no-video-playback.name": "تعطيل شاشة العرض",
+  "preferences.record.no-video-playback.placeholder": "  عند تفعيل هذا الخيار، سيتم تعطيل تعطيل شاشة عرض الجهاز أثناء التسجيل",
+  "preferences.record.no-video-playback.tips": "ملاحظة: سيتم تسجيل الفيديو، ولكن مع تعطيل شاشة عرض الجهاز",
+  "preferences.record.no-audio-playback.name": "تعطيل تشغيل الصوت",
+  "preferences.record.no-audio-playback.placeholder": "عند تفعيل هذا الخيار، سيتم تعطيل تشغيل صوت الجهاز أثناء تسجيل الفيديو",
+  "preferences.record.no-audio-playback.tips": "ملاحظة: سيتم تسجيل الصوت، ولكن لن يتم تشغيله اثناء التسجيل",
+
+  "preferences.audio.name": "الصوت",
+  "preferences.audio.disable-audio.name": "تعطيل إعادة توجيه الصوت",
+  "preferences.audio.disable-audio.placeholder": "عند تفعيل هذا الخيار، سيتم تعطيل إعادة توجيه الصوت",
+  "preferences.audio.disable-audio.tips": "إذا كان التقاط الصوت عبر جهازك لا يعمل بشكل صحيح، يمكنك تفعيل هذا الخيار للتأكد من إمكانية عرض الشاشة بشكل طبيعي",
+  "preferences.audio.audioDup.name": "إبقاء صوت الجهاز",
+  "preferences.audio.audioDup.placeholder": "عند تفعيل هذا الخيار، سيستمر تشغيل الصوت على الجهاز أثناء تشغيل شاشة العرض",
+  "preferences.audio.audioDup.tips": "ملاحظة: يتطلب هذا الخيار نظام أندرويد 13 أو أحدث، ويمكن لبعض التطبيقات عدم التقيد به (وفي هذه الحالة لن يتم تسجيل الصوت لها)",
+  "preferences.audio.audio-source.name": "مصدر الصوت",
+  "preferences.audio.audio-source.placeholder": "الصوت الصادر من الجهاز",
+  "preferences.audio.audio-source.tips": "نصيحة: عند اختيار 'الميكروفون' كمصدر، ستتمكن من تسجيل الصوت الخارجي.",
+  "preferences.audio.audio-source.output": "إعادة توجيه الصوت الصادر بشكل عام، وتعطيل تشغيله على الجهاز",
+  "preferences.audio.audio-source.mic": "تسجيل الميكروفون",
+  "preferences.audio.audio-source.playback": "تسجيل الصوت الذي يتم تشغيله على الجهاز (يمكن لتطبيقات أندرويد عدم التقيد به، لذلك لا يتم بالضرورة تسجيل الصوت بالكامل)",
+  "preferences.audio.audio-source.mic-unprocessed": "تسجيل الصوت مباشرة من الميكروفون دون معالجة",
+  "preferences.audio.audio-source.mic-camcorder": "تسجيل الصوت من الميكروفون بشكل محسن ومخصص لتسجيل الفيديو، مع الحفاظ على اتجاه الكاميرا عند استخدامها",
+  "preferences.audio.audio-source.mic-voice-recognition": "تسجيل الصوت من الميكروفون بشكل محسن ومخصص للتعرف على الصوت",
+  "preferences.audio.audio-source.mic-voice-communication": "تسجيل الصوت من الميكروفون بشكل محسن ومخصص للاتصالات الصوتية ( مثلاً سيتم الاستفادة من ميزات إلغاء الصدى أو التحكم التلقائي في مستوى الصوت إن كانت متوفرة)",
+  "preferences.audio.audio-source.voice-call": "تسجيل مكالمة صوتية",
+  "preferences.audio.audio-source.voice-call-uplink": "تسجيل صوتك فقط (الصوت الصادر)",
+  "preferences.audio.audio-source.voice-call-downlink": "تسجيل صوت الطرف الآخر فقط (الصوت الوارد)",
+  "preferences.audio.audio-source.voice-performance": "تسجيل الصوت المعد للأداء الحي (الكاراوكي)، يشمل كلاً من الميكروفون وصوت الجهاز",
+  "preferences.audio.audio-code.name": "ترميز الصوت",
+  "preferences.audio.audio-code.placeholder": "opus",
+  "preferences.audio.audio-bit-rate.name": "معدل البت للصوت",
+  "preferences.audio.audio-bit-rate.placeholder": "قيمة 128000 يمكن تمثيلها أما بـ 128K أو 128000",
+  "preferences.audio.audio-bit-rate.tips": "ملاحظة: لا يسري هذا الخيار على برامج ترميز الصوت غير المضغوطة (RAW).",
+  "preferences.audio.audio-buffer.name": "التخزين المؤقت للصوت",
+  "preferences.audio.audio-buffer.placeholder": "0",
+  "preferences.audio.audio-output-buffer.name": "المخزن المؤقت لإخراج الصوت",
+  "preferences.audio.audio-output-buffer.placeholder": "5",
+
+  "preferences.input.name": "الإدخال",
+  "preferences.input.mouse.name": "وضع الفأرة",
+  "preferences.input.mouse.placeholder": "sdk",
+  "preferences.input.mouse.tips": "تعيين وضع إدخال الفأرة",
+  "preferences.input.mouse.options[0].placeholder": "الافتراضي",
+  "preferences.input.mouse.options[1].placeholder": "محاكاة فأرة HID حقيقية باستخدام وحدة Kernel UHID على الجهاز",
+  "preferences.input.mouse.options[2].placeholder": "محاكاة فأرة HID حقيقية باستخدام بروتوكول AOAv2",
+  "preferences.input.mouse.options[3].placeholder": "تعطيل إدخال الفأرة",
+  "preferences.input.mouse-bind.name": "ربط الفأرة",
+  "preferences.input.mouse-bind.tips": "يسمح هذا الخيار بتخصيص وظائف زر الفأرة. يستخدم مجموعتين من تسلسلات مكونة من 4 أحرف لتحديد الارتباطات الأساسية والثانوية مع مفتاح Shift. يمثل كل حرف زر للماوس (اليمين والوسط والرابع والخامس) ويمكن ضبطه على: '+' إعادة توجيه إلى الجهاز و '-' تجاهل و 'b' العودة و 'h' الرئيسية و 's' تبديل التطبيق و 'n' توسيع لوحة الإشعارات. على سبيل المثال، --mouse-bind=bhsn:++++ تعني أن الارتباطات الأساسية هي العودة/الرئيسية/تبديل التطبيق/الإشعارات، بينما الارتباطات الثانوية كلها يتم إعادة توجيهها إلى الجهاز.",
+  "preferences.input.mouse-bind.placeholder": "bhsn:++++",
+  "preferences.input.keyboard.name": "وضع لوحة مفاتيح",
+  "preferences.input.keyboard.placeholder": "sdk",
+  "preferences.input.keyboard.tips": "تعيين وضع إدخال لوحة المفاتيح",
+  "preferences.input.keyboard.options[0].placeholder": "الافتراضي",
+  "preferences.input.keyboard.options[1].placeholder": "محاكاة لوحة مفاتيح HID حقيقية باستخدام وحدة Kernel UHID على الجهاز",
+  "preferences.input.keyboard.options[2].placeholder": "محاكاة لوحة مفاتيح HID حقيقية باستخدام بروتوكول AOAv2",
+  "preferences.input.keyboard.options[3].placeholder": "تعطيل إدخال لوحة المفاتيح",
+  "preferences.input.keyboard.inject.name": "حقن إدخال لوحة المفاتيح",
+  "preferences.input.keyboard.inject.placeholder": "الافتراضي",
+  "preferences.input.keyboard.inject.tips": "تعيين خيار حقن نص لوحة المفاتيح كإعداد أساسي",
+  "preferences.input.keyboard.inject.options[0].placeholder": "حقن الأحرف كـ نص",
+  "preferences.input.keyboard.inject.options[1].placeholder": "فرض حقن أحداث الأزرار الأساسية دائمًا",
+  "preferences.input.gamepad.name": "لوحة تحكم اللعب",
+  "preferences.input.gamepad.placeholder": "معطل",
+  "preferences.input.gamepad.tips": "يتيح هذا الخيار توصيل لوحة تحكم اللعب (PS4/PS5 أو Xbox) بالكمبيوتر لتشغيل ألعاب Android. ملاحظة: يجب أن تدعم اللعبة التي يتم تشغيلها إدخال لوحة تحكم اللعب.",
+
+  "preferences.camera.name": "الكاميرا",
+  "preferences.camera.camera-facing.name": "مصدر الكاميرا",
+  "preferences.camera.camera-facing.placeholder": "مصدر كاميرا الجهاز",
+  "preferences.camera.camera-facing.front": "الكاميرا الأمامية",
+  "preferences.camera.camera-facing.back": "الكاميرا الخلفية",
+  "preferences.camera.camera-facing.external": "كاميرا خارجية",
+  "preferences.camera.camera-size.name": "أبعاد الكاميرا",
+  "preferences.camera.camera-size.placeholder": "أبعاد كاميرا الجهاز، مثال: 1920x1080",
+  "preferences.camera.camera-ar.name": "نسبة أبعاد الكاميرا",
+  "preferences.camera.camera-ar.placeholder": "نسبة أبعاد كاميرا الجهاز، مثال: 4:3، مستشعر، 1.6 إلخ...",
+  "preferences.camera.camera-fps.name": "معدل إطارات الكاميرا",
+  "preferences.camera.camera-fps.placeholder": "معدل إطارات كاميرا الجهاز",
+
+  "about.name": "حول Escrcpy",
+  "about.description": "📱 عرض جهاز الأندرويد الخاص بك والتحكم فيه بشكل مرئي باستخدام scrcpy، من خلال الأجهزة التي تدعم تقنية Electron.",
+  "about.update": "التحقق من وجود تحديثات",
+  "about.update-not-available": "الإصدار الأحدث بالفعل",
+  "about.update-error.title": "فشل التحقق من وجود تحديثات",
+  "about.update-error.message": "قد تحتاج إلى استخدام خادم وكيل. هل تريد تنزيله يدوياً من صفحة الإصدارات؟",
+  "about.update-downloaded.title": "تم تنزيل الإصدار الجديد",
+  "about.update-downloaded.message": "إعادة التشغيل للتحديث الآن؟",
+  "about.update-downloaded.confirm": "تحديث",
+  "about.update-available.title": "يوجد تحديث جديد",
+  "about.update-available.confirm": "تحديث",
+  "about.update.progress": "جارٍ التحديث...",
+  "about.donate.title": "التبرع",
+  "about.donate.description": "إذا كان المشروع ذا فائدة لك، يمكنك أن تدعمني بشراء قهوة لتبقيني متحفزًا لتحسينه 😛",
+  "about.docs.name": "وثائق المساعدة",
+
+  "desktop.shortcut.add": "إضافة اختصار على سطح مكتب"
+}

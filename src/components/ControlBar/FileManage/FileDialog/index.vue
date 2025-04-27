@@ -191,18 +191,20 @@ const loading = ref(false)
 
 const tableData = ref([])
 
-const currentPath = ref('sdcard')
+const currentPath = ref('/sdcard')
 
 const presetMap = {
   sdcard: {
     icon: 'Iphone',
     label: 'device.control.file.manager.storage',
-    value: 'sdcard',
+    value: '/sdcard',
   },
 }
 
 const breadcrumbModel = computed(() => {
-  const list = currentPath.value.split('/')
+  const slicePath = currentPath.value.slice(1)
+
+  const list = slicePath ? slicePath.split('/') : ['/']
 
   const value = list.map(item => ({
     label: item,
@@ -243,7 +245,7 @@ function onSelectionChange(selection) {
 const scrollableRef = ref()
 
 async function handleDirectory(row) {
-  currentPath.value += `/${row.name}`
+  currentPath.value = row.id
   getTableData()
 
   await nextTick()
@@ -259,14 +261,14 @@ function handleBreadcrumb(data) {
 }
 
 function handlePrev() {
-  if (breadcrumbModel.value.length <= 1) {
-    return false
-  }
+  let value = '/'
 
-  const value = breadcrumbModel.value
-    .slice(0, -1)
-    .map(item => item.value)
-    .join('/')
+  if (breadcrumbModel.value.length > 1) {
+    value = breadcrumbModel.value
+      .slice(0, -1)
+      .map(item => item.value)
+      .join('/')
+  }
 
   currentPath.value = value
 
@@ -298,7 +300,7 @@ async function handleRemove(row) {
 
   await window.adb.deviceShell(
     device.value.id,
-    `rm -r "/${currentPath.value}/${row.name}"`,
+    `rm -r "${currentPath.value}/${row.name}"`,
   )
 
   getTableData()
@@ -307,7 +309,7 @@ async function handleRemove(row) {
 async function handleUpload(device, openType) {
   await fileActions.send(device, {
     openType,
-    remotePath: `/${currentPath.value}`,
+    remotePath: currentPath.value,
   })
 
   getTableData()

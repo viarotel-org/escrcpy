@@ -195,12 +195,12 @@ const watch = async (callback) => {
   return close
 }
 
-async function readdir(id, filePath) {
-  const value = await client.getDevice(id).readdir(filePath)
+async function readdir(id, currentPath) {
+  const value = await client.getDevice(id).readdir(currentPath)
 
   return value.map(item => ({
     ...item,
-    id: [filePath, item.name].join('/'),
+    id: path.posix.join(currentPath, item.name),
     type: item.isFile() ? 'file' : 'directory',
     name: item.name,
     size: formatFileSize(item.size),

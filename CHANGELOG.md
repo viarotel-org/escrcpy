@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.29.6](https://github.com/viarotel-org/escrcpy/compare/v1.29.5...v1.29.6) (2025-04-27)
+
+
+### Performance Improvements
+
+* 📝 Added Arabic language support ([f6c9fa4](https://github.com/viarotel-org/escrcpy/commit/f6c9fa44b009359790b90ee9dae534f876cfef46))
+* 🚀 File management supports returning to the root directory ([2e27443](https://github.com/viarotel-org/escrcpy/commit/2e274436e66262fb7251fa3d95a9979c6831652b))
+
 ## [1.29.5](https://github.com/viarotel-org/escrcpy/compare/v1.29.4...v1.29.5) (2025-04-17)
 
 

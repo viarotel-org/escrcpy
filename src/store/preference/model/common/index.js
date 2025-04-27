@@ -56,7 +56,7 @@ export default {
           value: 'ru-RU',
         },
         {
-          label: 'عربي',
+          label: 'العربية',
           value: 'ar',
         },
       ],

@@ -34,10 +34,6 @@
 
   "common.language.name": "Language",
   "common.language.placeholder": "Select language",
-  "common.language.zh-CN": "中文",
-  "common.language.zh-TW": "繁體中文",
-  "common.language.en-US": "English",
-  "common.language.ru-RU": "Русский",
 
   "time.update": "Update Time",
   "time.unit.month": "month",

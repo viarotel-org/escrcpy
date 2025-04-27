@@ -34,10 +34,6 @@
 
   "common.language.name": "اللغة",
   "common.language.placeholder": "اختر اللغة",
-  "common.language.zh-CN": "الصينية",
-  "common.language.zh-TW": "الصينية التقليدية",
-  "common.language.en-US": "الإنجليزية",
-  "common.language.ru-RU": "الروسية",
 
   "time.update": "وقت التحديث",
   "time.unit.month": "شهر",
@@ -437,7 +433,7 @@
   "preferences.camera.camera-fps.name": "معدل إطارات الكاميرا",
   "preferences.camera.camera-fps.placeholder": "معدل إطارات كاميرا الجهاز",
 
-  "about.name": "حول Escrcpy",
+  "about.name": "حول",
   "about.description": "📱 عرض جهاز الأندرويد الخاص بك والتحكم فيه بشكل مرئي باستخدام scrcpy، من خلال الأجهزة التي تدعم تقنية Electron.",
   "about.update": "التحقق من وجود تحديثات",
   "about.update-not-available": "الإصدار الأحدث بالفعل",

@@ -57,7 +57,7 @@ export default {
         },
         {
           label: 'العربية',
-          value: 'ar-AE',
+          value: 'ar',
         },
       ],
     },

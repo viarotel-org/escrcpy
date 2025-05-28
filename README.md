@@ -7,6 +7,7 @@
 [![GitCode](https://gitcode.com/viarotel-org/escrcpy/star/badge.svg)](https://gitcode.com/viarotel-org/escrcpy)
 [![Gitee](https://gitee.com/viarotel-org/escrcpy/badge/star.svg?theme=dark)](https://gitee.com/viarotel-org/escrcpy)
 [![GitHub](https://img.shields.io/github/stars/viarotel-org/escrcpy?label=Github%20Stars)](https://github.com/viarotel-org/escrcpy)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/viarotel-org/escrcpy)
 
 📱 Display and control your Android device graphically with scrcpy, powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 

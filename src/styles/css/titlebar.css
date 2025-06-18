@@ -1,0 +1,147 @@
+/* Titlebar main container styling */
+.titlebar {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background-color: var(--el-bg-color);
+  color: var(--el-text-color-primary);
+  border-bottom: 1px solid var(--el-border-color-light);
+  user-select: none;
+  z-index: 9999;
+}
+
+/* Platform specific styles - macOS/Darwin */
+.titlebar-darwin {
+  height: 28px;
+  padding-left: 80px; /* Space for macOS traffic lights */
+}
+
+/* Draggable region styling */
+.titlebar-drag {
+  -webkit-app-region: drag;
+}
+
+.titlebar-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Window control button styling */
+.titlebar-controls {
+  display: flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-button {
+  height: 32px;
+  width: 46px;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--el-text-color-regular);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.titlebar-button:hover {
+  background-color: var(--el-fill-color-light);
+}
+
+.titlebar-button-close:hover {
+  background-color: #e81123;
+  color: white;
+}
+
+/* macOS specific styles */
+.titlebar-button.mac {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  margin: 0 4px;
+  position: absolute;
+  top: 8px;
+}
+
+.titlebar-button-close.mac {
+  background-color: #ff5f57;
+  left: 12px;
+}
+
+.titlebar-button-minimize.mac {
+  background-color: #ffbd2e;
+  left: 32px;
+}
+
+.titlebar-button-maximize.mac {
+  background-color: #28c941;
+  left: 52px;
+}
+
+.titlebar-button.mac:hover {
+  filter: brightness(90%);
+}
+
+.titlebar-button.mac:active {
+  filter: brightness(80%);
+}
+
+/* Focus state styling */
+.titlebar:not(.titlebar-focused) {
+  opacity: 0.9;
+}
+
+.titlebar:not(.titlebar-focused) .titlebar-button.mac {
+  opacity: 0.7;
+}
+
+/* Icon and text styling in titlebar */
+.titlebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.titlebar-app-name {
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* Layout sections */
+.titlebar-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Dark mode adaptations */
+.dark .titlebar {
+  background-color: var(--el-bg-color-overlay);
+  border-color: var(--el-border-color-darker);
+}
+
+.dark .titlebar-button:hover:not(.mac):not(.titlebar-button-close) {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .titlebar-button-close:hover:not(.mac) {
+  background-color: #e81123;
+}
+
+/* Responsive styles */
+@media (max-width: 640px) {
+  .titlebar-app-name {
+    display: none;
+  }
+}
+
+/* Window state indicators */
+.titlebar-maximized {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

@@ -33,3 +33,12 @@ dist-ssr
 dist-electron
 dist-release
 dist-docs
+
+# Clacky specific
+.1024*
+!.1024
+.breakpoints
+
+# PNPM specific
+.pnpm-store/
+node_modules/.pnpm/

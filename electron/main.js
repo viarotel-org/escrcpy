@@ -30,8 +30,12 @@ import { snakeCase, toUpper } from 'lodash-es'
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-log.initialize({ preload: true })
-
+// Initialize logging with error handling
+try {
+  log.initialize({ preload: true })
+} catch (error) {
+  console.error(`Failed to initialize log: ${error.message || error}`)
+}
 
 contextMenu({
   showCopyImage: false,
@@ -72,6 +76,8 @@ function createWindow(callback) {
     autoHideMenuBar: true,
     frame: false, // Set frameless window for custom titlebar
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
+    backgroundColor: '#00000000',
+    ...(process.platform === 'darwin' ? { vibrancy: 'under-window' } : {}),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,
@@ -132,66 +138,51 @@ function createWindow(callback) {
       if(bounds.x < 0) bounds.x = 0
       if(bounds.y < 0) bounds.y = 0
 
-      appStore.set('common.bounds', {
-        ...bounds
-      })
+      try {
+        appStore.set('common.bounds', {
+          ...bounds
+        })
+      } catch (error) {
+        console.error(`Failed to save window bounds: ${error.message || error}`)
+      }
     })
   })
 
-  loadPage(mainWindow)
-
-  ipc(mainWindow)
-
-  control(mainWindow)
-
-  // Register IPC handlers for window control
-  ipcMain.handle('window:minimize', () => {
-    mainWindow.minimize()
-  })
-  
-  ipcMain.handle('window:toggle-maximize', () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize()
-    } else {
-      mainWindow.maximize()
-    }
-  })
-  
-  ipcMain.handle('window:close', () => {
-    mainWindow.close()
-  })
-  
-  ipcMain.handle('window:is-maximized', () => {
-    return mainWindow.isMaximized()
-  })
-  
-  ipcMain.handle('window:is-focused', () => {
-    return isWindowFocused
-  })
+  try {
+    loadPage(mainWindow)
+    ipc(mainWindow)
+    control(mainWindow)
+  } catch (error) {
+    console.error(`Failed to initialize window content: ${error.message || error}`)
+  }
 
   callback?.(mainWindow)
 }
 
 function onWhenReady(callback) {
   app.whenReady().then(() => {
-    electronApp.setAppUserModelId('com.viarotel.escrcpy')
-  
-    app.on('browser-window-created', (_, window) => {
-      optimizer.watchWindowShortcuts(window)
-    })
-  
-    createWindow(callback)
-  
-    // macOS 中应用被激活
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-        return
-      }
-  
-      app.dock.show()
-      mainWindow.show()
-    })
+    try {
+      electronApp.setAppUserModelId('com.viarotel.escrcpy')
+    
+      app.on('browser-window-created', (_, window) => {
+        optimizer.watchWindowShortcuts(window)
+      })
+    
+      createWindow(callback)
+    
+      // macOS 中应用被激活
+      app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+          createWindow()
+          return
+        }
+    
+        app.dock.show()
+        mainWindow.show()
+      })
+    } catch (error) {
+      console.error(`Error during app initialization: ${error.message || error}`)
+    }
   })
 }
 
@@ -221,21 +212,51 @@ function runExecuteArguments(mainWindow, commandLine) {
 
   const executeArgs = minimist(commandLine)
 
-  Object.entries(executeArgs).forEach(([key, value]) => {
-    process.env[`EXECUTE_ARG_${toUpper(snakeCase(key))}`] = value
-  })
+  try {
+    Object.entries(executeArgs).forEach(([key, value]) => {
+      process.env[`EXECUTE_ARG_${toUpper(snakeCase(key))}`] = value
+    })
 
-  mainWindow.webContents.send('execute-arguments-change', {
-    deviceId: executeArgs['device-id'],
-    appName: executeArgs['app-name'],
-    packageName: executeArgs['package-name'],
-  })
+    if (mainWindow && mainWindow.webContents) {
+      mainWindow.webContents.send('execute-arguments-change', {
+        deviceId: executeArgs['device-id'],
+        appName: executeArgs['app-name'],
+        packageName: executeArgs['package-name'],
+      })
+    }
+  } catch (error) {
+    console.error(`Error processing execute arguments: ${error.message || error}`)
+  }
 
   return executeArgs
 }
 
+// Handle app exit and cleanup
 app.on('window-all-closed', () => {
-  app.isQuiting = true
-  app.quit()
-  mainWindow = null
+  try {
+    // Clean up log streams before exiting
+    if (log && typeof log.cleanup === 'function') {
+      log.cleanup()
+    }
+    
+    app.isQuiting = true
+    app.quit()
+    mainWindow = null
+  } catch (error) {
+    console.error(`Error during app cleanup: ${error.message || error}`)
+    // Force quit the app even if cleanup failed
+    process.exit(1)
+  }
+})
+
+// Additional cleanup on app before-quit event
+app.on('before-quit', () => {
+  try {
+    // Perform log cleanup as early as possible
+    if (log && typeof log.cleanup === 'function') {
+      log.cleanup()
+    }
+  } catch (error) {
+    console.error(`Error during before-quit cleanup: ${error.message || error}`)
+  }
 })

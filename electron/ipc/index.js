@@ -4,6 +4,7 @@ import shortcuts from './shortcuts/index.js'
 import theme from './theme/index.js'
 import tray from './tray/index.js'
 import updater from './updater/index.js'
+import window from './window/index.js'
 
 export default (mainWindow) => {
   appEvents(mainWindow)
@@ -12,4 +13,5 @@ export default (mainWindow) => {
   tray(mainWindow)
   theme(mainWindow)
   shortcuts(mainWindow)
+  window(mainWindow)
 }

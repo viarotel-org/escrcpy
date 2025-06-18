@@ -5,7 +5,7 @@ import minimist from 'minimist'
 
 import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import contextMenu from 'electron-context-menu'
 /** process.js 必须位于非依赖项的顶部 */
 import { isPackaged } from './helpers/process.js'
@@ -70,6 +70,8 @@ function createWindow(callback) {
     show: false,
     icon: getLogoPath(),
     autoHideMenuBar: true,
+    frame: false, // Set frameless window for custom titlebar
+    titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,
@@ -97,6 +99,28 @@ function createWindow(callback) {
     new Edger(mainWindow)
   }
 
+  // Track window states for titlebar
+  let isWindowFocused = true
+  
+  // Window event handlers
+  mainWindow.on('focus', () => {
+    isWindowFocused = true
+    mainWindow.webContents.send('window:focus-change', true)
+  })
+  
+  mainWindow.on('blur', () => {
+    isWindowFocused = false
+    mainWindow.webContents.send('window:focus-change', false)
+  })
+  
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('window:maximize-change', true)
+  })
+  
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('window:maximize-change', false)
+  })
+
   ;['resize', 'move'].forEach((eventName) => {
     mainWindow.on(eventName, () => {
       if(mainWindow.isMaximized()) {
@@ -119,6 +143,31 @@ function createWindow(callback) {
   ipc(mainWindow)
 
   control(mainWindow)
+
+  // Register IPC handlers for window control
+  ipcMain.handle('window:minimize', () => {
+    mainWindow.minimize()
+  })
+  
+  ipcMain.handle('window:toggle-maximize', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  })
+  
+  ipcMain.handle('window:close', () => {
+    mainWindow.close()
+  })
+  
+  ipcMain.handle('window:is-maximized', () => {
+    return mainWindow.isMaximized()
+  })
+  
+  ipcMain.handle('window:is-focused', () => {
+    return isWindowFocused
+  })
 
   callback?.(mainWindow)
 }

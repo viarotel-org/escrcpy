@@ -78,5 +78,32 @@ async function showTips() {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
+/* Titlebar drag region styles */
+.app-region-drag {
+  -webkit-app-region: drag;
+}
+
+.app-region-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+html, body {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Add global styles for the titlebar */
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Import the titlebar specific styles */
+@import '$/styles/css/titlebar.css';
 </style>

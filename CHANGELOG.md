@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.8](https://github.com/viarotel-org/escrcpy/compare/v1.29.7...v1.29.8) (2025-06-20)
+
+
+### Bug Fixes
+
+* 🐛 Update scrcpy-server file to solve the problem of not being able to obtain device APP list ([63f7135](https://github.com/viarotel-org/escrcpy/commit/63f7135a818f9ab7e13b9dacb7a6f283bed03bcc))
+
 ## [1.29.7](https://github.com/viarotel-org/escrcpy/compare/v1.29.6...v1.29.7) (2025-06-16)
 
 

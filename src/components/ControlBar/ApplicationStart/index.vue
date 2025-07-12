@@ -85,8 +85,11 @@ export default {
 
       if (this.keyword) {
         return value.filter((item) => {
-          const pinyinLabel = pinyin(item.label, { toneType: 'none' })
-          return (item.label + pinyinLabel).includes(this.keyword)
+          const pinyinLabel = pinyin(item.label, { toneType: 'none' }).replaceAll(' ', '')
+
+          const matchText = [item.label, pinyinLabel, pinyinLabel.toLowerCase()].join('')
+
+          return matchText.includes(this.keyword)
         })
       }
 

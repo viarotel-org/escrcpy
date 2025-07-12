@@ -26,13 +26,13 @@ export function useStartApp() {
 
     await window.adb.waitForDevice(deviceId)
 
-    const title = `${appName}-${deviceStore.getLabel(deviceId, 'synergy')}`
+    const title = `${appName}[${packageName}]-${deviceStore.getLabel(deviceId, 'synergy')}`
 
     const commands = preferenceStore.scrcpyParameter(deviceId, {
       excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
     })
 
-    await window.scrcpy.startApp(deviceId, { title, commands, packageName })
+    await window.scrcpy.startApp(deviceId, { ...options, title, commands, packageName })
       .catch((e) => {
         console.error('mirror.commands', commands)
         console.error('mirror.error', e)

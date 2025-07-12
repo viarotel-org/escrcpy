@@ -153,20 +153,22 @@ async function getDisplayIds(serial) {
 }
 
 async function startApp(serial, args = {}) {
-  let { commands, packageName, ...options } = args
+  let { commands, packageName, useNewDisplay = true, ...options } = args
 
-  const displayOverlay = getDisplayOverlay(serial)
+  if (useNewDisplay) {
+    commands += ` --new-display`
 
-  commands += ` --new-display`
+    const displayOverlay = getDisplayOverlay(serial)
 
-  if (displayOverlay) {
-    commands += `=${displayOverlay}`
-  }
+    if (displayOverlay) {
+      commands += `=${displayOverlay}`
+    }
 
-  const imeFix = appStore.get('common.imeFix')
+    const imeFix = appStore.get('common.imeFix')
 
-  if (imeFix) {
-    commands += ` --display-ime-policy=local`
+    if (imeFix) {
+      commands += ` --display-ime-policy=local`
+    }
   }
 
   if (packageName) {

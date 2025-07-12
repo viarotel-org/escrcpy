@@ -20,14 +20,15 @@
           :command="item.value"
           :divided="item.divided"
           :icon="item.icon"
-          @click="handleCommand(item)"
+          @click="onStartClick(item)"
         >
-          <div class="pr-4">
+          <div class="pr-12">
             {{ $t(item.label) }}
           </div>
 
-          <div v-if="['win32'].includes(platform)" class="absolute inset-y-center right-0 z-5">
-            <el-link type="primary" :underline="false" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
+          <div class="absolute inset-y-center right-1 z-5 flex items-center">
+            <el-link v-if="['win32'].includes(platform)" type="primary" :underline="false" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
+            <el-link type="primary" :underline="false" icon="Monitor" class="" :title="$t('device.control.startApp.useMainScreen')" @click.stop="onMainStartClick(item)"></el-link>
           </div>
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -73,7 +74,7 @@ export default {
     options() {
       const value = this.appList.map(item => ({
         ...item,
-        label: item.name,
+        label: `${item.name}（${item.packageName}）`,
         value: item.packageName,
       }))
 
@@ -87,7 +88,7 @@ export default {
         return value.filter((item) => {
           const pinyinLabel = pinyin(item.label, { toneType: 'none' }).replaceAll(' ', '')
 
-          const matchText = [item.label, pinyinLabel, pinyinLabel.toLowerCase()].join('')
+          const matchText = [item.label, item.value, pinyinLabel, pinyinLabel.toLowerCase()].join('')
 
           return matchText.includes(this.keyword)
         })
@@ -117,7 +118,7 @@ export default {
       window.electron.ipcRenderer.once(
         channel,
         (event, value, item) => {
-          this.handleCommand(item)
+          this.onStartClick(item)
         },
       )
 
@@ -128,18 +129,24 @@ export default {
         options,
       })
     },
-    async handleCommand({ label, value }) {
-      this.loading = true
-
-      await this.startApp.open({
+    async onStartClick({ label, value }) {
+      this.startApp.open({
         deviceId: this.device.id,
         appName: label,
         packageName: value,
       })
 
       openFloatControl(toRaw(this.device))
+    },
+    onMainStartClick({ label, value }) {
+      this.startApp.open({
+        deviceId: this.device.id,
+        appName: label,
+        packageName: value,
+        useNewDisplay: false,
+      })
 
-      this.loading = false
+      openFloatControl(toRaw(this.device))
     },
     onShortcutClick(item) {
       const desktopName = this.$store.device.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)

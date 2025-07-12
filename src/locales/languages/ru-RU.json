@@ -188,6 +188,7 @@
   "device.control.turnScreenOff": "Выключить экран",
   "device.control.turnScreenOff.tips": "Отключение экрана с сохранением контроля (экспериментально): это действие создаст процесс EscrcpyHelper; при ручном завершении этого процесса экран снова включится.",
   "device.control.startApp": "Запустить APP",
+  "device.control.startApp.useMainScreen": "Открыть на основном экране",
   "device.control.power": "Питание",
   "device.control.power.tips": "Включить/выключить экран",
   "device.control.notification": "Уведомление",

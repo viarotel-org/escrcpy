@@ -1,7 +1,7 @@
 <template>
   <div
     ref="container"
-    class="overflow-hidden"
+    class="overflow-auto scrollable"
     :class="{ 'cursor-grab': !isDragging, 'cursor-grabbing': isDragging }"
     @mousedown="startDrag"
     @mousemove="onDrag"
@@ -35,6 +35,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  disabledDrag: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const container = ref(null)
@@ -54,6 +58,10 @@ const contentStyle = computed(() => ({
 }))
 
 const startDrag = (e) => {
+  if (props.disabledDrag) {
+    return false
+  }
+
   isDragging.value = true
   startX.value = e.pageX - container.value.offsetLeft
   startY.value = e.pageY - container.value.offsetTop
@@ -61,6 +69,10 @@ const startDrag = (e) => {
 }
 
 const onDrag = (e) => {
+  if (props.disabledDrag) {
+    return false
+  }
+
   if (!isDragging.value)
     return
   e.preventDefault()
@@ -93,6 +105,10 @@ const onDrag = (e) => {
 }
 
 const endDrag = () => {
+  if (props.disabledDrag) {
+    return false
+  }
+
   isDragging.value = false
   container.value.style.cursor = 'grab'
 }
@@ -186,3 +202,9 @@ defineExpose({
   scrollBackward,
 })
 </script>
+
+<style>
+.scrollable::-webkit-scrollbar {
+ display: none;
+}
+</style>

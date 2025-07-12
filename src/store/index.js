@@ -4,8 +4,9 @@ import { useDeviceStore } from './device/index.js'
 import { usePreferenceStore } from './preference/index.js'
 import { useTaskStore } from './task/index.js'
 import { useThemeStore } from './theme/index.js'
+import { useControlStore } from './control/index.js'
 
-export { useDeviceStore, usePreferenceStore, useTaskStore, useThemeStore }
+export { useControlStore, useDeviceStore, usePreferenceStore, useTaskStore, useThemeStore }
 
 export default {
   install(app) {

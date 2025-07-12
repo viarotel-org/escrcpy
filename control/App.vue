@@ -63,10 +63,11 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 
-import { useDeviceStore, useThemeStore } from '$/store/index.js'
+import { useControlStore, useDeviceStore, useThemeStore } from '$/store/index.js'
 
-const themeStore = useThemeStore()
+const controlStore = useControlStore()
 const deviceStore = useDeviceStore()
+const themeStore = useThemeStore()
 
 const locale = computed(() => {
   const i18nLocale = i18n.global.locale.value
@@ -125,6 +126,7 @@ onMounted(() => {
 
   window.electron.ipcRenderer.on('window-focus', (event, value) => {
     focusFlag.value = value
+    controlStore.update()
   })
 })
 </script>

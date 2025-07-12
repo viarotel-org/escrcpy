@@ -13,42 +13,55 @@
       </el-icon>
     </el-button>
 
-    <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
-      <component
-        :is="item.component || 'div'"
-        v-for="(item, index) of controlModel"
-        :key="index"
-        class="flex-none"
-        v-bind="{
-          device,
-          floating,
-        }"
+    <Scrollable ref="scrollableRef" class="flex-1 w-0" disabled-drag>
+      <Swapy
+        :key="swapyKey"
+        class="flex items-center" :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: true }"
+        @swap-end="onSwapEnd"
       >
-        <template #default="{ loading = false, trigger } = {}">
-          <el-button
-            type="primary"
-            plain
-            class="!border-none !mx-0 bg-transparent !rounded-0"
-            :class="['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : ''"
-            :disabled="['unauthorized', 'offline'].includes(device.status)"
-            :title="$t(item.tips || item.label)"
-            :loading="loading"
-            @click="handleClick(item, trigger || item.trigger)"
+        <SwapyItem
+          v-for="item of controlModel"
+          :key="item.id"
+          class="flex-none"
+          v-bind="{
+            slotId: item.id,
+            itemId: item.id,
+          }"
+        >
+          <component
+            :is="item.component || 'div'"
+            v-bind="{
+              device,
+              floating,
+            }"
           >
-            <template #icon>
-              <svg-icon
-                v-if="item.svgIcon"
-                :name="item.svgIcon"
-                :class="item.iconClass"
-              ></svg-icon>
-              <el-icon v-else-if="item.elIcon" :class="item.iconClass">
-                <component :is="item.elIcon" />
-              </el-icon>
+            <template #default="{ loading = false, trigger } = {}">
+              <el-button
+                type="primary"
+                plain
+                class="!border-none !mx-0 bg-transparent !rounded-0"
+                :class="['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : ''"
+                :disabled="['unauthorized', 'offline'].includes(device.status)"
+                :title="$t(item.tips || item.label)"
+                :loading="loading"
+                @click="handleClick(item, trigger || item.trigger)"
+              >
+                <template #icon>
+                  <svg-icon
+                    v-if="item.svgIcon"
+                    :name="item.svgIcon"
+                    :class="item.iconClass"
+                  ></svg-icon>
+                  <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+                    <component :is="item.elIcon" />
+                  </el-icon>
+                </template>
+                {{ $t(item.label) }}
+              </el-button>
             </template>
-            {{ $t(item.label) }}
-          </el-button>
-        </template>
-      </component>
+          </component>
+        </SwapyItem>
+      </Swapy>
     </Scrollable>
 
     <el-button
@@ -75,6 +88,8 @@ import Terminal from './Terminal/index.vue'
 import Tasks from './Tasks/index.vue'
 import Volume from './Volume/index.vue'
 
+import { useControlStore } from '$/store/control/index.js'
+
 export default {
   components: {
     Screenshot,
@@ -97,33 +112,45 @@ export default {
       default: false,
     },
   },
+  setup() {
+    const controlStore = useControlStore()
+
+    return {
+      controlStore,
+    }
+  },
   data() {
     return {}
   },
   computed: {
+    swapyKey() {
+      const value = this.controlStore.barLayout.join('')
+
+      return value
+    },
     controlModel() {
-      const value = [
-        {
+      const valueMap = {
+        'switch': {
           label: 'device.control.switch',
           elIcon: 'Switch',
           command: 'input keyevent 187',
         },
-        {
+        'home': {
           label: 'device.control.home',
           svgIcon: 'home',
           command: 'input keyevent 3',
         },
-        {
+        'back': {
           label: 'device.control.return',
           elIcon: 'Back',
           command: 'input keyevent 4',
         },
-        {
+        'app-start': {
           label: 'device.control.startApp',
           elIcon: 'Files',
           component: 'ApplicationStart',
         },
-        {
+        'turn-screen-off': {
           label: 'device.control.turnScreenOff',
           elIcon: 'TurnOff',
           tips: 'device.control.turnScreenOff.tips',
@@ -131,81 +158,88 @@ export default {
             window.scrcpy.helper(this.device.id, '--turn-screen-off')
           },
         },
-        {
+        'notification': {
           label: 'device.control.notification',
           elIcon: 'Notification',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
         },
-        {
+        'power': {
           label: 'device.control.power',
           elIcon: 'SwitchButton',
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
         },
-        {
+        'rotation': {
           label: 'device.control.rotation.name',
           svgIcon: 'rotation',
           component: 'Rotation',
         },
-        {
+        'volume': {
           label: 'device.control.volume.name',
           svgIcon: 'volume-up',
           component: 'Volume',
         },
-        {
+        'screenshot': {
           label: 'device.control.capture',
           elIcon: 'Crop',
           component: 'Screenshot',
         },
-        {
+        'reboot': {
           label: 'device.control.reboot',
           elIcon: 'RefreshLeft',
           command: 'reboot',
         },
-        {
+        'app-install': {
           label: 'device.control.install',
           svgIcon: 'install',
           component: 'Application',
         },
-        {
+        'file-manage': {
           label: 'device.control.file.name',
           svgIcon: 'file-send',
           component: 'FileManage',
           hiddenKeys: ['floating'],
         },
-        {
+        'terminal': {
           label: 'device.terminal.name',
           svgIcon: 'command',
           component: 'Terminal',
           hiddenKeys: ['floating'],
         },
-        {
+        'task': {
           label: 'device.task.name',
           elIcon: 'Clock',
           component: 'Tasks',
           hiddenKeys: ['floating'],
         },
-        {
+        'gnirehtet': {
           label: 'device.control.gnirehtet',
           elIcon: 'Link',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
         },
-        // {
-        //   label: 'device.control.mirror-group.name',
-        //   svgIcon: 'multi-screen',
-        //   iconClass: '',
-        //   component: 'Synergy',
-        //   tips: 'device.control.mirror-group.tips',
-        //   hiddenKeys: ['floating'],
-        // },
-      ]
+      }
 
       const handler = item =>
         !(item.hiddenKeys || []).some(key => this.$props[key])
 
-      return value.filter(item => handler(item))
+      const barLayout = [...new Set([...this.controlStore.barLayout, ...Object.keys(valueMap)])]
+
+      const value = barLayout.reduce((arr, key) => {
+        const item = valueMap[key]
+
+        if (item && handler(item)) {
+          arr.push({
+            ...item,
+            id: key,
+          })
+        }
+
+        return arr
+      }, [])
+
+      return value
     },
   },
   methods: {
@@ -227,6 +261,11 @@ export default {
       else if (row?.scrcpyCommand) {
         this.$scrcpy.control(this.device.id, { command: row.scrcpyCommand })
       }
+    },
+    onSwapEnd(event) {
+      const value = event.slotItemMap.asArray.map(obj => obj.item)
+
+      this.controlStore.setBarLayout(value)
     },
   },
 }

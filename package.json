@@ -66,6 +66,7 @@
     "qrcode": "1.5.4",
     "rimraf": "6.0.1",
     "simple-git": "3.27.0",
+    "swapy": "1.0.5",
     "tree-kill": "1.2.2",
     "unocss": "0.62.3",
     "unplugin-auto-import": "0.18.3",

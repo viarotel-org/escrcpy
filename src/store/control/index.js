@@ -1,16 +1,14 @@
-import { defineStore } from 'pinia'
-
 export const useControlStore = defineStore('app-control', () => {
   const barLayout = ref([])
 
-  getBarLayout()
-
-  function getBarLayout() {
+  // 初始化布局
+  const getBarLayout = () => {
     barLayout.value = window.appStore.get('control.barLayout') || []
     return barLayout.value
   }
 
-  function setBarLayout(value) {
+  // 设置布局
+  const setBarLayout = (value) => {
     if (!Array.isArray(value)) {
       throw new TypeError('parameter must be an array')
     }
@@ -19,10 +17,21 @@ export const useControlStore = defineStore('app-control', () => {
     window.appStore.set('control.barLayout', value)
   }
 
+  // 订阅外部变更
+  function setupWatcher() {
+    window.appStore.onDidChange('control.barLayout', () => {
+      getBarLayout()
+    })
+  }
+
+  onMounted(() => {
+    getBarLayout()
+    setupWatcher()
+  })
+
   return {
     barLayout,
-    setBarLayout,
     getBarLayout,
-    update: getBarLayout,
+    setBarLayout,
   }
 })

@@ -42,7 +42,7 @@ export const useDeviceStore = defineStore({
 
       const appName = capitalize(packageName)
 
-      const deviceName = `${data.remark || data.name}[${data.id}]${data.wifi ? '(WIFI)' : ''}`
+      const deviceName = `${data.remark || data.name}[${data.id}]`
 
       const currentTime = dayjs().format('YYYYMMDDHHmmss')
 

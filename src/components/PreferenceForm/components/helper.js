@@ -1,5 +1,3 @@
-import { useDeviceStore } from '$/store/device/index.js'
-
 /**
  * 获取设备ID
  * @param {*} scope

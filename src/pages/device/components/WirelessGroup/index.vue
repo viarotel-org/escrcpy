@@ -87,6 +87,14 @@ export default {
     },
   },
   emits: ['auto-connected'],
+  setup() {
+    const preferenceStore = usePreferenceStore()
+    const deviceStore = useDeviceStore()
+    return {
+      preferenceStore,
+      deviceStore,
+    }
+  },
   data() {
     return {
       loading: false,
@@ -103,7 +111,7 @@ export default {
   },
   computed: {
     wirelessList() {
-      const value = this.$store.device.list.reduce((arr, item) => {
+      const value = this.deviceStore.list.reduce((arr, item) => {
         if (item.wifi) {
           const { host, port } = parseDeviceId(item.id)
 
@@ -160,7 +168,7 @@ export default {
   },
   methods: {
     async handleConnectAuto() {
-      const autoConnect = this.$store.preference.data.autoConnect
+      const autoConnect = this.preferenceStore.data.autoConnect
 
       if (autoConnect) {
         await this.handleBatch()

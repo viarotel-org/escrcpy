@@ -63,8 +63,6 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 
-import { useDeviceStore, useThemeStore } from '$/store/index.js'
-
 const deviceStore = useDeviceStore()
 const themeStore = useThemeStore()
 

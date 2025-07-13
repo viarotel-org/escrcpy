@@ -34,8 +34,6 @@
 <script setup>
 import PreferenceForm from '$/components/PreferenceForm/index.vue'
 
-import { usePreferenceStore } from '$/store/index.js'
-
 import { sleep } from '$/utils'
 
 const emit = defineEmits(['success'])
@@ -51,8 +49,6 @@ const preferenceFormRef = ref(null)
 const preferenceData = ref({
   ...getDefaultData(),
 })
-
-const collapseValue = ref([])
 
 const device = ref(null)
 

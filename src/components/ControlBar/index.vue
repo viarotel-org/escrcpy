@@ -88,8 +88,6 @@ import Terminal from './Terminal/index.vue'
 import Tasks from './Tasks/index.vue'
 import Volume from './Volume/index.vue'
 
-import { useControlStore } from '$/store/control/index.js'
-
 export default {
   components: {
     Screenshot,

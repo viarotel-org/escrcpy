@@ -41,8 +41,7 @@ import { openFloatControl } from '$/utils/device/index.js'
 
 import { pinyin } from 'pinyin-pro'
 import { sleep } from '$/utils'
-
-import { useStartApp } from '$/hooks/index.js'
+import { useStartApp } from '$/hooks/useStartApp/index.js'
 
 export default {
   props: {
@@ -57,8 +56,10 @@ export default {
   },
   setup() {
     const startApp = useStartApp()
+    const deviceStore = useDeviceStore()
 
     return {
+      deviceStore,
       startApp,
       platform: window.electron?.process?.platform,
     }
@@ -153,7 +154,7 @@ export default {
       openFloatControl(toRaw(this.device))
     },
     onShortcutClick(item) {
-      const desktopName = this.$store.device.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)
+      const desktopName = this.deviceStore.getLabel(this.device, ({ deviceName }) => `${item.label}-${deviceName}`)
 
       let shortcutArguments = `--device-id=${this.device.id} --app-name=${item.label}`
 

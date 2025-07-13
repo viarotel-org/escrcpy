@@ -38,9 +38,7 @@
 </template>
 
 <script setup>
-import { useTaskStore, useThemeStore } from '$/store/index.js'
 import { sleep } from '$/utils/index.js'
-import { ElMessage } from 'element-plus'
 import VueCommand, {
   createQuery,
   createStdout,

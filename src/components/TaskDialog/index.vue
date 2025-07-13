@@ -169,10 +169,7 @@ import {
   timerType as timerModel,
 } from '$/dicts/index.js'
 
-import { useTaskStore } from '$/store/index.js'
 import { sleep } from '$/utils'
-
-import { ElMessage } from 'element-plus'
 
 const taskStore = useTaskStore()
 

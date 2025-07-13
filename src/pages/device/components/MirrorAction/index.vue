@@ -27,6 +27,14 @@ export default {
       default: () => () => false,
     },
   },
+  setup() {
+    const preferenceStore = usePreferenceStore()
+    const deviceStore = useDeviceStore()
+    return {
+      preferenceStore,
+      deviceStore,
+    }
+  },
   data() {
     return {
       loading: false,
@@ -38,13 +46,13 @@ export default {
 
       this.toggleRowExpansion(row, true)
 
-      const args = this.$store.preference.scrcpyParameter(row.id, {
+      const args = this.preferenceStore.scrcpyParameter(row.id, {
         excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
       })
 
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.$store.device.getLabel(row, 'mirror'),
+          title: this.deviceStore.getLabel(row, 'mirror'),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,

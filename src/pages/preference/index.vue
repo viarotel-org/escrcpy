@@ -38,17 +38,31 @@
 <script setup>
 import { debounce } from 'lodash-es'
 
-import { usePreferenceStore } from '$/store/index.js'
-
 import PreferenceForm from '$/components/PreferenceForm/index.vue'
 import ScopeSelect from './components/ScopeSelect/index.vue'
 
-const preferenceStore = usePreferenceStore()
-
 const { proxy } = getCurrentInstance()
 
-const preferenceData = ref(preferenceStore.data)
-const deviceScope = ref(preferenceStore.deviceScope)
+const preferenceStore = usePreferenceStore()
+const themeStore = useThemeStore()
+
+const preferenceData = computed({
+  get() {
+    return preferenceStore.data
+  },
+  set(value) {
+    preferenceStore.data = value
+  },
+})
+
+const deviceScope = computed({
+  get() {
+    return preferenceStore.deviceScope
+  },
+  set(value) {
+    preferenceStore.setScope(value)
+  },
+})
 
 function onDeviceChange(options) {
   const hasCurrentScope = options.some(item => item.value === deviceScope.value)
@@ -57,18 +71,25 @@ function onDeviceChange(options) {
     return false
 
   deviceScope.value = 'global'
-  preferenceStore.setScope(deviceScope.value)
-  preferenceData.value = preferenceStore.data
 }
 
-function handleReset() {
+async function handleReset() {
+  try {
+    await ElMessageBox.confirm(window.t('device.reset.reasons[1]'), window.t('common.tips'), {
+      type: 'warning',
+      confirmButtonText: window.t('common.confirm'),
+      cancelButtonText: window.t('common.cancel'),
+    })
+  }
+  catch (error) {
+    return false
+  }
+
   preferenceStore.reset(deviceScope.value)
-  preferenceData.value = preferenceStore.data
 }
 
 function onScopeChange(value) {
-  preferenceStore.setScope(value)
-  preferenceData.value = preferenceStore.data
+  deviceScope.value = value
 }
 
 async function handleImport() {
@@ -85,7 +106,7 @@ async function handleImport() {
     })
 
     proxy.$message.success(proxy.$t('preferences.config.import.success'))
-    preferenceData.value = preferenceStore.init()
+    preferenceStore.init()
   }
   catch (error) {
     if (error.message) {
@@ -100,7 +121,7 @@ function handleEdit() {
 }
 
 async function handleExport() {
-  const messageEl = proxy.$message.loading(
+  const message = proxy.$message.loading(
     proxy.$t('preferences.config.export.message'),
   )
 
@@ -125,27 +146,23 @@ async function handleExport() {
     }
   }
 
-  messageEl.close()
+  message.close()
 }
 
-function _handleSave() {
-  preferenceStore.setData(preferenceData.value)
-}
 const handleSave = debounce(_handleSave, 1000)
 
-watch(preferenceData, () => {
+watch(() => preferenceData.value, () => {
   handleSave()
 }, { deep: true })
 
 watch(() => preferenceData.value.theme, (value) => {
-  proxy.$store.theme.update(value)
+  themeStore.update(value)
   window.electron.ipcRenderer.send('theme-change', value)
 })
 
-onActivated(() => {
-  preferenceData.value = preferenceStore.data
-  deviceScope.value = preferenceStore.deviceScope
-})
+function _handleSave() {
+  preferenceStore.setData(preferenceData.value)
+}
 </script>
 
 <style scoped lang="postcss">

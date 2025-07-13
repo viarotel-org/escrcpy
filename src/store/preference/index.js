@@ -80,7 +80,7 @@ export const usePreferenceStore = defineStore({
       this.init(scope)
     },
     reset(scope) {
-      if (!scope) {
+      if (!scope || ['global'].includes(scope)) {
         window.appStore.clear()
       }
       else {
@@ -89,7 +89,7 @@ export const usePreferenceStore = defineStore({
         fields.forEach((key) => {
           if (key === 'scrcpy') {
             this.deviceScope = scope
-            window.appStore.set(['scrcpy', 'scope'], {})
+            window.appStore.set(['scrcpy', scope], {})
             return false
           }
           window.appStore.set(key, {})
@@ -136,12 +136,12 @@ export const usePreferenceStore = defineStore({
       const params = Object.entries(data).reduce((obj, [key, value]) => {
         const shouldExclude
           = (!value && typeof value !== 'number')
-          || this.scrcpyExcludeKeys.includes(key)
-          || (!isRecord && this.recordKeys.includes(key))
-          || (!isCamera && this.cameraKeys.includes(key))
-          || (!isOtg && this.otgKeys.includes(key))
-          || excludes.includes(key)
-          || excludes.includes(`${key}=${value}`)
+            || this.scrcpyExcludeKeys.includes(key)
+            || (!isRecord && this.recordKeys.includes(key))
+            || (!isCamera && this.cameraKeys.includes(key))
+            || (!isOtg && this.otgKeys.includes(key))
+            || excludes.includes(key)
+            || excludes.includes(`${key}=${value}`)
 
         if (shouldExclude) {
           return obj

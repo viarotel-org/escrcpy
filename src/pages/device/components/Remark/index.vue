@@ -33,6 +33,12 @@ export default {
       default: () => ({}),
     },
   },
+  setup() {
+    const deviceStore = useDeviceStore()
+    return {
+      deviceStore,
+    }
+  },
   data() {
     return {}
   },
@@ -42,7 +48,7 @@ export default {
     },
 
     onInputChange(value) {
-      this.$store.device.setRemark(this.device.id, value)
+      this.deviceStore.setRemark(this.device.id, value)
     },
   },
 }

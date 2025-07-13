@@ -34,6 +34,12 @@ export default {
       default: false,
     },
   },
+  setup() {
+    const preferenceStore = usePreferenceStore()
+    return {
+      preferenceStore,
+    }
+  },
   data() {
     return {}
   },
@@ -76,7 +82,7 @@ export default {
       })
     },
     preferenceData(...args) {
-      return this.$store.preference.getData(...args)
+      return this.preferenceStore.getData(...args)
     },
     async handleStart() {
       if (this.device.$gnirehtetLoading) {

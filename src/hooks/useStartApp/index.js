@@ -1,8 +1,3 @@
-import { useDeviceStore } from '$/store/device/index.js'
-import { usePreferenceStore } from '$/store/preference/index.js'
-
-import { ElMessage } from 'element-plus'
-
 export function useStartApp() {
   const deviceStore = useDeviceStore()
   const preferenceStore = usePreferenceStore()

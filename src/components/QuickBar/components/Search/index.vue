@@ -5,10 +5,6 @@
 </template>
 
 <script setup>
-import { useThemeStore } from '$/store/theme/index.js'
-
-import { useMagicKeys, whenever } from '@vueuse/core'
-
 const themeStore = useThemeStore()
 
 const activeTab = inject('activeTab')

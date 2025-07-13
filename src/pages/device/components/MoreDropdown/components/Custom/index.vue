@@ -25,6 +25,12 @@ export default {
       default: () => () => false,
     },
   },
+  setup() {
+    const deviceStore = useDeviceStore()
+    return {
+      deviceStore,
+    }
+  },
   data() {
     return {
       loading: false,
@@ -51,7 +57,7 @@ export default {
 
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.$store.device.getLabel(row, 'custom'),
+          title: this.deviceStore.getLabel(row, 'custom'),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,

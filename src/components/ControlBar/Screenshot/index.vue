@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import { useScreenshotAction } from '$/hooks/useScreenshotAction/index.js'
-
 const props = defineProps({
   device: {
     type: Object,

@@ -1,5 +1,3 @@
-import { usePreferenceStore } from '$/store/preference/index.js'
-import { useDeviceStore } from '$/store/device/index.js'
 import { sleep } from '$/utils'
 
 export function useMirrorAction() {

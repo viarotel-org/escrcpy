@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import { useFileActions } from '$/hooks/useFileActions/index.js'
-
 const props = defineProps({
   devices: {
     type: Object,

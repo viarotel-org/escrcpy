@@ -174,6 +174,9 @@ import DevicePopover from './components/DevicePopover/index.vue'
 import { getDictLabel } from '$/dicts/helper'
 import { deviceStatus } from '$/dicts/index.js'
 
+const deviceStore = useDeviceStore()
+const preferenceStore = usePreferenceStore()
+
 const loading = ref(false)
 const deviceList = ref([])
 const mirrorActionRefs = ref([])
@@ -210,7 +213,7 @@ async function getDeviceData(options = {}) {
   }
 
   try {
-    const data = await proxy.$store.device.getList()
+    const data = await deviceStore.getList()
     deviceList.value = data
   }
   catch (error) {
@@ -273,7 +276,7 @@ async function getMirrorActionRefs(ref) {
 
   await sleep(length * 1000)
 
-  const autoMirror = proxy.$store.preference.data.autoMirror
+  const autoMirror = preferenceStore.data.autoMirror
   if (autoMirror) {
     ref.handleClick(ref.row)
   }
@@ -309,7 +312,7 @@ async function handleReset() {
         type: 'warning',
       },
     )
-    proxy.$store.preference.reset()
+    preferenceStore.reset()
     proxy.$message.success(proxy.$t('device.reset.success'))
   }
   catch (error) {

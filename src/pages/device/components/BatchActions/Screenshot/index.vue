@@ -5,10 +5,6 @@
 </template>
 
 <script setup>
-import { useScreenshotAction } from '$/hooks/useScreenshotAction/index.js'
-
-import { useTaskStore } from '$/store/index.js'
-
 const props = defineProps({
   devices: {
     type: Array,

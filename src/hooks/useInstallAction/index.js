@@ -1,8 +1,4 @@
-import { useDeviceStore } from '$/store'
-
 import { allSettledWrapper } from '$/utils'
-
-import { ElMessage } from 'element-plus'
 
 export function useInstallAction() {
   const deviceStore = useDeviceStore()

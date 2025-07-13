@@ -17,6 +17,14 @@ export default {
       default: () => () => false,
     },
   },
+  setup() {
+    const preferenceStore = usePreferenceStore()
+    const deviceStore = useDeviceStore()
+    return {
+      preferenceStore,
+      deviceStore,
+    }
+  },
   data() {
     return {
       loading: false,
@@ -30,7 +38,7 @@ export default {
 
       this.toggleRowExpansion(row, true)
 
-      const args = `--video-source=camera ${this.$store.preference.scrcpyParameter(
+      const args = `--video-source=camera ${this.preferenceStore.scrcpyParameter(
         row.id,
         {
           excludes: [
@@ -48,7 +56,7 @@ export default {
 
       try {
         const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.$store.device.getLabel(row, 'camera'),
+          title: this.deviceStore.getLabel(row, 'camera'),
           args,
           stdout: this.onStdout,
           stderr: this.onStderr,

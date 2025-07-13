@@ -13,6 +13,5 @@
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
   },
-  "exclude": ["node_modules", "dist", "dist-electron", "dist-release"],
-  "include": ["src", "electron", "control"]
+  "exclude": ["node_modules", "dist", "dist-electron", "dist-release"]
 }

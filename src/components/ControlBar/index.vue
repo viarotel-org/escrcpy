@@ -16,7 +16,7 @@
     <Scrollable ref="scrollableRef" class="flex-1 w-0" disabled-drag>
       <Swapy
         :key="swapyKey"
-        class="flex items-center" :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: true }"
+        class="flex items-center" :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: false }"
         @swap-end="onSwapEnd"
       >
         <SwapyItem

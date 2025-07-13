@@ -1,4 +1,3 @@
-// import otg from './otg/index.js'
 import audio from './audio/index.js'
 import camera from './camera/index.js'
 import common from './common/index.js'
@@ -9,7 +8,6 @@ import video from './video/index.js'
 import window from './window/index.js'
 
 export default {
-  // otg,
   common,
   video,
   device,

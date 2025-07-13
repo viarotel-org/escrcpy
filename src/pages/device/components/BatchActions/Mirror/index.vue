@@ -6,7 +6,7 @@
 
 <script setup>
 import { useTaskStore } from '$/store/index.js'
-import { useMirrorAction } from '$/composables/index.js'
+import { useMirrorAction } from '$/hooks/index.js'
 
 const props = defineProps({
   devices: {

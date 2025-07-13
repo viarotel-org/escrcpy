@@ -156,8 +156,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { sleep } from '$/utils/index.js'
+import { uniqBy } from 'lodash-es'
+
 import BatchActions from './components/BatchActions/index.vue'
 import ControlBar from '$/components/ControlBar/index.vue'
 import MirrorAction from './components/MirrorAction/index.vue'
@@ -166,203 +168,172 @@ import Remark from './components/Remark/index.vue'
 import WirelessAction from './components/WirelessAction/index.vue'
 import ConnectAction from './components/ConnectAction/index.vue'
 import RemoveAction from './components/RemoveAction/index.vue'
-
 import WirelessGroup from './components/WirelessGroup/index.vue'
-
 import DevicePopover from './components/DevicePopover/index.vue'
 
 import { getDictLabel } from '$/dicts/helper'
-
 import { deviceStatus } from '$/dicts/index.js'
-import { uniqBy } from 'lodash-es'
 
-export default {
-  name: 'Device',
-  components: {
-    WirelessGroup,
-    ControlBar,
-    Remark,
-    MirrorAction,
-    MoreDropdown,
-    WirelessAction,
-    ConnectAction,
-    BatchActions,
-    DevicePopover,
-    RemoveAction,
-  },
-  data() {
-    return {
-      loading: false,
-      deviceList: [],
-      mirrorActionRefs: [],
-      selectionRows: [],
+const loading = ref(false)
+const deviceList = ref([])
+const mirrorActionRefs = ref([])
+const selectionRows = ref([])
+
+const { proxy } = getCurrentInstance()
+
+const isMultipleRow = computed(() => selectionRows.value.length > 0)
+
+const statusFilters = computed(() => {
+  return deviceStatus
+    .map(item => ({
+      text: window.t(item.label),
+      value: item.value,
+    }))
+    .filter(item => !['emulator'].includes(item.value))
+})
+
+const remarkFilters = computed(() => {
+  const value = deviceList.value
+    .filter(item => !!item.remark)
+    .map(item => ({
+      text: item.remark,
+      value: item.remark,
+    }))
+  return uniqBy(value, 'value')
+})
+
+async function getDeviceData(options = {}) {
+  const { resetResolve = false, unloading = false } = options
+
+  if (!unloading) {
+    loading.value = true
+  }
+
+  try {
+    const data = await proxy.$store.device.getList()
+    deviceList.value = data
+  }
+  catch (error) {
+    const message = error?.message || error?.cause?.message || ''
+    console.warn(message)
+
+    if (message.includes('failed to start daemon')) {
+      await getDeviceData()
+      return false
     }
-  },
-  computed: {
-    isMultipleRow() {
-      return this.selectionRows.length > 0
-    },
-    statusFilters() {
-      const value = deviceStatus
-        .map(item => ({
-          text: window.t(item.label),
-          value: item.value,
-        }))
-        .filter(item => !['emulator'].includes(item.value))
 
-      return value
-    },
-    remarkFilters() {
-      const value = this.deviceList.filter(item => !!item.remark).map(item => ({
-        text: item.remark,
-        value: item.remark,
-      }))
+    if (message) {
+      proxy.$message.warning(message)
+    }
 
-      return uniqBy(value, 'value')
-    },
-  },
-  async mounted() {
-    await this.getDeviceData()
+    deviceList.value = []
 
-    this.unAdbWatch = await this.$adb.watch(this.onAdbWatch)
-  },
-  beforeUnmount() {
-    this?.unAdbWatch?.()
-  },
-  activated() {
-    this.getDeviceData()
-  },
-  methods: {
-    getDictLabel,
+    if (resetResolve) {
+      handleReset()
+    }
+  }
 
-    onAutoConnected() {},
-
-    filterMethod(value, row, column) {
-      const property = column.property
-      return row[property] === value
-    },
-    onSelectionChange(rows) {
-      this.selectionRows = rows
-    },
-    async onAdbWatch(type, ret) {
-      if (ret && ret.id) {
-        await sleep(1000)
-        this.getDeviceData()
-      }
-
-      if (type === 'remove') {
-        this.mirrorActionRefs = this.mirrorActionRefs.filter(
-          item => item.row.id !== ret.id,
-        )
-      }
-    },
-    async getMirrorActionRefs(ref) {
-      await this.$nextTick()
-
-      if (!ref?.row?.id) {
-        return false
-      }
-
-      const someFlag = this.mirrorActionRefs.some(
-        item => item.row.id === ref.row.id,
-      )
-
-      if (someFlag) {
-        return false
-      }
-
-      const length = this.mirrorActionRefs.length
-
-      this.mirrorActionRefs.push(ref)
-
-      await sleep(length * 1000)
-
-      const autoMirror = this.$store.preference.data.autoMirror
-
-      if (autoMirror) {
-        ref.handleClick(ref.row)
-      }
-    },
-
-    toggleRowExpansion(...args) {
-      this.$refs.tableRef.toggleRowExpansion(...args)
-    },
-
-    handleConnect(...args) {
-      this.$refs.wirelessGroupRef.connect(...args)
-    },
-
-    async handleRefresh() {
-      this.loading = true
-      await sleep()
-      this.getDeviceData({ resetResolve: true, unloading: true })
-    },
-
-    async handleReset() {
-      try {
-        await this.$confirm(
-          `
-          <div>${this.$t('device.reset.reasons[0]')}</div>
-          <div class="text-red-500">${this.$t('device.reset.reasons[1]')}</div>
-          `,
-          this.$t('device.reset.title'),
-          {
-            dangerouslyUseHTMLString: true,
-            confirmButtonText: this.$t('device.reset.confirm'),
-            cancelButtonText: this.$t('device.reset.cancel'),
-            closeOnClickModal: false,
-            type: 'warning',
-          },
-        )
-
-        this.$store.preference.reset()
-
-        this.$message.success(this.$t('device.reset.success'))
-      }
-      catch (error) {
-        if (error.message) {
-          console.warn(error.message)
-        }
-      }
-    },
-
-    async getDeviceData(options = {}) {
-      const { resetResolve = false, unloading = false } = options
-
-      if (!unloading) {
-        this.loading = true
-      }
-
-      try {
-        const data = await this.$store.device.getList()
-
-        this.deviceList = data
-      }
-      catch (error) {
-        const message = error?.message || error?.cause?.message || ''
-
-        console.warn(message)
-
-        if (message.includes('failed to start daemon')) {
-          await this.getDeviceData()
-          return false
-        }
-
-        if (message) {
-          this.$message.warning(message)
-        }
-
-        this.deviceList = []
-
-        if (resetResolve) {
-          this.handleReset()
-        }
-      }
-
-      this.loading = false
-    },
-  },
+  loading.value = false
 }
+
+function filterMethod(value, row, column) {
+  const property = column.property
+  return row[property] === value
+}
+
+function onSelectionChange(rows) {
+  selectionRows.value = rows
+}
+
+async function onAdbWatch(type, ret) {
+  if (ret && ret.id) {
+    await sleep(1000)
+    getDeviceData()
+  }
+
+  if (type === 'remove') {
+    mirrorActionRefs.value = mirrorActionRefs.value.filter(
+      item => item.row.id !== ret.id,
+    )
+  }
+}
+
+async function getMirrorActionRefs(ref) {
+  await nextTick()
+
+  if (!ref?.row?.id)
+    return false
+
+  const exists = mirrorActionRefs.value.some(item => item.row.id === ref.row.id)
+  if (exists)
+    return false
+
+  const length = mirrorActionRefs.value.length
+  mirrorActionRefs.value.push(ref)
+
+  await sleep(length * 1000)
+
+  const autoMirror = proxy.$store.preference.data.autoMirror
+  if (autoMirror) {
+    ref.handleClick(ref.row)
+  }
+}
+
+function toggleRowExpansion(...args) {
+  proxy.$refs.tableRef.toggleRowExpansion(...args)
+}
+
+function handleConnect(...args) {
+  proxy.$refs.wirelessGroupRef.connect(...args)
+}
+
+async function handleRefresh() {
+  loading.value = true
+  await sleep()
+  getDeviceData({ resetResolve: true, unloading: true })
+}
+
+async function handleReset() {
+  try {
+    await proxy.$confirm(
+      `
+      <div>${proxy.$t('device.reset.reasons[0]')}</div>
+      <div class="text-red-500">${proxy.$t('device.reset.reasons[1]')}</div>
+      `,
+      proxy.$t('device.reset.title'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: proxy.$t('device.reset.confirm'),
+        cancelButtonText: proxy.$t('device.reset.cancel'),
+        closeOnClickModal: false,
+        type: 'warning',
+      },
+    )
+    proxy.$store.preference.reset()
+    proxy.$message.success(proxy.$t('device.reset.success'))
+  }
+  catch (error) {
+    if (error.message)
+      console.warn(error.message)
+  }
+}
+
+function onAutoConnected() {}
+
+let unAdbWatch = null
+
+onMounted(async () => {
+  await getDeviceData()
+  unAdbWatch = await proxy.$adb.watch(onAdbWatch)
+})
+
+onBeforeUnmount(() => {
+  unAdbWatch?.()
+})
+
+onActivated(() => {
+  getDeviceData()
+})
 </script>
 
 <style lang="postcss" scoped>

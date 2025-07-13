@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { useFileActions } from '$/composables/useFileActions/index.js'
+import { useFileActions } from '$/hooks/useFileActions/index.js'
 
 const props = defineProps({
   devices: {

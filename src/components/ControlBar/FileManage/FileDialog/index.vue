@@ -174,7 +174,7 @@
 </template>
 
 <script setup>
-import { useDialog, useFileActions } from '$/composables/index.js'
+import { useDialog, useFileActions } from '$/hooks/index.js'
 import { usePreferenceStore } from '$/store'
 import { ElMessageBox } from 'element-plus'
 import AddPopover from './AddPopover/index.vue'

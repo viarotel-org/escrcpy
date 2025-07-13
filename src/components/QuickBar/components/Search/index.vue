@@ -13,8 +13,6 @@ const themeStore = useThemeStore()
 
 const activeTab = inject('activeTab')
 
-const shortcutTip = 'Ctrl + F'
-
 watch([() => themeStore.value, () => activeTab.value], () => {
   closeSearchModal()
 })

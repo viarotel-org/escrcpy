@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { useShellAction } from '$/composables/useShellAction/index.js'
+import { useShellAction } from '$/hooks/useShellAction/index.js'
 import { useTaskStore } from '$/store'
 
 const props = defineProps({

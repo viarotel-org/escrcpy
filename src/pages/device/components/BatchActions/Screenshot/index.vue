@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { useScreenshotAction } from '$/composables/useScreenshotAction/index.js'
+import { useScreenshotAction } from '$/hooks/useScreenshotAction/index.js'
 
 import { useTaskStore } from '$/store/index.js'
 

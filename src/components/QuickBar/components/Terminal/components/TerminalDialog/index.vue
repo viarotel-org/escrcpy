@@ -46,9 +46,9 @@ import VueCommand, {
   createStdout,
   listFormatter,
 } from 'vue-command'
-import { useAdb } from './composables/adb-async.js'
-import { useGnirehtet } from './composables/gnirehtet.js'
-import { useScrcpy } from './composables/scrcpy.js'
+import { useAdb } from './hooks/adb-async.js'
+import { useGnirehtet } from './hooks/gnirehtet.js'
+import { useScrcpy } from './hooks/scrcpy.js'
 import 'vue-command/dist/vue-command.css'
 
 const themeStore = useThemeStore()

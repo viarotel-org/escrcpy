@@ -42,7 +42,7 @@ import { openFloatControl } from '$/utils/device/index.js'
 import { pinyin } from 'pinyin-pro'
 import { sleep } from '$/utils'
 
-import { useStartApp } from '$/composables/index.js'
+import { useStartApp } from '$/hooks/index.js'
 
 export default {
   props: {
@@ -105,6 +105,10 @@ export default {
       }
     },
     async getAppData() {
+      if (!['device'].includes(this.device.status)) {
+        return false
+      }
+
       const data = await window.scrcpy.getAppList(this.device.id)
 
       this.appList = data || []

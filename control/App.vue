@@ -64,7 +64,6 @@ import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
 
 const deviceStore = useDeviceStore()
-const themeStore = useThemeStore()
 
 const locale = computed(() => {
   const i18nLocale = i18n.global.locale.value
@@ -76,12 +75,10 @@ const locale = computed(() => {
 
 const deviceInfo = ref({})
 
-const deviceList = ref([])
-
 const deviceName = computed(() => deviceStore.getLabel(deviceInfo.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.ipcRenderer.send('hide-active-window')
+  window.electron.ipcRenderer.invoke('hide-control-window')
 }
 
 async function switchDevice(e) {

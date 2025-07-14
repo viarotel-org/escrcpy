@@ -29,4 +29,8 @@ export default (mainWindow) => {
       onControlMounted(controlWindow)
     })
   })
+
+  ipcMain.handle('hide-control-window', () => {
+    controlWindow.hide()
+  })
 }

@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.30.0](https://github.com/viarotel-org/escrcpy/compare/v1.29.9...v1.30.0) (2025-07-14)
+
+
+### Features
+
+* 🔍️ Optimize the search function of the app ([94ccb7b](https://github.com/viarotel-org/escrcpy/commit/94ccb7be41c7d13b63a716a4245cf8552f66528d))
+* 🚀 Supports dragging the device control bar to sort ([64a98b2](https://github.com/viarotel-org/escrcpy/commit/64a98b2c490cdd648fb21216cf9c2759a74ce7b0))
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue of layout flickering when refreshing the device list page ([608b8f3](https://github.com/viarotel-org/escrcpy/commit/608b8f3120182c7031e075d3268fcda39bfb4c15))
+* 🐛 Fixed the issue where activating the program on macOS in certain situations would cause the tray to be created repeatedly ([cf8e183](https://github.com/viarotel-org/escrcpy/commit/cf8e183eb6db7215268346742e070b9955d07696))
+* 🐛 Fixed the issue where there is a chance of an error when closing the floating control bar on macOS ([5c2c711](https://github.com/viarotel-org/escrcpy/commit/5c2c71131caa131ec00505bf114e6e0dc2cba989))
+* 🚀 Fix the issue of abnormal program exit behavior under windows ([705f8be](https://github.com/viarotel-org/escrcpy/commit/705f8be589434375b86d3c6e57a4d3010440bcdb))
+
+
+### Performance Improvements
+
+* ♻️ Code structure optimization ([595216b](https://github.com/viarotel-org/escrcpy/commit/595216b8b5bf6240f8debbc7c714f46792330adc))
+* 👥 Control bar sorting supports state synchronization ([88abe95](https://github.com/viarotel-org/escrcpy/commit/88abe9515360408a860dccc11d01338631387c41))
+* 📝 Optimize the title of the control interface to solve the problem of duplicate device names ([06a151d](https://github.com/viarotel-org/escrcpy/commit/06a151dddb2584f82a9323524113d475974fee63))
+* 🔀 Optimize the storage policy configured in preferences ([b9faabf](https://github.com/viarotel-org/escrcpy/commit/b9faabfb46066e150915538747f4a689fe38a7c6))
+* 🚀 Supports opening using the main monitor when starting the APP ([aec9b78](https://github.com/viarotel-org/escrcpy/commit/aec9b78823acaf1c5705b51691eb20a11ddc8dfd))
+
 ## [1.29.9](https://github.com/viarotel-org/escrcpy/compare/v1.29.8...v1.29.9) (2025-06-27)
 
 

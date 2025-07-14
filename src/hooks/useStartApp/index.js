@@ -21,7 +21,9 @@ export function useStartApp() {
 
     await window.adb.waitForDevice(deviceId)
 
-    const title = `${appName}[${packageName}]-${deviceStore.getLabel(deviceId, 'synergy')}`
+    const wrapPackageName = packageName ? `[${packageName}]` : ''
+
+    const title = `${appName}${wrapPackageName}-${deviceStore.getLabel(deviceId, 'synergy')}`
 
     const commands = preferenceStore.scrcpyParameter(deviceId, {
       excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],

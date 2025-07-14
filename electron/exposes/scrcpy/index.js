@@ -179,7 +179,7 @@ async function startApp(serial, args = {}) {
 
   const displayId = res?.[1]
 
-  if (!displayId) {
+  if (!displayId && useNewDisplay) {
     throw new Error('The display ID was not obtained.')
   }
 

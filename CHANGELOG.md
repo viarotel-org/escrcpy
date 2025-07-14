@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.30.1](https://github.com/viarotel-org/escrcpy/compare/v1.30.0...v1.30.1) (2025-07-14)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue where all configurations would be cleared when resetting the category configuration in preferences ([6ee9a92](https://github.com/viarotel-org/escrcpy/commit/6ee9a92bd3cd0d5b7a03419827b05346c605321c))
+* 🐛 Solve the problem of abnormal display timing when recording related functions are successful ([67d279e](https://github.com/viarotel-org/escrcpy/commit/67d279e162c21d3f2160ec9b51cfdf437b645e39))
+* 📝 Fixed the issue that special characters in Windows prevented the creation of app shortcut launch ([301dac5](https://github.com/viarotel-org/escrcpy/commit/301dac5d5ee3a99e4eb1386a1658cbda4b19cf2e))
+
+
+### Performance Improvements
+
+* 📝 Optimized startup app package name display ([22eb718](https://github.com/viarotel-org/escrcpy/commit/22eb718fa5821a40b414ec548342c2f05057e123))
+* 🔧 Optimized startup APP function interaction ([468af22](https://github.com/viarotel-org/escrcpy/commit/468af22bf84bcb5cc50a9ff77d2a70cb0d23c227))
+
 ## [1.30.0](https://github.com/viarotel-org/escrcpy/compare/v1.29.9...v1.30.0) (2025-07-14)
 
 

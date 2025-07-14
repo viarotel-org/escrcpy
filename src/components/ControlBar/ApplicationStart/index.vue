@@ -75,7 +75,7 @@ export default {
     options() {
       const value = this.appList.map(item => ({
         ...item,
-        label: `${item.name}（${item.packageName}）`,
+        label: `${item.name}[${item.packageName}]`,
         value: item.packageName,
       }))
 

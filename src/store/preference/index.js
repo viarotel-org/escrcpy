@@ -28,10 +28,6 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   const data = ref({ ...getDefaultData() })
   const scrcpyExcludeKeys = ref(getScrcpyExcludeKeys())
 
-  function getDefaultDataFn() {
-    return getDefaultData()
-  }
-
   function init(scope = deviceScope.value) {
     data.value = getData(scope)
     return data.value
@@ -166,7 +162,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     recordKeys,
     cameraKeys,
     otgKeys,
-    getDefaultData: getDefaultDataFn,
+    getDefaultData,
     init,
     setScope,
     setData,

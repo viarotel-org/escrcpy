@@ -92,6 +92,14 @@ export function setStoreData(data, scope) {
   }, [])
 
   storeList.forEach((item) => {
+    if (['common'].includes(item.field)) {
+      window.appStore.set(item.field, {
+        ...window.appStore.get(item.field),
+        ...item.value,
+      })
+      return false
+    }
+
     window.appStore.set(item.field, item.value)
   })
 }

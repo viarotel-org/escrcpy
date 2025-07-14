@@ -1,74 +1,72 @@
 import { defineStore } from 'pinia'
 
-const systemTheme = (key, value) => {
-  if (key === 'change') {
-    return window.electron.ipcRenderer.on('app-theme-change', (_, ...args) =>
-      value(...args),
-    )
+export const useThemeStore = defineStore('app-theme', () => {
+  const value = ref(window.appStore.get('common.theme') || 'system')
+  const isDark = ref(window.appStore.get('common.isDark') || false)
+
+  async function init(changeValue = value.value) {
+    value.value = changeValue
+
+    await invokeAppTheme('update', changeValue)
+
+    isDark.value = await invokeAppTheme('isDark')
+    window.appStore.set('common.isDark', isDark.value)
+
+    await updateHtml(changeValue)
   }
-  return window.electron.ipcRenderer.invoke(`app-theme-${key}`, value)
-}
 
-export const useThemeStore = defineStore({
-  id: 'app-theme',
-  state() {
-    const themeValue = window.appStore.get('common.theme') || 'system'
-    return {
-      value: themeValue,
-      isDark: false,
-    }
-  },
-  actions: {
-    system: systemTheme,
-
-    init() {
-      this.update(this.value)
-    },
-
-    async update(value) {
-      this.value = value
-
-      this.isDark = await systemTheme('isDark')
-
-      await systemTheme('update', value)
-
-      this.isDark = await systemTheme('isDark')
-
-      await this.updateHtml(value)
-    },
-
-    async updateHtml(value) {
-      const updateClass = (theme) => {
-        const htmlEl = document.querySelector('html')
-        if (theme === 'dark') {
-          htmlEl.classList.add('dark')
-          return
-        }
-
-        htmlEl.classList.remove('dark')
+  function setupWatcher() {
+    window.appStore.onDidChange('common.theme', (_value) => {
+      if (value.value === _value) {
+        updateHtml(_value)
+        return false
       }
 
-      if (value === 'system') {
-        updateClass(this.isDark ? 'dark' : 'light')
+      init(_value)
+    })
+
+    window.appStore.onDidChange('common.isDark', (_value) => {
+      if (isDark.value === _value) {
+        return false
+      }
+
+      init()
+    })
+  }
+
+  async function updateHtml(value) {
+    const updateClass = (theme) => {
+      const htmlEl = document.querySelector('html')
+      if (theme === 'dark') {
+        htmlEl.classList.add('dark')
         return
       }
 
-      updateClass(value)
-    },
-  },
-})
+      htmlEl.classList.remove('dark')
+    }
 
-/** 监听系统主题色变化 */
-systemTheme('change', async ({ isDark, value }) => {
-  if (value !== 'system') {
-    return
+    if (value === 'system') {
+      updateClass(isDark.value ? 'dark' : 'light')
+      return
+    }
+
+    updateClass(value)
   }
 
-  const themeStore = useThemeStore()
+  (async () => {
+    value.value = await invokeAppTheme('value')
+    init()
+    setupWatcher()
+  })()
 
-  if (themeStore.isDark === isDark) {
-    return
+  return {
+    value,
+    isDark,
+    init,
+    update: init,
   }
-
-  themeStore.update(value)
 })
+
+function invokeAppTheme(key, value) {
+  return window.electron.ipcRenderer.invoke(`app-theme-${key}`, value)
+}

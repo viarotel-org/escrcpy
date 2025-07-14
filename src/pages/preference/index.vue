@@ -149,7 +149,7 @@ async function handleExport() {
   message.close()
 }
 
-const handleSave = debounce(_handleSave, 1000)
+const handleSave = debounce(_handleSave, 500)
 
 watch(() => preferenceData.value, () => {
   handleSave()
@@ -157,7 +157,6 @@ watch(() => preferenceData.value, () => {
 
 watch(() => preferenceData.value.theme, (value) => {
   themeStore.update(value)
-  window.electron.ipcRenderer.send('theme-change', value)
 })
 
 function _handleSave() {

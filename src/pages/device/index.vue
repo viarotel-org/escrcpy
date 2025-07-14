@@ -135,7 +135,7 @@
       </el-table>
     </div>
 
-    <div class="flex-none flex items-center py-1 overflow-x-auto py-2">
+    <div class="flex-none flex items-center py-1 overflow-hidden py-2">
       <div class="flex-none">
         <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" @auto-connected="onAutoConnected" />
       </div>

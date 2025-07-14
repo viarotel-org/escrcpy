@@ -24,10 +24,8 @@ export const useControlStore = defineStore('app-control', () => {
     })
   }
 
-  onMounted(() => {
-    getBarLayout()
-    setupWatcher()
-  })
+  getBarLayout()
+  setupWatcher()
 
   return {
     barLayout,

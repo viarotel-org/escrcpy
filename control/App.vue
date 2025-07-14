@@ -107,18 +107,12 @@ const focusFlag = ref(false)
 onMounted(() => {
   window.electron.ipcRenderer.send('control-mounted')
 
-  themeStore.init()
-
   window.electron.ipcRenderer.on('device-change', (event, data) => {
     deviceInfo.value = data
   })
 
-  window.electron.ipcRenderer.on('language-change', (event, data) => {
-    i18n.global.locale.value = data
-  })
-
-  window.electron.ipcRenderer.on('theme-change', (event, data) => {
-    themeStore.update(data)
+  window.appStore.onDidChange('common.language', (value) => {
+    i18n.global.locale.value = value
   })
 
   window.electron.ipcRenderer.on('window-focus', (event, value) => {

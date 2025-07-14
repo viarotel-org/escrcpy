@@ -50,7 +50,6 @@ export default {
       set(value) {
         this.locale = value
         this.$emit('update:model-value', value)
-        window.electron.ipcRenderer.send('language-change', value)
       },
     },
   },

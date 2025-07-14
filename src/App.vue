@@ -35,12 +35,6 @@ const locale = computed(() => {
   return value
 })
 
-const themeStore = useThemeStore()
-const preferenceStore = usePreferenceStore()
-
-themeStore.init()
-preferenceStore.init()
-
 showTips()
 
 function getSize(grid) {

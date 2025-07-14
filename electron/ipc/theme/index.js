@@ -1,4 +1,5 @@
 import { ipcMain, nativeTheme } from 'electron'
+import appStore from '$electron/helpers/store.js'
 
 export default (mainWindow) => {
   const appTheme = {
@@ -18,9 +19,7 @@ export default (mainWindow) => {
   })
 
   nativeTheme.on('updated', () => {
-    mainWindow.webContents.send('app-theme-change', {
-      isDark: appTheme.isDark(),
-      value: appTheme.value(),
-    })
+    appStore.set('common.theme', appTheme.value())
+    appStore.set('common.isDark', appTheme.isDark())
   })
 }

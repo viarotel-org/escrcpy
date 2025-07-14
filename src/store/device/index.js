@@ -33,7 +33,8 @@ export const useDeviceStore = defineStore('app-device', () => {
     }
 
     const appName = capitalize(packageName)
-    const deviceName = `${data.remark || data.name}[${data.id}]`
+    const deviceSerial = data.id.replaceAll(/[<>:"/\\|?*]/g, '_')
+    const deviceName = `${data.remark || data.name}[${deviceSerial}]`
     const currentTime = dayjs().format('YYYYMMDDHHmmss')
     let value = `${deviceName}-${appName}`
 

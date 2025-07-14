@@ -114,8 +114,10 @@ async function mirror(
   )
 }
 
-async function record(serial, { title, args = '', savePath, ...options } = {}) {
-  return shell(
+async function record(serial, { title, args = '', exec = false, savePath, ...options } = {}) {
+  const currentShell = exec ? execShell : shell
+
+  return currentShell(
     `--serial="${serial}" --window-title="${title}" --record="${savePath}" ${args}`,
     options,
   )

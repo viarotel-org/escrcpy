@@ -63,9 +63,6 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 
-import { useDeviceStore, useThemeStore } from '$/store/index.js'
-
-const themeStore = useThemeStore()
 const deviceStore = useDeviceStore()
 
 const locale = computed(() => {
@@ -78,12 +75,10 @@ const locale = computed(() => {
 
 const deviceInfo = ref({})
 
-const deviceList = ref([])
-
 const deviceName = computed(() => deviceStore.getLabel(deviceInfo.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.ipcRenderer.send('hide-active-window')
+  window.electron.ipcRenderer.invoke('hide-control-window')
 }
 
 async function switchDevice(e) {
@@ -109,18 +104,12 @@ const focusFlag = ref(false)
 onMounted(() => {
   window.electron.ipcRenderer.send('control-mounted')
 
-  themeStore.init()
-
   window.electron.ipcRenderer.on('device-change', (event, data) => {
     deviceInfo.value = data
   })
 
-  window.electron.ipcRenderer.on('language-change', (event, data) => {
-    i18n.global.locale.value = data
-  })
-
-  window.electron.ipcRenderer.on('theme-change', (event, data) => {
-    themeStore.update(data)
+  window.appStore.onDidChange('common.language', (value) => {
+    i18n.global.locale.value = value
   })
 
   window.electron.ipcRenderer.on('window-focus', (event, value) => {

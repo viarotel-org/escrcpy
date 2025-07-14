@@ -7,7 +7,6 @@ const autoImport = require('./.eslintrc-auto-import.json')
 
 export default antfu(
   {
-    typescript: false,
     markdown: false,
     ignores: [
       '.github',

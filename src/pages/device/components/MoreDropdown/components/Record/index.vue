@@ -43,6 +43,14 @@ export default {
       default: () => () => false,
     },
   },
+  setup() {
+    const preferenceStore = usePreferenceStore()
+    const deviceStore = useDeviceStore()
+    return {
+      preferenceStore,
+      deviceStore,
+    }
+  },
   data() {
     return {
       loading: false,
@@ -63,7 +71,7 @@ export default {
 
       const savePath = this.getRecordPath(row)
 
-      let args = this.$store.preference.scrcpyParameter(row.id, {
+      let args = this.preferenceStore.scrcpyParameter(row.id, {
         isRecord: true,
         isCamera: ['camera'].includes(this.recordType),
         excludes: [
@@ -84,9 +92,10 @@ export default {
 
       try {
         const recording = this.$scrcpy.record(row.id, {
-          title: this.$store.device.getLabel(row, ({ appName, deviceName }) => `${appName}${this.activeModel.label}-${deviceName}`),
+          title: this.deviceStore.getLabel(row, ({ appName, deviceName }) => `${appName}${this.activeModel.label}-${deviceName}`),
           savePath,
           args,
+          exec: true,
         })
 
         await sleep(1 * 1000)
@@ -111,13 +120,13 @@ export default {
       }
     },
     getRecordPath(row) {
-      const deviceConfig = this.$store.preference.getData(this.row.id)
+      const deviceConfig = this.preferenceStore.getData(this.row.id)
 
       const savePath = deviceConfig.savePath
 
       const extension = this.activeModel.extname(deviceConfig)
 
-      const fileName = this.$store.device.getLabel(row, ({ currentTime, deviceName }) => `${this.activeModel.label}-${deviceName}-${currentTime}.${extension}`)
+      const fileName = this.deviceStore.getLabel(row, ({ currentTime, deviceName }) => `${this.activeModel.label}-${deviceName}-${currentTime}.${extension}`)
 
       const filePath = this.$path.join(savePath, fileName)
 

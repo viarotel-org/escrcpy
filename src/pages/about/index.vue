@@ -50,127 +50,121 @@
   </div>
 </template>
 
-<script>
-import { version } from '/package.json'
+<script setup>
+import { homepage, version } from '/package.json'
 import SponsorDialog from './components/SponsorDialog/index.vue'
 import { i18n } from '$/locales/index.js'
 
-export default {
-  name: 'About',
-  components: {
-    SponsorDialog,
-  },
-  setup() {
-    return {
-      locale: i18n.global.locale,
-    }
-  },
-  data() {
-    return {
-      loading: false,
-      version,
-      percent: 0,
-      escrcpyURL: 'https://github.com/viarotel-org/escrcpy',
-    }
-  },
-  created() {
-    this.onUpdateNotAvailable()
-    this.onUpdateAvailable()
-    this.onDownloadProgress()
-    this.onUpdateDownloaded()
-    this.onUpdateError()
-  },
-  methods: {
-    onClickDonate() {
-      this.$refs.sponsorDialogRef.open()
-    },
-    onClickDocs() {
-      const locale = {
-        'zh-CN': 'zhHans',
-      }[this.locale] || ''
+const loading = ref(false)
+const percent = ref(0)
+const escrcpyURL = homepage
+const locale = i18n.global.locale
 
-      window.open(`https://escrcpy.viarotel.eu.org/${locale}`)
-    },
-    handleUpdate() {
-      this.loading = true
-      this.$electron.ipcRenderer.send('check-for-update')
-    },
-    onUpdateNotAvailable() {
-      this.$electron.ipcRenderer.on('update-not-available', () => {
-        this.loading = false
-        this.$message.success(this.$t('about.update-not-available'))
-      })
-    },
-    onUpdateError() {
-      this.$electron.ipcRenderer.on('update-error', async (_, ret) => {
-        this.loading = false
-        try {
-          await this.$confirm(
-            this.$t('about.update-error.message'),
-            this.$t('about.update-error.title'),
-            {
-              confirmButtonText: this.$t('common.confirm'),
-              cancelButtonText: this.$t('common.cancel'),
-              closeOnClickModal: false,
-              type: 'error',
-            },
-          )
-          window.open(`${this.escrcpyURL}/releases`)
-        }
-        catch (error) {
-          console.warn(error.message)
-        }
-      })
-    },
-    onDownloadProgress() {
-      this.$electron.ipcRenderer.on('download-progress', async (event, ret) => {
-        this.percent = ret.percent
-      })
-    },
-    async onUpdateDownloaded() {
-      this.$electron.ipcRenderer.on('update-downloaded', async (event, ret) => {
-        this.loading = false
-        try {
-          await this.$confirm(
-            this.$t('about.update-downloaded.message'),
-            this.$t('about.update-downloaded.title'),
-            {
-              confirmButtonText: this.$t('about.update-downloaded.confirm'),
-              cancelButtonText: this.$t('common.cancel'),
-              closeOnClickModal: false,
-            },
-          )
-          this.$electron.ipcRenderer.send('quit-and-install')
-        }
-        catch (error) {
-          console.warn(error.message)
-        }
-      })
-    },
-    onUpdateAvailable() {
-      this.$electron.ipcRenderer.on('update-available', async (event, ret) => {
-        this.loading = false
-        try {
-          await this.$confirm(
-            ret.releaseNotes,
-            this.$t('about.update-available.title'),
-            {
-              dangerouslyUseHTMLString: true,
-              closeOnClickModal: false,
-              confirmButtonText: this.$t('about.update-available.confirm'),
-              cancelButtonText: this.$t('common.cancel'),
-            },
-          )
-          this.$electron.ipcRenderer.send('download-update')
-          this.loading = true
-        }
-        catch (error) {
-          console.warn(error.message)
-        }
-      })
-    },
-  },
+const { proxy } = getCurrentInstance()
+
+function onClickDonate() {
+  proxy.$refs.sponsorDialogRef.open()
 }
+
+function onClickDocs() {
+  const localePath = {
+    'zh-CN': 'zhHans',
+  }[locale.value] || ''
+
+  window.open(`https://escrcpy.viarotel.eu.org/${localePath}`)
+}
+
+function handleUpdate() {
+  loading.value = true
+  proxy.$electron.ipcRenderer.send('check-for-update')
+}
+
+function onUpdateNotAvailable() {
+  proxy.$electron.ipcRenderer.on('update-not-available', () => {
+    loading.value = false
+    proxy.$message.success(proxy.$t('about.update-not-available'))
+  })
+}
+
+function onDownloadProgress() {
+  proxy.$electron.ipcRenderer.on('download-progress', (event, ret) => {
+    percent.value = ret.percent
+  })
+}
+
+function onUpdateDownloaded() {
+  proxy.$electron.ipcRenderer.on('update-downloaded', async () => {
+    loading.value = false
+    try {
+      await proxy.$confirm(
+        proxy.$t('about.update-downloaded.message'),
+        proxy.$t('about.update-downloaded.title'),
+        {
+          confirmButtonText: proxy.$t('about.update-downloaded.confirm'),
+          cancelButtonText: proxy.$t('common.cancel'),
+          closeOnClickModal: false,
+        },
+      )
+      proxy.$electron.ipcRenderer.send('quit-and-install')
+    }
+    catch (error) {
+      console.warn(error.message)
+    }
+  })
+}
+
+function onUpdateError() {
+  proxy.$electron.ipcRenderer.on('update-error', async (_, ret) => {
+    loading.value = false
+    try {
+      await proxy.$confirm(
+        proxy.$t('about.update-error.message'),
+        proxy.$t('about.update-error.title'),
+        {
+          confirmButtonText: proxy.$t('common.confirm'),
+          cancelButtonText: proxy.$t('common.cancel'),
+          closeOnClickModal: false,
+          type: 'error',
+        },
+      )
+      window.open(`${escrcpyURL}/releases`)
+    }
+    catch (error) {
+      console.warn(error.message)
+    }
+  })
+}
+
+function onUpdateAvailable() {
+  proxy.$electron.ipcRenderer.on('update-available', async (_, ret) => {
+    loading.value = false
+    try {
+      await proxy.$confirm(
+        ret.releaseNotes,
+        proxy.$t('about.update-available.title'),
+        {
+          dangerouslyUseHTMLString: true,
+          closeOnClickModal: false,
+          confirmButtonText: proxy.$t('about.update-available.confirm'),
+          cancelButtonText: proxy.$t('common.cancel'),
+        },
+      )
+      proxy.$electron.ipcRenderer.send('download-update')
+      loading.value = true
+    }
+    catch (error) {
+      console.warn(error.message)
+    }
+  })
+}
+
+onMounted(() => {
+  onUpdateNotAvailable()
+  onUpdateAvailable()
+  onDownloadProgress()
+  onUpdateDownloaded()
+  onUpdateError()
+})
 </script>
 
 <style></style>

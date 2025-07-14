@@ -35,139 +35,132 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { debounce } from 'lodash-es'
-
-import { usePreferenceStore } from '$/store/index.js'
 
 import PreferenceForm from '$/components/PreferenceForm/index.vue'
 import ScopeSelect from './components/ScopeSelect/index.vue'
 
-export default {
-  name: 'Preference',
-  components: {
-    ScopeSelect,
-    PreferenceForm,
+const { proxy } = getCurrentInstance()
+
+const preferenceStore = usePreferenceStore()
+const themeStore = useThemeStore()
+
+const preferenceData = computed({
+  get() {
+    return preferenceStore.data
   },
-  setup() {
-    const preferenceStore = usePreferenceStore()
+  set(value) {
+    preferenceStore.data = value
+  },
+})
 
-    const preferenceData = ref(preferenceStore.data)
+const deviceScope = computed({
+  get() {
+    return preferenceStore.deviceScope
+  },
+  set(value) {
+    preferenceStore.setScope(value)
+  },
+})
 
-    const deviceScope = ref(preferenceStore.deviceScope)
+function onDeviceChange(options) {
+  const hasCurrentScope = options.some(item => item.value === deviceScope.value)
 
-    return {
-      preferenceStore,
-      preferenceData,
-      deviceScope,
+  if (hasCurrentScope)
+    return false
+
+  deviceScope.value = 'global'
+}
+
+async function handleReset() {
+  try {
+    await ElMessageBox.confirm(window.t('device.reset.reasons[1]'), window.t('common.tips'), {
+      type: 'warning',
+      confirmButtonText: window.t('common.confirm'),
+      cancelButtonText: window.t('common.cancel'),
+    })
+  }
+  catch (error) {
+    return false
+  }
+
+  preferenceStore.reset(deviceScope.value)
+}
+
+function onScopeChange(value) {
+  deviceScope.value = value
+}
+
+async function handleImport() {
+  try {
+    await proxy.$electron.ipcRenderer.invoke('show-open-dialog', {
+      preset: 'replaceFile',
+      filePath: proxy.$appStore.path,
+      filters: [
+        {
+          name: proxy.$t('preferences.config.import.placeholder'),
+          extensions: ['json'],
+        },
+      ],
+    })
+
+    proxy.$message.success(proxy.$t('preferences.config.import.success'))
+    preferenceStore.init()
+  }
+  catch (error) {
+    if (error.message) {
+      const message = error.message?.match(/Error: (.*)/)?.[1]
+      proxy.$message.warning(message || error.message)
     }
-  },
-  watch: {
-    'preferenceData': {
-      handler() {
-        this.handleSave()
-      },
-      deep: true,
-    },
-    'preferenceData.theme': {
-      handler(value) {
-        this.$store.theme.update(value)
-        window.electron.ipcRenderer.send('theme-change', value)
-      },
-    },
-  },
-  created() {
-    this.handleSave = debounce(this.handleSave, 1000)
-  },
-  activated() {
-    this.preferenceData = this.preferenceStore.data
-    this.deviceScope = this.preferenceStore.deviceScope
-  },
-  methods: {
-    onDeviceChange(options) {
-      const device = options.some(
-        item => item.value === this.deviceScope,
-      )
+  }
+}
 
-      if (device) {
-        return false
-      }
+function handleEdit() {
+  proxy.$appStore.openInEditor()
+}
 
-      this.deviceScope = 'global'
-      this.preferenceStore.setScope(this.deviceScope)
-      this.preferenceData = this.preferenceStore.data
-    },
-    handleReset() {
-      this.preferenceStore.reset(this.deviceScope)
-      this.preferenceData = this.preferenceStore.data
-    },
+async function handleExport() {
+  const message = proxy.$message.loading(
+    proxy.$t('preferences.config.export.message'),
+  )
 
-    onScopeChange(value) {
-      this.preferenceStore.setScope(value)
-      this.preferenceData = this.preferenceStore.data
-    },
+  try {
+    await proxy.$electron.ipcRenderer.invoke('show-save-dialog', {
+      defaultPath: 'escrcpy-configs.json',
+      filePath: proxy.$appStore.path,
+      filters: [
+        {
+          name: proxy.$t('preferences.config.export.placeholder'),
+          extensions: ['json'],
+        },
+      ],
+    })
 
-    async handleImport() {
-      try {
-        await this.$electron.ipcRenderer.invoke('show-open-dialog', {
-          preset: 'replaceFile',
-          filePath: this.$appStore.path,
-          filters: [
-            {
-              name: this.$t('preferences.config.import.placeholder'),
-              extensions: ['json'],
-            },
-          ],
-        })
+    proxy.$message.success(proxy.$t('preferences.config.export.success'))
+  }
+  catch (error) {
+    if (error.message) {
+      const message = error.message?.match(/Error: (.*)/)?.[1]
+      proxy.$message.warning(message || error.message)
+    }
+  }
 
-        this.$message.success(this.$t('preferences.config.import.success'))
+  message.close()
+}
 
-        this.preferenceData = this.preferenceStore.init()
-      }
-      catch (error) {
-        if (error.message) {
-          const message = error.message?.match(/Error: (.*)/)?.[1]
-          this.$message.warning(message || error.message)
-        }
-      }
-    },
+const handleSave = debounce(_handleSave, 500)
 
-    handleEdit() {
-      this.$appStore.openInEditor()
-    },
+watch(() => preferenceData.value, () => {
+  handleSave()
+}, { deep: true })
 
-    async handleExport() {
-      const messageEl = this.$message.loading(
-        this.$t('preferences.config.export.message'),
-      )
+watch(() => preferenceData.value.theme, (value) => {
+  themeStore.update(value)
+})
 
-      try {
-        await this.$electron.ipcRenderer.invoke('show-save-dialog', {
-          defaultPath: 'escrcpy-configs.json',
-          filePath: this.$appStore.path,
-          filters: [
-            {
-              name: this.$t('preferences.config.export.placeholder'),
-              extensions: ['json'],
-            },
-          ],
-        })
-        this.$message.success(this.$t('preferences.config.export.success'))
-      }
-      catch (error) {
-        if (error.message) {
-          const message = error.message?.match(/Error: (.*)/)?.[1]
-          this.$message.warning(message || error.message)
-        }
-      }
-
-      messageEl.close()
-    },
-
-    handleSave() {
-      this.preferenceStore.setData(this.preferenceData)
-    },
-  },
+function _handleSave() {
+  preferenceStore.setData(preferenceData.value)
 }
 </script>
 

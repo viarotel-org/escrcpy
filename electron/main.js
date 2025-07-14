@@ -142,6 +142,7 @@ function onWhenReady(callback) {
   
       app.dock.show()
       mainWindow.show()
+      eventEmitter.emit('tray:destroy')
     })
   })
 }
@@ -154,7 +155,7 @@ ensureSingleInstance({
   },
   onShowWindow(mainWindow, commandLine, next) {
     const executeArgs = runExecuteArguments(mainWindow, commandLine)
-    
+
     if(!executeArgs['device-id']) {
       next()
       eventEmitter.emit('tray:destroy')

@@ -1,8 +1,5 @@
-import { useTaskStore } from '$/store'
-
 import { selectAndSendFileToDevice } from '$/utils/device/index.js'
 import { allSettledWrapper } from '$/utils/index.js'
-import { ElMessage, ElMessageBox } from 'element-plus'
 
 export function useShellAction() {
   const taskStore = useTaskStore()

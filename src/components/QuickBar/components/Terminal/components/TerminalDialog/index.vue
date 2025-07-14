@@ -38,17 +38,15 @@
 </template>
 
 <script setup>
-import { useTaskStore, useThemeStore } from '$/store/index.js'
 import { sleep } from '$/utils/index.js'
-import { ElMessage } from 'element-plus'
 import VueCommand, {
   createQuery,
   createStdout,
   listFormatter,
 } from 'vue-command'
-import { useAdb } from './composables/adb-async.js'
-import { useGnirehtet } from './composables/gnirehtet.js'
-import { useScrcpy } from './composables/scrcpy.js'
+import { useAdb } from './hooks/adb-async.js'
+import { useGnirehtet } from './hooks/gnirehtet.js'
+import { useScrcpy } from './hooks/scrcpy.js'
 import 'vue-command/dist/vue-command.css'
 
 const themeStore = useThemeStore()

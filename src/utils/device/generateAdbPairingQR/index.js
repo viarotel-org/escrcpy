@@ -1,6 +1,5 @@
 import * as qrCode from 'qrcode'
 import { primaryColor } from '$/configs/index.js'
-import { useThemeStore } from '$/store/theme/index.js'
 
 /**
  * Generates a QR code data URL for ADB wireless pairing

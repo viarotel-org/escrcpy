@@ -1,8 +1,3 @@
-import { useDeviceStore } from '$/store/device/index.js'
-import { usePreferenceStore } from '$/store/preference/index.js'
-
-import { ElMessage } from 'element-plus'
-
 export function useStartApp() {
   const deviceStore = useDeviceStore()
   const preferenceStore = usePreferenceStore()
@@ -32,7 +27,7 @@ export function useStartApp() {
       excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
     })
 
-    await window.scrcpy.startApp(deviceId, { title, commands, packageName })
+    await window.scrcpy.startApp(deviceId, { ...options, title, commands, packageName })
       .catch((e) => {
         console.error('mirror.commands', commands)
         console.error('mirror.error', e)

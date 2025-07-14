@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import { useFileActions } from '$/composables/useFileActions/index.js'
-
 const props = defineProps({
   devices: {
     type: Object,

@@ -188,6 +188,7 @@
   "device.control.turnScreenOff": "إطفاء الشاشة",
   "device.control.turnScreenOff.tips": "إطفاء الشاشة مع الحفاظ على التحكم ( ميزة تجريبية): سينشئ هذا الإجراء عملية EscrcpyHelper؛ سيؤدي إغلاق هذه العملية يدويًا إلى إعادة فتح الشاشة.",
   "device.control.startApp": "فتح تطبيق",
+  "device.control.startApp.useMainScreen": "افتح باستخدام الشاشة الرئيسية",
   "device.control.power": "زر التشغيل",
   "device.control.power.tips": "تشغيل/إطفاء الشاشة",
   "device.control.notification": "الإشعارات",

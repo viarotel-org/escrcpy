@@ -1,9 +1,5 @@
-import { useDeviceStore, usePreferenceStore } from '$/store'
-
 import { allSettledWrapper } from '$/utils/index.js'
 import { adaptiveMessage } from '$/utils/modal/index.js'
-
-import { ElMessage } from 'element-plus'
 
 export function useScreenshotAction({ floating } = {}) {
   const deviceStore = useDeviceStore()

@@ -5,9 +5,6 @@
 </template>
 
 <script setup>
-import { useShellAction } from '$/composables/useShellAction/index.js'
-import { useTaskStore } from '$/store/index.js'
-
 const props = defineProps({
   devices: {
     type: Object,

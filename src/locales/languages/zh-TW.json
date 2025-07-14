@@ -187,6 +187,7 @@
   "device.control.turnScreenOff": "關閉螢幕",
   "device.control.turnScreenOff.tips": "關閉螢幕且保持控制（實驗功能）：此操作將建立一個 EscrcpyHelper 程序，手動關閉該程序將重新開啟螢幕。",
   "device.control.startApp": "啟動 APP",
+  "device.control.startApp.useMainScreen": "使用主顯示器開啟",
   "device.control.power": "電源鍵",
   "device.control.power.tips": "可以用來開啟或關閉螢幕",
   "device.control.notification": "通知欄",

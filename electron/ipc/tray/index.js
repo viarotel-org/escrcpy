@@ -110,6 +110,7 @@ export default (mainWindow) => {
     if (![0, 1].includes(appCloseCode)) {
       const { response } = await dialog.showMessageBox({
         type: 'question',
+        cancelId: 2,
         buttons: [
           await t('appClose.quit'),
           await t('appClose.minimize'),

@@ -19,15 +19,18 @@ export default {
       default: () => false,
     },
   },
+  setup() {
+    const deviceStore = useDeviceStore()
+    return {
+      deviceStore,
+    }
+  },
   data() {
     return {}
   },
   methods: {
     invoke(...args) {
       return this.handleInstall(...args)
-    },
-    preferenceData(...args) {
-      return this.$store.preference.getData(...args)
     },
     async handleInstall(device, { files, silent = false } = {}) {
       if (!files) {
@@ -58,7 +61,7 @@ export default {
       if (!silent) {
         closeLoading = adaptiveMessage(
           this.$t('device.control.install.progress', {
-            deviceName: this.$store.device.getLabel(device),
+            deviceName: this.deviceStore.getLabel(device),
           }),
           {
             type: 'loading',
@@ -89,7 +92,7 @@ export default {
         if (totalCount > 1) {
           adaptiveMessage(
             this.$t('device.control.install.success', {
-              deviceName: this.$store.device.getLabel(device),
+              deviceName: this.deviceStore.getLabel(device),
               totalCount,
               successCount,
               failCount,
@@ -103,7 +106,7 @@ export default {
         else {
           adaptiveMessage(
             this.$t('device.control.install.success.single', {
-              deviceName: this.$store.device.getLabel(device),
+              deviceName: this.deviceStore.getLabel(device),
             }),
             {
               type: 'success',

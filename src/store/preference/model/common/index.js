@@ -1,5 +1,3 @@
-import { locale } from '$/locales/index.js'
-
 const { adbPath, scrcpyPath, gnirehtetPath, desktopPath }
   = window?.electron?.configs || {}
 
@@ -36,7 +34,7 @@ export default {
       label: 'common.language.name',
       field: 'language',
       type: 'LanguageSelect',
-      value: locale,
+      value: window.navigator.language,
       placeholder: 'common.language.placeholder',
       options: [
         {
@@ -65,7 +63,7 @@ export default {
       label: 'appClose.name',
       field: 'appCloseCode',
       type: 'Select',
-      value: window.appStore.get('common.appCloseCode') ?? -1,
+      value: -1,
       placeholder: 'common.select.please',
       options: [
         {

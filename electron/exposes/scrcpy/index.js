@@ -114,8 +114,10 @@ async function mirror(
   )
 }
 
-async function record(serial, { title, args = '', savePath, ...options } = {}) {
-  return shell(
+async function record(serial, { title, args = '', exec = false, savePath, ...options } = {}) {
+  const currentShell = exec ? execShell : shell
+
+  return currentShell(
     `--serial="${serial}" --window-title="${title}" --record="${savePath}" ${args}`,
     options,
   )
@@ -153,20 +155,22 @@ async function getDisplayIds(serial) {
 }
 
 async function startApp(serial, args = {}) {
-  let { commands, packageName, ...options } = args
+  let { commands, packageName, useNewDisplay = true, ...options } = args
 
-  const displayOverlay = getDisplayOverlay(serial)
+  if (useNewDisplay) {
+    commands += ` --new-display`
 
-  commands += ` --new-display`
+    const displayOverlay = getDisplayOverlay(serial)
 
-  if (displayOverlay) {
-    commands += `=${displayOverlay}`
-  }
+    if (displayOverlay) {
+      commands += `=${displayOverlay}`
+    }
 
-  const imeFix = appStore.get('common.imeFix')
+    const imeFix = appStore.get('common.imeFix')
 
-  if (imeFix) {
-    commands += ` --display-ime-policy=local`
+    if (imeFix) {
+      commands += ` --display-ime-policy=local`
+    }
   }
 
   if (packageName) {
@@ -177,7 +181,7 @@ async function startApp(serial, args = {}) {
 
   const displayId = res?.[1]
 
-  if (!displayId) {
+  if (!displayId && useNewDisplay) {
     throw new Error('The display ID was not obtained.')
   }
 

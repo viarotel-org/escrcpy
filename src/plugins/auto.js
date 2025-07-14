@@ -10,10 +10,14 @@ export default () => {
   return [
     useAutoImport({
       resolvers,
-      imports: ['vue', VueRouterAutoImports, 'pinia'],
+      imports: ['vue', 'pinia', '@vueuse/core', VueRouterAutoImports],
       eslintrc: {
         enabled: true,
       },
+      dirs: [
+        'src/hooks/*/index.js',
+        'src/store/*/index.js',
+      ],
     }),
     useAutoComponents({
       resolvers,

@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
-
 import { capitalize } from 'lodash-es'
-
+import { ref } from 'vue'
 import { name as packageName } from '$root/package.json'
-
 import {
   getCurrentDevices,
   getHistoryDevices,
@@ -14,97 +12,82 @@ import {
 
 const $appStore = window.appStore
 
-export const useDeviceStore = defineStore({
-  id: 'app-device',
-  state() {
-    return {
-      list: [],
-      config: {},
+export const useDeviceStore = defineStore('app-device', () => {
+  const list = ref([])
+  const config = ref({})
+
+  function init() {
+    config.value = {
+      ...($appStore.get('device') || {}),
     }
-  },
-  getters: {},
-  actions: {
-    init() {
-      this.config = {
-        ...($appStore.get('device') || {}),
-      }
+    return config.value
+  }
 
-      return this.config
-    },
-    getLabel(device, params) {
-      const data = device?.id
-        ? device
-        : this.list.find(item => item.id === device)
+  function getLabel(device, params) {
+    const data = device?.id
+      ? device
+      : list.value.find(item => item.id === device)
 
-      if (!data) {
-        return ''
-      }
+    if (!data) {
+      return ''
+    }
 
-      const appName = capitalize(packageName)
+    const appName = capitalize(packageName)
+    const deviceSerial = data.id.replaceAll(/[<>:"/\\|?*]/g, '_')
+    const deviceName = `${data.remark || data.name}[${deviceSerial}]`
+    const currentTime = dayjs().format('YYYYMMDDHHmmss')
+    let value = `${deviceName}-${appName}`
 
-      const deviceName = `${data?.remark || data.name}${data.wifi ? '(WIFI)' : ''}`
+    const createPreset = type => `${capitalize(type)}-${deviceName}-${appName}`
 
-      const currentTime = dayjs().format('YYYYMMDDHHmmss')
+    const presets = {
+      ...[
+        'mirror',
+        'camera',
+        'custom',
+        'synergy',
+      ].reduce((obj, type) => {
+        obj[type] = createPreset(type)
+        return obj
+      }, {}),
+      screenshot: `Screenshot-${deviceName}-${currentTime}`,
+    }
 
-      let value = `${deviceName}-${appName}`
+    if (typeof params === 'function') {
+      value = params({
+        data,
+        appName,
+        deviceName,
+        currentTime,
+      })
+    }
+    else if (params && typeof params === 'string') {
+      value = presets[params]
+    }
 
-      const createPreset = type => `${capitalize(type)}-${deviceName}-${appName}`
+    return value
+  }
 
-      const presets = {
-        ...[
-          'mirror',
-          'camera',
-          'custom',
-          'synergy',
-        ]
-          .reduce((obj, type) => {
-            obj[type] = createPreset(type)
-            return obj
-          }, {}),
-        screenshot: `Screenshot-${deviceName}-${currentTime}`,
-      }
+  async function getList() {
+    const historyDevices = getHistoryDevices()
+    const currentDevices = await getCurrentDevices()
+    const mergedDevices = mergeDevices(historyDevices, currentDevices)
+    saveDevicesToStore(mergedDevices)
+    list.value = mergedDevices
+    return mergedDevices
+  }
 
-      if (typeof params === 'function') {
-        value = params({
-          data,
-          appName,
-          deviceName,
-          currentTime,
-        })
-      }
-      else if (params && typeof params === 'string') {
-        value = presets[params]
-      }
+  function setRemark(deviceId, value) {
+    $appStore.set(['device', deviceId, 'remark'], value)
+    init()
+  }
 
-      return value
-    },
-    setList(data) {
-      this.list = data
-    },
-    /**
-     * 获取设备列表
-     * @returns {Promise<Array>} 合并后的设备列表
-     */
-    async getList() {
-      const historyDevices = getHistoryDevices()
-
-      const currentDevices = await getCurrentDevices()
-
-      const mergedDevices = mergeDevices(historyDevices, currentDevices)
-
-      saveDevicesToStore(mergedDevices)
-
-      this.list = mergedDevices
-
-      return mergedDevices
-    },
-    setConfig(value, key = 'device') {
-      $appStore.set(key, value)
-      this.init()
-    },
-    setRemark(deviceId, value) {
-      $appStore.set(['device', deviceId, 'remark'], value)
-      this.init()
-    },
-  },
+  return {
+    list,
+    config,
+    init,
+    getLabel,
+    getList,
+    setRemark,
+  }
 })

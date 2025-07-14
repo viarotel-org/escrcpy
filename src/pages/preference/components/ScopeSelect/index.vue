@@ -36,8 +36,6 @@
 </template>
 
 <script setup>
-import { useDeviceStore } from '$/store/index.js'
-
 const emit = defineEmits(['device-change'])
 
 const deviceStore = useDeviceStore()

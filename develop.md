@@ -56,7 +56,7 @@ pnpm build:linux    # Build for Linux
  ┃ ┃ ┣ 📂Device      # Device management
  ┃ ┃ ┣ 📂Preference  # Settings interface
  ┃ ┃ ┗ 📂Quick       # Quick access features
- ┃ ┣ 📂composables   # Vue composition functions
+ ┃ ┣ 📂hooks   # Vue composition functions
  ┃ ┣ 📂configs       # App configurations
  ┃ ┣ 📂dicts         # Constants and enums
  ┃ ┣ 📂icons         # Icon assets

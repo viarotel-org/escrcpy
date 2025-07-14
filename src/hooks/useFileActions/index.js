@@ -1,7 +1,4 @@
-import { ElMessage } from 'element-plus'
-import { useDeviceStore } from '$/store'
 import { allSettledWrapper } from '$/utils'
-import { useMessageLoading } from '$/composables/index.js'
 
 export function useFileActions() {
   const deviceStore = useDeviceStore()

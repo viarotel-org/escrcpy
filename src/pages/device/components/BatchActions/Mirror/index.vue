@@ -5,9 +5,6 @@
 </template>
 
 <script setup>
-import { useTaskStore } from '$/store/index.js'
-import { useMirrorAction } from '$/composables/index.js'
-
 const props = defineProps({
   devices: {
     type: Array,

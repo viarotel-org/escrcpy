@@ -4,14 +4,6 @@ import { initControlWindow, openControlWindow } from './helpers/index.js'
 import { focus, menu } from './events/index.js'
 
 function onControlMounted(controlWindow) {
-  ipcMain.on('language-change', (event, data) => {
-    controlWindow.webContents.send('language-change', data)
-  })
-
-  ipcMain.on('theme-change', (event, data) => {
-    controlWindow.webContents.send('theme-change', data)
-  })
-
   menu(controlWindow)
 
   focus(controlWindow)
@@ -36,5 +28,9 @@ export default (mainWindow) => {
       openControlWindow(controlWindow, data)
       onControlMounted(controlWindow)
     })
+  })
+
+  ipcMain.handle('hide-control-window', () => {
+    controlWindow.hide()
   })
 }

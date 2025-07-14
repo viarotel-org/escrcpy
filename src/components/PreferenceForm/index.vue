@@ -85,8 +85,6 @@
 </template>
 
 <script setup>
-import { usePreferenceStore } from '$/store/index.js'
-
 import { omit } from 'lodash-es'
 
 import { inputModel } from './components/index.js'

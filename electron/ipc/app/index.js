@@ -9,11 +9,17 @@ export default () => {
 
   ipcMain.on('close-active-window', (event) => {
     const win = BrowserWindow.getFocusedWindow()
-    win.close()
+
+    if (win) {
+      win.close()
+    }
   })
 
   ipcMain.on('hide-active-window', (event) => {
     const win = BrowserWindow.getFocusedWindow()
-    win.hide()
+
+    if (win) {
+      win.hide()
+    }
   })
 }

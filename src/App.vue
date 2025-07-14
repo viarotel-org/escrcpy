@@ -5,15 +5,8 @@
 </template>
 
 <script setup>
-import { ElLoading, ElMessageBox } from 'element-plus'
-
 import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
-
-import { usePreferenceStore } from '$/store/preference/index.js'
-import { useThemeStore } from '$/store/theme/index.js'
-
-import { useStartApp } from '$/composables/index.js'
 
 import Layouts from './layouts/index.vue'
 
@@ -41,12 +34,6 @@ const locale = computed(() => {
 
   return value
 })
-
-const themeStore = useThemeStore()
-const preferenceStore = usePreferenceStore()
-
-themeStore.init()
-preferenceStore.init()
 
 showTips()
 

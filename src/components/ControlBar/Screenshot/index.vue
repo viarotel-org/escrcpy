@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import { useScreenshotAction } from '$/composables/useScreenshotAction/index.js'
-
 const props = defineProps({
   device: {
     type: Object,

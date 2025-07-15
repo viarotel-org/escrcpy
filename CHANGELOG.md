@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.30.2](https://github.com/viarotel-org/escrcpy/compare/v1.30.1...v1.30.2) (2025-07-15)
+
+
+### Performance Improvements
+
+* ♻️ Optimize device list interaction logic ([3812061](https://github.com/viarotel-org/escrcpy/commit/381206179311ad47594ecdc08170d26cd3c9eeca))
+* 📝 Add Japanese language support ([969378f](https://github.com/viarotel-org/escrcpy/commit/969378fa04292d07ad889e4113b556f9d3d5d2d9))
+
 ## [1.30.1](https://github.com/viarotel-org/escrcpy/compare/v1.30.0...v1.30.1) (2025-07-14)
 
 

@@ -7,7 +7,7 @@ import {
   mergeConfig,
   setStoreData,
 } from './helpers/index.js'
-import model from './model/index.js'
+import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
 
 const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
@@ -15,16 +15,16 @@ const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
 export const usePreferenceStore = defineStore('app-preference', () => {
   // 定义响应式状态
   const deviceScope = ref(window.appStore.get('scrcpy.deviceScope') || 'global')
-  const recordKeys = ref(Object.values(model?.record?.children || {}).map((item) => {
+  const recordKeys = ref(Object.values(preferenceModel?.record?.children || {}).map((item) => {
     return item.field
   }))
-  const cameraKeys = ref(Object.values(model?.camera?.children || {}).map((item) => {
+  const cameraKeys = ref(Object.values(preferenceModel?.camera?.children || {}).map((item) => {
     return item.field
   }))
-  const otgKeys = ref(Object.values(model?.otg?.children || {}).map((item) => {
+  const otgKeys = ref(Object.values(preferenceModel?.otg?.children || {}).map((item) => {
     return item.field
   }))
-  const modelRef = ref(cloneDeep(model))
+  const model = ref(cloneDeep(preferenceModel))
   const data = ref({ ...getDefaultData() })
   const scrcpyExcludeKeys = ref(getScrcpyExcludeKeys())
 
@@ -135,27 +135,27 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   }
 
   function getModel(path) {
-    return get(modelRef.value, path)
+    return get(model.value, path)
   }
 
   function setModel(path, value) {
-    set(modelRef.value, path, value)
-    return modelRef.value
+    set(model.value, path, value)
+    return model.value
   }
 
   function resetModel(path) {
     if (!path) {
-      modelRef.value = cloneDeep(model)
+      model.value = cloneDeep(preferenceModel)
       return true
     }
-    set(modelRef.value, path, cloneDeep(get(model, path)))
+    set(model.value, path, cloneDeep(get(preferenceModel, path)))
     return true
   }
 
   init()
 
   return {
-    model: modelRef,
+    model,
     data,
     deviceScope,
     scrcpyExcludeKeys,

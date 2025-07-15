@@ -1,5 +1,5 @@
 import { cloneDeep, keyBy, mergeWith, pick, uniq } from 'lodash-es'
-import model from '../model/index.js'
+import preferenceModel from '$/models/preference/index.js'
 
 const topFields = getTopFields()
 
@@ -7,11 +7,11 @@ const modelMap = getModelMap()
 
 const modelEntries = Object.entries(modelMap)
 
-export function getTopFields(data = model) {
+export function getTopFields(data = preferenceModel) {
   return uniq(Object.values(data).map(item => item.field))
 }
 
-export function getModelMap(data = model) {
+export function getModelMap(data = preferenceModel) {
   const value = Object.entries(data).reduce((obj, [parentId, parentItem]) => {
     const children
       = Object.entries(parentItem?.children || {})?.map(([id, item]) => ({

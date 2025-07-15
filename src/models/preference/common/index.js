@@ -46,6 +46,10 @@ export default {
           value: 'zh-TW',
         },
         {
+          label: '日本語',
+          value: 'ja-JP',
+        },
+        {
           label: 'English',
           value: 'en-US',
         },

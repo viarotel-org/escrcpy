@@ -22,7 +22,7 @@
           <el-empty :description="$t('device.list.empty')" />
         </template>
 
-        <el-table-column type="selection"></el-table-column>
+        <el-table-column type="selection" :selectable="selectable"></el-table-column>
 
         <el-table-column
           :label="$t('device.serial')"
@@ -204,6 +204,10 @@ const remarkFilters = computed(() => {
     }))
   return uniqBy(value, 'value')
 })
+
+function selectable(row) {
+  return ['device', 'emulator'].includes(row.status)
+}
 
 async function getDeviceData(options = {}) {
   const { resetResolve = false, unloading = false } = options

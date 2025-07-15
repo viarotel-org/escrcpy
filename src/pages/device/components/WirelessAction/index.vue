@@ -19,7 +19,7 @@
     text
     :loading="stopLoading"
     :disabled="['unauthorized', 'offline'].includes(row.status)"
-    :icon="stopLoading ? '' : 'CircleClose'"
+    :icon="stopLoading ? '' : 'Close'"
     placement="top"
     :content="stopLoading
       ? $t('device.wireless.disconnect.progress')

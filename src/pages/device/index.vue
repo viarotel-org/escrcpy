@@ -222,7 +222,7 @@ async function getDeviceData(options = {}) {
   }
   catch (error) {
     const message = error?.message || error?.cause?.message || ''
-    console.warn(message)
+    console.warn('Device list fetch error:', message)
 
     if (message.includes('failed to start daemon')) {
       await getDeviceData()

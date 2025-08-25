@@ -53,11 +53,8 @@ export const useThemeStore = defineStore('app-theme', () => {
     updateClass(value)
   }
 
-  (async () => {
-    value.value = await invokeAppTheme('value')
-    init()
-    setupWatcher()
-  })()
+  init()
+  setupWatcher()
 
   return {
     value,

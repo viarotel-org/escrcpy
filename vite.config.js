@@ -37,6 +37,9 @@ function mergeCommon(config, { command = '' } = {}) {
 export default function (args) {
   return mergeCommon(
     defineConfig({
+      server: {
+        port: 1535,
+      },
       build: {
         rollupOptions: {
           input: {

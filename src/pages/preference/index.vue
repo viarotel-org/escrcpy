@@ -151,12 +151,12 @@ async function handleExport() {
 
 const handleSave = debounce(_handleSave, 500)
 
-watch(() => preferenceData.value, () => {
+watch(() => JSON.stringify(preferenceData.value), () => {
   handleSave()
-}, { deep: true })
+})
 
-watch(() => preferenceData.value.theme, (value) => {
-  themeStore.update(value)
+watch(() => preferenceData.value.theme, (val) => {
+  themeStore.update(val)
 })
 
 function _handleSave() {

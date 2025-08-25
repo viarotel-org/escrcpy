@@ -10,8 +10,6 @@ import {
 import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
 
-const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
-
 export const usePreferenceStore = defineStore('app-preference', () => {
   // 定义响应式状态
   const deviceScope = ref(window.appStore.get('scrcpy.deviceScope') || 'global')
@@ -47,20 +45,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
       },
     )
 
-    if (dataToSet.adbPath === adbPath) {
-      delete pickData.adbPath
-    }
-
-    if (dataToSet.scrcpyPath === scrcpyPath) {
-      delete pickData.scrcpyPath
-    }
-
-    if (dataToSet.gnirehtetPath === gnirehtetPath) {
-      delete pickData.gnirehtetPath
-    }
-
     setStoreData(pickData, scope)
-    init(scope)
   }
 
   function reset(scope) {

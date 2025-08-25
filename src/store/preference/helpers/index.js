@@ -1,4 +1,4 @@
-import { cloneDeep, keyBy, mergeWith, pick, uniq } from 'lodash-es'
+import { cloneDeep, keyBy, mergeWith, pick, pickBy, uniq } from 'lodash-es'
 import preferenceModel from '$/models/preference/index.js'
 
 const topFields = getTopFields()
@@ -92,15 +92,23 @@ export function setStoreData(data, scope) {
   }, [])
 
   storeList.forEach((item) => {
+    let value = item.value
+
     if (['common'].includes(item.field)) {
-      window.appStore.set(item.field, {
+      value = {
         ...window.appStore.get(item.field),
         ...item.value,
-      })
-      return false
+      }
     }
 
-    window.appStore.set(item.field, item.value)
+    const pickValue = pickBy(
+      value,
+      (value) => {
+        return !['', void 0].includes(value)
+      },
+    )
+
+    window.appStore.set(item.field, pickValue)
   })
 }
 

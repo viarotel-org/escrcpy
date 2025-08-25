@@ -1,4 +1,4 @@
-import { cloneDeep, get, pickBy, set } from 'lodash-es'
+import { cloneDeep, get, set } from 'lodash-es'
 import {
   getDefaultData,
   getScrcpyExcludeKeys,
@@ -38,14 +38,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   }
 
   function setData(dataToSet, scope = deviceScope.value) {
-    const pickData = pickBy(
-      dataToSet,
-      (value) => {
-        return !['', void 0].includes(value)
-      },
-    )
-
-    setStoreData(pickData, scope)
+    setStoreData(dataToSet, scope)
   }
 
   function reset(scope) {

@@ -2,7 +2,7 @@ import { extraResolve } from '$electron/helpers/index.js'
 import which from 'which'
 
 export const getGnirehtetPath = () => {
-  const whichPath = which.sync('gnirehtet', { nothrow: true })
+  const whichPath = which.sync('gnirehtet', { nothrow: true }) || void 0
 
   switch (process.platform) {
     // case 'darwin':

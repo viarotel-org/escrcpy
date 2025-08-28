@@ -24,6 +24,9 @@
     "docs:preview": "vitepress preview docs",
     "prepare": "husky"
   },
+  "dependencies": {
+    "vue-draggable-resizable": "^3.0.0"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "4.16.2",
     "@devicefarmer/adbkit": "3.3.8",

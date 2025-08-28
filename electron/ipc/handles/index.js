@@ -1,4 +1,4 @@
-import { dialog, ipcMain, shell } from 'electron'
+import { dialog, ipcMain, screen, shell } from 'electron'
 import fs from 'fs-extra'
 
 export default (mainWindow) => {
@@ -35,6 +35,11 @@ export default (mainWindow) => {
 
   ipcMain.handle('show-item-in-folder', async (_, filePath) => {
     return shell.showItemInFolder(filePath)
+  })
+
+  ipcMain.handle('get-primary-display', async () => {
+    const primaryDisplay = screen.getPrimaryDisplay()
+    return primaryDisplay
   })
 
   ipcMain.handle(

@@ -6,7 +6,7 @@
     :close-on-press-escape="true"
     destroy-on-close
     append-to-body
-    class="overflow-hidden !rounded-md el-dialog-headless dark:border dark:border-gray-700"
+    class="overflow-hidden !rounded-md el-dialog--headless dark:border dark:border-gray-700"
     @closed="onClosed"
   >
     <el-icon

@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import Arrange from './components/Arrange/index.vue'
 import Log from './components/Log/index.vue'
 import Restart from './components/Restart/index.vue'
 import Search from './components/Search/index.vue'
@@ -52,14 +53,19 @@ const props = defineProps({})
 
 const actionModel = [
   {
-    label: 'device.task.list',
-    elIcon: 'Clock',
-    component: Task,
-  },
-  {
     label: 'device.terminal.name',
     svgIcon: 'command',
     component: Terminal,
+  },
+  {
+    label: 'device.arrange.name',
+    elIcon: 'DataBoard',
+    component: Arrange,
+  },
+  {
+    label: 'device.task.list',
+    elIcon: 'Clock',
+    component: Task,
   },
   {
     label: 'device.log.name',

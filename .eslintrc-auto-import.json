@@ -323,6 +323,7 @@
     "whenever": true,
     "ElMessage": true,
     "ElMessageBox": true,
-    "ElLoading": true
+    "ElLoading": true,
+    "useScaleScreen": true
   }
 }

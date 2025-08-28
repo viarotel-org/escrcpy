@@ -18,23 +18,7 @@
   --el-color-primary-dark-2: rgba(var(--color-primary-400), 1);
 }
 
-.el-tabs-flex {
-  @apply flex flex-col h-full !important;
-
-  .el-tabs__header {
-    @apply flex-none !important;
-  }
-
-  .el-tabs__content {
-    @apply flex-grow overflow-hidden h-full !important;
-  }
-
-  .el-tab-pane {
-    @apply h-full overflow-auto;
-  }
-}
-
-.el-dialog-flex {
+.el-dialog--flex {
   height: calc(100% - 20vh - 8px) !important;
   @apply flex flex-col !my-[10vh];
   .el-dialog__header,
@@ -44,9 +28,14 @@
   .el-dialog__body {
     @apply flex-1 !h-0;
   }
+
+  &.is-fullscreen {
+    @apply !my-0 !h-full;
+  }
 }
 
-.el-dialog-headless {
+
+.el-dialog--headless {
   .el-dialog__header,
   .el-dialog__footer {
     @apply !hidden;

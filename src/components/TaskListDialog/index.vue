@@ -3,8 +3,9 @@
     v-model="visible"
     :title="$t('device.task.list')"
     width="98%"
-    class="el-dialog--beautify"
+    class="el-dialog--beautify el-dialog--flex el-dialog--flex el-dialog--fullscreen"
     append-to-body
+    fullscreen
     destroy-on-close
     @closed="onClosed"
   >
@@ -18,8 +19,9 @@
         <el-radio-button value="finished" :label="$t('common.finished')" />
       </el-radio-group>
     </div>
-    <div v-loading="loading" class="mt-4">
-      <el-table :data="tableData" stripe>
+
+    <div v-loading="loading" class="h-full">
+      <el-table :data="tableData" stripe height="100%">
         <template #empty>
           <el-empty></el-empty>
         </template>
@@ -150,8 +152,6 @@
         </el-table-column>
       </el-table>
     </div>
-
-    <template #footer></template>
   </el-dialog>
 </template>
 

@@ -53,14 +53,14 @@ const props = defineProps({})
 
 const actionModel = [
   {
-    label: 'device.terminal.name',
-    svgIcon: 'command',
-    component: Terminal,
-  },
-  {
     label: 'device.arrange.name',
     elIcon: 'DataBoard',
     component: Arrange,
+  },
+  {
+    label: 'device.terminal.name',
+    svgIcon: 'command',
+    component: Terminal,
   },
   {
     label: 'device.task.list',

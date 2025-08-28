@@ -180,10 +180,21 @@ const screenContainerStyle = computed(() => {
 })
 
 // Initialize layout management
-const { loadLayout, createWidgetFromConfig } = useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
+const { loadLayout, updateLayout, createWidgetFromConfig } = useLayoutManagement(
+  scaleConverter,
+  arrangedWidgets,
+  allDevices,
+)
 
 // Initialize widget management
-const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemovedWidgets } = useWidgetManagement(arrangedWidgets, allDevices, hasGlobalWidget, createWidgetFromConfig)
+const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemovedWidgets } = useWidgetManagement(
+  arrangedWidgets,
+  allDevices,
+  hasGlobalWidget,
+  createWidgetFromConfig,
+  containerWidth,
+  containerHeight,
+)
 
 const resetLayout = () => {
   arrangedWidgets.value = []
@@ -204,33 +215,9 @@ const { open, close, onClosed } = useDialogManagement(visible, arrangedWidgets, 
 // Initialize save layout
 const { saveLayout } = useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets)
 
-// 监听容器尺寸变化，重新计算 widgets 比例
 watch(() => `${containerWidth.value}${containerHeight.value}`, () => {
-  recalculateWidgetsScale()
+  updateLayout()
 }, { flush: 'post' })
-
-// 重新计算所有 widgets 的比例
-function recalculateWidgetsScale() {
-  if (!arrangedWidgets.value.length) {
-    return
-  }
-
-  arrangedWidgets.value.forEach((widget) => {
-    // 使用 realX, realY, realWidth, realHeight 作为基准，重新计算容器坐标
-    const containerRect = scaleConverter({
-      x: widget.realX,
-      y: widget.realY,
-      width: widget.realWidth,
-      height: widget.realHeight,
-    })
-
-    // 更新容器坐标
-    widget.x = containerRect.x
-    widget.y = containerRect.y
-    widget.width = containerRect.width
-    widget.height = containerRect.height
-  })
-}
 
 // Expose public methods for parent components
 defineExpose({

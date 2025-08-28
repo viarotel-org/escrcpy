@@ -5,7 +5,14 @@ import { t } from '$/locales/index.js'
  * Widget management composable
  * Handles adding, removing, and managing widgets
  */
-export function useWidgetManagement(arrangedWidgets, allDevices, hasGlobalWidget, createWidgetFromConfig) {
+export function useWidgetManagement(
+  arrangedWidgets,
+  allDevices,
+  hasGlobalWidget,
+  createWidgetFromConfig,
+  containerWidth,
+  containerHeight,
+) {
   // Track removed widgets for later cleanup in saveLayout
   const removedWidgets = ref([])
 
@@ -44,8 +51,8 @@ export function useWidgetManagement(arrangedWidgets, allDevices, hasGlobalWidget
 
       const globalConfig = window.appStore.get('scrcpy.global') || {}
       const config = {
-        '--window-width': globalConfig['--window-width'] || '300',
-        '--window-height': globalConfig['--window-height'] || '600',
+        '--window-width': globalConfig['--window-width'] || containerWidth.value / 6,
+        '--window-height': globalConfig['--window-height'] || containerHeight.value / 3,
         '--window-x': globalConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
         '--window-y': globalConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
       }

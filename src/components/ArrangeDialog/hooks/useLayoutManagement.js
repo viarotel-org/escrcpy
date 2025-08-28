@@ -54,8 +54,32 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
     })
   }
 
+  // Recalculate the proportion of all widgets
+  function updateLayout() {
+    if (!arrangedWidgets.value.length) {
+      return
+    }
+
+    arrangedWidgets.value.forEach((widget) => {
+    // 使用 realX, realY, realWidth, realHeight 作为基准，重新计算容器坐标
+      const containerRect = scaleConverter({
+        x: widget.realX,
+        y: widget.realY,
+        width: widget.realWidth,
+        height: widget.realHeight,
+      })
+
+      // 更新容器坐标
+      widget.x = containerRect.x
+      widget.y = containerRect.y
+      widget.width = containerRect.width
+      widget.height = containerRect.height
+    })
+  }
+
   return {
-    loadLayout,
     createWidgetFromConfig,
+    loadLayout,
+    updateLayout,
   }
 }

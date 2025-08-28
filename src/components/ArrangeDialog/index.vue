@@ -12,52 +12,6 @@
     @closed="onClosed"
   >
     <div class="arrange-container overflow-hidden flex flex-col h-full">
-      <!-- Control Panel -->
-      <div class="control-panel flex-none mb-4 py-2 px-2">
-        <el-dropdown type="primary" @command="addWidget">
-          <el-button type="primary">
-            <template #icon>
-              <el-icon><el-icon-plus /></el-icon>
-            </template>
-            {{ $t('device.arrange.widget.add') }}
-            <el-icon class="el-icon--right">
-              <el-icon-arrow-down />
-            </el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="global" :disabled="hasGlobalWidget">
-                <el-icon><Setting /></el-icon>
-                {{ $t('device.arrange.widget.global') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-for="device in availableDevices"
-                :key="device.id"
-                :command="device.id"
-              >
-                <el-icon><Monitor /></el-icon>
-                {{ device.name || device.id }}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
-        <el-button-group>
-          <el-button :icon="Refresh" @click="resetLayout">
-            {{ $t('device.arrange.layout.reset') }}
-          </el-button>
-
-          <el-button
-            :icon="Delete"
-            :disabled="arrangedWidgets.length === 0"
-            @click="clearAllWidgets"
-          >
-            {{ $t('device.arrange.layout.clear') }}
-          </el-button>
-        </el-button-group>
-      </div>
-
-      <!-- Arrangement Area -->
       <div ref="arrangementAreaRef" class="arrangement-area flex-1 h-0 overflow-auto">
         <div
           ref="screenContainerRef"
@@ -110,12 +64,53 @@
     </div>
 
     <template #footer>
-      <el-button @click="close">
-        {{ $t('common.cancel') }}
-      </el-button>
-      <el-button type="primary" @click="saveLayout">
-        {{ $t('device.arrange.layout.save') }}
-      </el-button>
+      <div class="control-panel flex-none flex items-center space-x-2">
+        <el-dropdown type="primary" @command="addWidget">
+          <el-button type="primary">
+            <template #icon>
+              <el-icon><el-icon-plus /></el-icon>
+            </template>
+            {{ $t('device.arrange.widget.add') }}
+            <el-icon class="el-icon--right">
+              <el-icon-arrow-down />
+            </el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="global" :disabled="hasGlobalWidget">
+                <el-icon><Setting /></el-icon>
+                {{ $t('device.arrange.widget.global') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-for="device in availableDevices"
+                :key="device.id"
+                :command="device.id"
+              >
+                <el-icon><Monitor /></el-icon>
+                {{ device.name || device.id }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+        <el-button-group>
+          <el-button :icon="Refresh" @click="resetLayout">
+            {{ $t('device.arrange.layout.reset') }}
+          </el-button>
+
+          <el-button
+            :icon="Delete"
+            :disabled="arrangedWidgets.length === 0"
+            @click="clearAllWidgets"
+          >
+            {{ $t('device.arrange.layout.clear') }}
+          </el-button>
+        </el-button-group>
+
+        <el-button type="primary" class="!ml-auto" @click="saveLayout">
+          {{ $t('device.arrange.layout.save') }}
+        </el-button>
+      </div>
     </template>
   </el-dialog>
 </template>
@@ -227,16 +222,6 @@ defineExpose({
 </script>
 
 <style lang="postcss" scoped>
-.control-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f8f9fa;
-  border-radius: 8px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .arrangement-area {
   display: flex;
   justify-content: center;

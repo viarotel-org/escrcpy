@@ -47,8 +47,6 @@
 }
 
 .el-dialog--beautify {
-  @apply !rounded-lg;
-
   .el-dialog__title {
     @apply relative;
 

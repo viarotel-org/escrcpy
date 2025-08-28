@@ -17,11 +17,12 @@ Escrcpy is a graphical Android device control tool developed based on Electron. 
 - 🚀 Fast Startup: Displays the first frame in about 1 second  
 
 ### Rich Functional Features
-- 📡 Wireless Connection: Supports quick device connection via QR code scanning  
-- 🤖 Automation: Auto-connect devices, auto-execute mirroring, custom scripts, and scheduled tasks  
-- 💡 Highly Customizable: Multi-device management, independent configurations, custom notes, config import/export  
-- 🔗 Reverse Tethering: Built-in Gnirehtet reverse tethering functionality  
-- 🎨 Theme Switching: Supports light/dark modes, automatically switches with the system  
+- 📡 Wireless Connection: Supports quick device connection via QR code scanning
+- 🤖 Automation: Auto-connect devices, auto-execute mirroring, custom scripts, and scheduled tasks
+- 💡 Highly Customizable: Multi-device management, independent configurations, custom notes, config import/export
+- 🖥️ Window Arrangement: Visual multi-device window layout management with drag-and-drop position and size adjustment
+- 🔗 Reverse Tethering: Built-in Gnirehtet reverse tethering functionality
+- 🎨 Theme Switching: Supports light/dark modes, automatically switches with the system
 
 ### Optimized User Experience
 - 😎 Lightweight: Native support, displays only the device screen  

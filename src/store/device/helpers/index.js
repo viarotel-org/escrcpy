@@ -34,7 +34,7 @@ export function getHistoryDevices() {
  * 获取当前连接的设备
  */
 export async function getCurrentDevices() {
-  const devices = await window.adb.getDevices() || []
+  const devices = await window.adb.getDeviceList() || []
 
   return devices.map(device => ({
     ...device,

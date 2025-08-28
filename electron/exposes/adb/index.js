@@ -109,8 +109,6 @@ const spawnShell = async (command, { stdout, stderr } = {}) => {
   })
 }
 
-const getDevices = async () => client.listDevicesWithPaths()
-
 const deviceShell = async (id, command) => {
   const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
   return res.toString()
@@ -350,6 +348,31 @@ async function waitForDevice(id) {
   return device.waitForDevice()
 }
 
+async function getSerialNo(id) {
+  const ret = await deviceShell(id, 'getprop ro.serialno')
+
+  const value = ret.replace(/[\n\r]/g, '')
+
+  return value
+}
+
+async function getDeviceList() {
+  const devices = await client.listDevicesWithPaths()
+
+  const value = []
+
+  for (let index = 0; index < devices.length; index++) {
+    const item = devices[index]
+    const serialNo = await getSerialNo(item.id)
+    value.push({
+      ...item,
+      serialNo,
+    })
+  }
+
+  return value
+}
+
 function init() {
   const bin = appStore.get('common.adbPath') || adbPath
 
@@ -362,7 +385,7 @@ export default {
   init,
   shell,
   spawnShell,
-  getDevices,
+  getDeviceList,
   deviceShell,
   kill,
   pair,
@@ -382,4 +405,5 @@ export default {
   battery,
   uploader,
   waitForDevice,
+  getSerialNo,
 }

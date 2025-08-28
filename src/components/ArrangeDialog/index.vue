@@ -71,8 +71,8 @@
             :y="widget.y"
             :w="widget.width"
             :h="widget.height"
-            :min-width="100"
-            :min-height="100"
+            :min-width="containerWidth / 6"
+            :min-height="containerHeight / 4"
             :parent="true"
             class="widget-window" :class="[`${widget.type}-widget`]"
             @dragging="(x, y) => onWidgetDragging(widget.id, { x, y })"
@@ -82,13 +82,6 @@
           >
             <div class="widget-content">
               <div class="widget-header flex w-full space-x-2">
-                <div class="flex-none flex items-center">
-                  <el-icon>
-                    <ElIconSetting v-if="widget.type === 'global'" />
-                    <ElIconMonitor v-else />
-                  </el-icon>
-                </div>
-
                 <div class="widget-name flex-1 w-0 truncate" :title="widget.name">
                   {{ widget.name }}
                 </div>
@@ -106,8 +99,8 @@
               </div>
               <div class="widget-body">
                 <div class="widget-info">
-                  <p>{{ $t('device.arrange.widget.size') }}: {{ Math.round(widget.realWidth) }}×{{ Math.round(widget.realHeight) }}</p>
-                  <p>{{ $t('device.arrange.widget.position') }}: {{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</p>
+                  <p>{{ Math.round(widget.realWidth) }} × {{ Math.round(widget.realHeight) }}</p>
+                  <p>{{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</p>
                 </div>
               </div>
             </div>
@@ -314,15 +307,13 @@ defineExpose({
 .widget-name {
   font-weight: 500;
   color: #333;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .remove-btn {
   width: 14px !important;
   height: 14px !important;
-  padding: 0 !important;
   font-size: 10px;
-  flex-shrink: 0 !important;
 }
 
 .widget-body {
@@ -334,13 +325,8 @@ defineExpose({
 
 .widget-info {
   text-align: center;
-  font-size: max(8px, 0.5vw);
+  font-size: 10px;
   color: #666;
-  line-height: 1.4;
-
-  p {
-    margin: 2px 0;
-  }
 }
 
 /* Custom drag handle styles */

@@ -33,11 +33,14 @@ jobs:
     steps:
     - name: Set up Homebrew
       uses: Homebrew/actions/setup-homebrew@master
+      with:
+        token: ${{ secrets.GH_TOKEN }}
 
     - name: Configure Git
       uses: Homebrew/actions/git-user-config@master
       with:
         username: viarotel-bot
+        token: ${{ secrets.GH_TOKEN }}
 
     - name: Determine version to update
       id: version

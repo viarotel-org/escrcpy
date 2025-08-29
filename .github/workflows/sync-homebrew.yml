@@ -4,22 +4,282 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'The git tag name to bump the cask to'
+        description: 'The git tag name to bump the cask to (e.g., v1.2.3)'
         required: false
         type: string
-        default: 'refs/tags/v1.x.x'
+      force:
+        description: 'Force update even if version is not newer'
+        required: false
+        type: boolean
+        default: false
   workflow_run:
     workflows: ['release-assets']
     types:
       - completed
 
+env:
+  GITHUB_REPO: viarotel-org/escrcpy
+  HOMEBREW_TAP: viarotel-org/homebrew-escrcpy
+  CASK_NAME: escrcpy
+  MAX_RETRIES: 3
+  RETRY_DELAY: 10
+
 jobs:
   sync-homebrew:
     runs-on: macos-latest
+    # Only run if workflow_run was successful or if manually triggered
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
     steps:
-    - uses: eugenesvk/action-homebrew-bump-cask@c5357e045eb291820713d22f7d1a2a379b409ddd
+    - name: Set up Homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Configure Git
+      uses: Homebrew/actions/git-user-config@master
       with:
-        tap: viarotel-org/homebrew-escrcpy
-        cask: escrcpy
-        token: ${{secrets.GH_TOKEN}}
-        tag: ${{ github.event.inputs.tag || github.ref }}
+        username: viarotel-bot
+
+    - name: Determine version to update
+      id: version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        MANUAL_TAG: ${{ github.event.inputs.tag }}
+      run: |
+        set -euo pipefail
+
+        echo "::group::Determining version to update"
+
+        # Function to retry API calls
+        retry_api_call() {
+          local url="$1"
+          local max_attempts="$MAX_RETRIES"
+          local delay="$RETRY_DELAY"
+
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Attempt $attempt/$max_attempts for: $url"
+
+            response=$(curl -s -w "%{http_code}" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              --connect-timeout 30 \
+              --max-time 60 \
+              "$url")
+
+            http_code="${response: -3}"
+            body="${response%???}"
+
+            echo "HTTP Status: $http_code"
+
+            if [[ "$http_code" == "200" ]]; then
+              echo "$body"
+              return 0
+            elif [[ "$http_code" == "403" ]]; then
+              echo "::warning::Rate limit hit, waiting ${delay}s before retry..."
+              sleep $delay
+              delay=$((delay * 2))  # Exponential backoff
+            elif [[ "$http_code" == "404" ]]; then
+              echo "::error::Resource not found: $url"
+              return 1
+            else
+              echo "::warning::HTTP $http_code, retrying in ${delay}s..."
+              sleep $delay
+            fi
+          done
+
+          echo "::error::Failed to fetch after $max_attempts attempts"
+          return 1
+        }
+
+        if [[ -n "${MANUAL_TAG:-}" ]]; then
+          echo "Using manually specified tag: $MANUAL_TAG"
+          TAG_NAME="$MANUAL_TAG"
+
+          # Validate manual tag exists
+          echo "Validating tag exists..."
+          if ! retry_api_call "https://api.github.com/repos/$GITHUB_REPO/git/refs/tags/${TAG_NAME#refs/tags/}"; then
+            echo "::error::Tag $TAG_NAME does not exist"
+            exit 1
+          fi
+
+          # Get release info for manual tag
+          VERSION="${TAG_NAME#refs/tags/}"
+          VERSION="${VERSION#v}"
+
+          echo "Getting release info for tag: $TAG_NAME"
+          RELEASE_INFO=$(retry_api_call "https://api.github.com/repos/$GITHUB_REPO/releases/tags/${TAG_NAME#refs/tags/}")
+        else
+          echo "Getting latest release info..."
+          RELEASE_INFO=$(retry_api_call "https://api.github.com/repos/$GITHUB_REPO/releases/latest")
+          TAG_NAME=$(echo "$RELEASE_INFO" | jq -r '.tag_name')
+          VERSION=$(echo "$TAG_NAME" | sed 's/^v//')
+        fi
+
+        echo "Tag: $TAG_NAME"
+        echo "Version: $VERSION"
+
+        # Validate version format
+        if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
+          echo "::error::Invalid version format: $VERSION"
+          exit 1
+        fi
+
+        # Check if release has assets
+        ASSETS_COUNT=$(echo "$RELEASE_INFO" | jq '.assets | length')
+        echo "Release has $ASSETS_COUNT assets"
+
+        if [[ "$ASSETS_COUNT" == "0" ]]; then
+          echo "::error::Release $TAG_NAME has no assets"
+          exit 1
+        fi
+
+        # List assets for verification
+        echo "Release assets:"
+        echo "$RELEASE_INFO" | jq -r '.assets[].name' | while read -r asset; do
+          echo "  - $asset"
+        done
+
+        echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "release_info<<EOF" >> $GITHUB_OUTPUT
+        echo "$RELEASE_INFO" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+        echo "::endgroup::"
+
+    - name: Check current cask version
+      id: current_version
+      env:
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        echo "::group::Checking current cask version"
+
+        # Add the tap
+        echo "Adding Homebrew tap: $HOMEBREW_TAP"
+        brew tap "$HOMEBREW_TAP"
+
+        # Get current cask version
+        CURRENT_VERSION=$(brew info --json=v2 "$HOMEBREW_TAP/$CASK_NAME" | jq -r '.casks[0].version // "0.0.0"')
+        echo "Current cask version: $CURRENT_VERSION"
+        echo "New version: ${{ steps.version.outputs.version }}"
+
+        # Compare versions (simple string comparison for semantic versions)
+        if [[ "${{ steps.version.outputs.version }}" == "$CURRENT_VERSION" ]]; then
+          if [[ "${{ github.event.inputs.force }}" == "true" ]]; then
+            echo "::warning::Versions are the same but force update is enabled"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "::notice::Version ${{ steps.version.outputs.version }} is already current, skipping update"
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "Version update needed: $CURRENT_VERSION -> ${{ steps.version.outputs.version }}"
+          echo "needs_update=true" >> $GITHUB_OUTPUT
+        fi
+
+        echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+        echo "::endgroup::"
+
+    - name: Update Homebrew cask
+      if: steps.current_version.outputs.needs_update == 'true'
+      env:
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        echo "::group::Updating Homebrew cask"
+
+        VERSION="${{ steps.version.outputs.version }}"
+        TAG_NAME="${{ steps.version.outputs.tag_name }}"
+
+        echo "Updating cask to version: $VERSION"
+        echo "Using tag: $TAG_NAME"
+
+        # Function to run brew command with retry
+        retry_brew_command() {
+          local max_attempts="$MAX_RETRIES"
+          local delay="$RETRY_DELAY"
+
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Brew command attempt $attempt/$max_attempts"
+
+            if timeout 300 brew bump-cask-pr \
+              --no-browse \
+              --no-audit \
+              --version="$VERSION" \
+              "$HOMEBREW_TAP/$CASK_NAME"; then
+              echo "::notice::Successfully updated cask to version $VERSION"
+              return 0
+            else
+              exit_code=$?
+              echo "::warning::Brew command failed with exit code $exit_code"
+
+              if [[ $attempt -lt $max_attempts ]]; then
+                echo "Retrying in ${delay}s..."
+                sleep $delay
+                delay=$((delay * 2))  # Exponential backoff
+              fi
+            fi
+          done
+
+          echo "::error::Failed to update cask after $max_attempts attempts"
+          return 1
+        }
+
+        # Update the cask with retry logic
+        if retry_brew_command; then
+          echo "::notice::Homebrew cask update completed successfully"
+          echo "::notice::Updated from ${{ steps.current_version.outputs.current_version }} to $VERSION"
+        else
+          echo "::error::Failed to update Homebrew cask"
+          exit 1
+        fi
+
+        echo "::endgroup::"
+
+    - name: Verify update
+      if: steps.current_version.outputs.needs_update == 'true'
+      env:
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        echo "::group::Verifying cask update"
+
+        # Wait a moment for the update to propagate
+        sleep 5
+
+        # Check the updated version
+        UPDATED_VERSION=$(brew info --json=v2 "$HOMEBREW_TAP/$CASK_NAME" | jq -r '.casks[0].version')
+        echo "Verified cask version: $UPDATED_VERSION"
+
+        if [[ "$UPDATED_VERSION" == "${{ steps.version.outputs.version }}" ]]; then
+          echo "::notice::✅ Cask update verified successfully"
+        else
+          echo "::warning::⚠️ Version mismatch after update. Expected: ${{ steps.version.outputs.version }}, Got: $UPDATED_VERSION"
+        fi
+
+        echo "::endgroup::"
+
+    - name: Summary
+      if: always()
+      run: |
+        echo "::group::Workflow Summary"
+        echo "Trigger: ${{ github.event_name }}"
+
+        if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+          echo "Workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
+        fi
+
+        if [[ "${{ steps.version.outputs.version }}" != "" ]]; then
+          echo "Target version: ${{ steps.version.outputs.version }}"
+          echo "Current version: ${{ steps.current_version.outputs.current_version }}"
+          echo "Update needed: ${{ steps.current_version.outputs.needs_update }}"
+        fi
+
+        echo "Repository: $GITHUB_REPO"
+        echo "Homebrew tap: $HOMEBREW_TAP"
+        echo "Cask name: $CASK_NAME"
+        echo "::endgroup::"

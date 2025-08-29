@@ -183,13 +183,6 @@ ensureSingleInstance({
 })
 
 function runExecuteArguments(mainWindow, commandLine) {
-  // TEST
-  // commandLine = [
-  //   '--device-id=192.168.0.88:5555',
-  //   '--package-name=com.android.mms',
-  //   '--app-name=消息',
-  // ]
-
   const executeArgs = minimist(commandLine)
 
   Object.entries(executeArgs).forEach(([key, value]) => {

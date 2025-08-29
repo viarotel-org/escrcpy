@@ -64,6 +64,10 @@ const deviceScope = computed({
   },
 })
 
+onActivated(() => {
+  deviceScope.value = 'global'
+})
+
 function onDeviceChange(options) {
   const hasCurrentScope = options.some(item => item.value === deviceScope.value)
 

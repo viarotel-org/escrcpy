@@ -3,10 +3,11 @@ name: sync-homebrew
 on:
   workflow_dispatch:
     inputs:
-      tag-name:
+      tag:
         description: 'The git tag name to bump the cask to'
         required: false
         type: string
+        default: 'refs/tags/v1.x.x'
   workflow_run:
     workflows: ['release-assets']
     types:
@@ -16,17 +17,9 @@ jobs:
   sync-homebrew:
     runs-on: macos-latest
     steps:
-    - uses: mislav/bump-homebrew-formula-action@v3
+    - uses: eugenesvk/action-homebrew-bump-cask@c5357e045eb291820713d22f7d1a2a379b409ddd
       with:
-        formula-name: escrcpy
-        formula-path: Casks/escrcpy.rb
-        tag-name: ${{ github.event.inputs.tag-name || github.event.release.tag_name }}
-        download-url: https://github.com/viarotel-org/escrcpy/releases/download/v#{version}/Escrcpy-#{version}-mac-#{arch}.dmg
-        homebrew-tap: viarotel-org/homebrew-escrcpy
-        base-branch: main
-        commit-message: |
-          {{formulaName}} {{version}}
-
-          Created by https://github.com/mislav/bump-homebrew-formula-action
-      env:
-        COMMITTER_TOKEN: ${{secrets.GH_TOKEN}}
+        tap: viarotel-org/homebrew-escrcpy
+        cask: escrcpy
+        token: ${{secrets.GH_TOKEN}}
+        tag: ${{ github.event.inputs.tag || github.ref }}

@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.31.0](https://github.com/viarotel-org/escrcpy/compare/v1.30.2...v1.31.0) (2025-08-29)
+
+
+### Features
+
+* ✨ Device lists will now intelligently merge duplicate device entries and share device configurations ([52cc4b1](https://github.com/viarotel-org/escrcpy/commit/52cc4b1a65f753074bba188bb2a31f1e3f4628f3))
+* ✨ Now you can arrange your device windows through a graphical interface ([91ad249](https://github.com/viarotel-org/escrcpy/commit/91ad249bf1b85bddbbc697b182a5f47b04074c05))
+
+
+### Bug Fixes
+
+* 🐛 Fix typos ([a7a3a17](https://github.com/viarotel-org/escrcpy/commit/a7a3a17e022f3d8ed5e8db2b1aadfaa5c7b84a46))
+* 🐛 Fixed possible sandbox issues on Linux ([ff9f9bd](https://github.com/viarotel-org/escrcpy/commit/ff9f9bdd24841d6f0ad0c94f8331a337e011fcac))
+* 🐛 Fixed the issue of saving exceptions after adjusting parameters in preference settings ([4a18f61](https://github.com/viarotel-org/escrcpy/commit/4a18f61034bd7be9b6b3ae05f66427d50b359ac6))
+* 🐛 Issue not taking effect after restarting the application after switching themes ([857c480](https://github.com/viarotel-org/escrcpy/commit/857c4806a40760186be80233133d89330707cf4c))
+
+
+### Performance Improvements
+
+* ♻️ Improve the stability of window arrangement function ([7ae3f21](https://github.com/viarotel-org/escrcpy/commit/7ae3f21788634f6ce9d893a54494b16bc5a6cee5))
+* ♻️ Simplify sandbox automatic configuration manager code to improve performance ([1b82336](https://github.com/viarotel-org/escrcpy/commit/1b823362e5cc9888f39901538d4444b1fbba402e))
+* 💄 Improve space utilization of device window layout tools ([939a2d2](https://github.com/viarotel-org/escrcpy/commit/939a2d2c07d2de8d79f92bfbd228497c9a995ab9))
+* 🔖 Adjust the order of quick entry functions ([ccb59e1](https://github.com/viarotel-org/escrcpy/commit/ccb59e15ecf352a4f2121b31678b26ce57d51664))
+* 🔨 Improve the reliability of the linux sandbox configuration tool ([6de2538](https://github.com/viarotel-org/escrcpy/commit/6de25382d5a8b9479ecf2b75980af5d34ea54462))
+* 🚀 After getting the device list, query and save the SerialNo of each device in preparation for subsequent integration ([4464e7e](https://github.com/viarotel-org/escrcpy/commit/4464e7e80995493a53e9e5e6b155a0e138ef84bb))
+* 🚀 Improve performance by asynchronously storing main interface boundary information ([d230c15](https://github.com/viarotel-org/escrcpy/commit/d230c150be23df27a1e91166aae70f47af6b91e0))
+* 🚀 Optimize the default behavior when adding new widgets to the device window arrangement ([1be470a](https://github.com/viarotel-org/escrcpy/commit/1be470ad83e012857318172d634023abca034e68))
+* 🚀 Optimize the layout effect of the task list ([044cfcd](https://github.com/viarotel-org/escrcpy/commit/044cfcde2ede413248f236be7e39dc3a3fbba8aa))
+* 🚀 Optimize the storage strategy for preference Settings ([359b9b9](https://github.com/viarotel-org/escrcpy/commit/359b9b9f97e218dc4e3ed74fe184da8512121238))
+
 ## [1.30.2](https://github.com/viarotel-org/escrcpy/compare/v1.30.1...v1.30.2) (2025-07-15)
 
 

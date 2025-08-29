@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import minimist from 'minimist'
+import { debounce } from 'lodash-es'
 
 import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
@@ -97,21 +98,25 @@ function createWindow(callback) {
     new Edger(mainWindow)
   }
 
-  ;['resize', 'move'].forEach((eventName) => {
-    mainWindow.on(eventName, () => {
-      if(mainWindow.isMaximized()) {
-        return false
-      }
-  
-      const bounds = mainWindow.getBounds()
+  // 使用防抖函数优化窗口边界保存，避免频繁写入影响性能
+  const saveBoundsDebounced = debounce(() => {
+    console.log('1')
+    if(mainWindow.isMaximized()) {
+      return false
+    }
 
-      if(bounds.x < 0) bounds.x = 0
-      if(bounds.y < 0) bounds.y = 0
+    const bounds = mainWindow.getBounds()
 
-      appStore.set('common.bounds', {
-        ...bounds
-      })
+    if(bounds.x < 0) bounds.x = 0
+    if(bounds.y < 0) bounds.y = 0
+
+    appStore.set('common.bounds', {
+      ...bounds
     })
+  }, 300)
+
+  ;['resize', 'move'].forEach((eventName) => {
+    mainWindow.on(eventName, saveBoundsDebounced)
   })
 
   loadPage(mainWindow)

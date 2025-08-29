@@ -39,8 +39,7 @@ jobs:
     - name: Configure Git
       uses: Homebrew/actions/git-user-config@master
       with:
-        username: viarotel-bot
-        email: viarotel@qq.com
+        username: viarotel
         token: ${{ secrets.GH_TOKEN }}
 
     - name: Determine version to update

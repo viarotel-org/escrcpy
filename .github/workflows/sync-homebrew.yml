@@ -17,6 +17,7 @@ jobs:
         formula-path: Casks/escrcpy.rb
         download-url: https://github.com/viarotel-org/escrcpy/releases/download/v#{version}/Escrcpy-#{version}-mac-#{arch}.dmg
         homebrew-tap: viarotel-org/escrcpy
+        base-branch: main
         commit-message: |
           {{formulaName}} {{version}}
 

@@ -13,6 +13,7 @@ import { isPackaged } from './helpers/process.js'
 import log from './helpers/log.js'
 import './helpers/console.js'
 import appStore from './helpers/store.js'
+import sandboxManager from './helpers/sandbox.js'
 
 import { getLogoPath } from './configs/index.js'
 
@@ -33,6 +34,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 log.initialize({ preload: true })
 
+// 配置沙盒设置 - 必须在 app.whenReady() 之前调用
+sandboxManager.configureSandbox()
 
 contextMenu({
   showCopyImage: false,

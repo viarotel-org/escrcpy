@@ -11,10 +11,15 @@ jobs:
   sync-homebrew:
     runs-on: macos-latest
     steps:
-    - uses: macauley/action-homebrew-bump-cask@v1
+    - uses: mislav/bump-homebrew-formula-action@v3
       with:
-        token: ${{secrets.GH_TOKEN}}
-        tap: viarotel-org/escrcpy
-        cask: escrcpy
-        livecheck: true
-        dryrun: false
+        formula-name: escrcpy
+        formula-path: Casks/escrcpy.rb
+        download-url: https://github.com/viarotel-org/escrcpy/releases/download/v#{version}/Escrcpy-#{version}-mac-#{arch}.dmg
+        homebrew-tap: viarotel-org/escrcpy
+        commit-message: |
+          {{formulaName}} {{version}}
+
+          Created by https://github.com/mislav/bump-homebrew-formula-action
+      env:
+        COMMITTER_TOKEN: ${{secrets.GH_TOKEN}}

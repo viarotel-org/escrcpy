@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.1](https://github.com/viarotel-org/escrcpy/compare/v1.31.0...v1.31.1) (2025-08-29)
+
+
+### Performance Improvements
+
+* 👷 Remove redundant code comments ([ca4e826](https://github.com/viarotel-org/escrcpy/commit/ca4e8267942ec78cf600d67ef2741a2bbe0f8034))
+
 ## [1.31.0](https://github.com/viarotel-org/escrcpy/compare/v1.30.2...v1.31.0) (2025-08-29)
 
 

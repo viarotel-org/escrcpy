@@ -34,9 +34,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 log.initialize({ preload: true })
 
-// 配置沙盒设置 - 必须在 app.whenReady() 之前调用
-sandboxManager.configureSandbox()
-
 contextMenu({
   showCopyImage: false,
   showSelectAll: false,
@@ -131,27 +128,39 @@ function createWindow(callback) {
   callback?.(mainWindow)
 }
 
-function onWhenReady(callback) {
-  app.whenReady().then(() => {
-    electronApp.setAppUserModelId('com.viarotel.escrcpy')
-  
-    app.on('browser-window-created', (_, window) => {
-      optimizer.watchWindowShortcuts(window)
+async function onWhenReady(callback) {
+  // 配置沙盒设置 - 必须在 app.whenReady() 之前调用
+  try {
+    const sandboxResult = await sandboxManager.configureSandbox()
+    log.info('Sandbox configuration completed:', {
+      disabled: sandboxResult.disabled,
+      reason: sandboxResult.reason,
+      duration: sandboxResult.duration
     })
+  } catch (error) {
+    log.error('Sandbox configuration failed:', error.message)
+  }
   
-    createWindow(callback)
-  
-    // macOS 中应用被激活
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-        return
-      }
-  
-      app.dock.show()
-      mainWindow.show()
-      eventEmitter.emit('tray:destroy')
-    })
+  await app.whenReady()
+
+  electronApp.setAppUserModelId('com.viarotel.escrcpy')
+
+  app.on('browser-window-created', (_, window) => {
+    optimizer.watchWindowShortcuts(window)
+  })
+
+  createWindow(callback)
+
+  // macOS 中应用被激活
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+      return
+    }
+
+    app.dock.show()
+    mainWindow.show()
+    eventEmitter.emit('tray:destroy')
   })
 }
 
@@ -159,6 +168,8 @@ ensureSingleInstance({
   onSuccess() {
     onWhenReady((mainWindow)=> {
       runExecuteArguments(mainWindow, process.argv)
+    }).catch((error) => {
+      log.error('Failed to initialize application:', error.message)
     })
   },
   onShowWindow(mainWindow, commandLine, next) {

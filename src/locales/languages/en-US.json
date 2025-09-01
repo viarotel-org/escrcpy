@@ -1,4 +1,5 @@
 {
+  "common.empty": "No data",
   "common.yes": "Yes",
   "common.no": "No",
   "common.cancel": "Cancel",
@@ -235,7 +236,6 @@
   "preferences.reset": "Reset to Default",
   "preferences.scope.global": "Global",
   "preferences.scope.placeholder": "Preference scope",
-  "preferences.scope.no-data": "No data",
   "preferences.scope.details[0]": "Set global or per-device preferences",
   "preferences.scope.details[1]": "Global: Apply to all devices",
   "preferences.scope.details[2]": "Per-device: Override global settings for one device",

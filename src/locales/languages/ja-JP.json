@@ -1,4 +1,5 @@
 {
+  "common.empty": "データなし",
   "common.yes": "はい",
   "common.no": "いいえ",
   "common.cancel": "キャンセル",
@@ -235,7 +236,6 @@
   "preferences.reset": "既定に戻す",
   "preferences.scope.global": "グローバル",
   "preferences.scope.placeholder": "スコープの設定",
-  "preferences.scope.no-data": "データなし",
   "preferences.scope.details[0]": "グローバルまたはデバイスごとの設定を行う",
   "preferences.scope.details[1]": "グローバル: すべてのデバイスに適用",
   "preferences.scope.details[2]": "デバイスごと: 1 つのデバイスのグローバル設定を上書きする",

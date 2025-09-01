@@ -1,7 +1,7 @@
 <template>
   <el-select
     :placeholder="$t('preferences.scope.placeholder')"
-    :no-data-text="$t('preferences.scope.no-data')"
+    :no-data-text="$t('common.empty')"
     filterable
     class="!w-72"
   >

@@ -1,4 +1,5 @@
 {
+  "common.empty": "Нет данных",
   "common.yes": "Да",
   "common.no": "Нет",
   "common.cancel": "Отмена",
@@ -235,7 +236,6 @@
   "preferences.reset": "Сбросить на умолчания",
   "preferences.scope.global": "Глобальный",
   "preferences.scope.placeholder": "Область настроек",
-  "preferences.scope.no-data": "Нет данных",
   "preferences.scope.details[0]": "Установить глобальные или индивидуальные настройки для устройства",
   "preferences.scope.details[1]": "Глобальный: Применить ко всем устройствам",
   "preferences.scope.details[2]": "Индивидуальный: Переопределить глобальные настройки для одного устройства",

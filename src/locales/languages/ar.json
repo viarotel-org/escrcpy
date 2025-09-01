@@ -1,4 +1,5 @@
 {
+  "common.empty": "لا توجد أي بيانات",
   "common.yes": "نعم",
   "common.no": "لا",
   "common.cancel": "إلغاء",
@@ -235,7 +236,6 @@
   "preferences.reset": "إعادة التعيين إلى الوضع الافتراضي",
   "preferences.scope.global": "عام",
   "preferences.scope.placeholder": "نطاق التفضيلات",
-  "preferences.scope.no-data": "لا توجد أي بيانات",
   "preferences.scope.details[0]": "تعيين تفضيلات عامة أو مخصصة لكل جهاز",
   "preferences.scope.details[1]": "عام: تسري على جميع الأجهزة",
   "preferences.scope.details[2]": "مخصصة لكل جهاز: تجاوز الإعدادات العامة لجهاز معين",

@@ -1,4 +1,5 @@
 {
+  "common.empty": "暫無資料",
   "common.yes": "是",
   "common.no": "否",
   "common.cancel": "取消",
@@ -234,7 +235,6 @@
   "preferences.reset": "恢復預設值",
   "preferences.scope.global": "全域性",
   "preferences.scope.placeholder": "偏好設定的作用域範圍",
-  "preferences.scope.no-data": "暫無資料",
   "preferences.scope.details[0]": "對全域性或者單個裝置設定不同的偏好設定",
   "preferences.scope.details[1]": "全域性：將對所有裝置生效。",
   "preferences.scope.details[2]": "單個裝置：繼承於全域性設定，並對單個裝置進行獨立設定，僅對此裝置生效。",

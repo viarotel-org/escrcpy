@@ -35,7 +35,7 @@
             @resize-stop="(x, y, w, h) => onWidgetResizeStop(widget.id, { x, y, width: w, height: h })"
           >
             <div class="widget-content">
-              <div class="widget-header flex w-full space-x-2 p-1" :class="['global'].includes(widget.type) ? 'bg-blue-500' : 'bg-green-500'">
+              <div class="widget-header flex w-full space-x-2 p-1">
                 <div class="widget-name text-white flex-1 w-0 truncate" :title="widget.name">
                   {{ widget.name }}
                 </div>
@@ -57,13 +57,17 @@
                 </div>
               </div>
               <div class="widget-body">
-                <div class="widget-info">
-                  <p>{{ Math.round(widget.realWidth) }} × {{ Math.round(widget.realHeight) }}</p>
-                  <p>{{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</p>
+                <div class="widget-info bg-white/80 dark:bg-black/80">
+                  <div>{{ Math.round(widget.realWidth) }} × {{ Math.round(widget.realHeight) }}</div>
+                  <div>{{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</div>
                 </div>
               </div>
             </div>
           </VueDraggableResizable>
+
+          <div v-if="!arrangedWidgets?.length" class="absolute inset-center">
+            {{ $t('common.empty') }}
+          </div>
         </div>
       </div>
     </div>
@@ -232,7 +236,6 @@ defineExpose({
 .arrangement-area {
   display: flex;
   justify-content: center;
-  background: #fafafa;
   border-radius: 8px;
 }
 
@@ -243,22 +246,20 @@ defineExpose({
 }
 
 .widget-window {
+  border-style: none !important;
   border-radius: 8px;
-  background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 
-  @apply border-2 border-solid border-transparent;
-
   &.global-widget {
     &, &:hover {
-      @apply border-blue-500;
+      @apply bg-blue-500;
     }
   }
 
   &.device-widget {
     &, &:hover {
-      @apply border-green-500;
+      @apply bg-green-500;
     }
   }
 
@@ -280,15 +281,19 @@ defineExpose({
 
 .widget-body {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 0;
+  padding: 2px;
 }
 
 .widget-info {
-  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 10px;
-  color: #666;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 /* Custom drag handle styles */

@@ -1,4 +1,5 @@
 {
+  "common.empty": "暂无数据",
   "common.yes": "是",
   "common.no": "否",
   "common.cancel": "取消",
@@ -235,7 +236,6 @@
   "preferences.reset": "恢复默认值",
   "preferences.scope.global": "全局",
   "preferences.scope.placeholder": "偏好设置的作用域范围",
-  "preferences.scope.no-data": "暂无数据",
   "preferences.scope.details[0]": "对全局或者单个设备设置不同的偏好配置",
   "preferences.scope.details[1]": "全局:将对所有设备生效。",
   "preferences.scope.details[2]": "单个设备:继承于全局配置,并对单个设备进行独立设置,仅对此设备生效。",

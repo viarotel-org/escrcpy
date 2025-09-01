@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.3](https://github.com/viarotel-org/escrcpy/compare/v1.31.2...v1.31.3) (2025-09-01)
+
+
+### Performance Improvements
+
+* 💄 Window layout adapted to dark mode theme ([eab402b](https://github.com/viarotel-org/escrcpy/commit/eab402ba8bc7f6f72d7f4758fa60b32deeaefd1d))
+
 ## [1.31.2](https://github.com/viarotel-org/escrcpy/compare/v1.31.1...v1.31.2) (2025-09-01)
 
 

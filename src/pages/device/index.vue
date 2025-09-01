@@ -210,7 +210,7 @@ function selectable(row) {
 }
 
 async function getDeviceData(options = {}) {
-  const { resetResolve = false, unloading = false } = options
+  const { unloading = false } = options
 
   if (!unloading) {
     loading.value = true

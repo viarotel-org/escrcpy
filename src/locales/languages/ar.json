@@ -129,12 +129,6 @@
   "device.wireless.pair.code.message": "رمز الاقتران مطلوب",
   "device.wireless.pair.code.placeholder": "أدخل رمز الاقتران",
 
-  "device.reset.title": "فشلت العملية",
-  "device.reset.reasons[0]": "عادةً ما يحدث هذا بسبب إعدادات غير متوافقة. هل تريد إعادة تعيين التفضيلات؟",
-  "device.reset.reasons[1]": "ملاحظة: بعد إعادة التعيين، سيتم مسح أي إعدادات تم حفظها مسبقًا، لذلك يستحسن إجراء نسخ احتياطي للإعدادات قبل القيام بإعادة التعيين.",
-  "device.reset.confirm": "إعادة تعيين التفضيلات",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "نجح الأمر، يرجى المحاولة مرة أخرى",
   "device.refresh.name": "تحديث",
   "device.restart.name": "إعادة التشغيل",
   "device.log.name": "السجلات",
@@ -254,6 +248,7 @@
   "preferences.config.export.success": "تم التصدير بنجاح",
   "preferences.config.edit.name": "تعديل",
   "preferences.config.reset.name": "إعادة تعيين",
+  "preferences.config.reset.tips": "ملاحظة: بعد إعادة التعيين، سيتم مسح أي إعدادات تم حفظها مسبقًا، لذلك يستحسن إجراء نسخ احتياطي للإعدادات قبل القيام بإعادة التعيين.",
 
   "preferences.common.name": "شائع",
   "preferences.common.theme.name": "السمة",

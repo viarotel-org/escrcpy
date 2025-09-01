@@ -121,8 +121,6 @@ function onUpdateError() {
         proxy.$t('about.update-error.message'),
         proxy.$t('about.update-error.title'),
         {
-          confirmButtonText: proxy.$t('common.confirm'),
-          cancelButtonText: proxy.$t('common.cancel'),
           closeOnClickModal: false,
           type: 'error',
         },

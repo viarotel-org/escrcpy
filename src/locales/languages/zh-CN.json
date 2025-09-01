@@ -129,12 +129,6 @@
   "device.wireless.pair.code.message": "配对码不能为空",
   "device.wireless.pair.code.placeholder": "请输入配对码",
 
-  "device.reset.title": "操作失败",
-  "device.reset.reasons[0]": "通常情况下，这可能是配置不兼容所导致的，是否重置偏好设置？",
-  "device.reset.reasons[1]": "注意：重置后，之前保存的配置将会被清除，因此建议在执行重置操作之前备份您的配置。",
-  "device.reset.confirm": "重置偏好设置",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "操作成功，请重新尝试。",
   "device.refresh.name": "刷新设备",
   "device.restart.name": "重启服务",
   "device.log.name": "运行日志",
@@ -254,6 +248,7 @@
   "preferences.config.export.success": "导出成功",
   "preferences.config.edit.name": "编辑",
   "preferences.config.reset.name": "重置",
+  "preferences.config.reset.tips": "注意：重置后，之前保存的配置将会被清除，因此建议在执行重置操作之前备份您的配置。",
 
   "preferences.common.name": "通用设置",
   "preferences.common.theme.name": "主题",

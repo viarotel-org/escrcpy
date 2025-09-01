@@ -128,12 +128,6 @@
   "device.wireless.pair.code.message": "配對碼不能為空",
   "device.wireless.pair.code.placeholder": "請輸入配對碼",
 
-  "device.reset.title": "操作失敗",
-  "device.reset.reasons[0]": "通常情況下，這可能是設定不相容所導致的，是否重設偏好設定？",
-  "device.reset.reasons[1]": "注意：重設後，之前儲存的設定將會被清除，因此建議在執行重設操作之前備份您的設定。",
-  "device.reset.confirm": "重設偏好設定",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "操作成功，請重新嘗試。",
   "device.refresh.name": "重新整理裝置",
   "device.restart.name": "重啟服務",
   "device.log.name": "執行日誌",
@@ -253,6 +247,7 @@
   "preferences.config.export.success": "匯出成功",
   "preferences.config.edit.name": "編輯",
   "preferences.config.reset.name": "重設",
+  "preferences.config.reset.tips": "注意：重設後，之前儲存的設定將會被清除，因此建議在執行重設操作之前備份您的設定。",
 
   "preferences.common.name": "一般設定",
   "preferences.common.theme.name": "主題",

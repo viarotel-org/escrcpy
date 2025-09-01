@@ -97,10 +97,10 @@
             <MirrorAction
               v-if="['device', 'unauthorized'].includes(row.status)"
               :ref="getMirrorActionRefs"
-              v-bind="{ row, toggleRowExpansion, handleReset }"
+              v-bind="{ row, toggleRowExpansion }"
             />
 
-            <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion, handleReset }" />
+            <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion }" />
 
             <WirelessAction v-if="['device', 'unauthorized'].includes(row.status)" v-bind="{ row, handleConnect, handleRefresh }" />
 
@@ -234,10 +234,6 @@ async function getDeviceData(options = {}) {
     }
 
     deviceList.value = []
-
-    if (resetResolve) {
-      handleReset()
-    }
   }
 
   loading.value = false
@@ -298,31 +294,6 @@ async function handleRefresh() {
   loading.value = true
   await sleep()
   getDeviceData({ resetResolve: true, unloading: true })
-}
-
-async function handleReset() {
-  try {
-    await proxy.$confirm(
-      `
-      <div>${proxy.$t('device.reset.reasons[0]')}</div>
-      <div class="text-red-500">${proxy.$t('device.reset.reasons[1]')}</div>
-      `,
-      proxy.$t('device.reset.title'),
-      {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: proxy.$t('device.reset.confirm'),
-        cancelButtonText: proxy.$t('device.reset.cancel'),
-        closeOnClickModal: false,
-        type: 'warning',
-      },
-    )
-    preferenceStore.reset()
-    proxy.$message.success(proxy.$t('device.reset.success'))
-  }
-  catch (error) {
-    if (error.message)
-      console.warn(error.message)
-  }
 }
 
 function onAutoConnected() {}

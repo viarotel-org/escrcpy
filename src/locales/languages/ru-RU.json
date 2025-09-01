@@ -129,12 +129,6 @@
   "device.wireless.pair.code.message": "Код для сопряжения не может быть пустым",
   "device.wireless.pair.code.placeholder": "Введите код для сопряжения",
 
-  "device.reset.title": "Не удалось выполнить операцию",
-  "device.reset.reasons[0]": "Как правило, это может быть вызвано несовместимыми настройками. Хотите сбросить настройки?",
-  "device.reset.reasons[1]": "Примечание: После сброса все ранее сохраненные настройки будут удалены, поэтому рекомендуется сделать резервную копию ваших настроек перед выполнением сброса.",
-  "device.reset.confirm": "Сбросить настройки",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "Успешно, попробуйте снова",
   "device.refresh.name": "Обновить",
   "device.restart.name": "Перезапустить",
   "device.log.name": "Логи",
@@ -254,6 +248,7 @@
   "preferences.config.export.success": "Экспорт успешно выполнен",
   "preferences.config.edit.name": "Редактировать",
   "preferences.config.reset.name": "Сброс",
+  "preferences.config.reset.tips": "Примечание: После сброса все ранее сохраненные настройки будут удалены, поэтому рекомендуется сделать резервную копию ваших настроек перед выполнением сброса.",
 
   "preferences.common.name": "Общие",
   "preferences.common.theme.name": "Тема",

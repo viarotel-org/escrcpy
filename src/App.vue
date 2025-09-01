@@ -59,7 +59,6 @@ async function showTips() {
     window.t('dependencies.lack.title'),
     {
       dangerouslyUseHTMLString: true,
-      confirmButtonText: window.t('common.confirm'),
     },
   )
 }

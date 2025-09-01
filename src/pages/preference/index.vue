@@ -79,10 +79,8 @@ function onDeviceChange(options) {
 
 async function handleReset() {
   try {
-    await ElMessageBox.confirm(window.t('device.reset.reasons[1]'), window.t('common.tips'), {
+    await ElMessageBox.confirm(window.t('preferences.config.reset.tips'), window.t('common.tips'), {
       type: 'warning',
-      confirmButtonText: window.t('common.confirm'),
-      cancelButtonText: window.t('common.cancel'),
     })
   }
   catch (error) {

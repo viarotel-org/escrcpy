@@ -129,12 +129,6 @@
   "device.wireless.pair.code.message": "Pair code cannot be empty",
   "device.wireless.pair.code.placeholder": "Input pair code",
 
-  "device.reset.title": "Operation Failed",
-  "device.reset.reasons[0]": "Typically, this may be caused by incompatible configurations. Do you want to reset preferences?",
-  "device.reset.reasons[1]": "Note: After resetting, any previously saved configurations will be cleared, so it is recommended to back up your configurations before performing the reset operation.",
-  "device.reset.confirm": "Reset Preferences",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "Success, please try again",
   "device.refresh.name": "Refresh",
   "device.restart.name": "Restart",
   "device.log.name": "Logs",
@@ -254,6 +248,7 @@
   "preferences.config.export.success": "Export success",
   "preferences.config.edit.name": "Edit",
   "preferences.config.reset.name": "Reset",
+  "preferences.config.reset.tips": "Note: After resetting, any previously saved configurations will be cleared, so it is recommended to back up your configurations before performing the reset operation.",
 
   "preferences.common.name": "Common",
   "preferences.common.theme.name": "Theme",

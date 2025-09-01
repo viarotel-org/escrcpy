@@ -129,12 +129,6 @@
   "device.wireless.pair.code.message": "ペアコードは空欄にできません",
   "device.wireless.pair.code.placeholder": "ペアコードを入力",
 
-  "device.reset.title": "操作に失敗しました",
-  "device.reset.reasons[0]": "これは互換性のない設定が原因である可能性があります。設定をリセットしますか？",
-  "device.reset.reasons[1]": "注意: リセットすると以前に保存した設定はすべて消去されるため、リセットを行う前に設定をバックアップすることを推奨します。",
-  "device.reset.confirm": "設定をリセット",
-  "device.reset.cancel": "@:common.cancel",
-  "device.reset.success": "成功しました、再度お試しください",
   "device.refresh.name": "更新",
   "device.restart.name": "再起動",
   "device.log.name": "ログ",
@@ -254,6 +248,7 @@
   "preferences.config.export.success": "エクスポートに成功しました",
   "preferences.config.edit.name": "編集",
   "preferences.config.reset.name": "リセット",
+  "preferences.config.reset.tips": "注意: リセットすると以前に保存した設定はすべて消去されるため、リセットを行う前に設定をバックアップすることを推奨します。",
 
   "preferences.common.name": "一般",
   "preferences.common.theme.name": "テーマ",

@@ -349,9 +349,15 @@ async function waitForDevice(id) {
 }
 
 async function getSerialNo(id) {
-  const ret = await deviceShell(id, 'getprop ro.serialno')
+  let value = id
 
-  const value = ret.replace(/[\n\r]/g, '')
+  try {
+    const ret = await deviceShell(id, 'getprop ro.serialno')
+    value = ret.replace(/[\n\r]/g, '')
+  }
+  catch (error) {
+    console.error('getSerialNo.error', error?.message || error)
+  }
 
   return value
 }

@@ -39,24 +39,6 @@ Each connected device can be added as an independent window component, supportin
    - Click the button to enter window arrangement interface
    - The system will open a fullscreen window arrangement interface
 
-### Interface Layout Description
-
-The window arrangement interface uses a fullscreen design and mainly includes the following areas:
-
-#### Control Panel (Top)
-- **Add Widget Button**: Dropdown menu format, allowing selection of global configuration or specific devices
-- **Reset Layout Button**: Restore to default window layout settings
-- **Clear All Button**: Remove all added window components
-
-#### Arrangement Area (Main)
-- Visual arrangement space with dashed border
-- All window components are laid out within this area
-- Supports real-time dragging and adjustment operations
-
-#### Action Buttons (Bottom)
-- **Cancel Button**: Discard current modifications and close arrangement interface
-- **Save Layout Button**: Save current layout configuration and apply
-
 ### Adding and Managing Components
 
 #### Adding Global Configuration Component

@@ -35,20 +35,25 @@
             @resize-stop="(x, y, w, h) => onWidgetResizeStop(widget.id, { x, y, width: w, height: h })"
           >
             <div class="widget-content">
-              <div class="widget-header flex w-full space-x-2">
-                <div class="widget-name flex-1 w-0 truncate" :title="widget.name">
+              <div class="widget-header flex w-full space-x-2 p-1" :class="['global'].includes(widget.type) ? 'bg-blue-500' : 'bg-green-500'">
+                <div class="widget-name text-white flex-1 w-0 truncate" :title="widget.name">
                   {{ widget.name }}
                 </div>
 
                 <div class="flex-none flex items-center">
                   <el-button
                     type="danger"
-                    :icon="Close"
                     size="small"
                     circle
-                    class="remove-btn"
+                    class="remove-btn !size-[10px] group"
                     @click="removeWidget(widget.id)"
-                  />
+                  >
+                    <template #icon>
+                      <el-icon class="opacity-0 group-hover:opacity-100">
+                        <el-icon-close class=""></el-icon-close>
+                      </el-icon>
+                    </template>
+                  </el-button>
                 </div>
               </div>
               <div class="widget-body">
@@ -117,7 +122,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Close, Delete, Monitor, Refresh, Setting } from '@element-plus/icons-vue'
+import { Delete, Monitor, Refresh, Setting } from '@element-plus/icons-vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/style.css'
 import { useScaleScreen } from '$/hooks/useScaleScreen/index.js'
@@ -144,6 +149,8 @@ const {
   scaleConverter,
   containerWidth,
   containerHeight,
+  screenWidth,
+  screenHeight,
 } = useScaleScreen({
   containerRef: arrangementAreaRef,
 })
@@ -187,8 +194,8 @@ const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemove
   allDevices,
   hasGlobalWidget,
   createWidgetFromConfig,
-  containerWidth,
-  containerHeight,
+  screenWidth,
+  screenHeight,
 )
 
 const resetLayout = () => {
@@ -236,25 +243,22 @@ defineExpose({
 }
 
 .widget-window {
-  border-radius: 6px;
+  border-radius: 8px;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  border: 2px solid transparent;
+
+  @apply border-2 border-solid border-transparent;
 
   &.global-widget {
-    border-color: #409eff;
-
-    &:hover {
-      border-color: #66b1ff;
+    &, &:hover {
+      @apply border-blue-500;
     }
   }
 
   &.device-widget {
-    border-color: #67c23a;
-
-    &:hover {
-      border-color: #85ce61;
+    &, &:hover {
+      @apply border-green-500;
     }
   }
 
@@ -267,24 +271,10 @@ defineExpose({
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-}
-
-.widget-header {
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
 }
 
 .widget-name {
   font-weight: 500;
-  color: #333;
-  font-size: 10px;
-}
-
-.remove-btn {
-  width: 14px !important;
-  height: 14px !important;
   font-size: 10px;
 }
 

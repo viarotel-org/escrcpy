@@ -10,8 +10,8 @@ export function useWidgetManagement(
   allDevices,
   hasGlobalWidget,
   createWidgetFromConfig,
-  containerWidth,
-  containerHeight,
+  screenWidth,
+  screenHeight,
 ) {
   // Track removed widgets for later cleanup in saveLayout
   const removedWidgets = ref([])
@@ -43,16 +43,18 @@ export function useWidgetManagement(
     }
   }
   const addWidget = (command) => {
+    const scrcpy = window.appStore.get('scrcpy') || {}
+    const globalConfig = scrcpy.global || {}
+
     if (command === 'global') {
       if (hasGlobalWidget.value) {
         ElMessage.warning(t('device.arrange.widget.global.exists'))
         return
       }
 
-      const globalConfig = window.appStore.get('scrcpy.global') || {}
       const config = {
-        '--window-width': globalConfig['--window-width'] || containerWidth.value / 6,
-        '--window-height': globalConfig['--window-height'] || containerHeight.value / 3,
+        '--window-width': globalConfig['--window-width'] || screenWidth.value / 6,
+        '--window-height': globalConfig['--window-height'] || screenHeight.value / 2,
         '--window-x': globalConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
         '--window-y': globalConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
       }
@@ -62,38 +64,40 @@ export function useWidgetManagement(
         type: 'global',
         name: t('device.arrange.widget.global.name'),
       })
+
       arrangedWidgets.value.push(widget)
       // Remove from removed list if it was previously removed
       unmarkWidgetAsRemoved(widget)
-    }
-    else {
-      const device = allDevices.value.find(d => d.id === command)
-      if (!device) {
-        ElMessage.error(t('device.arrange.device.notFound'))
-        return
-      }
 
-      const deviceConfig = window.appStore.get(`scrcpy.${command}`) || {}
-      const globalConfig = window.appStore.get('scrcpy.global') || {}
-      const config = {
-        ...globalConfig,
-        ...deviceConfig,
-        '--window-width': deviceConfig['--window-width'] || globalConfig['--window-width'] || '300',
-        '--window-height': deviceConfig['--window-height'] || globalConfig['--window-height'] || '600',
-        '--window-x': deviceConfig['--window-x'] || globalConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
-        '--window-y': deviceConfig['--window-y'] || globalConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
-      }
-
-      const widget = createWidgetFromConfig(config, {
-        id: device.id,
-        type: 'device',
-        deviceId: device.id,
-        name: device.name || device.model?.split(':')[1] || device.id,
-      })
-      arrangedWidgets.value.push(widget)
-      // Remove from removed list if it was previously removed
-      unmarkWidgetAsRemoved(widget)
+      return false
     }
+
+    const device = allDevices.value.find(d => d.id === command)
+    if (!device) {
+      ElMessage.error(t('device.arrange.device.notFound'))
+      return
+    }
+
+    const deviceConfig = scrcpy[command] || {}
+
+    const config = {
+      ...deviceConfig,
+      '--window-width': deviceConfig['--window-width'] || screenWidth.value / 6,
+      '--window-height': deviceConfig['--window-height'] || screenHeight.value / 2,
+      '--window-x': deviceConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
+      '--window-y': deviceConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
+    }
+
+    const widget = createWidgetFromConfig(config, {
+      id: device.id,
+      type: 'device',
+      deviceId: device.id,
+      name: device.name || device.model?.split(':')[1] || device.id,
+    })
+
+    arrangedWidgets.value.push(widget)
+    // Remove from removed list if it was previously removed
+    unmarkWidgetAsRemoved(widget)
   }
 
   const removeWidget = (widgetId) => {

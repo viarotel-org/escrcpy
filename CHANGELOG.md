@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.31.2](https://github.com/viarotel-org/escrcpy/compare/v1.31.1...v1.31.2) (2025-09-01)
+
+
+### Bug Fixes
+
+* 🐛 Resolved the issue where the device list could not be displayed due to compatibility issues with certain devices ([2c53b77](https://github.com/viarotel-org/escrcpy/commit/2c53b77745cc289edc0de1a404ecd9f037c28523))
+
+
+### Performance Improvements
+
+* 🚀 Optimization of window arrangement function ([33786ab](https://github.com/viarotel-org/escrcpy/commit/33786ab46095727d027a5cb7206c093e9e7a06d2))
+
 ## [1.31.1](https://github.com/viarotel-org/escrcpy/compare/v1.31.0...v1.31.1) (2025-08-29)
 
 

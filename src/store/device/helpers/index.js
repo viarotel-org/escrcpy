@@ -91,7 +91,7 @@ export function mergeDevices(historyDevices, currentDevices) {
   const basicMergeList = Object.values(defaultsDeep(currentMap, historyMap))
 
   // 过滤掉排除的关键词
-  const excludedKeywords = ['_adb-tls-connect', '_tcp']
+  const excludedKeywords = []
   const filteredList = basicMergeList.filter(({ id = '' }) => !excludedKeywords.some(keyword => id.includes(keyword)))
 
   // 基于 serialNo 进行去重处理

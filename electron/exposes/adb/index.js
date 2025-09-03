@@ -287,7 +287,9 @@ async function pair(host, port, code) {
   return stdout
 }
 
-async function connect(address) {
+async function connect(host, port) {
+  const address = port ? `${host}:${port}` : host
+
   const { stderr, stdout } = await shell(`connect ${address}`)
 
   if (stderr) {
@@ -303,7 +305,9 @@ async function connect(address) {
   return stdout
 }
 
-async function disconnect(address) {
+async function disconnect(host, port) {
+  const address = port ? `${host}:${port}` : host
+
   const { stderr, stdout } = await shell(`disconnect ${address}`)
 
   if (stderr) {

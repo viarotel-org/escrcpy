@@ -6,10 +6,3 @@ import ipRegex from 'ip-regex'
 export function isIpv6(string) {
   return ipRegex.v6().test(string)
 }
-
-/**
- * Square brackets for IPV6 address
- */
-export function ipv6Wrapper(string) {
-  return isIpv6(string) ? `[${string}]` : string
-}

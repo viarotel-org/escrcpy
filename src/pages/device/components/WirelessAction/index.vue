@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { parseDeviceId, sleep } from '$/utils'
+import { sleep } from '$/utils'
 
 export default {
   inheritAttrs: false,
@@ -66,10 +66,7 @@ export default {
 
         await sleep()
 
-        this.handleConnect({
-          host,
-          port,
-        })
+        this.handleConnect(`${host}:${port}`)
       }
       catch (error) {
         console.warn(error.message)
@@ -82,10 +79,8 @@ export default {
     async handleStop(row) {
       this.stopLoading = true
 
-      const { host, port } = parseDeviceId(row.id)
-
       try {
-        await this.$adb.disconnect(host, port)
+        await this.$adb.disconnect(row.id)
         await sleep()
         this.$message.success(this.$t('device.wireless.disconnect.success'))
       }

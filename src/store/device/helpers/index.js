@@ -1,5 +1,25 @@
-import { defaultsDeep, groupBy, keyBy, omit } from 'lodash-es'
+import { defaultsDeep, groupBy, keyBy } from 'lodash-es'
 import { deviceStatus as deviceStatusDict } from '$/dicts/device/index.js'
+
+/**
+ * 获取无线设备优先级
+ * 数字越小优先级越高
+ */
+function getWirelessDevicePriority(device) {
+  if (['offline'].includes(device.type)) {
+    return 40
+  }
+
+  if (device.id.includes(':5555')) {
+    return 10
+  }
+
+  if (device.id.includes('_adb-tls-connect')) {
+    return 30
+  }
+
+  return 20
+}
 
 /**
  * 获取设备名称
@@ -24,7 +44,6 @@ export function getHistoryDevices() {
 
   const value = Object.values(devices).map(device => ({
     ...device,
-    status: 'offline',
   }))
 
   return value
@@ -41,7 +60,7 @@ export async function getCurrentDevices() {
     id: device.id,
     status: device.type,
     name: getDeviceName(device),
-    wifi: device.id.includes(':'),
+    wifi: ([':', '_adb-tls-connect']).some(item => device.id.includes(item)),
     remark: getRemark(device.id),
   }))
 }
@@ -99,7 +118,7 @@ export function mergeDevices(historyDevices, currentDevices) {
   const deduplicatedList = []
 
   Object.entries(serialNoGroups).forEach(([serialNo, devices]) => {
-    if (!serialNo || serialNo === 'undefined') {
+    if (!serialNo) {
       // 如果没有 serialNo，直接添加（保持原有逻辑）
       deduplicatedList.push(...devices)
       return
@@ -117,8 +136,17 @@ export function mergeDevices(historyDevices, currentDevices) {
 
     // 处理无线设备去重和配置迁移
     if (wirelessDevices.length > 0) {
-      // 优先选择 currentDevices 中的无线设备
-      const currentWirelessDevice = wirelessDevices.find(device => currentMap[device.id])
+      // 优先选择 currentDevices 中的无线设备，并按优先级排序
+      const currentWirelessDevices = wirelessDevices.filter(device => currentMap[device.id])
+      let currentWirelessDevice = null
+
+      if (currentWirelessDevices.length > 0) {
+        // 按优先级排序，选择优先级最高的设备
+        currentWirelessDevice = currentWirelessDevices.sort((a, b) =>
+          getWirelessDevicePriority(a) - getWirelessDevicePriority(b),
+        )[0]
+      }
+
       const selectedWirelessDevice = currentWirelessDevice || wirelessDevices[0]
 
       // 迁移其他无线设备的配置到选中的设备
@@ -143,7 +171,11 @@ export function mergeDevices(historyDevices, currentDevices) {
 export function saveDevicesToStore(devices) {
   const cleanedDevices = devices
     .filter(device => !['unauthorized'].includes(device.status))
-    .map(device => omit(device, ['status']))
+    .map(device => ({
+      ...device,
+      status: 'offline',
+      type: 'offline',
+    }))
 
   window.appStore.set('device', keyBy(cleanedDevices, 'id'))
 }

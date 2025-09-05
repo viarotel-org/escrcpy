@@ -75,6 +75,17 @@
   "device.powerSource": "Источник питания",
   "device.voltage": "Напряжение устройства",
 
+  "device.config.migration.title": "Миграция конфигурации",
+  "device.config.migration.description.title": "Обнаружена конфигурация для этого устройства",
+  "device.config.migration.description.content": "Хотите ли вы перенести эту конфигурацию в те же записи устройств в текущем списке устройств? Это поможет вам сохранить ваши предыдущие настройки.",
+  "device.config.migration.select.title": "Пожалуйста, выберите целевые устройства для миграции конфигурации:",
+  "device.config.migration.no.target.devices": "Не найдено целевых устройств для миграции",
+  "device.config.migration.skip": "Пропустить",
+  "device.config.migration.start": "Начать миграцию",
+  "device.config.migration.success": "Успешно перенесена конфигурация для {count} устройства(в)",
+  "device.config.migration.no.migration": "Нет конфигурации для миграции",
+  "device.config.migration.error": "Миграция конфигурации не удалась",
+
   "device.task.name": "Запланированная задача",
   "device.task.tips": "Примечание: Пожалуйста, убедитесь, что ваш компьютер не переходит в спящий режим, иначе запланированные задачи не будут выполнены правильно.",
   "device.task.list": "список задач",

@@ -75,6 +75,17 @@
   "device.powerSource": "電源ソース",
   "device.voltage": "デバイスの電圧",
 
+  "device.config.migration.title": "設定の移行",
+  "device.config.migration.description.title": "このデバイスの設定が検出されました",
+  "device.config.migration.description.content": "この設定を現在のデバイスリスト内の同じデバイスエントリに移行しますか？これにより、以前の設定を保持できます。",
+  "device.config.migration.select.title": "設定を移行する対象デバイスを選択してください：",
+  "device.config.migration.no.target.devices": "移行可能な対象デバイスが見つかりません",
+  "device.config.migration.skip": "スキップ",
+  "device.config.migration.start": "移行開始",
+  "device.config.migration.success": "{count}台のデバイスの設定を正常に移行しました",
+  "device.config.migration.no.migration": "移行する設定がありません",
+  "device.config.migration.error": "設定の移行に失敗しました",
+
   "device.task.name": "スケジュールされたタスク",
   "device.task.tips": " 注意: コンピューターが起動状態であることを確認してください。起動状態でないとスケジュールされたタスクが正しく実行されません。",
   "device.task.list": "タスクの一覧",

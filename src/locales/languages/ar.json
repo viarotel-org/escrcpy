@@ -75,6 +75,17 @@
   "device.powerSource": "مصدر الطاقة",
   "device.voltage": "جهد الجهاز",
 
+  "device.config.migration.title": "ترحيل التكوين",
+  "device.config.migration.description.title": "تم اكتشاف تكوين لهذا الجهاز",
+  "device.config.migration.description.content": "هل تريد ترحيل هذا التكوين إلى نفس إدخالات الجهاز في قائمة الأجهزة الحالية؟ سيساعدك هذا في الاحتفاظ بإعداداتك السابقة.",
+  "device.config.migration.select.title": "يرجى اختيار الأجهزة المستهدفة لترحيل التكوين إليها:",
+  "device.config.migration.no.target.devices": "لم يتم العثور على أجهزة مستهدفة للترحيل",
+  "device.config.migration.skip": "تخطي",
+  "device.config.migration.start": "بدء الترحيل",
+  "device.config.migration.success": "تم ترحيل التكوين بنجاح لـ {count} جهاز",
+  "device.config.migration.no.migration": "لا يوجد تكوين للترحيل",
+  "device.config.migration.error": "فشل ترحيل التكوين",
+
   "device.task.name": "مهمة مجدولة",
   "device.task.tips": "ملاحظة: يرجى التأكد من بقاء جهاز الكمبيوتر الخاص بك في حالة نشاط، وإلا فلن يتم تنفيذ المهام المجدولة بشكل صحيح.",
   "device.task.list": "قائمة المهام",

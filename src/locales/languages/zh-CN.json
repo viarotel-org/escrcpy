@@ -75,6 +75,17 @@
   "device.powerSource": "驱动来源",
   "device.voltage": "设备电压",
 
+  "device.config.migration.title": "配置迁移",
+  "device.config.migration.description.title": "检测到该设备存在配置",
+  "device.config.migration.description.content": "是否将该配置迁移到当前设备列表中同一设备的条目？这将帮助您保留之前的设置。",
+  "device.config.migration.select.title": "请选择要迁移配置的目标设备：",
+  "device.config.migration.no.target.devices": "未找到可迁移的目标设备",
+  "device.config.migration.skip": "跳过",
+  "device.config.migration.start": "开始迁移",
+  "device.config.migration.success": "成功迁移 {count} 个设备的配置",
+  "device.config.migration.no.migration": "没有配置需要迁移",
+  "device.config.migration.error": "配置迁移失败",
+
   "device.task.name": "计划任务",
   "device.task.tips": " 注意：请确保你的计算机保持唤醒状态，否则计划任务将无法被正常执行。",
   "device.task.list": "任务列表",

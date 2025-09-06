@@ -193,17 +193,7 @@ export async function copyFilePathWindows(absolutePath) {
     }
   }
 
-  // 尝试主要格式：CF_HDROP 格式（拖放格式）
-  const hdropBuffer = createCFHDROPBuffer(processedPath)
-  clipboard.writeBuffer('CF_HDROP', hdropBuffer)
-
-  if (verifyClipboardWrite('CF_HDROP')) {
-    console.log('File path copied to clipboard (Windows CF_HDROP format)')
-    return
-  }
-  console.warn('CF_HDROP format not supported, trying FileName')
-
-  // 备选格式：FileNameW (UTF-16 编码)
+  // FileNameW (UTF-16 编码)
   const pathWithNull = `${processedPath}\0`
   const fileNameWBuffer = Buffer.from(pathWithNull, 'utf16le')
   clipboard.writeBuffer('FileNameW', fileNameWBuffer)
@@ -214,7 +204,17 @@ export async function copyFilePathWindows(absolutePath) {
   }
   console.warn('FileNameW format not supported, trying alternatives')
 
-  // 备选格式：FileName (ANSI 编码，用于兼容旧应用)
+  // CF_HDROP 格式（拖放格式）
+  const hdropBuffer = createCFHDROPBuffer(processedPath)
+  clipboard.writeBuffer('CF_HDROP', hdropBuffer)
+
+  if (verifyClipboardWrite('CF_HDROP')) {
+    console.log('File path copied to clipboard (Windows CF_HDROP format)')
+    return
+  }
+  console.warn('CF_HDROP format not supported, trying FileName')
+
+  // FileName (ANSI 编码，用于兼容旧应用)
   const fileNameBuffer = Buffer.from(pathWithNull, 'latin1')
   clipboard.writeBuffer('FileName', fileNameBuffer)
 

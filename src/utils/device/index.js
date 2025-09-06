@@ -1,4 +1,5 @@
 import { allSettledWrapper, sleep } from '$/utils'
+import { defaultsDeep } from 'lodash-es'
 /**
  * 选择并将文件发送到设备
  */
@@ -135,12 +136,8 @@ export class ScrcpyConfigMigrator {
       return false
     }
 
-    if (this.hasConfig(scrcpyConfig, newDeviceId)) {
-      return false
-    }
-
     // 执行配置迁移
-    scrcpyConfig[newDeviceId] = { ...scrcpyConfig[oldDeviceId] }
+    scrcpyConfig[newDeviceId] = defaultsDeep(scrcpyConfig[newDeviceId] || {}, scrcpyConfig[oldDeviceId])
     this.saveScrcpyConfig(scrcpyConfig)
 
     // 记录已处理的设备ID，用于后续清理

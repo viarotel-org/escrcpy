@@ -10,19 +10,13 @@
   >
     <div class="space-y-4">
       <!-- 提示信息 -->
-      <div class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-md border border-primary-200 dark:border-primary-800">
-        <div class="flex items-start space-x-3">
-          <el-icon class="text-primary-500 mt-0.5 flex-none">
-            <InfoFilled />
-          </el-icon>
-          <div class="flex-1 text-sm text-primary-700 dark:text-primary-300">
-            <p class="font-medium mb-1">
-              {{ $t('device.config.migration.description.title') }}
-            </p>
-            <p>{{ $t('device.config.migration.description.content') }}</p>
-          </div>
-        </div>
-      </div>
+      <el-alert
+        :title="$t('device.config.migration.description.title')"
+        type="primary"
+        :description="$t('device.config.migration.description.content')"
+        show-icon
+        :closable="false"
+      />
 
       <!-- 设备选择 -->
       <div class="space-y-3">

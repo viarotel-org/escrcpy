@@ -64,6 +64,7 @@ export default antfu(
       'regexp/no-unused-capturing-group': 'off',
       'regexp/no-dupe-disjunctions': 'off',
       'perfectionist/sort-imports': 'off',
+      'no-control-regex': 'off',
     },
   },
 )

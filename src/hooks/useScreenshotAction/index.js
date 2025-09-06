@@ -38,6 +38,7 @@ export function useScreenshotAction({ floating } = {}) {
 
     try {
       await window.adb.screencap(device.id, { savePath })
+      window.electron.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
     }
     catch (error) {
       if (error.message) {

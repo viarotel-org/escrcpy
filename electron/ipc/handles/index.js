@@ -1,5 +1,6 @@
 import { dialog, ipcMain, screen, shell } from 'electron'
 import fs from 'fs-extra'
+import { copyFileToClipboard } from '$electron/helpers/clipboard.js'
 
 export default (mainWindow) => {
   ipcMain.handle(
@@ -64,4 +65,27 @@ export default (mainWindow) => {
       await fs.copy(filePath, destinationPath)
     },
   )
+
+  // 复制文件到剪切板
+  ipcMain.handle('copy-file-to-clipboard', async (_, filePath) => {
+    try {
+      if (!filePath) {
+        throw new Error('File path is required')
+      }
+
+      const success = await copyFileToClipboard(filePath)
+
+      return {
+        success,
+        message: success ? 'File copied to clipboard successfully' : 'Failed to copy file to clipboard',
+      }
+    }
+    catch (error) {
+      console.error('IPC copy-file-to-clipboard error:', error.message)
+      return {
+        success: false,
+        message: error.message,
+      }
+    }
+  })
 }

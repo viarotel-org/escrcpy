@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.32.0](https://github.com/viarotel-org/escrcpy/compare/v1.31.3...v1.32.0) (2025-09-08)
+
+
+### Features
+
+* ✨ Now supports copying device screenshots and recording files to the clipboard ([bdb3644](https://github.com/viarotel-org/escrcpy/commit/bdb364486292ecc382821b28cf523fdbf5ce4cce))
+* 🚀 Update to scrcpy v3.3.2 ([462536c](https://github.com/viarotel-org/escrcpy/commit/462536ce60d0c2340561ad397dd187f871845677))
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue where recorded files could not be copied to the clipboard under Windows ([119b518](https://github.com/viarotel-org/escrcpy/commit/119b518eb9099e641f99eb37f4bc7feaabe1e753))
+* 🔧 Fixed button loading prompt conflict issue ([c323ad6](https://github.com/viarotel-org/escrcpy/commit/c323ad60059f1a18ebb9486f860e088584da6b26))
+
+
+### Performance Improvements
+
+* ✅ Provides the function of detecting and migrating configurations when deleting a device ([39e0533](https://github.com/viarotel-org/escrcpy/commit/39e05334a899d6157ff3a9b96bab3faae298007f))
+* 📌 Standardize the device list lifecycle processing flow. IPv6 addresses must be enclosed in [] and the port number cannot be omitted for wireless connections. ([93c059d](https://github.com/viarotel-org/escrcpy/commit/93c059dc9d79949609f8537e161522acfa658f66))
+* 🚀 Modify the adb connection method to be compatible with scan connection ([e6e8a09](https://github.com/viarotel-org/escrcpy/commit/e6e8a09dfcbd0dfec1a2c8afe58384cd8189f2b4))
+* 🚀 Optimize device list connection behavior and configuration migration strategy ([8237058](https://github.com/viarotel-org/escrcpy/commit/82370583224a351ae15040a8cf70861a34342e1b))
+
 ## [1.31.3](https://github.com/viarotel-org/escrcpy/compare/v1.31.2...v1.31.3) (2025-09-01)
 
 

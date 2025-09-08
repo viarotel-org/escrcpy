@@ -103,7 +103,7 @@ export default {
     show({ params = {} } = {}) {
       this.formData = {
         ...this.$options.data().formData,
-        host: params.host,
+        ...params,
       }
       this.visible = true
     },

@@ -1,10 +1,10 @@
 <template>
   <div class="flex items-center flex-none space-x-2">
-    <div class="w-72 flex-none">
+    <div class="w-96 flex-none">
       <el-autocomplete
-        v-if="!showAutocomplete"
+        :key="autocompleteKey"
         ref="elAutocompleteRef"
-        v-model="fullHost"
+        v-model="address"
         placeholder="192.168.0.1:5555"
         clearable
         :fetch-suggestions="fetchSuggestions"
@@ -27,7 +27,7 @@
 
           <div v-else class="flex items-center">
             <div class="flex-1 w-0">
-              {{ item.host }}
+              {{ item.id }}
             </div>
             <div
               class="flex-none leading-none"
@@ -98,54 +98,23 @@ export default {
   data() {
     return {
       loading: false,
-      showAutocomplete: false,
 
-      formData: {
-        id: void 0,
-        host: void 0,
-        port: void 0,
-      },
+      address: '',
 
-      firstFlag: true,
+      autocompleteKey: 0,
     }
   },
   computed: {
     wirelessList() {
-      const value = this.deviceStore.list.reduce((arr, item) => {
-        if (item.wifi) {
-          const { host, port } = parseDeviceId(item.id)
-
-          arr.push({
-            id: item.id,
-            host,
-            port,
-          })
-        }
-
-        return arr
-      }, [])
-
+      const value = this.deviceStore.list.filter(item => item.wifi)
       return value
-    },
-    fullHost: {
-      get() {
-        return this.formData.id
-      },
-      set(value) {
-        this.formData.id = value
-
-        const { host, port } = parseDeviceId(value)
-
-        this.formData.host = host
-        this.formData.port = port
-      },
     },
   },
   watch: {
     'wirelessList.length': {
       handler(val) {
         if (val) {
-          this.getFormData()
+          this.getAddress()
         }
       },
       immediate: true,
@@ -154,16 +123,12 @@ export default {
   async created() {
     const unwatch = this.$watch('wirelessList', async (val) => {
       unwatch()
+
       if (!val) {
         return false
       }
 
-      this.getFormData()
-
-      if (this.firstFlag) {
-        this.firstFlag = false
-        this.handleConnectAuto()
-      }
+      this.handleConnectAuto()
     })
   },
   methods: {
@@ -176,33 +141,23 @@ export default {
         this.$emit('auto-connected')
       }
     },
-    getFormData() {
+    getAddress() {
       const lastIndex = this.wirelessList.length - 1
       const lastWireless = this.wirelessList[lastIndex]
 
       if (lastWireless) {
-        this.formData = {
-          host: lastWireless.host,
-          port: lastWireless.port,
-          id: `${lastWireless.host}:${lastWireless.port}`,
-        }
+        this.address = lastWireless.id
       }
     },
     connect(...args) {
       return this.handleConnect(...args)
-    },
-    onSelect({ host, port }) {
-      Object.assign(this.formData, {
-        host,
-        port,
-      })
     },
     fetchSuggestions(value, callback) {
       let results = []
 
       if (value) {
         results = this.wirelessList.filter(
-          item => item.host.toLowerCase().indexOf(value.toLowerCase()) === 0,
+          item => item.id.toLowerCase().indexOf(value.toLowerCase()) === 0,
         )
       }
       else {
@@ -214,6 +169,9 @@ export default {
       })
 
       callback(results)
+    },
+    onSelect(device) {
+      this.address = device.id
     },
     onPairSuccess() {
       this.handleConnect()
@@ -229,15 +187,7 @@ export default {
 
       this.wirelessList.splice(index, 1)
 
-      this.reRenderAutocomplete()
-    },
-
-    async reRenderAutocomplete() {
-      this.showAutocomplete = true
-
-      await this.$nextTick()
-
-      this.showAutocomplete = false
+      ++this.autocompleteKey
     },
 
     async handleBatch() {
@@ -256,10 +206,10 @@ export default {
       const promises = []
 
       for (let index = 0; index < totalCount; index++) {
-        const { host, port } = this.wirelessList[index]
+        const { id } = this.wirelessList[index]
 
         promises.push(
-          this.$adb.connect(host, port || 5555).catch(() => {
+          this.$adb.connect(id).catch(() => {
             ++failCount
           }),
         )
@@ -274,8 +224,8 @@ export default {
       this.loading = false
     },
 
-    async handleConnect(params = this.formData) {
-      if (!params.host) {
+    async handleConnect(address = this.address) {
+      if (!address) {
         this.$message.warning(
           this.$t('device.wireless.connect.error.no-address'),
         )
@@ -285,7 +235,7 @@ export default {
       this.loading = true
 
       try {
-        await this.$adb.connect(params.host, params.port || 5555)
+        await this.$adb.connect(address)
         await sleep()
 
         this.$message.success(this.$t('device.wireless.connect.success'))
@@ -330,7 +280,7 @@ export default {
             type: 'warning',
           },
         )
-        this.$refs.pairDialog.show({ params: { ...this.formData } })
+        this.$refs.pairDialog.show({ params: { ...parseDeviceId(this.address) } })
       }
       catch (error) {
         console.warn(error.message)

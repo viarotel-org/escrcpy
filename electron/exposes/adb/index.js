@@ -9,7 +9,6 @@ import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { ProcessManager, streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
-import { ipv6Wrapper, isIpv6 } from './helpers/index.js'
 import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
@@ -277,7 +276,9 @@ async function battery(id) {
 }
 
 async function pair(host, port, code) {
-  const { stderr, stdout } = await shell(`pair ${ipv6Wrapper(host)}:${port} ${code}`)
+  const address = port ? `${host}:${port}` : host
+
+  const { stderr, stdout } = await shell(`pair ${address} ${code}`)
 
   if (stderr) {
     throw stderr
@@ -286,12 +287,10 @@ async function pair(host, port, code) {
   return stdout
 }
 
-async function connect(host, port = 5555) {
-  if (!isIpv6(host) && client) {
-    return client.connect(host, port)
-  }
+async function connect(host, port) {
+  const address = port ? `${host}:${port}` : host
 
-  const { stderr, stdout } = await shell(`connect ${ipv6Wrapper(host)}:${port}`)
+  const { stderr, stdout } = await shell(`connect ${address}`)
 
   if (stderr) {
     throw stderr
@@ -306,12 +305,10 @@ async function connect(host, port = 5555) {
   return stdout
 }
 
-async function disconnect(host, port = 5555) {
-  if (!isIpv6(host) && client) {
-    return client.disconnect(host, port)
-  }
+async function disconnect(host, port) {
+  const address = port ? `${host}:${port}` : host
 
-  const { stderr, stdout } = await shell(`disconnect ${ipv6Wrapper(host)}:${port}`)
+  const { stderr, stdout } = await shell(`disconnect ${address}`)
 
   if (stderr) {
     throw stderr
@@ -363,7 +360,8 @@ async function getSerialNo(id) {
 }
 
 async function getDeviceList() {
-  const devices = await client.listDevicesWithPaths()
+  const listDevicesWithPaths = await client.listDevicesWithPaths()
+  const devices = listDevicesWithPaths.filter(item => !['offline'].includes(item.type))
 
   const value = []
 

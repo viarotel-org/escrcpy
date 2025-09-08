@@ -26,19 +26,9 @@ const props = defineProps({
 const loading = ref(false)
 
 async function handleClick(device) {
-  const [host, port] = device.id.split(':')
-
-  if (!host || !port) {
-    console.warn('Failed to obtain IP and port number')
-    return false
-  }
-
   loading.value = true
 
-  await props.handleConnect({
-    host,
-    port,
-  })
+  await props.handleConnect(device.id)
 
   loading.value = false
 }

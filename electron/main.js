@@ -100,7 +100,6 @@ function createWindow(callback) {
 
   // 使用防抖函数优化窗口边界保存，避免频繁写入影响性能
   const saveBoundsDebounced = debounce(() => {
-    console.log('1')
     if(mainWindow.isMaximized()) {
       return false
     }

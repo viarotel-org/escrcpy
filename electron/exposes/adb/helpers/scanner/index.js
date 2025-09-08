@@ -244,7 +244,7 @@ export class AdbScanner {
   getBackPort(device) {
     const devices = appStore.get('device')
 
-    const value = Object.entries(devices).reduce((port, [key, value]) => {
+    const value = Object.entries(devices).reduce((port, [key, _]) => {
       if (key.includes(device.address)) {
         port = parseDeviceId(key).port
       }

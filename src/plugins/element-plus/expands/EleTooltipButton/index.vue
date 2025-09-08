@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip v-bind="{ offset: 1, effect: 'light', ...$attrs }">
+  <el-tooltip ref="tooltipRef" v-bind="{ offset: 1, effect: 'light', ...$attrs }">
     <ElButton
       v-bind="{ ...$props }"
       :class="[
@@ -42,6 +42,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['click'])
+
+const tooltipRef = ref()
+watch(() => props.loading, (val) => {
+  if (!val) {
+    return false
+  }
+
+  tooltipRef.value?.hide?.()
+})
 </script>
 
 <style lang="postcss">

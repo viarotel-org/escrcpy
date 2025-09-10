@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.1](https://github.com/viarotel-org/escrcpy/compare/v1.32.0...v1.32.1) (2025-09-10)
+
+
+### Performance Improvements
+
+* 🌱 UI details and documentation optimization ([5b5bbf7](https://github.com/viarotel-org/escrcpy/commit/5b5bbf7a680142bdbfca869048feab60e70938f0))
+
 ## [1.32.0](https://github.com/viarotel-org/escrcpy/compare/v1.31.3...v1.32.0) (2025-09-08)
 
 

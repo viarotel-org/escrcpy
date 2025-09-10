@@ -41,7 +41,7 @@ const vitePressConfig = {
     [
       'script',
       {
-        src: 'https://busuanzi.9420.ltd/js',
+        src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js',
       },
     ],
   ],

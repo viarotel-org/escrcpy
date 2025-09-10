@@ -1,6 +1,7 @@
 // https://vitepress.dev/guide/custom-theme
 import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
+import './gtag/index.js'
 
 import './rainbow.css'
 import './vars.css'

@@ -36,6 +36,9 @@ features:
   - icon: 🔗
     title: Reverse tethering
     details: Gnirehtet reverse tethering
+  - icon: 🪟
+    title: Window Arrangement
+    details: Visual drag-and-drop interface for precise multi-device window layout control with custom positioning and sizing
   - icon: 🎨
     title: Themes
     details: Light mode, dark mode, system-based switching

@@ -45,11 +45,11 @@ Refer to [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 
 ## Documentation
 
-- [Getting Started](https://escrcpy.viarotel.eu.org/guide/started)
-- [Shortcuts](https://escrcpy.viarotel.eu.org/reference/scrcpy/shortcuts)
-- [Device Operations](https://escrcpy.viarotel.eu.org/guide/operation)
-- [Preferences](https://escrcpy.viarotel.eu.org/guide/preferences)
-- [Reverse Tethering](https://escrcpy.viarotel.eu.org/reference/gnirehtet/)
+- [Getting Started](https://viarotel.eu.org/guide/started)
+- [Shortcuts](https://viarotel.eu.org/reference/scrcpy/shortcuts)
+- [Device Operations](https://viarotel.eu.org/guide/operation)
+- [Preferences](https://viarotel.eu.org/guide/preferences)
+- [Reverse Tethering](https://viarotel.eu.org/reference/gnirehtet/)
 
 ## For Developers
 
@@ -59,13 +59,13 @@ If you are a developer and wish to run or help improve this project, refer to th
 
 As an open-source project powered by passion, support is limited, and updates are irregular.
 
-- [FAQ](https://escrcpy.viarotel.eu.org/help/escrcpy)
+- [FAQ](https://viarotel.eu.org/help/escrcpy)
 - [Report Issues](https://github.com/viarotel-org/escrcpy/issues)
 - [Contact Email](viarotel@qq.com)
 
 ## What's Next?
 
-[Milestones](https://escrcpy.viarotel.eu.org/guide/milestones)
+[Milestones](https://viarotel.eu.org/guide/milestones)
 
 ## Acknowledgments
 

@@ -44,11 +44,11 @@
 
 ## 文档
 
-- [快速上手](https://escrcpy.viarotel.eu.org/zhHans/guide/started)
-- [快捷键](https://escrcpy.viarotel.eu.org/zhHans/reference/scrcpy/shortcuts)
-- [设备操作](https://escrcpy.viarotel.eu.org/zhHans/guide/operation)
-- [偏好设置](https://escrcpy.viarotel.eu.org/zhHans/guide/preferences)
-- [反向供网](https://escrcpy.viarotel.eu.org/zhHans/reference/gnirehtet/)
+- [快速上手](https://viarotel.eu.org/zhHans/guide/started)
+- [快捷键](https://viarotel.eu.org/zhHans/reference/scrcpy/shortcuts)
+- [设备操作](https://viarotel.eu.org/zhHans/guide/operation)
+- [偏好设置](https://viarotel.eu.org/zhHans/guide/preferences)
+- [反向供网](https://viarotel.eu.org/zhHans/reference/gnirehtet/)
 
 ## 开发人员
 
@@ -58,13 +58,13 @@
 
 因为是开源项目 全靠爱发电 所以支持有限 更新节奏不固定
 
-- [常见问题](https://escrcpy.viarotel.eu.org/zhHans/help/escrcpy)
+- [常见问题](https://viarotel.eu.org/zhHans/help/escrcpy)
 - [反馈问题](https://github.com/viarotel-org/escrcpy/issues)
 - [联系邮箱](viarotel@qq.com)
 
 ## 下一步做什么？
 
-[里程碑](https://escrcpy.viarotel.eu.org/zhHans/guide/milestones)
+[里程碑](https://viarotel.eu.org/zhHans/guide/milestones)
 
 ## 致谢
 

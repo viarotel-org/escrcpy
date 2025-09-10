@@ -44,11 +44,11 @@
 
 ## Документация
 
-- [Начало работы](https://escrcpy.viarotel.eu.org/guide/started)
-- [Горячие клавиши](https://escrcpy.viarotel.eu.org/reference/scrcpy/shortcuts)
-- [Операции с устройством](https://escrcpy.viarotel.eu.org/guide/operation)
-- [Настройки](https://escrcpy.viarotel.eu.org/guide/preferences)
-- [Обратная привязка](https://escrcpy.viarotel.eu.org/reference/gnirehtet/)
+- [Начало работы](https://viarotel.eu.org/guide/started)
+- [Горячие клавиши](https://viarotel.eu.org/reference/scrcpy/shortcuts)
+- [Операции с устройством](https://viarotel.eu.org/guide/operation)
+- [Настройки](https://viarotel.eu.org/guide/preferences)
+- [Обратная привязка](https://viarotel.eu.org/reference/gnirehtet/)
 
 ## Для разработчиков
 
@@ -58,13 +58,13 @@
 
 Как проект с открытым исходным кодом, созданный на энтузиазме, поддержка ограничена, а обновления нерегулярны.
 
-- [FAQ](https://escrcpy.viarotel.eu.org/help/escrcpy)
+- [FAQ](https://viarotel.eu.org/help/escrcpy)
 - [Сообщить о проблеме](https://github.com/viarotel-org/escrcpy/issues)
 - [Контактный email](viarotel@qq.com)
 
 ## Что дальше?
 
-[Вехи](https://escrcpy.viarotel.eu.org/guide/milestones)
+[Вехи](https://viarotel.eu.org/guide/milestones)
 
 ## Благодарности
 

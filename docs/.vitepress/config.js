@@ -113,7 +113,7 @@ const vitePressConfig = {
   },
 
   sitemap: {
-    hostname: 'https://escrcpy.viarotel.eu.org',
+    hostname: 'https://viarotel.eu.org',
   },
 
   vite: viteConfig,

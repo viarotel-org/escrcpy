@@ -35,6 +35,7 @@ const vitePressConfig = {
       'script',
       {
         src: 'https://hm.baidu.com/hm.js?4984552ac1c9b6041c7f9edffff4089f',
+        async: '',
       },
     ],
     // 不蒜子统计工具
@@ -42,7 +43,7 @@ const vitePressConfig = {
       'script',
       {
         src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js',
-        async: true,
+        async: '',
       },
     ],
   ],

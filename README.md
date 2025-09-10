@@ -22,6 +22,7 @@
 - 💡 Customization: Multi-device management, independent configurations, custom notes, config import/export
 - 📡 Wireless: Quick connection via QR code scanning
 - 🔗 Reverse Tethering: Gnirehtet reverse tethering
+- 🪟 Window Arrangement: Visual drag-and-drop interface for precise multi-device window layout control with custom positioning and sizing
 - 🎨 Themes: Light mode, dark mode, system theme following
 - 😎 Lightweight: Native support, displays only the device screen
 - ⚡️ Performance: 30~120 FPS, depending on the device

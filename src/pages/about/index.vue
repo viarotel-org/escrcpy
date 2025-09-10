@@ -71,7 +71,7 @@ function onClickDocs() {
     'zh-CN': 'zhHans',
   }[locale.value] || ''
 
-  window.open(`https://escrcpy.viarotel.eu.org/${localePath}`)
+  window.open(`https://viarotel.eu.org/${localePath}`)
 }
 
 function handleUpdate() {

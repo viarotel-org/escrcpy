@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" :title="$t('about.donate.title')" width="98%" @closed="onClosed">
+  <el-dialog v-model="visible" :title="$t('about.donate.title')" fullscreen width="98%" @closed="onClosed">
     <div class="pt-4 pb-8">
       {{ $t('about.donate.description') }}
     </div>

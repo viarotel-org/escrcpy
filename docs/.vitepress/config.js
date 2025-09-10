@@ -27,6 +27,13 @@ const vitePressConfig = {
   description: appDescription,
   head: [
     ['link', { rel: 'icon', href: '/images/logo.ico' }],
+    // 百度统计工具
+    [
+      'script',
+      {
+        src: 'https://hm.baidu.com/hm.js?4984552ac1c9b6041c7f9edffff4089f',
+      },
+    ],
     // 不蒜子统计工具
     [
       'script',

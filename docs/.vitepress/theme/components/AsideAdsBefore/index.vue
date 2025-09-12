@@ -1,7 +1,5 @@
 <script client>
-document.addEventListener('DOMContentLoaded', () => {
-  addAds()
-})
+setTimeout(addAds, 5000)
 
 function addAds() {
   try {

@@ -47,13 +47,6 @@ const vitePressConfig = {
         crossorigin: 'anonymous',
       },
     ],
-    ['script', {},
-      `
-        window['addAds'] = function(){
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        }
-      `,
-    ],
     // 百度统计工具
     [
       'script',

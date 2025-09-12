@@ -1,12 +1,25 @@
 <script setup>
 import DefaultTheme from 'vitepress/theme'
-import { onMounted } from 'vue'
+import { nextTick, watch } from 'vue'
+import { useData } from 'vitepress'
+
+const { page } = useData()
 
 const { Layout } = DefaultTheme
 
-onMounted(() => {
-  console.log('addAds')
-  window.addAds?.()
+async function addAds() {
+  await nextTick()
+  try {
+    // @ts-expect-error Google Ads
+    ;(adsbygoogle = window.adsbygoogle || []).push({})
+  }
+  catch (e) {
+    console.warn('adsbygoogle error:', e)
+  }
+}
+
+watch(() => page.value.relativePath, addAds, {
+  immediate: true,
 })
 </script>
 

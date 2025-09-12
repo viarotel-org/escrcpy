@@ -7,6 +7,7 @@ function addAds() {
   try {
     // @ts-expect-error Google Ads
     ;(adsbygoogle = window.adsbygoogle || []).push({})
+    console.log('adsbygoogle loaded')
   }
   catch (e) {
     console.warn('adsbygoogle error:', e)

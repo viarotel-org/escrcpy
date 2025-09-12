@@ -1,4 +1,4 @@
-<script setup>
+<script client>
 document.addEventListener('DOMContentLoaded', () => {
   addAds()
 })

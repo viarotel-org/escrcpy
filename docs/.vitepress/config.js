@@ -28,7 +28,7 @@ const viteConfig = {
 const vueConfig = {
   template: {
     compilerOptions: {
-      isCustomElement: tag => ['amp-ad'].includes(tag),
+      isCustomElement: tag => ['amp-ad', 'ins'].includes(tag),
     },
   },
 }
@@ -47,14 +47,12 @@ const vitePressConfig = {
         crossorigin: 'anonymous',
       },
     ],
-    // AdSense AMP
-    [
-      'script',
-      {
-        'src': 'https://cdn.ampproject.org/v0/amp-ad-0.1.js',
-        'async': '',
-        'custom-element': 'amp-ad',
-      },
+    ['script', {},
+      `
+        window['addAds'] = function(){
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      `,
     ],
     // 百度统计工具
     [

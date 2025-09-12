@@ -30,6 +30,15 @@ const vitePressConfig = {
   description: appDescription,
   head: [
     ['link', { rel: 'icon', href: '/images/logo.ico' }],
+    // AdSense
+    [
+      'script',
+      {
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5328953201873088',
+        async: '',
+        crossorigin: 'anonymous',
+      },
+    ],
     // 百度统计工具
     [
       'script',
@@ -91,8 +100,7 @@ const vitePressConfig = {
     ],
     footer: {
       message: `
-        <span id="busuanzi_container_site_pv"> Views <span id="busuanzi_value_site_pv"></span> </span>
-        ,
+        <span id="busuanzi_container_site_pv"> Views <span id="busuanzi_value_site_pv"></span>, </span>
         <span id="busuanzi_container_site_uv"> Visitors <span id="busuanzi_value_site_uv"></span> </span>
         <br />
         Released under the MIT License. 

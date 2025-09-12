@@ -125,8 +125,6 @@ const vitePressConfig = {
     hostname: 'https://viarotel.eu.org',
   },
 
-  mpa: true,
-
   vite: viteConfig,
 
   vue: vueConfig,

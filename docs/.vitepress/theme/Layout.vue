@@ -9,7 +9,9 @@ const { Layout } = DefaultTheme
 <template>
   <Layout class="">
     <template #aside-ads-before>
-      <AsideAdsBefore />
+      <ClientOnly>
+        <AsideAdsBefore />
+      </ClientOnly>
     </template>
   </Layout>
 </template>

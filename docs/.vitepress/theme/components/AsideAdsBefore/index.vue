@@ -1,9 +1,18 @@
-<script client>
-document.addEventListener('DOMContentLoaded', () => {
-  addAds()
+<script setup>
+import { useData } from 'vitepress'
+import { computed, nextTick, watch } from 'vue'
+
+const { page } = useData()
+
+const relativePath = computed(() => page.value.relativePath)
+
+watch(relativePath, addAds, {
+  immediate: true,
 })
 
-function addAds() {
+async function addAds() {
+  await nextTick()
+
   try {
     // @ts-expect-error Google Ads
     ;(window.adsbygoogle = window.adsbygoogle || []).push({})
@@ -18,6 +27,7 @@ function addAds() {
 <template>
   <div style="margin-top: 72px;">
     <ins
+      :key="relativePath"
       class="adsbygoogle"
       style="display:block"
       data-ad-client="ca-pub-5328953201873088"

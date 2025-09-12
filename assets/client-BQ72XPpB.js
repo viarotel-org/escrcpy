@@ -1,1 +1,0 @@
-document.addEventListener("DOMContentLoaded",()=>{d()});function d(){try{(adsbygoogle=window.adsbygoogle||[]).push({}),console.log("adsbygoogle loaded")}catch(o){console.warn("adsbygoogle error:",o)}}

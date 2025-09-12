@@ -25,6 +25,14 @@ const viteConfig = {
   },
 }
 
+const vueConfig = {
+  template: {
+    compilerOptions: {
+      isCustomElement: tag => ['amp-ad'].includes(tag),
+    },
+  },
+}
+
 const vitePressConfig = {
   title: appName,
   description: appDescription,
@@ -37,6 +45,15 @@ const vitePressConfig = {
         src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5328953201873088',
         async: '',
         crossorigin: 'anonymous',
+      },
+    ],
+    // AdSense AMP
+    [
+      'script',
+      {
+        'src': 'https://cdn.ampproject.org/v0/amp-ad-0.1.js',
+        'async': '',
+        'custom-element': 'amp-ad',
       },
     ],
     // 百度统计工具
@@ -118,6 +135,8 @@ const vitePressConfig = {
   },
 
   vite: viteConfig,
+
+  vue: vueConfig,
 }
 
 const vitePressI18nConfig = {

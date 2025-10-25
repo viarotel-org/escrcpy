@@ -176,6 +176,10 @@
 
   "device.control.name": "Control",
   "device.control.more": "More Controls",
+  "device.control.bar": "Control Bar",
+  "device.control.prev": "Previous",
+  "device.control.next": "Next",
+  "device.quickbar": "Quick Bar",
   "device.control.install": "Install APP",
   "device.control.install.placeholder": "Select app to install",
   "device.control.install.progress": "Installing app to {deviceName}...",

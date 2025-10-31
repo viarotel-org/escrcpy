@@ -197,13 +197,6 @@
   "device.control.file.manager.download": "تنزيل ملف",
   "device.control.file.manager.download.tips": "هل أنت متأكد أنك تريد تنزيل المحتوى المحدد؟",
   "device.control.file.manager.delete.tips": "هل أنت متأكد أنك تريد حذف المحتوى المحدد؟",
-  "device.control.terminal.command.name": "تنفيذ أمر",
-  "device.control.terminal.script.name": "تنفيذ نص برمجي",
-  "device.control.terminal.script.select": "اختر النص البرمجي المراد تنفيذه",
-  "device.control.terminal.script.push.loading": "جارٍ إرسال النص البرمجي...",
-  "device.control.terminal.script.push.success": "تم إرسال النص البرمجي بنجاح",
-  "device.control.terminal.script.enter": "يرجى الضغط على مفتاح Enter لتأكيد إجراء تنفيذ النص البرمجي",
-  "device.control.terminal.script.success": "تم تنفيذ النص البرمجي بنجاح",
   "device.control.capture": "لقطة شاشة",
   "device.control.capture.progress": "جارٍ التقاط لقطة شاشة لـ {deviceName}...",
   "device.control.capture.success.message": "فتح مكان حفظ لقطة الشاشة؟",
@@ -474,5 +467,19 @@
   "about.donate.description": "إذا كان المشروع ذا فائدة لك، يمكنك أن تدعمني بشراء قهوة لتبقيني متحفزًا لتحسينه 😛",
   "about.docs.name": "وثائق المساعدة",
 
-  "desktop.shortcut.add": "إضافة اختصار على سطح مكتب"
+  "desktop.shortcut.add": "إضافة اختصار على سطح مكتب",
+
+  "terminal.command.name": "تنفيذ أمر",
+  "terminal.script.name": "تنفيذ نص برمجي",
+  "terminal.script.select": "اختر النص البرمجي المراد تنفيذه",
+  "terminal.script.push.loading": "جارٍ إرسال النص البرمجي...",
+  "terminal.script.push.success": "تم إرسال النص البرمجي بنجاح",
+  "terminal.script.enter": "يرجى الضغط على مفتاح Enter لتأكيد إجراء تنفيذ النص البرمجي",
+  "terminal.script.success": "تم تنفيذ النص البرمجي بنجاح",
+  "terminal.executing": "جارٍ التنفيذ...",
+  "terminal.terminate": "إيقاف الأمر",
+  "terminal.terminate.confirm": "هل أنت متأكد من إيقاف الأمر الحالي؟",
+  "terminal.terminated": "تم إيقاف الأمر",
+  "terminal.terminate.success": "تم إيقاف الأمر بنجاح",
+  "terminal.terminate.error": "فشل إيقاف الأمر"
 }

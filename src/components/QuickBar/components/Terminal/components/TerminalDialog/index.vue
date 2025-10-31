@@ -9,12 +9,40 @@
     class="overflow-hidden !rounded-md el-dialog--headless dark:border dark:border-gray-700"
     @closed="onClosed"
   >
-    <el-icon
-      class="cursor-pointer absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-[var(--el-bg-color)] hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md"
-      @click="close"
-    >
-      <CloseBold />
-    </el-icon>
+    <div class="absolute top-3 right-3 flex items-center gap-2 z-10 z-50">
+      <el-icon
+        class="cursor-pointer w-8 h-8 flex items-center justify-center bg-[var(--el-bg-color)] hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 !active:bg-red-600 !active:text-gray-200 rounded-md transition-colors"
+        @click="close"
+      >
+        <CloseBold />
+      </el-icon>
+    </div>
+
+    <div class="absolute bottom-3 right-3 flex items-center gap-2 z-10 z-50">
+      <div
+        v-if="delayLoading"
+        class="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md text-sm"
+      >
+        <el-icon class="is-loading">
+          <Loading />
+        </el-icon>
+        <span>{{ $t('terminal.executing') }}</span>
+      </div>
+
+      <el-tooltip
+        v-if="history.length > 2"
+        :content="$t('terminal.terminate')"
+        placement="bottom"
+      >
+        <el-icon
+          class="cursor-pointer w-8 h-8 flex items-center justify-center bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-md transition-colors"
+          @click="handleTerminate"
+        >
+          <CircleClose />
+        </el-icon>
+      </el-tooltip>
+    </div>
+
     <VueCommand
       ref="vShell"
       v-model:history="history"
@@ -41,6 +69,7 @@
 import { sleep } from '$/utils/index.js'
 import VueCommand, {
   createQuery,
+  createStderr,
   createStdout,
   listFormatter,
 } from 'vue-command'
@@ -84,6 +113,16 @@ dispatchedQueries.value = new Set([
   ...(window.appStore.get('terminal.dispatchedQueries') || []),
   ...Object.keys(commands.value),
 ])
+
+const delayLoading = ref(false)
+
+watchEffect(async () => {
+  if (!loading.value) {
+    await sleep(500)
+  }
+
+  delayLoading.value = loading.value
+})
 
 function getShell() {
   let unwatch = null
@@ -159,8 +198,76 @@ function onDispatchedQueriesUpdate(value) {
   dispatchedQueries.value = value
 }
 
-function onCtrlC() {
-  window.gnirehtet.shell('stop')
+async function killAllProcesses() {
+  try {
+    // Kill all running processes
+    const results = await Promise.allSettled([
+      window.adb.killProcesses(),
+      window.scrcpy.killProcesses(),
+      window.gnirehtet.killProcesses(),
+    ])
+
+    // Log any errors but don't throw
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        const names = ['adb', 'scrcpy', 'gnirehtet']
+        console.warn(`Error killing ${names[index]} processes:`, result.reason)
+      }
+    })
+
+    // Reset loading state
+    loading.value = false
+  }
+  catch (error) {
+    console.warn('Error killing processes:', error)
+    loading.value = false
+  }
+}
+
+async function handleTerminate() {
+  try {
+    await ElMessageBox.confirm(
+      window.t('terminal.terminate.confirm'),
+      window.t('common.tips'),
+      {
+        confirmButtonText: window.t('common.confirm'),
+        cancelButtonText: window.t('common.cancel'),
+        type: 'warning',
+      },
+    )
+
+    // Kill all processes
+    await killAllProcesses()
+
+    // Add termination message to history
+    const shell = await getShell()
+    shell.appendToHistory(createStderr(window.t('terminal.terminated')))
+
+    // Reset loading state
+    loading.value = false
+
+    ElMessage.success(window.t('terminal.terminate.success'))
+  }
+  catch (error) {
+    if (error !== 'cancel') {
+      console.warn('Terminate error:', error)
+      ElMessage.error(window.t('terminal.terminate.error'))
+    }
+  }
+}
+
+async function onCtrlC() {
+  // Kill all processes when Ctrl+C is pressed
+  await killAllProcesses()
+
+  // Add termination message to history
+  try {
+    const shell = await getShell()
+    shell.appendToHistory(createStderr(window.t('terminal.terminated')))
+  }
+  catch (error) {
+    console.warn('Error adding termination message:', error)
+  }
 }
 
 function onClosed() {

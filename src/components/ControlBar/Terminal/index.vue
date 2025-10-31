@@ -5,10 +5,10 @@
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="handleCommand(device)">
-          {{ $t('device.control.terminal.command.name') }}
+          {{ $t('terminal.command.name') }}
         </el-dropdown-item>
         <el-dropdown-item @click="handleScript(device)">
-          {{ $t('device.control.terminal.script.name') }}
+          {{ $t('terminal.script.name') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>

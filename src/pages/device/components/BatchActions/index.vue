@@ -76,7 +76,7 @@ const actionModel = [
     component: FilePush,
   },
   {
-    label: 'device.control.terminal.script.name',
+    label: 'terminal.script.name',
     svgIcon: 'command',
     component: Script,
   },

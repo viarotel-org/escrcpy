@@ -14,6 +14,7 @@ export function useAdb({ vShell, history, loading } = {}) {
 
     let stdoutText = ''
     let stderrText = ''
+
     $adb.spawnShell(command, {
       stdout(text) {
         loading.value = false

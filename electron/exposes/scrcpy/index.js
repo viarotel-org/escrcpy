@@ -188,6 +188,10 @@ async function startApp(serial, args = {}) {
   return displayId
 }
 
+function killProcesses() {
+  processManager.kill()
+}
+
 export default {
   shell,
   execShell,
@@ -198,4 +202,5 @@ export default {
   getAppList,
   startApp,
   getDisplayIds,
+  killProcesses,
 }

@@ -158,6 +158,10 @@ async function run(deviceId) {
   })
 }
 
+function killProcesses() {
+  processManager.kill()
+}
+
 export default {
   shell,
   relay,
@@ -167,4 +171,5 @@ export default {
   stop,
   tunnel,
   run,
+  killProcesses,
 }

@@ -385,6 +385,10 @@ function init() {
   })
 }
 
+function killProcesses() {
+  processManager.kill()
+}
+
 export default {
   init,
   shell,
@@ -410,4 +414,5 @@ export default {
   uploader,
   waitForDevice,
   getSerialNo,
+  killProcesses,
 }

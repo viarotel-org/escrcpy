@@ -197,13 +197,6 @@
   "device.control.file.manager.download": "Download File",
   "device.control.file.manager.download.tips": "Are you sure you want to download the selected content?",
   "device.control.file.manager.delete.tips": "Are you sure you want to delete the selected content?",
-  "device.control.terminal.command.name": "Execute Command",
-  "device.control.terminal.script.name": "Execute Script",
-  "device.control.terminal.script.select": "Please select the script you want to execute",
-  "device.control.terminal.script.push.loading": "Push script...",
-  "device.control.terminal.script.push.success": "Push script success",
-  "device.control.terminal.script.enter": "Please enter the Enter key to confirm the execution of the script",
-  "device.control.terminal.script.success": "Script execution successfully",
   "device.control.capture": "Screenshot",
   "device.control.capture.progress": "Capturing screenshot for {deviceName}...",
   "device.control.capture.success.message": "Open screenshot location?",
@@ -477,5 +470,19 @@
   "about.donate.description": "If this project has helped you, you can buy me a coffee to keep me energized to improve it 😛",
   "about.docs.name": "Help Docs",
 
-  "desktop.shortcut.add": "Add to Desktop Shortcut"
+  "desktop.shortcut.add": "Add to Desktop Shortcut",
+
+  "terminal.command.name": "Execute Command",
+  "terminal.script.name": "Execute Script",
+  "terminal.script.select": "Please select the script you want to execute",
+  "terminal.script.push.loading": "Push script...",
+  "terminal.script.push.success": "Push script success",
+  "terminal.script.enter": "Please enter the Enter key to confirm the execution of the script",
+  "terminal.script.success": "Script execution successfully",
+  "terminal.executing": "Executing...",
+  "terminal.terminate": "Terminate Command",
+  "terminal.terminate.confirm": "Are you sure you want to terminate the current command?",
+  "terminal.terminated": "Command terminated",
+  "terminal.terminate.success": "Command terminated successfully",
+  "terminal.terminate.error": "Failed to terminate command"
 }

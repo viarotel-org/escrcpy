@@ -24,7 +24,7 @@ export const useTaskStore = defineStore(
         value: 'screenshot',
       },
       {
-        label: 'device.control.terminal.script.name',
+        label: 'terminal.script.name',
         value: 'shell',
       },
       {

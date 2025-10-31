@@ -23,9 +23,9 @@ export function useShellAction() {
       try {
         files = await selectAndSendFileToDevice(device.id, {
           extensions: ['sh'],
-          selectText: window.t('device.control.terminal.script.select'),
-          loadingText: window.t('device.control.terminal.script.push.loading'),
-          successText: window.t('device.control.terminal.script.push.success'),
+          selectText: window.t('terminal.script.select'),
+          loadingText: window.t('terminal.script.push.loading'),
+          successText: window.t('terminal.script.push.success'),
         })
       }
       catch (error) {
@@ -39,7 +39,7 @@ export function useShellAction() {
 
     const command = `adb -s ${device.id} shell sh ${filePath}`
 
-    taskStore.emit('terminal', { command, message: window.t('device.control.terminal.script.enter') })
+    taskStore.emit('terminal', { command, message: window.t('terminal.script.enter') })
 
     loading.value = false
   }
@@ -53,7 +53,7 @@ export function useShellAction() {
           properties: ['openFile'],
           filters: [
             {
-              name: window.t('device.control.terminal.script.select'),
+              name: window.t('terminal.script.select'),
               extensions: ['sh'],
             },
           ],
@@ -71,7 +71,7 @@ export function useShellAction() {
     }
 
     const closeLoading = ElMessage.loading(
-      window.t('device.control.terminal.script.push.loading'),
+      window.t('terminal.script.push.loading'),
     ).close
 
     const failFiles = []
@@ -107,7 +107,7 @@ export function useShellAction() {
 
     closeLoading()
 
-    await ElMessage.success(window.t('device.control.terminal.script.success'))
+    await ElMessage.success(window.t('terminal.script.success'))
 
     loading.value = false
   }

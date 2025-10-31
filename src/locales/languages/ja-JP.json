@@ -197,13 +197,6 @@
   "device.control.file.manager.download": "ファイルをダウンロード",
   "device.control.file.manager.download.tips": "選択したコンテンツをダウンロードしますか？",
   "device.control.file.manager.delete.tips": "選択したコンテンツを削除してもよろしいですか？",
-  "device.control.terminal.command.name": "コマンドを実行",
-  "device.control.terminal.script.name": "スクリプトを実行",
-  "device.control.terminal.script.select": "実行するスクリプトを選択してください",
-  "device.control.terminal.script.push.loading": "スクリプトを転送...",
-  "device.control.terminal.script.push.success": "スクリプトの転送に成功しました",
-  "device.control.terminal.script.enter": "スクリプトの実行を確認するには、Enter キーを入力してください",
-  "device.control.terminal.script.success": "スクリプトの実行に成功しました",
   "device.control.capture": "スクリーンショット",
   "device.control.capture.progress": "{deviceName} のスクリーンショットをキャプチャ中...",
   "device.control.capture.success.message": "スクリーンショットの場所を開きますか？",
@@ -477,5 +470,19 @@
   "about.donate.description": "このプロジェクトがお役に立てたのであれば、私にコーヒーをご馳走して改善へのエネルギーをください 😛",
   "about.docs.name": "ヘルプドキュメント",
 
-  "desktop.shortcut.add": "デスクトップにショートカットを作成"
+  "desktop.shortcut.add": "デスクトップにショートカットを作成",
+
+  "terminal.command.name": "コマンドを実行",
+  "terminal.script.name": "スクリプトを実行",
+  "terminal.script.select": "実行するスクリプトを選択してください",
+  "terminal.script.push.loading": "スクリプトを転送...",
+  "terminal.script.push.success": "スクリプトの転送に成功しました",
+  "terminal.script.enter": "スクリプトの実行を確認するには、Enter キーを入力してください",
+  "terminal.script.success": "スクリプトの実行に成功しました",
+  "terminal.executing": "実行中...",
+  "terminal.terminate": "コマンドを停止",
+  "terminal.terminate.confirm": "現在のコマンドを停止してもよろしいですか？",
+  "terminal.terminated": "コマンドが停止されました",
+  "terminal.terminate.success": "コマンドの停止に成功しました",
+  "terminal.terminate.error": "コマンドの停止に失敗しました"
 }

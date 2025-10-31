@@ -196,13 +196,6 @@
   "device.control.file.manager.download": "下載檔案",
   "device.control.file.manager.download.tips": "確定要下載所選內容嗎？",
   "device.control.file.manager.delete.tips": "確定要刪除所選內容嗎？",
-  "device.control.terminal.command.name": "執行命令",
-  "device.control.terminal.script.name": "執行腳本",
-  "device.control.terminal.script.select": "請選擇要執行的腳本",
-  "device.control.terminal.script.push.loading": "推送腳本中...",
-  "device.control.terminal.script.push.success": "推送腳本成功",
-  "device.control.terminal.script.enter": "請輸入回車鍵確認執行該腳本",
-  "device.control.terminal.script.success": "腳本執行成功",
   "device.control.capture": "擷取螢幕",
   "device.control.capture.progress": "正在擷取 {deviceName} 的螢幕快照...",
   "device.control.capture.success.message": "是否前往截圖位置進行檢視？",
@@ -476,5 +469,19 @@
   "about.donate.description": "如果覺得這個專案有幫到您的話，可以考慮請我喝杯咖啡，讓我更有精神持續改進此專案 😛",
   "about.docs.name": "幫助文件",
 
-  "desktop.shortcut.add": "加入桌面快捷方式"
+  "desktop.shortcut.add": "加入桌面快捷方式",
+
+  "terminal.command.name": "執行命令",
+  "terminal.script.name": "執行腳本",
+  "terminal.script.select": "請選擇要執行的腳本",
+  "terminal.script.push.loading": "推送腳本中...",
+  "terminal.script.push.success": "推送腳本成功",
+  "terminal.script.enter": "請輸入回車鍵確認執行該腳本",
+  "terminal.script.success": "腳本執行成功",
+  "terminal.executing": "執行中...",
+  "terminal.terminate": "終止命令",
+  "terminal.terminate.confirm": "確定要終止目前命令嗎？",
+  "terminal.terminated": "命令已終止",
+  "terminal.terminate.success": "命令終止成功",
+  "terminal.terminate.error": "命令終止失敗"
 }

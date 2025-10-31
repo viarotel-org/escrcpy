@@ -267,7 +267,7 @@ function handlePrev() {
       .join('/')
   }
 
-  currentPath.value = value
+  currentPath.value = value.startsWith('/') ? value : `/${value}`
 
   getTableData()
 }

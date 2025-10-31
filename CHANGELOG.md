@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.32.3](https://github.com/viarotel-org/escrcpy/compare/v1.32.2...v1.32.3) (2025-10-31)
+
+
+### Bug Fixes
+
+* 🐛 Fix issue with incorrect address bar path when returning to the previous level in file management ([0222675](https://github.com/viarotel-org/escrcpy/commit/0222675aa8bc0eaed11dd6529526696842d42428))
+
+
+### Performance Improvements
+
+* 🚀 Optimize the built-in terminal interaction experience ([bb56d5b](https://github.com/viarotel-org/escrcpy/commit/bb56d5b53b26709baa1158614a9ebe5bb713eae2))
+
 ## [1.32.2](https://github.com/viarotel-org/escrcpy/compare/v1.32.1...v1.32.2) (2025-09-29)
 
 

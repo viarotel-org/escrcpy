@@ -217,10 +217,59 @@ export default {
     preferredTerminal: {
       label: 'preferences.common.preferredTerminal.name',
       field: 'preferredTerminal',
-      type: 'Input',
+      type: 'Select',
       value: undefined,
       placeholder: 'preferences.common.preferredTerminal.placeholder',
       tips: 'preferences.common.preferredTerminal.tips',
+      options: [
+        {
+          label: 'Windows',
+          options: [
+            {
+              label: 'WindowsTerminal',
+              value: 'WindowsTerminal',
+            },
+            {
+              label: 'PowerShell',
+              value: 'PowerShell',
+            },
+          ],
+        },
+        {
+          label: 'MacOS',
+          options: [
+            {
+              label: 'Terminal',
+              value: 'Terminal',
+            },
+            {
+              label: 'iTerm',
+              value: 'iTerm',
+            },
+          ],
+        },
+        {
+          label: 'Linux',
+          options: [
+            {
+              label: 'gnome-terminal',
+              value: 'gnome-terminal',
+            },
+            {
+              label: 'konsole',
+              value: 'konsole',
+            },
+            {
+              label: 'x-terminal-emulator',
+              value: 'x-terminal-emulator',
+            },
+            {
+              label: 'xterm',
+              value: 'xterm',
+            },
+          ],
+        },
+      ],
     },
   },
 }

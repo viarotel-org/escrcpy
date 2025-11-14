@@ -1,4 +1,4 @@
-import { exec, spawn } from 'node:child_process'
+import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import fs from 'fs-extra'
 import path from 'node:path'
@@ -12,7 +12,7 @@ const execAsync = promisify(exec)
  * @returns {string} - Escaped argument
  */
 function escapeShellArg(arg) {
-  return `'${arg.replace(/'/g, "'\\''")}'`
+  return `'${arg.replace(/'/g, '\'\\\'\'')}'`
 }
 
 /**
@@ -139,4 +139,3 @@ export async function getAvailableTerminals() {
 
   return terminals.filter(t => t.available)
 }
-

@@ -8,14 +8,30 @@
     }"
     class="!w-full"
   >
-    <el-option
-      v-for="(item, index) in data.options"
-      :key="index"
-      :label="$t(item.label)"
-      :value="item.value"
-      :title="$t(item.message || item.placeholder || item.label)"
-    >
-    </el-option>
+    <template v-if="data.options[0]?.options">
+      <el-option-group
+        v-for="(group, groupIndex) in data.options"
+        :key="groupIndex"
+        :label="$t(group.label)"
+      >
+        <el-option
+          v-for="(item, index) in group.options"
+          :key="index"
+          :label="$t(item.label)"
+          :value="item.value"
+        />
+      </el-option-group>
+    </template>
+
+    <template v-else>
+      <el-option
+        v-for="(item, index) in data.options"
+        :key="index"
+        :label="$t(item.label)"
+        :value="item.value"
+        :title="$t(item.message || item.placeholder || item.label)"
+      />
+    </template>
   </el-select>
 </template>
 

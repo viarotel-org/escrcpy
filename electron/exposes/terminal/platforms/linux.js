@@ -9,7 +9,7 @@ const execAsync = promisify(exec)
  * @returns {string} - Escaped argument
  */
 function escapeShellArg(arg) {
-  return `'${arg.replace(/'/g, "'\\''")}'`
+  return `'${arg.replace(/'/g, '\'\\\'\'')}'`
 }
 
 /**
@@ -179,4 +179,3 @@ export async function getAvailableTerminals() {
 
   return terminals
 }
-

@@ -1,8 +1,5 @@
 import { exec, spawn } from 'node:child_process'
 import { promisify } from 'node:util'
-import fs from 'fs-extra'
-import path from 'node:path'
-import os from 'node:os'
 
 const execAsync = promisify(exec)
 
@@ -104,53 +101,12 @@ async function openPowerShell(options = {}) {
   const fullCommand = command ? `${cdCommand}; ${command}` : cdCommand
 
   // Use env option to pass environment variables instead of command string
-  spawn('powershell.exe', ['-NoExit', '-Command', fullCommand], {
+  spawn('cmd.exe', ['/c', 'start', 'powershell.exe', '-NoExit', '-Command', fullCommand], {
     detached: true,
     stdio: 'ignore',
     cwd,
-    env, // Pass environment variables directly
+    env,
   }).unref()
-}
-
-/**
- * Open CMD
- * @param {Object} options - Options
- * @returns {Promise<void>}
- */
-async function openCmd(options = {}) {
-  const { env = {}, cwd = process.cwd(), command = '' } = options
-
-  // Create a batch file for CMD
-  const tmpDir = os.tmpdir()
-  const batchPath = path.join(tmpDir, `escrcpy-terminal-${Date.now()}.bat`)
-
-  // Build environment variable commands (only key variables)
-  const envCommands = buildCmdEnv(env)
-
-  // Build batch file content
-  // Use chcp 65001 to set UTF-8 encoding
-  // Use quotes around path to handle spaces
-  const batchContent = `@echo off
-chcp 65001 >nul
-${envCommands}
-cd /d "${cwd}"
-${command}
-cmd /k
-`
-
-  await fs.writeFile(batchPath, batchContent, 'utf8')
-
-  // Use start command to open a new CMD window
-  // Quote the batch path to handle spaces
-  spawn('cmd.exe', ['/c', 'start', 'cmd.exe', '/k', `"${batchPath}"`], {
-    detached: true,
-    stdio: 'ignore',
-  }).unref()
-
-  // Clean up batch file after a delay
-  setTimeout(() => {
-    fs.remove(batchPath).catch(() => {})
-  }, 5000)
 }
 
 /**
@@ -180,11 +136,8 @@ export async function openSystemTerminal(options = {}) {
   if (await hasWindowsTerminal()) {
     await openWindowsTerminal(options)
   }
-  else if (await hasPowerShell()) {
-    await openPowerShell(options)
-  }
   else {
-    await openCmd(options)
+    await openPowerShell(options)
   }
 }
 
@@ -196,7 +149,6 @@ export async function getAvailableTerminals() {
   const terminals = [
     { name: 'WindowsTerminal', displayName: 'Windows Terminal', available: await hasWindowsTerminal() },
     { name: 'PowerShell', displayName: 'PowerShell', available: await hasPowerShell() },
-    { name: 'CMD', displayName: 'Command Prompt', available: true },
   ]
 
   return terminals.filter(t => t.available)

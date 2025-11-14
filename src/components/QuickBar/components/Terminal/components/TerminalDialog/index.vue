@@ -270,9 +270,9 @@ async function onCtrlC() {
   }
 }
 
-function onClosed() {
+async function onClosed() {
+  await onCtrlC()
   vShell.value.dispatch('clear')
-  history.value = [createQuery()]
 }
 
 taskStore.on('terminal', (task) => {

@@ -206,5 +206,21 @@ export default {
       placeholder: 'preferences.common.debug.placeholder',
       tips: 'preferences.common.debug.tips',
     },
+    enableSystemTerminal: {
+      label: 'preferences.common.enableSystemTerminal.name',
+      field: 'enableSystemTerminal',
+      type: 'Switch',
+      value: false,
+      placeholder: 'preferences.common.enableSystemTerminal.placeholder',
+      tips: 'preferences.common.enableSystemTerminal.tips',
+    },
+    preferredTerminal: {
+      label: 'preferences.common.preferredTerminal.name',
+      field: 'preferredTerminal',
+      type: 'Input',
+      value: undefined,
+      placeholder: 'preferences.common.preferredTerminal.placeholder',
+      tips: 'preferences.common.preferredTerminal.tips',
+    },
   },
 }

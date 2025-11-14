@@ -293,6 +293,12 @@
   "preferences.common.edgeHidden.name": "إخفاء تلقائي للوحة الرئيسية",
   "preferences.common.edgeHidden.placeholder": "عند تفعيل هذا الخيار، ستختفي اللوحة الرئيسية تلقائيًا عند اقتراب الماوس من حدود الشاشة",
   "preferences.common.edgeHidden.tips": "ملاحظة: يتطلب الأمر إعادة تشغيل البرنامج",
+  "preferences.common.enableSystemTerminal.name": "استخدام طرفية النظام",
+  "preferences.common.enableSystemTerminal.placeholder": "عند التفعيل، سيتم استخدام طرفية النظام بدلاً من محاكي الطرفية المدمج",
+  "preferences.common.enableSystemTerminal.tips": "ملاحظة: تقوم طرفية النظام بإضافة مسارات ADB و Scrcpy و Gnirehtet تلقائيًا إلى متغيرات البيئة، مما يسمح بتنفيذ الأوامر مباشرة.",
+  "preferences.common.preferredTerminal.name": "الطرفية المفضلة",
+  "preferences.common.preferredTerminal.placeholder": "اتركه فارغًا لاستخدام الافتراضي (Terminal، iTerm، WindowsTerminal، PowerShell)",
+  "preferences.common.preferredTerminal.tips": "ملاحظة: حدد تطبيق الطرفية المفضل لديك. الخيارات المتاحة تختلف حسب النظام.",
 
   "preferences.video.name": "الفيديو",
   "preferences.video.disable-video.name": "تعطيل إعادة توجيه الفيديو",

@@ -25,12 +25,23 @@ const props = defineProps({
 
 const { loading, invoke: handleScript } = useShellAction()
 
-function handleCommand(device) {
-  const taskStore = useTaskStore()
+async function handleCommand(device) {
+  const enableSystemTerminal = window.appStore.get('common.enableSystemTerminal')
 
-  const command = `adb -s ${device.id} `
-
-  taskStore.emit('terminal', { command })
+  if (enableSystemTerminal) {
+    try {
+      await window.terminal.openWithAdbCommand(`-s ${device.id}`)
+    }
+    catch (error) {
+      console.error('Failed to open system terminal:', error)
+      ElMessage.error(error.message || 'Failed to open system terminal')
+    }
+  }
+  else {
+    const taskStore = useTaskStore()
+    const command = `adb -s ${device.id} `
+    taskStore.emit('terminal', { command })
+  }
 }
 </script>
 

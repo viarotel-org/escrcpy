@@ -295,6 +295,12 @@
   "preferences.common.imeFix.name": "啟動APP鍵盤修復",
   "preferences.common.imeFix.placeholder": "啟用後，將解決APP啟動時輸入法無法在當前鏡像視窗顯示的問題。",
   "preferences.common.imeFix.tips": "注意：此功能僅支援 scrcpy v3.2 及以上版本，低版本使用時會報錯。",
+  "preferences.common.enableSystemTerminal.name": "使用系統終端機",
+  "preferences.common.enableSystemTerminal.placeholder": "啟用後,將使用系統終端機代替內建終端機模擬器",
+  "preferences.common.enableSystemTerminal.tips": "注意:系統終端機會自動將 ADB、Scrcpy 和 Gnirehtet 路徑注入環境變數,可直接執行相關指令。",
+  "preferences.common.preferredTerminal.name": "首選終端機",
+  "preferences.common.preferredTerminal.placeholder": "留空使用系統預設(如 Terminal、iTerm、WindowsTerminal、PowerShell)",
+  "preferences.common.preferredTerminal.tips": "注意:指定您偏好的終端機應用程式。可用選項因平台而異。",
 
   "preferences.video.name": "影片控制",
   "preferences.video.disable-video.name": "停用影片轉發",

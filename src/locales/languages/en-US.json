@@ -296,6 +296,12 @@
   "preferences.common.imeFix.name": "Start APP Keyboard Fix",
   "preferences.common.imeFix.placeholder": "When enabled, this will resolve the issue where the input method cannot be displayed in the current mirror window when the APP starts.",
   "preferences.common.imeFix.tips": "Note: This feature is only supported in scrcpy v3.2 and above. Using it with lower versions will cause errors.",
+  "preferences.common.enableSystemTerminal.name": "Use System Terminal",
+  "preferences.common.enableSystemTerminal.placeholder": "When enabled, use system terminal instead of built-in terminal emulator",
+  "preferences.common.enableSystemTerminal.tips": "Note: System terminal will automatically inject ADB, Scrcpy, and Gnirehtet paths into environment variables for direct command execution.",
+  "preferences.common.preferredTerminal.name": "Preferred Terminal",
+  "preferences.common.preferredTerminal.placeholder": "Leave empty to use system default (e.g., Terminal, iTerm, WindowsTerminal, PowerShell)",
+  "preferences.common.preferredTerminal.tips": "Note: Specify your preferred terminal application. Available options vary by platform.",
 
   "preferences.video.name": "Video",
   "preferences.video.disable-video.name": "Disable Video Forwarding",

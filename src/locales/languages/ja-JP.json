@@ -296,6 +296,12 @@
   "preferences.common.imeFix.name": "アプリキーボードの問題を修正",
   "preferences.common.imeFix.placeholder": "有効化するとアプリの起動時に現在のミラーウィンドウ上に入力方法が表示されない問題を解決します。",
   "preferences.common.imeFix.tips": "注意: この機能は Scrcpy v3.2 以降でのみサポートされています。それ以前のバージョンで使用するとエラーが発生します。",
+  "preferences.common.enableSystemTerminal.name": "システムターミナルを使用",
+  "preferences.common.enableSystemTerminal.placeholder": "有効化するとビルトインターミナルエミュレータの代わりにシステムターミナルを使用します",
+  "preferences.common.enableSystemTerminal.tips": "注意: システムターミナルは ADB、Scrcpy、Gnirehtet のパスを環境変数に自動的に注入し、コマンドを直接実行できます。",
+  "preferences.common.preferredTerminal.name": "優先ターミナル",
+  "preferences.common.preferredTerminal.placeholder": "空欄の場合はシステムデフォルトを使用 (Terminal、iTerm、WindowsTerminal、PowerShell など)",
+  "preferences.common.preferredTerminal.tips": "注意: お好みのターミナルアプリケーションを指定します。利用可能なオプションはプラットフォームによって異なります。",
 
   "preferences.video.name": "動画",
   "preferences.video.disable-video.name": "動画の転送を無効化する",

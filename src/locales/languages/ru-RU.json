@@ -296,6 +296,12 @@
   "preferences.common.imeFix.name": "Исправление клавиатуры при запуске приложения",
   "preferences.common.imeFix.placeholder": "При включении будет решена проблема, когда метод ввода не отображается в текущем зеркальном окне при запуске приложения.",
   "preferences.common.imeFix.tips": "Примечание: Эта функция поддерживается только в scrcpy v3.2 и выше. Использование в более ранних версиях вызовет ошибки.",
+  "preferences.common.enableSystemTerminal.name": "Использовать системный терминал",
+  "preferences.common.enableSystemTerminal.placeholder": "При включении будет использоваться системный терминал вместо встроенного эмулятора терминала",
+  "preferences.common.enableSystemTerminal.tips": "Примечание: Системный терминал автоматически добавляет пути ADB, Scrcpy и Gnirehtet в переменные окружения, позволяя выполнять команды напрямую.",
+  "preferences.common.preferredTerminal.name": "Предпочитаемый терминал",
+  "preferences.common.preferredTerminal.placeholder": "Оставьте пустым для использования системного по умолчанию (Terminal, iTerm, WindowsTerminal, PowerShell)",
+  "preferences.common.preferredTerminal.tips": "Примечание: Укажите предпочитаемое приложение терминала. Доступные варианты зависят от платформы.",
 
   "preferences.video.name": "Видео",
   "preferences.video.disable-video.name": "Отключить передачу видео",

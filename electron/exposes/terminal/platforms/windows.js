@@ -12,38 +12,34 @@ const execAsync = promisify(exec)
  * @returns {string} - Escaped argument
  */
 function escapePowerShellArg(arg) {
-  return `'${arg.replace(/'/g, "''")}'`
+  return `'${arg.replace(/'/g, '\'\'')}'`
 }
 
 /**
- * Escape CMD arguments
- * @param {string} arg - Argument to escape
- * @returns {string} - Escaped argument
- */
-function escapeCmdArg(arg) {
-  return `"${arg.replace(/"/g, '""')}"`
-}
-
-/**
- * Build environment variable commands for PowerShell
- * @param {Object} env - Environment variables
- * @returns {string} - Environment commands
- */
-function buildPowerShellEnv(env = {}) {
-  return Object.entries(env)
-    .map(([key, value]) => `$env:${key}=${escapePowerShellArg(String(value))}`)
-    .join('; ')
-}
-
-/**
- * Build environment variable commands for CMD
+ * Build environment variable commands for CMD (only key variables)
  * @param {Object} env - Environment variables
  * @returns {string} - Environment commands
  */
 function buildCmdEnv(env = {}) {
-  return Object.entries(env)
-    .map(([key, value]) => `set ${key}=${String(value)}`)
-    .join(' && ')
+  const commands = []
+
+  // Set PATH if it exists and is different from system PATH
+  if (env.PATH) {
+    commands.push(`set "PATH=${env.PATH}"`)
+  }
+
+  // Set custom tool paths
+  if (env.ADB) {
+    commands.push(`set "ADB=${env.ADB}"`)
+  }
+  if (env.SCRCPY) {
+    commands.push(`set "SCRCPY=${env.SCRCPY}"`)
+  }
+  if (env.GNIREHTET) {
+    commands.push(`set "GNIREHTET=${env.GNIREHTET}"`)
+  }
+
+  return commands.join('\n')
 }
 
 /**
@@ -82,16 +78,16 @@ async function hasPowerShell() {
 async function openWindowsTerminal(options = {}) {
   const { env = {}, cwd = process.cwd(), command = '' } = options
 
-  const envCommands = buildPowerShellEnv(env)
+  // Build PowerShell command to change directory and execute user command
   const cdCommand = `cd ${escapePowerShellArg(cwd)}`
-
-  const fullCommand = [envCommands, cdCommand, command].filter(Boolean).join('; ')
+  const fullCommand = command ? `${cdCommand}; ${command}` : cdCommand
 
   // Windows Terminal supports PowerShell by default
+  // Use env option to pass environment variables instead of command string
   spawn('wt.exe', ['-d', cwd, 'powershell.exe', '-NoExit', '-Command', fullCommand], {
     detached: true,
     stdio: 'ignore',
-    shell: true,
+    env, // Pass environment variables directly
   }).unref()
 }
 
@@ -103,15 +99,16 @@ async function openWindowsTerminal(options = {}) {
 async function openPowerShell(options = {}) {
   const { env = {}, cwd = process.cwd(), command = '' } = options
 
-  const envCommands = buildPowerShellEnv(env)
+  // Build PowerShell command to change directory and execute user command
   const cdCommand = `cd ${escapePowerShellArg(cwd)}`
+  const fullCommand = command ? `${cdCommand}; ${command}` : cdCommand
 
-  const fullCommand = [envCommands, cdCommand, command].filter(Boolean).join('; ')
-
+  // Use env option to pass environment variables instead of command string
   spawn('powershell.exe', ['-NoExit', '-Command', fullCommand], {
     detached: true,
     stdio: 'ignore',
     cwd,
+    env, // Pass environment variables directly
   }).unref()
 }
 
@@ -127,22 +124,27 @@ async function openCmd(options = {}) {
   const tmpDir = os.tmpdir()
   const batchPath = path.join(tmpDir, `escrcpy-terminal-${Date.now()}.bat`)
 
+  // Build environment variable commands (only key variables)
   const envCommands = buildCmdEnv(env)
-  const cdCommand = `cd /d ${escapeCmdArg(cwd)}`
 
+  // Build batch file content
+  // Use chcp 65001 to set UTF-8 encoding
+  // Use quotes around path to handle spaces
   const batchContent = `@echo off
+chcp 65001 >nul
 ${envCommands}
-${cdCommand}
+cd /d "${cwd}"
 ${command}
 cmd /k
 `
 
-  await fs.writeFile(batchPath, batchContent)
+  await fs.writeFile(batchPath, batchContent, 'utf8')
 
-  spawn('cmd.exe', ['/c', 'start', 'cmd.exe', '/k', batchPath], {
+  // Use start command to open a new CMD window
+  // Quote the batch path to handle spaces
+  spawn('cmd.exe', ['/c', 'start', 'cmd.exe', '/k', `"${batchPath}"`], {
     detached: true,
     stdio: 'ignore',
-    shell: true,
   }).unref()
 
   // Clean up batch file after a delay
@@ -199,4 +201,3 @@ export async function getAvailableTerminals() {
 
   return terminals.filter(t => t.available)
 }
-

@@ -1,32 +1,51 @@
-import { createStderr, createStdout } from 'vue-command'
+import { debounce } from 'lodash-es'
+import { createStderr, createStdout, textFormatter } from 'vue-command'
+import { useFixCursor, useSystemTerminal } from './helper.js'
 
 const $adb = window.adb
 
-export function useAdb({ loading }) {
+export function useAdb({ vShell, history, loading } = {}) {
   const adb = async (args) => {
-    loading.value = true
-    const command = args.slice(1).join(' ')
-
-    let stderr
-    let stdout
+    const appendToHistory = debounce(vShell.value.appendToHistory, 500)
 
     try {
-      const res = await $adb.shell(command || 'help')
-
-      stdout = res?.stdout
-      stderr = res?.stderr
+      await useSystemTerminal(args.join(' '))
     }
     catch (error) {
-      stderr = error?.message || JSON.stringify(error) || 'Command failed'
+      useFixCursor(history)
+      appendToHistory(createStdout('System terminal is enabled'))
+      return false
     }
 
-    if (stderr) {
-      return createStderr(stderr)
-    }
+    loading.value = true
 
-    loading.value = false
+    let stdoutText = ''
+    let stderrText = ''
 
-    return createStdout(stdout)
+    const command = args.slice(1).join(' ')
+
+    $adb.spawnShell(command, {
+      stdout(text) {
+        loading.value = false
+
+        stdoutText += text
+
+        useFixCursor(history)
+
+        appendToHistory(createStdout(stdoutText))
+      },
+      stderr(text) {
+        loading.value = false
+
+        stderrText += text
+
+        useFixCursor(history)
+
+        appendToHistory(createStderr(stderrText))
+      },
+    })
+
+    return textFormatter('Waiting...')
   }
 
   return {

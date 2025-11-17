@@ -73,10 +73,11 @@ import VueCommand, {
   createStdout,
   listFormatter,
 } from 'vue-command'
-import { useAdb } from './hooks/adb-async.js'
+import { useAdb } from './hooks/adb.js'
 import { useGnirehtet } from './hooks/gnirehtet.js'
 import { useScrcpy } from './hooks/scrcpy.js'
 import 'vue-command/dist/vue-command.css'
+import { debounce } from 'lodash-es'
 
 const themeStore = useThemeStore()
 const taskStore = useTaskStore()
@@ -128,12 +129,14 @@ function getShell() {
   let unwatch = null
 
   return new Promise((resolve) => {
+    resolve = debounce(resolve, 500)
+
     unwatch = watch(
       () => vShell.value,
-      (value) => {
-        if (value) {
+      (val) => {
+        if (val) {
           unwatch?.()
-          resolve(value)
+          resolve(val)
         }
       },
       { immediate: true },
@@ -273,6 +276,7 @@ async function onCtrlC() {
 async function onClosed() {
   await onCtrlC()
   vShell.value.dispatch('clear')
+  vShell.value = null
 }
 
 taskStore.on('terminal', (task) => {

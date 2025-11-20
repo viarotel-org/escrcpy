@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.33.0](https://github.com/viarotel-org/escrcpy/compare/v1.32.2...v1.33.0) (2025-11-20)
+
+
+### Features
+
+* ✨ Add system terminal support ([e5c157e](https://github.com/viarotel-org/escrcpy/commit/e5c157e1a7339c284954d0142dd2ff8eb0983a0a))
+
+
+### Bug Fixes
+
+* 🐛 Fix issue with incorrect address bar path when returning to the previous level in file management ([0222675](https://github.com/viarotel-org/escrcpy/commit/0222675aa8bc0eaed11dd6529526696842d42428))
+* 🐛 Fix the problem of Windows calling system terminal failure ([194689e](https://github.com/viarotel-org/escrcpy/commit/194689ed6089b910a514494ec9af4cad64a56461))
+* 🐛 Fix the problem of Windows terminal injection command failure ([fbf88d0](https://github.com/viarotel-org/escrcpy/commit/fbf88d075c576a9f3c664bbb7fb2dae105e4399b))
+* 🐛 Fixed the issue where PowerShell failed to call the system terminal ([7beb027](https://github.com/viarotel-org/escrcpy/commit/7beb027fbd21df33bcbafce2cd23e86d90698eb4))
+
+
+### Performance Improvements
+
+* 🔖 Optimize interaction of preferred terminal options ([900dc69](https://github.com/viarotel-org/escrcpy/commit/900dc694251792aa95759d7c7e85ab241ed476d3))
+* 🚀 Clean output when closing built-in terminal ([c976d4c](https://github.com/viarotel-org/escrcpy/commit/c976d4cfc020d9761ca11ef5641264d5f33cecb7))
+* 🚀 Optimize system terminal stability ([2ffc588](https://github.com/viarotel-org/escrcpy/commit/2ffc5884a5ffd8dcc6d592f98eba15220229b3c3))
+* 🚀 Optimize the built-in terminal interaction experience ([bb56d5b](https://github.com/viarotel-org/escrcpy/commit/bb56d5b53b26709baa1158614a9ebe5bb713eae2))
+
 ## [1.32.2](https://github.com/viarotel-org/escrcpy/compare/v1.32.1...v1.32.2) (2025-09-29)
 
 

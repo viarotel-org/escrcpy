@@ -75,15 +75,13 @@ async function hasPowerShell() {
 async function openWindowsTerminal(options = {}) {
   const { env = {}, cwd = process.cwd(), command = '' } = options
 
-  // Build PowerShell command to change directory and execute user command
-  const cdCommand = `cd ${escapePowerShellArg(cwd)}`
-  const fullCommand = command ? `${cdCommand}; ${command}` : cdCommand
+  const useCommand = command ? ['-Command', command] : []
 
-  // Windows Terminal supports PowerShell by default
   // Use env option to pass environment variables instead of command string
-  spawn('wt.exe', ['-d', cwd, 'powershell.exe', '-NoExit', '-Command', fullCommand], {
+  spawn('wt.exe', ['powershell.exe', '-NoExit', ...useCommand], {
     detached: true,
     stdio: 'ignore',
+    cwd,
     env, // Pass environment variables directly
   }).unref()
 }
@@ -96,12 +94,10 @@ async function openWindowsTerminal(options = {}) {
 async function openPowerShell(options = {}) {
   const { env = {}, cwd = process.cwd(), command = '' } = options
 
-  // Build PowerShell command to change directory and execute user command
-  const cdCommand = `cd ${escapePowerShellArg(cwd)}`
-  const fullCommand = command ? `${cdCommand}; ${command}` : cdCommand
+  const useCommand = command ? ['-Command', command] : []
 
   // Use env option to pass environment variables instead of command string
-  spawn('cmd.exe', ['/c', 'start', 'powershell.exe', '-NoExit', '-Command', fullCommand], {
+  spawn('cmd.exe', ['/c', 'start', 'powershell.exe', '-NoExit', ...useCommand], {
     detached: true,
     stdio: 'ignore',
     cwd,

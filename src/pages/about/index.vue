@@ -2,7 +2,7 @@
   <div class="h-full">
     <div class="h-full flex flex-col items-center justify-center space-y-[4vh] -mt-[4vh]">
       <a class="block" :href="escrcpyURL" target="_blank">
-        <img src="$electron/resources/build/logo.png" class="h-[32vh] max-h-72" alt="" />
+        <img src="$electron/resources/build/logo.png" class="h-[32vh] max-h-72 drop-shadow drop-shadow-color-gray-300" alt="" />
       </a>
 
       <div class="text-lg lg:text-xl xl:text-2xl text-center italic text-gray-700 dark:text-white">

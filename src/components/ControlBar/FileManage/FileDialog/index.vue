@@ -219,7 +219,7 @@ function open(args) {
 }
 
 function onClosed() {
-  currentPath.value = 'sdcard'
+  currentPath.value = '/sdcard'
   dialog.reset()
 }
 

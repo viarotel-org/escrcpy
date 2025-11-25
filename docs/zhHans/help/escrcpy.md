@@ -101,3 +101,7 @@
 ```shell
 sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
 ```
+
+### 调整投屏窗口大小后出现黑边
+
+当调整投屏窗口尺寸后出现黑边时，只需双击黑边区域即可让其自动隐藏。

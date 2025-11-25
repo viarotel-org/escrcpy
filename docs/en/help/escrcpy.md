@@ -106,3 +106,7 @@ This might be due to Chinese or special characters in the installation path. Ple
 ```shell
 sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
 ```
+
+### Black edges appear after resizing the casting window
+
+If black edges appear after resizing the casting window, simply **double-click the black edge area** and it will automatically hide.

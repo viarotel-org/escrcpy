@@ -87,5 +87,8 @@
     "vue-router": "4.5.0",
     "vue-screen": "2.4.2",
     "which": "4.0.0"
+  },
+  "dependencies": {
+    "@opentiny/fluent-editor": "^3.25.6"
   }
 }

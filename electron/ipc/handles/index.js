@@ -1,5 +1,6 @@
-import { dialog, ipcMain, screen, shell } from 'electron'
+import { app, dialog, ipcMain, screen, shell } from 'electron'
 import fs from 'fs-extra'
+import path from 'node:path'
 import { copyFileToClipboard } from '$electron/helpers/clipboard.js'
 
 export default (mainWindow) => {
@@ -86,6 +87,53 @@ export default (mainWindow) => {
         success: false,
         message: error.message,
       }
+    }
+  })
+
+  // 获取系统临时目录
+  ipcMain.handle('get-temp-path', async () => {
+    try {
+      const tempDir = app.getPath('temp')
+      // 创建应用专用临时目录
+      const appTempDir = path.join(tempDir, 'escrcpy-preview')
+      await fs.ensureDir(appTempDir)
+      return appTempDir
+    }
+    catch (error) {
+      console.error('IPC get-temp-path error:', error.message)
+      throw error
+    }
+  })
+
+  // 重命名临时文件
+  ipcMain.handle('rename-temp-file', async (_, { oldPath, newPath }) => {
+    try {
+      if (!oldPath || !newPath) {
+        throw new Error('Both oldPath and newPath are required')
+      }
+
+      // 确保文件在临时目录中（安全检查）
+      const tempDir = app.getPath('temp')
+      const appTempDir = path.join(tempDir, 'escrcpy-preview')
+
+      if (!oldPath.startsWith(appTempDir) || !newPath.startsWith(appTempDir)) {
+        throw new Error('File paths must be within the app temp directory')
+      }
+
+      // 检查源文件是否存在
+      const exists = await fs.pathExists(oldPath)
+      if (!exists) {
+        throw new Error('Source file does not exist')
+      }
+
+      // 执行重命名
+      await fs.rename(oldPath, newPath)
+
+      return { success: true, newPath }
+    }
+    catch (error) {
+      console.error('IPC rename-temp-file error:', error.message)
+      throw error
     }
   })
 }

@@ -324,6 +324,14 @@
     "ElMessage": true,
     "ElMessageBox": true,
     "ElLoading": true,
-    "useScaleScreen": true
+    "useScaleScreen": true,
+    "useAdbFileManager": true,
+    "useDownloader": true,
+    "useFileOperations": true,
+    "usePathManager": true,
+    "useSelection": true,
+    "useUploader": true,
+    "useFileClipboard": true,
+    "useFilePreview": true
   }
 }

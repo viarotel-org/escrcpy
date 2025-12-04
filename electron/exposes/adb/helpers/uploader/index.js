@@ -6,6 +6,7 @@ export class ADBUploader {
     this.adb = options.adb
     this.options = {
       onProgress: () => {},
+      onScanProgress: () => {},
       onDirectoryStart: () => {},
       onDirectoryComplete: () => {},
       onFileStart: () => {},
@@ -20,12 +21,17 @@ export class ADBUploader {
     this.isCancelled = false
 
     this.stats = {
+      totalFiles: 0,
+      completedFiles: 0,
+      successFiles: 0,
+      failedFiles: 0,
       totalBytes: 0,
       uploadedBytes: 0,
       startTime: 0,
     }
 
     this._lastBytes = 0
+    this._scannedFiles = 0
   }
 
   /**
@@ -54,10 +60,15 @@ export class ADBUploader {
   async uploadTo(remoteDir, localPaths, deviceId = null) {
     this.isCancelled = false
     this.stats = {
+      totalFiles: 0,
+      completedFiles: 0,
+      successFiles: 0,
+      failedFiles: 0,
       totalBytes: 0,
       uploadedBytes: 0,
       startTime: Date.now(),
     }
+    this._scannedFiles = 0
 
     try {
       const paths = Array.isArray(localPaths) ? localPaths : [localPaths]
@@ -68,9 +79,11 @@ export class ADBUploader {
           const stats = await fs.stat(localPath)
           if (stats.isDirectory()) {
             const files = await this._getFileList(localPath)
+            this.stats.totalFiles += files.length
             this.stats.totalBytes += files.reduce((acc, file) => acc + file.size, 0)
           }
           else {
+            this.stats.totalFiles += 1
             this.stats.totalBytes += stats.size
           }
         }
@@ -139,6 +152,7 @@ export class ADBUploader {
 
         return {
           success: results.every(r => r.success),
+          cancelled: this.isCancelled,
           results,
           stats: {
             ...this.stats,
@@ -166,18 +180,32 @@ export class ADBUploader {
   }
 
   async _uploadSingleFile(sync, localPath, remotePath) {
-    if (this.options.validateFile) {
-      await this.options.validateFile(localPath)
-    }
+    try {
+      if (this.options.validateFile) {
+        await this.options.validateFile(localPath)
+      }
 
-    this.options.onFileStart(localPath, this.stats)
-    await this._uploadFileWithRetry(sync, localPath, remotePath)
-    this.options.onFileComplete(localPath, this.stats)
-    return true
+      this.options.onFileStart(localPath, this.stats)
+      await this._uploadFileWithRetry(sync, localPath, remotePath)
+
+      // 成功上传一个文件
+      this.stats.completedFiles++
+      this.stats.successFiles++
+
+      this.options.onFileComplete(localPath, this.stats)
+      return true
+    }
+    catch (error) {
+      // 上传失败
+      this.stats.completedFiles++
+      this.stats.failedFiles++
+      throw error
+    }
   }
 
   async _uploadSingleDirectory(sync, localDir, remoteDir) {
     const files = await this._getFileList(localDir)
+    let hasError = false
 
     for (const file of files) {
       if (this.isCancelled)
@@ -187,10 +215,17 @@ export class ADBUploader {
         continue
       }
 
-      const remotePath = path.posix.join(remoteDir, file.relativePath)
-      await this._uploadSingleFile(sync, file.localPath, remotePath)
+      try {
+        const remotePath = path.posix.join(remoteDir, file.relativePath)
+        await this._uploadSingleFile(sync, file.localPath, remotePath)
+      }
+      catch (error) {
+        hasError = true
+        this.options.onError(error, file.localPath)
+        // 继续上传其他文件，不中断整个目录的上传
+      }
     }
-    return true
+    return !hasError
   }
 
   async _getFileList(baseDir) {
@@ -212,6 +247,12 @@ export class ADBUploader {
         })))
       }
       else {
+        this._scannedFiles++
+        this.options.onScanProgress?.({
+          currentPath: fullPath,
+          filesFound: this._scannedFiles,
+        })
+
         fileList.push({
           localPath: fullPath,
           relativePath: file,

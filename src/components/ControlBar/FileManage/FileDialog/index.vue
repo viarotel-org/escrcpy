@@ -9,138 +9,165 @@
     class="el-dialog--beautify"
     @closed="onClosed"
   >
-    <div
-      class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1"
-    >
-      <el-button
-        text
-        icon="Top"
-        circle
-        class="mr-2 flex-none"
-        @click="handlePrev"
-      ></el-button>
+    <!-- 导航栏 -->
+    <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+      <!-- 后退/前进/上级按钮 -->
+      <div class="flex-none flex items-center">
+        <el-button
+          text
+          icon="Back"
+          circle
+          :disabled="!fileManager.canGoBack.value"
+          @click="fileManager.goBack()"
+        ></el-button>
+        <el-button
+          text
+          icon="Right"
+          circle
+          :disabled="!fileManager.canGoForward.value"
+          @click="fileManager.goForward()"
+        ></el-button>
+        <el-button
+          text
+          icon="Top"
+          circle
+          :disabled="fileManager.isRoot.value"
+          @click="fileManager.goUp()"
+        ></el-button>
+      </div>
 
-      <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
+      <!-- 面包屑导航 -->
+      <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
         <el-breadcrumb separator-icon="ArrowRight" class="!flex">
           <el-breadcrumb-item
-            v-for="item of breadcrumbModel"
+            v-for="item of fileManager.breadcrumbs.value"
             :key="item.value"
             class="!flex-none"
-            @click="handleBreadcrumb(item)"
+            @click="fileManager.navigateByBreadcrumb(item)"
           >
             <el-button text class="!px-2" :icon="item.icon" :title="item.label">
-              {{ $t(item.label) }}
+              {{ $t(item.label) || item.label }}
             </el-button>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </Scrollable>
 
+      <!-- 刷新按钮 -->
       <div class="flex-none">
-        <el-button text icon="Refresh" circle @click="getTableData"></el-button>
+        <el-button
+          text
+          icon="Refresh"
+          circle
+          :loading="fileManager.loading.value"
+          @click="fileManager.refresh()"
+        ></el-button>
       </div>
     </div>
 
-    <el-button-group class="mb-4 -ml-px">
-      <AddPopover @success="handleAdd">
-        <template #reference>
-          <el-button type="default" icon="FolderAdd">
-            {{ $t('device.control.file.manager.add') }}
-          </el-button>
-        </template>
-      </AddPopover>
+    <!-- 工具栏 -->
+    <div class="flex items-center justify-between mb-4">
+      <el-button-group class="-ml-px">
+        <!-- 新建 -->
+        <AddPopover @success="handleAdd">
+          <template #reference>
+            <el-button type="default" icon="Plus">
+              {{ $t('device.control.file.manager.add') }}
+            </el-button>
+          </template>
+        </AddPopover>
+
+        <!-- 上传（统一文件和目录上传） -->
+        <el-button
+          type="default"
+          icon="Upload"
+          :loading="fileManager.uploader.uploading.value"
+          @click="handleUpload()"
+        >
+          {{ $t('device.control.file.manager.upload') }}
+        </el-button>
+
+        <!-- 下载 -->
+        <el-button
+          type="default"
+          icon="Download"
+          :disabled="!fileManager.selection.hasSelection.value"
+          :loading="fileManager.downloader.downloading.value"
+          @click="handleDownload()"
+        >
+          {{ $t('device.control.file.manager.download') }}
+        </el-button>
+      </el-button-group>
+
+      <!-- 剪贴板操作 -->
+      <el-button-group v-if="fileManager.selection.hasSelection.value">
+        <el-button type="default" icon="CopyDocument" @click="handleCopy">
+          {{ $t('device.control.file.manager.copy') }}
+        </el-button>
+        <el-button type="default" icon="Scissor" @click="handleCut">
+          {{ $t('device.control.file.manager.cut') }}
+        </el-button>
+      </el-button-group>
 
       <el-button
-        type="default"
-        icon="DocumentChecked"
-        v-bind="{ loading: fileActions.loading }"
-        @click="handleUpload(device)"
+        v-if="fileManager.clipboard.hasClipboard.value"
+        type="primary"
+        icon="DocumentCopy"
+        @click="handlePaste"
       >
-        {{ $t('device.control.file.manager.upload') }}
+        {{ $t('device.control.file.manager.paste') }}
+        ({{ fileManager.clipboard.clipboardState.value.count }})
       </el-button>
+    </div>
 
-      <el-button
-        type="default"
-        icon="FolderChecked"
-        v-bind="{ loading: fileActions.loading }"
-        @click="handleUpload(device, 'openDirectory')"
-      >
-        {{ $t('device.control.file.manager.upload.directory') }}
-      </el-button>
-
-      <el-button
-        type="default"
-        icon="Download"
-        :disabled="!selectionRows.length"
-        @click="handleDownload()"
-      >
-        {{ $t('device.control.file.manager.download') }}
-      </el-button>
-    </el-button-group>
-
+    <!-- 文件列表 -->
     <el-table
-      v-loading="loading"
-      :data="tableData"
+      ref="tableRef"
+      v-loading="fileManager.loading.value"
+      :data="fileManager.files.value"
       stripe
       size="small"
       row-key="id"
-      @selection-change="onSelectionChange"
+      @selection-change="handleSelectionChange"
+      @row-contextmenu="handleContextMenu"
     >
-      <el-table-column
-        type="selection"
-        reserve-selection
-        width="50"
-        align="left"
-        :selectable="(row) => ['file'].includes(row.type)"
-      ></el-table-column>
+      <el-table-column type="selection" reserve-selection width="50" align="left" />
 
-      <el-table-column
-        prop="name"
-        :label="$t('common.name')"
-        sortable
-        show-overflow-tooltip
-      >
+      <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip>
         <template #default="{ row }">
-          <el-link
-            v-if="row.type === 'directory'"
-            type="default"
-            icon="Folder"
-            class="!space-x-2"
-            @click="handleDirectory(row)"
+          <div
+            class="flex items-center cursor-pointer"
+            :class="{ 'opacity-50': fileManager.clipboard.isCut(row) }"
+            @click="handleItemClick(row)"
           >
-            {{ row.name }}
-          </el-link>
-          <el-link
-            v-else
-            type="default"
-            icon="Document"
-            class="!space-x-2"
-            @click="handleDownload(row)"
-          >
-            {{ row.name }}
-          </el-link>
+            <el-icon class="mr-2" :class="getFileIconClass(row)">
+              <component :is="getFileIcon(row)" />
+            </el-icon>
+            <span class="truncate">{{ row.name }}</span>
+          </div>
         </template>
       </el-table-column>
 
-      <el-table-column
-        prop="size"
-        :label="$t('common.size')"
-        sortable
-        align="center"
-      >
-      </el-table-column>
+      <el-table-column prop="size" :label="$t('common.size')" sortable align="center" width="120" />
 
-      <el-table-column
-        prop="updateTime"
-        :label="$t('time.update')"
-        sortable
-        align="center"
-      >
-      </el-table-column>
+      <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="center" width="180" />
 
-      <el-table-column :label="$t('device.control.name')" align="center">
+      <el-table-column :label="$t('device.control.name')" align="center" width="240">
         <template #default="{ row }">
+          <!-- 编辑按钮（仅文本文件可用） -->
           <EleTooltipButton
-            v-if="['file'].includes(row.type)"
+            v-if="isTextFile(row)"
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('device.control.file.manager.edit')"
+            text
+            type="success"
+            icon="EditPen"
+            circle
+            @click="handleEdit(row)"
+          />
+
+          <EleTooltipButton
             effect="light"
             placement="top"
             :offset="2"
@@ -150,8 +177,45 @@
             icon="Download"
             circle
             @click="handleDownload(row)"
-          >
-          </EleTooltipButton>
+          />
+
+          <!-- 预览按钮（仅文件） -->
+          <EleTooltipButton
+            v-if="!row.isDirectory"
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('device.control.file.manager.preview')"
+            text
+            type="success"
+            icon="View"
+            circle
+            @click="handlePreview(row)"
+          />
+
+          <EleTooltipButton
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('device.control.file.manager.rename')"
+            text
+            type="warning"
+            icon="Edit"
+            circle
+            @click="handleRename(row)"
+          />
+
+          <EleTooltipButton
+            effect="light"
+            placement="top"
+            :offset="2"
+            :content="$t('device.control.file.manager.move')"
+            text
+            type="info"
+            icon="Rank"
+            circle
+            @click="handleMoveItem(row)"
+          />
 
           <EleTooltipButton
             effect="light"
@@ -163,190 +227,485 @@
             icon="Delete"
             circle
             @click="handleRemove(row)"
-          >
-          </EleTooltipButton>
+          />
         </template>
       </el-table-column>
     </el-table>
 
+    <!-- 状态栏 -->
+    <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
+      <div>
+        {{ fileManager.files.value.length }} {{ $t('common.item') || 'items' }}
+        <span v-if="fileManager.selection.hasSelection.value">
+          , {{ fileManager.selection.selectionCount.value }} {{ $t('common.selected') || 'selected' }}
+        </span>
+      </div>
+      <div v-if="fileManager.clipboard.hasClipboard.value" class="flex items-center">
+        <el-tag size="small" :type="fileManager.clipboard.isCutOperation.value ? 'warning' : 'info'">
+          {{ fileManager.clipboard.isCutOperation.value
+            ? $t('device.control.file.manager.cut')
+            : $t('device.control.file.manager.copy') }}
+          : {{ fileManager.clipboard.clipboardState.value.count }}
+        </el-tag>
+        <el-button text size="small" @click="fileManager.clipboard.clear()">
+          {{ $t('common.cancel') }}
+        </el-button>
+      </div>
+    </div>
+
     <template #footer></template>
   </el-dialog>
+
+  <!-- 路径选择对话框 -->
+  <MoveDialog
+    ref="moveDialogRef"
+    :device-id="device?.id"
+    :action="pathSelectAction"
+    @confirm="handlePathSelectConfirm"
+  />
+
+  <!-- 编辑对话框 -->
+  <EditDialog ref="editDialogRef" :file-manager="fileManager" @success="handleEditSuccess" />
 </template>
 
 <script setup>
+import useAdbFileManager from '$/hooks/useAdbFileManager'
 import AddPopover from './AddPopover/index.vue'
+import EditDialog from './EditDialog/index.vue'
+import MoveDialog from './MoveDialog/index.vue'
 
 const preferenceStore = usePreferenceStore()
-
-const fileActions = reactive(useFileActions())
-
 const dialog = reactive(useDialog())
-
 const device = ref()
+const tableRef = ref()
+const scrollableRef = ref()
+const moveDialogRef = ref()
+const editDialogRef = ref()
+const pathSelectAction = ref('move')
 
-const loading = ref(false)
+// 使用文件管理器 hook
+const fileManager = useAdbFileManager()
 
-const tableData = ref([])
+// 允许编辑的文本文件扩展名
+const TEXT_FILE_EXTENSIONS = ['.txt', '.md', '.log', '.json']
 
-const currentPath = ref('/sdcard')
-
-const presetMap = {
-  sdcard: {
-    icon: 'Iphone',
-    label: 'device.control.file.manager.storage',
-    value: '/sdcard',
-  },
+// 文件图标映射
+const FILE_ICON_MAP = {
+  // 目录
+  directory: { icon: 'Folder', class: 'text-yellow-500' },
+  // 图片
+  image: { icon: 'Picture', class: 'text-green-500', extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'] },
+  // 视频
+  video: { icon: 'VideoCamera', class: 'text-purple-500', extensions: ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm'] },
+  // 音频
+  audio: { icon: 'Headset', class: 'text-pink-500', extensions: ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a'] },
+  // 文档
+  document: { icon: 'Document', class: 'text-blue-500', extensions: ['.doc', '.docx', '.pdf', '.xls', '.xlsx', '.ppt', '.pptx'] },
+  // 压缩包
+  archive: { icon: 'Files', class: 'text-orange-500', extensions: ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'] },
+  // 代码
+  code: { icon: 'Tickets', class: 'text-cyan-500', extensions: ['.js', '.ts', '.py', '.java', '.c', '.cpp', '.h', '.go', '.rs', '.vue', '.jsx', '.tsx'] },
+  // 文本
+  text: { icon: 'Memo', class: 'text-gray-500', extensions: ['.txt', '.md', '.log', '.json', '.xml', '.yml', '.yaml', '.ini', '.conf', '.cfg'] },
+  // APK
+  apk: { icon: 'Box', class: 'text-green-600', extensions: ['.apk'] },
+  // 默认
+  default: { icon: 'Document', class: 'text-blue-500' },
 }
 
-const breadcrumbModel = computed(() => {
-  const slicePath = currentPath.value.slice(1)
-
-  const list = slicePath ? slicePath.split('/') : ['/']
-
-  const value = list.map(item => ({
-    label: item,
-    value: item,
-    ...(presetMap[item] || {}),
-  }))
-
-  return value
-})
-
-function open(args) {
-  device.value = args
-  dialog.open(args)
-  getTableData()
+/**
+ * 获取文件扩展名
+ * @param {string} filename - 文件名
+ * @returns {string}
+ */
+function getFileExtension(filename) {
+  const lastDotIndex = filename.lastIndexOf('.')
+  if (lastDotIndex === -1)
+    return ''
+  return filename.substring(lastDotIndex).toLowerCase()
 }
 
+/**
+ * 判断是否为文本文件
+ * @param {Object} row - 文件行数据
+ * @returns {boolean}
+ */
+function isTextFile(row) {
+  if (row.type === 'directory')
+    return false
+  const ext = getFileExtension(row.name)
+  return TEXT_FILE_EXTENSIONS.includes(ext)
+}
+
+/**
+ * 获取文件图标组件名
+ * @param {Object} row - 文件行数据
+ * @returns {string}
+ */
+function getFileIcon(row) {
+  if (row.type === 'directory') {
+    return FILE_ICON_MAP.directory.icon
+  }
+
+  const ext = getFileExtension(row.name)
+
+  for (const [, config] of Object.entries(FILE_ICON_MAP)) {
+    if (config.extensions?.includes(ext)) {
+      return config.icon
+    }
+  }
+
+  return FILE_ICON_MAP.default.icon
+}
+
+/**
+ * 获取文件图标样式类
+ * @param {Object} row - 文件行数据
+ * @returns {string}
+ */
+function getFileIconClass(row) {
+  if (row.type === 'directory') {
+    return FILE_ICON_MAP.directory.class
+  }
+
+  const ext = getFileExtension(row.name)
+
+  for (const [, config] of Object.entries(FILE_ICON_MAP)) {
+    if (config.extensions?.includes(ext)) {
+      return config.class
+    }
+  }
+
+  return FILE_ICON_MAP.default.class
+}
+
+// 打开对话框
+function open(info) {
+  device.value = info
+  dialog.open(info)
+  fileManager.init(info, '/sdcard')
+}
+
+// 关闭对话框
 function onClosed() {
-  currentPath.value = '/sdcard'
+  fileManager.reset()
   dialog.reset()
 }
 
-async function getTableData() {
-  loading.value = true
-
-  const data = await window.adb.readdir(device.value.id, currentPath.value)
-
-  loading.value = false
-
-  tableData.value = data
+// 处理选择变化
+function handleSelectionChange(selection) {
+  fileManager.selection.setSelection(selection)
 }
 
-const selectionRows = ref([])
-
-function onSelectionChange(selection) {
-  selectionRows.value = selection
+// 处理项目点击
+async function handleItemClick(row) {
+  if (row.type === 'directory') {
+    await fileManager.navigateTo(row.id)
+    await nextTick()
+    scrollableRef.value?.scrollToEnd()
+  }
+  else {
+    handleDownload(row)
+  }
 }
 
-const scrollableRef = ref()
-
-async function handleDirectory(row) {
-  currentPath.value = row.id
-  getTableData()
-
-  await nextTick()
-  scrollableRef.value.scrollToEnd()
-}
-
-function handleBreadcrumb(data) {
-  const index = currentPath.value.indexOf(data.value)
-
-  currentPath.value = currentPath.value.slice(0, index + data.value.length)
-
-  getTableData()
-}
-
-function handlePrev() {
-  let value = '/'
-
-  if (breadcrumbModel.value.length > 1) {
-    value = breadcrumbModel.value
-      .slice(0, -1)
-      .map(item => item.value)
-      .join('/')
+// 新建文件或文件夹
+async function handleAdd({ name, type }) {
+  let result
+  if (type === 'file') {
+    result = await fileManager.operations.createFile(name)
+  }
+  else {
+    result = await fileManager.operations.createDirectory(name)
   }
 
-  currentPath.value = value.startsWith('/') ? value : `/${value}`
-
-  getTableData()
+  if (result.success) {
+    ElMessage.success(window.t('common.success'))
+  }
+  else {
+    ElMessage.error(result.error || window.t('common.failed'))
+  }
 }
 
-async function handleAdd(dirname) {
-  await window.adb.deviceShell(
-    device.value.id,
-    `mkdir ${currentPath.value}/${dirname}`,
-  )
-
-  getTableData()
-}
-
+// 删除文件/文件夹
 async function handleRemove(row) {
   try {
     await ElMessageBox.confirm(
       window.t('device.control.file.manager.delete.tips'),
       window.t('common.tips'),
-      {
-        type: 'warning',
-      },
+      { type: 'warning' },
     )
   }
-  catch (error) {
-    return error.message
+  catch {
+    return
   }
 
-  await window.adb.deviceShell(
-    device.value.id,
-    `rm -r "${currentPath.value}/${row.name}"`,
-  )
+  const items = row ? [row] : fileManager.selection.selectedItems.value
+  const result = await fileManager.operations.remove(items)
 
-  getTableData()
+  if (result.success) {
+    ElMessage.success(window.t('device.control.file.manager.delete.success'))
+    fileManager.selection.clearSelection()
+    tableRef.value?.clearSelection()
+  }
+  else {
+    ElMessage.error(window.t('device.control.file.manager.delete.error', { error: result.error }))
+  }
 }
 
-async function handleUpload(device, openType) {
-  await fileActions.send(device, {
-    openType,
-    remotePath: currentPath.value,
+// 重命名
+function handleRename(row) {
+  editDialogRef.value?.openRename(row)
+}
+
+// 编辑文件
+function handleEdit(row) {
+  editDialogRef.value?.openEdit(row)
+}
+
+// 编辑成功回调
+function handleEditSuccess() {
+  // 编辑对话框已经处理了刷新，这里不需要额外操作
+}
+
+// 上传文件
+async function handleUpload() {
+  // 选择文件和目录
+  const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+    properties: ['openFile', 'openDirectory', 'multiSelections'],
   })
 
-  getTableData()
+  if (!files || files.length === 0)
+    return
+
+  // 创建进度提示
+  const messageLoading = useMessageLoading(
+    window.t('device.control.file.manager.upload.scanning'),
+    {
+      showClose: true,
+      onCancel: () => fileManager.uploader.cancel(),
+    },
+  )
+
+  try {
+    const result = await fileManager.uploader.upload(files, {
+      onScanProgress: ({ filesFound }) => {
+        messageLoading.update(
+          window.t('device.control.file.manager.upload.scanning.files', { count: filesFound }),
+        )
+      },
+      onProgress: ({ total, file }) => {
+        console.log('total', total)
+        messageLoading.update(
+          window.t('device.control.file.manager.upload.progress', {
+            percent: Math.round(total.percent || 0),
+            completed: total.uploaded || 0,
+            total: total.size || 0,
+          }),
+        )
+      },
+    })
+
+    messageLoading.close()
+
+    if (result.cancelled) {
+      ElMessage.info(window.t('device.control.file.manager.upload.cancelled'))
+    }
+    else if (result.success) {
+      const stats = result.stats || {}
+      ElMessage.success(
+        `${window.t('device.control.file.manager.upload.success')
+        } (${stats.successFiles || 0}/${stats.totalFiles || 0})`,
+      )
+    }
+    else if (result.error) {
+      ElMessage.error(window.t('device.control.file.manager.upload.error', { error: result.error }))
+    }
+  }
+  catch (error) {
+    messageLoading.close()
+    console.error('Upload error:', error)
+    ElMessage.error(window.t('device.control.file.manager.upload.error', { error: error.message }))
+  }
 }
 
+// 预览文件
+async function handlePreview(row) {
+  // 检查是否支持预览
+  const supportCheck = fileManager.previewer.checkPreviewSupport(row)
+  if (!supportCheck.supported) {
+    ElMessage.warning(
+      window.t('device.control.file.manager.preview.unsupported')
+      + (supportCheck.reason ? `: ${supportCheck.reason}` : ''),
+    )
+    return
+  }
+
+  const messageLoading = useMessageLoading(
+    window.t('device.control.file.manager.download.scanning'),
+    { showClose: false },
+  )
+
+  try {
+    const result = await fileManager.previewer.previewFile(row, {
+      onProgress: () => {
+        // 预览时不显示详细进度
+      },
+    })
+
+    messageLoading.close()
+
+    if (result.success) {
+      // 文件已成功打开，无需额外提示
+    }
+    else if (result.error) {
+      ElMessage.error(window.t('device.control.file.manager.preview.error', { error: result.error }))
+    }
+  }
+  catch (error) {
+    messageLoading.close()
+    console.error('Preview error:', error)
+    ElMessage.error(window.t('device.control.file.manager.preview.error', { error: error.message }))
+  }
+}
+
+// 下载文件
 async function handleDownload(row) {
   try {
     await ElMessageBox.confirm(
       window.t('device.control.file.manager.download.tips'),
       window.t('common.tips'),
-      {
-        type: 'info',
-      },
+      { type: 'info' },
     )
   }
-  catch (error) {
-    return error.message
+  catch {
+    return
   }
 
-  const pathList = row
-    ? [row.id]
-    : selectionRows.value
-        .filter(item => item.type === 'file')
-        .map(item => item.id)
+  const items = row ? [row] : fileManager.selection.selectedItems.value
+  if (items.length === 0)
+    return
 
-  const savePath = preferenceStore.getData(device.value.id)?.savePath
+  const savePath = preferenceStore.getData(device.value.id)?.savePath || './'
 
-  const closeLoading = ElMessage.loading(window.t('common.downloading')).close
+  // 创建进度提示
+  const messageLoading = useMessageLoading(
+    window.t('device.control.file.manager.download.scanning'),
+    {
+      showClose: true,
+      onCancel: () => fileManager.downloader.cancel(),
+    },
+  )
 
-  for (let index = 0; index < pathList.length; index++) {
-    const item = pathList[index]
+  const result = await fileManager.downloader.download(items, {
+    savePath,
+    onProgress: ({ total }) => {
+      if (total) {
+        messageLoading.update(
+          window.t('device.control.file.manager.download.progress', {
+            percent: total.percent || 0,
+            completed: total.completedFiles || 0,
+            total: total.files || 0,
+          }),
+        )
+      }
+    },
+    onScanProgress: ({ filesFound }) => {
+      messageLoading.update(
+        window.t('device.control.file.manager.download.scanning.files', { count: filesFound }),
+      )
+    },
+  })
 
-    await window.adb
-      .pull(device.value.id, item, { savePath })
-      .catch(e => console.warn(e?.message))
+  messageLoading.close()
+
+  if (result.cancelled) {
+    ElMessage.warning(window.t('device.control.file.manager.download.cancelled'))
+  }
+  else if (result.success) {
+    console.log('result', result)
+    ElMessage.success(
+      window.t('device.control.file.manager.download.success', {
+        total: result.stats?.totalFiles || 0,
+        success: result.stats?.completedFiles || 0,
+        failed: result.stats?.failedFiles || 0,
+      }),
+    )
+    fileManager.selection.clearSelection()
+    tableRef.value?.clearSelection()
+  }
+  else {
+    ElMessage.error(window.t('device.control.file.manager.download.error', { error: result.error }))
+  }
+}
+
+// 复制到剪贴板
+function handleCopy() {
+  const items = fileManager.selection.selectedItems.value
+  if (items.length > 0) {
+    fileManager.clipboard.copy(items)
+    ElMessage.success(`${window.t('device.control.file.manager.copy')}: ${items.length}`)
+  }
+}
+
+// 剪切到剪贴板
+function handleCut() {
+  const items = fileManager.selection.selectedItems.value
+  if (items.length > 0) {
+    fileManager.clipboard.cut(items)
+    ElMessage.success(`${window.t('device.control.file.manager.cut')}: ${items.length}`)
+  }
+}
+
+// 粘贴
+async function handlePaste() {
+  const result = await fileManager.clipboard.paste({ autoRefresh: true })
+  if (result.success) {
+    ElMessage.success(window.t('device.control.file.manager.paste.success'))
+    fileManager.selection.clearSelection()
+    tableRef.value?.clearSelection()
+  }
+  else {
+    ElMessage.error(window.t('device.control.file.manager.paste.error', { error: result.error }))
+  }
+}
+
+// 移动单个项目
+function handleMoveItem(row) {
+  pathSelectAction.value = 'move'
+  moveDialogRef.value?.open([row], fileManager.currentPath.value)
+}
+
+// 路径选择确认
+async function handlePathSelectConfirm({ targetPath, items }) {
+  let result
+  if (pathSelectAction.value === 'move') {
+    result = await fileManager.operations.move(items, targetPath, { autoRefresh: true })
+  }
+  else {
+    result = await fileManager.operations.copy(items, targetPath, { autoRefresh: true })
   }
 
-  closeLoading()
+  if (result.success) {
+    const msgKey = pathSelectAction.value === 'move'
+      ? 'device.control.file.manager.move.success'
+      : 'device.control.file.manager.copy.success'
+    ElMessage.success(window.t(msgKey))
+    fileManager.selection.clearSelection()
+    tableRef.value?.clearSelection()
+  }
+  else {
+    const msgKey = pathSelectAction.value === 'move'
+      ? 'device.control.file.manager.move.error'
+      : 'device.control.file.manager.copy.error'
+    ElMessage.error(window.t(msgKey, { error: result.error }))
+  }
+}
 
-  ElMessage.success(window.t('common.success'))
+// 右键菜单
+function handleContextMenu(row, column, event) {
+  event.preventDefault()
+  // 可以在这里添加右键菜单逻辑
 }
 
 defineExpose({

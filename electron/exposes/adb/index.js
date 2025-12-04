@@ -9,6 +9,7 @@ import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { ProcessManager, streamToBase64 } from '$electron/helpers/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
+import { ADBDownloader } from './helpers/downloader/index.js'
 import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
@@ -339,6 +340,39 @@ function uploader(options = {}) {
   }
 }
 
+/**
+ * 创建文件/文件夹下载器实例
+ * @param {Object} options 配置选项
+ * @param {string} options.deviceId 设备ID
+ * @param {Array} options.items 待下载项列表 [{id, type, name}]
+ * @param {string} options.localPath 本地保存路径
+ * @param {Function} options.onProgress 进度回调
+ * @param {Function} options.onItemStart 项目开始回调
+ * @param {Function} options.onItemComplete 项目完成回调
+ * @param {Function} options.onError 错误回调
+ * @param {Function} options.onCancel 取消回调
+ * @param {Function} options.onScanProgress 扫描进度回调
+ * @returns {Object} 下载器控制对象
+ */
+function downloader(options = {}) {
+  const { deviceId, items, localPath, ...initialOptions } = options
+
+  const downloaderInstance = new ADBDownloader({
+    adb: client,
+    onError: (error, file) => {
+      console.error(`Error downloading ${file}:`, error)
+    },
+    ...initialOptions,
+  })
+
+  return {
+    context: downloaderInstance,
+    start: () => downloaderInstance.downloadTo(deviceId, items, localPath),
+    preview: () => downloaderInstance.previewTasks(deviceId, items),
+    cancel: () => downloaderInstance.cancel(),
+  }
+}
+
 async function waitForDevice(id) {
   const device = client.getDevice(id)
 
@@ -412,6 +446,7 @@ export default {
   scannerConnect,
   battery,
   uploader,
+  downloader,
   waitForDevice,
   getSerialNo,
   killProcesses,

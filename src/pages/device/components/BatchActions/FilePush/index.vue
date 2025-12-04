@@ -1,5 +1,5 @@
 <template>
-  <div class="" @click="handlePush(devices)">
+  <div class="" @click="handleUpload(devices)">
     <slot v-bind="{ loading }" />
   </div>
 </template>
@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const { loading, send: handlePush } = useFileActions()
+const { loading, upload: handleUpload } = useAdbUploaderPlus()
 </script>
 
 <style></style>

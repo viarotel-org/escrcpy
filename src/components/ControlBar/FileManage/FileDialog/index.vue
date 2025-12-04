@@ -269,6 +269,7 @@
 </template>
 
 <script setup>
+import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 import useAdbFileManager from '$/hooks/useAdbFileManager'
 import AddPopover from './AddPopover/index.vue'
 import EditDialog from './EditDialog/index.vue'
@@ -285,9 +286,6 @@ const pathSelectAction = ref('move')
 
 // 使用文件管理器 hook
 const fileManager = useAdbFileManager()
-
-// 允许编辑的文本文件扩展名
-const TEXT_FILE_EXTENSIONS = ['.txt', '.md', '.log', '.json']
 
 // 文件图标映射
 const FILE_ICON_MAP = {

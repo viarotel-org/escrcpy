@@ -332,6 +332,8 @@
     "useSelection": true,
     "useUploader": true,
     "useFileClipboard": true,
-    "useFilePreview": true
+    "useFilePreview": true,
+    "useAdbUploaderPlus": true,
+    "UPLOAD_STATUS": true
   }
 }

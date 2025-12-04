@@ -34,11 +34,12 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { t } from '$/locales/index.js'
+import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 
 const emit = defineEmits(['success'])
 
 // 允许创建的文本文件扩展名白名单
-const ALLOWED_TEXT_EXTENSIONS = ['.txt', '.md', '.log', '.json']
+const ALLOWED_TEXT_EXTENSIONS = TEXT_FILE_EXTENSIONS
 
 const defaultText = 'NewItem'
 

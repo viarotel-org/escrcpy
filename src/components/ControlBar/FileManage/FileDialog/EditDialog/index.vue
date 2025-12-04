@@ -47,6 +47,8 @@
 </template>
 
 <script setup>
+import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
+
 const props = defineProps({
   fileManager: {
     type: Object,
@@ -55,9 +57,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['success'])
-
-// 允许编辑的文本文件扩展名
-const TEXT_FILE_EXTENSIONS = ['.txt', '.md', '.log', '.json']
 
 // 最大可编辑文件大小 (1MB)
 const MAX_EDITABLE_SIZE = 1024 * 1024

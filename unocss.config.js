@@ -1,14 +1,26 @@
 import transformerDirectives from '@unocss/transformer-directives'
 import { presetShades } from '@viarotel-org/unocss-preset-shades'
 import { defineConfig, presetWind } from 'unocss'
+import presetIcons from '@unocss/preset-icons'
 import { primaryColor } from './src/configs/index.js'
 
 const presetMain = presetWind()
 
-const presets = [presetMain, presetShades(primaryColor)]
+const presets = [
+  presetMain,
+  presetIcons(),
+  presetShades(primaryColor),
+]
 
 export default defineConfig({
-  // @ts-expect-error
+  content: {
+    pipeline: {
+      include: [
+        /\.(vue|svelte|[jt]sx|vine.ts|mdx?|astro|elm|php|phtml|marko|html)($|\?)/,
+        'src/**/*.{js,ts}',
+      ],
+    },
+  },
   presets,
   transformers: [transformerDirectives()],
   theme: {

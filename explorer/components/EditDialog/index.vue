@@ -1,13 +1,14 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="$t('device.control.file.manager.edit.title')"
+    :title="isTextFile ? $t('device.control.file.manager.edit.title') : $t('device.control.file.manager.rename')"
     width="80%"
     append-to-body
     destroy-on-close
-    fullscreen
+    :fullscreen="isTextFile"
     :close-on-click-modal="false"
-    class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
+    :class="isTextFile ? 'el-dialog--flex el-dialog--fullscreen' : ''"
+    class="el-dialog--beautify "
   >
     <div v-loading="loading" class="space-y-4 h-full overflow-auto pr-4">
       <!-- 文件名输入 -->

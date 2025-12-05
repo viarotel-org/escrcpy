@@ -6,68 +6,69 @@
     append-to-body
     destroy-on-close
     :close-on-click-modal="false"
-    class="el-dialog--beautify"
+    fullscreen
+    class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
     @closed="onClosed"
   >
-    <!-- 路径导航栏 -->
-    <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-      <el-button
-        text
-        icon="Top"
-        circle
-        class="mr-2 flex-none"
-        :disabled="isRoot"
-        @click="handleGoUp"
-      ></el-button>
+    <div class="flex flex-col h-full overflow-hidden">
+      <!-- 路径导航栏 -->
+      <div class="flex-none flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+        <el-button
+          text
+          icon="Top"
+          circle
+          class="mr-2 flex-none"
+          :disabled="isRoot"
+          @click="handleGoUp"
+        ></el-button>
 
-      <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
-        <el-breadcrumb separator-icon="ArrowRight" class="!flex">
-          <el-breadcrumb-item
-            v-for="item of breadcrumbs"
-            :key="item.value"
-            class="!flex-none"
-            @click="handleBreadcrumb(item)"
-          >
-            <el-button text class="!px-2" :icon="item.icon" :title="item.label">
-              {{ $t(item.label) || item.label }}
-            </el-button>
-          </el-breadcrumb-item>
-        </el-breadcrumb>
-      </Scrollable>
+        <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center">
+          <el-breadcrumb separator-icon="ArrowRight" class="!flex">
+            <el-breadcrumb-item
+              v-for="item of breadcrumbs"
+              :key="item.value"
+              class="!flex-none"
+              @click="handleBreadcrumb(item)"
+            >
+              <el-button text class="!px-2" :icon="item.icon" :title="item.label">
+                {{ $t(item.label) || item.label }}
+              </el-button>
+            </el-breadcrumb-item>
+          </el-breadcrumb>
+        </Scrollable>
 
-      <div class="flex-none">
-        <el-button text icon="Refresh" circle @click="loadDirectories"></el-button>
-      </div>
-    </div>
-
-    <!-- 目录列表 -->
-    <div class="border rounded-lg overflow-hidden" style="height: 300px;">
-      <el-scrollbar>
-        <div v-loading="loading" class="min-h-full">
-          <div
-            v-for="item in directories"
-            :key="item.id"
-            class="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
-            :class="{ 'bg-blue-50 dark:bg-blue-900': selectedPath === item.id }"
-            @click="selectDirectory(item)"
-            @dblclick="enterDirectory(item)"
-          >
-            <el-icon class="mr-2 text-yellow-500">
-              <Folder />
-            </el-icon>
-            <span class="truncate">{{ item.name }}</span>
-          </div>
-          <div v-if="!loading && directories.length === 0" class="py-8 text-center text-gray-400">
-            {{ $t('common.empty') }}
-          </div>
+        <div class="flex-none">
+          <el-button text icon="Refresh" circle @click="loadDirectories"></el-button>
         </div>
-      </el-scrollbar>
-    </div>
+      </div>
 
-    <!-- 当前选择的路径 -->
-    <div class="mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
-      <span class="text-gray-500">{{ $t('device.control.file.manager.target.path') }}:</span>
-      <span class="ml-2 font-mono">{{ selectedPath || currentPath }}</span>
+      <!-- 目录列表 -->
+      <div class="flex-1 min-h-0 border rounded-lg overflow-hidden">
+        <el-scrollbar>
+          <div v-loading="loading" class="min-h-full">
+            <div
+              v-for="item in directories"
+              :key="item.id"
+              class="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+              :class="{ 'bg-blue-50 dark:bg-blue-900': selectedPath === item.id }"
+              @click="selectDirectory(item)"
+              @dblclick="enterDirectory(item)"
+            >
+              <FileIcon :file="item" size="lg" class="mr-2" />
+              <span class="truncate">{{ item.name }}</span>
+            </div>
+            <div v-if="!loading && directories.length === 0" class="py-8 text-center text-gray-400">
+              {{ $t('common.empty') }}
+            </div>
+          </div>
+        </el-scrollbar>
+      </div>
+
+      <!-- 当前选择的路径 -->
+      <div class="flex-none mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
+        <span class="text-gray-500">{{ $t('device.control.file.manager.target.path') }}:</span>
+        <span class="ml-2 font-mono">{{ selectedPath || currentPath }}</span>
+      </div>
     </div>
 
     <template #footer>
@@ -130,6 +131,11 @@ const breadcrumbs = computed(() => {
 
 const isRoot = computed(() => currentPath.value === '/')
 
+watch(() => breadcrumbs.value.length, async () => {
+  await nextTick()
+  scrollableRef.value?.scrollToEnd?.()
+})
+
 async function loadDirectories() {
   loading.value = true
   try {
@@ -153,8 +159,6 @@ async function enterDirectory(item) {
   currentPath.value = item.id
   selectedPath.value = ''
   await loadDirectories()
-  await nextTick()
-  scrollableRef.value?.scrollToEnd()
 }
 
 function handleGoUp() {

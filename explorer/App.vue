@@ -138,6 +138,7 @@
           row-key="id"
           height="100%"
           @selection-change="handleSelectionChange"
+          @row-click="handleRowClick"
           @row-contextmenu="handleContextMenu"
         >
           <el-table-column type="selection" reserve-selection width="50" align="left" />
@@ -145,25 +146,33 @@
           <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip>
             <template #default="{ row }">
               <div
-                class="flex items-center cursor-pointer"
+                class="flex items-center cursor-pointer hover:text-primary-500 hover:underline"
                 :class="{ 'opacity-50': explorer.clipboard.isCut(row) }"
-                @click="handleItemClick(row)"
+                @click.stop="handleNameClick(row)"
               >
-                <el-icon class="mr-2" :class="getFileIconClass(row)">
-                  <component :is="getFileIcon(row)" />
-                </el-icon>
+                <FileIcon :file="row" size="lg" class="mr-2" />
                 <span class="truncate">{{ row.name }}</span>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column prop="size" :label="$t('common.size')" sortable align="center" width="120" />
+          <el-table-column prop="size" :label="$t('common.size')" sortable align="center" width="150" />
 
-          <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="center" width="180" />
-
-          <el-table-column :label="$t('device.control.name')" align="center" width="240">
+          <el-table-column :label="$t('device.control.name')" align="center" width="250">
             <template #default="{ row }">
-              <!-- 编辑按钮（仅文本文件可用） -->
+              <!-- 预览按钮（仅文件） -->
+              <EleTooltipButton
+                v-if="['file'].includes(row.type)"
+                effect="light"
+                placement="top"
+                :offset="2"
+                :content="$t('device.control.file.manager.preview')"
+                text
+                type="success"
+                icon="View"
+                circle
+                @click="handlePreview(row)"
+              />
 
               <EleTooltipButton
                 effect="light"
@@ -175,20 +184,6 @@
                 icon="Download"
                 circle
                 @click="handleDownload(row)"
-              />
-
-              <!-- 预览按钮（仅文件） -->
-              <EleTooltipButton
-                v-if="!row.isDirectory"
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('device.control.file.manager.preview')"
-                text
-                type="success"
-                icon="View"
-                circle
-                @click="handlePreview(row)"
               />
 
               <EleTooltipButton
@@ -267,7 +262,6 @@
 </template>
 
 <script setup>
-import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 import useExplorer from '$/hooks/useExplorer'
 import AddPopover from './components/AddPopover/index.vue'
 import EditDialog from './components/EditDialog/index.vue'
@@ -294,115 +288,18 @@ const { init: initWindowStateSync, currentDevice: device, locale } = useWindowSt
 
 initWindowStateSync()
 
+watch(() => explorer.breadcrumbs.value.length, async () => {
+  await nextTick()
+  scrollableRef.value?.scrollToEnd?.()
+})
+
 onMounted(() => {
   window.electron.ipcRenderer.send('explorer-mounted')
 })
 
-// 文件图标映射
-const FILE_ICON_MAP = {
-  // 目录
-  directory: { icon: 'Folder', class: 'text-yellow-500' },
-  // 图片
-  image: { icon: 'Picture', class: 'text-green-500', extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'] },
-  // 视频
-  video: { icon: 'VideoCamera', class: 'text-purple-500', extensions: ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm'] },
-  // 音频
-  audio: { icon: 'Headset', class: 'text-pink-500', extensions: ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a'] },
-  // 文档
-  document: { icon: 'Document', class: 'text-blue-500', extensions: ['.doc', '.docx', '.pdf', '.xls', '.xlsx', '.ppt', '.pptx'] },
-  // 压缩包
-  archive: { icon: 'Files', class: 'text-orange-500', extensions: ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'] },
-  // 代码
-  code: { icon: 'Tickets', class: 'text-cyan-500', extensions: ['.js', '.ts', '.py', '.java', '.c', '.cpp', '.h', '.go', '.rs', '.vue', '.jsx', '.tsx'] },
-  // 文本
-  text: { icon: 'Memo', class: 'text-gray-500', extensions: ['.txt', '.md', '.log', '.json', '.xml', '.yml', '.yaml', '.ini', '.conf', '.cfg'] },
-  // APK
-  apk: { icon: 'Box', class: 'text-green-600', extensions: ['.apk'] },
-  // 默认
-  default: { icon: 'Document', class: 'text-blue-500' },
-}
-
-/**
- * 获取文件扩展名
- * @param {string} filename - 文件名
- * @returns {string}
- */
-function getFileExtension(filename) {
-  const lastDotIndex = filename.lastIndexOf('.')
-  if (lastDotIndex === -1)
-    return ''
-  return filename.substring(lastDotIndex).toLowerCase()
-}
-
-/**
- * 判断是否为文本文件
- * @param {Object} row - 文件行数据
- * @returns {boolean}
- */
-function isTextFile(row) {
-  if (row.type === 'directory')
-    return false
-  const ext = getFileExtension(row.name)
-  return TEXT_FILE_EXTENSIONS.includes(ext)
-}
-
-/**
- * 获取文件图标组件名
- * @param {Object} row - 文件行数据
- * @returns {string}
- */
-function getFileIcon(row) {
-  if (row.type === 'directory') {
-    return FILE_ICON_MAP.directory.icon
-  }
-
-  const ext = getFileExtension(row.name)
-
-  for (const [, config] of Object.entries(FILE_ICON_MAP)) {
-    if (config.extensions?.includes(ext)) {
-      return config.icon
-    }
-  }
-
-  return FILE_ICON_MAP.default.icon
-}
-
-/**
- * 获取文件图标样式类
- * @param {Object} row - 文件行数据
- * @returns {string}
- */
-function getFileIconClass(row) {
-  if (row.type === 'directory') {
-    return FILE_ICON_MAP.directory.class
-  }
-
-  const ext = getFileExtension(row.name)
-
-  for (const [, config] of Object.entries(FILE_ICON_MAP)) {
-    if (config.extensions?.includes(ext)) {
-      return config.class
-    }
-  }
-
-  return FILE_ICON_MAP.default.class
-}
-
 // 处理选择变化
 function handleSelectionChange(selection) {
   explorer.selection.setSelection(selection)
-}
-
-// 处理项目点击
-async function handleItemClick(row) {
-  if (row.type === 'directory') {
-    await explorer.navigateTo(row.id)
-    await nextTick()
-    scrollableRef.value?.scrollToEnd()
-  }
-  else {
-    handleDownload(row)
-  }
 }
 
 // 新建文件或文件夹
@@ -688,10 +585,35 @@ async function handlePathSelectConfirm({ targetPath, items }) {
   }
 }
 
-// 右键菜单
+// 处理项目点击
+async function handleNameClick(row) {
+  if (!['file'].includes(row.type)) {
+    handleRowClick(row)
+    return false
+  }
+
+  const supportCheck = explorer.previewer.checkPreviewSupport(row)
+
+  if (supportCheck) {
+    handlePreview(row)
+    return false
+  }
+
+  handleDownload(row)
+}
+
 function handleContextMenu(row, column, event) {
   event.preventDefault()
-  // 可以在这里添加右键菜单逻辑
+  tableRef.value?.toggleRowSelection(row)
+}
+
+async function handleRowClick(row) {
+  if (['directory'].includes(row.type)) {
+    explorer.navigateTo(row.id)
+    return false
+  }
+
+  tableRef.value?.toggleRowSelection(row)
 }
 
 function getSize(grid) {

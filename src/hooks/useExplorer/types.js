@@ -119,7 +119,7 @@
 
 /**
  * 文件管理器选项
- * @typedef {Object} FileManagerOptions
+ * @typedef {Object} ExplorerOptions
  * @property {DeviceInfo} device - 设备信息
  * @property {PathManagerOptions} [pathOptions] - 路径管理器选项
  * @property {boolean} [autoRefresh=false] - 是否自动刷新
@@ -140,7 +140,7 @@
 
 /**
  * 文件管理器状态摘要
- * @typedef {Object} FileManagerStatus
+ * @typedef {Object} ExplorerStatus
  * @property {DeviceInfo|null} device - 当前设备
  * @property {string} path - 当前路径
  * @property {number} filesCount - 文件数量
@@ -201,8 +201,8 @@
  */
 
 /**
- * useAdbFileManager Hook 返回类型
- * @typedef {Object} AdbFileManagerInstance
+ * useExplorer Hook 返回类型
+ * @typedef {Object} ExplorerInstance
  *
  * @property {import('vue').Ref<string>} deviceId - 设备 ID
  * @property {import('vue').Ref<DeviceInfo|null>} deviceInfo - 设备信息

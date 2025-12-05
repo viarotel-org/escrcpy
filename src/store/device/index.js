@@ -51,6 +51,7 @@ export const useDeviceStore = defineStore('app-device', () => {
         return obj
       }, {}),
       screenshot: `Screenshot-${deviceName}-${currentTime}`,
+      name: deviceName,
     }
 
     if (typeof params === 'function') {

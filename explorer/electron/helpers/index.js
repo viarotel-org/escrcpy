@@ -1,26 +1,21 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { BrowserWindow } from 'electron'
-import { getLogoPath } from '$electron/configs/index.js'
+import { browserWindowHeight, browserWindowWidth, getLogoPath } from '$electron/configs/index.js'
 import { sleep } from '$renderer/utils/index.js'
 import { loadPage } from '$electron/helpers/index.js'
 
-export function initControlWindow(mainWindow) {
+export function initExplorerWindow(mainWindow) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-  const controlWindow = new BrowserWindow({
-    transparent: true,
-    backgroundColor: '#00000000',
+  const explorerWindow = new BrowserWindow({
     icon: getLogoPath(),
-    width: 700,
-    minWidth: 700,
-    height: 28,
-    maxHeight: 28,
-    frame: false,
+    width: browserWindowWidth,
+    minWidth: browserWindowWidth,
+    height: browserWindowHeight,
+    minHeight: browserWindowHeight,
     show: false,
     autoHideMenuBar: true,
-    alwaysOnTop: true,
-    skipTaskbar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,
@@ -29,14 +24,14 @@ export function initControlWindow(mainWindow) {
     },
   })
 
-  controlWindow.customId = 'control'
+  explorerWindow.customId = 'explorer'
 
-  loadPage(controlWindow, 'control/')
+  loadPage(explorerWindow, 'explorer/')
 
-  return controlWindow
+  return explorerWindow
 }
 
-export async function openControlWindow(win, data, args = {}) {
+export async function openExplorerWindow(win, data, args = {}) {
   if (args.sleep) {
     await sleep(args.sleep)
   }

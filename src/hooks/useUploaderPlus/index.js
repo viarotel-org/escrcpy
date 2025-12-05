@@ -23,7 +23,7 @@ export const UPLOAD_STATUS = {
  * 提供单设备和多设备文件上传功能
  * @returns {Object} 文件操作实例
  */
-export function useAdbUploaderPlus() {
+export function useUploaderPlus() {
   const deviceStore = useDeviceStore()
 
   /** @type {import('vue').Ref<boolean>} 加载状态（向后兼容） */

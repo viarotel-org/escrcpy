@@ -38,7 +38,7 @@
       ></div>
 
       <div class="flex-1 w-0 overflow-hidden h-full">
-        <ControlBar class="!h-full" :device="deviceInfo" floating />
+        <ControlBar class="!h-full" :device="currentDevice" floating />
       </div>
 
       <div
@@ -63,6 +63,10 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 
+const { init: initWindowStateSync, currentDevice } = useWindowStateSync()
+
+initWindowStateSync()
+
 const deviceStore = useDeviceStore()
 
 const locale = computed(() => {
@@ -73,12 +77,10 @@ const locale = computed(() => {
   return value
 })
 
-const deviceInfo = ref({})
-
-const deviceName = computed(() => deviceStore.getLabel(deviceInfo.value, ({ deviceName }) => deviceName))
+const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.ipcRenderer.invoke('hide-control-window')
+  window.electron.ipcRenderer.invoke('close-control-window')
 }
 
 async function switchDevice(e) {
@@ -103,14 +105,6 @@ const focusFlag = ref(false)
 
 onMounted(() => {
   window.electron.ipcRenderer.send('control-mounted')
-
-  window.electron.ipcRenderer.on('device-change', (event, data) => {
-    deviceInfo.value = data
-  })
-
-  window.appStore.onDidChange('common.language', (value) => {
-    i18n.global.locale.value = value
-  })
 
   window.electron.ipcRenderer.on('window-focus', (event, value) => {
     focusFlag.value = value

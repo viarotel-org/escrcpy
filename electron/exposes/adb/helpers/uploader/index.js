@@ -293,6 +293,9 @@ export class ADBUploader {
                 percent: Math.round((bytesTransferred / fileSize) * 100),
               },
               total: {
+                files: this.stats.totalFiles,
+                completedFiles: this.stats.completedFiles,
+                failedFiles: this.stats.failedFiles,
                 size: this.stats.totalBytes,
                 uploaded: this.stats.uploadedBytes,
                 percent: Math.round((this.stats.uploadedBytes / this.stats.totalBytes) * 100),

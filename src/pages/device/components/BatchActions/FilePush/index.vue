@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const { loading, upload: handleUpload } = useAdbUploaderPlus()
+const { loading, upload: handleUpload } = useUploaderPlus()
 </script>
 
 <style></style>

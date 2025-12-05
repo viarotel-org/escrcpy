@@ -15,11 +15,12 @@ import './helpers/console.js'
 import appStore from './helpers/store.js'
 import sandboxManager from './helpers/sandbox.js'
 
-import { getLogoPath } from './configs/index.js'
+import { browserWindowWidth, browserWindowHeight, getLogoPath } from './configs/index.js'
 
 import ipc from './ipc/index.js'
 
 import control from '$control/electron/main.js'
+import explorer from '$explorer/electron/main.js'
 
 import { loadPage } from './helpers/index.js'
 
@@ -59,14 +60,11 @@ let mainWindow
 function createWindow(callback) {
   const bounds = appStore.get('common.bounds') || {}
 
-  const baseWidth = 800
-  const baseHeight = Number((baseWidth / 1.57).toFixed())
-
   mainWindow = new BrowserWindow({
-    width: baseWidth,
-    minWidth: baseWidth,
-    height: baseHeight,
-    minHeight: baseHeight,
+    width: browserWindowWidth,
+    minWidth: browserWindowWidth,
+    height: browserWindowHeight,
+    minHeight: browserWindowHeight,
     ...bounds,
     show: false,
     icon: getLogoPath(),
@@ -123,6 +121,8 @@ function createWindow(callback) {
   ipc(mainWindow)
 
   control(mainWindow)
+
+  explorer(mainWindow)
 
   callback?.(mainWindow)
 }

@@ -1,14 +1,15 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="dialogTitle"
+    :title="$t('device.control.file.manager.edit.title')"
     width="80%"
     append-to-body
     destroy-on-close
+    fullscreen
     :close-on-click-modal="false"
-    class="el-dialog--beautify"
+    class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
   >
-    <div v-loading="loading" class="space-y-4">
+    <div v-loading="loading" class="space-y-4 h-full overflow-auto pr-4">
       <!-- 文件名输入 -->
       <div>
         <label class="block text-sm font-medium mb-1">
@@ -22,16 +23,12 @@
       </div>
 
       <!-- 文件内容编辑器（仅文本文件显示） -->
-      <div v-if="isTextFile && mode === 'edit'">
+      <div v-if="isTextFile">
         <label class="block text-sm font-medium mb-1">
           {{ $t('device.control.file.manager.edit.content') }}
         </label>
-        <TinyEditor
-          v-model="content"
-          :height="400"
-          :placeholder="$t('common.input.placeholder')"
-          :readonly="loading"
-        />
+
+        <el-input v-model="content" type="textarea" :autosize="{ minRows: 10 }" placeholder="$t('common.input.placeholder')"></el-input>
       </div>
     </div>
 
@@ -50,7 +47,7 @@
 import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 
 const props = defineProps({
-  fileManager: {
+  explorer: {
     type: Object,
     required: true,
   },
@@ -67,7 +64,6 @@ const loading = ref(false)
 const saving = ref(false)
 
 // 编辑数据
-const mode = ref('rename') // 'rename' | 'edit'
 const filename = ref('')
 const content = ref('')
 const originalItem = ref(null)
@@ -81,13 +77,6 @@ const isTextFile = computed(() => {
   return TEXT_FILE_EXTENSIONS.includes(ext)
 })
 
-const dialogTitle = computed(() => {
-  if (mode.value === 'edit') {
-    return window.t('device.control.file.manager.edit.title')
-  }
-  return window.t('device.control.file.manager.rename')
-})
-
 /**
  * 获取文件扩展名
  */
@@ -99,30 +88,23 @@ function getFileExtension(name) {
 }
 
 /**
- * 打开对话框 - 重命名模式
+ * 打开对话框
  */
-async function openRename(item) {
+async function open(item) {
   originalItem.value = item
-  mode.value = 'rename'
   filename.value = item.name
   content.value = ''
   visible.value = true
-}
 
-/**
- * 打开对话框 - 编辑模式
- */
-async function openEdit(item) {
-  originalItem.value = item
-  mode.value = 'edit'
-  filename.value = item.name
-  content.value = ''
-  visible.value = true
+  if (!isTextFile.value) {
+    return false
+  }
+
   loading.value = true
 
   try {
     // 读取文件内容
-    const result = await props.fileManager.operations.readFile(item.id, { maxSize: MAX_EDITABLE_SIZE })
+    const result = await props.explorer.operations.readFile(item.id, { maxSize: MAX_EDITABLE_SIZE })
 
     if (!result.success) {
       if (result.error === 'FILE_TOO_LARGE') {
@@ -180,7 +162,7 @@ async function handleSave() {
 
     // 如果文件名改变了，先重命名
     if (newFilename !== originalFilename) {
-      const renameResult = await props.fileManager.operations.rename(
+      const renameResult = await props.explorer.operations.rename(
         originalItem.value,
         newFilename,
         { autoRefresh: false },
@@ -192,25 +174,19 @@ async function handleSave() {
       }
     }
 
-    // 如果是编辑模式，写入文件内容
-    if (mode.value === 'edit' && isTextFile.value) {
-      const writeResult = await props.fileManager.operations.writeFile(newPath, content.value, { autoRefresh: true })
+    // 如果是文本文件，写入文件内容
+    if (isTextFile.value) {
+      const writeResult = await props.explorer.operations.writeFile(newPath, content.value, { autoRefresh: true })
 
       if (!writeResult.success) {
         ElMessage.error(window.t('device.control.file.manager.edit.save.error', { error: writeResult.error }))
         return
       }
     }
-    else {
-      // 仅重命名，需要手动刷新
-      await props.fileManager.refresh()
-    }
 
-    ElMessage.success(
-      mode.value === 'edit'
-        ? window.t('device.control.file.manager.edit.save.success')
-        : window.t('device.control.file.manager.rename.success'),
-    )
+    await props.explorer.refresh()
+
+    ElMessage.success(window.t('device.control.file.manager.edit.save.success'))
 
     visible.value = false
     emit('success')
@@ -225,7 +201,6 @@ async function handleSave() {
 }
 
 defineExpose({
-  openRename,
-  openEdit,
+  open,
 })
 </script>

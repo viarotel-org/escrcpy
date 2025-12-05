@@ -325,7 +325,7 @@
     "ElMessageBox": true,
     "ElLoading": true,
     "useScaleScreen": true,
-    "useAdbFileManager": true,
+    "useExplorer": true,
     "useDownloader": true,
     "useFileOperations": true,
     "usePathManager": true,
@@ -333,7 +333,8 @@
     "useUploader": true,
     "useFileClipboard": true,
     "useFilePreview": true,
-    "useAdbUploaderPlus": true,
-    "UPLOAD_STATUS": true
+    "useUploaderPlus": true,
+    "UPLOAD_STATUS": true,
+    "useWindowStateSync": true
   }
 }

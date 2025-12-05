@@ -1,2 +1,13 @@
-export { default as focus } from './focus/index.js'
-export { default as menu } from './menu/index.js'
+import focus from './focus/index.js'
+import menu from './menu/index.js'
+
+function install(controlWindow) {
+  focus(controlWindow)
+  menu(controlWindow)
+}
+
+export {
+  focus,
+  install,
+  menu,
+}

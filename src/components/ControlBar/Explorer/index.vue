@@ -1,13 +1,10 @@
 <template>
   <div class="" @click="handleFile(device)">
     <slot />
-    <FileDialog ref="fileDialogRef" />
   </div>
 </template>
 
 <script setup>
-import FileDialog from './FileDialog/index.vue'
-
 const props = defineProps({
   device: {
     type: Object,
@@ -15,10 +12,13 @@ const props = defineProps({
   },
 })
 
-const fileDialogRef = ref()
-
 function handleFile(device) {
-  fileDialogRef.value.open(device)
+  if (!device) {
+    return
+  }
+
+  // 通过 IPC 打开文件管理器窗口
+  window.electron.ipcRenderer.invoke('open-explorer-window', toRaw(device))
 }
 </script>
 

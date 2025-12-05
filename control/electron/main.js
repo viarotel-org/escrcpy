@@ -1,13 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { initControlWindow, openControlWindow } from './helpers/index.js'
 
-import { focus, menu } from './events/index.js'
-
-function onControlMounted(controlWindow) {
-  menu(controlWindow)
-
-  focus(controlWindow)
-}
+import * as events from './events/index.js'
 
 export default (mainWindow) => {
   let controlWindow
@@ -23,14 +17,18 @@ export default (mainWindow) => {
     }
 
     controlWindow = initControlWindow(mainWindow)
+    events.install(controlWindow)
 
     ipcMain.on('control-mounted', () => {
       openControlWindow(controlWindow, data)
-      onControlMounted(controlWindow)
     })
   })
 
   ipcMain.handle('hide-control-window', () => {
     controlWindow.hide()
+  })
+
+  ipcMain.handle('close-control-window', () => {
+    controlWindow.close()
   })
 }

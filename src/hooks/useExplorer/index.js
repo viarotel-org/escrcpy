@@ -4,22 +4,22 @@
  *
  * @example
  * ```js
- * const fileManager = useAdbFileManager({
+ * const explorer = useExplorer({
  *   device: { id: 'device-id' },
  *   initialPath: '/sdcard',
  * })
  *
  * // 读取目录
- * await fileManager.refresh()
+ * await explorer.refresh()
  *
  * // 导航
- * fileManager.navigateTo('/sdcard/Download')
+ * explorer.navigateTo('/sdcard/Download')
  *
  * // 上传文件
- * await fileManager.upload.selectAndUpload()
+ * await explorer.upload.selectAndUpload()
  *
  * // 下载选中项
- * await fileManager.download.download(fileManager.selection.selectedItems.value, {
+ * await explorer.download.download(explorer.selection.selectedItems.value, {
  *   savePath: '/local/path',
  * })
  * ```
@@ -38,10 +38,10 @@ import {
 
 /**
  * ADB 文件管理器 Hook
- * @param {import('./types.js').FileManagerOptions} options - 配置选项
+ * @param {import('./types.js').ExplorerOptions} options - 配置选项
  * @returns {Object} 文件管理器实例
  */
-export function useAdbFileManager(options = {}) {
+export function useExplorer(options = {}) {
   const {
     device,
     pathOptions = {},
@@ -398,7 +398,7 @@ export function useAdbFileManager(options = {}) {
   }
 }
 
-export default useAdbFileManager
+export default useExplorer
 
 // 导出子模块，允许独立使用
 export * from './modules/index.js'

@@ -80,7 +80,7 @@
 <script>
 import Application from './Application/index.vue'
 import ApplicationStart from './ApplicationStart/index.vue'
-import FileManage from './FileManage/index.vue'
+import Explorer from './Explorer/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import Rotation from './Rotation/index.vue'
 import Screenshot from './Screenshot/index.vue'
@@ -96,7 +96,7 @@ export default {
     Gnirehtet,
     Rotation,
     Volume,
-    FileManage,
+    Explorer,
     Terminal,
     Tasks,
   },
@@ -193,11 +193,10 @@ export default {
           svgIcon: 'install',
           component: 'Application',
         },
-        'file-manage': {
+        'explorer': {
           label: 'device.control.file.name',
           svgIcon: 'file-send',
-          component: 'FileManage',
-          hiddenKeys: ['floating'],
+          component: 'Explorer',
         },
         'terminal': {
           label: 'device.terminal.name',

@@ -3,7 +3,7 @@
     v-model="visible"
     :title="$t('device.task.list')"
     width="98%"
-    class="el-dialog--beautify el-dialog--flex el-dialog--flex el-dialog--fullscreen"
+    class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
     append-to-body
     fullscreen
     destroy-on-close

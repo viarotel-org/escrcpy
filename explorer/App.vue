@@ -171,7 +171,7 @@
                 type="success"
                 icon="View"
                 circle
-                @click="handlePreview(row)"
+                @click.stop="handlePreview(row)"
               />
 
               <EleTooltipButton
@@ -183,7 +183,7 @@
                 type="primary"
                 icon="Download"
                 circle
-                @click="handleDownload(row)"
+                @click.stop="handleDownload(row)"
               />
 
               <EleTooltipButton
@@ -195,7 +195,7 @@
                 type="success"
                 icon="Edit"
                 circle
-                @click="handleEdit(row)"
+                @click.stop="handleEdit(row)"
               />
 
               <EleTooltipButton
@@ -207,7 +207,7 @@
                 type="info"
                 icon="Rank"
                 circle
-                @click="handleMoveItem(row)"
+                @click.stop="handleMoveItem(row)"
               />
 
               <EleTooltipButton
@@ -219,7 +219,7 @@
                 type="danger"
                 icon="Delete"
                 circle
-                @click="handleRemove(row)"
+                @click.stop="handleRemove(row)"
               />
             </template>
           </el-table-column>
@@ -588,7 +588,7 @@ async function handlePathSelectConfirm({ targetPath, items }) {
 // 处理项目点击
 async function handleNameClick(row) {
   if (!['file'].includes(row.type)) {
-    handleRowClick(row)
+    explorer.navigateTo(row.id)
     return false
   }
 
@@ -608,11 +608,6 @@ function handleContextMenu(row, column, event) {
 }
 
 async function handleRowClick(row) {
-  if (['directory'].includes(row.type)) {
-    explorer.navigateTo(row.id)
-    return false
-  }
-
   tableRef.value?.toggleRowSelection(row)
 }
 

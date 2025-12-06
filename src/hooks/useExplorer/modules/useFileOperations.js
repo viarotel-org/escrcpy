@@ -4,6 +4,7 @@
  */
 
 import '../types.js'
+import { decodeBase64, encodeBase64 } from '../helpers/index.js'
 
 /** @type {typeof window.adb} */
 const $adb = window.adb
@@ -377,7 +378,7 @@ export function useFileOperations({ deviceId, currentPath }) {
       )
 
       // 解码 base64 内容
-      const content = atob(base64Content.trim())
+      const content = decodeBase64(base64Content.trim())
 
       return { success: true, data: { content, size: fileStat.size } }
     }
@@ -409,7 +410,7 @@ export function useFileOperations({ deviceId, currentPath }) {
       }
 
       // 使用 base64 编码写入文件，避免特殊字符问题
-      const base64Content = btoa(content)
+      const base64Content = encodeBase64(content)
 
       // 使用 echo 和 base64 解码写入文件
       await $adb.deviceShell(

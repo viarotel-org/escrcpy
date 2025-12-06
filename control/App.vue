@@ -63,9 +63,7 @@ import { i18n } from '$/locales/index.js'
 
 import localeModel from '$/plugins/element-plus/locale.js'
 
-const { init: initWindowStateSync, currentDevice } = useWindowStateSync()
-
-initWindowStateSync()
+const { currentDevice } = useWindowStateSync()
 
 const deviceStore = useDeviceStore()
 

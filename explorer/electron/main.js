@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
-import { initExplorerWindow, openExplorerWindow } from './helpers/index.js'
+import { initExplorerWindow } from './helpers/index.js'
+import { isWindowDestroyed } from '$electron/helpers/index.js'
 import * as events from './events/index.js'
 
 export default (mainWindow) => {
@@ -12,9 +13,8 @@ export default (mainWindow) => {
     // 检查是否已经存在该设备的文件管理器窗口
     let explorerWindow = explorerWindows.get(deviceId)
 
-    if (explorerWindow && !explorerWindow.isDestroyed()) {
-      // 如果窗口已存在，直接显示并更新数据
-      openExplorerWindow(explorerWindow, data)
+    if (!isWindowDestroyed(explorerWindow)) {
+      explorerWindow.show()
       return false
     }
 
@@ -29,11 +29,10 @@ export default (mainWindow) => {
     // 窗口关闭时清理引用
     explorerWindow.on('closed', () => {
       explorerWindows.delete(deviceId)
+      explorerWindow = void 0
     })
 
-    ipcMain.on('explorer-mounted', () => {
-      openExplorerWindow(explorerWindow, data)
-    })
+    explorerWindow.show()
 
     return true
   })
@@ -42,9 +41,13 @@ export default (mainWindow) => {
     const deviceId = data?.id
     const explorerWindow = explorerWindows.get(deviceId)
 
-    if (explorerWindow && !explorerWindow.isDestroyed()) {
-      explorerWindow.close()
-      explorerWindows.delete(deviceId)
+    if (isWindowDestroyed(explorerWindow)) {
+      return false
     }
+
+    explorerWindow.close()
+    explorerWindows.delete(deviceId)
+
+    return true
   })
 }

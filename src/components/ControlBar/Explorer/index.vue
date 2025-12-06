@@ -1,6 +1,6 @@
 <template>
-  <div class="" @click="handleFile(device)">
-    <slot />
+  <div class="">
+    <slot :trigger="() => handleFile(device)" />
   </div>
 </template>
 
@@ -13,6 +13,7 @@ const props = defineProps({
 })
 
 function handleFile(device) {
+  console.log('handleFile', device)
   if (!device) {
     return
   }

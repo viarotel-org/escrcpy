@@ -1,6 +1,6 @@
 <template>
-  <div class="" @click="handleClick(device)">
-    <slot v-bind="{ loading }" />
+  <div class="">
+    <slot v-bind="{ loading }" :trigger="() => handleClick(device)" />
   </div>
 </template>
 

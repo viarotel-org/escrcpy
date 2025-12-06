@@ -2,7 +2,6 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { BrowserWindow } from 'electron'
 import { getLogoPath } from '$electron/configs/index.js'
-import { sleep } from '$renderer/utils/index.js'
 import { loadPage } from '$electron/helpers/index.js'
 
 export function initControlWindow(mainWindow) {
@@ -34,13 +33,4 @@ export function initControlWindow(mainWindow) {
   loadPage(controlWindow, 'control/')
 
   return controlWindow
-}
-
-export async function openControlWindow(win, data, args = {}) {
-  if (args.sleep) {
-    await sleep(args.sleep)
-  }
-
-  win.webContents.send('device-change', data)
-  win.show()
 }

@@ -278,23 +278,17 @@ const pathSelectAction = ref('move')
 // 使用文件管理器 hooks
 const explorer = useExplorer()
 
-const { init: initWindowStateSync, currentDevice: device, locale } = useWindowStateSync({
-  onDeviceChange() {
+const { queryParams: device, locale } = useWindowStateSync({
+  onQueryMounted() {
     explorer.init(device.value, '/sdcard')
     const deviceName = deviceStore.getLabel(device.value, 'name')
     document.title = `${deviceName} - Escrcpy Explorer`
   },
 })
 
-initWindowStateSync()
-
 watch(() => explorer.breadcrumbs.value.length, async () => {
   await nextTick()
   scrollableRef.value?.scrollToEnd?.()
-})
-
-onMounted(() => {
-  window.electron.ipcRenderer.send('explorer-mounted')
 })
 
 // 处理选择变化

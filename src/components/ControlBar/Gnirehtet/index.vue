@@ -3,10 +3,9 @@
     <div
       class=""
       :title="device.$gnirehtetLoadingText"
-      @click="handleStart"
       @mouseenter="onMouseenter"
     >
-      <slot :loading="device.$gnirehtetLoading" />
+      <slot :loading="device.$gnirehtetLoading" :trigger="handleStart" />
     </div>
 
     <template v-if="device.$gnirehtetLoading" #dropdown>

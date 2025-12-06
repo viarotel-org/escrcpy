@@ -6,7 +6,8 @@ import localeModel from '$/plugins/element-plus/locale.js'
  */
 export function useWindowStateSync(options = {}) {
   const themeStore = useThemeStore()
-  const currentDevice = ref('')
+  const queryParams = ref({})
+  const currentDevice = ref({})
 
   const locale = computed(() => {
     const i18nLocale = i18n.global.locale.value
@@ -14,22 +15,25 @@ export function useWindowStateSync(options = {}) {
     return value
   })
 
-  function init() {
-    window.electron.ipcRenderer.on('device-change', (event, data) => {
-      currentDevice.value = data
-      options.onDeviceChange?.(data)
-    })
+  window.electron.ipcRenderer.on('device-change', (event, data) => {
+    currentDevice.value = data
+    options.onDeviceChange?.(data)
+  })
 
-    window.appStore.onDidChange('common.language', (value) => {
-      i18n.global.locale.value = value
-      options.onLanguageChange?.(value)
-    })
-  }
+  window.appStore.onDidChange('common.language', (value) => {
+    i18n.global.locale.value = value
+    options.onLanguageChange?.(value)
+  })
+
+  onMounted(() => {
+    queryParams.value = Object.fromEntries(new URLSearchParams(location.search))
+    options.onQueryMounted?.(queryParams.value)
+  })
 
   return {
-    init,
+    themeStore,
+    queryParams,
     locale,
     currentDevice,
-    themeStore,
   }
 }

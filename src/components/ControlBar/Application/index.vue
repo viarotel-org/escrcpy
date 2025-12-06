@@ -1,6 +1,6 @@
 <template>
-  <div class="" @click="handleInstall(device)">
-    <slot />
+  <div class="">
+    <slot :trigger="() => handleInstall(device)" />
   </div>
 </template>
 

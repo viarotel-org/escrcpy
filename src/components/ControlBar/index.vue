@@ -34,6 +34,7 @@
               device,
               floating,
             }"
+            class="overflow-hidden"
           >
             <template #default="{ loading = false, trigger } = {}">
               <el-button

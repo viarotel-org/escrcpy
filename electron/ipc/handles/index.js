@@ -64,6 +64,8 @@ export default (mainWindow) => {
       const destinationPath = res.filePath
 
       await fs.copy(filePath, destinationPath)
+
+      return true
     },
   )
 

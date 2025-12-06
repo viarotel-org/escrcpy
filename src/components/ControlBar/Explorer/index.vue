@@ -13,7 +13,6 @@ const props = defineProps({
 })
 
 function handleFile(device) {
-  console.log('handleFile', device)
   if (!device) {
     return
   }

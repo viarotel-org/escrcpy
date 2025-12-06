@@ -7,6 +7,7 @@
       :class="{
         '!border-none': borderless,
       }"
+      :title="showLabel(item)"
     >
       {{ showLabel(item) }}
     </ElTag>
@@ -24,6 +25,7 @@
             :class="{
               '!border-none': borderless,
             }"
+            :title="showLabel(item)"
           >
             {{ showLabel(item) }}
           </el-dropdown-item>

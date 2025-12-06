@@ -425,7 +425,7 @@ async function handlePreview(row) {
   }
 
   const messageLoading = useMessageLoading(
-    window.t('device.control.file.manager.download.scanning'),
+    window.t('common.loading'),
     { showClose: false },
   )
 

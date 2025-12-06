@@ -71,6 +71,7 @@
           v-slot="{ row }"
           :label="$t('device.task.timeout')"
           align="center"
+          min-width="150"
         >
           {{ row.formatTimeout }}
         </el-table-column>
@@ -94,11 +95,13 @@
           prop="devices"
           :label="$t('device.task.devices')"
           align="center"
+          min-width="150"
+          show-overflow-tooltip
         >
           <EleTagCollapse
             effect="light"
             :value="row.devices"
-            :label="(item) => item.remark || `${item.name} (${item.id})`"
+            :label="(item) => deviceStore.getLabel(item, 'name')"
             class="justify-center"
           />
         </el-table-column>
@@ -163,6 +166,8 @@ import { sleep } from '$/utils'
 import dayjs from 'dayjs'
 
 const taskStore = useTaskStore()
+
+const deviceStore = useDeviceStore()
 
 const visible = ref(false)
 

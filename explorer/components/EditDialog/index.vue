@@ -29,7 +29,7 @@
           {{ $t('device.control.file.manager.edit.content') }}
         </label>
 
-        <el-input v-model="content" type="textarea" :autosize="{ minRows: 10 }" placeholder="$t('common.input.placeholder')"></el-input>
+        <el-input v-model="content" type="textarea" :autosize="{ minRows: 10 }" :placeholder="$t('common.input.placeholder')"></el-input>
       </div>
     </div>
 

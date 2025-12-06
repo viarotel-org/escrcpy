@@ -1,5 +1,9 @@
+import { isEqual } from 'lodash-es'
+
 export const useControlStore = defineStore('app-control', () => {
   const barLayout = ref([])
+
+  const swapyKey = computed(() => barLayout.value.join())
 
   // 初始化布局
   const getBarLayout = () => {
@@ -8,9 +12,13 @@ export const useControlStore = defineStore('app-control', () => {
   }
 
   // 设置布局
-  const setBarLayout = (value) => {
+  const setBarLayout = async (value) => {
     if (!Array.isArray(value)) {
       throw new TypeError('parameter must be an array')
+    }
+
+    if (isEqual(value, barLayout.value)) {
+      return false
     }
 
     barLayout.value = value
@@ -29,6 +37,7 @@ export const useControlStore = defineStore('app-control', () => {
 
   return {
     barLayout,
+    swapyKey,
     getBarLayout,
     setBarLayout,
   }

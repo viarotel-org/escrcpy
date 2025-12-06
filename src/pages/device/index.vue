@@ -129,7 +129,7 @@
           </template>
 
           <template #default="{ row }">
-            <ControlBar :device="row" class="-my-[4px] lg:-my-[8px]" />
+            <ControlBar :device="row" swapy-enabled class="-my-[4px] lg:-my-[8px]" />
           </template>
         </el-table-column>
       </el-table>

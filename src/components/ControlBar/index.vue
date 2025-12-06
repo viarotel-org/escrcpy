@@ -15,7 +15,8 @@
 
     <Scrollable ref="scrollableRef" class="flex-1 w-0" disabled-drag>
       <Swapy
-        :key="swapyKey"
+        :key="controlStore.swapyKey"
+        :enabled="swapyEnabled"
         class="flex items-center" :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: false }"
         @swap-end="onSwapEnd"
       >
@@ -110,6 +111,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    swapyEnabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const controlStore = useControlStore()
@@ -122,11 +127,6 @@ export default {
     return {}
   },
   computed: {
-    swapyKey() {
-      const value = this.controlStore.barLayout.join('')
-
-      return value
-    },
     controlModel() {
       const valueMap = {
         'switch': {
@@ -219,15 +219,15 @@ export default {
         },
       }
 
-      const handler = item =>
-        !(item.hiddenKeys || []).some(key => this.$props[key])
+      const isHidden = item =>
+        (item.hiddenKeys || []).some(key => this.$props[key])
 
       const barLayout = [...new Set([...this.controlStore.barLayout, ...Object.keys(valueMap)])]
 
       const value = barLayout.reduce((arr, key) => {
         const item = valueMap[key]
 
-        if (item && handler(item)) {
+        if (item && !isHidden(item)) {
           arr.push({
             ...item,
             id: key,

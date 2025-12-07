@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.1](https://github.com/viarotel-org/escrcpy/compare/v1.34.0...v1.34.1) (2025-12-07)
+
+
+### Performance Improvements
+
+* 🍻 Improve file manager reliability ([9063243](https://github.com/viarotel-org/escrcpy/commit/90632430d1e4c95ff97a901566ea65dc5cd29388))
+
 ## [1.34.0](https://github.com/viarotel-org/escrcpy/compare/v1.33.0...v1.34.0) (2025-12-07)
 
 

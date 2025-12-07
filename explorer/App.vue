@@ -143,7 +143,7 @@
         >
           <el-table-column type="selection" reserve-selection width="50" align="left" />
 
-          <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip>
+          <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip min-width="200">
             <template #default="{ row }">
               <div
                 class="flex items-center cursor-pointer hover:text-primary-500 hover:underline"
@@ -156,13 +156,14 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="size" :label="$t('common.size')" sortable align="center" width="150" />
+          <el-table-column prop="size" :label="$t('common.size')" sortable align="left" min-width="100" />
 
-          <el-table-column :label="$t('device.control.name')" align="center" width="250">
+          <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="left" min-width="150" />
+
+          <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
             <template #default="{ row }">
               <!-- 预览按钮（仅文件） -->
               <EleTooltipButton
-                v-if="['file'].includes(row.type)"
                 effect="light"
                 placement="top"
                 :offset="2"
@@ -171,6 +172,7 @@
                 type="success"
                 icon="View"
                 circle
+                :button-class="['file'].includes(row.type) ? '!visible' : '!invisible'"
                 @click.stop="handlePreview(row)"
               />
 

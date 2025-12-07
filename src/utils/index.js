@@ -123,27 +123,6 @@ export function clearTimer(type, ...args) {
 }
 
 /**
- * 将文件大小（字节）格式化为易读的字符串。
- * @function
- * @param {number} bytes - 文件大小（字节）。
- * @returns {string} 表示文件大小的易读字符串，包含适当的单位。
- * @example
- * formatFileSize(1024);  // 返回 "1.00 KB"
- * formatFileSize(1234567);  // 返回 "1.18 MB"
- */
-export function formatFileSize(bytes) {
-  if (bytes === 0)
-    return '0 Bytes'
-
-  const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-  return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`
-}
-
-/**
  * 从设备 ID 字符串中解析出 `host` 和 `port`。
  *
  * 支持以下格式：

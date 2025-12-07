@@ -4,7 +4,6 @@ import path from 'node:path'
 import util from 'node:util'
 import { adbPath } from '$electron/configs/index.js'
 import appStore from '$electron/helpers/store.js'
-import { formatFileSize } from '$renderer/utils/index'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { ProcessManager, streamToBase64 } from '$electron/helpers/index.js'
@@ -13,6 +12,7 @@ import { ADBDownloader } from './helpers/downloader/index.js'
 import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
+import { readDirWithStat } from './helpers/explorer/index.js'
 
 const exec = util.promisify(_exec)
 
@@ -194,16 +194,11 @@ const watch = async (callback) => {
 }
 
 async function readdir(id, currentPath) {
-  const value = await client.getDevice(id).readdir(currentPath)
+  const device = await client.getDevice(id)
 
-  return value.map(item => ({
-    ...item,
-    id: path.posix.join(currentPath, item.name),
-    type: item.isFile() ? 'file' : 'directory',
-    name: item.name,
-    size: formatFileSize(item.size),
-    updateTime: dayjs(item.mtime).format('YYYY-MM-DD HH:mm:ss'),
-  }))
+  const value = await readDirWithStat(device, currentPath)
+
+  return value
 }
 
 async function push(id, filePath, args = {}) {

@@ -68,7 +68,7 @@
           align="left"
           sortable
           show-overflow-tooltip
-          width="150"
+          min-width="150"
           :filters="statusFilters"
           :filter-method="filterMethod"
         >
@@ -91,9 +91,17 @@
           v-slot="{ row }"
           :label="$t('device.control.name')"
           align="left"
-          width="150"
+          min-width="150"
         >
           <div class="flex items-center !space-x-0">
+            <ConnectAction
+              v-if="['offline'].includes(row.status) && row.wifi"
+              v-bind="{
+                device: row,
+                handleConnect,
+              }"
+            />
+
             <MirrorAction
               v-if="['device', 'unauthorized'].includes(row.status)"
               :ref="getMirrorActionRefs"
@@ -103,14 +111,6 @@
             <MoreDropdown v-if="['device'].includes(row.status)" v-bind="{ row, toggleRowExpansion }" />
 
             <WirelessAction v-if="['device', 'unauthorized'].includes(row.status)" v-bind="{ row, handleConnect, handleRefresh }" />
-
-            <ConnectAction
-              v-if="['offline'].includes(row.status) && row.wifi"
-              v-bind="{
-                device: row,
-                handleConnect,
-              }"
-            />
 
             <RemoveAction
               v-if="['offline'].includes(row.status)"

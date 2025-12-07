@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.34.0](https://github.com/viarotel-org/escrcpy/compare/v1.33.0...v1.34.0) (2025-12-07)
+
+
+### Features
+
+* ✨ Introducing a new file icon display component and enhancing the File Explorer dialog. ([11be6f1](https://github.com/viarotel-org/escrcpy/commit/11be6f17cffd4d37dd55a9e5a0e159f0acb501dd))
+* 🚀 Split the file manager into independent windows and support multiple instances in parallel ([f41d853](https://github.com/viarotel-org/escrcpy/commit/f41d853b7599222c73646cb8eeb0d5e212c330bb))
+* 🚚 The file manager has been refactored and improved, and more useful features have been added. ([5cd5992](https://github.com/viarotel-org/escrcpy/commit/5cd5992a9c490bebc826b9f1ac3dd3e3ef87838a))
+
+
+### Bug Fixes
+
+* 🐛 Fixed the conflict between device control bar sorting and click events ([18a57b9](https://github.com/viarotel-org/escrcpy/commit/18a57b97a8f2657b016b337d287421e946b0806f))
+* 🐛 Fixed the issue of abnormal path display in the file manager address bar ([2f63f6f](https://github.com/viarotel-org/escrcpy/commit/2f63f6f1febccc066ba9b8ebefb369ef169c23a1))
+* 🐛 Fixed the issue where Chinese text cannot be saved in file management read and write text ([34785dd](https://github.com/viarotel-org/escrcpy/commit/34785ddde5b7ea70ab6725875f00c4dc8ff11bf6))
+
+
+### Performance Improvements
+
+* ♻️ Optimize file manager interaction ([b168cc3](https://github.com/viarotel-org/escrcpy/commit/b168cc36a558723a039b82de49409e194b05f8f1))
+* ✨ Enable new icon ([695e35d](https://github.com/viarotel-org/escrcpy/commit/695e35d86289ae9ac3989f8f0d4e3ce3c955d178))
+* 🌱 Optimize app icon background color and corner radius. ([bc4f492](https://github.com/viarotel-org/escrcpy/commit/bc4f49255dc08792a2b49142087cf4d63ed24a9c))
+* 🌱 Optimize application icon details ([55800be](https://github.com/viarotel-org/escrcpy/commit/55800be0ec93b0a84bbf36a9fdddce1f40ebd31c))
+* 📝 Optimize the scheduled task list ([c666709](https://github.com/viarotel-org/escrcpy/commit/c666709aeb7e698a376018885e85a011decddb22))
+* 🧑‍💻 Optimize application icon size under macOS ([066d81f](https://github.com/viarotel-org/escrcpy/commit/066d81fe8ec8daeed6e0beac0caab6193d16ee49))
+* 🧑‍💻 Optimize the interactive experience of the device control bar ([8388646](https://github.com/viarotel-org/escrcpy/commit/8388646d787e265628f3120a1246c3fc6604f7fd))
+* 🚀 Improve app icon quality ([8a6f4c7](https://github.com/viarotel-org/escrcpy/commit/8a6f4c7bcba0bdbb352d8e1ed7825a095e15b9b0))
+* 🚀 Optimize program performance ([9af3988](https://github.com/viarotel-org/escrcpy/commit/9af3988cf6cf34a35245ed176f2f9906876341c5))
+* 🚀 Optimize the details of the new version of the icon ([db9b19a](https://github.com/viarotel-org/escrcpy/commit/db9b19a8aaf4c515a4f805c9e84df9e9ecc381f3))
+* 🚀 Optimize the display effect of application icons under windows ([e0c221f](https://github.com/viarotel-org/escrcpy/commit/e0c221fe4c9015e2dab119d524541d92aa83a557))
+* 🚀 Optimize the display effect of new icons in smaller sizes ([7d91d71](https://github.com/viarotel-org/escrcpy/commit/7d91d7169ff7317597a0ab800f31bb7e4773ff4e))
+
 ## [1.33.0](https://github.com/viarotel-org/escrcpy/compare/v1.32.2...v1.33.0) (2025-11-20)
 
 

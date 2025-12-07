@@ -1,5 +1,5 @@
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/electron/resources/build/logo.png" alt="viarotel-escrcpy" width="108px">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/electron/resources/build/logo.png?version=1.34.0" alt="viarotel-escrcpy" width="108px">
 </div>
 
 # Escrcpy

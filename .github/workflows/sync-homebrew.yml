@@ -11,6 +11,9 @@ jobs:
   sync-homebrew:
     runs-on: macos-latest
     steps:
+    - name: Install rubocop (fix rubocop-ast issue)
+      run: brew install rubocop
+      
     - uses: macauley/action-homebrew-bump-cask@v1
       with:
         token: ${{secrets.GH_TOKEN}}

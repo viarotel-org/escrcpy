@@ -290,7 +290,7 @@ const moveDialogRef = ref()
 const editDialogRef = ref()
 const pathSelectAction = ref('move')
 
-const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'click'
+const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'hover'
 
 // 使用文件管理器 hooks
 const explorer = useExplorer()

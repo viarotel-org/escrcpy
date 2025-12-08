@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.34.2](https://github.com/viarotel-org/escrcpy/compare/v1.34.1...v1.34.2) (2025-12-08)
+
+
+### Performance Improvements
+
+* 📦️ Update the upload function to support file and directory selection, and optimize the interface layout ([7f5bd35](https://github.com/viarotel-org/escrcpy/commit/7f5bd3510f724b6da618d840e2ee12e1609926bb))
+* 🚀 Optimize the menu trigger method for the upload function ([8d39f5b](https://github.com/viarotel-org/escrcpy/commit/8d39f5badc9a1c25edd15f290452701b60fc9e7c))
+
 ## [1.34.1](https://github.com/viarotel-org/escrcpy/compare/v1.34.0...v1.34.1) (2025-12-07)
 
 

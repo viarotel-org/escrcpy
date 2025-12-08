@@ -58,7 +58,7 @@
 
       <!-- 工具栏 -->
       <div class="flex items-center justify-between mb-4">
-        <el-button-group class="-ml-px">
+        <div class="-ml-px space-x-2">
           <!-- 新建 -->
           <AddPopover @success="handleAdd">
             <template #reference>
@@ -68,16 +68,29 @@
             </template>
           </AddPopover>
 
-          <!-- 上传（统一文件和目录上传） -->
-          <el-button
-            type="default"
-            icon="Upload"
-            :loading="explorer.uploader.uploading.value"
-            @click="handleUpload()"
-          >
-            {{ $t('device.control.file.manager.upload') }}
-          </el-button>
-        </el-button-group>
+          <!-- 上传 -->
+          <el-dropdown ref="uploadDropdownRef" :trigger="uploadDropdownTrigger" @command="handleUpload">
+            <el-button
+              type="default"
+              icon="Upload"
+              :loading="explorer.uploader.uploading.value"
+              @click="handleUpload()"
+            >
+              {{ $t('device.control.file.manager.upload') }}
+            </el-button>
+
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="openFile">
+                  {{ $t('common.file') }}
+                </el-dropdown-item>
+                <el-dropdown-item command="openDirectory">
+                  {{ $t('common.directory') }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
 
         <!-- 批量操作 -->
         <el-button-group>
@@ -277,6 +290,8 @@ const moveDialogRef = ref()
 const editDialogRef = ref()
 const pathSelectAction = ref('move')
 
+const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'click'
+
 // 使用文件管理器 hooks
 const explorer = useExplorer()
 
@@ -347,11 +362,23 @@ function handleEdit(row) {
   editDialogRef.value?.open(row)
 }
 
-// 上传文件
-async function handleUpload() {
+// 上传文件/目录
+async function handleUpload(command) {
+  const properties = ['multiSelections']
+
+  const positiveDropdown = ['hover', 'click'].includes(uploadDropdownTrigger)
+
+  if (!command && positiveDropdown) {
+    return false
+  }
+
+  const openTypes = command ? [command] : ['openFile', 'openDirectory']
+
+  properties.unshift(...openTypes)
+
   // 选择文件和目录
   const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
-    properties: ['openFile', 'openDirectory', 'multiSelections'],
+    properties,
   })
 
   if (!files || files.length === 0)
@@ -374,7 +401,6 @@ async function handleUpload() {
         )
       },
       onProgress: ({ total, file }) => {
-        console.log('total', total)
         messageLoading.update(
           window.t('device.control.file.manager.upload.progress', {
             percent: Math.round(total.percent || 0),

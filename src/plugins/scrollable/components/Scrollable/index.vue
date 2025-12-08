@@ -152,8 +152,6 @@ const scrollToEnd = () => {
       content.value.offsetWidth - container.value.offsetWidth,
     )
 
-    console.log('maxScroll', maxScroll)
-
     scrollLeft.value = maxScroll
   }
   else {

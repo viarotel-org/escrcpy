@@ -57,8 +57,8 @@
       </div>
 
       <!-- 工具栏 -->
-      <div class="flex items-center justify-between mb-4">
-        <div class="-ml-px space-x-2">
+      <div class="flex items-center mb-4">
+        <div class="-ml-px space-x-2 mr-auto">
           <!-- 新建 -->
           <AddPopover @success="handleAdd">
             <template #reference>
@@ -91,6 +91,18 @@
             </template>
           </el-dropdown>
         </div>
+
+        <!-- 粘贴 -->
+        <el-button
+          v-if="explorer.clipboard.hasClipboard.value"
+          type="primary"
+          icon="DocumentCopy"
+          class="mr-2"
+          @click="handlePaste"
+        >
+          {{ $t('device.control.file.manager.paste') }}
+          ({{ explorer.clipboard.clipboardState.value.count }})
+        </el-button>
 
         <!-- 批量操作 -->
         <el-button-group>
@@ -128,16 +140,6 @@
             {{ $t('common.delete') }}
           </el-button>
         </el-button-group>
-
-        <el-button
-          v-if="explorer.clipboard.hasClipboard.value"
-          type="primary"
-          icon="DocumentCopy"
-          @click="handlePaste"
-        >
-          {{ $t('device.control.file.manager.paste') }}
-          ({{ explorer.clipboard.clipboardState.value.count }})
-        </el-button>
       </div>
 
       <!-- 文件列表 -->
@@ -249,7 +251,7 @@
             , {{ explorer.selection.selectionCount.value }} {{ $t('common.selected') || 'selected' }}
           </span>
         </div>
-        <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center">
+        <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center gap-1">
           <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
             {{ explorer.clipboard.isCutOperation.value
               ? $t('device.control.file.manager.cut')

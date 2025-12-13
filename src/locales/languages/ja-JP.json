@@ -557,7 +557,7 @@
   "common.save": "保存",
   "common.done": "完了",
 
-  "copilot.title": "Copilot アシスタント",
+  "copilot.title": "アシスタント",
   "copilot.device": "デバイス",
   "copilot.noDevice": "デバイスが選択されていません",
   "copilot.noDeviceHint": "Copilot を開くには、デバイスリストからデバイスを選択してください",

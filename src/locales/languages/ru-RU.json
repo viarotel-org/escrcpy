@@ -556,7 +556,7 @@
   "common.save": "Сохранить",
   "common.done": "Готово",
 
-  "copilot.title": "Copilot Ассистент",
+  "copilot.title": "Ассистент",
   "copilot.device": "Устройство",
   "copilot.noDevice": "Устройство не выбрано",
   "copilot.noDeviceHint": "Выберите устройство из списка для открытия Copilot",

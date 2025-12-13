@@ -557,7 +557,7 @@
   "common.save": "Save",
   "common.done": "Done",
 
-  "copilot.title": "Copilot Assistant",
+  "copilot.title": "Copilot",
   "copilot.device": "Device",
   "copilot.noDevice": "No device selected",
   "copilot.noDeviceHint": "Please select a device from the device list to open Copilot",

@@ -557,7 +557,7 @@
   "common.save": "保存",
   "common.done": "完成",
 
-  "copilot.title": "Copilot 智能助手",
+  "copilot.title": "智能助手",
   "copilot.device": "设备",
   "copilot.noDevice": "未选择设备",
   "copilot.noDeviceHint": "请从设备列表中选择一个设备后打开 Copilot",

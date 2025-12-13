@@ -1,0 +1,152 @@
+{
+  "timestamp": "2025-12-13T03:08:45.328Z",
+  "platform": "mac-arm64",
+  "config": {
+    "baseUrl": "https://open.bigmodel.cn/api/paas/v4",
+    "apiKey": "***",
+    "model": "autoglm-phone",
+    "maxSteps": 5,
+    "lang": "cn",
+    "quiet": false
+  },
+  "summary": {
+    "duration": "136.75",
+    "total": 26,
+    "success": 23,
+    "error": 0,
+    "warning": 3,
+    "passed": true
+  },
+  "results": [
+    {
+      "type": "success",
+      "message": "copilot 文件存在: /Users/viarotel/Desktop/viarotel/Works/Self/escrcpy/electron/resources/extra/mac-arm64/copilot",
+      "timestamp": 1765595188584
+    },
+    {
+      "type": "success",
+      "message": "copilot 文件具有执行权限",
+      "timestamp": 1765595188584
+    },
+    {
+      "type": "success",
+      "message": "ADB 文件存在: /Users/viarotel/Desktop/viarotel/Works/Self/escrcpy/electron/resources/extra/mac-arm64/scrcpy/adb",
+      "timestamp": 1765595188584
+    },
+    {
+      "type": "success",
+      "message": "ADB 文件具有执行权限",
+      "timestamp": 1765595188585
+    },
+    {
+      "type": "success",
+      "message": "成功获取帮助信息",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --base-url 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --apikey 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --model 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --device-id 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --max-steps 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --quiet 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "参数 --lang 已文档化",
+      "timestamp": 1765595193466
+    },
+    {
+      "type": "success",
+      "message": "成功执行设备列表命令",
+      "timestamp": 1765595198105
+    },
+    {
+      "type": "warning",
+      "message": "无法解析为 JSON: Unexpected token 'C', \"Connected \"... is not valid JSON",
+      "timestamp": 1765595198107
+    },
+    {
+      "type": "success",
+      "message": "成功执行应用列表命令",
+      "timestamp": 1765595202745
+    },
+    {
+      "type": "warning",
+      "message": "无法解析为 JSON: Unexpected token 'S', \"Supported \"... is not valid JSON",
+      "timestamp": 1765595202745
+    },
+    {
+      "type": "success",
+      "message": "正确拒绝缺少 base-url 的请求",
+      "timestamp": 1765595218520
+    },
+    {
+      "type": "success",
+      "message": "正确识别无效 URL 格式",
+      "timestamp": 1765595225035
+    },
+    {
+      "type": "warning",
+      "message": "注意: 此测试需要真实设备连接才能完整执行",
+      "timestamp": 1765595225035
+    },
+    {
+      "type": "success",
+      "message": "命令执行完成",
+      "timestamp": 1765595281827
+    },
+    {
+      "type": "success",
+      "message": "✅ 流式输出验证通过：成功捕获多个数据块",
+      "timestamp": 1765595281827
+    },
+    {
+      "type": "success",
+      "message": "✅ 文本信息捕获完整，无丢失",
+      "timestamp": 1765595281827
+    },
+    {
+      "type": "success",
+      "message": "✅ 正确处理中文字符",
+      "timestamp": 1765595281827
+    },
+    {
+      "type": "success",
+      "message": "--quiet 参数 测试通过",
+      "timestamp": 1765595293422
+    },
+    {
+      "type": "success",
+      "message": "--lang 参数 测试通过",
+      "timestamp": 1765595303208
+    },
+    {
+      "type": "success",
+      "message": "--max-steps 参数 测试通过",
+      "timestamp": 1765595325328
+    }
+  ]
+}

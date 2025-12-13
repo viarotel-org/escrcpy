@@ -21,6 +21,7 @@ import ipc from './ipc/index.js'
 
 import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
+import copilot from '$root/copilot/electron/main.js'
 
 import { loadPage } from './helpers/index.js'
 
@@ -123,6 +124,8 @@ function createWindow(callback) {
   control(mainWindow)
 
   explorer(mainWindow)
+
+  copilot(mainWindow)
 
   callback?.(mainWindow)
 }

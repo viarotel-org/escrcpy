@@ -4,6 +4,7 @@ import * as configs from '$electron/configs/index.js'
 import appLog from '$electron/helpers/log.js'
 import store from '$electron/helpers/store.js'
 import adb from './adb/index.js'
+import copilot from './copilot/index.js'
 import electron from './electron/index.js'
 import gnirehtet from './gnirehtet/index.js'
 import scrcpy from './scrcpy/index.js'
@@ -32,6 +33,8 @@ export default {
     expose('scrcpy', scrcpy)
 
     expose('gnirehtet', gnirehtet)
+
+    expose('copilot', copilot)
 
     expose('findInPageModal', search)
 

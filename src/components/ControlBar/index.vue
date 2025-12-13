@@ -82,6 +82,7 @@
 <script>
 import Application from './Application/index.vue'
 import ApplicationStart from './ApplicationStart/index.vue'
+import Copilot from './Copilot/index.vue'
 import Explorer from './Explorer/index.vue'
 import Gnirehtet from './Gnirehtet/index.vue'
 import Rotation from './Rotation/index.vue'
@@ -95,6 +96,7 @@ export default {
     Screenshot,
     Application,
     ApplicationStart,
+    Copilot,
     Gnirehtet,
     Rotation,
     Volume,
@@ -216,6 +218,13 @@ export default {
           elIcon: 'Link',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
+        },
+        'copilot': {
+          label: 'copilot.title',
+          elIcon: 'MagicStick',
+          component: 'Copilot',
+          tips: 'copilot.title',
+          hiddenKeys: ['floating'],
         },
       }
 

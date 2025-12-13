@@ -2,6 +2,8 @@ import { resolve } from 'node:path'
 
 export * from './android-platform-tools/index.js'
 
+export * from './copilot/index.js'
+
 export * from './gnirehtet/index.js'
 
 export * from './logo/index.js'

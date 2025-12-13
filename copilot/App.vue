@@ -72,6 +72,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Collection, Cpu, Monitor, Setting } from '@element-plus/icons-vue'
 import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
+import copilotClient from '$/services/copilot/index.js'
 
 import ChatPanel from './components/ChatPanel/index.vue'
 import ConfigDialog from './components/ConfigDialog/index.vue'
@@ -113,7 +114,7 @@ const handleDeviceChange = (event, data) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   // 从 URL 参数获取设备信息
   const urlParams = new URLSearchParams(window.location.search)
   const deviceId = urlParams.get('id')
@@ -135,7 +136,7 @@ onMounted(() => {
   window.electron.ipcRenderer.on('device-change', handleDeviceChange)
 
   // 检查配置是否完整
-  const config = window.copilot?.getConfig?.() || {}
+  const config = await copilotClient.getConfig() || {}
   if (!config.apiKey) {
     showConfigDialog.value = true
   }

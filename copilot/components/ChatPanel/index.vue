@@ -173,11 +173,12 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { ChatDotRound, Loading, Promotion, VideoPause, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
+import copilotClient from '$/services/copilot/index.js'
 
 import TaskStatus from '../TaskStatus/index.vue'
 
@@ -209,9 +210,13 @@ const messageListRef = ref(null)
 const inputRef = ref(null)
 
 // 快捷指令
-const quickPrompts = computed(() => {
-  return window.copilot?.getConfig?.()?.prompts || []
-})
+const quickPrompts = ref([])
+
+// 加载快捷指令
+const loadQuickPrompts = async () => {
+  const config = await copilotClient.getConfig()
+  quickPrompts.value = config?.prompts || []
+}
 
 // 获取消息样式类
 const getMessageClass = (message) => {
@@ -248,7 +253,7 @@ const handleSubmit = async () => {
     return
 
   // 检查配置
-  const config = window.copilot?.getConfig?.() || {}
+  const config = await copilotClient.getConfig() || {}
   if (!config.apiKey) {
     ElMessage.warning(t('copilot.error.noApiKey'))
     return
@@ -273,10 +278,11 @@ const handleSubmit = async () => {
       : props.targetDevices.map(d => d.id)
 
     // 执行任务
-    const result = await window.copilot.execute(text, {
+    await copilotClient.execute(text, {
       deviceId,
       mode: props.taskMode,
       onOutput: (output) => {
+        console.log('execute onOutput:', output)
         currentOutput.value += output
         scrollToBottom()
       },
@@ -285,6 +291,8 @@ const handleSubmit = async () => {
         scrollToBottom()
       },
     })
+
+    const result = { output: currentOutput.value }
 
     // 添加助手消息
     messages.value.push({
@@ -320,7 +328,7 @@ const handlePromptClick = (prompt) => {
 
 // 停止执行
 const handleStop = () => {
-  window.copilot?.stop?.()
+  copilotClient.destroyAll()
   isExecuting.value = false
   currentOutput.value = ''
 
@@ -336,16 +344,18 @@ watch(messages, scrollToBottom, { deep: true })
 
 // 监听窗口关闭事件
 onMounted(() => {
+  loadQuickPrompts()
+
   window.electron.ipcRenderer.on('copilot-window-closing', () => {
     if (isExecuting.value) {
-      window.copilot?.stop?.()
+      copilotClient.destroyAll()
     }
   })
 })
 
 onUnmounted(() => {
   if (isExecuting.value) {
-    window.copilot?.stop?.()
+    copilotClient.destroyAll()
   }
 })
 </script>

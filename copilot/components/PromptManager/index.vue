@@ -142,6 +142,7 @@ import { ref, watch } from 'vue'
 import { Delete, Document, Edit, EditPen, Plus, Rank } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import copilotClient from '$/services/copilot/index.js'
 
 const props = defineProps({
   modelValue: {
@@ -188,14 +189,14 @@ const presetPrompts = [
 ]
 
 // 加载指令
-const loadPrompts = () => {
-  const config = window.copilot?.getConfig?.() || {}
+const loadPrompts = async () => {
+  const config = await copilotClient.getConfig() || {}
   prompts.value = [...(config.prompts || [])]
 }
 
 // 保存指令
-const savePrompts = () => {
-  window.copilot?.setConfig?.('prompts', [...prompts.value])
+const savePrompts = async () => {
+  await copilotClient.setConfig('prompts', [...prompts.value])
 }
 
 // 添加指令

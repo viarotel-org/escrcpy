@@ -149,6 +149,7 @@ import {
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import copilotClient from '$/services/copilot/index.js'
 
 const props = defineProps({
   modelValue: {
@@ -214,9 +215,9 @@ const configRules = {
 }
 
 // 加载配置
-const loadConfig = () => {
-  const defaultConfig = window.copilot?.getDefaultConfig?.() || {}
-  const savedConfig = window.copilot?.getConfig?.() || {}
+const loadConfig = async () => {
+  const defaultConfig = await copilotClient.getDefaultConfig() || {}
+  const savedConfig = await copilotClient.getConfig() || {}
 
   Object.assign(configForm, {
     ...defaultConfig,
@@ -230,7 +231,7 @@ const submitConfig = async () => {
     await configFormRef.value?.validate()
 
     // 保存配置
-    window.copilot?.setConfig?.(null, { ...toRaw(configForm) })
+    await copilotClient.setConfig(null, { ...toRaw(configForm) })
 
     ElMessage.success(t('copilot.config.saveSuccess'))
     visible.value = false
@@ -253,7 +254,7 @@ const resetConfig = async () => {
       },
     )
 
-    const defaultConfig = window.copilot?.getDefaultConfig?.() || {}
+    const defaultConfig = await copilotClient.getDefaultConfig() || {}
     Object.assign(configForm, defaultConfig)
 
     ElMessage.success(t('copilot.config.resetSuccess'))

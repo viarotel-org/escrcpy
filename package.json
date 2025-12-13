@@ -39,7 +39,6 @@
     "@lydell/node-pty-linux-arm64": "^1.1.0",
     "@lydell/node-pty-linux-x64": "^1.1.0",
     "@lydell/node-pty-win32-x64": "^1.1.0",
-    "@tdesign-vue-next/chat": "^0.4.6",
     "@unocss/preset-icons": "^66.5.10",
     "@unocss/reset": "0.62.3",
     "@unocss/transformer-directives": "0.62.3",

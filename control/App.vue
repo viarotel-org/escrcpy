@@ -59,21 +59,9 @@
 <script setup>
 import ControlBar from '$/components/ControlBar/index.vue'
 
-import { i18n } from '$/locales/index.js'
-
-import localeModel from '$/plugins/element-plus/locale.js'
-
-const { currentDevice } = useWindowStateSync()
+const { currentDevice, locale } = useWindowStateSync()
 
 const deviceStore = useDeviceStore()
-
-const locale = computed(() => {
-  const i18nLocale = i18n.global.locale.value
-
-  const value = localeModel[i18nLocale]
-
-  return value
-})
 
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 

@@ -87,20 +87,20 @@ class CopilotClient {
    * @param {string|string[]} options.deviceId - 设备ID（批量时传入数组）
    * @param {number} options.maxSteps - 最大步数
    * @param {boolean} options.quiet - 静默模式
-   * @param {function} options.onOutput - 实时输出回调
+   * @param {function} options.onData - 实时输出回调
    * @param {function} options.onError - 错误输出回调
    * @param {function} options.onExit - 退出回调
    * @returns {Promise<{id: string, pid: number}>} 会话信息
    */
   async execute(task, options = {}) {
     // 创建会话
-    const session = await this._invoke('createSession', task, omit(options, ['onOutput', 'onError', 'onExit']))
+    const session = await this._invoke('createSession', task, omit(options, ['onData', 'onError', 'onExit']))
 
     // 订阅数据事件
-    if (options.onOutput) {
+    if (options.onData) {
       await this.onData(session.id, (data) => {
-        console.log('execute onOutput:', data)
-        options.onOutput(data)
+        console.log('execute onData:', data)
+        options.onData(data)
       })
     }
 

@@ -37,6 +37,7 @@ export default antfu(
       'import/order': 'off',
 
       'node/prefer-global/process': 'off',
+      'node/prefer-global/buffer': 'off',
 
       'no-console': 'off',
       'curly': 'off',

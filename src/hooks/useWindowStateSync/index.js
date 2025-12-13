@@ -30,10 +30,17 @@ export function useWindowStateSync(options = {}) {
     options.onQueryMounted?.(queryParams.value)
   })
 
+  function getSize(grid) {
+    const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
+
+    return value
+  }
+
   return {
     themeStore,
     queryParams,
     locale,
+    getSize,
     currentDevice,
   }
 }

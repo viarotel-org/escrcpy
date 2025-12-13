@@ -2,124 +2,216 @@
   <el-dialog
     v-model="visible"
     :title="$t('copilot.config.title')"
-    width="600px"
+    width="95%"
     :close-on-click-modal="false"
+    :close-on-press-escape="true"
+    destroy-on-close
+    append-to-body
+    fullscreen
+    class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen config-dialog"
     @open="loadConfig"
   >
-    <el-form
-      ref="configFormRef"
-      :model="configForm"
-      :rules="configRules"
-      label-width="120px"
-      label-position="left"
-    >
-      <!-- API 配置区 -->
-      <el-divider content-position="left">
-        <el-icon class="mr-1">
-          <Connection />
-        </el-icon>
-        {{ $t('copilot.config.apiSection') }}
-      </el-divider>
+    <div class="config-container h-full overflow-hidden">
+      <div class="config-content h-full overflow-y-auto">
+        <div class="max-w-3xl mx-auto py-6 px-4">
+          <!-- API 配置区 -->
+          <div class="config-section mb-8">
+            <div class="section-header flex items-center gap-2 mb-4">
+              <div class="section-icon w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+                <el-icon class="text-primary-500">
+                  <Connection />
+                </el-icon>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                  {{ $t('copilot.config.apiSection') }}
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ $t('copilot.config.apiSectionDesc') }}
+                </p>
+              </div>
+            </div>
 
-      <el-form-item :label="$t('copilot.config.baseUrl')" prop="baseUrl">
-        <el-input
-          v-model="configForm.baseUrl"
-          :placeholder="$t('copilot.config.baseUrlPlaceholder')"
-          clearable
-        >
-          <template #prefix>
-            <el-icon><Link /></el-icon>
-          </template>
-        </el-input>
-      </el-form-item>
+            <div class="config-card bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 space-y-5">
+              <!-- Base URL -->
+              <div class="config-item">
+                <label class="config-label flex items-center gap-2 mb-2">
+                  <el-icon class="text-gray-400"><Link /></el-icon>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('copilot.config.baseUrl') }}
+                  </span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <el-input
+                  v-model="configForm.baseUrl"
+                  :placeholder="$t('copilot.config.baseUrlPlaceholder')"
+                  clearable
+                  size="large"
+                  class="config-input"
+                />
+              </div>
 
-      <el-form-item :label="$t('copilot.config.apiKey')" prop="apiKey">
-        <el-input
-          v-model="configForm.apiKey"
-          :type="showApiKey ? 'text' : 'password'"
-          :placeholder="$t('copilot.config.apiKeyPlaceholder')"
-          clearable
-        >
-          <template #prefix>
-            <el-icon><Key /></el-icon>
-          </template>
-          <template #suffix>
-            <el-icon
-              class="cursor-pointer hover:text-primary-500"
-              @click="showApiKey = !showApiKey"
-            >
-              <View v-if="showApiKey" />
-              <Hide v-else />
-            </el-icon>
-          </template>
-        </el-input>
-      </el-form-item>
+              <!-- API Key -->
+              <div class="config-item">
+                <label class="config-label flex items-center gap-2 mb-2">
+                  <el-icon class="text-gray-400"><Key /></el-icon>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('copilot.config.apiKey') }}
+                  </span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <el-input
+                  v-model="configForm.apiKey"
+                  :type="showApiKey ? 'text' : 'password'"
+                  :placeholder="$t('copilot.config.apiKeyPlaceholder')"
+                  clearable
+                  size="large"
+                  class="config-input"
+                >
+                  <template #suffix>
+                    <el-button
+                      text
+                      size="small"
+                      @click="showApiKey = !showApiKey"
+                    >
+                      <el-icon>
+                        <View v-if="showApiKey" />
+                        <Hide v-else />
+                      </el-icon>
+                    </el-button>
+                  </template>
+                </el-input>
+              </div>
 
-      <el-form-item :label="$t('copilot.config.model')" prop="model">
-        <el-select
-          v-model="configForm.model"
-          :placeholder="$t('copilot.config.modelPlaceholder')"
-          allow-create
-          filterable
-          class="w-full"
-        >
-          <el-option label="autoglm-phone" value="autoglm-phone" />
-          <el-option label="GLM-4V-Plus" value="GLM-4V-Plus" />
-          <el-option label="GLM-4V" value="GLM-4V" />
-        </el-select>
-      </el-form-item>
+              <!-- Model -->
+              <div class="config-item">
+                <label class="config-label flex items-center gap-2 mb-2">
+                  <el-icon class="text-gray-400"><Cpu /></el-icon>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('copilot.config.model') }}
+                  </span>
+                </label>
+                <el-select
+                  v-model="configForm.model"
+                  :placeholder="$t('copilot.config.modelPlaceholder')"
+                  allow-create
+                  filterable
+                  size="large"
+                  class="w-full"
+                >
+                  <el-option label="autoglm-phone" value="autoglm-phone">
+                    <div class="flex items-center gap-2">
+                      <span class="text-primary-500">●</span>
+                      <span>autoglm-phone</span>
+                      <el-tag size="small" type="success">
+                        推荐
+                      </el-tag>
+                    </div>
+                  </el-option>
+                  <el-option label="GLM-4V-Plus" value="GLM-4V-Plus" />
+                  <el-option label="GLM-4V" value="GLM-4V" />
+                </el-select>
+              </div>
+            </div>
+          </div>
 
-      <!-- 执行配置区 -->
-      <el-divider content-position="left">
-        <el-icon class="mr-1">
-          <Setting />
-        </el-icon>
-        {{ $t('copilot.config.executionSection') }}
-      </el-divider>
+          <!-- 执行配置区 -->
+          <div class="config-section mb-8">
+            <div class="section-header flex items-center gap-2 mb-4">
+              <div class="section-icon w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
+                <el-icon class="text-amber-500">
+                  <Setting />
+                </el-icon>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                  {{ $t('copilot.config.executionSection') }}
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ $t('copilot.config.executionSectionDesc') }}
+                </p>
+              </div>
+            </div>
 
-      <el-form-item :label="$t('copilot.config.maxSteps')" prop="maxSteps">
-        <el-input-number
-          v-model="configForm.maxSteps"
-          :min="1"
-          :max="100"
-          :step="5"
-          class="w-full"
-        />
-        <div class="text-xs text-gray-400 mt-1">
-          {{ $t('copilot.config.maxStepsHint') }}
+            <div class="config-card bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 space-y-5">
+              <!-- Max Steps -->
+              <div class="config-item">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="config-label flex items-center gap-2">
+                    <el-icon class="text-gray-400"><Odometer /></el-icon>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {{ $t('copilot.config.maxSteps') }}
+                    </span>
+                  </label>
+                  <span class="text-sm font-semibold text-primary-500">{{ configForm.maxSteps }}</span>
+                </div>
+                <el-slider
+                  v-model="configForm.maxSteps"
+                  :min="1"
+                  :max="100"
+                  :step="5"
+                  :marks="{ 1: '1', 25: '25', 50: '50', 75: '75', 100: '100' }"
+                  class="px-2"
+                />
+                <p class="text-xs text-gray-400 mt-8">
+                  {{ $t('copilot.config.maxStepsHint') }}
+                </p>
+              </div>
+
+              <!-- Language -->
+              <div class="config-item">
+                <label class="config-label flex items-center gap-2 mb-2">
+                  <el-icon class="text-gray-400"><ChatLineSquare /></el-icon>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('copilot.config.lang') }}
+                  </span>
+                </label>
+                <el-radio-group v-model="configForm.lang" class="lang-radio-group">
+                  <el-radio-button value="cn">
+                    {{ $t('copilot.config.langCn') }}
+                  </el-radio-button>
+                  <el-radio-button value="en">
+                    {{ $t('copilot.config.langEn') }}
+                  </el-radio-button>
+                </el-radio-group>
+              </div>
+
+              <!-- Quiet Mode -->
+              <div class="config-item">
+                <div class="flex items-center justify-between p-4 rounded-lg bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                      <el-icon class="text-gray-500">
+                        <Mute />
+                      </el-icon>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {{ $t('copilot.config.quiet') }}
+                      </p>
+                      <p class="text-xs text-gray-400">
+                        {{ $t('copilot.config.quietHint') }}
+                      </p>
+                    </div>
+                  </div>
+                  <el-switch v-model="configForm.quiet" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </el-form-item>
-
-      <el-form-item :label="$t('copilot.config.lang')" prop="lang">
-        <el-select
-          v-model="configForm.lang"
-          :placeholder="$t('copilot.config.langPlaceholder')"
-          allow-create
-          filterable
-          class="w-full"
-        >
-          <el-option :label="$t('copilot.config.langCn')" value="cn" />
-          <el-option :label="$t('copilot.config.langEn')" value="en" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="$t('copilot.config.quiet')" prop="quiet">
-        <el-switch v-model="configForm.quiet" />
-        <span class="ml-2 text-xs text-gray-400">
-          {{ $t('copilot.config.quietHint') }}
-        </span>
-      </el-form-item>
-    </el-form>
+      </div>
+    </div>
 
     <template #footer>
-      <div class="flex justify-between">
+      <div class="config-footer flex items-center justify-between px-4">
         <el-button @click="resetConfig">
           <el-icon class="mr-1">
             <RefreshRight />
           </el-icon>
           {{ $t('copilot.config.reset') }}
         </el-button>
-        <div class="space-x-2">
+        <div class="flex items-center gap-2">
           <el-button @click="visible = false">
             {{ $t('common.cancel') }}
           </el-button>
@@ -136,13 +228,17 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, toRaw, watch } from 'vue'
 import {
+  ChatLineSquare,
   Check,
   Connection,
+  Cpu,
   Hide,
   Key,
   Link,
+  Mute,
+  Odometer,
   RefreshRight,
   Setting,
   View,
@@ -173,9 +269,6 @@ watch(visible, (val) => {
   emit('update:modelValue', val)
 })
 
-// 表单引用
-const configFormRef = ref(null)
-
 // API Key 显示状态
 const showApiKey = ref(false)
 
@@ -189,33 +282,8 @@ const configForm = reactive({
   quiet: false,
 })
 
-// 表单校验规则
-const configRules = {
-  baseUrl: [
-    { required: true, message: () => t('copilot.config.baseUrlRequired'), trigger: 'blur' },
-    {
-      pattern: /^https?:\/\/.+/,
-      message: () => t('copilot.config.baseUrlInvalid'),
-      trigger: 'blur',
-    },
-  ],
-  apiKey: [
-    { required: true, message: () => t('copilot.config.apiKeyRequired'), trigger: 'blur' },
-  ],
-  maxSteps: [
-    { required: true, message: () => t('copilot.config.maxStepsRequired'), trigger: 'change' },
-    {
-      type: 'number',
-      min: 1,
-      max: 100,
-      message: () => t('copilot.config.maxStepsRange'),
-      trigger: 'change',
-    },
-  ],
-}
-
 // 加载配置
-const loadConfig = async () => {
+async function loadConfig() {
   const defaultConfig = await copilotClient.getDefaultConfig() || {}
   const savedConfig = await copilotClient.getConfig() || {}
 
@@ -225,24 +293,41 @@ const loadConfig = async () => {
   })
 }
 
+// 验证配置
+function validateConfig() {
+  if (!configForm.baseUrl?.trim()) {
+    ElMessage.warning(t('copilot.config.baseUrlRequired'))
+    return false
+  }
+  if (!/^https?:\/\/.+/.test(configForm.baseUrl)) {
+    ElMessage.warning(t('copilot.config.baseUrlInvalid'))
+    return false
+  }
+  if (!configForm.apiKey?.trim()) {
+    ElMessage.warning(t('copilot.config.apiKeyRequired'))
+    return false
+  }
+  return true
+}
+
 // 提交配置
-const submitConfig = async () => {
+async function submitConfig() {
+  if (!validateConfig())
+    return
+
   try {
-    await configFormRef.value?.validate()
-
-    // 保存配置
     await copilotClient.setConfig(null, { ...toRaw(configForm) })
-
     ElMessage.success(t('copilot.config.saveSuccess'))
     visible.value = false
   }
   catch (error) {
-    console.error('Config validation failed:', error)
+    console.error('Config save failed:', error)
+    ElMessage.error(t('copilot.config.saveFailed'))
   }
 }
 
 // 重置配置
-const resetConfig = async () => {
+async function resetConfig() {
   try {
     await ElMessageBox.confirm(
       t('copilot.config.resetConfirm'),
@@ -266,5 +351,4 @@ const resetConfig = async () => {
 </script>
 
 <style scoped>
-/* 自定义样式 */
 </style>

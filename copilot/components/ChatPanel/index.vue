@@ -1,186 +1,50 @@
 <template>
-  <div class="flex flex-col h-full">
-    <!-- 消息列表区域 -->
-    <div
-      ref="messageListRef"
-      class="flex-1 overflow-y-auto p-4 space-y-4"
-    >
-      <!-- 欢迎消息 -->
-      <div
-        v-if="messages.length === 0"
-        class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400"
-      >
-        <el-icon :size="64" class="mb-4 text-primary-300">
-          <ChatDotRound />
-        </el-icon>
-        <h2 class="text-lg font-medium mb-2">
-          {{ $t('copilot.welcome.title') }}
-        </h2>
-        <p class="text-sm text-center max-w-md">
-          {{ $t('copilot.welcome.description') }}
-        </p>
+  <div class="chat-panel flex flex-col h-full bg-white dark:bg-gray-900">
+    <!-- 欢迎界面 -->
+    <WelcomePanel
+      v-if="messages.length === 0"
+      :prompts="quickPrompts"
+      :max-display-count="4"
+      class="flex-1"
+      @select-prompt="handlePromptSelect"
+      @show-prompt-manager="emit('showPromptManager')"
+    />
 
-        <!-- 快捷指令展示 -->
-        <div class="mt-6 flex flex-wrap justify-center gap-2 max-w-lg">
-          <el-tag
-            v-for="(prompt, index) in quickPrompts.slice(0, 5)"
-            :key="index"
-            class="cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-            effect="plain"
-            @click="handlePromptClick(prompt)"
-          >
-            {{ prompt }}
-          </el-tag>
-        </div>
-      </div>
-
+    <!-- 聊天界面 -->
+    <template v-else>
       <!-- 消息列表 -->
-      <template v-else>
-        <div
-          v-for="(message, index) in messages"
-          :key="index"
-          class="flex"
-          :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
-        >
-          <div
-            class="max-w-[80%] rounded-lg px-4 py-3"
-            :class="getMessageClass(message)"
-          >
-            <!-- 用户消息 -->
-            <template v-if="message.role === 'user'">
-              <p class="text-white whitespace-pre-wrap">
-                {{ message.content }}
-              </p>
-            </template>
-
-            <!-- 助手消息 -->
-            <template v-else-if="message.role === 'assistant'">
-              <div class="text-gray-800 dark:text-gray-200">
-                <!-- 任务状态 -->
-                <TaskStatus
-                  v-if="message.status"
-                  :status="message.status"
-                  :steps="message.steps"
-                  :current-step="message.currentStep"
-                />
-                <!-- 输出内容 -->
-                <pre
-                  v-if="message.content"
-                  class="whitespace-pre-wrap font-sans text-sm"
-                >{{ message.content }}</pre>
-              </div>
-            </template>
-
-            <!-- 系统消息（错误等） -->
-            <template v-else-if="message.role === 'system'">
-              <div class="flex items-center space-x-2 text-red-600 dark:text-red-400">
-                <el-icon><WarningFilled /></el-icon>
-                <span>{{ message.content }}</span>
-              </div>
-            </template>
-
-            <div class="text-xs text-gray-400 mt-2">
-              {{ formatTime(message.timestamp) }}
-            </div>
-          </div>
-        </div>
-
-        <!-- 正在输入指示器 -->
-        <div v-if="isExecuting" class="flex justify-start">
-          <div class="bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-3">
-            <div class="flex items-center space-x-2">
-              <el-icon class="animate-spin text-primary-500">
-                <Loading />
-              </el-icon>
-              <span class="text-gray-600 dark:text-gray-300">{{ $t('copilot.executing') }}</span>
-            </div>
-            <pre
-              v-if="currentOutput"
-              class="mt-2 text-sm text-gray-500 dark:text-gray-400 whitespace-pre-wrap max-h-40 overflow-y-auto"
-            >{{ currentOutput }}</pre>
-          </div>
-        </div>
-      </template>
-    </div>
-
-    <!-- 快捷指令栏 -->
-    <div
-      v-if="quickPrompts.length > 0 && messages.length > 0"
-      class="flex-none border-t border-gray-200 dark:border-gray-700 px-4 py-2"
-    >
-      <div class="flex items-center overflow-x-auto space-x-2 scrollbar-thin">
-        <span class="text-xs text-gray-500 dark:text-gray-400 flex-none">
-          {{ $t('copilot.quickPrompts') }}:
-        </span>
-        <el-tag
-          v-for="(prompt, index) in quickPrompts.slice(0, 5)"
-          :key="index"
-          size="small"
-          class="cursor-pointer flex-none hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-          effect="plain"
-          @click="handlePromptClick(prompt)"
-        >
-          {{ prompt }}
-        </el-tag>
-        <el-button
-          v-if="quickPrompts.length > 5"
-          size="small"
-          text
-          type="primary"
-          @click="emit('showPromptManager')"
-        >
-          {{ $t('copilot.morePrompts') }}
-        </el-button>
-      </div>
-    </div>
+      <MessageList
+        ref="messageListRef"
+        :messages="messages"
+        :is-executing="isExecuting"
+        :current-output="currentOutput"
+        class="flex-1 h-0"
+      />
+    </template>
 
     <!-- 输入区域 -->
-    <div class="flex-none border-t border-gray-200 dark:border-gray-700 p-4">
-      <div class="flex items-end space-x-3">
-        <el-input
-          ref="inputRef"
-          v-model="inputText"
-          type="textarea"
-          :placeholder="$t('copilot.inputPlaceholder')"
-          :autosize="{ minRows: 1, maxRows: 4 }"
-          :disabled="isExecuting"
-          class="flex-1"
-          @keydown.enter.exact.prevent="handleSubmit"
-          @keydown.enter.shift.exact="() => {}"
-        />
-        <div class="flex flex-col space-y-2">
-          <el-button
-            v-if="isExecuting"
-            type="danger"
-            :icon="VideoPause"
-            @click="handleStop"
-          >
-            {{ $t('copilot.stop') }}
-          </el-button>
-          <el-button
-            v-else
-            type="primary"
-            :icon="Promotion"
-            :disabled="!inputText.trim()"
-            @click="handleSubmit"
-          >
-            {{ $t('copilot.send') }}
-          </el-button>
-        </div>
-      </div>
-    </div>
+    <ChatInput
+      ref="chatInputRef"
+      v-model="inputText"
+      :is-executing="isExecuting"
+      :quick-prompts="quickPrompts"
+      :show-quick-prompts="messages.length > 0"
+      @submit="handleSubmit"
+      @stop="handleStop"
+      @show-prompt-manager="emit('showPromptManager')"
+    />
   </div>
 </template>
 
 <script setup>
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { ChatDotRound, Loading, Promotion, VideoPause, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import dayjs from 'dayjs'
 import copilotClient from '$/services/copilot/index.js'
 
-import TaskStatus from '../TaskStatus/index.vue'
+import WelcomePanel from '../WelcomePanel/index.vue'
+import MessageList from '../MessageList/index.vue'
+import ChatInput from '../ChatInput/index.vue'
 
 const props = defineProps({
   taskMode: {
@@ -207,49 +71,35 @@ const messages = ref([])
 const isExecuting = ref(false)
 const currentOutput = ref('')
 const messageListRef = ref(null)
-const inputRef = ref(null)
+const chatInputRef = ref(null)
 
 // 快捷指令
 const quickPrompts = ref([])
 
+// 消息 ID 生成器
+let messageIdCounter = 0
+function generateMessageId() {
+  return `msg_${Date.now()}_${++messageIdCounter}`
+}
+
 // 加载快捷指令
-const loadQuickPrompts = async () => {
+async function loadQuickPrompts() {
   const config = await copilotClient.getConfig()
   quickPrompts.value = config?.prompts || []
 }
 
-// 获取消息样式类
-const getMessageClass = (message) => {
-  switch (message.role) {
-    case 'user':
-      return 'bg-primary-500 text-white'
-    case 'assistant':
-      return 'bg-gray-100 dark:bg-gray-700'
-    case 'system':
-      return 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
-    default:
-      return 'bg-gray-100 dark:bg-gray-700'
-  }
-}
-
-// 格式化时间
-const formatTime = (timestamp) => {
-  return dayjs(timestamp).format('HH:mm:ss')
-}
-
-// 滚动到底部
-const scrollToBottom = () => {
+// 处理快捷指令选择
+function handlePromptSelect(prompt) {
+  inputText.value = prompt
   nextTick(() => {
-    if (messageListRef.value) {
-      messageListRef.value.scrollTop = messageListRef.value.scrollHeight
-    }
+    chatInputRef.value?.focus()
   })
 }
 
 // 提交指令
-const handleSubmit = async () => {
-  const text = inputText.value.trim()
-  if (!text || isExecuting.value)
+async function handleSubmit(text) {
+  const trimmedText = text?.trim() || inputText.value.trim()
+  if (!trimmedText || isExecuting.value)
     return
 
   // 检查配置
@@ -261,15 +111,15 @@ const handleSubmit = async () => {
 
   // 添加用户消息
   messages.value.push({
+    id: generateMessageId(),
     role: 'user',
-    content: text,
+    content: trimmedText,
     timestamp: Date.now(),
   })
 
   inputText.value = ''
   isExecuting.value = true
   currentOutput.value = ''
-  scrollToBottom()
 
   try {
     // 获取设备 ID
@@ -278,26 +128,22 @@ const handleSubmit = async () => {
       : props.targetDevices.map(d => d.id)
 
     // 执行任务
-    await copilotClient.execute(text, {
+    await copilotClient.execute(trimmedText, {
       deviceId,
       mode: props.taskMode,
-      onOutput: (output) => {
-        console.log('execute onOutput:', output)
+      onData: (output) => {
         currentOutput.value += output
-        scrollToBottom()
       },
       onError: (error) => {
         currentOutput.value += `[ERROR] ${error}`
-        scrollToBottom()
       },
     })
 
-    const result = { output: currentOutput.value }
-
     // 添加助手消息
     messages.value.push({
+      id: generateMessageId(),
       role: 'assistant',
-      content: result.output || currentOutput.value,
+      content: currentOutput.value,
       timestamp: Date.now(),
       status: 'completed',
     })
@@ -305,6 +151,7 @@ const handleSubmit = async () => {
   catch (error) {
     // 添加错误消息
     messages.value.push({
+      id: generateMessageId(),
       role: 'system',
       content: `${t('copilot.error.executionFailed')}: ${error.message}`,
       timestamp: Date.now(),
@@ -314,33 +161,22 @@ const handleSubmit = async () => {
   finally {
     isExecuting.value = false
     currentOutput.value = ''
-    scrollToBottom()
   }
 }
 
-// 快捷指令点击
-const handlePromptClick = (prompt) => {
-  inputText.value = prompt
-  nextTick(() => {
-    inputRef.value?.focus()
-  })
-}
-
 // 停止执行
-const handleStop = () => {
+function handleStop() {
   copilotClient.destroyAll()
   isExecuting.value = false
   currentOutput.value = ''
 
   messages.value.push({
+    id: generateMessageId(),
     role: 'system',
     content: t('copilot.stopped'),
     timestamp: Date.now(),
   })
 }
-
-// 监听消息变化，自动滚动
-watch(messages, scrollToBottom, { deep: true })
 
 // 监听窗口关闭事件
 onMounted(() => {
@@ -358,19 +194,15 @@ onUnmounted(() => {
     copilotClient.destroyAll()
   }
 })
+
+// 监听配置变化，重新加载快捷指令
+watch(() => props.currentDevice, () => {
+  loadQuickPrompts()
+})
 </script>
 
 <style scoped>
-.scrollbar-thin::-webkit-scrollbar {
-  height: 4px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 2px;
+.chat-panel {
+  min-height: 0;
 }
 </style>

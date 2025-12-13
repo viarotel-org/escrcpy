@@ -297,7 +297,7 @@ const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platfo
 // 使用文件管理器 hooks
 const explorer = useExplorer()
 
-const { queryParams: device, locale } = useWindowStateSync({
+const { queryParams: device, locale, getSize } = useWindowStateSync({
   onQueryMounted() {
     explorer.init(device.value, '/sdcard')
     const deviceName = deviceStore.getLabel(device.value, 'name')
@@ -633,12 +633,6 @@ function handleContextMenu(row, column, event) {
 
 async function handleRowClick(row) {
   tableRef.value?.toggleRowSelection(row)
-}
-
-function getSize(grid) {
-  const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
-
-  return value
 }
 </script>
 

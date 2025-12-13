@@ -6,7 +6,8 @@
     "output": "dist-release",
     "buildResources": "electron/resources/build"
   },
-  "files": ["dist", "dist-electron"],
+  "files": ["dist", "dist-electron", "node_modules/node-pty/**/*"],
+  "asarUnpack": ["node_modules/node-pty/**/*"],
   "win": {
     "icon": "logo.ico",
     "target": [

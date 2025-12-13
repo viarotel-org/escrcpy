@@ -19,6 +19,8 @@ import { browserWindowWidth, browserWindowHeight, getLogoPath } from './configs/
 
 import ipc from './ipc/index.js'
 
+import { registerPTYHandlers } from './services/pty/handlers.js'
+
 import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
 import copilot from '$root/copilot/electron/main.js'
@@ -120,6 +122,9 @@ function createWindow(callback) {
   loadPage(mainWindow)
 
   ipc(mainWindow)
+
+  // 注册服务层 IPC 处理器
+  registerPTYHandlers(mainWindow)
 
   control(mainWindow)
 

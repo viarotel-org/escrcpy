@@ -1,0 +1,40 @@
+html {
+  font-size: 14px !important;
+}
+
+body {
+  @apply bg-gray-100 !dark:bg-gray-950;    
+}
+
+.app-region-drag {
+  -webkit-app-region: drag !important;
+}
+
+.app-region-no-drag {
+  -webkit-app-region: no-drag !important;
+}
+
+.\*\:app-region-no-drag > * {
+  -webkit-app-region: no-drag !important;
+}
+
+/* 自定义滚动条的外观 */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: theme('colors.gray.100');
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  @apply bg-gray-300 dark:bg-gray-600;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500 dark:bg-gray-300;
+}

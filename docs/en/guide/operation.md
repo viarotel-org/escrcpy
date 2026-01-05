@@ -25,6 +25,7 @@ title: Operation
 
 ## Device Interaction Bar
 
+- Automatic Control (AutoGLM)
 - Switch
 - Home
 - Back

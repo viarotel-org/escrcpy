@@ -1,0 +1,30 @@
+.macos-platform {
+  .el-dialog {
+    .el-dialog__header {
+      @apply !-mt-2;
+    }
+  }
+}
+
+.windows-platform {
+  .el-dialog {
+    .el-dialog__header {
+      @apply flex flex-row-reverse items-center justify-end;
+
+      .el-dialog__title, .el-dialog__headerbtn {
+        @apply !relative !-left-4;
+      }
+
+      .el-dialog__title {
+        @apply !-top-4 !right-2;
+      }
+
+      .el-dialog__headerbtn {
+        -webkit-app-region: no-drag !important;
+        @apply !-top-3;
+      }
+    }
+  }
+}
+
+.linux-platform {}

@@ -21,6 +21,9 @@ Continuously improving. Currently supports the following common configurations
 - Gnirehtet fix
 - Debug
 - Floating control bar
+- Use system terminal
+- Preferred terminal
+- Concurrency limit
 
 ## Video Control
 

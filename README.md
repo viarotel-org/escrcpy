@@ -12,26 +12,16 @@
 📱 Display and control your Android device graphically with scrcpy, powered by Electron. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="./screenshots/zh-CN/overview.jpg" alt="viarotel-escrcpy" width="100%">
+  <img src="./desktop/screenshots/en-US/overview.png" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## Features
 
-- 🏃 Synchronization: Faster synchronization with Scrcpy thanks to web technology
-- 🤖 Automation: Auto-connect devices, auto-execute mirroring, custom scripts, scheduled tasks
-- 💡 Customization: Multi-device management, independent configurations, custom notes, config import/export
-- 📡 Wireless: Quick connection via QR code scanning
-- 🔗 Reverse Tethering: Gnirehtet reverse tethering
-- 🪟 Window Arrangement: Visual drag-and-drop interface for precise multi-device window layout control with custom positioning and sizing
-- 🎨 Themes: Light mode, dark mode, system theme following
-- 😎 Lightweight: Native support, displays only the device screen
-- ⚡️ Performance: 30~120 FPS, depending on the device
-- 🌟 Quality: 1920×1080 or higher
-- 🕒 Low Latency: 35~70 ms
-- 🚀 Fast Startup: First image displayed in about 1 second
-- 🙅‍♂️ Non-intrusive: No installation files left on Android devices
-- 🤩 User Benefits: No accounts, no ads, no internet connection required
-- 🗽 Freedom: Free and open-source software
+- 🤖 **Intelligent Control**: Natural-language commands powered by AutoGLM for smart control of Android devices
+- 🏃 **Automation & Efficiency**: Automated workflow execution with support for parallel operations across multiple devices
+- 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of multiple devices  
+- 📡 **Connectivity & Networking**: Wireless connections with Gnirehtet reverse tethering support
+- ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring based on Scrcpy
 
 ## Installation
 
@@ -76,6 +66,7 @@ This project owes its existence to the following open-source projects:
 - [electron](https://www.electronjs.org/)
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
+- [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
 
 ## Donate
 

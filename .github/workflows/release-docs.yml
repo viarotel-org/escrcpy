@@ -19,12 +19,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Enable corepack and pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@9.13.2 --activate
+          corepack prepare pnpm@10.26.1 --activate
 
       - name: Install and Build
         run: |

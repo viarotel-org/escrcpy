@@ -1,0 +1,13 @@
+packages:
+  - packages/*
+  - desktop
+
+ignoreWorkspaceRootCheck: true
+
+ignoredBuiltDependencies:
+  - core-js
+  - electron
+  - esbuild
+  - vue-demi
+
+shellEmulator: true

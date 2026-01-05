@@ -1,0 +1,44 @@
+{
+  "name": "@autoglm.js/shared",
+  "type": "module",
+  "version": "1.34.2",
+  "private": true,
+  "packageManager": "pnpm@10.25.0",
+  "description": "Shared utilities for autoglm.js",
+  "author": "FlippedRound <flippedround@qq.com>",
+  "license": "MIT",
+  "funding": "https://afdian.com/a/flippedround",
+  "homepage": "https://github.com/FliPPeDround/autoglm.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FliPPeDround/autoglm.js"
+  },
+  "bugs": "https://github.com/FliPPeDround/autoglm.js/issues",
+  "keywords": [
+    "autoglm.js",
+    "shared"
+  ],
+  "sideEffects": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./*"
+  },
+  "main": "./src/index.js",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*"
+      ]
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "unzipper": "^0.12.3"
+  },
+  "devDependencies": {
+    "@types/unzipper": "^0.10.11",
+    "chmodr": "^2.0.2"
+  }
+}

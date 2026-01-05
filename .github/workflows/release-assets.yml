@@ -4,21 +4,29 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - v*.*.*
+      - 'workspace-v*.*.*'
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
-            arch: [arm64, amd64]
+            platform: linux
+            build_command: build:linux
           - os: macos-latest
-            arch: [arm64, amd64]
+            platform: mac
+            build_command: build:mac
           - os: windows-latest
-            arch: [arm64, amd64]
+            platform: win
+            build_command: build:win
+    env:
+      VITE_GITEE_APP_TOKEN: ${{ secrets.VITE_GITEE_APP_TOKEN }}
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -26,53 +34,37 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Enable corepack and pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@9.13.2 --activate
+          corepack prepare pnpm@10.26.1 --activate
 
       - name: Install Dependencies
         run: pnpm install
 
-      - name: build-linux
-        if: matrix.os == 'ubuntu-latest'
-        run: pnpm build:linux
+      - name: Build ${{ matrix.platform }}
+        run: pnpm ${{ matrix.build_command }}
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: build-mac
-        if: matrix.os == 'macos-latest'
-        run: pnpm build:mac
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: build-win
-        if: matrix.os == 'windows-latest'
-        run: pnpm build:win
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
           prerelease: false
           fail_on_unmatched_files: false
           files: |
-            dist-release/*.exe
-            dist-release/*.zip
-            dist-release/*.dmg
-            dist-release/*.AppImage
-            dist-release/*.snap
-            dist-release/*.deb
-            dist-release/*.rpm
-            dist-release/*.tar.gz
-            dist-release/*.blockmap
-            dist-release/latest.yml
-            dist-release/latest-mac.yml
-            dist-release/latest-linux.yml
-            dist-release/latest-linux-arm64.yml
+            desktop/dist-release/*.exe
+            desktop/dist-release/*.zip
+            desktop/dist-release/*.dmg
+            desktop/dist-release/*.AppImage
+            desktop/dist-release/*.snap
+            desktop/dist-release/*.deb
+            desktop/dist-release/*.rpm
+            desktop/dist-release/*.tar.gz
+            desktop/dist-release/*.blockmap
+            desktop/dist-release/latest*.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

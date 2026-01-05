@@ -1,0 +1,61 @@
+{
+  "name": "autoglm.js",
+  "type": "module",
+  "version": "1.34.2",
+  "private": false,
+  "packageManager": "pnpm@10.25.0",
+  "description": "AutoGLM.js is a JavaScript library for Open-AutoGLM",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "funding": "https://afdian.com/a/flippedround",
+  "homepage": "https://github.com/FliPPeDround/autoglm.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FliPPeDround/autoglm.js"
+  },
+  "bugs": "https://github.com/FliPPeDround/autoglm.js/issues",
+  "keywords": [
+    "autoglm",
+    "open-autoglm",
+    "agent",
+    "ai"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "asset",
+    "dist",
+    "schema"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "prepublishOnly": "node ./scripts/sync-version.mjs && pnpm build",
+    "release": "bumpp",
+    "typecheck": "tsc",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@autoglm.js/shared": "workspace:*",
+    "@clack/prompts": "^0.11.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/minimist": "^1.2.5",
+    "acorn": "^8.15.0",
+    "acorn-loose": "^8.5.2",
+    "consola": "^3.4.2",
+    "dayjs": "^1.11.19",
+    "fs-extra": "^11.3.3",
+    "kolorist": "^1.8.0",
+    "mitt": "^3.0.1",
+    "openai": "^6.10.0",
+    "std-env": "^3.10.0",
+    "tinyexec": "^1.0.2",
+    "vitest": "^4.0.16"
+  }
+}

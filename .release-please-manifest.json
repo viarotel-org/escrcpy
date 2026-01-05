@@ -1,7 +1,7 @@
 {
-  ".": "1.34.2",
-  "packages/shared": "1.34.2",
-  "desktop": "1.34.2",
-  "packages/electron-ipcx": "1.34.2",
-  "packages/autoglm.js": "1.34.2"
+  ".": "2.0.0",
+  "packages/shared": "2.0.0",
+  "desktop": "2.0.0",
+  "packages/electron-ipcx": "2.0.0",
+  "packages/autoglm.js": "2.0.0"
 }

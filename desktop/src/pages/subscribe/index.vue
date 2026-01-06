@@ -98,8 +98,6 @@ async function onPurchaseClick(params) {
     }
   }
 
-  params.amount = 0.01
-
   // 打开支付弹窗
   paymentDialogRef.value.open({
     plan: params.plan,

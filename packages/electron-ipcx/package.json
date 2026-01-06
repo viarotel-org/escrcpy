@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/electron-ipcx",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": false,
   "description": "A more intuitive electron ipc system with function proxy support",
   "author": "viarotel",

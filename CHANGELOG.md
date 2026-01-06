@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.0.0...workspace-v2.0.1) (2026-01-06)
+
+
+### Bug Fixes
+
+* 🐛 Fix the problem of abnormal subscription recharge fee ([b32043c](https://github.com/viarotel-org/escrcpy/commit/b32043c5f2a37792d8c336f09f4b62534ce43bec))
+
 ## [2.0.0](https://github.com/viarotel-org/escrcpy/compare/workspace-v1.34.2...workspace-v2.0.0) (2026-01-05)
 
 

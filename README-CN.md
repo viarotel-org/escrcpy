@@ -1,5 +1,5 @@
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/desktop/electron/resources/build/logo.png?version=2.0.0" alt="viarotel-escrcpy" width="108px">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/logos/escrcpy.png" alt="viarotel-escrcpy" width="108px">
 </div>
 
 # Escrcpy
@@ -11,7 +11,7 @@
 📱 使用图形化的 Scrcpy 显示和控制您的 Android 设备，由 Electron 驱动。[English Document](https://github.com/viarotel-org/escrcpy/blob/main/README.md)
 
 <div style="display:flex;">
-  <img src="./desktop/screenshots/zh-CN/overview.png" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/zh-CN/overview.png" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## 特点
@@ -72,10 +72,10 @@
 如果该项目帮到你的话，可以请我喝杯咖啡，让我更有精神完善该项目 😛
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/desktop/src/assets/sponsor/viarotel-wepay.png" alt="viarotel-wepay" width="30%">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/desktop/src/assets/sponsor/viarotel-alipay.png" alt="viarotel-alipay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/donate/viarotel-wepay.png" alt="viarotel-wepay" width="30%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/donate/viarotel-alipay.png" alt="viarotel-alipay" width="30%">
   <a href="https://www.paypal.com/paypalme/viarotel" target="_blank" rel="noopener noreferrer">
-    <img src="https://cdn.jsdelivr.net/gh/viarotel-org/escrcpy@main/desktop/src/assets/sponsor/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
+    <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/donate/viarotel-paypal.png" alt="viarotel-paypal" width="30%">
   </a>
 </div>
 

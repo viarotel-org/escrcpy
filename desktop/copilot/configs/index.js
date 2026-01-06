@@ -8,9 +8,5 @@ export const defaultCopilotConfigs = {
   maxSteps: 50,
   lang: 'cn',
   quiet: false,
-  prompts: [
-    '打开微信',
-    '打开支付宝扫码支付',
-    '打开抖音并点赞第一个视频',
-  ],
+  prompts: [],
 }

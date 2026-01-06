@@ -9,7 +9,7 @@ export const appDescription = 'Control your Android device with graphical scrcpy
 export const defaultLocale = 'en'
 export const locales = [defaultLocale, 'zhHans']
 
-export function useImgTag(src) {
+export function useImgTag(src = '') {
   return `<img src="${src}" style="width: 20px; height: 20px;" class="hover:opacity-100 opacity-70 duration-500" />`
 }
 
@@ -28,7 +28,7 @@ const viteConfig = {
 const vueConfig = {
   template: {
     compilerOptions: {
-      isCustomElement: tag => ['amp-ad', 'ins'].includes(tag),
+      isCustomElement: (tag = '') => ['amp-ad', 'ins'].includes(tag),
     },
   },
 }
@@ -52,14 +52,6 @@ const vitePressConfig = {
       'script',
       {
         src: 'https://hm.baidu.com/hm.js?4984552ac1c9b6041c7f9edffff4089f',
-        async: '',
-      },
-    ],
-    // 不蒜子统计工具
-    [
-      'script',
-      {
-        src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js',
         async: '',
       },
     ],
@@ -108,9 +100,6 @@ const vitePressConfig = {
     ],
     footer: {
       message: `
-        <span id="busuanzi_container_site_pv"> Views <span id="busuanzi_value_site_pv"></span>, </span>
-        <span id="busuanzi_container_site_uv"> Visitors <span id="busuanzi_value_site_uv"></span> </span>
-        <br />
         Released under the MIT License. 
       `,
       copyright: `Copyright © 2025-${new Date().getFullYear()} viarotel`,
@@ -147,7 +136,7 @@ const vitePressI18nConfig = {
         { text: 'Changelog', link: '/changelog' },
         { text: 'Donate', link: '/donate' },
         { text: 'Contact', link: '/contact' },
-        { text: 'Blog', link: 'https://viarotel.eu.org/en' },
+        { text: 'Blog', link: 'https://blog.viarotel.eu.org/en' },
       ],
     },
     zhHans: {
@@ -158,7 +147,7 @@ const vitePressI18nConfig = {
         { text: '变更日志', link: '/zhHans/changelog' },
         { text: '捐赠', link: '/zhHans/donate' },
         { text: '联系', link: '/zhHans/contact' },
-        { text: '博客', link: 'https://viarotel.eu.org/' },
+        { text: '博客', link: 'https://blog.viarotel.eu.org/' },
       ],
     },
   },

@@ -12,14 +12,12 @@ class BaseFormatter {
     this.md = md
 
     this.icons = {
-      keyboard: '⌨️',
-      thinking: '🤔',
-      action: '▶️',
-      taskComplete: '✅',
-      log: '📝',
-      message: '💬',
-      error: '❌',
       default: '📌',
+      start: '🚀',
+      thinking: '🤔',
+      action: '🤖',
+      taskComplete: '✅',
+      error: '❌',
       aborted: '❗',
     }
 
@@ -41,13 +39,12 @@ class BaseFormatter {
     const { time = dayjs().format('YYYY-MM-DD HH:mm:ss'), message } = payload
 
     const methodMap = {
-      keyboard: 'formatKeyboard',
+      start: 'formatStart',
       thinking: 'formatThinking',
       action: 'formatAction',
       task_complete: 'formatTaskComplete',
-      log: 'formatLog',
-      message: 'formatMessage',
       error: 'formatError',
+      aborted: 'formatAborted',
     }
 
     const methodName = methodMap[event]
@@ -64,71 +61,63 @@ class BaseFormatter {
     return this.formatDefault({ event, time, message, context })
   }
 
-  /**
-   * 工具方法：生成代码块格式化文本
-   */
-  codeBlockJson(obj) {
+  listMarker() {
+    return this.md.list([''])
+  }
+
+  formatCode(obj) {
     return this.md`${this.md.codeBlock('json', JSON.stringify(obj, null, 2))}`.toString()
   }
 
-  listMarker() {
-    return this.md.list(['']).trim()
+  formatTitle(eventName) {
+    return this.md.bold(window.t(`copilot.event.${eventName}`)).toString()
   }
 
-  /**
-   * 格式化空事件（无 payload）
-   */
   formatEmpty() {
     return ''
   }
 
-  /**
-   * 格式化默认事件（未知类型）
-   * 使用 build-md 确保格式正确
-   */
   formatDefault({ event, time, message }) {
-    return this.md`${this.listMarker()} ${this.icons[event] || this.icons.default} ${this.md.bold(event)}\n\n${this.codeBlockJson({ message, time })}\n\n`.toString()
+    return this.md`${this.listMarker()} ${this.icons[event] || this.icons.default} ${this.md.bold(event)}\n\n${this.formatCode({ message, time })}\n\n`.toString()
   }
 
-  /**
-   * 以下方法应由子类实现
-   */
-  formatKeyboard(time, message, payload, context) {
-    throw new Error('formatKeyboard must be implemented by subclass')
+  formatStart() {
+    throw new Error('formatStart must be implemented by subclass')
   }
 
-  formatThinking(time, message, payload, context) {
+  formatThinking() {
     throw new Error('formatThinking must be implemented by subclass')
   }
 
-  formatAction(time, message, payload, context) {
+  formatAction() {
     throw new Error('formatAction must be implemented by subclass')
   }
 
-  formatTaskComplete(time, message, payload, context) {
+  formatTaskComplete() {
     throw new Error('formatTaskComplete must be implemented by subclass')
   }
 
-  formatLog(time, message, payload, context) {
-    throw new Error('formatLog must be implemented by subclass')
+  formatAborted() {
+    throw new Error('formatAborted must be implemented by subclass')
   }
 
-  formatMessage(time, message, payload, context) {
-    throw new Error('formatMessage must be implemented by subclass')
-  }
-
-  formatError(time, message, payload, context) {
+  formatError() {
     throw new Error('formatError must be implemented by subclass')
   }
 
-  /**
-   * 工具方法：移除引号
-   * 使用正则表达式安全处理引号
-   */
   removeQuotes(text) {
-    if (typeof text !== 'string')
+    if (typeof text !== 'string') {
       return text
-    return text.replace(/^["']|["']$/g, '')
+    }
+
+    if (
+      (text.startsWith('"') && text.endsWith('"'))
+      || (text.startsWith('\'') && text.endsWith('\''))
+    ) {
+      return text.slice(1, -1)
+    }
+
+    return text
   }
 }
 

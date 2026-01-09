@@ -163,10 +163,15 @@ export class SessionManager {
    * @param {string} deviceId - 设备 ID
    * @param {string} task - 任务描述
    * @param {SessionConfig} config - 会话配置
-   * @returns {Promise<{session: SessionInstance, promise: Promise}>} 会话实例和执行 Promise
+   * @param {Object} [callbacks] - 回调函数集合（可选）
+   * @param {Function} [callbacks.onData] - 数据回调
+   * @param {Function} [callbacks.onExit] - 退出回调
+   * @returns {Promise<{session: SessionInstance, promise: Promise, cleanup: Function}>} 会话实例、执行 Promise 和清理函数
    */
-  async executeTask(deviceId, task, config) {
+  async executeTask(deviceId, task, config, callbacks = {}) {
     const session = this.getOrCreateSession(deviceId, config)
+
+    const cleanup = this._wireSessionCallbacks(session, callbacks)
 
     // 更新会话状态
     this._updateSessionState(session, task, true)
@@ -178,10 +183,12 @@ export class SessionManager {
       return {
         session,
         promise,
+        cleanup,
       }
     }
     catch (error) {
       console.error(`${LOG_PREFIX} 任务执行失败 (${deviceId}):`, error.message)
+      cleanup()
       throw error
     }
   }
@@ -256,29 +263,37 @@ export class SessionManager {
     return customLimit ?? appStore.get('common.concurrencyLimit') ?? 5
   }
 
+  _getCleanSession(deviceId) {
+    const session = this.sessions.get(deviceId)
+
+    return {
+      id: session.id,
+      sessionId: session.id,
+      deviceId: session.deviceId,
+      task: session.task,
+    }
+  }
+
   /**
    * 执行单个设备任务（用于批量执行）
    * @private
    */
   async _executeDeviceTask(deviceId, task, sessionConfig, sessions, cleanups, options) {
-    let rawSession
     let session
+    let emitter
 
     try {
-      const result = await this.executeTask(deviceId, task, sessionConfig)
-      rawSession = result.session
+      const result = await this.executeTask(deviceId, task, sessionConfig, options)
 
-      session = {
-        id: rawSession.id,
-        sessionId: rawSession.id,
-        deviceId: rawSession.deviceId,
-        task,
-      }
+      session = this._getCleanSession(result.session.deviceId)
+
+      emitter = result.session.emitter
 
       sessions.push(session)
-      cleanups.push(this._wireSessionListeners(session, options))
+      cleanups.push(result.cleanup)
 
       await result.promise
+
       await sleep(POST_TASK_WAIT_TIME)
 
       return {
@@ -294,8 +309,8 @@ export class SessionManager {
       }
     }
     finally {
-      if (rawSession) {
-        rawSession.emitter.emit('exit', {
+      if (emitter) {
+        emitter.emit('exit', {
           session,
           exitCode: 1,
           signal: null,
@@ -350,57 +365,15 @@ export class SessionManager {
   }
 
   /**
-   * 订阅会话数据事件
-   *
-   * @param {string} sessionId - 会话 ID
-   * @param {Function} callback - 回调函数
-   * @returns {Function} 取消订阅函数
-   */
-  onData(sessionId, callback) {
-    const session = this.getSessionById(sessionId)
-
-    if (!session) {
-      console.warn(`${LOG_PREFIX} 未找到会话: ${sessionId}`)
-      return () => {}
-    }
-
-    session.emitter.on('data', callback)
-
-    return () => session.emitter.off('data', callback)
-  }
-
-  /**
-   * 订阅会话退出事件
-   *
-   * @param {string} sessionId - 会话 ID
-   * @param {Function} callback - 回调函数 (exitCode, signal) => void
-   * @returns {Function} 取消订阅函数
-   */
-  onExit(sessionId, callback) {
-    const session = this.getSessionById(sessionId)
-
-    if (!session) {
-      console.warn(`${LOG_PREFIX} 未找到会话: ${sessionId}`)
-      return () => {}
-    }
-
-    const wrapper = ({ exitCode, signal }) => {
-      callback(exitCode, signal)
-    }
-
-    session.emitter.on('exit', wrapper)
-    return () => session.emitter.off('exit', wrapper)
-  }
-
-  /**
-   * 将会话事件与调用方回调绑定，并返回清理函数
+   * 将回调直接绑定到会话的 emitter（用于 executeTask）
    * @private
-   * @param {Object} session - 会话信息
+   * @param {SessionInstance} session - 会话实例
    * @param {Object} callbacks - 回调函数集合
    * @returns {Function} 清理函数
    */
-  _wireSessionListeners(session, callbacks = {}) {
+  _wireSessionCallbacks(session, callbacks = {}) {
     const teardowns = []
+
     let cleaned = false
 
     const cleanup = () => {
@@ -411,20 +384,24 @@ export class SessionManager {
       teardowns.forEach(fn => fn?.())
     }
 
+    const cleanSession = this._getCleanSession(session.deviceId)
+
     // 绑定数据事件
     if (callbacks.onData) {
-      const offData = this.onData(session.id, (payload) => {
-        callbacks.onData(payload, session)
-      })
-      teardowns.push(offData)
+      const handler = (payload) => {
+        callbacks.onData(payload, cleanSession)
+      }
+      session.emitter.on('data', handler)
+      teardowns.push(() => session.emitter.off('data', handler))
     }
 
     // 绑定退出事件
     if (callbacks.onExit) {
-      const offExit = this.onExit(session.id, (exitCode, signal) => {
-        callbacks.onExit?.({ exitCode, signal, session })
-      })
-      teardowns.push(offExit)
+      const handler = ({ exitCode, signal }) => {
+        callbacks.onExit?.({ exitCode, signal, session: cleanSession })
+      }
+      session.emitter.on('exit', handler)
+      teardowns.push(() => session.emitter.off('exit', handler))
     }
 
     return cleanup
@@ -613,9 +590,12 @@ export class SessionManager {
       })
     }
 
-    // 监听所有事件并转发
-    agent.on('*', (event, payload) => {
-      forward(event, payload)
+    const eventTypes = ['start', 'thinking', 'action', 'task_complete', 'error', 'aborted']
+
+    eventTypes.forEach((event) => {
+      agent.on(event, (payload) => {
+        forward(event, payload)
+      })
     })
   }
 

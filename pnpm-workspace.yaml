@@ -5,9 +5,11 @@ packages:
 ignoreWorkspaceRootCheck: true
 
 ignoredBuiltDependencies:
-  - core-js
-  - electron
   - esbuild
-  - vue-demi
+  - electron
+  - sharp
+
+patchedDependencies:
+  autoglm.js@0.0.10: patches/autoglm.js@0.0.10.patch
 
 shellEmulator: true

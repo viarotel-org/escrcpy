@@ -1,0 +1,35 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 48ba98c33629813f77ddd5e46496bd68a6182dda..ffcab6adcf7fe7b16396f66353b4d6b9d2885061 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -388,18 +388,18 @@ var ADBAutoInstaller = class {
+ 	async install() {
+ 		if (await this.check()) return;
+ 		await fs.ensureDir(this.installPath);
+-		if (isMacOS) {
+-			const { installADB } = await import("@autoglm.js/platform-tools-darwin");
+-			await installADB(this.installPath);
+-		}
+-		if (isLinux) {
+-			const { installADB } = await import("@autoglm.js/platform-tools-linux");
+-			await installADB(this.installPath);
+-		}
+-		if (isWindows) {
+-			const { installADB } = await import("@autoglm.js/platform-tools-windows");
+-			await installADB(this.installPath);
+-		}
++		// if (isMacOS) {
++		// 	const { installADB } = await import("@autoglm.js/platform-tools-darwin");
++		// 	await installADB(this.installPath);
++		// }
++		// if (isLinux) {
++		// 	const { installADB } = await import("@autoglm.js/platform-tools-linux");
++		// 	await installADB(this.installPath);
++		// }
++		// if (isWindows) {
++		// 	const { installADB } = await import("@autoglm.js/platform-tools-windows");
++		// 	await installADB(this.installPath);
++		// }
+ 	}
+ 	async check() {
+ 		return await fs.pathExists(this.adbPath);

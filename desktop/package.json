@@ -20,6 +20,9 @@
     "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps"
   },
+  "dependencies": {
+    "sharp": "0.34.5"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "4.16.2",
     "@devicefarmer/adbkit": "3.3.8",

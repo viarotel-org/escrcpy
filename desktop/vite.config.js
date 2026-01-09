@@ -31,6 +31,13 @@ function mergeCommon(config, { command = '' } = {}) {
       resolve: {
         alias,
       },
+      build: {
+        rollupOptions: {
+          external: [
+            'sharp',
+          ],
+        },
+      },
     },
     config,
   )

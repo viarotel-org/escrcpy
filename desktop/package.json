@@ -40,7 +40,7 @@
     "@vitejs/plugin-vue-jsx": "4.1.1",
     "@vueuse/core": "10.9.0",
     "@vueuse/rxjs": "14.1.0",
-    "autoglm.js": "workspace:^",
+    "autoglm.js": "0.0.10",
     "bonjour-service": "1.3.0",
     "build-md": "0.4.5",
     "create-desktop-shortcuts": "1.11.0",

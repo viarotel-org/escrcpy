@@ -1,6 +1,5 @@
 /**
- * 基础格式化器 - 定义格式化器标准接口
- * 所有格式化器都应继承此类并实现相应方法
+ * Base Formatter
  */
 import { md } from 'build-md'
 import dayjs from 'dayjs'
@@ -41,6 +40,7 @@ class BaseFormatter {
     const methodMap = {
       start: 'formatStart',
       thinking: 'formatThinking',
+      thinking_stream: 'formatThinkingStream',
       action: 'formatAction',
       task_complete: 'formatTaskComplete',
       error: 'formatError',
@@ -87,6 +87,10 @@ class BaseFormatter {
 
   formatThinking() {
     throw new Error('formatThinking must be implemented by subclass')
+  }
+
+  formatThinkingStream() {
+    throw new Error('formatThinkingStream must be implemented by subclass')
   }
 
   formatAction() {

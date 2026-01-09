@@ -1,6 +1,5 @@
 /**
  * Copilot Agent Helper
- * 提供临时代理创建和会话代理获取功能
  *
  * @module CopilotAgentHelper
  */
@@ -8,27 +7,21 @@ import { AutoGLM } from 'autoglm.js'
 import copilotService from '$copilot/electron/services/index.js'
 import appStore from '$electron/helpers/store.js'
 
-// ==================== 常量定义 ====================
-
-/** 临时设备 ID 前缀 */
+/** Temporary device ID prefix */
 const TEMP_DEVICE_ID_PREFIX = 'temp-device'
 
-// ==================== 类型定义 ====================
-
 /**
- * 代理配置类型
+ * Agent configuration
  * @typedef {Object} AgentConfig
- * @property {string} [deviceId] - 设备 ID
- * @property {string} [baseUrl] - API 基础 URL
- * @property {string} [apiKey] - API 密钥
- * @property {string} [model] - 模型名称
+ * @property {string} [deviceId] - Device ID
+ * @property {string} [baseUrl] - API base URL
+ * @property {string} [apiKey] - API key
+ * @property {string} [model] - Model name
  */
 
-// ==================== 辅助函数 ====================
-
 /**
- * 获取默认配置
- * @returns {Object} 默认配置对象
+ * Get default configuration
+ * @returns {Object} Default configuration object
  * @private
  */
 function getDefaultConfig() {
@@ -36,23 +29,21 @@ function getDefaultConfig() {
 }
 
 /**
- * 生成临时设备 ID
- * @param {string} [customId] - 自定义 ID
- * @returns {string} 设备 ID
+ * Generate a temporary device ID
+ * @param {string} [customId] - Custom ID
+ * @returns {string} Device ID
  * @private
  */
 function generateDeviceId(customId) {
   return customId || `${TEMP_DEVICE_ID_PREFIX}-${Date.now()}`
 }
 
-// ==================== 公开 API ====================
-
 /**
- * 创建临时代理实例
- * 用于一次性任务或不需要会话管理的场景
+ * Create a temporary agent instance
+ * Used for one-off tasks or scenarios where session management is not required
  *
- * @param {AgentConfig} customConfig - 自定义配置
- * @returns {Promise<AutoGLM>} AutoGLM 实例
+ * @param {AgentConfig} customConfig - Custom configuration
+ * @returns {Promise<AutoGLM>} AutoGLM instance
  *
  * @example
  * const agent = await createTempAgent({ deviceId: 'my-device' })
@@ -74,11 +65,12 @@ export async function createTempAgent(customConfig = {}) {
 }
 
 /**
- * 创建或获取代理实例
- * 优先从会话中获取已有代理，不存在则创建临时代理
+ * Create or retrieve an agent instance
+ * Attempts to retrieve an existing agent from the session first;
+ * if none exists, a temporary agent is created
  *
- * @param {AgentConfig} customConfig - 自定义配置
- * @returns {Promise<AutoGLM>} AutoGLM 实例
+ * @param {AgentConfig} customConfig - Custom configuration
+ * @returns {Promise<AutoGLM>} AutoGLM instance
  *
  * @example
  * const agent = await createOrGetAgent({ deviceId: 'device-123' })
@@ -86,7 +78,7 @@ export async function createTempAgent(customConfig = {}) {
 export async function createOrGetAgent(customConfig = {}) {
   const { deviceId } = customConfig
 
-  // 如果提供了设备 ID，尝试从会话中获取
+  // If a device ID is provided, try to retrieve it from an existing session
   if (deviceId) {
     const sessionInfo = copilotService.getSessionByDevice(deviceId)
 
@@ -95,6 +87,6 @@ export async function createOrGetAgent(customConfig = {}) {
     }
   }
 
-  // 未找到会话或未提供设备 ID，创建临时代理
+  // No session found or no device ID provided; create a temporary agent
   return createTempAgent(customConfig)
 }

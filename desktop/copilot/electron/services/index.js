@@ -1,57 +1,58 @@
 /**
  * Copilot Service
- * Copilot 服务主入口，提供设备任务执行、会话管理等核心功能
+ * Main entry point of the Copilot service, providing core features such as
+ * device task execution and session management.
  *
  * @module CopilotService
  */
 import appStore from '$electron/helpers/store.js'
 import { sessionManager } from './modules/index.js'
 
-// ==================== 类型定义 ====================
+// ==================== Type Definitions ====================
 
 /**
- * 执行选项
+ * Execution options
  * @typedef {Object} ExecuteOptions
- * @property {string|string[]} deviceId - 设备 ID 或设备 ID 列表
- * @property {number} [maxSteps] - 最大执行步数
- * @property {boolean} [quiet] - 静默模式
- * @property {number} [concurrency] - 并发数（批量执行时）
- * @property {Function} [onSession] - 会话创建回调
- * @property {Function} [onData] - 数据回调
- * @property {Function} [onExit] - 退出回调
+ * @property {string|string[]} deviceId - Device ID or list of device IDs
+ * @property {number} [maxSteps] - Maximum number of execution steps
+ * @property {boolean} [quiet] - Quiet mode
+ * @property {number} [concurrency] - Concurrency level (for batch execution)
+ * @property {Function} [onSession] - Session creation callback
+ * @property {Function} [onData] - Data callback
+ * @property {Function} [onExit] - Exit callback
  */
 
 /**
- * 执行结果
+ * Execution result
  * @typedef {Object} ExecuteResult
- * @property {string} id - 会话 ID
- * @property {string} deviceId - 设备 ID
- * @property {boolean} isRunning - 是否正在运行
- * @property {string} currentTask - 当前任务
- * @property {number} createdAt - 创建时间戳
- * @property {number} lastActiveAt - 最后活跃时间戳
+ * @property {string} id - Session ID
+ * @property {string} deviceId - Device ID
+ * @property {boolean} isRunning - Whether the session is running
+ * @property {string} currentTask - Current task
+ * @property {number} createdAt - Creation timestamp
+ * @property {number} lastActiveAt - Last active timestamp
  */
 
 /**
- * 会话信息
+ * Session information
  * @typedef {Object} SessionInfo
- * @property {string} id - 会话 ID
- * @property {string} deviceId - 设备 ID
- * @property {boolean} isRunning - 是否正在运行
- * @property {string|null} currentTask - 当前任务
- * @property {number} createdAt - 创建时间戳
- * @property {number} lastActiveAt - 最后活跃时间戳
+ * @property {string} id - Session ID
+ * @property {string} deviceId - Device ID
+ * @property {boolean} isRunning - Whether the session is running
+ * @property {string|null} currentTask - Current task
+ * @property {number} createdAt - Creation timestamp
+ * @property {number} lastActiveAt - Last active timestamp
  */
 
-// ==================== Copilot 服务类 ====================
+// ==================== Copilot Service Class ====================
 
 /**
- * Copilot 服务
- * 提供任务执行、会话管理等核心功能
+ * Copilot Service
+ * Provides core features such as task execution and session management.
  */
 class CopilotService {
   constructor() {
-    /** @type {SessionManager} 会话管理器 */
+    /** @type {SessionManager} Session manager */
     this.sessionManager = sessionManager
 
     if (this.unsubscribeCopilotApiKey) {
@@ -63,25 +64,25 @@ class CopilotService {
     })
   }
 
-  // ==================== 任务执行 ====================
+  // ==================== Task Execution ====================
 
   /**
-   * 执行 Copilot 任务（同时支持单设备和批量设备）
+   * Execute a Copilot task (supports both single-device and batch execution)
    *
-   * @param {string} task - 任务描述
-   * @param {ExecuteOptions} options - 执行选项
-   * @returns {Promise<ExecuteResult|ExecuteResult[]>} 执行结果
+   * @param {string} task - Task description
+   * @param {ExecuteOptions} options - Execution options
+   * @returns {Promise<ExecuteResult|ExecuteResult[]>} Execution result
    */
   async execute(task, options = {}) {
     const { deviceId } = options
 
-    // 获取配置
+    // Build session configuration
     const sessionConfig = this._buildSessionConfig(options)
 
-    // 标准化设备 ID 列表
+    // Normalize device ID list
     const deviceIds = Array.isArray(deviceId) ? deviceId : [deviceId]
 
-    // 执行任务
+    // Execute task
     return this.sessionManager.executeTaskList(
       task,
       deviceIds,
@@ -91,10 +92,10 @@ class CopilotService {
   }
 
   /**
-   * 构建会话配置
+   * Build session configuration
    * @private
-   * @param {ExecuteOptions} options - 执行选项
-   * @returns {Object} 会话配置
+   * @param {ExecuteOptions} options - Execution options
+   * @returns {Object} Session configuration
    */
   _buildSessionConfig(options) {
     const config = appStore.get('copilot') || {}
@@ -109,41 +110,41 @@ class CopilotService {
     }
   }
 
-  // ==================== 任务控制 ====================
+  // ==================== Task Control ====================
 
   /**
-   * 停止设备的当前任务
+   * Stop the current task on a device
    *
-   * @param {string} deviceId - 设备 ID
-   * @param {string} [reason] - 中止原因（默认：'User termination'）
+   * @param {string} deviceId - Device ID
+   * @param {string} [reason] - Abort reason (default: 'User termination')
    */
   stop(deviceId, reason = 'User termination') {
     this.sessionManager.stopTask(deviceId, reason)
   }
 
   /**
-   * 销毁设备的会话
+   * Destroy the session of a device
    *
-   * @param {string} deviceId - 设备 ID
+   * @param {string} deviceId - Device ID
    */
   destroy(deviceId) {
     this.sessionManager.destroySession(deviceId)
   }
 
   /**
-   * 销毁所有会话
+   * Destroy all sessions
    */
   destroyAll() {
     this.sessionManager.destroyAll()
   }
 
-  // ==================== 会话查询 ====================
+  // ==================== Session Queries ====================
 
   /**
-   * 获取设备的会话信息
+   * Get session information by device
    *
-   * @param {string} deviceId - 设备 ID
-   * @returns {SessionInfo|null} 会话信息
+   * @param {string} deviceId - Device ID
+   * @returns {SessionInfo|null} Session information
    */
   getSessionByDevice(deviceId) {
     const session = this.sessionManager.getSessionByDevice(deviceId)
@@ -155,19 +156,19 @@ class CopilotService {
   }
 
   /**
-   * 获取所有活跃会话
+   * Get all active sessions
    *
-   * @returns {Array<SessionInfo>} 会话列表
+   * @returns {Array<SessionInfo>} Session list
    */
   getActiveSessions() {
     return this.sessionManager.getActiveSessions()
   }
 
   /**
-   * 格式化会话信息
+   * Format session information
    * @private
-   * @param {Object} session - 会话实例
-   * @returns {SessionInfo} 格式化后的会话信息
+   * @param {Object} session - Session instance
+   * @returns {SessionInfo} Formatted session information
    */
   _formatSessionInfo(session) {
     return {
@@ -180,22 +181,22 @@ class CopilotService {
     }
   }
 
-  // ==================== 高级配置 ====================
+  // ==================== Advanced Configuration ====================
 
   /**
-   * 设置空闲超时时间
+   * Set idle timeout
    *
-   * @param {number} timeout - 超时时间（毫秒）
+   * @param {number} timeout - Timeout in milliseconds
    */
   setIdleTimeout(timeout) {
     this.sessionManager.setIdleTimeout(timeout)
   }
 }
 
-// ==================== 单例导出 ====================
+// ==================== Singleton Export ====================
 
 /**
- * 导出 CopilotService 单例
+ * Export the CopilotService singleton
  */
 const copilotService = new CopilotService()
 

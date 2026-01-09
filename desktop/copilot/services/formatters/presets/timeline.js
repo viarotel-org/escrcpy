@@ -1,8 +1,8 @@
 /**
- * 序号列表格式化器
- * 以有序列表形式展示自动化执行流程
+ * Numbered List Formatter
  */
 import BaseFormatter from './base.js'
+import { eventStreamManager } from '$copilot/services/streams/index.js'
 
 class NumberedListFormatter extends BaseFormatter {
   constructor(options = {}) {
@@ -14,7 +14,26 @@ class NumberedListFormatter extends BaseFormatter {
   }
 
   formatThinking({ event, time, message, payload, context }) {
+    const thinking = eventStreamManager.get(context.sessionId, 'thinking')
+
+    if (thinking) {
+      eventStreamManager.set(context.sessionId, 'thinking', false)
+      return '\n\n'
+    }
+
     return this.md`${this.listMarker()} ${this.icons.thinking} ${this.formatTitle(event)} - ${time}\n\n${message}\n\n`.toString()
+  }
+
+  formatThinkingStream({ event, time, message, payload, context }) {
+    const thinking = eventStreamManager.get(context.sessionId, 'thinking')
+
+    if (thinking) {
+      return message
+    }
+
+    eventStreamManager.set(context.sessionId, 'thinking', true)
+
+    return this.md`${this.listMarker()} ${this.icons.thinking} ${this.formatTitle('thinking')} - ${time}\n\n${message}`.toString()
   }
 
   formatAction({ event, time, message, payload, context }) {

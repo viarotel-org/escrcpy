@@ -1,6 +1,6 @@
 /**
- * 格式化器管理器
- * 提供格式化器的注册、获取和切换功能
+ * Formatter Manager
+ * Provides formatter registration, retrieval, and switching capabilities
  */
 import TimelineFormatter from './presets/timeline.js'
 
@@ -9,14 +9,14 @@ class FormatterManager {
     this.formatters = new Map()
     this.defaultFormatterType = 'timeline'
 
-    // 注册内置格式化器
+    // Register built-in formatters
     this.register('timeline', TimelineFormatter)
   }
 
   /**
-   * 注册格式化器
-   * @param {string} type - 格式化器类型标识
-   * @param {Class} FormatterClass - 格式化器类
+   * Register a formatter
+   * @param {string} type - Formatter type identifier
+   * @param {Class} FormatterClass - Formatter class
    */
   register(type, FormatterClass) {
     this.formatters.set(type, FormatterClass)
@@ -24,16 +24,18 @@ class FormatterManager {
   }
 
   /**
-   * 创建格式化器实例
-   * @param {string} type - 格式化器类型
-   * @param {object} options - 格式化器选项
-   * @returns {BaseFormatter} 格式化器实例
+   * Create a formatter instance
+   * @param {string} type - Formatter type
+   * @param {object} options - Formatter options
+   * @returns {BaseFormatter} Formatter instance
    */
   create(type = this.defaultFormatterType, options = {}) {
     const FormatterClass = this.formatters.get(type)
 
     if (!FormatterClass) {
-      console.warn(`Formatter type "${type}" not found, using default "${this.defaultFormatterType}"`)
+      console.warn(
+        `Formatter type "${type}" not found, using default "${this.defaultFormatterType}"`,
+      )
       return this.create(this.defaultFormatterType, options)
     }
 
@@ -41,14 +43,14 @@ class FormatterManager {
   }
 
   /**
-   * 获取所有已注册的格式化器类型
+   * Get all registered formatter types
    */
   getAvailableTypes() {
     return Array.from(this.formatters.keys())
   }
 
   /**
-   * 设置默认格式化器类型
+   * Set the default formatter type
    */
   setDefault(type) {
     if (this.formatters.has(type)) {
@@ -61,10 +63,10 @@ class FormatterManager {
   }
 }
 
-// 导出单例
+// Export singleton
 const formatterManager = new FormatterManager()
 
-// 导出格式化器类供外部扩展
+// Export formatter classes for external extension
 export { FormatterManager, TimelineFormatter }
 
 export default formatterManager

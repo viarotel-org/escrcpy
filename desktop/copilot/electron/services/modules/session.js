@@ -1,6 +1,7 @@
 /**
  * Copilot Session Manager
- *
+ * Responsible for managing the lifecycle of Copilot sessions across all devices,
+ * including core capabilities like creation, execution, destruction, and idle recycling.
  * @module SessionManager
  */
 import appStore from '$electron/helpers/store.js'
@@ -11,113 +12,163 @@ import { AutoGLM } from 'autoglm.js'
 import { adbKeyboardApkPath } from '$electron/configs/index.js'
 import { sleep } from '$/utils'
 
-// ==================== 常量定义 ====================
+// ==================== Constant Definitions (Grouped by Function) ====================
 
-/** 默认空闲超时时间（30分钟） */
-const DEFAULT_IDLE_TIMEOUT = 30 * 60 * 1000
-
-/** 空闲检查间隔（5分钟） */
-const IDLE_CHECK_INTERVAL = 5 * 60 * 1000
-
-/** 任务完成后的等待时间（确保所有事件处理完成） */
-const POST_TASK_WAIT_TIME = 1 * 1000
-
-/** 日志前缀 */
-const LOG_PREFIX = '[SessionManager]'
-
-// ==================== 错误码定义 ====================
-
-/** 错误类型常量 */
-const ERROR_CODES = {
-  API_NOT_PURCHASED: 'API_NOT_PURCHASED',
-  NETWORK_ERROR: 'NETWORK_ERROR',
-  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+/** Time constants (in milliseconds) */
+const TIME_CONSTANTS = {
+  DEFAULT_IDLE_TIMEOUT: 30 * 60 * 1000, // Default idle timeout (30 minutes)
+  IDLE_CHECK_INTERVAL: 5 * 60 * 1000, // Idle check interval (5 minutes)
+  POST_TASK_WAIT_TIME: 1 * 1000, // Wait time after task completion (ensures event handling finishes)
 }
 
-// ==================== 会话管理器 ====================
+/** Log configuration */
+const LOG_CONFIG = {
+  PREFIX: '[SessionManager]',
+}
+
+/** AutoGLM event types (for event forwarding) */
+const AGENT_EVENT_TYPES = [
+  'start', 'thinking_stream', 'thinking', 'action', 'task_complete', 'error', 'aborted',
+]
+
+// ==================== Error Code Definitions (Semantic & Extensible) ====================
+
+/** Business error code enumeration */
+const ERROR_CODES = {
+  API_NOT_PURCHASED: 'API_NOT_PURCHASED', // API not purchased
+  NETWORK_ERROR: 'NETWORK_ERROR', // Network exception
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR', // Unknown error
+}
+
+// ==================== Type Definitions (Centralized & Semantically Enhanced) ====================
 
 /**
- * 会话配置类型定义
+ * Session configuration options
  * @typedef {Object} SessionConfig
- * @property {string} baseUrl - API 基础 URL
- * @property {string} apiKey - API 密钥
- * @property {string} model - 模型名称
- * @property {number} [maxSteps] - 最大执行步数
- * @property {string} [lang] - 语言
- * @property {boolean} [quiet] - 静默模式
+ * @property {string} baseUrl - API base address
+ * @property {string} apiKey - API authorization key
+ * @property {string} model - Model name
+ * @property {number} [maxSteps] - Maximum number of execution steps
+ * @property {string} [lang] - Execution language
+ * @property {boolean} [quiet] - Whether to enable quiet mode
  */
 
 /**
- * 会话实例类型定义
+ * Session metadata (stores session state information)
+ * @typedef {Object} SessionMetadata
+ * @property {string} type - Session type (fixed as 'copilot')
+ * @property {number} createdAt - Session creation timestamp
+ * @property {number} lastActiveAt - Session last active timestamp
+ * @property {string|null} currentTask - Current task description
+ * @property {boolean} isRunning - Whether the session is in running state
+ */
+
+/**
+ * Session instance (core data structure)
  * @typedef {Object} SessionInstance
- * @property {string} id - 会话 ID
- * @property {string} deviceId - 设备 ID
- * @property {AutoGLM} agent - AutoGLM 实例
- * @property {EventEmitter} emitter - 事件发射器
- * @property {Object} metadata - 会话元数据
- * @property {number} stepCounter - 步骤计数器
+ * @property {string} id - Unique session identifier
+ * @property {string} deviceId - Associated device ID
+ * @property {AutoGLM} agent - AutoGLM agent instance
+ * @property {EventEmitter} emitter - Event emitter (for forwarding agent events)
+ * @property {SessionMetadata} metadata - Session metadata
+ * @property {number} stepCounter - Task execution step counter
  */
 
 /**
- * 会话管理器
- * 负责管理所有设备的 Copilot 会话，包括会话创建、执行、生命周期管理等
+ * Batch task execution options
+ * @typedef {Object} BatchTaskOptions
+ * @property {number} [concurrency] - Number of concurrent executions
+ * @property {Function} [onSession] - Session creation callback
+ * @property {Function} [onData] - Data callback (receives agent events)
+ * @property {Function} [onExit] - Task exit callback
+ */
+
+/**
+ * Session snapshot (simplified session information exposed externally)
+ * @typedef {Object} SessionSnapshot
+ * @property {string} id - Session ID
+ * @property {string} sessionId - Session ID (compatible with legacy field)
+ * @property {string} deviceId - Device ID
+ * @property {string|null} task - Current task description
+ */
+
+// ==================== Core Session Manager Class ====================
+
+/**
+ * Session Manager
+ * Core capabilities:
+ * 1. Session lifecycle management (creation/reuse/destruction/idle recycling)
+ * 2. Task execution (single device/batch devices)
+ * 3. Session state maintenance (running/idle/timeout)
+ * 4. Event forwarding and callback management
  */
 export class SessionManager {
   /**
-   * @param {Object} options - 配置选项
-   * @param {number} [options.idleTimeout] - 空闲超时时间（毫秒，默认 30 分钟）
+   * Initialize Session Manager
+   * @param {Object} [options] - Initialization options
+   * @param {number} [options.idleTimeout] - Idle timeout in milliseconds (default: 30 minutes)
    */
   constructor(options = {}) {
-    /** @type {Map<string, SessionInstance>} 设备ID -> 会话实例 */
-    this.sessions = new Map()
+    /** @type {Map<string, SessionInstance>} Device ID -> Session instance (primary index) */
+    this.deviceSessionMap = new Map()
 
-    /** @type {Map<string, SessionInstance>} 会话ID -> 会话实例 */
-    this.sessionById = new Map()
+    /** @type {Map<string, SessionInstance>} Session ID -> Session instance (secondary index) */
+    this.sessionIdMap = new Map()
 
-    /** @type {Set<string>} 正在运行的设备ID集合 */
-    this.runningTasks = new Set()
+    /** @type {Set<string>} Set of device IDs with running tasks (for quick query) */
+    this.runningDeviceSet = new Set()
 
-    /** @type {number} 空闲超时时间（毫秒） */
-    this.idleTimeout = options.idleTimeout || DEFAULT_IDLE_TIMEOUT
+    /** @type {number} Idle timeout in milliseconds */
+    this.idleTimeout = options.idleTimeout || TIME_CONSTANTS.DEFAULT_IDLE_TIMEOUT
 
-    /** @type {NodeJS.Timeout|null} 空闲检查定时器 */
+    /** @type {NodeJS.Timeout|null} Idle check timer */
     this.idleCheckTimer = null
 
-    // 启动空闲会话检查
+    // Start automatic idle session recycling mechanism
     this._startIdleCheck()
   }
 
+  // ==================== Session Lifecycle Management (Core Capability) ====================
+
   /**
-   * 获取或创建设备的会话实例
-   *
-   * @param {string} deviceId - 设备 ID
-   * @param {SessionConfig} config - 会话配置
-   * @returns {SessionInstance} 会话实例
+   * Get or create a session instance for a device (core entry point)
+   * @param {string} deviceId - Unique device identifier
+   * @param {SessionConfig} config - Session configuration
+   * @returns {SessionInstance} Session instance
+   * @throws {Error} Throws error if input parameters are invalid
    */
   getOrCreateSession(deviceId, config) {
-    // 复用已有会话
-    if (this.sessions.has(deviceId)) {
-      const session = this.sessions.get(deviceId)
+    // Defensive programming: input validation
+    if (!deviceId || typeof deviceId !== 'string') {
+      throw new Error(`${LOG_CONFIG.PREFIX} Device ID must be a non-empty string`)
+    }
+    if (!config || typeof config !== 'object') {
+      throw new Error(`${LOG_CONFIG.PREFIX} Session config must be a valid object`)
+    }
+
+    // Reuse existing session: update last active time
+    if (this.deviceSessionMap.has(deviceId)) {
+      const session = this.deviceSessionMap.get(deviceId)
       session.metadata.lastActiveAt = Date.now()
       return session
     }
 
-    // 创建新会话
+    // Create new session
     return this._createNewSession(deviceId, config)
   }
 
   /**
-   * 创建新会话
+   * Create a new session instance (private method)
    * @private
-   * @param {string} deviceId - 设备 ID
-   * @param {SessionConfig} config - 会话配置
-   * @returns {SessionInstance} 会话实例
+   * @param {string} deviceId - Device ID
+   * @param {SessionConfig} config - Session configuration
+   * @returns {SessionInstance} New session instance
    */
   _createNewSession(deviceId, config) {
     const sessionId = randomUUID()
     const now = Date.now()
 
-    // 创建 AutoGLM 代理实例
+    // Create AutoGLM agent instance (core dependency)
     const agent = new AutoGLM({
       maxSteps: config.maxSteps,
       lang: config.lang,
@@ -128,7 +179,7 @@ export class SessionManager {
       adbKeyboardApkPath,
     })
 
-    // 创建会话实例
+    // Construct complete session instance
     /** @type {SessionInstance} */
     const session = {
       id: sessionId,
@@ -145,415 +196,377 @@ export class SessionManager {
       stepCounter: 0,
     }
 
-    // 绑定事件处理器
-    this._attachEventHandlers(session)
+    // Bind agent event handlers (forward events to session emitter)
+    this._attachAgentEventHandlers(session)
 
-    // 保存到索引
-    this.sessions.set(deviceId, session)
-    this.sessionById.set(sessionId, session)
+    // Update indexes
+    this.deviceSessionMap.set(deviceId, session)
+    this.sessionIdMap.set(sessionId, session)
 
-    console.log(`${LOG_PREFIX} 创建新会话: ${sessionId} (设备: ${deviceId})`)
-
+    console.log(`${LOG_CONFIG.PREFIX} Created new session: ${sessionId} (Device: ${deviceId})`)
     return session
   }
 
   /**
-   * 执行单个设备任务
-   *
-   * @param {string} deviceId - 设备 ID
-   * @param {string} task - 任务描述
-   * @param {SessionConfig} config - 会话配置
-   * @param {Object} [callbacks] - 回调函数集合（可选）
-   * @param {Function} [callbacks.onData] - 数据回调
-   * @param {Function} [callbacks.onExit] - 退出回调
-   * @returns {Promise<{session: SessionInstance, promise: Promise, cleanup: Function}>} 会话实例、执行 Promise 和清理函数
+   * Destroy the session for a specific device
+   * @param {string} deviceId - Device ID
    */
-  async executeTask(deviceId, task, config, callbacks = {}) {
-    const session = this.getOrCreateSession(deviceId, config)
-
-    const cleanup = this._wireSessionCallbacks(session, callbacks)
-
-    // 更新会话状态
-    this._updateSessionState(session, task, true)
+  destroySession(deviceId) {
+    const session = this.deviceSessionMap.get(deviceId)
+    if (!session) {
+      console.warn(`${LOG_CONFIG.PREFIX} No valid session found for device ${deviceId}, no need to destroy`)
+      return
+    }
 
     try {
-      // 执行任务
-      const promise = session.agent.run(task, { quiet: config.quiet || false })
+      // Stop running task if exists
+      if (session.metadata.isRunning) {
+        this.stopTask(deviceId, 'Session destruction')
+      }
+
+      // Clean up session resources (indexes/events/state)
+      this._cleanupSessionResources(session)
+
+      console.log(`${LOG_CONFIG.PREFIX} Destroyed session: ${session.id} (Device: ${deviceId})`)
+    }
+    catch (error) {
+      console.error(`${LOG_CONFIG.PREFIX} Failed to destroy session for device ${deviceId}:`, error.message)
+    }
+  }
+
+  /**
+   * Destroy all sessions and clean up resources
+   */
+  destroyAll() {
+    const sessionCount = this.deviceSessionMap.size
+    console.log(`${LOG_CONFIG.PREFIX} Starting to destroy all sessions (total: ${sessionCount})`)
+
+    try {
+      // Batch stop tasks + clean up event listeners
+      Array.from(this.deviceSessionMap.values()).forEach((session) => {
+        if (session.metadata.isRunning) {
+          this.stopTask(session.deviceId, 'Batch session destruction')
+        }
+        session.emitter.removeAllListeners()
+      })
+
+      // Clear all indexes
+      this.deviceSessionMap.clear()
+      this.sessionIdMap.clear()
+      this.runningDeviceSet.clear()
+
+      // Stop idle check timer
+      this._stopIdleCheck()
+
+      console.log(`${LOG_CONFIG.PREFIX} All sessions destroyed successfully`)
+    }
+    catch (error) {
+      console.error(`${LOG_CONFIG.PREFIX} Failed to batch destroy sessions:`, error.message)
+    }
+  }
+
+  /**
+   * Clean up session resources (private method)
+   * @private
+   * @param {SessionInstance} session - Session instance
+   */
+  _cleanupSessionResources(session) {
+    // Remove all event listeners (prevent memory leaks)
+    session.emitter.removeAllListeners()
+
+    // Remove from indexes
+    this.deviceSessionMap.delete(session.deviceId)
+    this.sessionIdMap.delete(session.id)
+    this.runningDeviceSet.delete(session.deviceId)
+  }
+
+  // ==================== Task Execution Management ====================
+
+  /**
+   * Execute a task on a single device
+   * @param {string} deviceId - Device ID
+   * @param {string} task - Task description
+   * @param {SessionConfig} config - Session configuration
+   * @param {Object} [callbacks] - Callback function collection
+   * @param {Function} [callbacks.onData] - Data callback (receives agent events)
+   * @param {Function} [callbacks.onExit] - Task exit callback
+   * @returns {Promise<{session: SessionInstance, promise: Promise, cleanup: Function}>} Execution result
+   */
+  async executeTask(deviceId, task, config, callbacks = {}) {
+    // Input validation (defensive programming)
+    if (!task || typeof task !== 'string') {
+      throw new Error(`${LOG_CONFIG.PREFIX} Task description must be a non-empty string`)
+    }
+
+    const session = this.getOrCreateSession(deviceId, config)
+    // Bind callback functions and return cleanup method
+    const cleanup = this._bindSessionCallbacks(session, callbacks)
+
+    try {
+      // Update session running state
+      this._updateSessionRunningState(session, task, true)
+      // Execute agent task
+      const taskPromise = session.agent.run(task, { quiet: config.quiet || false })
 
       return {
         session,
-        promise,
+        promise: taskPromise,
         cleanup,
       }
     }
     catch (error) {
-      console.error(`${LOG_PREFIX} 任务执行失败 (${deviceId}):`, error.message)
-      cleanup()
-      throw error
+      console.error(`${LOG_CONFIG.PREFIX} Failed to execute task on device ${deviceId}:`, error.message)
+      cleanup() // Execute cleanup
+      throw error // Re-throw error for upper-layer handling
     }
   }
 
   /**
-   * 更新会话状态
-   * @private
-   * @param {SessionInstance} session - 会话实例
-   * @param {string|null} task - 任务描述
-   * @param {boolean} isRunning - 是否正在运行
-   */
-  _updateSessionState(session, task, isRunning) {
-    session.metadata.currentTask = task
-    session.metadata.isRunning = isRunning
-    session.metadata.lastActiveAt = Date.now()
-
-    if (isRunning) {
-      this.runningTasks.add(session.deviceId)
-    }
-    else {
-      this.runningTasks.delete(session.deviceId)
-    }
-  }
-
-  /**
-   * 批量执行设备任务
-   * @param {string} task - 任务描述
-   * @param {string[]} deviceIds - 设备 ID 列表
-   * @param {SessionConfig} sessionConfig - 会话配置
-   * @param {Object} options - 执行选项
-   * @param {number} [options.concurrency] - 并发数
-   * @param {Function} [options.onSession] - 会话创建回调
-   * @param {Function} [options.onData] - 数据回调
-   * @param {Function} [options.onExit] - 退出回调
-   * @returns {Promise<[Array, Array]>} [成功列表, 失败列表]
+   * Execute tasks on multiple devices in batch
+   * @param {string} task - Task description
+   * @param {string[]} deviceIds - List of device IDs
+   * @param {SessionConfig} sessionConfig - Session configuration
+   * @param {BatchTaskOptions} [options] - Execution options
+   * @returns {Promise<[SessionSnapshot[], Object[]]>} [Success list, Failure list]
    */
   async executeTaskList(task, deviceIds, sessionConfig, options = {}) {
+    // Input validation
+    if (!Array.isArray(deviceIds) || deviceIds.length === 0) {
+      throw new Error(`${LOG_CONFIG.PREFIX} Device ID list must be a non-empty array`)
+    }
+
+    // Get concurrency limit (priority: custom > config > default 5)
     const concurrencyLimit = this._getConcurrencyLimit(options.concurrency)
     const limit = pLimit(concurrencyLimit)
 
-    const sessions = []
-    const cleanups = []
+    const sessionSnapshots = []
+    const cleanupFunctions = []
 
-    // 创建任务包装器
-    const taskWrapper = deviceId => limit(async () =>
-      this._executeDeviceTask(deviceId, task, sessionConfig, sessions, cleanups, options),
-    )
+    // Create task executor wrapper for single device
+    const createDeviceTaskExecutor = deviceId => limit(async () => {
+      return this._executeSingleDeviceTask({
+        deviceId,
+        task,
+        sessionConfig,
+        sessionSnapshots,
+        cleanupFunctions,
+        options,
+      })
+    })
 
-    // 执行所有任务
-    const tasks = deviceIds.map(deviceId => taskWrapper(deviceId))
+    // Build task list for all devices
+    const deviceTasks = deviceIds.map(createDeviceTaskExecutor)
 
-    // 通知会话创建
-    options.onSession?.(sessions)
+    // Trigger session creation callback
+    options.onSession?.(sessionSnapshots)
 
     try {
-      const results = await Promise.all(tasks)
-
-      return this._categorizeResults(results)
+      // Execute all tasks and categorize results
+      const taskResults = await Promise.all(deviceTasks)
+      return this._categorizeTaskResults(taskResults)
     }
     finally {
-      this._executeCleanups(cleanups)
+      // Execute cleanup regardless of success or failure
+      this._executeCleanupFunctions(cleanupFunctions)
     }
   }
 
   /**
-   * 获取并发限制
+   * Execute task on a single device (internal method for batch execution)
    * @private
-   * @param {number} [customLimit] - 自定义并发数
-   * @returns {number} 并发限制
+   * @param {Object} params - Input parameter object (improves parameter readability)
+   * @param {string} params.deviceId - Device ID
+   * @param {string} params.task - Task description
+   * @param {SessionConfig} params.sessionConfig - Session configuration
+   * @param {SessionSnapshot[]} params.sessionSnapshots - List of session snapshots
+   * @param {Function[]} params.cleanupFunctions - List of cleanup functions
+   * @param {BatchTaskOptions} params.options - Execution options
+   * @returns {Object} Task execution result
    */
-  _getConcurrencyLimit(customLimit) {
-    return customLimit ?? appStore.get('common.concurrencyLimit') ?? 5
-  }
-
-  _getCleanSession(deviceId) {
-    const session = this.sessions.get(deviceId)
-
-    return {
-      id: session.id,
-      sessionId: session.id,
-      deviceId: session.deviceId,
-      task: session.task,
-    }
-  }
-
-  /**
-   * 执行单个设备任务（用于批量执行）
-   * @private
-   */
-  async _executeDeviceTask(deviceId, task, sessionConfig, sessions, cleanups, options) {
-    let session
-    let emitter
+  async _executeSingleDeviceTask({
+    deviceId,
+    task,
+    sessionConfig,
+    sessionSnapshots,
+    cleanupFunctions,
+    options,
+  }) {
+    let sessionSnapshot = null
+    let sessionEmitter = null
+    let exitCode = 0
+    let errorInfo = null
 
     try {
-      const result = await this.executeTask(deviceId, task, sessionConfig, options)
+      // Execute single task
+      const executeResult = await this.executeTask(
+        deviceId,
+        task,
+        sessionConfig,
+        options,
+      )
 
-      session = this._getCleanSession(result.session.deviceId)
+      // Create session snapshot (hides internal details)
+      sessionSnapshot = this._createSessionSnapshot(executeResult.session)
+      sessionEmitter = executeResult.session.emitter
 
-      emitter = result.session.emitter
+      // Collect snapshot and cleanup function
+      sessionSnapshots.push(sessionSnapshot)
+      cleanupFunctions.push(executeResult.cleanup)
 
-      sessions.push(session)
-      cleanups.push(result.cleanup)
-
-      await result.promise
-
-      await sleep(POST_TASK_WAIT_TIME)
-
-      return {
-        status: 'fulfilled',
-        session,
-      }
+      // Wait for task completion
+      await executeResult.promise
     }
     catch (err) {
-      return {
-        status: 'rejected',
-        session,
-        error: this._normalizeExecuteError(err),
-      }
+      exitCode = 1
+      // Normalize error information
+      errorInfo = this._normalizeTaskError(err)
     }
     finally {
-      if (emitter) {
-        emitter.emit('exit', {
-          session,
-          exitCode: 1,
-          signal: null,
-        })
+      // Trigger exit event
+      if (sessionEmitter) {
+        sessionEmitter.emit('exit', { session: sessionSnapshot, exitCode })
       }
+      // Wait for event handling to complete
+      await sleep(TIME_CONSTANTS.POST_TASK_WAIT_TIME)
     }
+
+    // Return normalized result
+    return exitCode === 0
+      ? { status: 'fulfilled', session: sessionSnapshot }
+      : { status: 'rejected', session: sessionSnapshot, error: errorInfo }
   }
 
   /**
-   * 分类执行结果
-   * @private
-   * @param {Array} results - 执行结果列表
-   * @returns {[Array, Array]} [成功列表, 失败列表]
+   * Stop the current task on a specific device
+   * @param {string} deviceId - Device ID
+   * @param {string} [reason] - Abort reason
    */
-  _categorizeResults(results) {
-    const successSessions = []
-    const failedResults = []
+  stopTask(deviceId, reason = 'User abort') {
+    const session = this.deviceSessionMap.get(deviceId)
+    if (!session) {
+      console.warn(`${LOG_CONFIG.PREFIX} No session found for device ${deviceId}, cannot stop task`)
+      return
+    }
 
-    for (const result of results) {
-      if (result.status === 'fulfilled') {
-        successSessions.push(result.session)
+    try {
+      if (typeof session.agent.abort === 'function') {
+        session.agent.abort(reason)
+        console.log(`${LOG_CONFIG.PREFIX} Stopped task on device ${deviceId}: ${reason}`)
+        // Clean up session running state
+        this.clearRunningState(session)
       }
       else {
-        failedResults.push({
-          ...result.session,
-          ...result.error,
-        })
+        console.warn(`${LOG_CONFIG.PREFIX} Agent for device ${deviceId} does not support abort operation`)
       }
     }
-
-    if (failedResults.length > 0) {
-      console.warn(`${LOG_PREFIX} 部分设备执行失败:`, failedResults)
+    catch (error) {
+      console.error(`${LOG_CONFIG.PREFIX} Failed to stop task on device ${deviceId}:`, error.message)
     }
-
-    return [successSessions, failedResults]
   }
 
+  // ==================== Idle Session Management ====================
+
   /**
-   * 执行清理函数
+   * Start idle session check timer
    * @private
-   * @param {Function[]} cleanups - 清理函数列表
    */
-  _executeCleanups(cleanups) {
-    cleanups.forEach((fn) => {
-      try {
-        fn()
-      }
-      catch (e) {
-        console.warn(`${LOG_PREFIX} cleanup 失败:`, e)
-      }
-    })
+  _startIdleCheck() {
+    if (this.idleCheckTimer) {
+      this._stopIdleCheck() // Prevent duplicate startup
+    }
+
+    this.idleCheckTimer = setInterval(() => {
+      this._checkAndRecycleIdleSessions()
+    }, TIME_CONSTANTS.IDLE_CHECK_INTERVAL)
+
+    console.log(
+      `${LOG_CONFIG.PREFIX} Idle session check started (check interval: ${TIME_CONSTANTS.IDLE_CHECK_INTERVAL / 1000}s, timeout: ${this.idleTimeout / 1000}s)`,
+    )
   }
 
   /**
-   * 将回调直接绑定到会话的 emitter（用于 executeTask）
+   * Stop idle session check timer
    * @private
-   * @param {SessionInstance} session - 会话实例
-   * @param {Object} callbacks - 回调函数集合
-   * @returns {Function} 清理函数
    */
-  _wireSessionCallbacks(session, callbacks = {}) {
-    const teardowns = []
-
-    let cleaned = false
-
-    const cleanup = () => {
-      if (cleaned)
-        return
-
-      cleaned = true
-      teardowns.forEach(fn => fn?.())
+  _stopIdleCheck() {
+    if (this.idleCheckTimer) {
+      clearInterval(this.idleCheckTimer)
+      this.idleCheckTimer = null
+      console.log(`${LOG_CONFIG.PREFIX} Idle session check stopped`)
     }
-
-    const cleanSession = this._getCleanSession(session.deviceId)
-
-    // 绑定数据事件
-    if (callbacks.onData) {
-      const handler = (payload) => {
-        callbacks.onData(payload, cleanSession)
-      }
-      session.emitter.on('data', handler)
-      teardowns.push(() => session.emitter.off('data', handler))
-    }
-
-    // 绑定退出事件
-    if (callbacks.onExit) {
-      const handler = ({ exitCode, signal }) => {
-        callbacks.onExit?.({ exitCode, signal, session: cleanSession })
-      }
-      session.emitter.on('exit', handler)
-      teardowns.push(() => session.emitter.off('exit', handler))
-    }
-
-    return cleanup
   }
 
   /**
-   * 将底层异常转换为可消费的业务错误
+   * Check and recycle idle sessions
    * @private
-   * @param {Error} err - 原始错误
-   * @returns {Object} 标准化错误对象
    */
-  _normalizeExecuteError(err) {
-    // API 未购买错误
-    if (err?.status === 400 && err?.error?.message) {
-      return {
-        code: ERROR_CODES.API_NOT_PURCHASED,
-        message: err.error.message,
-        retryable: false,
-        raw: err,
+  _checkAndRecycleIdleSessions() {
+    const now = Date.now()
+    const idleDeviceIds = []
+
+    // Traverse all sessions and filter timed-out idle sessions (avoid modifying Map during traversal)
+    for (const [deviceId, session] of this.deviceSessionMap.entries()) {
+      // Skip running sessions
+      if (session.metadata.isRunning)
+        continue
+
+      const idleDuration = now - session.metadata.lastActiveAt
+      if (idleDuration > this.idleTimeout) {
+        console.log(
+          `${LOG_CONFIG.PREFIX} Session ${session.id} (Device ${deviceId}) idle timed out (idle for ${Math.floor(idleDuration / 1000)}s)`,
+        )
+        idleDeviceIds.push(deviceId)
       }
     }
 
-    // 网络超时错误
-    if (err?.code === 'ETIMEDOUT' || err?.name === 'AbortError') {
-      return {
-        code: ERROR_CODES.NETWORK_ERROR,
-        message: '网络异常，请稍后重试',
-        retryable: true,
-        raw: err,
-      }
-    }
+    // Batch destroy idle sessions
+    idleDeviceIds.forEach(deviceId => this.destroySession(deviceId))
 
-    // 未知错误
-    return {
-      code: ERROR_CODES.UNKNOWN_ERROR,
-      message: err?.message || '未知错误',
-      retryable: false,
-      raw: err,
+    if (idleDeviceIds.length > 0) {
+      console.log(`${LOG_CONFIG.PREFIX} Recycled ${idleDeviceIds.length} idle sessions`)
     }
   }
 
   /**
-   * 停止设备的当前任务
-   *
-   * @param {string} deviceId - 设备 ID
-   * @param {string} [reason] - 中止原因（默认：'用户中止'）
+   * Set idle timeout
+   * @param {number} timeout - Timeout in milliseconds
    */
-  stopTask(deviceId, reason = '用户中止') {
-    const session = this.sessions.get(deviceId)
-
-    if (!session) {
-      console.warn(`${LOG_PREFIX} 未找到设备 ${deviceId} 的会话`)
+  setIdleTimeout(timeout) {
+    if (typeof timeout !== 'number' || timeout <= 0) {
+      console.warn(`${LOG_CONFIG.PREFIX} Invalid idle timeout: ${timeout} (must be a positive integer)`)
       return
     }
 
-    if (typeof session.agent.abort === 'function') {
-      session.agent.abort(reason)
-      console.log(`${LOG_PREFIX} 已停止设备 ${deviceId} 的任务: ${reason}`)
-    }
-    else {
-      console.warn(`${LOG_PREFIX} 设备 ${deviceId} 的代理不支持 abort 方法`)
-    }
+    this.idleTimeout = timeout
+    console.log(`${LOG_CONFIG.PREFIX} Idle timeout updated to: ${timeout / 1000}s`)
   }
 
-  /**
-   * 销毁设备的会话
-   *
-   * @param {string} deviceId - 设备 ID
-   */
-  destroySession(deviceId) {
-    const session = this.sessions.get(deviceId)
-    if (!session) {
-      return
-    }
-
-    // 停止运行中的任务
-    if (session.metadata.isRunning) {
-      this.stopTask(deviceId, '会话被销毁')
-    }
-
-    // 清理会话资源
-    this._cleanupSession(session)
-
-    console.log(`${LOG_PREFIX} 已销毁会话: ${session.id} (设备: ${deviceId})`)
-  }
+  // ==================== Session Query & State Management ====================
 
   /**
-   * 清理会话资源
-   * @private
-   * @param {SessionInstance} session - 会话实例
-   */
-  _cleanupSession(session) {
-    // 移除所有事件监听器
-    session.emitter.removeAllListeners()
-
-    // 从索引中移除
-    this.sessions.delete(session.deviceId)
-    this.sessionById.delete(session.id)
-    this.runningTasks.delete(session.deviceId)
-  }
-
-  /**
-   * 销毁所有会话
-   */
-  destroyAll() {
-    const sessionCount = this.sessions.size
-    console.log(`${LOG_PREFIX} 销毁所有会话 (共 ${sessionCount} 个)`)
-
-    // 停止所有任务并清理
-    for (const session of this.sessions.values()) {
-      if (session.metadata.isRunning) {
-        this.stopTask(session.deviceId, '批量销毁会话')
-      }
-      session.emitter.removeAllListeners()
-    }
-
-    // 清空所有索引
-    this.sessions.clear()
-    this.sessionById.clear()
-    this.runningTasks.clear()
-
-    // 停止空闲检查
-    this._stopIdleCheck()
-  }
-
-  /**
-   * 通过会话 ID 获取会话实例
-   *
-   * @param {string} sessionId - 会话 ID
-   * @returns {SessionInstance|null}
+   * Get session instance by session ID
+   * @param {string} sessionId - Session ID
+   * @returns {SessionInstance|null} Session instance (null if not exists)
    */
   getSessionById(sessionId) {
-    return this.sessionById.get(sessionId) || null
+    return this.sessionIdMap.get(sessionId) || null
   }
 
   /**
-   * 通过设备 ID 获取会话实例
-   *
-   * @param {string} deviceId - 设备 ID
-   * @returns {SessionInstance|null}
+   * Get session instance by device ID
+   * @param {string} deviceId - Device ID
+   * @returns {SessionInstance|null} Session instance (null if not exists)
    */
   getSessionByDevice(deviceId) {
-    return this.sessions.get(deviceId) || null
+    return this.deviceSessionMap.get(deviceId) || null
   }
 
   /**
-   * 获取所有活跃会话的摘要信息
-   *
-   * @returns {Array<Object>} 会话摘要列表
+   * Get summary information of all active sessions
+   * @returns {Array<Object>} List of session summaries
    */
   getActiveSessions() {
-    return Array.from(this.sessions.values()).map(session => ({
+    return Array.from(this.deviceSessionMap.values()).map(session => ({
       id: session.id,
       deviceId: session.deviceId,
       isRunning: session.metadata.isRunning,
@@ -564,19 +577,123 @@ export class SessionManager {
   }
 
   /**
-   * 绑定 AutoGLM 事件处理器
-   * @private
-   * @param {SessionInstance} session - 会话实例
+   * Clear session running state
+   * @param {SessionInstance} session - Session instance
    */
-  _attachEventHandlers(session) {
-    const { agent, emitter, id } = session
+  clearRunningState(session) {
+    session.stepCounter = 0
+    session.metadata.isRunning = false
+    session.metadata.currentTask = null
+    session.metadata.lastActiveAt = Date.now()
+    this.runningDeviceSet.delete(session.deviceId)
+  }
 
-    /**
-     * 转发事件到会话 emitter
-     * @param {string} event - 事件名称
-     * @param {*} payload - 事件载荷
-     */
-    const forward = (event, payload) => {
+  /**
+   * Update session running state
+   * @private
+   * @param {SessionInstance} session - Session instance
+   * @param {string|null} task - Task description
+   * @param {boolean} isRunning - Whether the session is running
+   */
+  _updateSessionRunningState(session, task, isRunning) {
+    session.metadata.currentTask = task
+    session.metadata.isRunning = isRunning
+    session.metadata.lastActiveAt = Date.now()
+
+    if (isRunning) {
+      this.runningDeviceSet.add(session.deviceId)
+    }
+    else {
+      this.runningDeviceSet.delete(session.deviceId)
+    }
+  }
+
+  // ==================== Helper Methods (Semantic & Single Responsibility) ====================
+
+  /**
+   * Get concurrency limit
+   * @private
+   * @param {number} [customLimit] - Custom concurrency limit
+   * @returns {number} Final concurrency limit
+   */
+  _getConcurrencyLimit(customLimit) {
+    if (customLimit && typeof customLimit === 'number' && customLimit > 0) {
+      return customLimit
+    }
+    // Get from config, default to 5
+    return appStore.get('common.concurrencyLimit') ?? 5
+  }
+
+  /**
+   * Create session snapshot (hides internal details, exposes simplified information externally)
+   * @private
+   * @param {SessionInstance} session - Session instance
+   * @returns {SessionSnapshot} Session snapshot
+   */
+  _createSessionSnapshot(session) {
+    return {
+      id: session.id,
+      sessionId: session.id, // Compatible with legacy field
+      deviceId: session.deviceId,
+      task: session.metadata.currentTask,
+    }
+  }
+
+  /**
+   * Bind session callback functions
+   * @private
+   * @param {SessionInstance} session - Session instance
+   * @param {Object} callbacks - Collection of callback functions
+   * @returns {Function} Cleanup function (unbinds callbacks)
+   */
+  _bindSessionCallbacks(session, callbacks = {}) {
+    const eventHandlerTeardowns = []
+    let isCleanedUp = false // Prevent duplicate cleanup
+
+    // Cleanup function: unbind all event listeners
+    const cleanup = () => {
+      if (isCleanedUp)
+        return
+      isCleanedUp = true
+      eventHandlerTeardowns.forEach(teardown => teardown?.())
+    }
+
+    const sessionSnapshot = this._createSessionSnapshot(session)
+
+    // Bind data callback
+    if (typeof callbacks.onData === 'function') {
+      const dataHandler = payload => callbacks.onData(payload, sessionSnapshot)
+      session.emitter.on('data', dataHandler)
+      eventHandlerTeardowns.push(() => session.emitter.off('data', dataHandler))
+    }
+
+    // Bind exit callback
+    if (typeof callbacks.onExit === 'function') {
+      const exitHandler = ({ exitCode, signal }) => {
+        callbacks.onExit({ exitCode, signal, session: sessionSnapshot })
+      }
+      session.emitter.on('exit', exitHandler)
+      eventHandlerTeardowns.push(() => session.emitter.off('exit', exitHandler))
+    }
+
+    return cleanup
+  }
+
+  /**
+   * Bind AutoGLM agent event handlers (forwards events to session emitter)
+   * @private
+   * @param {SessionInstance} session - Session instance
+   */
+  _attachAgentEventHandlers(session) {
+    const { agent, emitter, id, deviceId } = session
+
+    // Event forwarder: uniformly handle agent events
+    const forwardAgentEvent = (event, payload) => {
+      // Skip redundant finish actions
+      if (['action'].includes(event) && ['finish'].includes(payload?.message?._metadata)) {
+        return false
+      }
+
       session.stepCounter++
 
       emitter.emit('data', {
@@ -585,112 +702,104 @@ export class SessionManager {
         context: {
           stepNumber: session.stepCounter,
           sessionId: id,
-          deviceId: session.deviceId,
+          deviceId,
         },
       })
     }
 
-    const eventTypes = ['start', 'thinking', 'action', 'task_complete', 'error', 'aborted']
-
-    eventTypes.forEach((event) => {
-      agent.on(event, (payload) => {
-        forward(event, payload)
-      })
+    // Batch bind events (extensible)
+    AGENT_EVENT_TYPES.forEach((event) => {
+      agent.on(event, payload => forwardAgentEvent(event, payload))
     })
   }
 
   /**
-   * 清除会话的运行状态
-   * @param {SessionInstance} session - 会话实例
-   */
-  clearRunningState(session) {
-    session.stepCounter = 0
-    session.metadata.isRunning = false
-    session.metadata.currentTask = null
-    session.metadata.lastActiveAt = Date.now()
-    this.runningTasks.delete(session.deviceId)
-  }
-
-  /**
-   * 启动空闲会话检查定时器
+   * Normalize task execution errors
    * @private
+   * @param {Error} error - Original error object
+   * @returns {Object} Normalized error information
    */
-  _startIdleCheck() {
-    this.idleCheckTimer = setInterval(() => {
-      this._checkIdleSessions()
-    }, IDLE_CHECK_INTERVAL)
-
-    console.log(
-      `${LOG_PREFIX} 已启动空闲会话检查 (间隔: ${IDLE_CHECK_INTERVAL / 1000}s, 超时: ${this.idleTimeout / 1000}s)`,
-    )
-  }
-
-  /**
-   * 停止空闲会话检查定时器
-   * @private
-   */
-  _stopIdleCheck() {
-    if (this.idleCheckTimer) {
-      clearInterval(this.idleCheckTimer)
-      this.idleCheckTimer = null
-      console.log(`${LOG_PREFIX} 已停止空闲会话检查`)
-    }
-  }
-
-  /**
-   * 检查并回收空闲会话
-   * @private
-   */
-  _checkIdleSessions() {
-    const now = Date.now()
-    const devicesToDestroy = []
-
-    for (const [deviceId, session] of this.sessions.entries()) {
-      // 跳过正在运行的会话
-      if (session.metadata.isRunning) {
-        continue
-      }
-
-      const idleTime = now - session.metadata.lastActiveAt
-
-      if (idleTime > this.idleTimeout) {
-        console.log(
-          `${LOG_PREFIX} 会话 ${session.id} (设备 ${deviceId}) 空闲超时 (${Math.floor(idleTime / 1000)}s)`,
-        )
-        devicesToDestroy.push(deviceId)
+  _normalizeTaskError(error) {
+    // API not purchased error
+    if (error?.status === 400 && error?.error?.message) {
+      return {
+        code: ERROR_CODES.API_NOT_PURCHASED,
+        message: error.error.message,
+        retryable: false,
+        raw: error,
       }
     }
 
-    // 销毁空闲会话
-    devicesToDestroy.forEach(deviceId => this.destroySession(deviceId))
+    // Network error (timeout/abort)
+    if (error?.code === 'ETIMEDOUT' || error?.name === 'AbortError') {
+      return {
+        code: ERROR_CODES.NETWORK_ERROR,
+        message: 'Network exception, please try again later',
+        retryable: true,
+        raw: error,
+      }
+    }
 
-    if (devicesToDestroy.length > 0) {
-      console.log(`${LOG_PREFIX} 已回收 ${devicesToDestroy.length} 个空闲会话`)
+    // Unknown error
+    return {
+      code: ERROR_CODES.UNKNOWN_ERROR,
+      message: error?.message || 'Unknown error',
+      retryable: false,
+      raw: error,
     }
   }
 
   /**
-   * 设置空闲超时时间
-   *
-   * @param {number} timeout - 超时时间（毫秒）
+   * Categorize task execution results (success/failure)
+   * @private
+   * @param {Array} results - List of task execution results
+   * @returns {[SessionSnapshot[], Object[]]} [Success list, Failure list]
    */
-  setIdleTimeout(timeout) {
-    if (typeof timeout !== 'number' || timeout <= 0) {
-      console.warn(`${LOG_PREFIX} 无效的超时时间: ${timeout}`)
-      return
+  _categorizeTaskResults(results) {
+    const successList = []
+    const failureList = []
+
+    results.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        successList.push(result.session)
+      }
+      else {
+        failureList.push({
+          ...result.session,
+          ...result.error,
+        })
+      }
+    })
+
+    if (failureList.length > 0) {
+      console.warn(`${LOG_CONFIG.PREFIX} Batch task execution failed count: ${failureList.length}`, failureList)
     }
 
-    this.idleTimeout = timeout
-    console.log(`${LOG_PREFIX} 已更新空闲超时时间: ${timeout / 1000}s`)
+    return [successList, failureList]
+  }
+
+  /**
+   * Execute list of cleanup functions (fault-tolerant handling)
+   * @private
+   * @param {Function[]} cleanupFunctions - List of cleanup functions
+   */
+  _executeCleanupFunctions(cleanupFunctions) {
+    cleanupFunctions.forEach((cleanup) => {
+      try {
+        cleanup()
+      }
+      catch (e) {
+        console.warn(`${LOG_CONFIG.PREFIX} Failed to execute cleanup function:`, e.message)
+      }
+    })
   }
 }
 
-// ==================== 单例导出 ====================
+// ==================== Singleton Export (Preserves Original Semantics) ====================
 
 /**
- * 导出 SessionManager 单例
- * 默认配置：30 分钟空闲超时
+ * Session Manager singleton (default config: 30-minute idle timeout)
  */
 export const sessionManager = new SessionManager({
-  idleTimeout: DEFAULT_IDLE_TIMEOUT,
+  idleTimeout: TIME_CONSTANTS.DEFAULT_IDLE_TIMEOUT,
 })

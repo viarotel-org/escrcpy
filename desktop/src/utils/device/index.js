@@ -25,10 +25,10 @@ export function parseDeviceId(string = '') {
   const input = string.trim()
   const DEFAULT_PORT = 5555
 
-  // 验证端口号是否有效
+  // Validate that port number is valid
   const isValidPort = port => port > 0 && port <= 65535
 
-  // IPv6 格式: [host]:port 或 [host]
+  // IPv6 format: [host]:port or [host]
   const ipv6Match = input.match(/^\[([^\]]+)\](?::(\d+))?$/)
   if (ipv6Match) {
     const [, host, portStr] = ipv6Match
@@ -36,7 +36,7 @@ export function parseDeviceId(string = '') {
     return { host: `[${host}]`, port: isValidPort(port) ? port : DEFAULT_PORT }
   }
 
-  // IPv4/域名格式: host:port 或 host
+  // IPv4/domain format: host:port or host
   const match = input.match(/^(.+?)(?::(\d+))?$/)
   if (match) {
     const [, host, portStr] = match

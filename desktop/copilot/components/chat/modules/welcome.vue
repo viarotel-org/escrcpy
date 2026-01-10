@@ -52,7 +52,7 @@ const props = defineProps({
 
 const emit = defineEmits([])
 
-// 功能特性
+// Feature highlights
 const features = computed(() => [
   {
     key: 'smart',

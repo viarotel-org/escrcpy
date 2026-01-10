@@ -4,17 +4,17 @@ import { nativeTheme } from 'electron'
 import { cloneDeep, isEmpty, omitBy } from 'lodash-es'
 
 /**
- * 安全的深拷贝函数，避免循环引用导致的栈溢出
- * @param {any} value - 要拷贝的值
- * @returns {any} - 拷贝后的值
+ * Safe deep clone function to avoid stack overflow from circular references
+ * @param {any} value - Value to clone
+ * @returns {any} - Cloned value
  */
 function safeCloneDeep(value) {
-  // 对于原始类型、null、undefined 直接返回
+  // Return early for primitive, null, or undefined
   if (value === null || typeof value !== 'object') {
     return value
   }
 
-  // 对于错误对象，只保留基本信息避免循环引用
+  // For Error objects, keep basic info to avoid circular references
   if (value instanceof Error) {
     return {
       name: value.name,
@@ -23,12 +23,12 @@ function safeCloneDeep(value) {
     }
   }
 
-  // 对于其他对象类型，尝试深拷贝，失败则返回原值
+  // For other object types, attempt deep clone; return original value on failure
   try {
     return cloneDeep(value)
   }
   catch (error) {
-    // 如果深拷贝失败（通常是循环引用），返回简化版本
+    // If deep clone fails (often due to circular refs), return a shallow copy
     if (error instanceof RangeError) {
       return Array.isArray(value) ? [...value] : { ...value }
     }
@@ -37,11 +37,11 @@ function safeCloneDeep(value) {
 }
 
 /**
- * 创建一个代理对象，将目标对象的指定方法转发并执行。
+ * Create a proxy object that forwards specified methods from the target object.
  *
- * @param {object} targetObject - 目标对象，包含要代理的方法。
- * @param {string[]} methodNames - 要代理的方法名称数组。
- * @returns {object} - 代理对象，包含转发的方法。
+ * @param {object} targetObject - The target object containing methods to proxy.
+ * @param {string[]} methodNames - Array of method names to proxy.
+ * @returns {object} - Proxy object with forwarded methods.
  */
 export function createProxy(targetObject, methodNames) {
   return methodNames.reduce((proxyObj, methodName) => {

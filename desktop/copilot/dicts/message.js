@@ -1,6 +1,6 @@
 import { Enum } from 'enum-plus'
 /**
- * 消息角色枚举
+ * Message role enumeration
  */
 export const MessageRoleEnum = Enum({
   USER: 'user',
@@ -9,7 +9,7 @@ export const MessageRoleEnum = Enum({
 })
 
 /**
- * 消息状态枚举
+ * Message status enumeration
  */
 export const MessageStatusEnum = Enum({
   PENDING: 'pending',

@@ -6,7 +6,7 @@
     :clear-history="displayMessages.length > 0 && !isExecuting"
     @clear="handleClearAll"
   >
-    <!-- 欢迎界面 -->
+    <!-- Welcome panel -->
     <WelcomePanel
       v-if="displayMessages.length === 0 && !loading"
       class="mt-4"
@@ -18,7 +18,7 @@
       </template>
     </div>
 
-    <!-- 输入框 -->
+    <!-- Input area -->
     <template #footer>
       <ChatInput
         v-model="inputText"
@@ -54,12 +54,12 @@ const props = defineProps({
 
 const emit = defineEmits(['showPromptManager'])
 
-// 会话ID - 使用设备ID作为会话标识
+// Session ID - use device ID as session identifier
 const sessionId = computed(() => {
   return props.currentDevice?.id || 'default'
 })
 
-// 使用聊天消息 Hook - 响应式自动同步
+// Use chat messages hook for reactive synchronization
 const {
   messages,
   loading,
@@ -74,7 +74,7 @@ const isExecuting = ref(false)
 const currentOutput = ref('')
 const chatRef = ref(null)
 
-// 临时消息（用于实时输出流）
+// Temporary message (for streaming output)
 const temporaryMessage = ref(null)
 
 const displayMessages = ref([])
@@ -85,7 +85,7 @@ watchEffect(() => {
     return false
   }
 
-  // 获取适配后的持久化消息
+  // Get adapted persisted messages
   const adapted = adaptMessagesForTDesign(messages.value, {
     reverse: true,
   })
@@ -108,14 +108,14 @@ async function handleSubmit(text) {
   if (!trimmedText || isExecuting.value)
     return
 
-  // 检查配置
+  // Check configuration
   const config = await copilotClient.getConfig() || {}
   if (!config.apiKey) {
     ElMessage.warning(t('copilot.error.noApiKey'))
     return
   }
 
-  // 添加用户消息到数据库
+  // Add user message to database
   const userMessageResult = await addMessage({
     role: MessageRoleEnum.USER,
     content: trimmedText,
@@ -133,14 +133,14 @@ async function handleSubmit(text) {
   isExecuting.value = true
   currentOutput.value = ''
 
-  // 创建临时助手消息（用于实时输出）
+  // Create temporary assistant message (for streaming output)
   temporaryMessage.value = createTemporaryAssistantMessage()
 
   try {
-    // 获取设备 ID
+    // Get device ID
     const deviceId = props.currentDevice?.id
 
-    // 执行任务
+    // Execute task
     await copilotClient.execute(trimmedText, {
       deviceId,
       onData: (output, { payload }) => {
@@ -168,7 +168,7 @@ async function handleSubmit(text) {
     })
   }
   catch (error) {
-    // 添加错误消息到数据库
+    // Add error message to database
     await addMessage({
       role: MessageRoleEnum.ASSISTANT,
       content: error.message ?? window.t('copilot.error.executionFailed'),
@@ -190,13 +190,13 @@ function scrollToBottom(behavior = 'smooth') {
   }
 }
 
-// 停止执行
+// Stop execution
 async function handleStop() {
   copilotClient.stop(props.currentDevice?.id)
   isExecuting.value = false
 }
 
-// 清空所有消息
+// Clear all messages
 async function handleClearAll() {
   try {
     const result = await clearAll()

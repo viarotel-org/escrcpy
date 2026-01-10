@@ -1,16 +1,16 @@
 /**
  * window.localStorage
- * @method set 设置
- * @method get 获取
- * @method remove 移除
- * @method clear 移除全部
+ * @method set Set
+ * @method get Get
+ * @method remove Remove
+ * @method clear Clear all
  */
 export default {
-  // 设置
+  // Set
   set(key, val) {
     window.localStorage.setItem(key, JSON.stringify(val))
   },
-  // 获取
+  // Get
   get(key) {
     const json = window.localStorage.getItem(key)
     try {
@@ -20,11 +20,11 @@ export default {
       return json
     }
   },
-  // 移除
+  // Remove
   remove(key) {
     window.localStorage.removeItem(key)
   },
-  // 移除全部
+  // Clear all
   clear() {
     window.localStorage.clear()
   },

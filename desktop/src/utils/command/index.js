@@ -16,7 +16,7 @@ function stringify(options) {
 
   // Helper function to format parameter names
   const formatParamName = (name) => {
-    // 验证参数名称的合法性
+    // Validate parameter name
     if (typeof name !== 'string' || !name.length) {
       throw new TypeError('Parameter name must be a non-empty string')
     }
@@ -37,11 +37,11 @@ function stringify(options) {
     }
 
     if (typeof value === 'string') {
-      // 处理空字符串
+      // Handle empty string
       if (!value.length) {
         return '""'
       }
-      // 转义引号并在需要时添加引号
+      // Escape quotes and wrap with quotes if needed
       const needsQuotes = /[\s"']/.test(value)
       return needsQuotes ? `"${value.replace(/"/g, '\\"')}"` : value
     }
@@ -54,7 +54,7 @@ function stringify(options) {
     }
 
     if (typeof value === 'boolean') {
-      return '' // 布尔值不需要返回值
+      return '' // Boolean values do not require a value
     }
 
     if (Array.isArray(value)) {
@@ -84,7 +84,7 @@ function stringify(options) {
     // Handle array values
     if (Array.isArray(value)) {
       if (value.length === 0) {
-        continue // 跳过空数组
+        continue // Skip empty arrays
       }
       value.forEach((item) => {
         if (![null, undefined, false, ''].includes(item)) {

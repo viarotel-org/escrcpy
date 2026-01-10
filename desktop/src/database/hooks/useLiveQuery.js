@@ -1,10 +1,10 @@
 /**
- * Vue 响应式存储 Hook - 基于 @vueuse/rxjs 和 Dexie liveQuery
+ * Vue reactive storage hooks - based on @vueuse/rxjs and Dexie liveQuery
  *
- * 设计思路：
- * 1. 利用 Dexie 的 liveQuery 实现数据变化自动响应
- * 2. 封装为 Vue Composition API 风格的 Hook
- * 3. 自动管理订阅生命周期
+ * Design:
+ * 1. Use Dexie liveQuery for automatic reactive updates
+ * 2. Provide hooks in Vue Composition API style
+ * 3. Automatically manage subscription lifecycle
  *
  * @module storage/hooks/useLiveQuery
  */
@@ -13,20 +13,20 @@ import { liveQuery } from 'dexie'
 import { useObservable } from '@vueuse/rxjs'
 
 /**
- * 使用 Dexie liveQuery 创建响应式查询
- * 当数据库数据变化时，自动更新 Vue 响应式数据
+ * Create reactive queries using Dexie liveQuery
+ * Automatically update Vue reactive data when database changes
  *
- * @param {Function} queryFn - 返回 Promise 的查询函数
- * @param {Object} [options] - 选项
- * @param {any} [options.defaultValue] - 默认值
- * @param {Array} [options.deps] - 依赖项，当依赖变化时重新执行查询
- * @returns {import('vue').Ref} 响应式数据引用
+ * @param {Function} queryFn - Query function that returns a Promise
+ * @param {Object} [options] - Options
+ * @param {any} [options.defaultValue] - Default value
+ * @param {Array} [options.deps] - Dependencies; re-run query when they change
+ * @returns {import('vue').Ref} Reactive data reference
  *
  * @example
- * // 基本用法
+ * // Basic usage
  * const messages = useLiveQuery(() => db.messages.toArray())
  *
- * // 带条件查询
+ * // Conditional query with dependencies
  * const sessionMessages = useLiveQuery(
  *   () => db.messages.where('sessionId').equals(sessionId.value).toArray(),
  *   { deps: [sessionId] }
@@ -35,17 +35,17 @@ import { useObservable } from '@vueuse/rxjs'
 export function useLiveQuery(queryFn, options = {}) {
   const { defaultValue = [] } = options
 
-  // 使用 @vueuse/rxjs 的 useObservable 来消费 liveQuery 返回的 observable
+  // Use @vueuse/rxjs useObservable to consume the observable returned by liveQuery
   const result = useObservable(liveQuery(queryFn), { initialValue: defaultValue })
 
   return result
 }
 
 /**
- * 带手动刷新功能的 liveQuery Hook
+ * liveQuery Hook with manual refresh capability
  *
- * @param {Function} queryFn - 查询函数
- * @param {Object} [options] - 选项
+ * @param {Function} queryFn - Query function
+ * @param {Object} [options] - Options
  * @returns {{data: Ref, loading: Ref, error: Ref, refresh: Function}}
  */
 export function useLiveQueryWithState(queryFn, options = {}) {
@@ -95,10 +95,10 @@ export function useLiveQueryWithState(queryFn, options = {}) {
     subscribe()
   }
 
-  // 初始订阅
+  // Initial subscription
   subscribe()
 
-  // 组件卸载时取消订阅
+  // Unsubscribe on component unmount
   onUnmounted(() => {
     unsubscribe()
   })
@@ -112,12 +112,12 @@ export function useLiveQueryWithState(queryFn, options = {}) {
 }
 
 /**
- * 带依赖监听的 liveQuery Hook
- * 当依赖变化时自动重新执行查询
+ * liveQuery Hook with dependency watch
+ * Automatically re-executes the query when dependencies change
  *
- * @param {Function} queryFnFactory - 返回查询函数的工厂函数
- * @param {Array|Function} deps - 依赖项
- * @param {Object} [options] - 选项
+ * @param {Function} queryFnFactory - Factory that returns the query function
+ * @param {Array|Function} deps - Dependencies
+ * @param {Object} [options] - Options
  * @returns {{data: Ref, loading: Ref, error: Ref}}
  */
 export function useLiveQueryWithDeps(queryFnFactory, deps, options = {}) {
@@ -130,7 +130,7 @@ export function useLiveQueryWithDeps(queryFnFactory, deps, options = {}) {
   let subscription = null
 
   const subscribe = () => {
-    // 先取消之前的订阅
+    // Unsubscribe previous subscription
     if (subscription) {
       subscription.unsubscribe()
       subscription = null
@@ -169,12 +169,12 @@ export function useLiveQueryWithDeps(queryFnFactory, deps, options = {}) {
     }
   }
 
-  // 监听依赖变化
+  // Watch dependencies for changes
   watch(deps, () => {
     subscribe()
   }, { immediate: true, deep: true })
 
-  // 组件卸载时取消订阅
+  // Unsubscribe on component unmount
   onUnmounted(() => {
     if (subscription) {
       subscription.unsubscribe()

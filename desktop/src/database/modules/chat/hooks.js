@@ -231,13 +231,13 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 刷新数据
+   * Refresh data
    */
   const refresh = () => {
     subscribe()
   }
 
-  // 监听 sessionId 变化
+  // Watch for sessionId changes
   if (typeof sessionIdRef === 'object' && 'value' in sessionIdRef) {
     watch(sessionIdRef, () => {
       subscribe()
@@ -247,7 +247,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
     subscribe()
   }
 
-  // 组件卸载时取消订阅
+  // Unsubscribe when component unmounts
   onUnmounted(() => {
     if (subscription) {
       subscription.unsubscribe()
@@ -255,7 +255,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
     }
   })
 
-  // 计算属性
+  // Computed properties
   const isEmpty = computed(() => messages.value.length === 0)
   const lastMessage = computed(() => {
     const list = messages.value
@@ -263,7 +263,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
   })
 
   return {
-    // 状态
+    // State
     messages,
     loading,
     error,
@@ -272,7 +272,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
     isEmpty,
     lastMessage,
 
-    // 方法
+    // Methods
     addMessage,
     addMessages,
     deleteMessage,
@@ -286,37 +286,37 @@ export function useChatMessages(sessionIdRef, options = {}) {
 }
 
 /**
- * 全局聊天消息管理 Hook
- * 用于管理所有会话
+ * Global chat session manager Hook
+ * Used to manage all sessions
  *
  * @returns {Object}
  */
 export function useChatSessionManager() {
   /**
-   * 获取所有会话ID
+   * Get all session IDs
    */
   const getAllSessions = async () => {
     return chatMessageStore.getAllSessionIds()
   }
 
   /**
-   * 删除指定会话
-   * @param {string} sessionId - 会话ID
+   * Delete specified session
+   * @param {string} sessionId - Session ID
    */
   const deleteSession = async (sessionId) => {
     return chatMessageStore.clearSession(sessionId)
   }
 
   /**
-   * 清空所有会话
+   * Clear all sessions
    */
   const clearAllSessions = async () => {
     return chatMessageStore.clearAll()
   }
 
   /**
-   * 获取会话统计
-   * @param {string} sessionId - 会话ID
+   * Get session statistics
+   * @param {string} sessionId - Session ID
    */
   const getSessionStats = async (sessionId) => {
     return chatMessageStore.getSessionStats(sessionId)

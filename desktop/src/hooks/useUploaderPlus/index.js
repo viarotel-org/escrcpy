@@ -19,9 +19,9 @@ export const UPLOAD_STATUS = {
 }
 
 /**
- * ADB 批量上传 Hook
- * 提供单设备和多设备文件上传功能
- * @returns {Object} 文件操作实例
+ * ADB bulk upload hook
+ * Provides single-device and multi-device file upload capabilities
+ * @returns {Object} File operation instance
  */
 export function useUploaderPlus() {
   const deviceStore = useDeviceStore()
@@ -120,7 +120,7 @@ export function useUploaderPlus() {
       externalOnScanProgress?.(scanData)
     }
 
-    // 上传进度回调
+    // Upload progress callback
     const onProgress = (progressData) => {
       scanning.value = false
       const percent = progressData.total?.percent || 0
@@ -140,7 +140,7 @@ export function useUploaderPlus() {
       externalOnProgress?.(progressData)
     }
 
-    // 文件开始回调
+    // File start callback
     const onFileStart = (file, stats) => {
       progress.value = {
         ...progress.value,
@@ -149,28 +149,28 @@ export function useUploaderPlus() {
       externalOnFileStart?.(file, stats)
     }
 
-    // 文件完成回调
+    // File complete callback
     const onFileComplete = (file, stats) => {
       externalOnFileComplete?.(file, stats)
     }
 
-    // 目录开始回调
+    // Directory start callback
     const onDirectoryStart = (dir, info) => {
       externalOnDirectoryStart?.(dir, info)
     }
 
-    // 目录完成回调
+    // Directory complete callback
     const onDirectoryComplete = (dir, success, info) => {
       externalOnDirectoryComplete?.(dir, success, info)
     }
 
-    // 错误回调
+    // Error callback
     const onError = (err, file) => {
       console.warn(`Upload error for ${file}:`, err)
       externalOnError?.(err, file)
     }
 
-    // 创建上传器
+    // Create uploader
     const uploader = window.adb.uploader({
       deviceId: device.id,
       localPaths,
@@ -185,7 +185,7 @@ export function useUploaderPlus() {
       ...uploaderOptions,
     })
 
-    // 保存上传器实例
+    // Store uploader instance
     activeUploaders.set(device.id, uploader)
 
     if (!silent) {
@@ -253,9 +253,9 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 多设备批量上传
-   * @param {Object[]} devices - 设备列表
-   * @param {Object} [options] - 选项
+   * Multiple-device bulk upload
+   * @param {Object[]} devices - Devices list
+   * @param {Object} [options] - Options
    * @returns {Promise<Object>}
    */
   async function multipleUpload(devices, options = {}) {
@@ -264,7 +264,7 @@ export function useUploaderPlus() {
     error.value = null
     progress.value = { percent: 0, completed: 0, total: 0 }
 
-    // 初始化设备进度和状态
+    // Initialize device progress and status
     deviceProgress.value = new Map()
     deviceStatus.value = new Map()
 
@@ -294,7 +294,7 @@ export function useUploaderPlus() {
     let completedDevices = 0
     let scanningDevices = 0
 
-    // 用于取消所有上传
+    // Used to cancel all uploads
     let cancelFlag = false
 
     const messageLoading = useMessageLoading(messageText, {
@@ -312,11 +312,11 @@ export function useUploaderPlus() {
 
         if (confirmed) {
           cancelFlag = true
-          // 取消所有活跃的上传器
+          // Cancel all active uploaders
           activeUploaders.forEach((uploader) => {
             uploader.cancel()
           })
-          // 更新所有未完成设备的状态为已取消
+          // Mark all unfinished devices as cancelled
           deviceStatus.value.forEach((status, deviceId) => {
             if (status.status === UPLOAD_STATUS.PENDING || status.status === UPLOAD_STATUS.SCANNING || status.status === UPLOAD_STATUS.UPLOADING) {
               status.status = UPLOAD_STATUS.CANCELLED
@@ -327,7 +327,7 @@ export function useUploaderPlus() {
       },
     })
 
-    // 聚合统计信息
+    // Aggregate statistics
     const aggregatedStats = {
       totalFiles: 0,
       completedFiles: 0,
@@ -337,10 +337,10 @@ export function useUploaderPlus() {
       uploadedBytes: 0,
     }
 
-    // 失败原因统计
+    // Error statistics
     const errorStats = new Map()
 
-    // 设备进度回调
+    // Device progress callback
     const onDeviceProgress = (deviceId, progressData) => {
       if (cancelFlag)
         return
@@ -353,13 +353,13 @@ export function useUploaderPlus() {
         deviceProgressData.currentFile = progressData?.file?.path || null
       }
 
-      // 更新设备状态为上传中
+      // Update device status to uploading
       const deviceStatusData = deviceStatus.value.get(deviceId)
       if (deviceStatusData && deviceStatusData.status === UPLOAD_STATUS.SCANNING) {
         deviceStatusData.status = UPLOAD_STATUS.UPLOADING
       }
 
-      // 计算总体进度
+      // Compute overall progress
       const percent = progressData?.total?.percent || 0
       const deviceWeight = 1 / totalDevices
       const currentProgress = ((completedDevices / totalDevices) + (percent / 100 * deviceWeight)) * 100
@@ -373,7 +373,7 @@ export function useUploaderPlus() {
       messageLoading.update(`${messageText} (${Math.floor(currentProgress)}%)`)
     }
 
-    // 设备扫描进度回调
+    // Device scan progress callback
     const onDeviceScanProgress = (deviceId, scanData) => {
       if (cancelFlag)
         return
@@ -383,7 +383,7 @@ export function useUploaderPlus() {
         deviceProgressData.filesScanned = scanData?.filesFound || 0
       }
 
-      // 更新设备状态为扫描中
+      // Update device status to scanning
       const deviceStatusData = deviceStatus.value.get(deviceId)
       if (deviceStatusData && deviceStatusData.status === UPLOAD_STATUS.PENDING) {
         deviceStatusData.status = UPLOAD_STATUS.SCANNING
@@ -394,7 +394,7 @@ export function useUploaderPlus() {
       messageLoading.update(`${messageText} (${window.t('common.scanning')}...)`)
     }
 
-    // 执行批量上传
+    // Perform bulk upload
     const results = await allSettledWrapper(devices, async (device, index) => {
       if (cancelFlag) {
         return { success: false, cancelled: true, device: device.id }
@@ -415,7 +415,7 @@ export function useUploaderPlus() {
             options.onScanProgress?.(scanData)
           },
           onError: (err, file) => {
-            // 统计失败原因
+            // Aggregate failure reasons
             const errorKey = err.message || 'Unknown error'
             errorStats.set(errorKey, (errorStats.get(errorKey) || 0) + 1)
             options.onError?.(err, file)

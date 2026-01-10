@@ -338,17 +338,17 @@ const quickPrompts = ref([])
  * Form data model
  */
 const model = ref({
-  taskType: void 0, // 任务类型
-  timerType: 'timeout', // 执行频率类型：timeout | interval | cron
-  timeout: void 0, // 单次执行时间
-  interval: void 0, // 周期间隔值
-  intervalType: 'second', // 周期间隔单位
-  cronExpression: '', // Cron 表达式
-  extra: void 0, // 额外参数（如 APK 路径、脚本路径、Copilot 指令）
+  taskType: void 0, // Task type
+  timerType: 'timeout', // Timer type: 'timeout' | 'interval' | 'cron'
+  timeout: void 0, // Single execution time
+  interval: void 0, // Interval value
+  intervalType: 'second', // Interval unit
+  cronExpression: '', // Cron expression
+  extra: void 0, // Extra parameters (e.g., APK path, script path, Copilot instruction)
 })
 
 /**
- * 表单校验规则
+ * Form validation rules
  */
 const rules = computed(() => {
   const baseRules = {
@@ -360,7 +360,7 @@ const rules = computed(() => {
     ],
   }
 
-  // 根据执行频率类型动态添加校验规则
+  // Dynamically add validation rules based on timer type
   if (model.value.timerType === 'timeout') {
     baseRules.timeout = [
       { required: true, message: window.t('common.required'), trigger: 'change' },
@@ -413,7 +413,7 @@ const rules = computed(() => {
     ]
   }
 
-  // 根据任务类型添加额外参数校验
+  // Add extra parameter validation according to task type
   if (['install', 'shell', 'copilot'].includes(model.value.taskType)) {
     baseRules.extra = [
       { required: true, message: window.t('common.required'), trigger: 'blur' },
@@ -423,11 +423,11 @@ const rules = computed(() => {
   return baseRules
 })
 
-// 监听执行频率类型变化，清除相关字段
+// Watch timer type changes and clear related fields
 watch(
   () => model.value.timerType,
   (newType) => {
-    // 切换类型时清除其他类型的值
+    // Clear fields of other types when switching timer type
     if (newType !== 'timeout') {
       model.value.timeout = void 0
     }
@@ -441,10 +441,10 @@ watch(
 )
 
 /**
- * 验证 Cron 表达式有效性
- * 使用 croner@9.1.0 的验证能力
- * @param {string} expression - Cron 表达式
- * @returns {boolean} 是否有效
+ * Validate Cron expression validity
+ * Uses croner@9.1.0 for validation
+ * @param {string} expression - Cron expression
+ * @returns {boolean} True if valid
  */
 function validateCronExpression(expression) {
   if (!expression) {
@@ -460,14 +460,14 @@ function validateCronExpression(expression) {
 }
 
 /**
- * 打开弹窗
- * @param {Object} args - 参数对象
- * @param {Array|Object} args.devices - 设备列表或单个设备
+ * Opens the dialog
+ * @param {Object} args - Argument object
+ * @param {Array|Object} args.devices - Devices array or single device
  */
 function open(args) {
   visible.value = true
 
-  // 处理设备参数
+  // Handle device parameters
   if (args.devices) {
     devices.value = args.devices
   }
@@ -475,25 +475,25 @@ function open(args) {
     devices.value = [args.device]
   }
 
-  // 设置默认时间为当前时间
+  // Set default time to current time
   defaultTime.value = new Date()
 
-  // 加载快捷指令
+  // Load quick prompts
   loadQuickPrompts()
 }
 
 /**
- * 关闭弹窗
+ * Closes the dialog
  */
 function close() {
   visible.value = false
 }
 
 /**
- * 提交表单
+ * Submit form
  */
 async function submit() {
-  // 表单校验
+  // Validate form
   try {
     await formRef.value.validate()
   }
@@ -501,13 +501,13 @@ async function submit() {
     return error.message
   }
 
-  // Cron 表达式额外校验
+  // Additional validation for cron expression
   if (model.value.timerType === 'cron' && !cronValid.value) {
     ElMessage.warning(window.t('device.task.cron.invalid'))
     return
   }
 
-  // 检查设备
+  // Check devices
   if (!devices.value || devices.value.length === 0) {
     ElMessage.warning(window.t('device.task.noDeviceSelected'))
     return
@@ -516,13 +516,13 @@ async function submit() {
   loading.value = true
 
   try {
-    // 构建任务数据
+    // Build task data
     const taskData = {
       ...model.value,
       devices: devices.value,
     }
 
-    // 添加任务到 store
+    // Add task to store
     await taskStore.add(taskData)
     await sleep()
     await ElMessage.success(window.t('common.success'))
@@ -539,14 +539,14 @@ async function submit() {
 }
 
 /**
- * 弹窗关闭回调
+ * Dialog close callback
  */
 async function onClosed() {
   devices.value = null
   formRef.value?.resetFields()
   formRef.value?.clearValidate()
 
-  // 重置模型
+  // Reset model
   model.value = {
     taskType: void 0,
     timerType: 'timeout',
@@ -559,28 +559,28 @@ async function onClosed() {
 }
 
 /**
- * 禁用日期（不能选择过去的日期）
+ * Disable dates (do not allow selecting past dates)
  */
 function disabledDate(time) {
   return time.getTime() < Date.now() - 24 * 60 * 60 * 1000
 }
 
 /**
- * 任务类型变化回调
+ * Task type change callback
  */
 function onTaskChange() {
   model.value.extra = void 0
 }
 
 /**
- * Cron 表达式有效性变化回调
+ * Cron validity change callback
  */
 function onCronValidChange(valid) {
   cronValid.value = valid
 }
 
 /**
- * 加载快捷指令
+ * Load quick prompts
  */
 async function loadQuickPrompts() {
   try {
@@ -594,8 +594,8 @@ async function loadQuickPrompts() {
 }
 
 /**
- * 选择快捷指令
- * @param {string} prompt - 快捷指令内容
+ * Select quick prompt
+ * @param {string} prompt - Quick prompt content
  */
 function selectQuickPrompt(prompt) {
   model.value.extra = prompt

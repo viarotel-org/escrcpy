@@ -1,81 +1,81 @@
 /**
- * Preflight Checker - 前置检查系统
+ * Preflight Checker - preflight check system
  *
- * 职责：
- * 1. 执行 AI 任务前的三层检查
- *    - Layer 1: ADB 键盘检查（自动安装引导）
- *    - Layer 2: API 服务有效性检查
- *    - Layer 3: 订阅状态检查
- * 2. 提供友好的用户提示信息
- * 3. 支持异步检查和结果缓存
+ * Responsibilities:
+ * 1. Perform three-layer checks before running AI tasks:
+ *    - Layer 1: ADB keyboard check (with guided auto-install)
+ *    - Layer 2: API service validity check
+ *    - Layer 3: Subscription status check
+ * 2. Provide user-friendly messages and suggested actions
+ * 3. Support asynchronous checks and result caching
  *
  * @module PreflightChecker
  */
 
 /**
- * 检查结果状态枚举
+ * Check result status enumeration
  */
 export const CheckStatus = {
-  /** 检查通过 */
+  /** Check passed */
   PASS: 'PASS',
-  /** 检查警告（可继续，但建议修复） */
+  /** Warning (can continue, but fix recommended) */
   WARN: 'WARN',
-  /** 检查失败（必须修复才能继续） */
+  /** Check failed (must fix to proceed) */
   FAIL: 'FAIL',
-  /** 跳过检查 */
+  /** Check skipped */
   SKIP: 'SKIP',
 }
 
 /**
- * 订阅状态枚举
+ * Subscription status enumeration
  */
 export const SubscriptionStatus = {
-  /** 已激活 */
+  /** Active */
   ACTIVE: 'ACTIVE',
-  /** 已过期 */
+  /** Expired */
   EXPIRED: 'EXPIRED',
-  /** 额度已用尽 */
+  /** Quota exhausted */
   EXHAUSTED: 'EXHAUSTED',
-  /** 未购买 */
+  /** Not purchased */
   NOT_PURCHASED: 'NOT_PURCHASED',
 }
 
 /**
  * @typedef {Object} CheckResult
- * @property {string} status - 检查状态（PASS | WARN | FAIL | SKIP）
- * @property {string} name - 检查项名称
- * @property {string} [message] - 提示信息
- * @property {Object} [details] - 详细信息
- * @property {string} [actionType] - 建议的操作类型（'install' | 'configure' | 'subscribe' | 'none'）
- * @property {Function} [action] - 自动修复操作（可选）
+ * @property {string} status - Check status (PASS | WARN | FAIL | SKIP)
+ * @property {string} name - Name of the check
+ * @property {string} [message] - User-facing message or hint
+ * @property {Object} [details] - Additional details
+ * @property {string} [actionType] - Suggested action type ('install' | 'configure' | 'subscribe' | 'none')
+ * @property {Function} [action] - Optional auto-fix action
  */
 
 /**
  * @typedef {Object} PreflightCheckOptions
- * @property {string} deviceId - 设备 ID
- * @property {Object} copilotConfig - Copilot 配置
- * @property {Object} [subscribeStore] - 订阅 Store（可选，用于检查订阅状态）
- * @property {boolean} [skipKeyboardCheck=false] - 跳过键盘检查
- * @property {boolean} [skipApiCheck=false] - 跳过 API 检查
- * @property {boolean} [skipSubscriptionCheck=false] - 跳过订阅检查
+ * @property {string} deviceId - Device ID
+ * @property {Object} copilotConfig - Copilot configuration
+ * @property {Object} [subscribeStore] - Subscription store (optional, used for subscription checks)
+ * @property {boolean} [skipKeyboardCheck=false] - Skip ADB keyboard check
+ * @property {boolean} [skipApiCheck=false] - Skip API service check
+ * @property {boolean} [skipSubscriptionCheck=false] - Skip subscription status check
  */
 
 /**
- * Preflight Checker 类
+ * Preflight Checker class
  */
 export class PreflightChecker {
   constructor() {
-    /** 检查结果缓存 */
+    /** Cache for check results */
     this.cache = new Map()
 
-    /** 缓存过期时间 */
+    /** Cache expiry time (ms) */
     this.cacheExpiry = 500
   }
 
   /**
-   * 运行所有前置检查
+   * Run all preflight checks
    *
-   * @param {PreflightCheckOptions} options - 检查选项
+   * @param {PreflightCheckOptions} options - Check options
    * @returns {Promise<{passed: boolean, results: CheckResult[], failedChecks: CheckResult[]}>}
    */
   async runAll(options) {
@@ -90,25 +90,25 @@ export class PreflightChecker {
 
     const results = []
 
-    // Layer 1: ADB 键盘检查
+    // Layer 1: ADB keyboard check
     if (!skipKeyboardCheck) {
       const keyboardResult = await this.checkADBKeyboard(deviceId)
       results.push(keyboardResult)
     }
 
-    // Layer 2: API 服务检查
+    // Layer 2: API service check
     if (!skipApiCheck) {
       const apiResult = await this.checkAPIService(copilotConfig)
       results.push(apiResult)
     }
 
-    // Layer 3: 订阅状态检查
+    // Layer 3: subscription status check
     if (!skipSubscriptionCheck && subscribeStore) {
       const subscriptionResult = await this.checkSubscription(copilotConfig, subscribeStore)
       results.push(subscriptionResult)
     }
 
-    // 统计失败的检查
+    // Collect failed checks
     const failedChecks = results.filter(r => r.status === CheckStatus.FAIL)
 
     return {
@@ -119,22 +119,22 @@ export class PreflightChecker {
   }
 
   /**
-   * Layer 1: 检查 ADB 键盘
+   * Layer 1: Check ADB keyboard
    *
-   * @param {string} deviceId - 设备 ID
+   * @param {string} deviceId - Device ID
    * @returns {Promise<CheckResult>}
    */
   async checkADBKeyboard(deviceId) {
     const cacheKey = `keyboard-${deviceId}`
 
-    // 检查缓存
+    // Check cache
     if (this._isCacheValid(cacheKey)) {
       const cached = this.cache.get(cacheKey)
       return cached.result
     }
 
     try {
-      // 通过 IPC 调用主进程检查键盘状态
+      // Check keyboard status via IPC call to main process
       const isInstalled = await window.electron?.ipcRenderer.invoke(
         'copilot:checkKeyboard',
         deviceId,
@@ -296,16 +296,16 @@ export class PreflightChecker {
   }
 
   /**
-   * 清除所有缓存
+   * Clear all cached check results
    */
   clearCache() {
     this.cache.clear()
   }
 
   /**
-   * 清除特定设备的键盘检查缓存
+   * Clear keyboard check cache for a specific device
    *
-   * @param {string} deviceId - 设备 ID
+   * @param {string} deviceId - Device ID
    */
   clearKeyboardCache(deviceId) {
     const cacheKey = `keyboard-${deviceId}`
@@ -313,7 +313,7 @@ export class PreflightChecker {
   }
 
   /**
-   * 检查缓存是否有效
+   * Check whether cache entry is still valid
    * @private
    */
   _isCacheValid(key) {
@@ -327,7 +327,7 @@ export class PreflightChecker {
   }
 
   /**
-   * 缓存检查结果
+   * Cache the check result
    * @private
    */
   _cacheResult(key, result) {
@@ -339,12 +339,12 @@ export class PreflightChecker {
 }
 
 /**
- * 导出单例
+ * Export singleton
  */
 export const preflightChecker = new PreflightChecker()
 
 /**
- * 导出便捷函数
+ * Export helper function
  */
 export async function runPreflightChecks(options) {
   return preflightChecker.runAll(options)

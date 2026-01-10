@@ -1,6 +1,6 @@
 <template>
   <t-chat-item v-bind="{ ...item, name: $t(item.name), variant: 'base' }" class="t-chat-item--copilot">
-    <!-- 自定义消息内容 -->
+    <!-- Custom message content -->
     <template #content>
       <div class="mt-2 space-y-2">
         <template v-if="[MessageRoleEnum.ASSISTANT].includes(item.role)">
@@ -22,7 +22,7 @@
           </t-chat-reasoning>
         </template>
 
-        <!-- 消息内容 -->
+        <!-- Message content -->
         <t-chat-content
           v-else
           :content="item.content"
@@ -34,7 +34,7 @@
       </div>
     </template>
 
-    <!-- 操作按钮 -->
+    <!-- Action buttons -->
     <template #actions>
       <el-button-group class="mt-4">
         <el-button icon="CopyDocument" :title="$t('common.copy')" @click="onCopyClick(item)">
@@ -80,7 +80,7 @@ const props = defineProps({
   },
 })
 
-// 删除单条消息
+// Delete single message
 async function handleDeleteMessage(messageId) {
   const result = await deleteMessage(messageId)
   if (result.success) {
@@ -99,7 +99,7 @@ async function onCopyClick(item) {
 function onRetryClick(item) {
   const itemIndex = messages.value.findIndex(msg => msg.id === item.id)
   if (itemIndex >= 0) {
-    // 在原始消息列表中向后查找最近的用户消息（因为消息是升序的）
+    // Search backward in the original messages for the most recent user message (messages are in ascending order)
     for (let i = itemIndex - 1; i >= 0; i--) {
       if (messages.value[i].role === 'user') {
         handleSubmit(messages.value[i].content)

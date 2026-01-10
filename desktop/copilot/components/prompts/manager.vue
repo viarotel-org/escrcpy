@@ -12,7 +12,7 @@
     @open="loadPrompts"
   >
     <div class="space-y-4 h-full flex flex-col overflow-hidden -mr-1">
-      <!-- 添加新指令 -->
+      <!-- Add new prompt -->
       <div class="flex-none flex space-x-2 pr-1">
         <el-input
           v-model="newPrompt"
@@ -55,7 +55,7 @@
               body-class="!p-0"
             >
               <div class="flex items-center p-4 justify-between group">
-                <!-- 编辑模式 -->
+                <!-- Edit mode -->
                 <template v-if="editingIndex === index">
                   <el-autocomplete
                     v-model="editingValue"
@@ -75,7 +75,7 @@
                   </div>
                 </template>
 
-                <!-- 显示模式 -->
+                <!-- Display mode -->
                 <template v-else>
                   <div class="flex items-center flex-1 min-w-0 cursor-move">
                     <el-icon class="text-gray-400 mr-2 flex-none">
@@ -145,29 +145,29 @@ const emit = defineEmits([])
 
 const dialog = useDialog()
 
-// 指令列表
+// Prompts list
 const prompts = ref([])
 
-// 新指令输入
+// New prompt input
 const newPrompt = ref('')
 
-// 编辑状态
+// Edit state
 const editingIndex = ref(-1)
 const editingValue = ref('')
 
-// 加载指令
+// Load prompts
 const loadPrompts = async () => {
   const config = await copilotClient.getConfig() || {}
   prompts.value = [...(config.prompts || [])]
 }
 
-// 保存指令
+// Save prompts
 const savePrompts = async () => {
   await copilotClient.setConfig([...prompts.value], 'prompts')
   copilotPromptBus.emit(prompts.value)
 }
 
-// 添加指令
+// Add prompt
 const addPrompt = () => {
   const text = newPrompt.value.trim()
   if (!text) {
@@ -186,13 +186,13 @@ const addPrompt = () => {
   ElMessage.success(t('copilot.promptManager.addSuccess'))
 }
 
-// 开始编辑
+// Start editing
 const startEdit = (index) => {
   editingIndex.value = index
   editingValue.value = prompts.value[index]
 }
 
-// 保存编辑
+// Save edit
 const saveEdit = (index) => {
   const text = editingValue.value.trim()
   if (!text) {
@@ -207,13 +207,13 @@ const saveEdit = (index) => {
   ElMessage.success(t('copilot.promptManager.editSuccess'))
 }
 
-// 取消编辑
+// Cancel edit
 const cancelEdit = () => {
   editingIndex.value = -1
   editingValue.value = ''
 }
 
-// 删除指令
+// Delete prompt
 const deletePrompt = async (index) => {
   try {
     await ElMessageBox.confirm(
@@ -231,11 +231,11 @@ const deletePrompt = async (index) => {
     ElMessage.success(t('copilot.promptManager.deleteSuccess'))
   }
   catch {
-    // 用户取消
+    // User cancelled
   }
 }
 
-// 清空所有指令
+// Clear all prompts
 const clearAllPrompts = async () => {
   if (prompts.value.length === 0)
     return
@@ -256,7 +256,7 @@ const clearAllPrompts = async () => {
     ElMessage.success(t('copilot.promptManager.clearAllSuccess'))
   }
   catch {
-    // 用户取消
+    // User cancelled
   }
 }
 

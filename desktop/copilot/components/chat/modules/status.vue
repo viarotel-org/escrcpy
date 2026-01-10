@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-// 状态图标
+// Status icon
 const statusIcon = computed(() => {
   switch (props.status) {
     case 'running':
@@ -53,7 +53,7 @@ const textType = computed(() => {
   }
 })
 
-// 状态图标样式
+// Status icon class/style
 const statusIconClass = computed(() => {
   switch (props.status) {
     case 'running':
@@ -69,7 +69,7 @@ const statusIconClass = computed(() => {
   }
 })
 
-// 状态文本
+// Status text
 const statusText = computed(() => {
   switch (props.status) {
     case 'running':

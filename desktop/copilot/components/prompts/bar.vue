@@ -31,7 +31,7 @@
       </el-button>
     </div>
 
-    <!-- 快捷指令 -->
+    <!-- Quick prompts -->
     <PromptManager v-if="showPromptManager" ref="promptManagerRef" />
   </div>
 </template>
@@ -62,7 +62,7 @@ onMounted(() => {
   })
 })
 
-// 加载快捷指令
+// Load quick prompts
 async function loadPrompts() {
   const config = await copilotClient.getConfig()
   quickPrompts.value = config?.prompts || []

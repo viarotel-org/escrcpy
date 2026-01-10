@@ -1,6 +1,6 @@
 /**
- * @fileoverview ADB 文件管理器 Hook
- * 提供完整的 ADB 文件管理功能，包括浏览、上传、下载、操作等
+ * @fileoverview ADB file manager Hook
+ * Provides a full set of ADB file management features: browse, upload, download, and operations
  *
  * @example
  * ```js
@@ -9,16 +9,16 @@
  *   initialPath: '/sdcard',
  * })
  *
- * // 读取目录
+ * // Read directory
  * await explorer.refresh()
  *
- * // 导航
+ * // Navigate
  * explorer.navigateTo('/sdcard/Download')
  *
- * // 上传文件
+ * // Upload files
  * await explorer.upload.selectAndUpload()
  *
- * // 下载选中项
+ * // Download selected items
  * await explorer.download.download(explorer.selection.selectedItems.value, {
  *   savePath: '/local/path',
  * })
@@ -49,7 +49,7 @@ export function useExplorer(options = {}) {
     refreshInterval = 5000,
   } = options
 
-  // ========== 设备管理 ==========
+  // ========== Device management ==========
 
   /** @type {import('vue').Ref<string>} 设备 ID */
   const deviceId = ref(device?.id || '')
@@ -66,18 +66,18 @@ export function useExplorer(options = {}) {
     deviceInfo.value = newDevice
   }
 
-  // ========== 路径管理 ==========
+  // ========== Path management ==========
 
   const pathManager = usePathManager(pathOptions)
 
-  // ========== 文件操作 ==========
+  // ========== File operations ==========
 
   const fileOps = useFileOperations({
     deviceId,
     currentPath: pathManager.currentPath,
   })
 
-  // ========== 上传器 ==========
+  // ========== Uploader ==========
 
   const uploader = useUploader({
     deviceId,
@@ -85,23 +85,23 @@ export function useExplorer(options = {}) {
     onRefresh: () => fileOps.refresh(),
   })
 
-  // ========== 下载器 ==========
+  // ========== Downloader ==========
 
   const downloader = useDownloader({ deviceId })
 
-  // ========== 预览器 ==========
+  // ========== Previewer ==========
 
   const previewer = useFilePreview({ deviceId })
 
-  // ========== 选择管理 ==========
+  // ========== Selection management ==========
 
   const selection = useSelection()
 
-  // ========== 剪贴板管理 ==========
+  // ========== Clipboard management ==========
 
   const clipboard = useFileClipboard()
 
-  // ========== 自动刷新 ==========
+  // ========== Auto-refresh ==========
 
   let refreshTimer = null
 
@@ -122,7 +122,7 @@ export function useExplorer(options = {}) {
     }
   }
 
-  // 监听路径变化，自动刷新
+  // Watch path changes and refresh automatically
   watch(
     () => pathManager.currentPath.value,
     async () => {
@@ -133,7 +133,7 @@ export function useExplorer(options = {}) {
     },
   )
 
-  // 组件卸载时清理
+  // Cleanup on component unmount
   onUnmounted(() => {
     stopAutoRefresh()
     uploader.reset()
@@ -141,32 +141,32 @@ export function useExplorer(options = {}) {
     previewer.reset()
   })
 
-  // 初始化
+  // Initialization
   if (autoRefresh) {
     startAutoRefresh()
   }
 
-  // ========== 便捷方法 ==========
+  // ========== Convenience methods ==========
 
   /**
-   * 刷新当前目录
+   * Refresh current directory
    */
   async function refresh() {
     return fileOps.refresh()
   }
 
   /**
-   * 导航到路径并刷新
-   * @param {string} path - 目标路径
+   * Navigate to path and refresh
+   * @param {string} path - Target path
    */
   async function navigateTo(path) {
     pathManager.navigateTo(path)
-    // 监听器会自动触发刷新
+    // Listener will trigger refresh automatically
   }
 
   /**
-   * 进入子目录
-   * @param {import('./types.js').FileEntry} item - 目录项
+   * Enter subdirectory
+   * @param {import('./types.js').FileEntry} item - Directory item
    */
   async function enterDirectory(item) {
     if (item.type === 'directory') {
@@ -175,14 +175,14 @@ export function useExplorer(options = {}) {
   }
 
   /**
-   * 返回上级目录
+   * Go up to parent directory
    */
   async function goUp() {
     pathManager.navigateToParent()
   }
   /**
-   * 获取当前状态摘要
-   * @returns {Object} 状态摘要
+   * Get current status summary
+   * @returns {Object} Status summary
    */
   function getStatus() {
     return {
@@ -198,7 +198,7 @@ export function useExplorer(options = {}) {
   }
 
   /**
-   * 重置所有状态
+   * Reset all states
    */
   function reset() {
     pathManager.reset()
@@ -210,9 +210,9 @@ export function useExplorer(options = {}) {
   }
 
   /**
-   * 粘贴剪贴板内容到当前目录
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Paste clipboard content to current directory
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Whether to auto-refresh
    * @returns {Promise<import('./types.js').OperationResult>}
    */
   async function paste(options = {}) {
@@ -239,8 +239,8 @@ export function useExplorer(options = {}) {
   }
 
   /**
-   * 初始化并加载
-   * @param {import('./types.js').DeviceInfo} [newDevice] - 可选的新设备
+   * Initialize and load
+   * @param {import('./types.js').DeviceInfo} [newDevice] - Optional new device
    */
   async function init(newDevice) {
     if (newDevice) {

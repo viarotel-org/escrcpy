@@ -123,9 +123,9 @@ export function clearTimer(type, ...args) {
 }
 
 /**
- * 判断当前运行平台
- * @param {*} name 平台名称
- * @returns {boolean} 是否是指定平台
+ * Determine whether running on a specific platform
+ * @param {*} name - Platform name
+ * @returns {boolean} True if the current platform matches the specified name
  */
 export function isPlatform(name) {
   const model = {

@@ -1,18 +1,18 @@
 import jsCookie from 'js-cookie'
 
 /**
- *  操作 Cookie
- * @method set 设置
- * @method get 获取
- * @method remove 移除
- * @method clear 移除全部
+ *  Manage cookies
+ * @method set Set
+ * @method get Get
+ * @method remove Remove
+ * @method clear Clear all
  */
 export default {
-  // 设置
+  // Set
   set(key, val) {
     jsCookie.set(key, JSON.stringify(val))
   },
-  // 获取
+  // Get
   get(key) {
     const json = jsCookie.get(key)
     try {
@@ -22,7 +22,7 @@ export default {
       return json
     }
   },
-  // 移除
+  // Remove
   remove(key) {
     jsCookie.remove(key)
   },

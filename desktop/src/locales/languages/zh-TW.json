@@ -832,7 +832,7 @@
   "subscribe.user": "使用者",
   "subscribe.userCenter": "使用者中心",
   "subscribe.waitingPayment": "等待支付中，請勿關閉視窗",
-  "subscribe.wepay": "微信支付",
+  "subscribe.wepay": "微信",
   "terminal.command.name": "執行命令",
   "terminal.executing": "執行中...",
   "terminal.script.enter": "請輸入回車鍵確認執行該腳本",

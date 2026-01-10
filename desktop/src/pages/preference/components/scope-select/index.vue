@@ -45,7 +45,7 @@ const options = computed(() => {
     ...item,
     label: `${item.id} (${item.name}${
       item.remark ? `, ${item.remark}` : ''
-    })`, 
+    })`,
     value: item.id,
   }))
 

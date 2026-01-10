@@ -337,18 +337,18 @@ function uploader(options = {}) {
 }
 
 /**
- * 创建文件/文件夹下载器实例
- * @param {Object} options 配置选项
- * @param {string} options.deviceId 设备ID
- * @param {Array} options.items 待下载项列表 [{id, type, name}]
- * @param {string} options.localPath 本地保存路径
- * @param {Function} options.onProgress 进度回调
- * @param {Function} options.onItemStart 项目开始回调
- * @param {Function} options.onItemComplete 项目完成回调
- * @param {Function} options.onError 错误回调
- * @param {Function} options.onCancel 取消回调
- * @param {Function} options.onScanProgress 扫描进度回调
- * @returns {Object} 下载器控制对象
+ * Creates a downloader instance for files/directories
+ * @param {Object} options - Configuration options
+ * @param {string} options.deviceId - Device ID
+ * @param {Array} options.items - Items to download [{id, type, name}]
+ * @param {string} options.localPath - Local save path
+ * @param {Function} options.onProgress - Progress callback
+ * @param {Function} options.onItemStart - Callback when an item starts
+ * @param {Function} options.onItemComplete - Callback when an item completes
+ * @param {Function} options.onError - Error callback
+ * @param {Function} options.onCancel - Cancel callback
+ * @param {Function} options.onScanProgress - Scan progress callback
+ * @returns {Object} Downloader control object
  */
 function downloader(options = {}) {
   const { deviceId, items, localPath, ...initialOptions } = options

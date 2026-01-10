@@ -1,4 +1,4 @@
-/** process.js 必须位于顶部 */
+/** process.js must be required at the top */
 import { isPackaged } from './helpers/process/index.js'
 import appStore from './helpers/store.js'
 import './helpers/debugger/index.js'
@@ -101,7 +101,7 @@ function createWindow(callback) {
 }
 
 async function onWhenReady(callback) {
-  // 配置沙盒设置 - 必须在 app.whenReady() 之前调用
+  // Configure sandbox settings - must be called before app.whenReady()
   try {
     const sandboxResult = await sandboxManager.configureSandbox()
     console.info('Sandbox configuration completed:', {
@@ -123,7 +123,7 @@ async function onWhenReady(callback) {
 
   createWindow(callback)
 
-  // macOS 中应用被激活
+  // Application activated on macOS
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()

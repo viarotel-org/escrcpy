@@ -35,7 +35,7 @@ export class ADBUploader {
   }
 
   /**
-   * 取消当前上传操作
+   * Cancel the current upload operation
    */
   cancel() {
     this.isCancelled = true
@@ -122,7 +122,7 @@ export class ADBUploader {
             const name = path.basename(localPath)
             const targetRemotePath = path.posix.join(remoteDir, name)
 
-            // 目录或文件开始上传回调
+            // Directory or file start upload callback
             this.options.onDirectoryStart(localPath, {
               isDirectory,
               ...this.stats,
@@ -188,7 +188,7 @@ export class ADBUploader {
       this.options.onFileStart(localPath, this.stats)
       await this._uploadFileWithRetry(sync, localPath, remotePath)
 
-      // 成功上传一个文件
+      // Successfully uploaded a file
       this.stats.completedFiles++
       this.stats.successFiles++
 
@@ -196,7 +196,7 @@ export class ADBUploader {
       return true
     }
     catch (error) {
-      // 上传失败
+      // Upload failed
       this.stats.completedFiles++
       this.stats.failedFiles++
       throw error
@@ -222,7 +222,7 @@ export class ADBUploader {
       catch (error) {
         hasError = true
         this.options.onError(error, file.localPath)
-        // 继续上传其他文件，不中断整个目录的上传
+        // Continue with other files; do not abort the entire directory upload
       }
     }
     return !hasError

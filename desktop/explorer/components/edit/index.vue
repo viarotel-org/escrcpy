@@ -60,17 +60,17 @@ const emit = defineEmits(['success'])
 // Maximum editable file size (1MB)
 const MAX_EDITABLE_SIZE = 1024 * 1024
 
-// 对话框状态
+// Dialog state
 const visible = ref(false)
 const loading = ref(false)
 const saving = ref(false)
 
-// 编辑数据
+// Edit data
 const filename = ref('')
 const content = ref('')
 const originalItem = ref(null)
 
-// 计算属性
+// Computed properties
 const isTextFile = computed(() => {
   if (!originalItem.value || originalItem.value.type === 'directory') {
     return false
@@ -80,7 +80,7 @@ const isTextFile = computed(() => {
 })
 
 /**
- * 获取文件扩展名
+ * Retrieves the file extension from a filename
  */
 function getFileExtension(name) {
   const lastDotIndex = name.lastIndexOf('.')
@@ -90,7 +90,7 @@ function getFileExtension(name) {
 }
 
 /**
- * 打开对话框
+ * Opens the editor dialog for the specified item
  */
 async function open(item) {
   originalItem.value = item
@@ -105,7 +105,7 @@ async function open(item) {
   loading.value = true
 
   try {
-    // 读取文件内容
+    // Read file content
     const result = await props.explorer.operations.readFile(item.id, { maxSize: MAX_EDITABLE_SIZE })
 
     if (!result.success) {
@@ -133,14 +133,14 @@ async function open(item) {
 }
 
 /**
- * 取消
+ * Close the dialog without saving
  */
 function handleCancel() {
   visible.value = false
 }
 
 /**
- * 保存
+ * Persist edits to the file system
  */
 async function handleSave() {
   const newFilename = filename.value.trim()
@@ -162,7 +162,7 @@ async function handleSave() {
     const originalFilename = originalItem.value.name
     const newPath = `${originalDir}/${newFilename}`.replace(/\/+/g, '/')
 
-    // 如果文件名改变了，先重命名
+    // If filename changed, perform rename first
     if (newFilename !== originalFilename) {
       const renameResult = await props.explorer.operations.rename(
         originalItem.value,
@@ -176,7 +176,7 @@ async function handleSave() {
       }
     }
 
-    // 如果是文本文件，写入文件内容
+    // If text file, write content to file
     if (isTextFile.value) {
       const writeResult = await props.explorer.operations.writeFile(newPath, content.value, { autoRefresh: true })
 

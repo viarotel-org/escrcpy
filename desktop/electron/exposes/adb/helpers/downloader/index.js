@@ -2,8 +2,8 @@ import fs from 'fs-extra'
 import path from 'node:path'
 
 /**
- * ADB 文件/文件夹下载器
- * 支持递归下载目录结构、进度追踪、取消任务、错误处理
+ * ADB file/directory downloader
+ * Supports recursive directory downloads, progress tracking, cancellation, and error handling
  */
 export class ADBDownloader {
   constructor(options = {}) {
@@ -16,12 +16,12 @@ export class ADBDownloader {
       onCancel: () => {},
       onScanProgress: () => {},
       retries: 3,
-      concurrency: 1, // 并发下载数（预留扩展）
+      concurrency: 1, // Number of concurrent downloads (reserved for future use)
       ...options,
     }
     this.isCancelled = false
 
-    // 下载统计信息
+    // Download statistics
     this.stats = {
       totalFiles: 0,
       completedFiles: 0,
@@ -31,14 +31,14 @@ export class ADBDownloader {
       startTime: 0,
     }
 
-    // 下载任务队列
+    // Download task queue
     this.taskQueue = []
-    // 失败任务列表
+    // Failed task list
     this.failedTasks = []
   }
 
   /**
-   * 取消当前下载操作
+   * Cancel the current download operation
    */
   cancel() {
     this.isCancelled = true
@@ -46,7 +46,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 重置状态
+   * Reset internal state
    */
   reset() {
     this.isCancelled = false
@@ -63,11 +63,11 @@ export class ADBDownloader {
   }
 
   /**
-   * 递归扫描设备端目录结构，构建下载任务列表
-   * @param {string} deviceId 设备ID
-   * @param {string} remotePath 设备端路径
-   * @param {string} basePath 基础路径（用于计算相对路径）
-   * @returns {Promise<Array>} 文件任务列表
+   * Recursively scan remote directory structure and build download task list
+   * @param {string} deviceId - Device ID
+   * @param {string} remotePath - Remote device path
+   * @param {string} basePath - Base path (used to compute relative paths)
+   * @returns {Promise<Array>} List of file tasks
    */
   async scanRemoteDirectory(deviceId, remotePath, basePath = null) {
     if (this.isCancelled)
@@ -96,14 +96,14 @@ export class ADBDownloader {
             size: entry.size || 0,
           })
 
-          // 扫描进度回调
+          // Scan progress callback
           this.options.onScanProgress?.({
             currentPath: fullRemotePath,
             filesFound: tasks.length,
           })
         }
         else if (entry.isDirectory()) {
-          // 添加目录任务（用于创建空目录）
+          // Add directory task (used to create empty directory)
           tasks.push({
             type: 'directory',
             remotePath: fullRemotePath,
@@ -112,7 +112,7 @@ export class ADBDownloader {
             size: 0,
           })
 
-          // 递归扫描子目录
+          // Recursively scan subdirectory
           const subTasks = await this.scanRemoteDirectory(deviceId, fullRemotePath, effectiveBasePath)
           tasks.push(...subTasks)
         }
@@ -127,9 +127,9 @@ export class ADBDownloader {
   }
 
   /**
-   * 检查路径是否为目录
-   * @param {string} deviceId 设备ID
-   * @param {string} remotePath 设备端路径
+   * Check whether a remote path is a directory
+   * @param {string} deviceId - Device ID
+   * @param {string} remotePath - Remote device path
    * @returns {Promise<boolean>}
    */
   async isDirectory(deviceId, remotePath) {
@@ -147,9 +147,9 @@ export class ADBDownloader {
   }
 
   /**
-   * 获取单个文件/目录的信息
-   * @param {string} deviceId 设备ID
-   * @param {string} remotePath 设备端路径
+   * Get info for a single file or directory
+   * @param {string} deviceId - Device ID
+   * @param {string} remotePath - Remote device path
    * @returns {Promise<Object|null>}
    */
   async getFileInfo(deviceId, remotePath) {
@@ -167,32 +167,32 @@ export class ADBDownloader {
   }
 
   /**
-   * 主下载方法：支持文件和文件夹混合下载
-   * @param {string} deviceId 设备ID
-   * @param {Array<Object>} items 待下载项列表 [{id: remotePath, type: 'file'|'directory', name}]
-   * @param {string} localBasePath 本地保存基础路径
-   * @returns {Promise<Object>} 下载结果
+   * Main download method: supports mixed files and directories
+   * @param {string} deviceId - Device ID
+   * @param {Array<Object>} items - List of items to download [{id: remotePath, type: 'file'|'directory', name}]
+   * @param {string} localBasePath - Local base path for saving
+   * @returns {Promise<Object>} Download result
    */
   async downloadTo(deviceId, items, localBasePath) {
     this.reset()
     this.stats.startTime = Date.now()
 
     try {
-      // 确保本地保存目录存在
+      // Ensure local save directory exists
       await fs.ensureDir(localBasePath)
 
-      // 第一步：构建完整的下载任务队列
+      // Step 1: build the complete download task queue
       await this._buildTaskQueue(deviceId, items)
 
       if (this.isCancelled) {
         return this._buildResult(false, 'Download cancelled')
       }
 
-      // 计算文件总大小
+      // Calculate total files and bytes
       this.stats.totalFiles = this.taskQueue.filter(t => t.type === 'file').length
       this.stats.totalBytes = this.taskQueue.reduce((sum, t) => sum + (t.size || 0), 0)
 
-      // 第二步：执行下载任务
+      // Step 2: execute download tasks
       await this._executeTaskQueue(deviceId, localBasePath)
 
       return this._buildResult(this.failedTasks.length === 0)
@@ -204,7 +204,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 构建下载任务队列
+   * Build the download task queue
    * @private
    */
   async _buildTaskQueue(deviceId, items) {
@@ -216,11 +216,11 @@ export class ADBDownloader {
       const itemType = item.type
 
       if (itemType === 'directory') {
-        // 扫描目录，添加目录本身和所有子项
+        // Scan directory and add the directory itself and all child items
         const dirName = path.posix.basename(remotePath)
         const parentPath = path.posix.dirname(remotePath)
 
-        // 添加根目录任务
+        // Add root directory task
         this.taskQueue.push({
           type: 'directory',
           remotePath,
@@ -229,12 +229,12 @@ export class ADBDownloader {
           size: 0,
         })
 
-        // 递归扫描并添加子任务
+        // Recursively scan and add child tasks
         const subTasks = await this.scanRemoteDirectory(deviceId, remotePath, parentPath)
         this.taskQueue.push(...subTasks)
       }
       else {
-        // 单个文件
+        // Single file
         const fileInfo = await this.getFileInfo(deviceId, remotePath)
         const fileName = path.posix.basename(remotePath)
 
@@ -250,7 +250,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 执行下载任务队列
+   * Execute the download task queue
    * @private
    */
   async _executeTaskQueue(deviceId, localBasePath) {
@@ -266,11 +266,11 @@ export class ADBDownloader {
         this.options.onItemStart?.(task, { ...this.stats })
 
         if (task.type === 'directory') {
-          // 创建本地目录（处理空文件夹情况）
+          // Create local directory (handles empty folders)
           await fs.ensureDir(localPath)
         }
         else {
-          // 下载文件
+          // Download file
           await this._downloadFileWithRetry(device, task, localPath)
           this.stats.completedFiles++
         }
@@ -283,16 +283,16 @@ export class ADBDownloader {
         this.failedTasks.push({ ...task, error: error.message })
         this.options.onError?.(error, task.remotePath)
         this.options.onItemComplete?.(task, false, { ...this.stats, error: error.message })
-        // 继续下载其他文件，不中断整个流程
+        // Continue with other files; do not abort the entire process
       }
 
-      // 更新整体进度
+      // Update overall progress
       this._updateProgress()
     }
   }
 
   /**
-   * 带重试的文件下载
+   * File download with retries
    * @private
    */
   async _downloadFileWithRetry(device, task, localPath) {
@@ -303,7 +303,7 @@ export class ADBDownloader {
         break
 
       try {
-        // 确保父目录存在
+        // Ensure parent directory exists
         await fs.ensureDir(path.dirname(localPath))
 
         await this._downloadSingleFile(device, task.remotePath, localPath, task.size)
@@ -314,7 +314,7 @@ export class ADBDownloader {
         console.warn(`Download attempt ${attempt + 1} failed for ${task.remotePath}:`, error.message)
 
         if (attempt < this.options.retries - 1) {
-          // 指数退避重试
+          // Exponential backoff retry
           await new Promise(resolve => setTimeout(resolve, 2 ** attempt * 1000))
         }
       }
@@ -324,7 +324,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 下载单个文件
+   * Download a single file
    * @private
    */
   async _downloadSingleFile(device, remotePath, localPath, fileSize) {
@@ -368,7 +368,7 @@ export class ADBDownloader {
 
           transfer.on('error', (err) => {
             writeStream.destroy()
-            // 清理失败的文件
+            // Clean up failed file
             fs.unlink(localPath).catch(() => {})
             reject(err)
           })
@@ -384,7 +384,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 更新整体进度
+   * Update overall progress
    * @private
    */
   _updateProgress() {
@@ -406,7 +406,7 @@ export class ADBDownloader {
   }
 
   /**
-   * 构建返回结果
+   * Construct return result
    * @private
    */
   _buildResult(success, error = null) {
@@ -424,10 +424,10 @@ export class ADBDownloader {
   }
 
   /**
-   * 获取任务预览信息（不执行下载）
-   * @param {string} deviceId 设备ID
-   * @param {Array<Object>} items 待下载项列表
-   * @returns {Promise<Object>} 任务预览信息
+   * Retrieve task preview information (does not perform downloads)
+   * @param {string} deviceId - Device ID
+   * @param {Array<Object>} items - List of items to preview
+   * @returns {Promise<Object>} Task preview information
    */
   async previewTasks(deviceId, items) {
     this.reset()

@@ -6,14 +6,14 @@ import { Adb } from '@devicefarmer/adbkit'
 import appStore from '$electron/helpers/store.js'
 
 /**
- * 高性能获取目录文件信息，支持大文件
- * @param {object} device adbkit 设备对象
- * @param {string} dirPath 目录路径
- * @param {object} options 可选参数
- *   - concurrency: 并发限制 (默认 5)
- *   - filter: 文件过滤函数 (item => boolean)
- *   - map: 文件映射函数 (item => item)
- * @returns {Promise<Array>} 文件信息列表
+ * High-performance directory listing with file stats; supports large files
+ * @param {object} device - Adbkit device object
+ * @param {string} dirPath - Directory path
+ * @param {object} options - Optional parameters
+ *   - concurrency: concurrency limit (default 5)
+ *   - filter: file filter function (item => boolean)
+ *   - map: file mapping function (item => item)
+ * @returns {Promise<Array>} List of file info objects
  */
 export async function readDirWithStat(device, dirPath, options = {}) {
   const {
@@ -37,7 +37,7 @@ export async function readDirWithStat(device, dirPath, options = {}) {
 
           try {
             if (item.isFile()) {
-              // 使用更可靠的命令获取文件大小
+              // Use a more reliable command to obtain file size
               const output = await device.shell(`stat -c %s "${fullPath}"`)
               const buffer = await Adb.util.readAll(output)
               const sizeStr = buffer.toString().trim()

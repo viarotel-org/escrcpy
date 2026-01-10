@@ -51,7 +51,7 @@ export default (mainWindow) => {
     mainWindow.webContents.send('update-available', ret)
   })
 
-  // 检测到不需要更新时
+  // When no update is available
   autoUpdater.on('update-not-available', (ret) => {
     mainWindow.webContents.send('update-not-available', ret)
   })
@@ -61,7 +61,7 @@ export default (mainWindow) => {
     mainWindow.webContents.send('download-progress', ret)
   })
 
-  // 当需要更新的内容下载完成后
+  // After the update package has been downloaded
   autoUpdater.on('update-downloaded', (ret) => {
     mainWindow.webContents.send('update-downloaded', ret)
   })

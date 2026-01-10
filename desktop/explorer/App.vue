@@ -177,7 +177,7 @@
 
           <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
             <template #default="{ row }">
-              <!-- 预览按钮（仅文件） -->
+              <!-- Preview button (files only) -->
               <ExTooltipButton
                 effect="light"
                 placement="top"
@@ -243,7 +243,7 @@
         </el-table>
       </div>
 
-      <!-- 状态栏 -->
+      <!-- Status bar -->
       <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
         <div>
           {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
@@ -265,7 +265,7 @@
       </div>
     </div>
 
-    <!-- 路径选择对话框 -->
+    <!-- Path selection dialog -->
     <MoveDialog
       ref="moveDialogRef"
       :device-id="device?.id"
@@ -273,7 +273,7 @@
       @confirm="handlePathSelectConfirm"
     />
 
-    <!-- 编辑对话框 -->
+    <!-- Edit dialog -->
     <EditDialog ref="editDialogRef" :explorer />
   </el-config-provider>
 </template>
@@ -294,7 +294,7 @@ const pathSelectAction = ref('move')
 
 const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'hover'
 
-// 使用文件管理器 hooks
+// Use file manager hooks
 const explorer = useExplorer()
 
 const { queryParams: device, locale, getSize } = useWindowStateSync({
@@ -310,12 +310,12 @@ watch(() => explorer.breadcrumbs.value.length, async () => {
   scrollableRef.value?.scrollToEnd?.()
 })
 
-// 处理选择变化
+// Handle selection change
 function handleSelectionChange(selection) {
   explorer.selection.setSelection(selection)
 }
 
-// 新建文件或文件夹
+// Create new file or directory
 async function handleAdd({ name, type }) {
   let result
   if (type === 'file') {
@@ -333,7 +333,7 @@ async function handleAdd({ name, type }) {
   }
 }
 
-// 删除文件/文件夹
+// Delete file/directory
 async function handleRemove(row) {
   try {
     await ElMessageBox.confirm(
@@ -359,12 +359,12 @@ async function handleRemove(row) {
   }
 }
 
-// 编辑文件
+// Edit file
 function handleEdit(row) {
   editDialogRef.value?.open(row)
 }
 
-// 上传文件/目录
+// Upload files/directories
 async function handleUpload(command) {
   const properties = ['multiSelections']
 
@@ -378,7 +378,7 @@ async function handleUpload(command) {
 
   properties.unshift(...openTypes)
 
-  // 选择文件和目录
+  // Select files and directories
   const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
     properties,
   })
@@ -386,7 +386,7 @@ async function handleUpload(command) {
   if (!files || files.length === 0)
     return
 
-  // 创建进度提示
+  // Create progress notification
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.upload.scanning'),
     {
@@ -436,9 +436,9 @@ async function handleUpload(command) {
   }
 }
 
-// 预览文件
+// Preview file
 async function handlePreview(row) {
-  // 检查是否支持预览
+  // Check whether preview is supported
   const supportCheck = explorer.previewer.checkPreviewSupport(row)
   if (!supportCheck.supported) {
     ElMessage.warning(
@@ -456,14 +456,14 @@ async function handlePreview(row) {
   try {
     const result = await explorer.previewer.previewFile(row, {
       onProgress: () => {
-        // 预览时不显示详细进度
+        // Do not show detailed progress during preview
       },
     })
 
     messageLoading.close()
 
     if (result.success) {
-      // 文件已成功打开，无需额外提示
+      // File opened successfully; no further action required
     }
     else if (result.error) {
       ElMessage.error(window.t('device.control.file.manager.preview.error', { error: result.error }))
@@ -476,7 +476,7 @@ async function handlePreview(row) {
   }
 }
 
-// 下载文件
+// Download file
 async function handleDownload(row) {
   try {
     await ElMessageBox.confirm(
@@ -495,7 +495,7 @@ async function handleDownload(row) {
 
   const savePath = preferenceStore.getData(device.value.id)?.savePath || './'
 
-  // 创建进度提示
+  // Create progress notification
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.download.scanning'),
     {
@@ -546,7 +546,7 @@ async function handleDownload(row) {
   }
 }
 
-// 复制到剪贴板
+// Copy to clipboard
 function handleCopy() {
   const items = explorer.selection.selectedItems.value
   if (items.length > 0) {
@@ -555,7 +555,7 @@ function handleCopy() {
   }
 }
 
-// 剪切到剪贴板
+// Cut to clipboard
 function handleCut() {
   const items = explorer.selection.selectedItems.value
   if (items.length > 0) {
@@ -564,7 +564,7 @@ function handleCut() {
   }
 }
 
-// 粘贴
+// Paste
 async function handlePaste() {
   const result = await explorer.clipboard.paste({ autoRefresh: true })
   if (result.success) {
@@ -577,13 +577,13 @@ async function handlePaste() {
   }
 }
 
-// 移动单个项目
+// Move a single item
 function handleMoveItem(row) {
   pathSelectAction.value = 'move'
   moveDialogRef.value?.open([row], explorer.currentPath.value)
 }
 
-// 路径选择确认
+// Confirm target path selection
 async function handlePathSelectConfirm({ targetPath, items }) {
   let result
   if (pathSelectAction.value === 'move') {
@@ -609,7 +609,7 @@ async function handlePathSelectConfirm({ targetPath, items }) {
   }
 }
 
-// 处理项目点击
+// Handle item click
 async function handleNameClick(row) {
   if (!['file'].includes(row.type)) {
     explorer.navigateTo(row.id)

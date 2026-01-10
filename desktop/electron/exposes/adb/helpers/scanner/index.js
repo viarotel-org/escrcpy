@@ -103,7 +103,7 @@ export class AdbScanner {
 
       this.onStatus('connecting')
 
-      // 先尝试使用历史端口连接
+      // Attempt to connect using historical port first
       const backPort = this.getBackPort(device)
 
       if (backPort && ![5555].includes(backPort)) {

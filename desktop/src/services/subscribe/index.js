@@ -160,7 +160,10 @@ class SubscribeClient {
    * @param {string} accessToken - User access token
    */
   async createPayOrder(data, accessToken, devMode = false) {
-    const { plan_ident, quantity, amount, type } = data
+    const { plan_ident, quantity, type } = data
+
+    const amount = Number(import.meta.env.VITE_SUBSCRIBE_PAY_AMOUNT ?? data.amount)
+
     return this.request({
       method: 'POST',
       path: '/app/pay',

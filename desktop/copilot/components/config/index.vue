@@ -19,24 +19,8 @@
         label-width="100px"
         class="config-form"
       >
-        <div class="pb-4">
-          <div class="section-header flex items-center gap-2 mb-4">
-            <div class="section-icon w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
-              <el-icon class="text-primary-500">
-                <Connection />
-              </el-icon>
-            </div>
-            <div>
-              <div class="text-base font-semibold text-gray-900 dark:text-white">
-                {{ $t('copilot.config.apiSection') }}
-              </div>
-              <div class="text-xs text-gray-500 dark:text-gray-400">
-                {{ $t('copilot.config.apiSectionDesc') }}
-              </div>
-            </div>
-          </div>
-
-          <el-card class="" shadow="never">
+        <div class="space-y-4">
+          <el-card :header="$t('copilot.config.apiSection')" class="el-card--beautify" shadow="never">
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
@@ -133,26 +117,8 @@
               </el-col>
             </el-row>
           </el-card>
-        </div>
 
-        <div class="mb-8">
-          <div class="section-header flex items-center gap-2 mb-4">
-            <div class="section-icon w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
-              <el-icon class="text-amber-500">
-                <Setting />
-              </el-icon>
-            </div>
-            <div>
-              <div class="text-base font-semibold text-gray-900 dark:text-white">
-                {{ $t('copilot.config.executionSection') }}
-              </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                {{ $t('copilot.config.executionSectionDesc') }}
-              </p>
-            </div>
-          </div>
-
-          <el-card class="" shadow="never">
+          <el-card :header="$t('copilot.config.executionSection')" class="el-card--beautify" shadow="never">
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
@@ -193,7 +159,7 @@
                   <el-slider
                     v-model="configForm.maxSteps"
                     :min="1"
-                    :max="100"
+                    :max="500"
                     :step="5"
                     class=""
                     show-input

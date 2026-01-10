@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  autoglm.js@0.0.10:
-    hash: f134d5bac752c56c3c27ca95a67791a0d21f0b56f412f2593726608ed8d7e503
-    path: patches/autoglm.js@0.0.10.patch
+  autoglm.js@0.0.11:
+    hash: 5cfac0f4bd144c9358a1bd3fba8abd995003c5b16c1e5790b9b55777c8e11561
+    path: patches/autoglm.js@0.0.11.patch
 
 importers:
 
@@ -35,8 +35,8 @@ importers:
   desktop:
     dependencies:
       autoglm.js:
-        specifier: 0.0.10
-        version: 0.0.10(patch_hash=f134d5bac752c56c3c27ca95a67791a0d21f0b56f412f2593726608ed8d7e503)
+        specifier: 0.0.11
+        version: 0.0.11(patch_hash=5cfac0f4bd144c9358a1bd3fba8abd995003c5b16c1e5790b9b55777c8e11561)
     devDependencies:
       '@antfu/eslint-config':
         specifier: 4.16.2
@@ -2956,8 +2956,8 @@ packages:
   atomically@2.1.0:
     resolution: {integrity: sha512-+gDffFXRW6sl/HCwbta7zK4uNqbPjv4YJEAdz7Vu+FLQHe77eZ4bvbJGi4hE0QPeJlMYMA3piXEr1UL3dAwx7Q==}
 
-  autoglm.js@0.0.10:
-    resolution: {integrity: sha512-6eCFrvAuEZrVNHLZjykdJeATyRNXOMFND7mwCEl7RtLjB0ut4X8HCc9rJFsGmrt9sripUGMN8Lq3UwrynwGE2A==}
+  autoglm.js@0.0.11:
+    resolution: {integrity: sha512-YrhVMpFhi1KnFXhx+Osrf5KmkqYm7DmTCAtRoV4ru0IOTcyK2ScJ0iN7DIEFPNTecOyEAWiwpUe1b+BRmDh/Uw==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -9253,7 +9253,7 @@ snapshots:
       stubborn-fs: 2.0.0
       when-exit: 2.1.5
 
-  autoglm.js@0.0.10(patch_hash=f134d5bac752c56c3c27ca95a67791a0d21f0b56f412f2593726608ed8d7e503):
+  autoglm.js@0.0.11(patch_hash=5cfac0f4bd144c9358a1bd3fba8abd995003c5b16c1e5790b9b55777c8e11561):
     dependencies:
       '@clack/prompts': 0.11.0
       acorn: 8.15.0

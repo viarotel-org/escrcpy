@@ -10,6 +10,6 @@ ignoredBuiltDependencies:
   - sharp
 
 patchedDependencies:
-  autoglm.js@0.0.10: patches/autoglm.js@0.0.10.patch
+  autoglm.js@0.0.11: patches/autoglm.js@0.0.11.patch
 
 shellEmulator: true

@@ -5,7 +5,7 @@
     </div>
 
     <Scrollable class="flex-1 min-w-0">
-      <div class="flex items-center">
+      <div class="flex items-center !space-x-2">
         <el-button
           v-for="(prompt, index) in quickPrompts"
           :key="index"

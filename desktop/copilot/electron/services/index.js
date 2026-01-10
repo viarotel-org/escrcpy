@@ -6,6 +6,7 @@
  * @module CopilotService
  */
 import appStore from '$electron/helpers/store.js'
+import { isEqual, omit } from 'lodash-es'
 import { sessionManager } from './modules/index.js'
 
 // ==================== Type Definitions ====================
@@ -52,14 +53,17 @@ import { sessionManager } from './modules/index.js'
  */
 class CopilotService {
   constructor() {
-    /** @type {SessionManager} Session manager */
     this.sessionManager = sessionManager
 
     if (this.unsubscribeCopilotApiKey) {
       this.unsubscribeCopilotApiKey()
     }
 
-    this.unsubscribeCopilotApiKey = appStore.onDidChange('copilot.apiKey', () => {
+    this.unsubscribeCopilotApiKey = appStore.onDidChange('copilot', (val, oldVal) => {
+      if (!this._isCopilotConfigChanged(val, oldVal)) {
+        return
+      }
+
       this.sessionManager.destroyAll()
     })
   }
@@ -89,6 +93,15 @@ class CopilotService {
       sessionConfig,
       options,
     )
+  }
+
+  _isCopilotConfigChanged(nextValue = {}, prevValue = {}) {
+    const IGNORED_KEYS = ['prompts']
+
+    const normalizedNext = omit(nextValue, IGNORED_KEYS)
+    const normalizedPrev = omit(prevValue, IGNORED_KEYS)
+
+    return !isEqual(normalizedNext, normalizedPrev)
   }
 
   /**

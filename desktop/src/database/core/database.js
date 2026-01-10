@@ -57,7 +57,7 @@ function mergeSchemas() {
 }
 
 /**
- * 创建并配置 Dexie 数据库实例
+ * Create and configure the Dexie database instance
  */
 class AppDatabase extends Dexie {
   constructor() {
@@ -67,9 +67,9 @@ class AppDatabase extends Dexie {
     this.version(DB_VERSION).stores(mergeSchemas())
 
     // Dynamically attach table references for easier access and type hints
-    // chat 模块
+    // Chat module
     this.messages = this.table('messages')
-    // task 模块
+    // Task module
     this.tasks = this.table('tasks')
   }
 
@@ -127,12 +127,12 @@ class AppDatabase extends Dexie {
   }
 }
 
-// 单例实例
+// Singleton instance
 let dbInstance = null
 
 /**
- * 获取数据库单例实例
- * @returns {AppDatabase} 数据库实例
+ * Get the singleton database instance
+ * @returns {AppDatabase} Database instance
  */
 export function getDatabase() {
   if (!dbInstance) {
@@ -142,8 +142,8 @@ export function getDatabase() {
 }
 
 /**
- * 关闭并重置数据库连接
- * 主要用于测试或特殊场景
+ * Close and reset the database connection
+ * Mainly used for testing or special scenarios
  */
 export async function resetDatabase() {
   if (dbInstance) {
@@ -153,8 +153,8 @@ export async function resetDatabase() {
 }
 
 /**
- * 删除整个数据库
- * 警告：此操作不可逆！
+ * Delete the entire database
+ * Warning: this operation is irreversible!
  */
 export async function deleteDatabase() {
   if (dbInstance) {
@@ -164,7 +164,7 @@ export async function deleteDatabase() {
   await Dexie.delete(DB_NAME)
 }
 
-// 导出默认数据库实例
+// Export default database instance
 export const db = getDatabase()
 
 export default db

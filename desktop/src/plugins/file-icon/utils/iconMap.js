@@ -240,12 +240,12 @@ export function getFileIconInfo(fileOrType) {
 }
 
 /**
- * 添加自定义图标类型
- * @param {string} type - 图标类型名称
- * @param {Object} config - 图标配置
- * @param {string} config.icon - UnoCSS 图标类名
- * @param {string} config.color - Tailwind 颜色类名
- * @param {string[]} [config.extensions] - 文件扩展名数组
+ * Add a custom icon type
+ * @param {string} type - Icon type name
+ * @param {Object} config - Icon configuration
+ * @param {string} config.icon - UnoCSS icon class name
+ * @param {string} config.color - Tailwind color class name
+ * @param {string[]} [config.extensions] - Array of file extensions
  */
 export function addIconType(type, config) {
   if (!type || !config || !config.icon || !config.color) {
@@ -255,13 +255,13 @@ export function addIconType(type, config) {
 
   FILE_ICON_MAP[type] = config
 
-  // 清除缓存以便重新构建
+  // Clear cache so it can be rebuilt
   extensionCache = null
 }
 
 /**
- * 批量添加自定义图标类型
- * @param {Object<string, Object>} types - 图标类型配置对象
+ * Add multiple custom icon types (batch add)
+ * @param {Object<string, Object>} types - Icon type configuration object
  */
 export function addIconTypes(types) {
   if (!types || typeof types !== 'object')

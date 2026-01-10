@@ -74,7 +74,7 @@ export class IpcxMain {
 
   handle(
     channel: string,
-    listener: (event: IpcMainInvokeEvent, ...args: unknown[]) => unknown | Promise<unknown>,
+    listener: (event: IpcMainInvokeEvent, ...args: any[]) => unknown | Promise<unknown>,
   ) {
     debugLogger.info('Registering handler', { channel })
     

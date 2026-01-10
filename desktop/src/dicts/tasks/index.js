@@ -1,10 +1,10 @@
 /**
- * 任务相关字典配置
+ * Task-related dictionary configuration
  *
- * 定时器类型支持三种:
- * 1. timeout - 单次执行（指定时间点）
- * 2. interval - 周期重复（固定间隔）
- * 3. cron - Cron 表达式（灵活配置）
+ * Supported timer types:
+ * 1. timeout - One-time execution (specific time)
+ * 2. interval - Periodic repeat (fixed interval)
+ * 3. cron - Cron expression (flexible configuration)
  */
 
 export const timerType = [

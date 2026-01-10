@@ -12,7 +12,7 @@
     @closed="onClosed"
   >
     <div class="flex flex-col h-full overflow-hidden">
-      <!-- 路径导航栏 -->
+      <!-- Path breadcrumb -->
       <div class="flex-none flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
         <el-button
           text
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <!-- 目录列表 -->
+      <!-- Directory list -->
       <div class="flex-1 min-h-0 border rounded-lg overflow-hidden">
         <el-scrollbar>
           <div v-loading="loading" class="min-h-full">
@@ -65,7 +65,7 @@
         </el-scrollbar>
       </div>
 
-      <!-- 当前选择的路径 -->
+      <!-- Currently selected path -->
       <div class="flex-none mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
         <span class="text-gray-500">{{ $t('device.control.file.manager.target.path') }}:</span>
         <span class="ml-2 font-mono">{{ selectedPath || currentPath }}</span>

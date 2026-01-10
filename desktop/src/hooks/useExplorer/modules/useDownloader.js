@@ -24,25 +24,25 @@ export function useDownloader({ deviceId }) {
   /** @type {import('vue').Ref<import('../types.js').ProgressInfo|null>} Download progress */
   const progress = ref(null)
 
-  /** @type {import('vue').Ref<string|null>} 错误信息 */
+  /** @type {import('vue').Ref<string|null>} Error message */
   const error = ref(null)
 
-  /** @type {import('vue').Ref<Object|null>} 下载结果 */
+  /** @type {import('vue').Ref<Object|null>} Download result */
   const result = ref(null)
 
-  /** @type {Object|null} 当前下载器实例 */
+  /** @type {Object|null} Current downloader instance */
   let downloaderInstance = null
 
   /**
-   * 下载文件或文件夹
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要下载的项
-   * @param {Object} [options] - 选项
-   * @param {string} options.savePath - 本地保存路径
-   * @param {Function} [options.onProgress] - 进度回调
-   * @param {Function} [options.onScanProgress] - 扫描进度回调
-   * @param {Function} [options.onError] - 错误回调
-   * @param {Function} [options.onItemStart] - 项目开始回调
-   * @param {Function} [options.onItemComplete] - 项目完成回调
+   * Download files or folders
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to download
+   * @param {Object} [options] - Options
+   * @param {string} options.savePath - Local save path
+   * @param {Function} [options.onProgress] - Progress callback
+   * @param {Function} [options.onScanProgress] - Scan progress callback
+   * @param {Function} [options.onError] - Error callback
+   * @param {Function} [options.onItemStart] - Item start callback
+   * @param {Function} [options.onItemComplete] - Item complete callback
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function download(items, options = {}) {
@@ -69,7 +69,7 @@ export function useDownloader({ deviceId }) {
       return { success: false, error: 'No items to download' }
     }
 
-    // 转换为下载器需要的格式
+    // Convert to downloader required format
     const downloadItems = itemArray.map(item => ({
       id: item.id,
       type: item.type,
@@ -83,7 +83,7 @@ export function useDownloader({ deviceId }) {
     progress.value = { percent: 0, completed: 0, total: 0 }
 
     try {
-      // 扫描进度回调
+      // Scan progress callback
       const onScanProgress = ({ filesFound, currentPath }) => {
         progress.value = {
           ...progress.value,
@@ -93,7 +93,7 @@ export function useDownloader({ deviceId }) {
         externalOnScanProgress?.({ filesFound, currentPath })
       }
 
-      // 进度回调
+      // Progress callback
       const onProgress = (progressData) => {
         scanning.value = false
         if (progressData.total) {
@@ -110,13 +110,13 @@ export function useDownloader({ deviceId }) {
         externalOnProgress?.(progressData)
       }
 
-      // 错误回调
+      // Error callback
       const onError = (err, filePath) => {
         console.warn(`Download error for ${filePath}:`, err?.message || err)
         externalOnError?.(err, filePath)
       }
 
-      // 创建下载器
+      // Create downloader
       downloaderInstance = $adb.downloader({
         deviceId: deviceId.value,
         items: downloadItems,
@@ -129,7 +129,7 @@ export function useDownloader({ deviceId }) {
         ...downloaderOptions,
       })
 
-      // 执行下载
+      // Start download
       const downloadResult = await downloaderInstance.start()
       result.value = downloadResult
 
@@ -154,9 +154,9 @@ export function useDownloader({ deviceId }) {
   }
 
   /**
-   * 预览下载任务（不执行实际下载）
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要预览的项
-   * @returns {Promise<Object>} 预览信息
+   * Preview download job (does not perform actual download)
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to preview
+   * @returns {Promise<Object>} Preview info
    */
   async function preview(items) {
     if (!deviceId.value) {
@@ -174,7 +174,7 @@ export function useDownloader({ deviceId }) {
       const previewInstance = $adb.downloader({
         deviceId: deviceId.value,
         items: downloadItems,
-        localPath: './', // 临时路径，不会实际使用
+        localPath: './', // Temporary path, not actually used
       })
 
       return await previewInstance.preview()
@@ -184,9 +184,9 @@ export function useDownloader({ deviceId }) {
     }
   }
   /**
-   * 选择保存路径并下载
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要下载的项
-   * @param {Object} [options] - 选项
+   * Select save path and download
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to download
+   * @param {Object} [options] - Options
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function selectAndDownload(items, options = {}) {
@@ -208,7 +208,7 @@ export function useDownloader({ deviceId }) {
   }
 
   /**
-   * 取消下载
+   * Cancel download
    */
   function cancel() {
     if (downloaderInstance) {
@@ -220,7 +220,7 @@ export function useDownloader({ deviceId }) {
   }
 
   /**
-   * 重置状态
+   * Reset state
    */
   function reset() {
     cancel()
@@ -230,8 +230,8 @@ export function useDownloader({ deviceId }) {
   }
 
   /**
-   * 获取下载状态摘要
-   * @returns {Object} 状态摘要
+   * Get download status summary
+   * @returns {Object} Status summary
    */
   function getStatusSummary() {
     return {
@@ -245,14 +245,14 @@ export function useDownloader({ deviceId }) {
   }
 
   return {
-    // 状态
+    // State
     downloading: readonly(downloading),
     scanning: readonly(scanning),
     progress: readonly(progress),
     error: readonly(error),
     result: readonly(result),
 
-    // 方法
+    // Methods
     download,
     selectAndDownload,
     preview,

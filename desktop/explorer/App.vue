@@ -1,9 +1,9 @@
 <template>
   <el-config-provider :locale="locale" :size="getSize($grid)">
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-4">
-      <!-- 导航栏 -->
+      <!-- Navigation bar -->
       <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-        <!-- 后退/前进/上级按钮 -->
+        <!-- Back/Forward/Up buttons -->
         <div class="flex-none flex items-center">
           <el-button
             text
@@ -28,7 +28,7 @@
           ></el-button>
         </div>
 
-        <!-- 面包屑导航 -->
+        <!-- Breadcrumb navigation -->
         <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
           <el-breadcrumb separator-icon="ArrowRight" class="!flex">
             <el-breadcrumb-item
@@ -44,7 +44,7 @@
           </el-breadcrumb>
         </Scrollable>
 
-        <!-- 刷新按钮 -->
+        <!-- Refresh button -->
         <div class="flex-none">
           <el-button
             text
@@ -56,10 +56,10 @@
         </div>
       </div>
 
-      <!-- 工具栏 -->
+      <!-- Toolbar -->
       <div class="flex items-center mb-4">
         <div class="-ml-px space-x-2 mr-auto">
-          <!-- 新建 -->
+          <!-- New -->
           <AddPopover @success="handleAdd">
             <template #reference>
               <el-button type="default" icon="Plus">
@@ -68,7 +68,7 @@
             </template>
           </AddPopover>
 
-          <!-- 上传 -->
+          <!-- Upload -->
           <el-dropdown ref="uploadDropdownRef" :trigger="uploadDropdownTrigger" @command="handleUpload">
             <el-button
               type="default"
@@ -92,7 +92,7 @@
           </el-dropdown>
         </div>
 
-        <!-- 粘贴 -->
+        <!-- Paste -->
         <el-button
           v-if="explorer.clipboard.hasClipboard.value"
           type="primary"
@@ -104,7 +104,7 @@
           ({{ explorer.clipboard.clipboardState.value.count }})
         </el-button>
 
-        <!-- 批量操作 -->
+        <!-- Batch actions -->
         <el-button-group>
           <el-button
             type="default"
@@ -142,7 +142,7 @@
         </el-button-group>
       </div>
 
-      <!-- 文件列表 -->
+      <!-- File list -->
       <div class="flex-1 overflow-hidden">
         <el-table
           ref="tableRef"

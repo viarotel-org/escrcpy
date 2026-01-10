@@ -1,39 +1,39 @@
 /**
- * @fileoverview 剪贴板操作模块
- * 封装文件复制、剪切、粘贴等剪贴板相关操作
+ * @fileoverview Clipboard operations module
+ * Encapsulates file copy, cut, paste and other clipboard related operations
  */
 
 import '../types.js'
 
 /**
- * 剪贴板操作类型
+ * Clipboard action type
  * @typedef {'copy'|'cut'} ClipboardAction
  */
 
 /**
- * 剪贴板 Hook
- * @returns {Object} 剪贴板管理器实例
+ * Clipboard hook
+ * @returns {Object} Clipboard manager instance
  */
 export function useFileClipboard() {
-  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} 剪贴板中的项 */
+  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} Items in clipboard */
   const clipboardItems = ref([])
 
-  /** @type {import('vue').Ref<ClipboardAction|null>} 剪贴板操作类型 */
+  /** @type {import('vue').Ref<ClipboardAction|null>} Clipboard action type */
   const clipboardAction = ref(null)
 
-  /** @type {import('vue').Ref<string>} 剪贴板来源路径 */
+  /** @type {import('vue').Ref<string>} Clipboard source path */
   const sourcePath = ref('')
 
-  /** 是否有剪贴板内容 */
+  /** Whether clipboard has content */
   const hasClipboard = computed(() => clipboardItems.value.length > 0)
 
-  /** 是否为剪切操作 */
+  /** Whether it's cut operation */
   const isCutOperation = computed(() => clipboardAction.value === 'cut')
 
-  /** 是否为复制操作 */
+  /** Whether it's copy operation */
   const isCopyOperation = computed(() => clipboardAction.value === 'copy')
 
-  /** 剪贴板状态 */
+  /** Clipboard state */
   const clipboardState = computed(() => ({
     items: clipboardItems.value,
     action: clipboardAction.value,
@@ -45,9 +45,9 @@ export function useFileClipboard() {
   }))
 
   /**
-   * 复制项到剪贴板
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要复制的项
-   * @param {string} currentPath - 当前路径
+   * Copy items to clipboard
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to copy
+   * @param {string} currentPath - Current path
    */
   function copy(items, currentPath) {
     const itemArray = Array.isArray(items) ? items : [items]
@@ -57,9 +57,9 @@ export function useFileClipboard() {
   }
 
   /**
-   * 剪切项到剪贴板
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要剪切的项
-   * @param {string} currentPath - 当前路径
+   * Cut items to clipboard
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to cut
+   * @param {string} currentPath - Current path
    */
   function cut(items, currentPath) {
     const itemArray = Array.isArray(items) ? items : [items]
@@ -69,7 +69,7 @@ export function useFileClipboard() {
   }
 
   /**
-   * 清空剪贴板
+   * Clear clipboard
    */
   function clear() {
     clipboardItems.value = []
@@ -78,8 +78,8 @@ export function useFileClipboard() {
   }
 
   /**
-   * 检查项是否在剪贴板中（用于 UI 显示）
-   * @param {import('../types.js').FileEntry} item - 要检查的项
+   * Check whether an item is in the clipboard (for UI display)
+   * @param {import('../types.js').FileEntry} item - Item to check
    * @returns {boolean}
    */
   function isInClipboard(item) {
@@ -87,8 +87,8 @@ export function useFileClipboard() {
   }
 
   /**
-   * 检查项是否被剪切（用于 UI 显示半透明效果）
-   * @param {import('../types.js').FileEntry} item - 要检查的项
+   * Check whether an item is cut (for UI translucent effect)
+   * @param {import('../types.js').FileEntry} item - Item to check
    * @returns {boolean}
    */
   function isCut(item) {
@@ -96,7 +96,7 @@ export function useFileClipboard() {
   }
 
   /**
-   * 获取粘贴后需要删除的源项（仅剪切操作）
+   * Get items to remove after paste (cut operations only)
    * @returns {import('../types.js').FileEntry[]}
    */
   function getItemsToRemove() {
@@ -104,7 +104,7 @@ export function useFileClipboard() {
   }
 
   return {
-    // 状态
+    // State
     clipboardItems: readonly(clipboardItems),
     clipboardAction: readonly(clipboardAction),
     sourcePath: readonly(sourcePath),
@@ -113,12 +113,12 @@ export function useFileClipboard() {
     isCopyOperation,
     clipboardState,
 
-    // 操作
+    // Actions
     copy,
     cut,
     clear,
 
-    // 查询
+    // Queries
     isInClipboard,
     isCut,
     getItemsToRemove,

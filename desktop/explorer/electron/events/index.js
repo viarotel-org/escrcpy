@@ -7,11 +7,11 @@ function install(explorerWindow) {
   })
 
   explorerWindow.on('focus', () => {
-    // 窗口获得焦点时的处理
+    // Handle window focus
   })
 
   explorerWindow.on('blur', () => {
-    // 窗口失去焦点时的处理
+    // Handle window blur
   })
 }
 

@@ -1,11 +1,11 @@
 /**
- * 通用 Store 基类 - 提供统一的 CRUD 接口
+ * Generic Base Store class - provides unified CRUD interfaces
  *
- * 设计思路：
- * 1. 抽象通用的数据操作方法，所有模块继承此类
- * 2. 统一的入参/出参格式
- * 3. 内置错误处理和数据校验
- * 4. 支持分页查询和条件过滤
+ * Design:
+ * 1. Abstract common data operations, inherited by modules
+ * 2. Unified input/output formats
+ * 3. Built-in error handling and data validation
+ * 4. Support pagination and filtered queries
  *
  * @module storage/core/BaseStore
  */
@@ -14,39 +14,39 @@ import { db } from './database.js'
 import { createStorageError, StorageErrorTypes, validateData } from '../utils/validation.js'
 
 /**
- * Store 配置选项
+ * Store configuration options
  * @typedef {Object} StoreConfig
- * @property {string} tableName - 表名
- * @property {Object} [schema] - 字段定义，用于数据校验
- * @property {string} [primaryKey='id'] - 主键字段名
- * @property {Array<string>} [requiredFields=[]] - 必填字段列表
+ * @property {string} tableName - Table name
+ * @property {Object} [schema] - Field definitions for validation
+ * @property {string} [primaryKey='id'] - Primary key field name
+ * @property {Array<string>} [requiredFields=[]] - Required field list
  */
 
 /**
- * 分页参数
+ * Pagination parameters
  * @typedef {Object} PaginationParams
- * @property {number} [page=1] - 页码（从1开始）
- * @property {number} [pageSize=20] - 每页数量
- * @property {string} [orderBy] - 排序字段
- * @property {boolean} [desc=true] - 是否降序
+ * @property {number} [page=1] - Page number (1-based)
+ * @property {number} [pageSize=20] - Items per page
+ * @property {string} [orderBy] - Sort field
+ * @property {boolean} [desc=true] - Descending order
  */
 
 /**
- * 分页结果
+ * Pagination result
  * @typedef {Object} PaginationResult
- * @property {Array} list - 数据列表
- * @property {number} total - 总记录数
- * @property {number} page - 当前页码
- * @property {number} pageSize - 每页数量
- * @property {number} totalPages - 总页数
+ * @property {Array} list - Data list
+ * @property {number} total - Total record count
+ * @property {number} page - Current page number
+ * @property {number} pageSize - Items per page
+ * @property {number} totalPages - Total page count
  */
 
 /**
- * 通用 Store 基类
+ * Base Store class
  */
 export class BaseStore {
   /**
-   * @param {StoreConfig} config - Store 配置
+   * @param {StoreConfig} config - Store config
    */
   constructor(config) {
     if (!config.tableName) {
@@ -61,13 +61,13 @@ export class BaseStore {
   }
 
   /**
-   * 添加单条记录
-   * @param {Object} data - 要添加的数据
+   * Add a single record
+   * @param {Object} data - Data to add
    * @returns {Promise<{success: boolean, data?: any, error?: Object}>}
    */
   async add(data) {
     try {
-      // 数据校验
+      // Data validation
       const validation = validateData(data, this.requiredFields, this.schema)
       if (!validation.valid) {
         return {
@@ -80,7 +80,7 @@ export class BaseStore {
         }
       }
 
-      // 添加时间戳（如果 schema 中定义了）
+      // Add timestamps (if schema defines them)
       const record = {
         ...data,
         createdAt: data.createdAt || Date.now(),
@@ -104,8 +104,8 @@ export class BaseStore {
   }
 
   /**
-   * 批量添加记录
-   * @param {Array<Object>} items - 要添加的数据数组
+   * Bulk add records
+   * @param {Array<Object>} items - Array of items to add
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   async bulkAdd(items) {
@@ -147,8 +147,8 @@ export class BaseStore {
   }
 
   /**
-   * 根据主键获取单条记录
-   * @param {any} id - 主键值
+   * Get a single record by primary key
+   * @param {any} id - Primary key value
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   async getById(id) {
@@ -177,10 +177,10 @@ export class BaseStore {
   }
 
   /**
-   * 获取所有记录
-   * @param {Object} [options] - 查询选项
-   * @param {string} [options.orderBy] - 排序字段
-   * @param {boolean} [options.desc] - 是否降序
+   * Get all records
+   * @param {Object} [options] - Query options
+   * @param {string} [options.orderBy] - Sort field
+   * @param {boolean} [options.desc] - Descending
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   async getAll(options = {}) {
@@ -208,9 +208,9 @@ export class BaseStore {
   }
 
   /**
-   * 分页查询
-   * @param {PaginationParams} params - 分页参数
-   * @param {Object} [filter] - 过滤条件（索引字段）
+   * Paged query
+   * @param {PaginationParams} params - Pagination parameters
+   * @param {Object} [filter] - Filter conditions (indexed fields)
    * @returns {Promise<{success: boolean, data?: PaginationResult, error?: Object}>}
    */
   async getList(params = {}, filter = {}) {
@@ -222,16 +222,16 @@ export class BaseStore {
         desc = true,
       } = params
 
-      // 构建查询
+      // Build query
       let collection
 
-      // 如果有索引过滤条件
+      // If there are indexed filter conditions
       const filterKeys = Object.keys(filter)
       if (filterKeys.length > 0) {
         const [firstKey] = filterKeys
         collection = this.table.where(firstKey).equals(filter[firstKey])
 
-        // 链式添加其他条件
+        // Chain additional conditions
         for (let i = 1; i < filterKeys.length; i++) {
           const key = filterKeys[i]
           collection = collection.and(item => item[key] === filter[key])
@@ -241,13 +241,13 @@ export class BaseStore {
         collection = this.table.toCollection()
       }
 
-      // 获取总数
+      // Get total count
       const total = await collection.count()
 
-      // 排序
+      // Sorting
       let query = collection
       if (orderBy) {
-        // 需要重新创建带排序的查询
+        // Need to recreate query with ordering
         if (filterKeys.length > 0) {
           const [firstKey] = filterKeys
           query = this.table.where(firstKey).equals(filter[firstKey])
@@ -257,11 +257,11 @@ export class BaseStore {
         }
       }
 
-      // 分页
+      // Pagination
       const offset = (page - 1) * pageSize
       let records = await query.toArray()
 
-      // 手动排序（当使用 where 时 orderBy 不可用）
+      // Manual sort (orderBy not available when using where)
       if (filterKeys.length > 0 && orderBy) {
         records.sort((a, b) => {
           const aVal = a[orderBy]
@@ -273,7 +273,7 @@ export class BaseStore {
         records = records.reverse()
       }
 
-      // 截取分页数据
+      // Slice pagination data
       const list = records.slice(offset, offset + pageSize)
 
       return {
@@ -297,9 +297,9 @@ export class BaseStore {
   }
 
   /**
-   * 更新记录
-   * @param {any} id - 主键值
-   * @param {Object} changes - 要更新的字段
+   * Update record
+   * @param {any} id - Primary key value
+   * @param {Object} changes - Fields to update
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   async update(id, changes) {
@@ -322,7 +322,7 @@ export class BaseStore {
 
       await this.table.update(id, updateData)
 
-      // 返回更新后的完整记录
+      // Return the updated full record
       const updated = await this.table.get(id)
 
       return { success: true, data: updated }
@@ -337,8 +337,8 @@ export class BaseStore {
   }
 
   /**
-   * 删除单条记录
-   * @param {any} id - 主键值
+   * Delete a single record
+   * @param {any} id - Primary key value
    * @returns {Promise<{success: boolean, error?: Object}>}
    */
   async deleteById(id) {
@@ -356,8 +356,8 @@ export class BaseStore {
   }
 
   /**
-   * 批量删除
-   * @param {Array<any>} ids - 主键值数组
+   * Bulk delete
+   * @param {Array<any>} ids - Array of primary key values
    * @returns {Promise<{success: boolean, error?: Object}>}
    */
   async bulkDelete(ids) {
@@ -375,7 +375,7 @@ export class BaseStore {
   }
 
   /**
-   * 清空所有记录
+   * Clear all records
    * @returns {Promise<{success: boolean, error?: Object}>}
    */
   async clearAll() {
@@ -393,8 +393,8 @@ export class BaseStore {
   }
 
   /**
-   * 获取记录总数
-   * @param {Object} [filter] - 过滤条件
+   * Get total record count
+   * @param {Object} [filter] - Filter conditions
    * @returns {Promise<{success: boolean, data?: number, error?: Object}>}
    */
   async count(filter = {}) {
@@ -424,7 +424,7 @@ export class BaseStore {
   }
 
   /**
-   * 获取 Dexie Table 实例，用于自定义查询
+   * Get Dexie Table instance for custom queries
    * @returns {import('dexie').Table}
    */
   getTable() {

@@ -1,7 +1,7 @@
 /**
- * @fileoverview 文件预览模块
- * 封装文件预览功能，支持不同文件类型的预览
- * 使用安全的 API，不依赖未暴露的 Node 模块
+ * @fileoverview File preview module
+ * Encapsulates file preview functionality and supports multiple file types
+ * Uses safe APIs and does not rely on unexposed Node modules
  */
 
 import '../types.js'
@@ -16,21 +16,21 @@ const $adb = window.adb
  * @returns {Object} Previewer instance
  */
 export function useFilePreview({ deviceId }) {
-  /** @type {import('vue').Ref<boolean>} 预览中状态 */
+  /** @type {import('vue').Ref<boolean>} Previewing state */
   const previewing = ref(false)
 
-  /** @type {import('vue').Ref<string|null>} 错误信息 */
+  /** @type {import('vue').Ref<string|null>} Error message */
   const error = ref(null)
 
-  /** @type {import('vue').Ref<string|null>} 当前预览文件路径 */
+  /** @type {import('vue').Ref<string|null>} Current preview file path */
   const currentPreviewFile = ref(null)
 
-  /** @type {Object|null} 当前下载器实例 */
+  /** @type {Object|null} Current downloader instance */
   let downloaderInstance = null
 
   /**
-   * 支持预览的文件类型配置
-   * 可扩展以支持更多文件类型
+   * Supported preview file types configuration
+   * Extendable to support more file types
    */
   const PREVIEW_SUPPORT = {
     // Text files
@@ -66,8 +66,8 @@ export function useFilePreview({ deviceId }) {
   }
 
   /**
-   * 获取文件扩展名
-   * @param {string} filename - 文件名
+   * Get file extension
+   * @param {string} filename - Filename
    * @returns {string}
    */
   function getFileExtension(filename) {
@@ -78,8 +78,8 @@ export function useFilePreview({ deviceId }) {
   }
 
   /**
-   * 检查文件是否支持预览
-   * @param {import('../types.js').FileEntry} file - 文件项
+   * Check if file is supported for preview
+   * @param {import('../types.js').FileEntry} file - File entry
    * @returns {Object} { supported: boolean, type: string, reason: string }
    */
   function checkPreviewSupport(file) {
@@ -92,10 +92,10 @@ export function useFilePreview({ deviceId }) {
       return { supported: false, type: null, reason: 'Unknown file type' }
     }
 
-    // 查找支持的文件类型
+    // Find supported file types
     for (const [type, config] of Object.entries(PREVIEW_SUPPORT)) {
       if (config.extensions.includes(ext)) {
-        // 检查文件大小（如果有）
+        // Check file size (if present)
         if (file.size && file.size > config.maxSize) {
           return {
             supported: false,
@@ -107,15 +107,15 @@ export function useFilePreview({ deviceId }) {
       }
     }
 
-    // 默认尝试预览（让系统决定）
+    // Default to attempt preview (let system decide)
     return { supported: true, type: 'unknown', reason: null }
   }
 
   /**
-   * 预览文件
-   * @param {import('../types.js').FileEntry} file - 要预览的文件
-   * @param {Object} [options] - 选项
-   * @param {Function} [options.onProgress] - 进度回调
+   * Preview file
+   * @param {import('../types.js').FileEntry} file - File to preview
+   * @param {Object} [options] - Options
+   * @param {Function} [options.onProgress] - Progress callback
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function previewFile(file, options = {}) {
@@ -125,7 +125,7 @@ export function useFilePreview({ deviceId }) {
       return { success: false, error: 'Device ID is required' }
     }
 
-    // 检查是否支持预览
+    // Check preview support
     const supportCheck = checkPreviewSupport(file)
     if (!supportCheck.supported) {
       return { success: false, error: supportCheck.reason }
@@ -135,10 +135,10 @@ export function useFilePreview({ deviceId }) {
     error.value = null
 
     try {
-      // 获取临时目录
+      // Get temp directory
       const tempDir = await window.electron.ipcRenderer.invoke('get-temp-path')
 
-      // 生成唯一文件名（添加时间戳避免冲突）
+      // Generate unique filename (append timestamp to avoid collisions)
       const timestamp = Date.now()
       const fileName = file.name
       const fileExt = getFileExtension(fileName)
@@ -148,14 +148,14 @@ export function useFilePreview({ deviceId }) {
       const uniqueFileName = `${fileBaseName}_${timestamp}${fileExt}`
       const tempFilePath = window.nodePath.join(tempDir, uniqueFileName)
 
-      // 转换为下载器需要的格式
+      // Convert to downloader format
       const downloadItem = {
         id: file.id,
         type: file.type || 'file',
         name: fileName,
       }
 
-      // 创建下载器
+      // Create downloader
       downloaderInstance = $adb.downloader({
         deviceId: deviceId.value,
         items: [downloadItem],
@@ -165,7 +165,7 @@ export function useFilePreview({ deviceId }) {
         },
       })
 
-      // 执行下载
+      // Start download
       const downloadResult = await downloaderInstance.start()
 
       if (!downloadResult.success) {
@@ -175,14 +175,14 @@ export function useFilePreview({ deviceId }) {
         }
       }
 
-      // 构建下载后的文件路径
+      // Build downloaded file path
       const downloadedPath = window.nodePath.join(tempDir, fileName)
 
-      // 使用 IPC 调用重命名文件（如果需要）
+      // Rename file via IPC if necessary
       let finalPath = downloadedPath
       if (fileName !== uniqueFileName) {
         try {
-          // 通过 IPC 调用主进程进行文件重命名
+          // Use IPC to call main process for file rename
           await window.electron.ipcRenderer.invoke('rename-temp-file', {
             oldPath: downloadedPath,
             newPath: tempFilePath,
@@ -190,17 +190,17 @@ export function useFilePreview({ deviceId }) {
           finalPath = tempFilePath
         }
         catch (renameError) {
-          // 如果重命名失败，使用原文件名
+          // If rename fails, keep original filename
           console.warn('Failed to rename temp file:', renameError)
           finalPath = downloadedPath
         }
       }
 
-      // 使用系统默认应用打开文件（通过 IPC 调用）
+      // Open file with system default app (via IPC)
       const openResult = await window.electron.ipcRenderer.invoke('open-path', finalPath)
 
       if (openResult) {
-        // openPath 返回非空字符串表示出错
+        // openPath returns a non-empty string on error
         return {
           success: false,
           error: openResult,
@@ -229,7 +229,7 @@ export function useFilePreview({ deviceId }) {
   }
 
   /**
-   * 取消预览（取消下载）
+   * Cancel preview (cancel download)
    */
   function cancel() {
     if (downloaderInstance) {
@@ -240,7 +240,7 @@ export function useFilePreview({ deviceId }) {
   }
 
   /**
-   * 重置状态
+   * Reset state
    */
   function reset() {
     cancel()
@@ -249,18 +249,18 @@ export function useFilePreview({ deviceId }) {
   }
 
   return {
-    // 状态
+    // State
     previewing: readonly(previewing),
     error: readonly(error),
     currentPreviewFile: readonly(currentPreviewFile),
 
-    // 方法
+    // Methods
     previewFile,
     checkPreviewSupport,
     cancel,
     reset,
 
-    // 配置（只读）
+    // Config (readonly)
     PREVIEW_SUPPORT: readonly(PREVIEW_SUPPORT),
   }
 }

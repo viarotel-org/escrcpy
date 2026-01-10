@@ -12,7 +12,7 @@
     class="el-dialog--beautify "
   >
     <div v-loading="loading" class="space-y-4 h-full overflow-auto pr-4">
-      <!-- 文件名输入 -->
+      <!-- Filename input -->
       <div>
         <label class="block text-sm font-medium mb-1">
           {{ $t('device.control.file.manager.edit.filename') }}
@@ -24,7 +24,7 @@
         />
       </div>
 
-      <!-- 文件内容编辑器（仅文本文件显示） -->
+      <!-- File content editor (text files only) -->
       <div v-if="isTextFile">
         <label class="block text-sm font-medium mb-1">
           {{ $t('device.control.file.manager.edit.content') }}
@@ -57,7 +57,7 @@ const props = defineProps({
 
 const emit = defineEmits(['success'])
 
-// 最大可编辑文件大小 (1MB)
+// Maximum editable file size (1MB)
 const MAX_EDITABLE_SIZE = 1024 * 1024
 
 // 对话框状态

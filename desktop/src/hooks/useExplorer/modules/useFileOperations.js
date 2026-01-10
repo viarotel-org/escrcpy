@@ -1,6 +1,6 @@
 /**
- * @fileoverview 文件操作模块
- * 封装读取目录、创建、删除、重命名等基础文件操作
+ * @fileoverview File operations module
+ * Encapsulates directory reading, create, delete, rename and other basic file operations
  */
 
 import '../types.js'
@@ -10,27 +10,27 @@ import { decodeBase64, encodeBase64 } from '../helpers/index.js'
 const $adb = window.adb
 
 /**
- * 文件操作 Hook
- * @param {Object} options - 配置选项
- * @param {import('vue').Ref<string>} options.deviceId - 设备 ID
- * @param {import('vue').Ref<string>} options.currentPath - 当前路径
- * @returns {Object} 文件操作实例
+ * File operations hook
+ * @param {Object} options - Configuration options
+ * @param {import('vue').Ref<string>} options.deviceId - Device ID
+ * @param {import('vue').Ref<string>} options.currentPath - Current path
+ * @returns {Object} File operations instance
  */
 export function useFileOperations({ deviceId, currentPath }) {
-  /** @type {import('vue').Ref<boolean>} 加载状态 */
+  /** @type {import('vue').Ref<boolean>} Loading state */
   const loading = ref(false)
 
-  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} 文件列表 */
+  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} File list */
   const files = ref([])
 
   /** @type {import('vue').Ref<string|null>} 错误信息 */
   const error = ref(null)
 
-  /** @type {import('vue').Ref<number>} 最后刷新时间 */
+  /** @type {import('vue').Ref<number>} Last refresh time */
   const lastRefreshTime = ref(0)
 
   /**
-   * 读取当前目录
+   * Read current directory
    * @returns {Promise<import('../types.js').FileEntry[]>}
    */
   async function readDirectory() {
@@ -67,10 +67,10 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 创建文件夹
-   * @param {string} dirname - 文件夹名称
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Create directory
+   * @param {string} dirname - Directory name
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function createDirectory(dirname, { autoRefresh = true } = {}) {
@@ -99,10 +99,10 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 创建空文件
-   * @param {string} filename - 文件名
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Create empty file
+   * @param {string} filename - Filename
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function createFile(filename, { autoRefresh = true } = {}) {
@@ -131,11 +131,11 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 删除文件或文件夹
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要删除的项
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
-   * @param {boolean} [options.recursive] - 是否递归删除
+   * Remove files or directories
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to remove
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
+   * @param {boolean} [options.recursive] - Recursive delete
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function remove(items, { autoRefresh = true, recursive = true } = {}) {
@@ -209,11 +209,11 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 复制文件或文件夹
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要复制的项
-   * @param {string} targetPath - 目标路径
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Copy files or folders
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to copy
+   * @param {string} targetPath - Target path
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function copy(items, targetPath, { autoRefresh = true } = {}) {

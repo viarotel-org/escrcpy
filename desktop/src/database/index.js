@@ -29,19 +29,19 @@
  * @module storage
  */
 
-// 核心层
+// Core layer
 export { BaseStore, db, deleteDatabase, getDatabase, resetDatabase } from './core/index.js'
 
 // Hooks
 export { useLiveQuery, useLiveQueryWithDeps, useLiveQueryWithState } from './hooks/index.js'
 
-// 聊天模块
+// Chat module
 export {
   chatMessageStore,
   useChatMessages,
 } from './modules/chat/index.js'
 
-// 工具函数
+// Utilities
 export {
   createStorageError,
   FieldTypes,

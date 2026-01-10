@@ -1,45 +1,45 @@
 /**
- * 核心数据库实例 - 基于 Dexie.js 的 IndexedDB 封装
+ * Core database instance - Dexie.js wrapper for IndexedDB
  *
- * 设计思路：
- * 1. 单例模式确保全局唯一数据库实例
- * 2. 模块化 Schema 设计，支持按需扩展新模块
- * 3. 版本管理支持平滑升级
+ * Design:
+ * 1. Singleton ensures a single global DB instance
+ * 2. Modular schema design to extend modules on demand
+ * 3. Versioning supports smooth upgrades
  *
  * @module storage/core/database
  */
 
 import Dexie from 'dexie'
 
-// 数据库名称
+// Database namease name
 const DB_NAME = 'escrcpy_local_db'
 
-// 当前数据库版本
+// Current database version
 const DB_VERSION = 1
 
 /**
- * 模块 Schema 配置
- * 每个模块定义自己的表结构和索引
- * 索引规则：++ 为自增主键，& 为唯一索引，* 为多值索引，[a+b] 为复合索引
+ * Module schema configuration
+ * Each module defines its own table structures and indexes
+ * Index rules: ++ auto-increment primary key, & unique index, * multi-entry index, [a+b] composite index
  */
 const MODULE_SCHEMAS = {
   /**
-   * 聊天消息模块
-   * - id: 消息唯一标识（自增）
-   * - sessionId: 会话ID，用于区分不同设备/会话的聊天记录
-   * - timestamp: 消息时间戳，支持按时间范围查询
-   * - role: 消息角色（user/assistant/system）
+   * Chat messages module
+   * - id: Unique message identifier (auto-increment)
+   * - sessionId: Session ID to separate chats by device/session
+   * - timestamp: Message timestamp (supports range queries)
+   * - role: Message role (user/assistant/system)
    */
   chat: {
     messages: '++id, sessionId, timestamp, role, [sessionId+timestamp]',
   },
 
   /**
-   * 任务模块（预留）
-   * - id: 任务唯一标识
-   * - deviceId: 设备ID
-   * - status: 任务状态
-   * - createdAt: 创建时间
+   * Task module (reserved)
+   * - id: Unique task identifier
+   * - deviceId: Device ID
+   * - status: Task status
+   * - createdAt: Creation time
    */
   task: {
     tasks: '++id, deviceId, status, createdAt, [deviceId+status]',
@@ -47,8 +47,8 @@ const MODULE_SCHEMAS = {
 }
 
 /**
- * 合并所有模块的 Schema
- * @returns {Object} 合并后的完整 Schema
+ * Merge all module schemas
+ * @returns {Object} Merged full schema
  */
 function mergeSchemas() {
   return Object.values(MODULE_SCHEMAS).reduce((acc, schema) => {
@@ -63,10 +63,10 @@ class AppDatabase extends Dexie {
   constructor() {
     super(DB_NAME)
 
-    // 配置数据库版本和 Schema
+    // Configure database version and schema
     this.version(DB_VERSION).stores(mergeSchemas())
 
-    // 动态挂载表引用，方便类型提示和访问
+    // Dynamically attach table references for easier access and type hints
     // chat 模块
     this.messages = this.table('messages')
     // task 模块
@@ -74,9 +74,9 @@ class AppDatabase extends Dexie {
   }
 
   /**
-   * 获取指定模块的所有表
-   * @param {string} moduleName - 模块名称
-   * @returns {Object} 模块包含的表对象
+   * Get all tables for a specified module
+   * @param {string} moduleName - Module name
+   * @returns {Object} Tables contained in the module
    */
   getModuleTables(moduleName) {
     const schema = MODULE_SCHEMAS[moduleName]
@@ -93,8 +93,8 @@ class AppDatabase extends Dexie {
   }
 
   /**
-   * 清空指定模块的所有数据
-   * @param {string} moduleName - 模块名称
+   * Clear all data for the specified module
+   * @param {string} moduleName - Module name
    * @returns {Promise<void>}
    */
   async clearModule(moduleName) {
@@ -112,8 +112,8 @@ class AppDatabase extends Dexie {
   }
 
   /**
-   * 获取数据库统计信息
-   * @returns {Promise<Object>} 各表的记录数
+   * Get database statistics
+   * @returns {Promise<Object>} Record counts per table
    */
   async getStats() {
     const stats = {}

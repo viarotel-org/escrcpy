@@ -328,7 +328,7 @@ async function onSubmit(command) {
 
   const selectedDevices = deviceSelectionHelper.filter(props.devices, 'onlineAndUnique')
 
-  // 调用批量执行方法
+  // Invoke the batch execution method
   await executeBatchCopilotTask(selectedDevices, {
     extra: command,
     taskId: `batch-copilot-${Date.now()}`,

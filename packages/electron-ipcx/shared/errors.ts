@@ -145,7 +145,7 @@ export function wrapError(error: unknown): ErrorEnvelope {
   }
   else if (error instanceof Error) {
     err = error
-    // @ts-expect-error 非标准属性
+    // @ts-expect-error non-standard property
     code = err.code
   }
   else {
@@ -173,7 +173,7 @@ export function unwrapError<T>(value: T | ErrorEnvelope): T {
   if (isErrorEnvelope(value)) {
     const error = new Error(value.message)
     error.name = value.name
-    // @ts-expect-error 非标准属性
+    // @ts-expect-error non-standard property
     if (value.code) error.code = value.code
     if (value.stack) error.stack = value.stack
     throw error

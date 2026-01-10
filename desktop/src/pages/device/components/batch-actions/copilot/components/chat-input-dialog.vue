@@ -74,7 +74,7 @@ function open() {
   })
 }
 
-// 提交
+// Submit
 function handleSubmit() {
   if (!inputValue.value.trim() || props.isExecuting)
     return
@@ -87,12 +87,12 @@ function handleStop() {
   emit('stop')
 }
 
-// 关闭
+// Close
 function close() {
   visible.value = false
 }
 
-// 关闭后回调
+// After close callback
 function handleClosed() {
   inputValue.value = ''
   emit('closed')

@@ -371,7 +371,7 @@ import { ArrowDown, ArrowUp, Check, Close, InfoFilled } from '@element-plus/icon
 
 const props = defineProps({
   /**
-   * Cron 表达式值（v-model）
+   * Cron expression value (v-model)
    */
   modelValue: {
     type: String,
@@ -387,10 +387,10 @@ const presetType = ref('daily')
 // Whether to show advanced mode
 const showAdvanced = ref(false)
 
-// 自定义配置展开面板
+// Custom configuration expanded panels
 const activePanel = ref(['minute', 'hour'])
 
-// 星期选项
+// Weekday options
 const weekDays = [
   { label: 'cron.weekday.sun', value: 0 },
   { label: 'cron.weekday.mon', value: 1 },
@@ -409,7 +409,7 @@ const config = reactive({
   days: [1], // Default: day 1 of month
 })
 
-// 自定义配置（用于高级自定义）
+// Custom configuration (for advanced customization)
 const customConfig = reactive({
   minute: {
     type: 'every',
@@ -519,26 +519,26 @@ const cronDescription = computed(() => {
 })
 
 /**
- * 根据可视化配置生成 Cron 表达式
+ * Generate Cron expression from visual configuration
  */
 function generateCronExpressionFromConfig() {
   let expression = ''
 
   switch (presetType.value) {
     case 'hourly':
-      // 每小时的第 N 分钟
+      // Nth minute of every hour
       expression = `${config.minute} * * * *`
       break
 
     case 'daily': {
-      // 每天固定时间
+      // Fixed time each day
       const [hour, minute] = (config.time || '08:00').split(':')
       expression = `${Number.parseInt(minute)} ${Number.parseInt(hour)} * * *`
       break
     }
 
     case 'weekly': {
-      // 每周特定日期和时间
+      // Specific weekdays and time
       const [hour, minute] = (config.time || '08:00').split(':')
       const weekdaysStr = config.weekdays.length > 0 ? config.weekdays.sort((a, b) => a - b).join(',') : '*'
       expression = `${Number.parseInt(minute)} ${Number.parseInt(hour)} * * ${weekdaysStr}`
@@ -546,7 +546,7 @@ function generateCronExpressionFromConfig() {
     }
 
     case 'monthly': {
-      // 每月特定日期和时间
+      // Specific days of month and time
       const [hour, minute] = (config.time || '08:00').split(':')
       const daysStr = config.days.length > 0 ? config.days.sort((a, b) => a - b).join(',') : '*'
       expression = `${Number.parseInt(minute)} ${Number.parseInt(hour)} ${daysStr} * *`
@@ -562,24 +562,24 @@ function generateCronExpressionFromConfig() {
 }
 
 /**
- * 根据自定义配置生成 Cron 表达式
+ * Generate Cron expression from custom configuration
  */
 function generateCustomCronExpression() {
   const parts = []
 
-  // 分钟部分
+  // Minute part
   parts.push(generateFieldExpression(customConfig.minute, 0, 59))
 
-  // 小时部分
+  // Hour part
   parts.push(generateFieldExpression(customConfig.hour, 0, 23))
 
-  // 日期部分
+  // Day part
   parts.push(generateFieldExpression(customConfig.day, 1, 31))
 
-  // 月份部分（固定为每月）
+  // Month part (fixed to every month)
   parts.push('*')
 
-  // 星期部分
+  // Weekday part
   if (customConfig.weekday.type === 'every') {
     parts.push('*')
   }
@@ -594,7 +594,7 @@ function generateCustomCronExpression() {
 }
 
 /**
- * 生成单个字段的 Cron 表达式
+ * Generate a Cron expression for a single field
  */
 function generateFieldExpression(fieldConfig, min, max) {
   switch (fieldConfig.type) {
@@ -614,14 +614,14 @@ function generateFieldExpression(fieldConfig, min, max) {
 }
 
 /**
- * 处理预设类型变化
+ * Handle preset type changes
  */
 function handlePresetChange() {
   updateCronExpression()
 }
 
 /**
- * 处理用户直接输入表达式
+ * Handle user-entered expression
  */
 function handleExpressionInput(value) {
   cronExpression.value = value
@@ -629,12 +629,12 @@ function handleExpressionInput(value) {
   emit('change', value)
   emit('valid-change', isValidCron.value)
 
-  // 尝试反向解析到可视化配置
+  // Attempt to parse back into the visual configuration
   parseExpressionToConfig(value)
 }
 
 /**
- * 尝试将 Cron 表达式解析为可视化配置
+ * Try to parse Cron expression into visual config
  */
 function parseExpressionToConfig(expression) {
   if (!expression) {
@@ -648,37 +648,37 @@ function parseExpressionToConfig(expression) {
 
   const [minute, hour, day, month, weekday] = parts
 
-  // 尝试识别预设类型
+  // Attempt to recognize preset type
   if (minute !== '*' && hour === '*' && day === '*' && month === '*' && weekday === '*') {
-    // 每小时模式
+    // Hourly mode
     presetType.value = 'hourly'
     config.minute = Number.parseInt(minute) || 0
   }
   else if (minute !== '*' && hour !== '*' && day === '*' && month === '*' && weekday === '*') {
-    // 每天模式
+    // Daily mode
     presetType.value = 'daily'
     config.time = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
   }
   else if (minute !== '*' && hour !== '*' && day === '*' && month === '*' && weekday !== '*') {
-    // 每周模式
+    // Weekly mode
     presetType.value = 'weekly'
     config.time = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
     config.weekdays = weekday.split(',').map(d => Number.parseInt(d))
   }
   else if (minute !== '*' && hour !== '*' && day !== '*' && month === '*' && weekday === '*') {
-    // 每月模式
+    // Monthly mode
     presetType.value = 'monthly'
     config.time = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
     config.days = day.split(',').map(d => Number.parseInt(d))
   }
   else {
-    // 自定义模式
+    // Custom mode
     presetType.value = 'custom'
   }
 }
 
 /**
- * 更新 Cron 表达式并发送事件
+ * Update Cron expression and emit events
  */
 function updateCronExpression() {
   const expression = generateCronExpressionFromConfig()
@@ -688,7 +688,7 @@ function updateCronExpression() {
   emit('valid-change', isValidCron.value)
 }
 
-// 监听配置变化，自动更新 Cron 表达式
+// Watch config changes and auto-update Cron expression
 watch(
   () => [config.minute, config.time, config.weekdays, config.days],
   () => {
@@ -699,7 +699,7 @@ watch(
   { deep: true },
 )
 
-// 监听自定义配置变化
+// Watch custom config changes
 watch(
   customConfig,
   () => {
@@ -710,7 +710,7 @@ watch(
   { deep: true },
 )
 
-// 监听外部值变化
+// Watch external value changes
 watch(
   () => props.modelValue,
   (newValue) => {
@@ -721,28 +721,28 @@ watch(
   },
 )
 
-// 初始化
+// Initialization
 if (props.modelValue) {
   cronExpression.value = props.modelValue
   parseExpressionToConfig(props.modelValue)
 }
 else {
-  // 默认生成一个表达式
+  // Generate a default expression
   updateCronExpression()
 }
 
-// 暴露方法
+// Expose methods
 defineExpose({
   /**
-   * 获取当前 Cron 表达式
+   * Get current Cron expression
    */
   getCronExpression: () => cronExpression.value,
   /**
-   * 验证当前表达式是否有效
+   * Validate whether the current expression is valid
    */
   validate: () => isValidCron.value,
   /**
-   * 获取下次执行时间列表
+   * Get list of next execution times
    */
   getNextExecutions: () => nextExecutions.value,
 })

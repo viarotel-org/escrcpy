@@ -23,7 +23,7 @@ export function useFileOperations({ deviceId, currentPath }) {
   /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} File list */
   const files = ref([])
 
-  /** @type {import('vue').Ref<string|null>} 错误信息 */
+  /** @type {import('vue').Ref<string|null>} Error message */
   const error = ref(null)
 
   /** @type {import('vue').Ref<number>} Last refresh time */
@@ -59,7 +59,7 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 刷新当前目录
+   * Refresh current directory
    * @returns {Promise<import('../types.js').FileEntry[]>}
    */
   async function refresh() {
@@ -175,11 +175,11 @@ export function useFileOperations({ deviceId, currentPath }) {
     }
   }
   /**
-   * 重命名文件或文件夹
-   * @param {import('../types.js').FileEntry} item - 要重命名的项
-   * @param {string} newName - 新名称
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Rename file or folder
+   * @param {import('../types.js').FileEntry} item - Item to rename
+   * @param {string} newName - New name
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function rename(item, newName, { autoRefresh = true } = {}) {
@@ -255,11 +255,11 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 移动文件或文件夹
-   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - 要移动的项
-   * @param {string} targetPath - 目标路径
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Move files or folders
+   * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to move
+   * @param {string} targetPath - Target path
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function move(items, targetPath, { autoRefresh = true } = {}) {
@@ -300,8 +300,8 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 检查路径是否存在
-   * @param {string} path - 路径
+   * Check whether a path exists
+   * @param {string} path - Path
    * @returns {Promise<boolean>}
    */
   async function exists(path) {
@@ -318,8 +318,8 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 获取文件/文件夹信息
-   * @param {string} path - 路径
+   * Get file/folder information
+   * @param {string} path - Path
    * @returns {Promise<Object|null>}
    */
   async function stat(path) {
@@ -341,10 +341,10 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 读取文件内容
-   * @param {string} filePath - 文件路径
-   * @param {Object} [options] - 选项
-   * @param {number} [options.maxSize] - 最大文件大小（字节），默认 1MB
+   * Read file content
+   * @param {string} filePath - File path
+   * @param {Object} [options] - Options
+   * @param {number} [options.maxSize] - Maximum file size (bytes), default 1MB
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function readFile(filePath, { maxSize = 1024 * 1024 } = {}) {
@@ -353,7 +353,7 @@ export function useFileOperations({ deviceId, currentPath }) {
     }
 
     try {
-      // 先检查文件大小
+      // First check file size
       const fileStat = await stat(filePath)
       if (!fileStat) {
         return { success: false, error: 'File not found' }
@@ -371,13 +371,13 @@ export function useFileOperations({ deviceId, currentPath }) {
         }
       }
 
-      // 使用 base64 编码读取文件内容，避免特殊字符问题
+      // Use base64 to read file content to avoid special character issues
       const base64Content = await $adb.deviceShell(
         deviceId.value,
         `base64 "${filePath}"`,
       )
 
-      // 解码 base64 内容
+      // Decode base64 content
       const content = decodeBase64(base64Content.trim())
 
       return { success: true, data: { content, size: fileStat.size } }
@@ -389,12 +389,12 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   /**
-   * 写入文件内容
-   * @param {string} filePath - 文件路径
-   * @param {string} content - 文件内容
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
-   * @param {boolean} [options.createBackup] - 是否创建备份
+   * Write file content
+   * @param {string} filePath - File path
+   * @param {string} content - File content
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.autoRefresh] - Auto refresh
+   * @param {boolean} [options.createBackup] - Create backup
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function writeFile(filePath, content, { autoRefresh = true, createBackup = false } = {}) {
@@ -403,16 +403,16 @@ export function useFileOperations({ deviceId, currentPath }) {
     }
 
     try {
-      // 可选：创建备份
+      // Optional: create backup
       if (createBackup) {
         const backupPath = `${filePath}.bak`
         await $adb.deviceShell(deviceId.value, `cp "${filePath}" "${backupPath}" 2>/dev/null || true`)
       }
 
-      // 使用 base64 编码写入文件，避免特殊字符问题
+      // Use base64 to write file content to avoid special character issues
       const base64Content = encodeBase64(content)
 
-      // 使用 echo 和 base64 解码写入文件
+      // Use echo and base64 decode to write file
       await $adb.deviceShell(
         deviceId.value,
         `echo '${base64Content}' | base64 -d > "${filePath}"`,
@@ -431,13 +431,13 @@ export function useFileOperations({ deviceId, currentPath }) {
   }
 
   return {
-    // 状态
+    // State
     loading: readonly(loading),
     files: readonly(files),
     error: readonly(error),
     lastRefreshTime: readonly(lastRefreshTime),
 
-    // 基础操作
+    // Basic operations
     readDirectory,
     refresh,
     createDirectory,
@@ -447,11 +447,11 @@ export function useFileOperations({ deviceId, currentPath }) {
     copy,
     move,
 
-    // 文件读写操作
+    // File read/write operations
     readFile,
     writeFile,
 
-    // 查询操作
+    // Query operations
     exists,
     stat,
   }

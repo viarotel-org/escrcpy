@@ -94,7 +94,6 @@ import { CircleCheck, CircleClose, Loading } from '@element-plus/icons-vue'
 import QRCode from 'qrcode'
 import { t } from '$/locales/index.js'
 import subscribeClient from '$/services/subscribe/index.js'
-import { ApiModelEnum } from '$copilot/dicts/api.js'
 import { sleep } from '$/utils/index.js'
 
 const emit = defineEmits(['update:modelValue', 'success'])
@@ -102,6 +101,8 @@ const emit = defineEmits(['update:modelValue', 'success'])
 const dialog = useDialog()
 
 const subscribeStore = useSubscribeStore()
+
+const subscribeConfigure = useSubscribeConfigure()
 
 const status = ref('generating') // generating | pending | success | failed | cancelled
 const orderInfo = ref(null)
@@ -225,7 +226,7 @@ async function checkPaymentStatus() {
       stopPolling()
       status.value = 'success'
 
-      configureApiSettings()
+      subscribeConfigure.update()
 
       await sleep()
 
@@ -241,25 +242,6 @@ async function checkPaymentStatus() {
   }
   finally {
     checkingStatus.value = false
-  }
-}
-
-// Configure API settings (auto-configure after successful payment)
-async function configureApiSettings() {
-  try {
-    // Retrieve copilot config and update
-    const copilotConfig = window.appStore.get('copilot') || {}
-
-    window.appStore.set('copilot', {
-      ...copilotConfig,
-      apiKey: subscribeStore.accessToken,
-      provider: 'Gitee',
-      baseUrl: ApiModelEnum.Gitee,
-      model: ApiModelEnum.named.Gitee.label,
-    })
-  }
-  catch (error) {
-    console.error('Configure API settings failed:', error)
   }
 }
 

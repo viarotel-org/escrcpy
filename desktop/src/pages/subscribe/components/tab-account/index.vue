@@ -1,8 +1,8 @@
 <template>
   <div v-loading="loading" class="flex h-full py-4 gap-4">
     <div class="flex-none">
-      <el-card class="!rounded-xl h-full min-w-72" body-class="" shadow="hover">
-        <div class="flex items-center gap-4 mb-6">
+      <el-card class="!rounded-xl h-full min-w-72" body-class="h-full flex flex-col" shadow="hover">
+        <div class="flex-none flex items-center gap-4 mb-6">
           <el-avatar :size="48" class="!bg-gradient-to-br !from-primary-300 !to-primary-500">
             <el-icon class="text-3xl">
               <User />
@@ -22,52 +22,60 @@
           </div>
         </div>
 
-        <el-descriptions
-          :column="1"
-        >
-          <el-descriptions-item
-            :label="$t('subscribe.balance')"
-            label-class-name="text-gray-500"
-            content-class-name="text-gray-900 dark:text-white"
+        <div class="flex-1 min-h-0 overflow-auto">
+          <el-descriptions
+            :column="1"
           >
-            {{ (userInfo.balance || 0).toFixed(2) }}{{ $t('subscribe.perUnit') }}
-          </el-descriptions-item>
+            <el-descriptions-item
+              :label="$t('subscribe.balance')"
+              label-class-name="text-gray-500"
+              content-class-name="text-gray-900 dark:text-white"
+            >
+              {{ (userInfo.balance || 0).toFixed(2) }}{{ $t('subscribe.perUnit') }}
+            </el-descriptions-item>
 
-          <el-descriptions-item
-            v-if="userInfo.mobile"
-            :label="$t('subscribe.mobile')"
-            label-class-name="text-gray-500"
-            content-class-name="text-gray-900 dark:text-white"
-          >
-            {{ userInfo.mobile }}
-          </el-descriptions-item>
+            <el-descriptions-item
+              v-if="userInfo.mobile"
+              :label="$t('subscribe.mobile')"
+              label-class-name="text-gray-500"
+              content-class-name="text-gray-900 dark:text-white"
+            >
+              {{ userInfo.mobile }}
+            </el-descriptions-item>
 
-          <el-descriptions-item
-            v-if="userInfo.email"
-            :label="$t('subscribe.email')"
-            label-class-name="text-gray-500"
-            content-class-name="text-gray-900 dark:text-white"
-          >
-            {{ userInfo.email }}
-          </el-descriptions-item>
+            <el-descriptions-item
+              v-if="userInfo.email"
+              :label="$t('subscribe.email')"
+              label-class-name="text-gray-500"
+              content-class-name="text-gray-900 dark:text-white"
+            >
+              {{ userInfo.email }}
+            </el-descriptions-item>
 
-          <el-descriptions-item
-            :label="$t('subscribe.registerTime')"
-            label-class-name="text-gray-500"
-            content-class-name="text-gray-900 dark:text-white"
-          >
-            {{ formatDate(userInfo.created_at) }}
-          </el-descriptions-item>
+            <el-descriptions-item
+              :label="$t('subscribe.registerTime')"
+              label-class-name="text-gray-500"
+              content-class-name="text-gray-900 dark:text-white"
+            >
+              {{ formatDate(userInfo.created_at) }}
+            </el-descriptions-item>
 
-          <el-descriptions-item
-            v-if="userInfo.pay_plan_ident"
-            :label="$t('subscribe.currentPlan')"
-            label-class-name="text-gray-500"
-            content-class-name="text-gray-900 dark:text-white"
-          >
-            {{ userInfo.pay_plan_ident }}
-          </el-descriptions-item>
-        </el-descriptions>
+            <el-descriptions-item
+              v-if="userInfo.pay_plan_ident"
+              :label="$t('subscribe.currentPlan')"
+              label-class-name="text-gray-500"
+              content-class-name="text-gray-900 dark:text-white"
+            >
+              {{ userInfo.pay_plan_ident }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </div>
+
+        <div class="flex-none text-center">
+          <el-button icon="Position" @click="updateSubscribeConfigure">
+            {{ $t('subscribe.config.auto') }}
+          </el-button>
+        </div>
       </el-card>
     </div>
 
@@ -84,6 +92,8 @@ import Subscriptions from './subscriptions/index.vue'
 const emit = defineEmits(['switchTab'])
 
 const subscribeStore = useSubscribeStore()
+
+const subscribeConfigure = useSubscribeConfigure()
 
 // State
 const loading = ref(false)
@@ -120,6 +130,11 @@ function formatDate(timestamp) {
     month: '2-digit',
     day: '2-digit',
   })
+}
+
+function updateSubscribeConfigure() {
+  subscribeConfigure.update()
+  ElMessage.success(window.t('common.success'))
 }
 
 // Initialization

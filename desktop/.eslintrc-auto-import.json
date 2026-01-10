@@ -345,6 +345,7 @@
     "useSubscribeValidator": true,
     "useSubscribeSms": true,
     "useCountdown": true,
-    "useSmsCountdown": true
+    "useSmsCountdown": true,
+    "useSubscribeConfigure": true
   }
 }

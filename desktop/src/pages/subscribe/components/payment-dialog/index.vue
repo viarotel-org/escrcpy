@@ -225,31 +225,9 @@ async function checkPaymentStatus() {
       stopPolling()
       status.value = 'success'
 
-      await sleep(1500)
+      configureApiSettings()
 
-      // Prompt user to configure Copilot
-      const copilotConfig = window.appStore?.get('copilot') || {}
-
-      if (copilotConfig.apiKey !== subscribeStore.accessToken) {
-        try {
-          await ElMessageBox.confirm(
-            t('subscribe.config.tip'),
-            t('subscribe.paymentSuccess'),
-            {
-              confirmButtonText: t('subscribe.config.now'),
-              cancelButtonText: t('subscribe.config.later'),
-              type: 'success',
-            },
-          )
-          // User confirmed configuration
-          await configureApiSettings()
-          ElMessage.success(t('subscribe.config.success'))
-        }
-        catch {
-        // User cancelled configuration
-          console.log('[Subscribe] User cancelled Copilot configuration')
-        }
-      }
+      await sleep()
 
       dialog.options.onSuccess?.()
     }
@@ -270,17 +248,15 @@ async function checkPaymentStatus() {
 async function configureApiSettings() {
   try {
     // Retrieve copilot config and update
-    const copilotConfig = window.appStore?.get('copilot') || {}
+    const copilotConfig = window.appStore.get('copilot') || {}
 
-    window.appStore?.set('copilot', {
+    window.appStore.set('copilot', {
       ...copilotConfig,
       apiKey: subscribeStore.accessToken,
       provider: 'Gitee',
       baseUrl: ApiModelEnum.Gitee,
       model: ApiModelEnum.named.Gitee.label,
     })
-
-    console.log('[Subscribe] API settings configured successfully')
   }
   catch (error) {
     console.error('Configure API settings failed:', error)

@@ -1,9 +1,9 @@
 function install(explorerWindow) {
-  // 可以在这里添加文件管理器窗口的事件监听
-  // 例如：窗口关闭、焦点变化等
+  // Add file explorer window event listeners here
+  // e.g.: window close, focus changes, etc.
 
   explorerWindow.on('close', () => {
-    // 窗口关闭时的清理工作
+    // Cleanup work when window closes
   })
 
   explorerWindow.on('focus', () => {

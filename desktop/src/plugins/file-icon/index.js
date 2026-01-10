@@ -2,20 +2,20 @@ import FileIcon from './components/FileIcon.vue'
 import { addIconType, addIconTypes, getFileExtension, getFileIconInfo } from './utils/iconMap.js'
 
 /**
- * FileIcon 插件
- * 提供文件图标显示功能
+ * FileIcon plugin
+ * Provides file icon rendering utilities
  *
  * @example
- * // 在 main.js 中安装
+ * // Install in main.js
  * import FileIconPlugin from '@/plugins/FileIcon'
  * app.use(FileIconPlugin)
  *
- * // 在组件中使用
+ * // Usage in components
  * <FileIcon :file="fileObject" size="lg" />
  * <FileIcon file="test.jpg" />
  * <FileIcon file="directory" />
  *
- * // 使用工具函数
+ * // Using utility functions
  * import { getFileIconInfo } from '@/plugins/FileIcon'
  * const iconInfo = getFileIconInfo('test.jpg')
  * // { icon: 'i-mdi-file-image', color: 'text-green-500', type: 'image' }
@@ -23,10 +23,10 @@ import { addIconType, addIconTypes, getFileExtension, getFileIconInfo } from './
 
 export default {
   install(app) {
-    // 注册全局组件
+    // Register global component
     app.component('FileIcon', FileIcon)
 
-    // 提供全局属性（可选）
+    // Provide global properties (optional)
     app.config.globalProperties.$fileIcon = {
       getIconInfo: getFileIconInfo,
       getExtension: getFileExtension,
@@ -36,7 +36,7 @@ export default {
   },
 }
 
-// 导出工具函数供直接使用
+// Export utility functions for direct use
 export {
   addIconType,
   addIconTypes,

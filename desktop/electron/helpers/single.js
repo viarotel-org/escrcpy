@@ -1,33 +1,33 @@
 import { app, BrowserWindow } from 'electron'
 
 /**
- * 确保 Electron 应用只运行一个实例的工具函数
+ * Utility to ensure the Electron app runs as a single instance
  * @typedef {Object} SingleInstanceOptions
- * @property {Function} [onSecondInstance] - 当第二个实例启动时的回调函数
- * @property {boolean} [enableSandbox=false] - 是否启用沙箱模式
- * @property {Function} [onSuccess] - 成功获取单例锁后的回调函数
- * @property {Function} [onShowWindow] - 主窗口已展示回调
- * @property {boolean} [forceFocus=true] - 是否强制聚焦已存在的窗口
- * @property {boolean} [silentMode=false] - 静默模式，不显示任何提示
- * @property {Function} [onError] - 错误处理回调函数
+ * @property {Function} [onSecondInstance] - Callback when a second instance is launched
+ * @property {boolean} [enableSandbox=false] - Whether to enable sandbox mode
+ * @property {Function} [onSuccess] - Callback after acquiring the single-instance lock
+ * @property {Function} [onShowWindow] - Callback when main window should be shown
+ * @property {boolean} [forceFocus=true] - Whether to force-focus an existing window
+ * @property {boolean} [silentMode=false] - Silent mode, suppress logs
+ * @property {Function} [onError] - Error handler callback
  */
 
 /**
- * 第二个实例启动时的回调函数类型
+ * Callback type for a second instance launch
  * @callback OnSecondInstanceCallback
- * @param {Event} event - Electron 事件对象
- * @param {string[]} commandLine - 命令行参数数组
- * @param {string} workingDirectory - 工作目录
- * @param {BrowserWindow|null} mainWindow - 主窗口实例，如果存在的话
+ * @param {Event} event - Electron event object
+ * @param {string[]} commandLine - Command line arguments array
+ * @param {string} workingDirectory - Working directory
+ * @param {BrowserWindow|null} mainWindow - Main window instance, if available
  */
 
 /**
- * 确保应用程序只运行单个实例
- * @param {SingleInstanceOptions} options - 配置选项
- * @returns {boolean} 是否成功获取单例锁
+ * Ensure the application runs as a single instance
+ * @param {SingleInstanceOptions} options - Options
+ * @returns {boolean} Whether the single-instance lock was acquired
  *
  * @example
- * // 基础使用
+ * // Basic usage
  * ensureSingleInstance({
  *     onSuccess: () => {
  *         app.whenReady().then(createWindow)
@@ -35,7 +35,7 @@ import { app, BrowserWindow } from 'electron'
  * });
  *
  * @example
- * // 高级使用
+ * // Advanced usage
  * ensureSingleInstance({
  *     onSecondInstance: (event, commandLine, workingDirectory, mainWindow) => {
  *         if (mainWindow) {
@@ -53,10 +53,10 @@ import { app, BrowserWindow } from 'electron'
  *     silentMode: false
  * });
  *
- * @throws {Error} 如果在非 Electron 环境中调用
+ * @throws {Error} If called outside an Electron environment
  */
 function ensureSingleInstance(options = {}) {
-  // 参数解构与默认值设置
+  // Destructure options and set defaults
   const {
     onSecondInstance,
     enableSandbox = false,
@@ -67,7 +67,7 @@ function ensureSingleInstance(options = {}) {
     silentMode = false,
   } = options
 
-  // 验证运行环境
+  // Validate runtime environment
   if (!app || !BrowserWindow) {
     const error = new Error('ensureSingleInstance must be called in Electron environment')
     if (onError) {
@@ -78,27 +78,27 @@ function ensureSingleInstance(options = {}) {
   }
 
   try {
-    // 沙箱模式检查
+    // Sandbox mode check
     if (enableSandbox) {
       !silentMode && console.log('Sandbox mode enabled, skipping single instance check')
       onSuccess?.()
       return true
     }
 
-    // 请求单例锁
+    // Request single instance lock
     const gotTheLock = app.requestSingleInstanceLock()
 
-    // 如果无法获取锁，说明已有实例在运行
+    // If lock cannot be obtained, another instance is already running
     if (!gotTheLock) {
       !silentMode && console.log('Application instance already running, quitting...')
       app.quit()
       return false
     }
 
-    // 监听第二个实例的启动
+    // Listen for second instance launch
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       try {
-        // 获取所有窗口
+        // Get all windows
         const windows = BrowserWindow.getAllWindows()
 
         const mainWindow = windows.find(item => item.customId === 'mainWindow')
@@ -114,7 +114,7 @@ function ensureSingleInstance(options = {}) {
           }
         }
 
-        // 处理窗口焦点
+        // Handle window focus
         if (onShowWindow) {
           onShowWindow?.(mainWindow, commandLine, showWindowNext)
         }
@@ -122,7 +122,7 @@ function ensureSingleInstance(options = {}) {
           showWindowNext()
         }
 
-        // 调用用户自定义的回调
+        // Invoke user-defined callback
         onSecondInstance?.(event, commandLine, workingDirectory, mainWindow)
       }
       catch (error) {
@@ -131,7 +131,7 @@ function ensureSingleInstance(options = {}) {
       }
     })
 
-    // 调用成功回调
+    // Invoke success callback
     onSuccess?.()
     return true
   }
@@ -143,15 +143,15 @@ function ensureSingleInstance(options = {}) {
 }
 
 /**
- * 检查当前是否为应用程序的主实例
- * @returns {boolean} 如果是主实例返回 true，否则返回 false
+ * Check if current process is the main application instance
+ * @returns {boolean} Returns true when running as main instance
  */
 function isMainInstance() {
   return app.requestSingleInstanceLock()
 }
 
 /**
- * 释放单例锁，允许其他实例启动
+ * Release the single-instance lock to allow other instances to start
  * @returns {void}
  */
 function releaseSingleInstanceLock() {

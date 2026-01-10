@@ -11,16 +11,16 @@
 import { getFileIconInfo } from '../utils/iconMap.js'
 
 /**
- * FileIcon 组件
- * 根据文件类型或文件名显示对应的图标
+ * FileIcon component
+ * Renders an icon based on file type or filename
  */
 
 const props = defineProps({
   /**
-   * 文件对象或文件类型字符串
-   * 可以是：
-   * - 字符串：文件类型（如 'directory'）或文件名（如 'test.jpg'）
-   * - 对象：包含 type/name/isDirectory 等属性的文件对象
+   * File object or file type string
+   * Can be:
+   * - String: file type (e.g., 'directory') or filename (e.g., 'test.jpg')
+   * - Object: file object with type/name/isDirectory properties
    */
   file: {
     type: [String, Object],
@@ -28,8 +28,8 @@ const props = defineProps({
   },
 
   /**
-   * 图标大小
-   * 可以是预设值或自定义尺寸
+   * Icon size
+   * Can be preset values or custom dimensions
    */
   size: {
     type: [String, Number],
@@ -65,7 +65,7 @@ const props = defineProps({
   },
 })
 
-// 尺寸映射
+// Size mapping
 const sizeMap = {
   'xs': '0.75em',
   'sm': '0.875em',
@@ -105,7 +105,7 @@ const sizeStyle = computed(() => {
 </script>
 
 <style scoped>
-/* 确保图标正确显示 */
+/* Ensure icon displays correctly */
 div {
   flex-shrink: 0;
 }

@@ -1,6 +1,6 @@
 /**
- * @fileoverview 上传模块
- * 封装文件/文件夹上传功能，支持进度、取消、错误处理
+ * @fileoverview Upload module
+ * Encapsulates file/folder upload functionality with progress, cancel and error handling
  */
 
 import '../types.js'
@@ -9,38 +9,38 @@ import '../types.js'
 const $adb = window.adb
 
 /**
- * 上传 Hook
- * @param {Object} options - 配置选项
- * @param {import('vue').Ref<string>} options.deviceId - 设备 ID
- * @param {import('vue').Ref<string>} options.currentPath - 当前路径
- * @param {Function} [options.onRefresh] - 刷新回调
- * @returns {Object} 上传器实例
+ * Upload hook
+ * @param {Object} options - Options
+ * @param {import('vue').Ref<string>} options.deviceId - Device ID
+ * @param {import('vue').Ref<string>} options.currentPath - Current path
+ * @param {Function} [options.onRefresh] - Refresh callback
+ * @returns {Object} Uploader instance
  */
 export function useUploader({ deviceId, currentPath, onRefresh }) {
-  /** @type {import('vue').Ref<boolean>} 上传中状态 */
+  /** @type {import('vue').Ref<boolean>} Uploading state */
   const uploading = ref(false)
 
-  /** @type {import('vue').Ref<boolean>} 扫描中状态 */
+  /** @type {import('vue').Ref<boolean>} Scanning state */
   const scanning = ref(false)
 
-  /** @type {import('vue').Ref<import('../types.js').ProgressInfo|null>} 上传进度 */
+  /** @type {import('vue').Ref<import('../types.js').ProgressInfo|null>} Upload progress */
   const progress = ref(null)
 
-  /** @type {import('vue').Ref<string|null>} 错误信息 */
+  /** @type {import('vue').Ref<string|null>} Error message */
   const error = ref(null)
 
-  /** @type {import('vue').Ref<Object|null>} 上传结果 */
+  /** @type {import('vue').Ref<Object|null>} Upload result */
   const result = ref(null)
 
-  /** @type {Object|null} 当前上传器实例 */
+  /** @type {Object|null} Current uploader instance */
   let uploaderInstance = null
 
   /**
-   * 选择文件并上传
-   * @param {Object} [options] - 选项
-   * @param {'openFile'|'openDirectory'} [options.openType] - 打开类型
-   * @param {string} [options.remotePath] - 远程路径（默认使用当前路径）
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
+   * Select files and upload
+   * @param {Object} [options] - Options
+   * @param {'openFile'|'openDirectory'} [options.openType] - Open type
+   * @param {string} [options.remotePath] - Remote path (defaults to currentPath)
+   * @param {boolean} [options.autoRefresh] - Whether to auto-refresh
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function selectAndUpload(options = {}) {
@@ -52,7 +52,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
     } = options
 
     try {
-      // 选择文件
+      // Select files
       const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
         properties: [openType, 'multiSelections'],
         filters: [{ name: 'All Files', extensions: ['*'] }],

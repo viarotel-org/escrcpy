@@ -312,7 +312,7 @@ async function loadConfig() {
   }
 }
 
-// 提交配置
+// Submit configuration
 async function submitConfig() {
   try {
     // Validate form first
@@ -342,6 +342,7 @@ function openSubscribePage() {
 // Import Copilot configuration from subscription
 async function onAutoConfigSubscribe() {
   try {
+    configForm.provider = 'Gitee'
     configForm.baseUrl = 'https://ai.gitee.com/v1'
     configForm.apiKey = subscribeStore.accessToken
     configForm.model = 'AutoGLM-Phone-9B-Multilingual'

@@ -30,14 +30,14 @@ const swapyInstance = shallowRef(null)
 provide('swapyInstance', () => swapyInstance)
 provide('swapyContainer', containerRef)
 
-// 监听 enabled 变化
+// Watch enabled changes
 watch(() => props.enabled, (newEnabled) => {
   if (swapyInstance.value) {
     swapyInstance.value.enable(newEnabled)
   }
 })
 
-// 监听配置变化，重新初始化
+// Watch config changes and reinitialize
 watch(() => props.config, () => {
   destroySwapy()
   initSwapy()
@@ -69,7 +69,7 @@ async function initSwapy() {
       return true
     })
 
-    // 设置启用状态
+    // Set enabled state
     swapyInstance.value.enable(props.enabled)
   }
   catch (error) {

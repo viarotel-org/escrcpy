@@ -1,5 +1,5 @@
 /**
- * @fileoverview 模块导出入口
+ * @fileoverview Module export entry
  */
 
 export { useFileClipboard } from './useClipboard.js'

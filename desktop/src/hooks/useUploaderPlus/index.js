@@ -79,9 +79,9 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 单设备上传
-   * @param {Object} device - 设备对象
-   * @param {Object} [options] - 选项
+   * Single-device upload
+   * @param {Object} device - Device object
+   * @param {Object} [options] - Options
    * @returns {Promise<Object>}
    */
   async function singleUpload(device, options = {}) {
@@ -424,7 +424,7 @@ export function useUploaderPlus() {
 
         scanningDevices--
 
-        // 更新设备进度
+        // Update device progress
         const deviceProgressData = deviceProgress.value.get(device.id)
         if (deviceProgressData && res.stats) {
           deviceProgressData.filesCompleted = res.stats.completedFiles || 0
@@ -432,7 +432,7 @@ export function useUploaderPlus() {
           deviceProgressData.filesFailed = res.stats.failedFiles || 0
         }
 
-        // 更新设备状态
+        // Update device status
         const deviceStatusData = deviceStatus.value.get(device.id)
         if (deviceStatusData) {
           deviceStatusData.status = res.success ? UPLOAD_STATUS.SUCCESS : UPLOAD_STATUS.FAILED
@@ -440,7 +440,7 @@ export function useUploaderPlus() {
           deviceStatusData.endTime = Date.now()
         }
 
-        // 聚合统计
+        // Aggregate statistics
         if (res.stats) {
           aggregatedStats.totalFiles += res.stats.totalFiles || 0
           aggregatedStats.completedFiles += res.stats.completedFiles || 0
@@ -459,7 +459,7 @@ export function useUploaderPlus() {
         scanningDevices--
         completedDevices++
 
-        // 更新设备状态为失败
+        // Mark device status as failed
         const deviceStatusData = deviceStatus.value.get(device.id)
         if (deviceStatusData) {
           deviceStatusData.status = UPLOAD_STATUS.FAILED
@@ -467,7 +467,7 @@ export function useUploaderPlus() {
           deviceStatusData.endTime = Date.now()
         }
 
-        // 统计失败原因
+        // Record failure reason
         const errorKey = err.message || 'Unknown error'
         errorStats.set(errorKey, (errorStats.get(errorKey) || 0) + 1)
 
@@ -478,12 +478,12 @@ export function useUploaderPlus() {
 
     messageLoading.close()
 
-    // 统计结果
+    // Summarize results
     const successDevices = results.filter(r => r.value?.success).length
     const failedDevices = totalDevices - successDevices
     const cancelledDevices = results.filter(r => r.value?.cancelled).length
 
-    // 转换失败原因统计为数组
+    // Convert error stats map to array
     const errorStatsArray = Array.from(errorStats.entries()).map(([error, count]) => ({
       error,
       count,
@@ -505,7 +505,7 @@ export function useUploaderPlus() {
       },
     }
 
-    // 显示结果消息
+    // Show result notifications
     if (!cancelFlag) {
       if (failedDevices > 0) {
         ElMessage.warning(
@@ -531,9 +531,9 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 重试失败的设备上传
-   * @param {Object[]} failedDevices - 失败的设备列表
-   * @param {Object} [options] - 选项
+   * Retry uploads for failed devices
+   * @param {Object[]} failedDevices - List of failed devices
+   * @param {Object} [options] - Options
    * @returns {Promise<Object>}
    */
   async function retryFailedDevices(failedDevices, options = {}) {
@@ -546,7 +546,7 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 取消所有上传
+   * Cancel all uploads
    */
   function cancelAll() {
     activeUploaders.forEach((uploader) => {
@@ -558,7 +558,7 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 重置状态
+   * Reset state
    */
   function reset() {
     cancelAll()
@@ -568,7 +568,7 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 获取状态摘要
+   * Get status summary
    * @returns {Object}
    */
   function getStatusSummary() {
@@ -585,8 +585,8 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 获取设备进度
-   * @param {string} deviceId - 设备ID
+   * Get device progress
+   * @param {string} deviceId - Device ID
    * @returns {Object|null}
    */
   function getDeviceProgress(deviceId) {
@@ -594,8 +594,8 @@ export function useUploaderPlus() {
   }
 
   /**
-   * 获取设备状态
-   * @param {string} deviceId - 设备ID
+   * Get device status
+   * @param {string} deviceId - Device ID
    * @returns {Object|null}
    */
   function getDeviceStatus(deviceId) {
@@ -603,7 +603,7 @@ export function useUploaderPlus() {
   }
 
   return {
-    // 状态
+    // State
     loading: readonly(loading),
     scanning: readonly(scanning),
     progress: readonly(progress),
@@ -612,7 +612,7 @@ export function useUploaderPlus() {
     deviceProgress: readonly(deviceProgress),
     deviceStatus: readonly(deviceStatus),
 
-    // 方法
+    // Methods
     upload,
     singleUpload,
     multipleUpload,
@@ -623,16 +623,16 @@ export function useUploaderPlus() {
     getDeviceProgress,
     getDeviceStatus,
 
-    // 常量
+    // Constants
     UPLOAD_STATUS,
   }
 }
 
 /**
- * 选择文件对话框
- * @param {Object} [options] - 选项
- * @param {string[]} [options.properties] - 对话框属性
- * @returns {Promise<string[]>} 选中的文件路径列表
+ * File selection dialog
+ * @param {Object} [options] - Options
+ * @param {string[]} [options.properties] - Dialog properties
+ * @returns {Promise<string[]>} Selected file paths
  */
 export async function selectFiles(options = {}) {
   const { properties = ['openFile', 'openDirectory', 'multiSelections'] } = options

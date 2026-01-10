@@ -7,8 +7,8 @@ import * as events from './events/index.js'
 export default (mainWindow) => {
   registerCopilotHandlers(mainWindow)
 
-  // 存储每个设备的 Copilot 窗口
-  // key: deviceId (单例模式 - 每个设备只有一个窗口)
+  // Store Copilot windows per device
+  // key: deviceId (singleton per device)
   const copilotWindows = new Map()
 
   ipcMain.handle('open-copilot-window', (event, data) => {
@@ -19,18 +19,18 @@ export default (mainWindow) => {
       return false
     }
 
-    // 检查是否已经存在该设备的 Copilot 窗口
+    // Check whether a Copilot window already exists for the device
     let copilotWindow = copilotWindows.get(deviceId)
 
     if (!isWindowDestroyed(copilotWindow)) {
-      // 窗口已存在，更新设备信息并显示
+      // Window exists: update device info and show
       copilotWindow.webContents.send('device-change', data)
       copilotWindow.show()
       copilotWindow.focus()
       return false
     }
 
-    // 创建新的 Copilot 窗口
+    // Create a new Copilot window
     copilotWindow = initCopilotWindow(mainWindow, {
       id: deviceId,
       name: data?.device?.name || data?.name,
@@ -39,10 +39,10 @@ export default (mainWindow) => {
 
     events.install(copilotWindow)
 
-    // 存储窗口引用
+    // Store window reference
     copilotWindows.set(deviceId, copilotWindow)
 
-    // 窗口关闭时清理引用
+    // Clean up reference on window closed
     copilotWindow.on('closed', () => {
       copilotWindows.delete(deviceId)
       copilotWindow = void 0
@@ -72,7 +72,7 @@ export default (mainWindow) => {
     return true
   })
 
-  // 关闭所有 Copilot 窗口
+  // Close all Copilot windows
   ipcMain.handle('close-all-copilot-windows', () => {
     copilotWindows.forEach((window, key) => {
       if (!isWindowDestroyed(window)) {

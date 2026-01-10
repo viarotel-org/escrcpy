@@ -1,11 +1,11 @@
 /**
- * @fileoverview 路径管理模块
- * 封装路径导航、面包屑、历史记录等功能
+ * @fileoverview Path manager module
+ * Encapsulates path navigation, breadcrumbs and history management
  */
 
 import '../types.js'
 
-/** 默认预设路径映射 */
+/** Default preset path mappings */
 const DEFAULT_PRESETS = {
   sdcard: {
     icon: 'Iphone',
@@ -20,9 +20,9 @@ const DEFAULT_PRESETS = {
 }
 
 /**
- * 路径管理 Hook
- * @param {import('../types.js').PathManagerOptions} [options] - 配置选项
- * @returns {Object} 路径管理器实例
+ * Path manager hook
+ * @param {import('../types.js').PathManagerOptions} [options] - Options
+ * @returns {Object} Path manager instance
  */
 export function usePathManager(options = {}) {
   const {
@@ -31,17 +31,17 @@ export function usePathManager(options = {}) {
     presets = DEFAULT_PRESETS,
   } = options
 
-  /** @type {import('vue').Ref<string>} 当前路径 */
+  /** @type {import('vue').Ref<string>} Current path */
   const currentPath = ref(initialPath)
 
-  /** @type {import('vue').Ref<string[]>} 访问历史 */
+  /** @type {import('vue').Ref<string[]>} Access history */
   const history = ref([initialPath])
 
-  /** @type {import('vue').Ref<number>} 历史索引 */
+  /** @type {import('vue').Ref<number>} History index */
   const historyIndex = ref(0)
 
   /**
-   * 面包屑导航数据
+   * Breadcrumb navigation data
    * @type {import('vue').ComputedRef<import('../types.js').BreadcrumbItem[]>}
    */
   const breadcrumbs = computed(() => {
@@ -85,11 +85,11 @@ export function usePathManager(options = {}) {
   const canGoForward = computed(() => historyIndex.value < history.value.length - 1)
 
   /**
-   * 导航到指定路径
-   * @param {string} path - 目标路径
-   * @param {Object} [options] - 选项
-   * @param {boolean} [options.addToHistory] - 是否添加到历史
-   * @returns {string} 规范化后的路径
+   * Navigate to a specific path
+   * @param {string} path - Target path
+   * @param {Object} [options] - Options
+   * @param {boolean} [options.addToHistory] - Whether to add to history
+   * @returns {string} Normalized path
    */
   function navigateTo(path, { addToHistory = true } = {}) {
     // 规范化路径
@@ -118,8 +118,8 @@ export function usePathManager(options = {}) {
   }
 
   /**
-   * 导航到子目录
-   * @param {string} dirname - 目录名
+   * Navigate to a child directory
+   * @param {string} dirname - Directory name
    */
   function navigateToChild(dirname) {
     const newPath = joinPath(currentPath.value, dirname)
@@ -223,7 +223,7 @@ export function usePathManager(options = {}) {
   }
 
   return {
-    // 状态
+    // State
     currentPath: readonly(currentPath),
     breadcrumbs,
     pathSegments,
@@ -234,7 +234,7 @@ export function usePathManager(options = {}) {
     history: readonly(history),
     historyIndex: readonly(historyIndex),
 
-    // 导航方法
+    // Navigation methods
     navigateTo,
     navigateToChild,
     navigateToParent,
@@ -243,13 +243,13 @@ export function usePathManager(options = {}) {
     goForward,
     reset,
 
-    // 工具方法
+    // Utility methods
     normalizePath,
     joinPath,
     getBasename,
     getDirname,
 
-    // 预设
+    // Presets
     presets,
   }
 }

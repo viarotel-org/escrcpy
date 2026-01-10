@@ -16,7 +16,7 @@ function handleFile(device) {
     return
   }
 
-  // 通过 IPC 打开文件管理器窗口
+  // Open file explorer window via IPC
   window.electron.ipcRenderer.invoke('open-explorer-window', toRaw(device))
 }
 </script>

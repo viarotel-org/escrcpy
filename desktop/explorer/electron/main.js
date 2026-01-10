@@ -4,13 +4,13 @@ import { isWindowDestroyed } from '$electron/helpers/index.js'
 import * as events from './events/index.js'
 
 export default (mainWindow) => {
-  // 存储每个设备的文件管理器窗口
+  // Store file explorer windows per device
   const explorerWindows = new Map()
 
   ipcMain.handle('open-explorer-window', (event, data) => {
     const deviceId = data?.id
 
-    // 检查是否已经存在该设备的文件管理器窗口
+    // Check whether a file explorer window already exists for the device
     let explorerWindow = explorerWindows.get(deviceId)
 
     if (!isWindowDestroyed(explorerWindow)) {
@@ -18,15 +18,15 @@ export default (mainWindow) => {
       return false
     }
 
-    // 创建新的文件管理器窗口
+    // Create a new file explorer window
     explorerWindow = initExplorerWindow(mainWindow, data)
 
     events.install(explorerWindow)
 
-    // 存储窗口引用
+    // Store window reference
     explorerWindows.set(deviceId, explorerWindow)
 
-    // 窗口关闭时清理引用
+    // Clean up reference on window closed
     explorerWindow.on('closed', () => {
       explorerWindows.delete(deviceId)
       explorerWindow = void 0

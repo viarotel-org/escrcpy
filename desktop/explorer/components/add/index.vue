@@ -37,7 +37,7 @@ import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 
 const emit = defineEmits(['success'])
 
-// 允许创建的文本文件扩展名白名单
+// Whitelisted text file extensions allowed for creation
 const ALLOWED_TEXT_EXTENSIONS = TEXT_FILE_EXTENSIONS
 
 const defaultText = 'NewItem'
@@ -47,8 +47,8 @@ const inputName = ref(defaultText)
 const popoverRef = ref()
 
 /**
- * 检查是否为文件（包含扩展名）
- * @param {string} name - 名称
+ * Check whether a name is a file (contains extension)
+ * @param {string} name - Name
  * @returns {boolean}
  */
 function isFile(name) {
@@ -56,8 +56,8 @@ function isFile(name) {
 }
 
 /**
- * 获取文件扩展名
- * @param {string} name - 文件名
+ * Get file extension
+ * @param {string} name - File name
  * @returns {string}
  */
 function getExtension(name) {
@@ -68,8 +68,8 @@ function getExtension(name) {
 }
 
 /**
- * 检查扩展名是否在白名单内
- * @param {string} extension - 扩展名
+ * Check whether extension is whitelisted
+ * @param {string} extension - Extension
  * @returns {boolean}
  */
 function isAllowedExtension(extension) {
@@ -88,17 +88,17 @@ function handleConfirm() {
     return
   }
 
-  // 检查名称是否包含非法字符
+  // Check whether the name contains illegal characters
   if (name.includes('/')) {
     ElMessage.error(t('device.control.file.manager.rename.invalid'))
     return
   }
 
-  // 判断是文件还是目录
+  // Determine whether it's a file or a directory
   const isFileType = isFile(name)
 
   if (isFileType) {
-    // 检查扩展名是否在白名单内
+    // Check whether the extension is whitelisted
     const extension = getExtension(name)
     if (!isAllowedExtension(extension)) {
       ElMessage.error(t('device.control.file.manager.add.file.type.error'))

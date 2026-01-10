@@ -17,7 +17,7 @@ export function getRemark(deviceId) {
 }
 
 /**
- * 获取历史设备列表
+ * Get history devices list
  */
 export function getHistoryDevices() {
   const devices = window.appStore.get('device') || {}
@@ -30,7 +30,7 @@ export function getHistoryDevices() {
 }
 
 /**
- * 获取当前连接的设备
+ * Get currently connected devices
  */
 export async function getCurrentDevices() {
   const devices = await window.adb.getDeviceList() || []
@@ -51,25 +51,25 @@ export const deviceSortModel = deviceStatusDict.reduce((obj, item, index) => {
 }, {})
 
 /**
- * 合并历史和当前设备列表
- * @param {Array} historyDevices - 历史设备列表
- * @param {Array} currentDevices - 当前设备列表
- * @returns {Array} 合并后的设备列表
+ * Merge history and current device lists
+ * @param {Array} historyDevices - History devices list
+ * @param {Array} currentDevices - Current devices list
+ * @returns {Array} Merged device list
  */
 export function mergeDevices(historyDevices, currentDevices) {
-  // 合并设备列表：当前设备优先，历史设备作为默认值
+  // Merge device lists: current devices take precedence; history devices as defaults
   const historyDeviceMap = keyBy(historyDevices, 'id')
   const currentDeviceMap = keyBy(currentDevices, 'id')
   const mergedDeviceList = Object.values(defaultsDeep(currentDeviceMap, historyDeviceMap))
 
-  // 按设备状态排序
+  // Sort by device status
   const sortedDeviceList = mergedDeviceList.sort((a, b) => deviceSortModel[a.status] - deviceSortModel[b.status])
 
   return sortedDeviceList
 }
 
 /**
- * 保存设备信息到存储
+ * Save device information to store
  */
 export function saveDevicesToStore(devices) {
   const cleanedDevices = devices

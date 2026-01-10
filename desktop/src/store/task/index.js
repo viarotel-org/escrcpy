@@ -96,7 +96,7 @@ export const useTaskStore = defineStore(
     function add(form) {
       const task = {
         ...form,
-        cronJob: void 0, // croner 实例引用标识
+        cronJob: void 0, // croner instance reference
         id: nanoid(),
         taskStatus: TaskStatus.START,
         formatTimeout: form.timeout
@@ -302,10 +302,10 @@ export const useTaskStore = defineStore(
         return false
       }
 
-      // 停止 Cron 定时器
+      // Stop Cron timer
       stopCronJob(task.id)
 
-      // 更新任务状态
+      // Update task status
       Object.assign(task, {
         cronJob: void 0,
         taskStatus: TaskStatus.FINISHED,

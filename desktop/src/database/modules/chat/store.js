@@ -1,10 +1,10 @@
 /**
- * 聊天消息 Store - 基于 BaseStore 的聊天记录模块
+ * Chat message Store - chat record module based on BaseStore
  *
- * 设计思路：
- * 1. 继承 BaseStore 获得通用 CRUD 能力
- * 2. 扩展聊天特有的查询方法（按会话、按时间范围）
- * 3. 支持消息分页加载，避免大量数据导致性能问题
+ * Design goals:
+ * 1. Inherit BaseStore to obtain common CRUD capabilities
+ * 2. Extend chat-specific query methods (by session, by time range)
+ * 3. Support paginated message loading to avoid performance issues with large data sets
  *
  * @module storage/modules/chat
  */
@@ -13,7 +13,7 @@ import { BaseStore } from '$/database/core/BaseStore.js'
 import { FieldTypes } from '$/database/utils/validation.js'
 
 /**
- * 消息角色枚举
+ * Message role enumeration
  */
 export const MessageRole = {
   USER: 'user',
@@ -22,7 +22,7 @@ export const MessageRole = {
 }
 
 /**
- * 消息状态枚举
+ * Message status enumeration
  */
 export const MessageStatus = {
   PENDING: 'pending',
@@ -33,7 +33,7 @@ export const MessageStatus = {
 }
 
 /**
- * 消息字段 Schema
+ * Message field schema
  */
 const messageSchema = {
   sessionId: {
@@ -59,7 +59,7 @@ const messageSchema = {
 }
 
 /**
- * 聊天消息 Store 类
+ * ChatMessageStore class
  */
 class ChatMessageStore extends BaseStore {
   constructor() {
@@ -72,14 +72,14 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 添加聊天消息
-   * @param {Object} message - 消息对象
-   * @param {string} message.sessionId - 会话ID
-   * @param {string} message.role - 消息角色 (user/assistant/system)
-   * @param {string} message.content - 消息内容
-   * @param {number} [message.timestamp] - 时间戳
-   * @param {string} [message.status] - 消息状态
-   * @param {Object} [message.metadata] - 额外元数据
+   * Add a chat message
+   * @param {Object} message - Message object
+   * @param {string} message.sessionId - Session ID
+   * @param {string} message.role - Message role (user/assistant/system)
+   * @param {string} message.content - Message content
+   * @param {number} [message.timestamp] - Timestamp
+   * @param {string} [message.status] - Message status
+   * @param {Object} [message.metadata] - Additional metadata
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   async addMessage(message) {
@@ -92,10 +92,10 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 获取指定会话的所有消息
-   * @param {string} sessionId - 会话ID
-   * @param {Object} [options] - 查询选项
-   * @param {boolean} [options.desc] - 是否降序（默认升序，按时间顺序）
+   * Get all messages for a given session
+   * @param {string} sessionId - Session ID
+   * @param {Object} [options] - Query options
+   * @param {boolean} [options.desc] - Whether to use descending order (default ascending by timestamp)
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   async getSessionMessages(sessionId, options = {}) {
@@ -107,7 +107,7 @@ class ChatMessageStore extends BaseStore {
         .equals(sessionId)
         .toArray()
 
-      // 按时间戳排序
+      // Sort by timestamp
       records.sort((a, b) => {
         return desc ? b.timestamp - a.timestamp : a.timestamp - b.timestamp
       })
@@ -127,12 +127,12 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 分页获取会话消息（支持懒加载）
-   * @param {string} sessionId - 会话ID
-   * @param {Object} params - 分页参数
-   * @param {number} [params.page] - 页码
-   * @param {number} [params.pageSize] - 每页数量
-   * @param {number} [params.beforeTimestamp] - 获取此时间戳之前的消息（用于向上加载历史）
+   * Paginated retrieval of session messages (supports lazy loading)
+   * @param {string} sessionId - Session ID
+   * @param {Object} params - Pagination parameters
+   * @param {number} [params.page] - Page number
+   * @param {number} [params.pageSize] - Items per page
+   * @param {number} [params.beforeTimestamp] - Get messages before this timestamp (for loading older history)
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   async getSessionMessagesPaginated(sessionId, params = {}) {
@@ -145,21 +145,21 @@ class ChatMessageStore extends BaseStore {
 
       const collection = this.table.where('sessionId').equals(sessionId)
 
-      // 如果指定了 beforeTimestamp，过滤时间
+      // If beforeTimestamp is specified, filter by time
       let records = await collection.toArray()
 
       if (beforeTimestamp) {
         records = records.filter(r => r.timestamp < beforeTimestamp)
       }
 
-      // 按时间戳降序排序（最新的在前）
+      // Sort by timestamp descending (newest first)
       records.sort((a, b) => b.timestamp - a.timestamp)
 
       const total = records.length
       const offset = (page - 1) * pageSize
       const list = records.slice(offset, offset + pageSize)
 
-      // 返回时反转，让消息按时间升序排列
+      // Reverse before returning so messages are in ascending time order
       list.reverse()
 
       return {
@@ -187,10 +187,10 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 获取时间范围内的消息
-   * @param {string} sessionId - 会话ID
-   * @param {number} startTime - 开始时间戳
-   * @param {number} endTime - 结束时间戳
+   * Get messages within a specified time range
+   * @param {string} sessionId - Session ID
+   * @param {number} startTime - Start timestamp
+   * @param {number} endTime - End timestamp
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   async getMessagesByTimeRange(sessionId, startTime, endTime) {
@@ -205,7 +205,7 @@ class ChatMessageStore extends BaseStore {
         )
         .toArray()
 
-      // 按时间升序
+      // Sort by timestamp ascending
       records.sort((a, b) => a.timestamp - b.timestamp)
 
       return { success: true, data: records }
@@ -223,8 +223,8 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 删除指定会话的所有消息
-   * @param {string} sessionId - 会话ID
+   * Delete all messages for a session
+   * @param {string} sessionId - Session ID
    * @returns {Promise<{success: boolean, deletedCount?: number, error?: Object}>}
    */
   async clearSession(sessionId) {
@@ -249,7 +249,7 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 获取所有会话ID列表
+   * Get list of all session IDs
    * @returns {Promise<{success: boolean, data?: Array<string>, error?: Object}>}
    */
   async getAllSessionIds() {
@@ -270,8 +270,8 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 获取会话统计信息
-   * @param {string} sessionId - 会话ID
+   * Get session statistics
+   * @param {string} sessionId - Session ID
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   async getSessionStats(sessionId) {
@@ -319,9 +319,9 @@ class ChatMessageStore extends BaseStore {
   }
 
   /**
-   * 搜索消息内容
-   * @param {string} sessionId - 会话ID
-   * @param {string} keyword - 搜索关键词
+   * Search message content
+   * @param {string} sessionId - Session ID
+   * @param {string} keyword - Search keyword
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   async searchMessages(sessionId, keyword) {
@@ -337,7 +337,7 @@ class ChatMessageStore extends BaseStore {
         .filter(msg => msg.content.toLowerCase().includes(lowerKeyword))
         .toArray()
 
-      // 按时间升序
+      // Sort by timestamp ascending
       records.sort((a, b) => a.timestamp - b.timestamp)
 
       return { success: true, data: records }
@@ -355,7 +355,7 @@ class ChatMessageStore extends BaseStore {
   }
 }
 
-// 导出单例实例
+// Export singleton instance
 export const chatMessageStore = new ChatMessageStore()
 
 export default chatMessageStore

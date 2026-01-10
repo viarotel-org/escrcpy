@@ -1,13 +1,13 @@
 import { delimiter } from 'node:path'
 
 /**
- * 通过注入特定于平台和或自动检测的路径来解析新的 PATH 环境变量字符串。
- * @param {Object} [options] - 各平台的自定义路径配置
- * @param {string[]} [options.win] - Windows平台需注入的路径列表
- * @param {string[]} [options.mac] - MacOS平台需注入的路径列表
- * @param {string[]} [options.linux] - Linux平台需注入的路径列表
- * @param {string[]} [options.auto] - 自动根据当前平台注入对应路径列表
- * @returns {string} 注入后的完整PATH字符串
+ * Resolve a new PATH environment string by injecting platform-specific or auto-detected paths.
+ * @param {Object} [options] - Custom path configurations per platform
+ * @param {string[]} [options.win] - Paths to inject on Windows
+ * @param {string[]} [options.mac] - Paths to inject on macOS
+ * @param {string[]} [options.linux] - Paths to inject on Linux
+ * @param {string[]} [options.auto] - Paths to inject automatically based on the current platform
+ * @returns {string} The resulting PATH string after injection
  */
 export function resolveEnvPath(options = {}) {
   const PLATFORM_MAP = Object.freeze({

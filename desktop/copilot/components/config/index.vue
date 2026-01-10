@@ -249,18 +249,18 @@ const subscribeStore = useSubscribeStore()
 
 const dialog = useDialog()
 
-// API Key 显示状态
+// Indicate API key visibility
 const showApiKey = ref(false)
 
-// 表单引用
+// Form reference
 const configFormRef = ref(null)
 
-// 表单数据
+// Form data
 const configForm = reactive({
   ...defaultCopilotConfigs,
 })
 
-// 表单校验规则
+// Form validation rules
 const formRules = reactive({
   baseUrl: [
     {
@@ -274,7 +274,7 @@ const formRules = reactive({
       type: 'number',
       min: 1,
       max: 100,
-      message: t('copilot.config.maxStepsRange') || '步骤数必须在 1-100 之间',
+      message: t('copilot.config.maxStepsRange') || 'Steps must be between 1 and 100',
       trigger: 'change',
     },
   ],
@@ -298,7 +298,7 @@ async function onOpen() {
   loadConfig()
 }
 
-// 加载配置
+// Load configuration
 async function loadConfig() {
   const savedConfig = await copilotClient.getConfig() || {}
 
@@ -306,7 +306,7 @@ async function loadConfig() {
     ...savedConfig,
   })
 
-  // 重置表单校验状态
+  // Reset form validation state
   if (configFormRef.value) {
     configFormRef.value.clearValidate()
   }
@@ -315,7 +315,7 @@ async function loadConfig() {
 // 提交配置
 async function submitConfig() {
   try {
-    // 先进行表单校验
+    // Validate form first
     const valid = await configFormRef.value.validate()
     if (!valid)
       return
@@ -325,7 +325,7 @@ async function submitConfig() {
     dialog.close()
   }
   catch (error) {
-    // 校验失败时会自动提示错误信息
+    // Validation errors are shown automatically
     if (error.name !== 'ValidationError') {
       console.error('Config save failed:', error)
       ElMessage.error(t('copilot.config.saveFailed'))
@@ -333,13 +333,13 @@ async function submitConfig() {
   }
 }
 
-// 打开订阅页面
+// Open subscribe page
 function openSubscribePage() {
-  // 通过 IPC 通知主窗口跳转到订阅页面
+  // Notify main window via IPC to navigate to subscribe page
   window.electron?.ipcRenderer.invoke('navigate-to-route', '/subscribe')
 }
 
-// 一键从订阅配置 Copilot
+// Import Copilot configuration from subscription
 async function onAutoConfigSubscribe() {
   try {
     configForm.baseUrl = 'https://ai.gitee.com/v1'
@@ -356,7 +356,7 @@ async function onAutoConfigSubscribe() {
   }
 }
 
-// 重置配置
+// Reset configuration
 async function resetConfig() {
   try {
     await ElMessageBox.confirm(
@@ -373,7 +373,7 @@ async function resetConfig() {
       ...defaultCopilotConfigs,
     })
 
-    // 重置表单校验状态
+    // Reset form validation state
     if (configFormRef.value) {
       configFormRef.value.clearValidate()
     }
@@ -381,7 +381,7 @@ async function resetConfig() {
     ElMessage.success(t('copilot.config.resetSuccess'))
   }
   catch {
-    // 用户取消
+    // User cancelled
   }
 }
 

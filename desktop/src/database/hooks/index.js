@@ -1,5 +1,5 @@
 /**
- * Hooks 导出入口
+ * Hooks export entry
  *
  * @module storage/hooks
  */

@@ -85,10 +85,10 @@ const emit = defineEmits(['switchTab'])
 
 const subscribeStore = useSubscribeStore()
 
-// 状态
+// State
 const loading = ref(false)
 
-// 计算属性
+// Computed properties
 const userInfo = computed(() => subscribeStore.userInfo || {})
 
 const statusTagType = computed(() => {
@@ -111,7 +111,7 @@ const statusText = computed(() => {
   return statusMap[userInfo.value?.purchase_status] || userInfo.value?.purchase_status
 })
 
-// 方法
+// Methods
 function formatDate(timestamp) {
   if (!timestamp)
     return '-'
@@ -122,7 +122,7 @@ function formatDate(timestamp) {
   })
 }
 
-// 初始化
+// Initialization
 onMounted(async () => {
   loading.value = true
   try {

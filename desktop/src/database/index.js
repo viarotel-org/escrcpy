@@ -1,28 +1,28 @@
 /**
- * 本地存储架构主入口
+ * Local storage architecture entry point
  *
- * 架构概述：
- * ├── core/           # 核心层 - 数据库实例、基础 Store 类
- * │   ├── database.js # Dexie 数据库封装，Schema 定义
- * │   └── BaseStore.js # 通用 Store 基类，提供统一 CRUD 接口
+ * Architecture overview:
+ * ├── core/           # Core layer - database instance, Base Store classes
+ * │   ├── database.js # Dexie database wrapper and schema definitions
+ * │   └── BaseStore.js # Base Store class providing common CRUD interfaces
  * │
- * ├── hooks/          # Vue 响应式 Hooks
- * │   └── useLiveQuery.js # 基于 liveQuery 的响应式查询
+ * ├── hooks/          # Vue reactive hooks
+ * │   └── useLiveQuery.js # Reactive queries based on liveQuery
  * │
- * ├── modules/        # 业务模块
- * │   ├── chat/       # 聊天消息模块
+ * ├── modules/        # Business modules
+ * │   ├── chat/       # Chat messages module
  * │   │   ├── store.js      # ChatMessageStore
  * │   │   └── composables.js # useChatMessages Hook
- * │   └── [future]/   # 未来扩展模块（task 等）
+ * │   └── [future]/   # Future modules (tasks, etc.)
  * │
- * └── utils/          # 工具函数
- *     └── validation.js # 数据校验、错误处理
+ * └── utils/          # Utility functions
+ *     └── validation.js # Data validation and error handling
  *
- * 使用示例：
+ * Usage example:
  * ```javascript
  * import { useChatMessages } from '$/database'
  *
- * // 在 Vue 组件中使用
+ * // In a Vue component:
  * const { messages, addMessage, deleteMessage, clearAll } = useChatMessages(deviceId)
  * ```
  *

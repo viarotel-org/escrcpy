@@ -1,5 +1,5 @@
 /**
- * 工具函数导出入口
+ * Utilities export entry
  *
  * @module storage/utils
  */

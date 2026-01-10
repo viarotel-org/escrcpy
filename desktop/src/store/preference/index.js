@@ -11,7 +11,7 @@ import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
 
 export const usePreferenceStore = defineStore('app-preference', () => {
-  // 定义响应式状态
+  // Define reactive state
   const deviceScope = ref(window.appStore.get('scrcpy.deviceScope') || 'global')
   const recordKeys = ref(Object.values(preferenceModel?.record?.children || {}).map((item) => {
     return item.field

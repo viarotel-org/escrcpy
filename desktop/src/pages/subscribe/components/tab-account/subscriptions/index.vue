@@ -126,7 +126,7 @@ const formatTime = (timestamp) => {
   })
 }
 
-// 优惠单位文本映射
+// Discount unit text mapping
 const getUnitText = (unit) => {
   const unitMap = {
     CNY: t('subscribe.perUnit'),

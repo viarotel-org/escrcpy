@@ -1,5 +1,5 @@
 /**
- * 聊天模块导出入口
+ * Chat module export entry
  *
  * @module storage/modules/chat
  */

@@ -24,7 +24,7 @@ window.electron.ipcRenderer.on('execute-arguments-change', async (event, params)
   startApp.open(params)
 })
 
-// 监听路由跳转
+// Listen for route navigation changes
 window.electron.ipcRenderer.on('navigate-to-route', (event, route) => {
   router.push(route)
 })

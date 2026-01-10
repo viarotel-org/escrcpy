@@ -42,21 +42,22 @@ export default {
       placeholder: 'common.language.placeholder',
       options: [
         {
-          label: '中文',
+          label: 'Chinese (Simplified)',
           value: 'zh-CN',
         },
         {
-          label: '繁體中文',
+          label: 'Chinese (Traditional)',
           value: 'zh-TW',
         },
         {
-          label: '日本語',
+          label: 'Japanese',
           value: 'ja-JP',
         },
         {
           label: 'English',
           value: 'en-US',
         },
+
         {
           label: 'Русский',
           value: 'ru-RU',

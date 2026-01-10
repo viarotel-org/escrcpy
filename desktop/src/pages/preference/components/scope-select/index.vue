@@ -43,14 +43,14 @@ const deviceStore = useDeviceStore()
 const options = computed(() => {
   const value = deviceStore.list.map(item => ({
     ...item,
-    label: `${item.id}（${item.name}${
-      item.remark ? `，${item.remark}` : ''
-    }）`,
+    label: `${item.id} (${item.name}${
+      item.remark ? `, ${item.remark}` : ''
+    })`, 
     value: item.id,
   }))
 
   value.unshift({
-    label: `Global（${window.t('preferences.scope.global')}）`,
+    label: `Global (${window.t('preferences.scope.global')})`,
     value: 'global',
   })
 

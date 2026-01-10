@@ -227,7 +227,7 @@
               </el-form-item>
             </div>
 
-            <!-- 执行对象区块（设备信息展示） -->
+            <!-- Execution target block (device info display) -->
             <div class="form-section">
               <div class="section-title mb-4">
                 <el-icon class="mr-2">
@@ -259,7 +259,7 @@
               </div>
             </div>
 
-            <!-- 提示信息 -->
+            <!-- Tips -->
             <div>
               <el-alert
                 :title="$t('device.task.tips')"
@@ -307,35 +307,35 @@ import {
 import { sleep } from '$/utils'
 import copilotClient from '$copilot/services/index.js'
 
-// Store 引用
+// Store references
 const taskStore = useTaskStore()
 const deviceStore = useDeviceStore()
 
-// 弹窗状态
+// Dialog state
 const visible = ref(false)
 const loading = ref(false)
 
-// 表单引用
+// Form refs
 const formRef = ref(null)
 const cronSelectorRef = ref(null)
 
-// 设备列表
+// Device list
 const devices = ref(null)
 
-// 默认时间（用于日期选择器）
+// Default time (for date picker)
 const defaultTime = ref(null)
 
-// Cron 表达式有效性状态
+// Cron expression validity state
 const cronValid = ref(true)
 
-// 任务类型模型（从 store 获取，包含 Copilot）
+// Task model (from store, includes Copilot)
 const taskModel = computed(() => taskStore.model)
 
-// Copilot 快捷指令
+// Copilot quick prompts
 const quickPrompts = ref([])
 
 /**
- * 表单数据模型
+ * Form data model
  */
 const model = ref({
   taskType: void 0, // 任务类型

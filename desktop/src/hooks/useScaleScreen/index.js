@@ -14,7 +14,7 @@ export function useScaleScreen(options = {}) {
   getPrimaryDisplay()
 
   watchEffect(() => {
-    // 断开之前的观察
+    // Disconnect previous observer
     if (resizeObserver.value) {
       resizeObserver.value.disconnect()
       resizeObserver.value = null
@@ -24,10 +24,10 @@ export function useScaleScreen(options = {}) {
       return
     }
 
-    // 初始计算
+    // Initial calculation
     updateContainerDimensions()
 
-    // 设置 ResizeObserver
+    // Set up ResizeObserver
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver.value = new ResizeObserver(() => {
         updateContainerDimensions()
@@ -36,7 +36,7 @@ export function useScaleScreen(options = {}) {
     }
   })
 
-  // 更新容器尺寸和缩放比例的函数
+  // Function to update container dimensions and zoom scale
   function updateContainerDimensions() {
     if (!containerRef?.value || !display.value) {
       return false

@@ -110,7 +110,7 @@ const qrcodeRef = ref(null)
 
 let pollTimer = null
 
-// 计算属性
+// Computed properties
 const { totalPrice } = useSubscribePrice({
   billing_type: computed(() => dialog.options.plan.billing_type),
   price: computed(() => dialog.options.plan.price),

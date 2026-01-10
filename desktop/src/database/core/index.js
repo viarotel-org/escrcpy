@@ -1,5 +1,5 @@
 /**
- * 核心层导出入口
+ * Core layer export entry point
  *
  * @module storage/core
  */

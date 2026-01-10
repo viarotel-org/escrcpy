@@ -1,4 +1,4 @@
-// 加载 Google Analytics 分析工具
+// Load Google Analytics tracking script
 
 const GoogleAnalyticsId = 'G-24PQ0ZF4RG'
 if (!import.meta.env.SSR) {

@@ -51,13 +51,13 @@ export function useUploaderPlus() {
   const activeUploaders = new Map()
 
   /**
-   * 发送文件到设备（单个或多个）
-   * @param {Object|Object[]} devices - 设备或设备列表
-   * @param {Object} [options] - 选项
-   * @param {string[]} [options.localPaths] - 本地文件路径
-   * @param {string} [options.remotePath] - 远程路径
-   * @param {string} [options.properties] - 打开文件对话框属性
-   * @param {boolean} [options.silent] - 静默模式
+   * Send files to device(s)
+   * @param {Object|Object[]} devices - Device or list of devices
+   * @param {Object} [options] - Options
+   * @param {string[]} [options.localPaths] - Local file paths
+   * @param {string} [options.remotePath] - Remote path
+   * @param {string} [options.properties] - File dialog properties
+   * @param {boolean} [options.silent] - Silent mode
    * @returns {Promise<boolean|Object>}
    */
   async function upload(devices, options = {}) {

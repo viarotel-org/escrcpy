@@ -47,7 +47,7 @@ const vitePressConfig = {
         crossorigin: 'anonymous',
       },
     ],
-    // 百度统计工具
+    // Baidu analytics
     [
       'script',
       {
@@ -125,7 +125,7 @@ const vitePressI18nConfig = {
   searchProvider: 'local',
   description: {
     en: 'Control your Android device with graphical scrcpy.',
-    zhHans: '使用图形化的 scrcpy 控制你的安卓设备。',
+    zhHans: 'Graphical frontend for scrcpy to control your Android devices.',
   },
   themeConfig: {
     en: {
@@ -141,13 +141,13 @@ const vitePressI18nConfig = {
     },
     zhHans: {
       nav: [
-        { text: '指引', link: '/zhHans/guide' },
-        { text: '参考', link: '/zhHans/reference' },
-        { text: '帮助', link: '/zhHans/help' },
-        { text: '变更日志', link: '/zhHans/changelog' },
-        { text: '捐赠', link: '/zhHans/donate' },
-        { text: '联系', link: '/zhHans/contact' },
-        { text: '博客', link: 'https://blog.viarotel.eu.org/' },
+        { text: 'Guide', link: '/zhHans/guide' },
+        { text: 'Reference', link: '/zhHans/reference' },
+        { text: 'Help', link: '/zhHans/help' },
+        { text: 'Changelog', link: '/zhHans/changelog' },
+        { text: 'Donate', link: '/zhHans/donate' },
+        { text: 'Contact', link: '/zhHans/contact' },
+        { text: 'Blog', link: 'https://blog.viarotel.eu.org/' },
       ],
     },
   },

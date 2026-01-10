@@ -3,7 +3,7 @@
     <div
       class="flex flex-col h-screen"
     >
-      <!-- 顶部标题栏 - 紧凑设计 -->
+      <!-- Top title bar - compact design -->
       <div
         :class="[
           {
@@ -30,7 +30,7 @@
           </div>
         </div>
 
-        <!-- 操作按钮 -->
+        <!-- Action buttons -->
         <div class="flex items-center gap-1 *:app-region-no-drag">
           <el-tooltip :content="$t('copilot.promptManager.title')" placement="bottom">
             <el-button
@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <!-- 主内容区域 -->
+      <!-- Main content area -->
       <div class="flex-1 min-h-0 overflow-hidden">
         <ChatPanel
           v-if="currentDevice"
@@ -68,10 +68,10 @@
         />
       </div>
 
-      <!-- 配置弹窗 -->
+      <!-- Config dialog -->
       <ConfigDialog ref="configDialogRef" />
 
-      <!-- 快捷指令 -->
+      <!-- Quick commands -->
       <PromptManager ref="promptManagerRef" />
     </div>
   </el-config-provider>
@@ -96,7 +96,7 @@ const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
 const configDialogRef = ref(null)
 const promptManagerRef = ref(null)
 
-// 获取设备显示名称
+// Get device display name
 const getDeviceLabel = (device) => {
   if (!device)
     return ''

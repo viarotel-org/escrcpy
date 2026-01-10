@@ -257,8 +257,8 @@ export default {
           `<div class="pt-4 pl-4">
             <div class="text-sm text-red-500 pb-4">${this.$t(
               'device.wireless.connect.error.detail',
-            )}：${message}</div>
-            <div>${this.$t('device.wireless.connect.error.reasons[0]')}：</div>
+            )}: ${message}</div>
+            <div>${this.$t('device.wireless.connect.error.reasons[0]'):</div>
             <div>1. ${this.$t(
               'device.wireless.connect.error.reasons[1]',
             )} </div>

@@ -24,11 +24,11 @@ export function isIPWithPort(ip) {
 }
 
 /**
- * 创建一个代理对象，将目标对象的指定方法转发并执行。
+ * Create a proxy object that forwards specified methods from the target object.
  *
- * @param {object} targetObject - 目标对象，包含要代理的方法。
- * @param {string[]} methodNames - 要代理的方法名称数组。
- * @returns {object} - 代理对象，包含转发的方法。
+ * @param {object} targetObject - The target object containing methods to proxy.
+ * @param {string[]} methodNames - Array of method names to proxy.
+ * @returns {object} - Proxy object with forwarded methods.
  */
 export function createProxy(targetObject, methodNames) {
   return methodNames.reduce((proxyObj, methodName) => {
@@ -52,18 +52,18 @@ export function keyByValue(data, key = 'key', valueKey = 'value') {
 }
 
 /**
- * 对列表中的每个项目执行给定的迭代器函数，并返回一个 Promise，
- * 该 Promise 在所有迭代完成时解决，无论它们是成功还是失败。
+ * Execute the provided iterator function for each item in a list and return a Promise
+ * that resolves when all iterations complete, regardless of success or failure.
  *
- * @param {Array} list - 要迭代的项目数组。
- * @param {Function} iterator - 对列表中每个项目执行的函数。
- *   它应该返回一个 Promise 或者可以是一个异步函数。
- * @param {*} iterator.item - 当前正在处理的列表项。
- * @param {number} iterator.index - 当前正在处理的项目的索引。
- * @param {Array} iterator.array - 正在处理的原始数组。
- * @returns {Promise<Array<PromiseSettledResult>>} 一个 Promise，解析为一个对象数组，
- *   描述输入数组中每个 promise 的结果。
- * @throws {TypeError} 如果第一个参数不是数组或第二个参数不是函数。
+ * @param {Array} list - Array of items to iterate.
+ * @param {Function} iterator - Function applied to each item in the list.
+ *   It should return a Promise or be an async function.
+ * @param {*} iterator.item - The current list item being processed.
+ * @param {number} iterator.index - The index of the current item.
+ * @param {Array} iterator.array - The original array being processed.
+ * @returns {Promise<Array<PromiseSettledResult>>} A Promise that resolves to an array of results
+ *   describing each input promise's outcome.
+ * @throws {TypeError} If the first argument is not an array or the second argument is not a function.
  *
  * @example
  * const list = [1, 2, 3, 4, 5];
@@ -71,7 +71,7 @@ export function keyByValue(data, key = 'key', valueKey = 'value') {
  *   if (item % 2 === 0) {
  *     return item * 2;
  *   } else {
- *     throw new Error('奇数');
+ *     throw new Error('Odd number');
  *   }
  * };
  * allSettledWrapper(list, iterator).then(console.log);
@@ -89,10 +89,10 @@ export function allSettledWrapper(list = [], iterator) {
 }
 
 /**
- * @description 继承组件方法
- * @param {*} refName ref名称
- * @param {*} methodNames 需要继承的方法名列表
- * @returns
+ * @description Inherit component methods
+ * @param {*} refName - Reference name of the component
+ * @param {*} methodNames - Array of method names to inherit
+ * @returns {object} An object mapping method names to wrapper functions
  */
 export function inheritComponentMethods(refName, methodNames) {
   const methods = {}
@@ -105,8 +105,8 @@ export function inheritComponentMethods(refName, methodNames) {
 }
 
 /**
- * 通用定时器
- * @param {string} type
+ * Generic timer setter
+ * @param {string} type - Timer type identifier
  */
 export function setTimer(type, ...args) {
   const method = camelCase(`set-${type}`)
@@ -114,8 +114,8 @@ export function setTimer(type, ...args) {
 }
 
 /**
- * 通用清除定时器
- * @param {string} type
+ * Generic timer clearer
+ * @param {string} type - Timer type identifier
  */
 export function clearTimer(type, ...args) {
   const method = camelCase(`clear-${type}`)

@@ -1,10 +1,10 @@
 /**
- * 聊天消息 Composables - Vue 响应式聊天记录 Hook
+ * Chat message Composables - Vue reactive chat history Hook
  *
- * 设计思路：
- * 1. 封装聊天消息的响应式查询
- * 2. 提供便捷的增删改操作
- * 3. 自动同步视图与数据库
+ * Design:
+ * 1. Encapsulate reactive queries for chat messages
+ * 2. Provide convenient CRUD operations
+ * 3. Automatically sync view with the database
  *
  * @module storage/modules/chat/composables
  */
@@ -14,14 +14,14 @@ import { chatMessageStore, MessageStatus } from './store.js'
 import { db } from '$/database/core/database.js'
 
 /**
- * 聊天消息 Hook
- * 提供响应式的聊天消息管理功能
+ * Chat messages Hook
+ * Provides reactive chat message management utilities
  *
- * @param {import('vue').Ref<string>|string} sessionIdRef - 会话ID（响应式或普通字符串）
- * @param {Object} [options] - 选项
- * @param {boolean} [options.autoLoad] - 是否自动加载
- * @param {number} [options.pageSize] - 每页数量
- * @returns {Object} 聊天消息管理对象
+ * @param {import('vue').Ref<string>|string} sessionIdRef - Session ID (ref or plain string)
+ * @param {Object} [options] - Options
+ * @param {boolean} [options.autoLoad] - Whether to auto-load messages
+ * @param {number} [options.pageSize] - Number per page
+ * @returns {Object} Chat message management object
  *
  * @example
  * const { messages, addMessage, deleteMessage, clearAll, loading } = useChatMessages(deviceId)
@@ -32,18 +32,18 @@ export function useChatMessages(sessionIdRef, options = {}) {
     pageSize = 100,
   } = options
 
-  // 状态
+  // State
   const messages = shallowRef([])
   const loading = ref(false)
   const error = ref(null)
   const hasMore = ref(false)
   const totalCount = ref(0)
 
-  // 订阅句柄
+  // Subscription handle
   let subscription = null
 
   /**
-   * 获取当前 sessionId
+   * Get current sessionId
    */
   const getSessionId = () => {
     if (typeof sessionIdRef === 'object' && 'value' in sessionIdRef) {
@@ -53,12 +53,12 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 订阅消息变化（响应式）
+   * Subscribe to message changes (reactive)
    */
   const subscribe = () => {
     const sessionId = getSessionId()
 
-    // 取消之前的订阅
+    // Unsubscribe previous subscription
     if (subscription) {
       subscription.unsubscribe()
       subscription = null
@@ -74,14 +74,14 @@ export function useChatMessages(sessionIdRef, options = {}) {
     error.value = null
 
     try {
-      // 使用 liveQuery 监听数据变化
+      // Use liveQuery to observe data changes
       const observable = liveQuery(async () => {
         const records = await db.messages
           .where('sessionId')
           .equals(sessionId)
           .toArray()
 
-        // 按时间戳升序排列
+        // Sort by timestamp ascending
         records.sort((a, b) => a.timestamp - b.timestamp)
 
         return records
@@ -108,8 +108,8 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 添加消息
-   * @param {Object} message - 消息对象
+   * Add message
+   * @param {Object} message - Message object
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   const addMessage = async (message) => {
@@ -128,8 +128,8 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 批量添加消息
-   * @param {Array} messageList - 消息数组
+   * Bulk add messages
+   * @param {Array} messageList - Array of messages
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   const addMessages = async (messageList) => {
@@ -152,8 +152,8 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 删除单条消息
-   * @param {number} messageId - 消息ID
+   * Delete a message
+   * @param {number} messageId - Message ID
    * @returns {Promise<{success: boolean, error?: Object}>}
    */
   const deleteMessage = async (messageId) => {
@@ -161,8 +161,8 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 批量删除消息
-   * @param {Array<number>} messageIds - 消息ID数组
+   * Bulk delete messages
+   * @param {Array<number>} messageIds - Array of message IDs
    * @returns {Promise<{success: boolean, error?: Object}>}
    */
   const deleteMessages = async (messageIds) => {
@@ -170,7 +170,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 清空当前会话所有消息
+   * Clear all messages for the current session
    * @returns {Promise<{success: boolean, deletedCount?: number, error?: Object}>}
    */
   const clearAll = async () => {
@@ -186,9 +186,9 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 更新消息
-   * @param {number} messageId - 消息ID
-   * @param {Object} changes - 要更新的字段
+   * Update message
+   * @param {number} messageId - Message ID
+   * @param {Object} changes - Fields to update
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   const updateMessage = async (messageId, changes) => {
@@ -196,8 +196,8 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 搜索消息
-   * @param {string} keyword - 搜索关键词
+   * Search messages
+   * @param {string} keyword - Search keyword
    * @returns {Promise<{success: boolean, data?: Array, error?: Object}>}
    */
   const searchMessages = async (keyword) => {
@@ -210,7 +210,7 @@ export function useChatMessages(sessionIdRef, options = {}) {
   }
 
   /**
-   * 获取会话统计信息
+   * Get session statistics
    * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
    */
   const getStats = async () => {

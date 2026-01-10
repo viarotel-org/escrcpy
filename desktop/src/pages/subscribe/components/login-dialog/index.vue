@@ -19,9 +19,9 @@
         </div>
       </div>
 
-      <!-- 登录表单 -->
+      <!-- Login form -->
       <el-form ref="formRef" :model="formInfo" :rules="formRules" @submit.prevent="handleSubmit">
-        <!-- 账号输入 -->
+        <!-- Account input -->
         <el-form-item prop="account">
           <el-input
             v-model="formInfo.account"
@@ -32,7 +32,7 @@
           />
         </el-form-item>
 
-        <!-- 验证码输入 -->
+        <!-- Verification code input -->
         <el-form-item prop="code">
           <div class="flex gap-3 w-full">
             <el-input
@@ -83,7 +83,7 @@ const subscribeStore = useSubscribeStore()
 
 const smsCountdown = reactive(useSmsCountdown())
 
-// 表单
+// Form
 const formRef = ref(null)
 
 const formInfo = reactive({
@@ -97,7 +97,7 @@ const subscribeValidator = reactive(
   }),
 )
 
-// 表单规则
+// Form rules
 const formRules = {
   account: [
     { required: true, message: t('subscribe.accountRequired'), trigger: 'blur' },
@@ -119,10 +119,10 @@ const formRules = {
   ],
 }
 
-// 状态
+// State
 const logging = ref(false)
 
-// resolve/reject 用于 Promise
+// resolve/reject for Promise
 let resolveLogin = null
 let rejectLogin = null
 
@@ -185,12 +185,12 @@ async function handleSubmit() {
     const result = await subscribeClient.getUserToken(data)
 
     if (result?.access_token) {
-      // 保存令牌
+      // Save token
       await subscribeStore.setAccessToken(result.access_token)
 
       await subscribeStore.init()
 
-      // 登录成功
+      // Login success
       visible.value = false
       ElMessage.success(t('subscribe.loginSuccess'))
 
@@ -225,14 +225,14 @@ function handleClosed() {
 
   smsCountdown.reset()
 
-  // reject Promise（如果用户关闭对话框）
+  // Reject Promise (if user closes the dialog)
   if (rejectLogin) {
     rejectLogin(new Error('Login cancelled'))
     rejectLogin = null
   }
 }
 
-// 打开对话框（返回 Promise）
+// Open dialog (returns a Promise)
 function open() {
   visible.value = true
 
@@ -242,12 +242,12 @@ function open() {
   })
 }
 
-// 清理
+// Cleanup
 onUnmounted(() => {
   smsCountdown.reset()
 })
 
-// 暴露方法
+// Expose methods
 defineExpose({
   open,
 })

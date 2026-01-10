@@ -75,7 +75,7 @@ import subscribeClient from '$/services/subscribe/index.js'
 
 const subscribeStore = useSubscribeStore()
 
-// 表单
+// Form
 const formRef = ref(null)
 
 const formInfo = reactive({
@@ -95,7 +95,7 @@ const fileList = ref([])
 
 const submitting = ref(false)
 
-// 表单规则
+// Form rules
 const formRules = {
   type: [
     { required: true, message: t('subscribe.feedbackTypeRequired'), trigger: 'change' },
@@ -119,20 +119,20 @@ const formRules = {
   ],
 }
 
-// 方法
+// Methods
 function handleExceed() {
   ElMessage.warning(t('subscribe.feedbackMaxFiles'))
 }
 
 function beforeUpload(file) {
-  // 验证文件类型
+  // Validate file type
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
   if (!allowedTypes.includes(file.type)) {
     ElMessage.error(t('subscribe.feedbackInvalidFileType'))
     return false
   }
 
-  // 验证文件大小（5MB）
+  // Validate file size (5MB)
   const maxSize = 5 * 1024 * 1024
   if (file.size > maxSize) {
     ElMessage.error(t('subscribe.feedbackFileTooLarge'))
@@ -170,7 +170,7 @@ async function handleSubmit() {
 
     if (result === true || result) {
       ElMessage.success(t('subscribe.feedbackSuccess'))
-      // 重置表单
+      // Reset form
       formRef.value.resetFields()
       fileList.value = []
     }

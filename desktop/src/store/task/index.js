@@ -1,12 +1,12 @@
 /**
- * 任务 Store - 计划任务管理
+ * Task Store - Scheduled task management
  *
- * 基于 croner@9.1.0 实现的定时任务系统，支持三种执行频率:
- * 1. 单次执行 (timeout): 在指定时间点执行一次
- * 2. 周期重复 (interval): 按固定时间间隔重复执行
- * 3. Cron 表达式 (cron): 基于 Cron 表达式的灵活定时配置
+ * A scheduling system implemented with croner@9.1.0, supporting three timer types:
+ * 1. Single run (timeout): execute once at a specified time
+ * 2. Repeating interval (interval): execute at fixed intervals
+ * 3. Cron expression (cron): flexible scheduling via cron expressions
  *
- * 执行精度 ≤1s，通过 croner 的高精度定时器实现
+ * Execution precision ≤1s provided by croner's high-precision timers
  */
 
 import { Cron } from 'croner'
@@ -18,33 +18,33 @@ import { defineStore } from 'pinia'
 dayjs.extend(duration)
 
 /**
- * 任务状态常量
+ * Task status constants
  */
 export const TaskStatus = {
-  START: 'start', // 初始状态
-  PROGRESS: 'progress', // 执行中
-  FINISHED: 'finished', // 已完成
-  FAILED: 'failed', // 失败
+  START: 'start', // Initial status
+  PROGRESS: 'progress', // In progress
+  FINISHED: 'finished', // Completed
+  FAILED: 'failed', // Failed
 }
 
 /**
- * 执行频率类型常量
+ * Timer type constants
  */
 export const TimerType = {
-  TIMEOUT: 'timeout', // 单次执行
-  INTERVAL: 'interval', // 周期重复
-  CRON: 'cron', // Cron 表达式
+  TIMEOUT: 'timeout', // Single run
+  INTERVAL: 'interval', // Repeating interval
+  CRON: 'cron', // Cron expression
 }
 
 export const useTaskStore = defineStore(
   'app-task',
   () => {
-    // 事件总线，用于任务事件分发
+    // Event bus for task event dispatch
     const event = useEventBus('app-task')
 
     /**
-     * 任务类型模型（扩展支持 Copilot）
-     * 可通过 registerTaskType 方法扩展新任务类型
+     * Task type model (supports Copilot extension)
+     * New task types can be added via the registerTaskType method
      */
     const model = ref([
       {
@@ -69,17 +69,17 @@ export const useTaskStore = defineStore(
       },
     ])
 
-    // 任务列表
+    // Task list
     const list = ref([])
 
-    // Cron 实例映射表，用于管理 croner 实例
+    // Cron instance map used to manage croner instances
     const cronInstances = new Map()
 
     /**
-     * 注册新的任务类型
-     * @param {Object} taskType - 任务类型配置
-     * @param {string} taskType.label - 显示标签（i18n key）
-     * @param {string} taskType.value - 任务类型值
+     * Register a new task type
+     * @param {Object} taskType - Task type configuration
+     * @param {string} taskType.label - Display label (i18n key)
+     * @param {string} taskType.value - Task type value
      */
     function registerTaskType(taskType) {
       const exists = model.value.some(item => item.value === taskType.value)
@@ -105,7 +105,7 @@ export const useTaskStore = defineStore(
         createdAt: Date.now(),
       }
 
-      // 发送任务事件，通知相关模块处理
+      // Emit task event to notify relevant modules
       event.emit(task)
 
       list.value.push(task)
@@ -114,26 +114,26 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 将任务配置转换为 Cron 表达式
-     * @param {Object} task - 任务对象
-     * @returns {string|null} Cron 表达式或 null
+     * Convert a task configuration to a cron expression
+     * @param {Object} task - Task object
+     * @returns {string|null} Cron expression or null
      */
     function convertTaskToCronExpression(task) {
       const { timerType, timeout, interval, intervalType, cronExpression } = task
 
       switch (timerType) {
         case TimerType.TIMEOUT: {
-          // 单次执行：转换为特定时间点的 Cron 表达式
+          // Single run: convert to a cron expression for a specific time
           if (!timeout) {
             return null
           }
           const date = dayjs(timeout)
-          // Cron 格式: 秒 分 时 日 月 周
+          // Cron format: second minute hour day month week
           return `${date.second()} ${date.minute()} ${date.hour()} ${date.date()} ${date.month() + 1} *`
         }
 
         case TimerType.INTERVAL: {
-          // 周期执行：转换为间隔 Cron 表达式
+          // Interval execution: convert to interval cron expression
           if (!interval) {
             return null
           }
@@ -141,7 +141,7 @@ export const useTaskStore = defineStore(
 
           switch (intervalType) {
             case 'second':
-              // croner 支持秒级，使用 6 位 Cron
+              // croner supports second-level granularity; use 6-field cron
               return `*/${intervalValue} * * * * *`
             case 'minute':
               return `*/${intervalValue} * * * *`
@@ -150,7 +150,7 @@ export const useTaskStore = defineStore(
             case 'day':
               return `0 0 */${intervalValue} * *`
             case 'millisecond':
-              // 毫秒级不支持 Cron，使用最小秒级
+              // Millisecond intervals are not supported by cron; use 1-second minimum
               console.warn('Millisecond interval not supported by Cron, using 1 second minimum')
               return '* * * * * *'
             default:
@@ -188,7 +188,7 @@ export const useTaskStore = defineStore(
           .asMilliseconds()
       }
       else if (timerType === TimerType.CRON) {
-        // 对于 Cron 类型，计算到下次执行的时间
+        // For Cron type, compute delay until next execution
         try {
           const cron = new Cron(task.cronExpression, { legacyMode: false })
           const nextRun = cron.nextRun()
@@ -206,30 +206,30 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 启动任务
-     * 使用 croner@9.1.0 创建定时器，保证执行精度 ≤1s
+     * Start a task
+     * Uses croner@9.1.0 to create timers, ensuring execution precision ≤1s
      *
-     * @param {Object} options - 启动选项
-     * @param {Object} options.task - 任务对象
-     * @param {Function} options.handler - 任务执行处理函数
+     * @param {Object} options - Start options
+     * @param {Object} options.task - Task object
+     * @param {Function} options.handler - Task handler function
      */
     function start({ task, handler }) {
       const { timerType, devices, id } = task
 
       const files = task.extra ? task.extra.split(',') : void 0
 
-      // 检查任务是否已过期
+      // Check whether the task has expired
       const timeout = getTimeout(task)
       if (timeout < 0 && timerType !== TimerType.CRON) {
         ElMessage.warning(window.t('device.task.timeout.expired'))
         return false
       }
 
-      // 清除可能存在的旧定时器
+      // Clear any existing timer
       stopCronJob(id)
 
       try {
-        // 转换为 Cron 表达式
+        // Convert to cron expression
         const cronExpression = convertTaskToCronExpression(task)
 
         if (!cronExpression) {
@@ -237,19 +237,19 @@ export const useTaskStore = defineStore(
           return false
         }
 
-        // 创建 croner 实例
+        // Create croner instance
         const cronOptions = {
           legacyMode: false,
-          protect: true, // 防止重叠执行
+          protect: true, // Prevent overlapping executions
         }
 
-        // 对于单次执行，设置 maxRuns 为 1
+        // For single-run tasks, set maxRuns to 1
         if (timerType === TimerType.TIMEOUT) {
           cronOptions.maxRuns = 1
         }
 
         const cronJob = new Cron(cronExpression, cronOptions, () => {
-          // 执行任务处理函数
+          // Execute task handler function
           handler(devices, {
             files,
             extra: task.extra,
@@ -257,18 +257,18 @@ export const useTaskStore = defineStore(
             taskType: task.taskType,
           })
 
-          // 单次执行完成后停止任务
+          // Stop single-run task after execution
           if (timerType === TimerType.TIMEOUT) {
             stop(task)
           }
         })
 
-        // 保存 Cron 实例
+        // Store cron instance
         cronInstances.set(id, cronJob)
 
-        // 更新任务状态
+        // Update task status
         Object.assign(task, {
-          cronJob: id, // 使用 id 作为引用标识
+          cronJob: id, // Use id as reference handle
           taskStatus: TaskStatus.PROGRESS,
         })
 
@@ -282,8 +282,8 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 停止 Cron 定时器
-     * @param {string} taskId - 任务 ID
+     * Stop Cron timer
+     * @param {string} taskId - Task ID
      */
     function stopCronJob(taskId) {
       const cronJob = cronInstances.get(taskId)
@@ -294,8 +294,8 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 停止任务
-     * @param {Object} task - 任务对象
+     * Stop a task
+     * @param {Object} task - Task object
      */
     function stop(task) {
       if (!task) {
@@ -313,13 +313,13 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 重新启动任务
-     * @param {Object} task - 任务对象
+     * Restart a task
+     * @param {Object} task - Task object
      */
     function restart(task) {
-      // 对于单次执行任务，需要更新执行时间
+      // For single-run tasks, update execution time
       if (task.timerType === TimerType.TIMEOUT) {
-        // 重新发送事件让处理器决定如何处理
+        // Re-emit event for handler to decide how to handle it
         event.emit({ ...task, taskStatus: TaskStatus.START })
       }
       else {
@@ -328,8 +328,8 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 移除任务
-     * @param {Object} task - 任务对象
+     * Remove a task
+     * @param {Object} task - Task object
      */
     function remove(task) {
       stop(task)
@@ -337,8 +337,8 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 批量移除任务
-     * @param {Array} tasks - 任务数组
+     * Remove multiple tasks
+     * @param {Array} tasks - Array of task objects
      */
     function removeAll(tasks) {
       for (let index = 0; index < tasks.length; index++) {
@@ -348,12 +348,12 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 注册任务事件监听器
-     * 用于各模块注册对应任务类型的处理逻辑
+     * Register a task event listener
+     * Allows modules to register handlers for specific task types
      *
-     * @param {string} name - 任务类型名称
-     * @param {Function} callback - 回调函数
-     * @returns {Object} 事件总线实例
+     * @param {string} name - Task type name
+     * @param {Function} callback - Callback function
+     * @returns {Object} Event bus instance
      */
     function on(name, callback) {
       event.on((...args) => {
@@ -370,10 +370,10 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 发送任务事件
-     * @param {string} name - 任务类型名称
-     * @param {Object} args - 事件参数
-     * @returns {Object} 事件总线实例
+     * Emit a task event
+     * @param {string} name - Task type name
+     * @param {Object} args - Event arguments
+     * @returns {Object} Event bus instance
      */
     function emit(name, args) {
       event.emit({ taskType: name, ...args })
@@ -381,9 +381,9 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 获取任务的下次执行时间
-     * @param {Object} task - 任务对象
-     * @returns {Date|null} 下次执行时间
+     * Get the next execution time for a task
+     * @param {Object} task - Task object
+     * @returns {Date|null} Next execution time or null
      */
     function getNextExecution(task) {
       const cronJob = cronInstances.get(task.id)
@@ -394,9 +394,9 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 获取任务执行统计
-     * @param {Object} task - 任务对象
-     * @returns {Object} 统计信息
+     * Get task execution statistics
+     * @param {Object} task - Task object
+     * @returns {Object} Statistics
      */
     function getTaskStats(task) {
       const cronJob = cronInstances.get(task.id)

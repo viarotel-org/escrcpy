@@ -9,7 +9,7 @@
     @closed="onClosed"
   >
     <div class="space-y-4">
-      <!-- 提示信息 -->
+      <!-- Alert message -->
       <el-alert
         :title="$t('device.config.migration.description.title')"
         type="primary"
@@ -18,7 +18,7 @@
         :closable="false"
       />
 
-      <!-- 设备选择 -->
+      <!-- Device selection -->
       <div class="space-y-3">
         <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
           {{ $t('device.config.migration.select.title') }}
@@ -87,8 +87,8 @@ const targetDevices = ref([])
 const selectedDeviceIds = ref([])
 
 /**
- * 打开对话框
- * @param {Object} device - 要删除的设备对象
+ * Open the dialog
+ * @param {Object} device - Device object to be removed
  */
 function open(device) {
   sourceDevice.value = device
@@ -97,7 +97,7 @@ function open(device) {
 }
 
 /**
- * 更新目标设备列表（通过 serialNo 匹配）
+ * Update target device list (matched by serialNo)
  */
 function updateTargetDevices() {
   if (!sourceDevice.value?.serialNo) {
@@ -105,12 +105,12 @@ function updateTargetDevices() {
     return
   }
 
-  // 使用共享的工具函数查找目标设备
+  // Use shared utility to find target devices
   targetDevices.value = findTargetDevices(sourceDevice.value, deviceStore.list)
 }
 
 /**
- * 处理取消操作
+ * Handle cancel action
  */
 function handleCancel() {
   visible.value = false
@@ -118,7 +118,7 @@ function handleCancel() {
 }
 
 /**
- * 处理跳过操作
+ * Handle skip action
  */
 function handleSkip() {
   visible.value = false
@@ -126,7 +126,7 @@ function handleSkip() {
 }
 
 /**
- * 处理配置迁移
+ * Handle configuration migration
  */
 async function handleMigrate() {
   if (selectedDeviceIds.value.length === 0) {
@@ -139,7 +139,7 @@ async function handleMigrate() {
     const migrator = new ScrcpyConfigMigrator()
     let successCount = 0
 
-    // 对每个选中的设备执行配置迁移
+    // Perform config migration for each selected device
     for (const targetDeviceId of selectedDeviceIds.value) {
       const success = migrator.migrateConfigFromOldToNew(
         sourceDevice.value.id,
@@ -172,7 +172,7 @@ async function handleMigrate() {
 }
 
 /**
- * 对话框关闭时的清理
+ * Cleanup when dialog is closed
  */
 function onClosed() {
   sourceDevice.value = null
@@ -181,7 +181,7 @@ function onClosed() {
   migrating.value = false
 }
 
-// 暴露方法给父组件使用
+// Expose methods for parent component
 defineExpose({
   open,
 })

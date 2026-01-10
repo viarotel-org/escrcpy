@@ -1,5 +1,5 @@
 /**
- * Subscribe Client - 订阅服务客户端
+ * Subscribe Client - Subscription service client
  */
 
 class SubscribeClient {
@@ -9,10 +9,10 @@ class SubscribeClient {
     this.accessToken = ''
   }
 
-  // ==================== HTTP 请求 ====================
+  // ==================== HTTP Requests ====================
 
   /**
-   * 发送 HTTP 请求（使用 fetch API）
+   * Sends an HTTP request using the fetch API
    */
   async request(options) {
     const {
@@ -27,23 +27,23 @@ class SubscribeClient {
 
     const url = `${this.baseUrl}${path}`
 
-    // 构建请求头
+    // Build request headers
     const requestHeaders = {
       'Content-Type': 'application/json',
       ...headers,
     }
 
-    // 添加开发模式头
+    // Add development mode header
     if (devMode) {
       requestHeaders['X-Dev-Mode'] = 'true'
     }
 
-    // 更新访问令牌
+    // Update access token
     if (accessToken) {
       this.accessToken = accessToken
     }
 
-    // 添加鉴权头
+    // Add authentication header
     if (useAppToken) {
       const temporaryToken = await window.electron.ipcRenderer.invoke('get-gitee-temporary-token')
       requestHeaders.Authorization = `Bearer ${temporaryToken}`
@@ -57,7 +57,7 @@ class SubscribeClient {
       headers: requestHeaders,
     }
 
-    // 添加请求体（仅 POST/PUT/PATCH）
+    // Attach request body (POST/PUT/PATCH only)
     if (data && ['POST', 'PUT', 'PATCH'].includes(method)) {
       fetchOptions.body = JSON.stringify(data)
     }
@@ -77,7 +77,7 @@ class SubscribeClient {
       }
     }
     catch (error) {
-      // 网络错误或解析错误
+      // Network or parse error
       if (!error.status) {
         error.message = `Network error: ${error.message}`
       }
@@ -86,8 +86,8 @@ class SubscribeClient {
   }
 
   /**
-   * 获取应用信息及计费计划
-   * @param {boolean} devMode - 是否开发模式
+   * Retrieves application information and billing plans
+   * @param {boolean} devMode - Whether dev mode is enabled
    */
   async getAppInfo(devMode = false) {
     return this.request({
@@ -97,10 +97,10 @@ class SubscribeClient {
     })
   }
 
-  // ==================== 验证码 ====================
+  // ==================== Verification Code ====================
 
   /**
-   * 发送验证码
+   * Send verification code
    * @param {object} data - { mobile?, email?, channel_type? }
    */
   async sendVerifyCode(data) {
@@ -118,10 +118,10 @@ class SubscribeClient {
     })
   }
 
-  // ==================== 用户认证 ====================
+  // ==================== User Authentication ====================
 
   /**
-   * 获取用户访问令牌
+   * Obtain user access token
    * @param {object} data - { mobile?, email?, code, channel_type? }
    */
   async getUserToken(data) {
@@ -141,8 +141,8 @@ class SubscribeClient {
   }
 
   /**
-   * 获取用户信息
-   * @param {string} accessToken - 用户访问令牌
+   * Retrieve user information
+   * @param {string} accessToken - User access token
    */
   async getUserInfo(accessToken) {
     return this.request({
@@ -152,12 +152,12 @@ class SubscribeClient {
     })
   }
 
-  // ==================== 支付 ====================
+  // ==================== Payments ====================
 
   /**
-   * 创建支付订单
+   * Create a payment order
    * @param {object} data - { plan_ident, quantity?, amount?, type }
-   * @param {string} accessToken - 用户访问令牌
+   * @param {string} accessToken - User access token
    */
   async createPayOrder(data, accessToken, devMode = false) {
     const { plan_ident, quantity, amount, type } = data
@@ -176,9 +176,9 @@ class SubscribeClient {
   }
 
   /**
-   * 获取支付详情
-   * @param {string} ident - 支付订单号
-   * @param {string} accessToken - 用户访问令牌
+   * Retrieve payment details
+   * @param {string} ident - Payment identifier
+   * @param {string} accessToken - User access token
    */
   async getPayDetail(ident, accessToken) {
     return this.request({
@@ -189,9 +189,9 @@ class SubscribeClient {
   }
 
   /**
-   * 获取支付记录列表
+   * Retrieve payment records list
    * @param {object} params - { page?, size?, status? }
-   * @param {string} accessToken - 用户访问令牌
+   * @param {string} accessToken - User access token
    */
   async getPayList(params, accessToken) {
     const { page = 1, size = 10, status } = params
@@ -206,19 +206,19 @@ class SubscribeClient {
     })
   }
 
-  // ==================== 反馈 ====================
+  // ==================== Feedback ====================
 
   /**
-   * 提交反馈（使用 multipart/form-data）
+   * Submit feedback (using multipart/form-data)
    * @param {object} data - { type, description, attachment?, contact_type?, contact? }
-   * @param {string} accessToken - 用户访问令牌
+   * @param {string} accessToken - User access token
    */
   async submitFeedback(data, accessToken) {
     const { type, description, attachments, contact_type, contact } = data
 
     const url = `${this.baseUrl}/app/feedback`
 
-    // 构建 FormData
+    // Build FormData
     const formData = new FormData()
 
     formData.append('type', type)
@@ -230,7 +230,7 @@ class SubscribeClient {
       })
     }
 
-    // 添加联系方式
+    // Append contact type
     if (contact_type) {
       formData.append('contact_type', contact_type)
     }

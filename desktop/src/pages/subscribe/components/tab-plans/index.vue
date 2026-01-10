@@ -9,7 +9,7 @@
       @close="onAlertClose"
     />
 
-    <!-- 加载失败 -->
+    <!-- Load failed -->
     <el-result
       v-if="loadError"
       icon="warning"
@@ -22,7 +22,7 @@
       </template>
     </el-result>
 
-    <!-- 订阅计费 -->
+    <!-- Subscription billing -->
     <div v-else class="space-y-8">
       <div v-for="item of planModel" :key="item.label">
         <el-divider content-position="left" class="el-divider--plain">
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <!-- 无套餐提示 -->
+    <!-- No plans available notice -->
     <el-empty v-if="!subscriptionPlans.length && !usageBasedPlans.length" :description="$t('subscribe.noPlans')" :image-size="64">
       <template #image>
         <ElIconBox class=""></ElIconBox>
@@ -60,11 +60,11 @@ const subscribeStore = useSubscribeStore()
 
 const isSubscribePlansAlertShow = useStorage('subscribe.plans.alert.show', true)
 
-// 状态
+// State
 const loading = ref(false)
 const loadError = ref(false)
 
-// 计算属性
+// Computed properties
 const subscriptionPlans = computed(() => subscribeStore.subscriptionPlans)
 const usageBasedPlans = computed(() => subscribeStore.usageBasedPlans)
 
@@ -83,14 +83,14 @@ const planModel = computed(() => {
   return value.filter(item => item.children.length > 0)
 })
 
-// 初始化
+// Initialization
 onMounted(async () => {
   if (!subscribeStore.paymentPlans.length) {
     await loadPlans()
   }
 })
 
-// 方法
+// Methods
 function handlePurchase(params) {
   emit('purchase', params)
 }

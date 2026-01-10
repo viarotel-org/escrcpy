@@ -1,7 +1,7 @@
 <template>
   <el-card class="!rounded-xl" body-class="" shadow="hover">
     <div class="space-y-2">
-      <!-- 计划信息 -->
+      <!-- Plan information -->
       <div class="flex items-start">
         <div class="flex-1 min-w-0">
           <div class="text-xl font-semibold">
@@ -9,9 +9,9 @@
           </div>
         </div>
 
-        <!-- 标签行 -->
+        <!-- Tag row -->
         <div class="flex items-center gap-2 mb-3 flex-none">
-          <!-- 优惠标签 -->
+          <!-- Discount tags -->
           <template v-for="(discount, index) in plan.discounts" :key="index">
             <el-tag
               v-if="discount.start_time || discount.end_time"
@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <!-- 价格显示 -->
+      <!-- Price display -->
       <div class="pb-2">
         <template v-if="plan.billing_type === 'SUBSCRIPTION'">
           <div class="flex items-baseline gap-2">
@@ -87,7 +87,7 @@
         </template>
       </div>
 
-      <!-- 订阅：数量选择 -->
+      <!-- Subscription: quantity selector -->
       <div v-if="plan.billing_type === 'SUBSCRIPTION'" class="flex items-center gap-2">
         <span class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
           {{ $t('subscribe.quantity') }}
@@ -103,7 +103,7 @@
         <span class="text-sm text-gray-500">{{ periodText }}</span>
       </div>
 
-      <!-- 按量：充值金额 -->
+      <!-- Usage-based: top-up amount -->
       <div v-if="plan.billing_type === 'USAGE_BASED'" class="flex items-center gap-2">
         <span class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
           {{ $t('subscribe.amount') }}
@@ -119,7 +119,7 @@
         <span class="text-sm text-gray-500">{{ $t('subscribe.perUnit') }}</span>
       </div>
 
-      <!-- 支付方式 -->
+      <!-- Payment method -->
       <div class="flex items-center gap-2">
         <span class="flex-none text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
           {{ $t('subscribe.paymentMethod') }}
@@ -159,7 +159,7 @@ const props = defineProps({
 
 const emit = defineEmits(['purchase'])
 
-// 状态
+// State
 const quantity = ref(1)
 const amount = ref(1)
 const paymentType = ref('wepay')
@@ -172,7 +172,7 @@ const { totalPrice, originalTotalPrice } = useSubscribePrice({
   amount,
 })
 
-// 计算属性
+// Computed properties
 const periodText = computed(() => {
   const periodMap = {
     YEAR: t('subscribe.perYear'),
@@ -193,17 +193,17 @@ const hasDiscount = computed(() => {
   return props.plan.discounts?.some(d => d.type === 'AMOUNT')
 })
 
-// 方法
+// Methods
 function formatDiscountTag(discount) {
-  // 金额优惠
+  // Amount discount
   if (discount.type === 'AMOUNT') {
-    // 按量计费显示"赠送金额"，订阅计费显示"优惠金额"
+    // For usage-based billing show gift amount; for subscriptions show discount amount
     if (props.plan.billing_type === 'USAGE_BASED') {
       return t('subscribe.giftAmount', { value: discount.value })
     }
     return t('subscribe.discountAmountValue', { value: discount.value })
   }
-  // 免费赠送
+  // Free gift
   else if (discount.type === 'FREE') {
     const unitMap = {
       DAY: t('time.unit.day'),
@@ -220,7 +220,7 @@ function formatDiscountTag(discount) {
   return ''
 }
 
-// 格式化折扣有效期
+// Format discount validity period
 function formatDiscountPeriod(discount) {
   if (!discount.start_time && !discount.end_time) {
     return t('subscribe.longTermDiscount')

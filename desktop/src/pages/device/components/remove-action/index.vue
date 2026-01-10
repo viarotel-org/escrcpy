@@ -45,7 +45,7 @@ const configMigrationDialog = ref(null)
 const migrator = new ScrcpyConfigMigrator()
 
 /**
- * 检查设备配置信息
+ * Check device configuration
  */
 function checkDeviceConfig(device) {
   const scrcpyConfig = migrator.getScrcpyConfig()
@@ -63,7 +63,7 @@ function checkDeviceConfig(device) {
 }
 
 /**
- * 处理配置迁移
+ * Handle configuration migration
  */
 function handleConfigMigration(device) {
   loading.value = false
@@ -71,7 +71,7 @@ function handleConfigMigration(device) {
 }
 
 /**
- * 处理点击删除按钮
+ * Handle delete button click
  */
 async function handleClick(device = props.device) {
   loading.value = true
@@ -79,30 +79,30 @@ async function handleClick(device = props.device) {
   try {
     const configInfo = checkDeviceConfig(device)
 
-    // 没有配置，直接删除
+    // No configuration, remove directly
     if (!configInfo.hasConfig) {
       await handleRemove(device)
       return
     }
 
-    // 有配置但没有可迁移的目标设备，直接删除
+    // Has configuration but no target devices to migrate, remove directly
     if (!configInfo.hasTargetDevices) {
       await handleRemove(device)
       return
     }
 
-    // 有配置且有可迁移的目标设备，显示迁移对话框
+    // Has config and target devices exist, show migration dialog
     handleConfigMigration(device)
   }
   catch (error) {
     console.error('Error checking device config:', error)
-    // 出错时直接删除设备
+    // On error, remove device directly
     await handleRemove(device)
   }
 }
 
 /**
- * 删除设备
+ * Remove device
  */
 async function handleRemove(device) {
   await removeDevices(device)
@@ -116,21 +116,21 @@ async function handleRemove(device) {
 }
 
 /**
- * 配置迁移成功回调
+ * Configuration migration success callback
  */
 async function onMigrationSuccess() {
   await handleRemove(props.device)
 }
 
 /**
- * 跳过配置迁移回调
+ * Skip migration callback
  */
 async function onMigrationSkip() {
   await handleRemove(props.device)
 }
 
 /**
- * 取消配置迁移回调
+ * Cancel migration callback
  */
 function onMigrationCancel() {
   loading.value = false

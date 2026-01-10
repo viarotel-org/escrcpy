@@ -1,18 +1,18 @@
 /**
- * Subscribe Store - 订阅计费模块状态管理
+ * Subscribe Store - Subscription billing state management
  */
 import { defineStore } from 'pinia'
 import subscribeClient from '$/services/subscribe/index.js'
 
 export const useSubscribeStore = defineStore('app-subscribe', () => {
-  // 状态
+  // State
   const accessToken = ref('')
   const userInfo = ref(null)
   const appInfo = ref(null)
   const paymentPlans = ref([])
   const loading = ref(false)
 
-  // 计算属性
+  // Computed properties
   const isLoggedIn = computed(() => !!accessToken.value)
 
   const subscriptionPlans = computed(() =>
@@ -37,7 +37,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     return userInfo.value.nickname || userInfo.value.email || userInfo.value.mobile || 'User'
   })
 
-  // 初始化
+  // Initialization
   async function init() {
     if (!accessToken.value) {
       return false
@@ -47,18 +47,18 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
       await fetchUserInfo()
     }
     catch (error) {
-      // 忽略用户信息获取失败（可能 token 已过期）
+      // Ignore fetch user info failure (token may have expired)
       console.warn('[SubscribeStore] Fetch user info failed on init:', error)
     }
   }
 
-  // 设置访问令牌
+  // Set access token
   async function setAccessToken(token) {
     accessToken.value = token
     subscribeClient.accessToken = token
   }
 
-  // 获取应用信息
+  // Fetch app information
   async function fetchAppInfo() {
     try {
       loading.value = true
@@ -78,7 +78,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
   }
 
-  // 获取用户信息
+  // Fetch user information
   async function fetchUserInfo() {
     if (!accessToken.value)
       return null
@@ -93,7 +93,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
     catch (error) {
       console.error('[SubscribeStore] Fetch user info failed:', error)
-      // Token 无效，清除登录状态
+      // Token invalid, clear login state
       if (error.status === 401) {
         logout()
       }
@@ -104,14 +104,14 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
   }
 
-  // 登出
+  // Logout
   async function logout() {
     accessToken.value = ''
     userInfo.value = null
     subscribeClient.accessToken = ''
   }
 
-  // 重置
+  // Reset
   function $reset() {
     accessToken.value = ''
     userInfo.value = null
@@ -137,7 +137,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     currentPlanIdent,
     displayUserName,
 
-    // 方法
+    // Methods
     init,
     setAccessToken,
     fetchAppInfo,

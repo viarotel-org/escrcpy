@@ -12,7 +12,7 @@
     @closed="onClosed"
   >
     <div class="h-full flex flex-col overflow-hidden">
-      <!-- 订单信息 -->
+      <!-- Order information -->
       <div class="flex-none bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
         <div class="flex items-center justify-between mb-2">
           <span class="text-gray-500">{{ $t('subscribe.planName') }}</span>
@@ -26,13 +26,13 @@
         </div>
       </div>
 
-      <!-- 支付状态 -->
+      <!-- Payment status -->
       <div
         v-loading="['generating'].includes(status)"
         class="flex flex-col justify-center items-center gap-4 py-4 flex-1 min-h-0"
         :element-loading-text="$t('subscribe.generatingOrder')"
       >
-        <!-- 待支付 - 显示二维码 -->
+        <!-- Pending payment - show QR code -->
         <template v-if="status === 'pending'">
           <div
             ref="qrcodeRef"
@@ -54,7 +54,7 @@
           </div>
         </template>
 
-        <!-- 支付成功 -->
+        <!-- Payment success -->
         <template v-else-if="status === 'success'">
           <el-icon class="text-5xl text-green-500 mb-4">
             <CircleCheck />
@@ -64,7 +64,7 @@
           </p>
         </template>
 
-        <!-- 支付失败/取消 -->
+        <!-- Payment failed / cancelled -->
         <template v-else-if="status === 'failed' || status === 'cancelled'">
           <el-icon class="text-5xl text-red-500 mb-4">
             <CircleClose />
@@ -128,7 +128,7 @@ function onClosed() {
   stopPolling()
 }
 
-// 创建订单
+// Create order
 async function createOrder() {
   if (!dialog.options.plan)
     return
@@ -191,7 +191,7 @@ async function generateQRCode(url) {
   }
 }
 
-// 开始轮询支付状态（每2秒）
+// Start polling payment status (every 2 seconds)
 function startPolling() {
   stopPolling()
 
@@ -200,7 +200,7 @@ function startPolling() {
   }, 2000)
 }
 
-// 停止轮询
+// Stop polling
 function stopPolling() {
   if (pollTimer) {
     clearInterval(pollTimer)
@@ -208,7 +208,7 @@ function stopPolling() {
   }
 }
 
-// 检查支付状态
+// Check payment status
 async function checkPaymentStatus() {
   if (!orderInfo.value?.ident)
     return
@@ -227,7 +227,7 @@ async function checkPaymentStatus() {
 
       await sleep(1500)
 
-      // 询问用户是否配置 Copilot
+      // Prompt user to configure Copilot
       const copilotConfig = window.appStore?.get('copilot') || {}
 
       if (copilotConfig.apiKey !== subscribeStore.accessToken) {
@@ -241,12 +241,12 @@ async function checkPaymentStatus() {
               type: 'success',
             },
           )
-          // 用户确认配置
+          // User confirmed configuration
           await configureApiSettings()
           ElMessage.success(t('subscribe.config.success'))
         }
         catch {
-        // 用户取消配置
+        // User cancelled configuration
           console.log('[Subscribe] User cancelled Copilot configuration')
         }
       }
@@ -266,10 +266,10 @@ async function checkPaymentStatus() {
   }
 }
 
-// 配置 API 参数（支付成功后自动配置）
+// Configure API settings (auto-configure after successful payment)
 async function configureApiSettings() {
   try {
-    // 获取 copilot 配置并更新
+    // Retrieve copilot config and update
     const copilotConfig = window.appStore?.get('copilot') || {}
 
     window.appStore?.set('copilot', {
@@ -287,12 +287,12 @@ async function configureApiSettings() {
   }
 }
 
-// 重试支付
+// Retry payment
 function retryPayment() {
   createOrder()
 }
 
-// 关闭弹窗
+// Close dialog
 function handleClose() {
   if (status.value === 'success') {
     dialog.options.onSuccess?.()
@@ -301,7 +301,7 @@ function handleClose() {
   dialog.close()
 }
 
-// 清理
+// Cleanup
 onUnmounted(() => {
   stopPolling()
 })

@@ -68,7 +68,7 @@ const {
   clearAll,
 } = useChatMessages(sessionId)
 
-// 状态
+// State
 const inputText = ref('')
 const isExecuting = ref(false)
 const currentOutput = ref('')

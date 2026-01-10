@@ -61,7 +61,7 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
     }
 
     arrangedWidgets.value.forEach((widget) => {
-    // 使用 realX, realY, realWidth, realHeight 作为基准，重新计算容器坐标
+      // Use realX, realY, realWidth, realHeight as the baseline to recalculate container coordinates
       const containerRect = scaleConverter({
         x: widget.realX,
         y: widget.realY,
@@ -69,7 +69,7 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
         height: widget.realHeight,
       })
 
-      // 更新容器坐标
+      // Update container coordinates
       widget.x = containerRect.x
       widget.y = containerRect.y
       widget.width = containerRect.width

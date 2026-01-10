@@ -231,9 +231,9 @@ function handleRemove(row) {
 }
 
 /**
- * 获取 Cron 任务的下次执行时间
- * @param {Object} row - 任务对象
- * @returns {string} 格式化的下次执行时间
+ * Get the next execution time for a Cron task
+ * @param {Object} row - Task object
+ * @returns {string} Formatted next execution time
  */
 function getNextCronExecution(row) {
   if (!row.cronExpression) {

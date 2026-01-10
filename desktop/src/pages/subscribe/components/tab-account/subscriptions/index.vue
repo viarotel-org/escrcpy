@@ -104,14 +104,14 @@ const userInfo = computed(() => subscribeStore.userInfo || {})
 
 const subscriptions = computed(() => userInfo.value.subscriptions || [])
 
-// 响应式判断是否为移动端
+// Reactive check for mobile
 const isMobile = computed(() => {
   return window.innerWidth < 768
 })
 
 const switchSubscribeTab = inject('switchSubscribeTab')
 
-// 时间戳转换为格式化日期
+// Convert timestamp to formatted date
 const formatTime = (timestamp) => {
   if (!timestamp)
     return '-'
@@ -142,10 +142,10 @@ function onGoToSubscribe() {
   switchSubscribeTab('plans')
 }
 
-// 监听窗口大小变化
+// Listen to window size changes
 onMounted(() => {
   window.addEventListener('resize', () => {
-    // 触发响应式更新
+    // Trigger reactive update
     isMobile.value = window.innerWidth < 768
   })
 })

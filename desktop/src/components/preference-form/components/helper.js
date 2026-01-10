@@ -1,7 +1,7 @@
 /**
- * 获取设备ID
+ * Get device ID
  * @param {*} scope
- * @returns
+ * @returns {string|undefined}
  */
 export function getDeviceId(scope) {
   let value = scope

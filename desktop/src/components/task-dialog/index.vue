@@ -11,7 +11,7 @@
   >
     <div class="h-full overflow-auto">
       <div class="">
-        <!-- 配置项分组布局 -->
+        <!-- Form sections layout -->
         <el-form
           ref="formRef"
           :model="model"
@@ -21,7 +21,7 @@
           <div
             class="space-y-4"
           >
-            <!-- 基础信息区块 -->
+            <!-- Basic info section -->
             <div class="form-section">
               <div class="section-title mb-4">
                 <el-icon class="mr-2">
@@ -55,7 +55,7 @@
                 </el-select>
               </el-form-item>
 
-              <!-- 任务额外参数：安装应用 -->
+              <!-- Task extra params: install app -->
               <el-form-item
                 v-if="['install'].includes(model.taskType)"
                 :label="$t('device.task.extra.app')"
@@ -76,7 +76,7 @@
                 />
               </el-form-item>
 
-              <!-- 任务额外参数：执行脚本 -->
+              <!-- Task extra params: execute script -->
               <el-form-item
                 v-if="['shell'].includes(model.taskType)"
                 :label="$t('device.task.extra.shell')"
@@ -97,7 +97,7 @@
                 />
               </el-form-item>
 
-              <!-- Copilot 任务额外参数：指令内容 -->
+              <!-- Copilot task extra params: command content -->
               <el-form-item
                 v-if="['copilot'].includes(model.taskType)"
                 :label="$t('device.task.extra.copilot')"
@@ -113,7 +113,7 @@
                     show-word-limit
                   />
 
-                  <!-- 快捷指令选择 -->
+                  <!-- Quick prompt selection -->
                   <div v-if="quickPrompts.length > 0" class="quick-prompts-section">
                     <div class="flex items-center gap-2 mb-2">
                       <el-icon class="text-gray-400">
@@ -139,7 +139,7 @@
               </el-form-item>
             </div>
 
-            <!-- 执行频率区块 -->
+            <!-- Execution frequency section -->
             <div class="form-section">
               <div class="section-title mb-4">
                 <el-icon class="mr-2">
@@ -166,7 +166,7 @@
                 </el-radio-group>
               </el-form-item>
 
-              <!-- 单次执行配置 -->
+              <!-- Single-run configuration -->
               <el-form-item
                 v-if="['timeout'].includes(model.timerType)"
                 :label="$t('device.task.timeout')"
@@ -182,7 +182,7 @@
                 />
               </el-form-item>
 
-              <!-- 周期重复配置 -->
+              <!-- Interval configuration -->
               <el-form-item
                 v-if="['interval'].includes(model.timerType)"
                 :label="$t('device.task.interval')"
@@ -213,7 +213,7 @@
                 </el-input>
               </el-form-item>
 
-              <!-- Cron 表达式配置 -->
+              <!-- Cron expression configuration -->
               <el-form-item
                 v-if="['cron'].includes(model.timerType)"
                 :label="$t('device.task.cronExpression')"

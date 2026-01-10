@@ -1,8 +1,8 @@
 <template>
   <div class="cron-selector">
-    <!-- 可视化选择器 -->
+    <!-- Visual selector -->
     <div class="cron-visual-selector">
-      <!-- 快捷预设选项 -->
+      <!-- Preset shortcuts -->
       <div class="cron-presets mb-4">
         <el-radio-group
           v-model="presetType"
@@ -26,7 +26,7 @@
         </el-radio-group>
       </div>
 
-      <!-- 每小时配置 -->
+      <!-- Hourly configuration -->
       <div v-if="presetType === 'hourly'" class="cron-config-section">
         <div class="flex items-center gap-2 flex-wrap">
           <span>{{ $t('cron.hourly.at') }}</span>
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <!-- 每天配置 -->
+      <!-- Daily configuration -->
       <div v-if="presetType === 'daily'" class="cron-config-section">
         <div class="flex items-center gap-2 flex-wrap">
           <span>{{ $t('cron.daily.at') }}</span>
@@ -113,9 +113,9 @@
         </div>
       </div>
 
-      <!-- 自定义 Cron 表达式配置 -->
+      <!-- Custom Cron expression configuration -->
       <div v-if="presetType === 'custom'" class="cron-config-section">
-        <!-- 可视化配置面板 -->
+        <!-- Visual configuration panels -->
         <el-collapse v-model="activePanel" class="mb-4">
           <!-- 分钟配置 -->
           <el-collapse-item name="minute" :title="$t('cron.custom.minute')">
@@ -474,7 +474,7 @@ const nextExecutions = computed(() => {
       const next = cron.nextRun(date)
       if (next) {
         times.push(dayjs(next).format('YYYY-MM-DD HH:mm'))
-        date = new Date(next.getTime() + 1000) // 加1秒避免重复
+        date = new Date(next.getTime() + 1000) // Add 1 second to avoid duplicates
       }
     }
 
@@ -486,7 +486,7 @@ const nextExecutions = computed(() => {
 })
 
 /**
- * 生成人性化的 Cron 描述
+ * Generate a human-friendly Cron description
  */
 const cronDescription = computed(() => {
   if (!cronExpression.value) {

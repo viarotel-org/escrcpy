@@ -86,19 +86,19 @@ function onLogoutClick() {
 }
 
 async function onPurchaseClick(params) {
-  // 检查登录状态
+  // Check login status
   if (!subscribeStore.isLoggedIn) {
     try {
-      // 显示登录弹窗
+      // Show login dialog
       await loginDialogRef.value.open()
     }
     catch (error) {
-      // 用户取消登录
+      // User cancelled login
       return
     }
   }
 
-  // 打开支付弹窗
+  // Open payment dialog
   paymentDialogRef.value.open({
     plan: params.plan,
     paymentType: params.paymentType,

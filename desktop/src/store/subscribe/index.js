@@ -121,14 +121,14 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
   }
 
   return {
-    // 状态
+    // State
     accessToken,
     userInfo,
     appInfo,
     paymentPlans,
     loading,
 
-    // 计算属性
+    // Computed
     isLoggedIn,
     subscriptionPlans,
     usageBasedPlans,

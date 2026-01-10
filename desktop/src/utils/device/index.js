@@ -5,17 +5,17 @@ export * from './qr/index.js'
 export * from './selection/index.js'
 
 /**
- * 从设备 ID 字符串中解析出 `host` 和 `port`。
+ * Parse `host` and `port` from a device ID string.
  *
- * 支持以下格式：
+ * Supported formats:
  * - IPv6: "[fd7a:115c:a1e0::9c01:264d]:5555" → { host: "[fd7a:115c:a1e0::9c01:264d]", port: 5555 }
  * - IPv4: "127.0.0.1:5555" → { host: "127.0.0.1", port: 5555 }
  * - domain: "www.domain.com:1234" → { host: "www.domain.com", port: 1234 }
  *
- * 如果未指定端口，默认返回 { port: 5555 }。
+ * When port is omitted, { port: 5555 } is returned by default.
  *
- * @param {string} string - 设备 ID 字符串
- * @returns {{ host: string, port: number }} 解析结果
+ * @param {string} string - Device ID string
+ * @returns {{ host: string, port: number }} Parsed result
  */
 export function parseDeviceId(string = '') {
   if (!string?.trim()) {
@@ -44,12 +44,12 @@ export function parseDeviceId(string = '') {
     return { host, port: isValidPort(port) ? port : DEFAULT_PORT }
   }
 
-  // 兜底情况
+  // Fallback case
   return { host: input, port: DEFAULT_PORT }
 }
 
 /**
- * 选择并将文件发送到设备
+ * Select files and push them to a device
  */
 export async function selectAndSendFileToDevice(
   deviceId,

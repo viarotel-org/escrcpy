@@ -93,12 +93,12 @@ export function useScaleScreen(options = {}) {
   }
 
   /**
-   * 用于获取容器相对于屏幕比例的最大缩放矩形
-   * 需要根据屏幕的宽高比，计算出容器最大缩放矩形(容器的宽度和高度)
+   * Get the maximum scaled rectangle for a container relative to the screen aspect ratio
+   * Calculates the container's scaled width/height based on the screen's aspect ratio
    * @param {Object} options
-   * @param {number} options.originalWidth - 容器原始宽度
-   * @param {number} options.originalHeight - 容器原始高度
-   * @param {string} options.dimension - 按照哪个维度计算，可选值为 'width'、'height'、'contain'
+   * @param {number} options.originalWidth - Original container width
+   * @param {number} options.originalHeight - Original container height
+   * @param {string} options.dimension - Which dimension to base calculation on: 'width', 'height', or 'contain'
    */
   function getContainerAspectScaleRect(options = {}) {
     const { originalWidth, originalHeight, dimension = 'contain' } = options
@@ -106,7 +106,7 @@ export function useScaleScreen(options = {}) {
     let width = originalWidth
     let height = originalHeight
 
-    // 如果没有显示器信息或宽高比信息，直接使用原始尺寸
+    // If display information or aspect ratio is missing, use original dimensions
     if (!display.value || !aspectScale.value) {
       containerWidth.value = width
       containerHeight.value = height
@@ -117,22 +117,22 @@ export function useScaleScreen(options = {}) {
 
     switch (dimension) {
       case 'width':
-        // 保持宽度不变，根据屏幕宽高比调整高度
+        // Keep width fixed; adjust height based on screen aspect ratio
         height = width / screenAspectRatio
         break
       case 'height':
-        // 保持高度不变，根据屏幕宽高比调整宽度
+        // Keep height fixed; adjust width based on screen aspect ratio
         width = height * screenAspectRatio
         break
       case 'contain': {
-        // 包含模式：确保容器完全适应屏幕比例，保持原始比例
+        // Contain mode: ensure the container fits the screen aspect while preserving original proportions
         const containerAspectRatio = originalWidth / originalHeight
         if (containerAspectRatio > screenAspectRatio) {
-          // 容器比屏幕更宽，以宽度为准调整高度
+          // Container is wider than screen: adjust height based on width
           height = width / screenAspectRatio
         }
         else {
-          // 容器比屏幕更高，以高度为准调整宽度
+          // Container is taller than screen: adjust width based on height
           width = height * screenAspectRatio
         }
         break
@@ -143,7 +143,7 @@ export function useScaleScreen(options = {}) {
     containerHeight.value = height
   }
 
-  // 清理 ResizeObserver
+  // Cleanup ResizeObserver
   onUnmounted(() => {
     if (resizeObserver.value) {
       resizeObserver.value.disconnect()

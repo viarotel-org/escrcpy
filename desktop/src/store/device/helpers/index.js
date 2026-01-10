@@ -9,7 +9,7 @@ export function getDeviceName(device) {
 }
 
 /**
- * 获取备注名称
+ * Get device remark
  */
 export function getRemark(deviceId) {
   const value = window.appStore.get('device')?.[deviceId]?.remark

@@ -1,9 +1,9 @@
 import { camelCase, cloneDeep, keyBy } from 'lodash-es'
 
 /**
- * @desc 使用async await 进行延时操作
- * @param {number} time - 延时时间（毫秒）
- * @returns {Promise<boolean>} 延时完成后返回true
+ * Delay execution using async/await
+ * @param {number} time - Delay time in milliseconds
+ * @returns {Promise<boolean>} Resolves to true after the delay
  */
 export function sleep(time = 500) {
   return new Promise((resolve) => {
@@ -12,9 +12,9 @@ export function sleep(time = 500) {
 }
 
 /**
- * 检查字符串是否为带端口的IP地址格式
- * @param {string} ip - 要检查的IP地址字符串
- * @returns {boolean} 是否为有效的IP:PORT格式
+ * Check whether a string is an IP:PORT format
+ * @param {string} ip - The IP address string to check
+ * @returns {boolean} True if a valid IP:PORT format
  */
 export function isIPWithPort(ip) {
   const regex

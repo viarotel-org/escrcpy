@@ -2,8 +2,8 @@ import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
 
 /**
- * 窗口状态同步 Hook
- * @returns {Object} 窗口状态同步实例
+ * Window state sync hook
+ * @returns {Object} Window state sync instance
  */
 export function useWindowStateSync(options = {}) {
   const { useDeviceSync = true } = options

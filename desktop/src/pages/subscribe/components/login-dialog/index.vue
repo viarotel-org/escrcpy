@@ -218,7 +218,7 @@ async function handleSubmit() {
 }
 
 function handleClosed() {
-  // 重置表单
+  // Reset form
   formRef.value?.resetFields()
   formInfo.account = ''
   formInfo.code = ''

@@ -89,9 +89,9 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 添加任务
-     * @param {Object} form - 任务表单数据
-     * @returns {Object} 创建的任务对象
+     * Add a task
+     * @param {Object} form - Task form data
+     * @returns {Object} Created task object
      */
     function add(form) {
       const task = {
@@ -159,7 +159,7 @@ export const useTaskStore = defineStore(
         }
 
         case TimerType.CRON: {
-          // 直接使用 Cron 表达式
+          // Use Cron expression directly
           return cronExpression || null
         }
 
@@ -169,10 +169,10 @@ export const useTaskStore = defineStore(
     }
 
     /**
-     * 计算任务下次执行的延迟时间（毫秒）
-     * 用于兼容原有 timeout/interval 逻辑
-     * @param {Object} task - 任务对象
-     * @returns {number} 延迟毫秒数
+     * Compute delay until the task's next execution (milliseconds)
+     * Compatible with legacy timeout/interval logic
+     * @param {Object} task - Task object
+     * @returns {number} Delay in milliseconds
      */
     function getTimeout(task) {
       let value = 0

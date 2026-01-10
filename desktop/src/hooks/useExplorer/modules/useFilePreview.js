@@ -10,10 +10,10 @@ import '../types.js'
 const $adb = window.adb
 
 /**
- * 文件预览 Hook
- * @param {Object} options - 配置选项
- * @param {import('vue').Ref<string>} options.deviceId - 设备 ID
- * @returns {Object} 预览器实例
+ * File preview hook
+ * @param {Object} options - Configuration options
+ * @param {import('vue').Ref<string>} options.deviceId - Device ID
+ * @returns {Object} Previewer instance
  */
 export function useFilePreview({ deviceId }) {
   /** @type {import('vue').Ref<boolean>} 预览中状态 */
@@ -33,32 +33,32 @@ export function useFilePreview({ deviceId }) {
    * 可扩展以支持更多文件类型
    */
   const PREVIEW_SUPPORT = {
-    // 文本文件
+    // Text files
     text: {
       extensions: ['.txt', '.md', '.log', '.json', '.xml', '.yml', '.yaml', '.ini', '.conf', '.cfg'],
       maxSize: 10 * 1024 * 1024, // 10MB
     },
-    // 图片文件
+    // Image files
     image: {
       extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'],
       maxSize: 50 * 1024 * 1024, // 50MB
     },
-    // 视频文件
+    // Video files
     video: {
       extensions: ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm'],
       maxSize: 500 * 1024 * 1024, // 500MB
     },
-    // 音频文件
+    // Audio files
     audio: {
       extensions: ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a'],
       maxSize: 100 * 1024 * 1024, // 100MB
     },
-    // 文档文件
+    // Document files
     document: {
       extensions: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'],
       maxSize: 100 * 1024 * 1024, // 100MB
     },
-    // 代码文件
+    // Code files
     code: {
       extensions: ['.js', '.ts', '.py', '.java', '.c', '.cpp', '.h', '.go', '.rs', '.vue', '.jsx', '.tsx', '.html', '.css', '.scss'],
       maxSize: 10 * 1024 * 1024, // 10MB

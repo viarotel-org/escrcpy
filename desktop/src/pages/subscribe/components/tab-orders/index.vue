@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden">
-    <!-- 筛选栏 -->
+    <!-- Filter bar -->
     <div class="flex items-center gap-4 justify-center flex-none py-4">
       <el-radio-group v-model="statusFilter" @change="fetchOrders(1)">
         <el-radio-button value="">
@@ -85,7 +85,7 @@ import subscribeClient from '$/services/subscribe/index.js'
 
 const subscribeStore = useSubscribeStore()
 
-// 状态
+// State
 const loading = ref(false)
 const orders = ref([])
 const total = ref(0)
@@ -93,7 +93,7 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const statusFilter = ref('')
 
-// 方法
+// Methods
 function getStatusType(status) {
   const typeMap = {
     PAID: 'success',
@@ -158,7 +158,7 @@ async function fetchOrders(page = 1) {
   }
 }
 
-// 初始化
+// Initialization
 onMounted(() => {
   fetchOrders()
 })

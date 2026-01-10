@@ -1,21 +1,21 @@
 /**
- * @fileoverview ADB 批量上传 Hook
- * 基于最新的 ADBUploader 模块重构，支持扫描进度、详细统计、取消机制等
- * 优化版本：提供详细的设备进度跟踪、结果展示、重试功能等
+ * @fileoverview ADB bulk upload hook
+ * Rebuilt on top of the latest ADBUploader module, supporting scan progress, detailed stats, cancellations, etc.
+ * Enhanced: provides detailed per-device progress tracking, result presentation, and retry capabilities
  */
 
 import { allSettledWrapper } from '$/utils'
 
 /**
- * 设备上传状态枚举
+ * Upload status enumeration
  */
 export const UPLOAD_STATUS = {
-  PENDING: 'pending', // 等待中
-  SCANNING: 'scanning', // 扫描中
-  UPLOADING: 'uploading', // 上传中
-  SUCCESS: 'success', // 成功
-  FAILED: 'failed', // 失败
-  CANCELLED: 'cancelled', // 已取消
+  PENDING: 'pending', // Pending
+  SCANNING: 'scanning', // Scanning
+  UPLOADING: 'uploading', // Uploading
+  SUCCESS: 'success', // Success
+  FAILED: 'failed', // Failed
+  CANCELLED: 'cancelled', // Cancelled
 }
 
 /**
@@ -26,28 +26,28 @@ export const UPLOAD_STATUS = {
 export function useUploaderPlus() {
   const deviceStore = useDeviceStore()
 
-  /** @type {import('vue').Ref<boolean>} 加载状态（向后兼容） */
+  /** @type {import('vue').Ref<boolean>} Loading state (backwards compatible) */
   const loading = ref(false)
 
-  /** @type {import('vue').Ref<boolean>} 扫描状态 */
+  /** @type {import('vue').Ref<boolean>} Scanning state */
   const scanning = ref(false)
 
-  /** @type {import('vue').Ref<Object|null>} 进度信息 */
+  /** @type {import('vue').Ref<Object|null>} Progress information */
   const progress = ref(null)
 
-  /** @type {import('vue').Ref<string|null>} 错误信息 */
+  /** @type {import('vue').Ref<string|null>} Error information */
   const error = ref(null)
 
-  /** @type {import('vue').Ref<Object|null>} 上传结果 */
+  /** @type {import('vue').Ref<Object|null>} Upload result */
   const result = ref(null)
 
-  /** @type {import('vue').Ref<Map<string, Object>>} 设备进度映射（设备ID -> 进度信息） */
+  /** @type {import('vue').Ref<Map<string, Object>>} Device progress map (deviceId -> progress info) */
   const deviceProgress = ref(new Map())
 
-  /** @type {import('vue').Ref<Map<string, Object>>} 设备状态映射（设备ID -> 状态信息） */
+  /** @type {import('vue').Ref<Map<string, Object>>} Device status map (deviceId -> status info) */
   const deviceStatus = ref(new Map())
 
-  /** @type {Map<string, Object>} 活跃的上传器实例映射（设备ID -> 上传器） */
+  /** @type {Map<string, Object>} Active uploader instances map (deviceId -> uploader) */
   const activeUploaders = new Map()
 
   /**
@@ -111,7 +111,7 @@ export function useUploaderPlus() {
     const deviceLabel = deviceStore.getLabel(device)
     const messageText = `${deviceLabel}: ${window.t('device.control.file.push.loading')}`
 
-    // 扫描进度回调
+    // Scan progress callback
     const onScanProgress = (scanData) => {
       scanning.value = true
       if (!silent) {

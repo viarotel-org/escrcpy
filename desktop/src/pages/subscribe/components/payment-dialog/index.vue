@@ -154,11 +154,11 @@ async function createOrder() {
       orderInfo.value = result
       status.value = 'pending'
 
-      // 生成二维码
+      // Generate QR code
       await nextTick()
       generateQRCode(result.url)
 
-      // 开始轮询支付状态
+      // Start polling payment status
       startPolling()
     }
     else {
@@ -172,7 +172,7 @@ async function createOrder() {
   }
 }
 
-// 生成二维码
+// Generate QR code
 async function generateQRCode(url) {
   if (!qrcodeRef.value)
     return

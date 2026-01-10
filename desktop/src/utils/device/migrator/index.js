@@ -1,17 +1,17 @@
 import { defaultsDeep } from 'lodash-es'
 
 /**
- * 查找目标设备（通过 serialNo 匹配）
- * @param {Object} sourceDevice - 源设备对象
- * @param {Array} deviceList - 设备列表
- * @returns {Array} 匹配的目标设备数组
+ * Find target devices by matching serial numbers
+ * @param {Object} sourceDevice - Source device object
+ * @param {Array} deviceList - List of devices to search
+ * @returns {Array} Array of matching target devices
  */
 export function findTargetDevices(sourceDevice, deviceList) {
   if (!sourceDevice?.serialNo || !Array.isArray(deviceList)) {
     return []
   }
 
-  // 从设备列表中查找具有相同 serialNo 但不同 id 的设备
+  // Find devices in the list that have the same serialNo but a different id
   return deviceList.filter((targetDevice) => {
     return targetDevice.serialNo === sourceDevice.serialNo
       && targetDevice.id !== sourceDevice.id
@@ -19,10 +19,10 @@ export function findTargetDevices(sourceDevice, deviceList) {
 }
 
 /**
- * 查找与历史设备序列号匹配的当前设备
- * @param {Object} historyDevice - 历史设备对象
- * @param {Array} currentDevices - 当前设备列表
- * @returns {Array} 匹配的当前设备列表
+ * Find current devices that match a historical device's serial number
+ * @param {Object} historyDevice - Historical device object
+ * @param {Array} currentDevices - Current device list
+ * @returns {Array} Array of matching current devices
  */
 export function findMatchingCurrentDevices(historyDevice, currentDevices) {
   return currentDevices.filter(device =>
@@ -31,8 +31,8 @@ export function findMatchingCurrentDevices(historyDevice, currentDevices) {
 }
 
 /**
- * Scrcpy 配置迁移管理器
- * 用于在设备ID变更时迁移配置，并清理旧配置
+ * Scrcpy configuration migrator
+ * Used to migrate configuration when device IDs change and to clean up old configs
  */
 export class ScrcpyConfigMigrator {
   constructor() {
@@ -40,10 +40,10 @@ export class ScrcpyConfigMigrator {
   }
 
   /**
-   * 从旧设备迁移配置到新设备
-   * @param {string} oldDeviceId - 旧设备ID
-   * @param {string} newDeviceId - 新设备ID
-   * @returns {boolean} 是否成功迁移配置
+   * Migrate configuration from an old device to a new device
+   * @param {string} oldDeviceId - Old device ID
+   * @param {string} newDeviceId - New device ID
+   * @returns {boolean} True if migration succeeded
    */
   migrateConfigFromOldToNew(oldDeviceId, newDeviceId) {
     const scrcpyConfig = this.getScrcpyConfig()

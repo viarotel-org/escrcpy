@@ -1,6 +1,6 @@
 /**
- * IPCX Payload 验证模块
- * 提供类型守卫和 envelope 规范化逻辑
+ * IPCX payload validation module
+ * Provides type guards and envelope normalization logic
  */
 
 import type { FunctionDescriptor, InvokeEnvelope } from './types'
@@ -9,7 +9,7 @@ import { parsePath } from './paths'
 import { debugLogger } from './debug'
 
 /**
- * 类型守卫：判断是否为 InvokeEnvelope
+ * Type guard: determines if a payload is an InvokeEnvelope
  */
 export function isInvokeEnvelope(payload: unknown): payload is InvokeEnvelope {
   if (!payload || typeof payload !== 'object') return false
@@ -19,16 +19,16 @@ export function isInvokeEnvelope(payload: unknown): payload is InvokeEnvelope {
 }
 
 /**
- * 验证并规范化 FunctionDescriptor
+ * Validate and normalize FunctionDescriptor
  */
 export function normalizeDescriptor(descriptor: FunctionDescriptor): FunctionDescriptor {
-  // 解析 index 路径
+  // Parse the index path
   const parsed = parsePath(descriptor.index)
   
-  // 移除开头的 'args' 前缀（如果存在）
+  // Remove leading 'args' prefix if present
   const trimmed = parsed[0] === 'args' ? parsed.slice(1) : parsed
   
-  // 优先使用 descriptor.segments，fallback 到解析后的路径
+  // Prefer descriptor.segments; fall back to parsed path
   const segments = descriptor.segments?.length ? descriptor.segments : trimmed
   
   return {
@@ -40,14 +40,14 @@ export function normalizeDescriptor(descriptor: FunctionDescriptor): FunctionDes
 }
 
 /**
- * 验证并规范化 InvokeEnvelope
- * @throws {IpcxError} 当 payload 格式不合法时
+ * Validate and normalize an InvokeEnvelope
+ * @throws {IpcxError} When the payload format is invalid
  */
 export function normalizeEnvelope(
   payload: unknown,
   channel?: string,
 ): InvokeEnvelope {
-  // 验证 payload 基本结构
+  // Validate basic payload structure
   if (!payload || typeof payload !== 'object') {
     throw createPayloadError(
       'Invalid IPCX payload: expected object',
@@ -58,7 +58,7 @@ export function normalizeEnvelope(
   
   const envelope = payload as Partial<InvokeEnvelope>
   
-  // 验证 args 字段
+  // Validate args field
   if (!Array.isArray(envelope.args)) {
     throw createPayloadError(
       `Invalid IPCX payload: args must be an array, got ${typeof envelope.args}`,
@@ -67,7 +67,7 @@ export function normalizeEnvelope(
     )
   }
   
-  // 验证 fns 字段
+  // Validate fns field
   if (!Array.isArray(envelope.fns)) {
     throw createPayloadError(
       `Invalid IPCX payload: fns must be an array, got ${typeof envelope.fns}`,
@@ -76,7 +76,7 @@ export function normalizeEnvelope(
     )
   }
   
-  // 规范化所有 function descriptors
+  // Normalize all function descriptors
   const fns = envelope.fns.map((descriptor, index) => {
     try {
       return normalizeDescriptor(descriptor)
@@ -102,7 +102,7 @@ export function normalizeEnvelope(
 }
 
 /**
- * 安全验证 envelope（不抛出异常，返回验证结果）
+ * Safely validate an envelope (returns result instead of throwing)
  */
 export function validateEnvelope(
   payload: unknown,
@@ -121,29 +121,29 @@ export function validateEnvelope(
 }
 
 /**
- * 验证参数数组（用于序列化前检查）
+ * Validate argument arrays (used for pre-serialization checks)
  */
 export function validateArgs(args: unknown): args is unknown[] {
   return Array.isArray(args)
 }
 
 /**
- * 准备入站参数（支持 IPCX envelope 和原生格式）
+ * Prepare inbound arguments (supports IPCX envelope and native formats)
  */
 export function prepareInboundArgs(
   payload: unknown,
   restArgs: unknown[],
 ): unknown[] {
-  // 如果是 IPCX envelope，提取 args
+  // If an IPCX envelope is provided, extract its args
   if (isInvokeEnvelope(payload)) {
     return payload.args
   }
   
-  // 如果 payload 是 undefined，返回剩余参数
+  // If payload is undefined, return the remaining arguments
   if (typeof payload === 'undefined') {
     return restArgs
   }
   
-  // 否则将 payload 作为第一个参数
+  // Otherwise treat payload as the first argument
   return [payload, ...restArgs]
 }

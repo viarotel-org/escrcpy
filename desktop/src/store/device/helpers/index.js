@@ -2,10 +2,10 @@ import { defaultsDeep, keyBy } from 'lodash-es'
 import { deviceStatus as deviceStatusDict } from '$/dicts/device/index.js'
 
 /**
- * 获取设备名称
+ * Retrieve device name
  */
 export function getDeviceName(device) {
-  return device.product ? device.product.split(':')[1] : '未授权设备'
+  return device.product ? device.product.split(':')[1] : 'Unauthorized device'
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
- * IPCX 调试工具模块
- * 提供可配置的调试日志输出，支持环境变量控制
+ * IPCX debugging utilities
+ * Provides configurable debug logging controlled via environment variables
  */
 
 export enum LogLevel {
@@ -117,7 +117,7 @@ class DebugLogger {
   }
 
   /**
-   * 调试序列化前后的对比
+   * Debug serialization comparison
    */
   debugSerialize(channel: string, originalArgs: unknown[], envelope: unknown) {
     if (!this.shouldLog(LogLevel.DEBUG)) return
@@ -131,7 +131,7 @@ class DebugLogger {
   }
 
   /**
-   * 调试 payload 格式检测
+   * Debug payload format detection
    */
   debugPayloadDetection(channel: string, payload: unknown, isIpcxFormat: boolean) {
     if (!this.shouldLog(LogLevel.DEBUG)) return
@@ -145,7 +145,7 @@ class DebugLogger {
   }
 
   /**
-   * 截断过大的 payload 避免日志爆炸
+   * Truncate large payloads to prevent log flooding
    */
   private truncatePayload(payload: unknown): unknown {
     if (typeof payload !== 'object' || payload === null) return payload
@@ -157,6 +157,6 @@ class DebugLogger {
   }
 }
 
-// 全局单例
+// Global singleton
 export const debugLogger = new DebugLogger()
 

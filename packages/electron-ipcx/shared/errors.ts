@@ -1,30 +1,30 @@
 /**
- * IPCX 统一错误处理模块
- * 定义错误码、错误类型和错误包装逻辑
+ * IPCX unified error handling module
+ * Defines error codes, types, and error wrapping logic
  */
 
 import type { ErrorEnvelope } from './types'
 import { debugLogger } from './debug'
 
 export enum IpcxErrorCode {
-  // Payload 验证错误 (1xxx)
+  // Payload validation errors (1xxx)
   INVALID_PAYLOAD = 'IPCX_E1001',
   INVALID_ARGS = 'IPCX_E1002',
   INVALID_FNS = 'IPCX_E1003',
   INVALID_DESCRIPTOR = 'IPCX_E1004',
   
-  // 序列化错误 (2xxx)
+  // Serialization errors (2xxx)
   SERIALIZE_FAILED = 'IPCX_E2001',
   CIRCULAR_REFERENCE = 'IPCX_E2002',
   UNSUPPORTED_TYPE = 'IPCX_E2003',
   
-  // 运行时错误 (3xxx)
+  // Runtime errors (3xxx)
   CALLBACK_FAILED = 'IPCX_E3001',
   SENDER_MISSING = 'IPCX_E3002',
   HYDRATION_FAILED = 'IPCX_E3003',
   LISTENER_ERROR = 'IPCX_E3004',
   
-  // 系统错误 (9xxx)
+  // System errors (9xxx)
   UNKNOWN = 'IPCX_E9999',
 }
 
@@ -42,7 +42,7 @@ export class IpcxError extends Error {
     this.code = code
     this.context = context
     
-    // 确保 stack trace 正确
+    // Ensure stack trace is captured correctly
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, IpcxError)
     }
@@ -60,7 +60,7 @@ export class IpcxError extends Error {
 }
 
 /**
- * 创建 payload 验证错误
+ * Create a payload validation error
  */
 export function createPayloadError(
   message: string,
@@ -83,7 +83,7 @@ export function createPayloadError(
 }
 
 /**
- * 创建序列化错误
+ * Create a serialization error
  */
 export function createSerializeError(
   message: string,
@@ -108,7 +108,7 @@ export function createSerializeError(
 }
 
 /**
- * 创建回调执行错误
+ * Create a callback execution error
  */
 export function createCallbackError(
   callbackIndex: string,
@@ -133,7 +133,7 @@ export function createCallbackError(
 }
 
 /**
- * 包装任意错误为 ErrorEnvelope（用于 IPC 传输）
+ * Wrap arbitrary errors into an ErrorEnvelope (for IPC transport)
  */
 export function wrapError(error: unknown): ErrorEnvelope {
   let err: Error
@@ -167,7 +167,7 @@ export function wrapError(error: unknown): ErrorEnvelope {
 }
 
 /**
- * 解包 ErrorEnvelope 并重新抛出
+ * Unpack an ErrorEnvelope and re-throw
  */
 export function unwrapError<T>(value: T | ErrorEnvelope): T {
   if (isErrorEnvelope(value)) {
@@ -182,7 +182,7 @@ export function unwrapError<T>(value: T | ErrorEnvelope): T {
 }
 
 /**
- * 判断是否为 ErrorEnvelope
+ * Determine if a value is an ErrorEnvelope
  */
 export function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
   return (
@@ -194,7 +194,7 @@ export function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
 }
 
 /**
- * 截断值用于日志输出
+ * Truncate values for log output
  */
 function truncateValue(value: unknown, maxLength = 200): string {
   if (value === null) return 'null'
@@ -210,7 +210,7 @@ function truncateValue(value: unknown, maxLength = 200): string {
 }
 
 /**
- * 安全执行函数，捕获错误但不抛出
+ * Safely execute a function and capture errors without throwing
  */
 export function safeCall(fn: () => void, errorContext?: string): void {
   try {

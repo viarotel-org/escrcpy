@@ -44,46 +44,46 @@ export class InvalidPayloadError extends Error {
 export type AnyFn = (...args: any[]) => any
 
 /**
- * 调试配置接口
+ * Debug configuration interface
  */
 export interface IpcxDebugConfig {
   /**
-   * 是否启用调试日志
+   * Whether debug logging is enabled
    */
   enabled: boolean
   
   /**
-   * 日志级别
+   * Log level
    */
   level?: 'error' | 'warn' | 'info' | 'debug'
   
   /**
-   * 是否记录 payload 详情
+   * Whether to log payload details
    */
   logPayload?: boolean
   
   /**
-   * 是否记录序列化前后对比
+   * Whether to log serialization comparisons
    */
   logSerialization?: boolean
 }
 
 /**
- * 性能配置接口
+ * Performance configuration interface
  */
 export interface IpcxPerformanceConfig {
   /**
-   * 是否启用 channel 池
+   * Whether to enable channel pooling
    */
   useChannelPool?: boolean
   
   /**
-   * Channel 池大小
+   * Channel pool size
    */
   channelPoolSize?: number
   
   /**
-   * 使用即时生成的函数参数阈值
+   * Threshold for using on-demand generation based on function parameter count
    */
   directGenerateThreshold?: number
 }

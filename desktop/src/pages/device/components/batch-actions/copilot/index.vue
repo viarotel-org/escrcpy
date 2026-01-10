@@ -26,13 +26,13 @@ const props = defineProps({
   },
 })
 
-// 任务 Store
+// Task store
 const taskStore = useTaskStore()
 
-// 加载状态
+// Loading state
 const loading = ref(false)
 
-// 执行超时时间（毫秒）
+// Execution timeout (milliseconds)
 const EXECUTION_TIMEOUT = 10 * 60 * 1000
 
 const chatInputDialogRef = ref(null)
@@ -40,8 +40,8 @@ const chatInputDialogRef = ref(null)
 const currentTask = ref(null)
 
 /**
- * 注册 Copilot 任务监听器
- * 基于 taskStore.on 机制，与其他任务类型（mirror、install 等）保持一致
+ * Register Copilot task listener
+ * Uses taskStore.on mechanism to remain consistent with other task types (mirror, install, etc.)
  */
 onMounted(() => {
   taskStore.on('copilot', (task) => {
@@ -55,23 +55,23 @@ onMounted(() => {
 })
 
 /**
- * 执行记录结构
+ * Execution record structure
  * @typedef {Object} ExecutionRecord
- * @property {number} timestamp - 执行时间（毫秒级时间戳）
- * @property {string} deviceId - 设备 ID
- * @property {'success'|'fail'} result - 执行结果
- * @property {string} errorMessage - 异常信息（无则为空）
- * @property {Object} taskConfig - 任务配置参数（含 Cron 表达式/定时规则）
+ * @property {number} timestamp - Execution time (ms UTC timestamp)
+ * @property {string} deviceId - Device ID
+ * @property {'success'|'fail'} result - Execution result
+ * @property {string} errorMessage - Error message (empty when none)
+ * @property {Object} taskConfig - Task configuration (includes cron expression / scheduling rules)
  */
 
 /**
- * 保存用户消息到设备数据库
- * 对齐 ChatPanel 逻辑：计划任务触发时记录用户指令
+ * Save user message to device database
+ * Aligns with ChatPanel logic: record user command when a scheduled task triggers
  *
- * @param {string} deviceId - 设备 ID
- * @param {string} command - 用户指令
- * @param {number} timestamp - 时间戳
- * @returns {Promise<Object>} 保存结果
+ * @param {string} deviceId - Device ID
+ * @param {string} command - User command
+ * @param {number} timestamp - Timestamp
+ * @returns {Promise<Object>} Save result
  */
 async function saveUserMessage(deviceId, command, timestamp) {
   try {
@@ -92,13 +92,13 @@ async function saveUserMessage(deviceId, command, timestamp) {
 }
 
 /**
- * 保存助手消息到设备数据库
- * 对齐 ChatPanel 逻辑：执行成功后记录输出结果
+ * Save assistant message to device database
+ * Aligns with ChatPanel logic: record assistant output after successful execution
  *
- * @param {string} deviceId - 设备 ID
- * @param {string} output - 执行输出
- * @param {number} timestamp - 时间戳
- * @returns {Promise<Object>} 保存结果
+ * @param {string} deviceId - Device ID
+ * @param {string} output - Execution output
+ * @param {number} timestamp - Timestamp
+ * @returns {Promise<Object>} Save result
  */
 async function saveAssistantMessage(deviceId, output, timestamp) {
   try {
@@ -120,13 +120,13 @@ async function saveAssistantMessage(deviceId, output, timestamp) {
 }
 
 /**
- * 保存系统错误消息到设备数据库
- * 对齐 ChatPanel 逻辑：仅在执行失败时记录错误信息
+ * Save system error message to device database
+ * Aligns with ChatPanel logic: record errors only when execution fails
  *
- * @param {string} deviceId - 设备 ID
- * @param {string} errorMessage - 错误信息
- * @param {number} timestamp - 时间戳
- * @returns {Promise<Object>} 保存结果
+ * @param {string} deviceId - Device ID
+ * @param {string} errorMessage - Error message
+ * @param {number} timestamp - Timestamp
+ * @returns {Promise<Object>} Save result
  */
 async function saveSystemErrorMessage(deviceId, errorMessage, timestamp) {
   try {
@@ -148,30 +148,30 @@ async function saveSystemErrorMessage(deviceId, errorMessage, timestamp) {
 }
 
 /**
- * 带重试的单设备执行
- * 设备离线时触发 3 次重试，每次间隔 5s
- * 对齐 ChatPanel 消息入库逻辑：
- * - 正常场景：插入 USER + ASSISTANT 消息
- * - 异常场景：插入 USER + SYSTEM 错误消息
+ * Single-device execution with retries
+ * Retries up to 3 times for offline devices with 5s intervals
+ * Aligns with ChatPanel persistence logic:
+ * - Success: insert USER + ASSISTANT messages
+ * - Failure: insert USER + SYSTEM error message
  *
- * @param {Object} device - 设备对象
- * @param {string} command - Copilot 指令
- * @param {Object} taskConfig - 任务配置
- * @returns {Promise<ExecutionRecord>} 执行记录
+ * @param {Object} device - Device object
+ * @param {string} command - Copilot command
+ * @param {Object} taskConfig - Task configuration
+ * @returns {Promise<ExecutionRecord>} Execution record
  */
 async function executeWithRetryForDevice(device, command, taskConfig) {
   const deviceId = device.id
   const timestamp = Date.now()
   let lastError = null
 
-  // 1. 先保存用户消息（对齐 ChatPanel 逻辑）
+  // 1. Save user message first (align with ChatPanel logic)
   const userMessageResult = await saveUserMessage(deviceId, command, timestamp)
   if (!userMessageResult.success) {
     console.error('Failed to save user message, but continuing execution')
   }
 
   try {
-    // 使用 Promise.race 实现超时控制
+    // Use Promise.race to implement timeout control
     const result = await Promise.race([
       executeCopilotCommandForDevice(device, command),
       createTimeoutPromise(EXECUTION_TIMEOUT),
@@ -193,7 +193,7 @@ async function executeWithRetryForDevice(device, command, taskConfig) {
   catch (error) {
     lastError = error
 
-    // 超时错误
+    // Timeout error
     if (error.message === 'EXECUTION_TIMEOUT') {
       const errorMsg = window.t('copilot.batch.error.timeout', { timeout: EXECUTION_TIMEOUT })
       await saveSystemErrorMessage(deviceId, errorMsg, Date.now())
@@ -209,7 +209,7 @@ async function executeWithRetryForDevice(device, command, taskConfig) {
     }
   }
 
-  // 所有重试失败
+  // All retries failed
   const errorMsg = lastError?.message || 'Unknown error'
 
   await saveSystemErrorMessage(deviceId, errorMsg, Date.now())
@@ -226,8 +226,8 @@ async function executeWithRetryForDevice(device, command, taskConfig) {
 }
 
 /**
- * 创建超时 Promise
- * @param {number} timeout - 超时时间（毫秒）
+ * Create a timeout Promise
+ * @param {number} timeout - Timeout in milliseconds
  */
 function createTimeoutPromise(timeout) {
   return new Promise((_, reject) => {
@@ -238,24 +238,24 @@ function createTimeoutPromise(timeout) {
 }
 
 /**
- * 执行单个设备的 Copilot 指令
+ * Execute a Copilot command on a single device
  *
- * @param {Object} device - 设备对象
- * @param {string} command - Copilot 指令
- * @returns {Promise<string>} 执行输出
+ * @param {Object} device - Device object
+ * @param {string} command - Copilot command
+ * @returns {Promise<string>} Execution output
  */
 async function executeCopilotCommandForDevice(device, command) {
   const deviceId = device.id
 
   let output = ''
 
-  // 检查配置
+  // Check configuration
   const config = await copilotClient.getConfig() || {}
   if (!config.apiKey) {
     throw copilotClient.formatError('CONFIG_MISSING', window.t('copilot.batch.error.missingApiKey'))
   }
 
-  // 执行任务
+  // Execute task
   await copilotClient.execute(command, {
     deviceId,
     onData: (data) => {
@@ -267,13 +267,13 @@ async function executeCopilotCommandForDevice(device, command) {
 }
 
 /**
- * 批量执行 Copilot 任务
+ * Execute Copilot task in batch
  *
- * @param {Array} devices - 设备列表
- * @param {Object} options - 执行选项
- * @param {string} options.extra - Copilot 指令内容
- * @param {string} options.taskId - 任务 ID
- * @param {Object} options.taskConfig - 完整任务配置
+ * @param {Array} devices - Device list
+ * @param {Object} options - Execution options
+ * @param {string} options.extra - Copilot command content
+ * @param {string} options.taskId - Task ID
+ * @param {Object} options.taskConfig - Full task configuration
  */
 async function executeBatchCopilotTask(devices, options = {}) {
   const { extra: command, taskId, ...taskConfig } = options
@@ -285,7 +285,7 @@ async function executeBatchCopilotTask(devices, options = {}) {
   const limit = pLimit(concurrencyLimit)
 
   try {
-    // 创建受限并发的任务
+    // Create concurrency-limited tasks
     const tasks = devices.map(device =>
       limit(() =>
         executeWithRetryForDevice(device, command, {
@@ -298,7 +298,7 @@ async function executeBatchCopilotTask(devices, options = {}) {
     const settledResults = await Promise.allSettled(tasks)
     results.push(...settledResults)
 
-    // 统计结果
+    // Aggregate results
     const successCount = results.filter(r => r.status === 'fulfilled' && r.value.result === 'success').length
 
     if (successCount === 0) {
@@ -320,8 +320,8 @@ async function executeBatchCopilotTask(devices, options = {}) {
 }
 
 /**
- * 处理弹窗提交
- * @param {string} command - 用户输入的 Copilot 指令
+ * Handle dialog submit
+ * @param {string} command - Copilot command entered by user
  */
 async function onSubmit(command) {
   const loading = ElMessage.loading(window.t('copilot.taskStatus.running'))

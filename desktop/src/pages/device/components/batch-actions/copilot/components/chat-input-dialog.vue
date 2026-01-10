@@ -9,7 +9,7 @@
     class="el-dialog--headless el-dialog--chat-input"
     @closed="handleClosed"
   >
-    <!-- 关闭按钮 -->
+    <!-- Close button -->
     <div class="absolute -bottom-4 left-1/2 translate-y-full -translate-x-1/2 flex items-center gap-2 z-50">
       <el-icon
         class="cursor-pointer w-8 h-8 flex items-center justify-center bg-white/30 hover:bg-gray-100 dark:bg-gray-800/80 dark:hover:bg-gray-700 rounded-full transition-all backdrop-blur-sm shadow-sm"
@@ -54,18 +54,18 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'submit', 'closed', 'stop'])
 
-// 输入内容
+// Input content
 const inputValue = ref('')
 const chatInputRef = ref(null)
 
-// 双向绑定显示状态
+// Two-way bound visibility state
 const visible = ref(false)
 
 watch(visible, (val) => {
   emit('update:modelValue', val)
 })
 
-// 打开
+// Open dialog
 function open() {
   visible.value = true
 
@@ -82,6 +82,7 @@ function handleSubmit() {
   emit('submit', inputValue.value.trim())
 }
 
+// Stop handler
 function handleStop() {
   emit('stop')
 }

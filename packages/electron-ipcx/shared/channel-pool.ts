@@ -1,39 +1,39 @@
 /**
- * IPCX Channel 池管理模块
- * 优化高频调用场景下的 channel 生成开销
+ * IPCX Channel Pool Manager
+ * Optimizes channel generation overhead for high-frequency call scenarios
  */
 
 import { nanoid } from 'nanoid'
 
 export interface ChannelPoolOptions {
   /**
-   * 池中预分配的 channel 数量
+   * Number of channels pre-allocated in the pool
    * @default 10
    */
   poolSize?: number
   
   /**
-   * 当池耗尽时是否自动扩容
+   * Whether to auto-expand when the pool is exhausted
    * @default true
    */
   autoExpand?: boolean
   
   /**
-   * 每次扩容增加的 channel 数量
+   * Number of channels to add on each expansion
    * @default 5
    */
   expandSize?: number
   
   /**
-   * Channel 前缀
+   * Channel prefix
    * @default ''
    */
   prefix?: string
 }
 
 /**
- * Channel 池管理器
- * 用于减少 nanoid() 调用次数，提升性能
+ * Channel pool manager
+ * Reduces nanoid() calls to improve performance
  */
 export class ChannelPool {
   private pool: string[] = []
@@ -48,12 +48,12 @@ export class ChannelPool {
       prefix: options.prefix ?? '',
     }
     
-    // 预分配 channel
+    // Pre-allocate channels
     this.expand(this.options.poolSize)
   }
   
   /**
-   * 扩容池
+   * Expand the pool
    */
   private expand(count: number) {
     for (let i = 0; i < count; i++) {
@@ -63,7 +63,7 @@ export class ChannelPool {
   }
   
   /**
-   * 生成新的 channel
+   * Generate a new channel
    */
   private generateChannel(): string {
     const suffix = nanoid(8)
@@ -71,16 +71,16 @@ export class ChannelPool {
   }
   
   /**
-   * 获取可用 channel
+   * Acquire an available channel
    */
   acquire(): string {
-    // 如果池为空且允许扩容
+    // If the pool is empty and auto-expansion is allowed
     if (this.pool.length === 0) {
       if (this.options.autoExpand) {
         this.expand(this.options.expandSize)
       }
       else {
-        // 池耗尽且不扩容，直接生成新 channel
+        // Pool exhausted and auto-expansion disabled: generate a new channel directly
         const channel = this.generateChannel()
         this.inUse.add(channel)
         return channel
@@ -93,30 +93,30 @@ export class ChannelPool {
   }
   
   /**
-   * 释放 channel 回收到池中
+   * Release a channel back to the pool
    */
   release(channel: string) {
     if (!this.inUse.has(channel)) {
-      return // 不是从池中分配的 channel
+      return // Channel was not allocated from the pool
     }
     
     this.inUse.delete(channel)
     
-    // 避免池无限增长
+    // Avoid unbounded pool growth
     if (this.pool.length < this.options.poolSize * 2) {
       this.pool.push(channel)
     }
   }
   
   /**
-   * 批量释放 channels
+   * Release multiple channels
    */
   releaseAll(channels: string[]) {
     channels.forEach(channel => this.release(channel))
   }
   
   /**
-   * 获取池状态信息
+   * Get pool statistics
    */
   getStats() {
     return {
@@ -127,7 +127,7 @@ export class ChannelPool {
   }
   
   /**
-   * 清空池
+   * Clear the pool
    */
   clear() {
     this.pool = []
@@ -136,7 +136,7 @@ export class ChannelPool {
 }
 
 /**
- * 简单的基于时间戳的 channel 生成器（更轻量级）
+ * Simple timestamp-based channel generator (lightweight)
  */
 export class SimpleChannelGenerator {
   private counter = 0
@@ -147,14 +147,14 @@ export class SimpleChannelGenerator {
   }
   
   /**
-   * 生成 channel
-   * 格式: prefix_timestamp_counter
+   * Generate a channel
+   * Format: prefix_timestamp_counter
    */
   generate(): string {
     const timestamp = Date.now()
     const count = this.counter++
     
-    // 重置计数器防止溢出
+    // Reset counter to prevent overflow
     if (this.counter > 9999) {
       this.counter = 0
     }
@@ -165,8 +165,8 @@ export class SimpleChannelGenerator {
 }
 
 /**
- * 混合策略：结合池化和即时生成
- * 对于函数参数较少的调用使用池化，函数较多的直接生成避免池污染
+ * Hybrid strategy: combine pooling and on-demand generation
+ * Use pooling for low-argument calls and direct generation for high-argument calls to avoid pool pollution
  */
 export class HybridChannelProvider {
   private pool: ChannelPool
@@ -175,7 +175,7 @@ export class HybridChannelProvider {
   
   constructor(
     poolOptions?: ChannelPoolOptions,
-    threshold = 3, // 函数参数超过此阈值使用即时生成
+    threshold = 3, // Use on-demand generation if function argument count exceeds this threshold
   ) {
     this.pool = new ChannelPool(poolOptions)
     this.generator = new SimpleChannelGenerator(poolOptions?.prefix)
@@ -183,22 +183,22 @@ export class HybridChannelProvider {
   }
   
   /**
-   * 获取 channel（自动选择策略）
+   * Acquire a channel (automatic selection strategy)
    */
   acquire(functionCount: number): {
     channel: string
     release: () => void
   } {
-    // 函数参数较多时使用即时生成
+    // Use on-demand generation for high-argument calls
     if (functionCount > this.threshold) {
       const channel = this.generator.generate()
       return {
         channel,
-        release: () => {}, // 即时生成的不需要释放
+        release: () => {}, // On-demand channels do not require release
       }
     }
     
-    // 函数参数较少时使用池化
+    // Use pooling for low-argument calls
     const channel = this.pool.acquire()
     return {
       channel,

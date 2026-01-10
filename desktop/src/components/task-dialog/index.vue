@@ -13,6 +13,7 @@
       <div class="">
         <!-- Form sections layout -->
         <el-form
+          :key="model.taskType"
           ref="formRef"
           :model="model"
           :rules="rules"
@@ -103,7 +104,8 @@
                 :label="$t('device.task.extra.copilot')"
                 prop="extra"
               >
-                <div class="w-full space-y-3">
+                <div class="w-full space-y-2">
+                  <PromptBar class="!p-0" show-prompt-manager @select-prompt="selectQuickPrompt" />
                   <el-input
                     v-model="model.extra"
                     type="textarea"
@@ -112,29 +114,6 @@
                     :maxlength="2000"
                     show-word-limit
                   />
-
-                  <!-- Quick prompt selection -->
-                  <div v-if="quickPrompts.length > 0" class="quick-prompts-section">
-                    <div class="flex items-center gap-2 mb-2">
-                      <el-icon class="text-gray-400">
-                        <EditPen />
-                      </el-icon>
-                      <span class="text-sm text-gray-500 dark:text-gray-400">
-                        {{ $t('copilot.promptManager.quickSelect') }}
-                      </span>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                      <el-tag
-                        v-for="(prompt, index) in quickPrompts"
-                        :key="index"
-                        class="cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                        effect="plain"
-                        @click="selectQuickPrompt(prompt)"
-                      >
-                        {{ prompt }}
-                      </el-tag>
-                    </div>
-                  </div>
                 </div>
               </el-form-item>
             </div>
@@ -295,17 +274,18 @@
 </template>
 
 <script setup>
-import { Check, Clock, EditPen, Monitor, Setting } from '@element-plus/icons-vue'
 import { Cron } from 'croner'
 
 import InputPath from '$/components/preference-form/components/input-path/index.vue'
 import CronSelector from '$/components/cron-selector/index.vue'
+import { PromptBar } from '$copilot/components/prompts/index.js'
+
 import {
   timeUnit as intervalModel,
   timerType as timerModel,
 } from '$/dicts/index.js'
+
 import { sleep } from '$/utils'
-import copilotClient from '$copilot/services/index.js'
 
 // Store references
 const taskStore = useTaskStore()
@@ -330,9 +310,6 @@ const cronValid = ref(true)
 
 // Task model (from store, includes Copilot)
 const taskModel = computed(() => taskStore.model)
-
-// Copilot quick prompts
-const quickPrompts = ref([])
 
 /**
  * Form data model
@@ -477,9 +454,6 @@ function open(args) {
 
   // Set default time to current time
   defaultTime.value = new Date()
-
-  // Load quick prompts
-  loadQuickPrompts()
 }
 
 /**
@@ -568,7 +542,7 @@ function disabledDate(time) {
 /**
  * Task type change callback
  */
-function onTaskChange() {
+async function onTaskChange() {
   model.value.extra = void 0
 }
 
@@ -580,20 +554,6 @@ function onCronValidChange(valid) {
 }
 
 /**
- * Load quick prompts
- */
-async function loadQuickPrompts() {
-  try {
-    const config = await copilotClient.getConfig() || {}
-    quickPrompts.value = config.prompts || []
-  }
-  catch (error) {
-    console.error('Failed to load quick prompts:', error)
-    quickPrompts.value = []
-  }
-}
-
-/**
  * Select quick prompt
  * @param {string} prompt - Quick prompt content
  */
@@ -601,7 +561,7 @@ function selectQuickPrompt(prompt) {
   model.value.extra = prompt
 }
 
-// 暴露方法
+// Expose methods
 defineExpose({
   open,
   close,

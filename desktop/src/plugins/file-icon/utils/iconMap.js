@@ -1,55 +1,55 @@
 /**
- * 文件图标映射配置
- * 使用 @iconify-json/mdi 图标库
+ * File icon mapping configuration
+ * Uses the @iconify-json/mdi icon set
  */
 
 /**
- * 文件类型图标映射表
+ * File type icon mapping table
  * @type {Object<string, {icon: string, color: string, extensions?: string[]}>}
  */
 export const FILE_ICON_MAP = {
-  // 目录
+  // Directory
   directory: {
     icon: 'i-mdi-folder',
     color: 'text-yellow-500',
   },
 
-  // 图片文件
+  // Image files
   image: {
     icon: 'i-mdi-file-image',
     color: 'text-green-500',
     extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico', '.heic', '.heif'],
   },
 
-  // 视频文件
+  // Video files
   video: {
     icon: 'i-mdi-file-video',
     color: 'text-purple-500',
     extensions: ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.3gp', '.mpeg', '.mpg'],
   },
 
-  // 音频文件
+  // Audio files
   audio: {
     icon: 'i-mdi-file-music',
     color: 'text-pink-500',
     extensions: ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a', '.opus', '.ape'],
   },
 
-  // 文档文件
+  // Document files
   document: {
     icon: 'i-mdi-file-document',
     color: 'text-blue-500',
     extensions: ['.doc', '.docx', '.pdf', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods', '.odp'],
   },
 
-  // 压缩包
+  // Archives
   archive: {
     icon: 'i-mdi-folder-zip',
     color: 'text-orange-500',
     extensions: ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2', '.xz', '.tgz', '.tbz2', '.iso'],
   },
 
-  // 代码文件
+  // Code files
   code: {
     icon: 'i-mdi-file-code',
     color: 'text-cyan-500',
@@ -59,70 +59,70 @@ export const FILE_ICON_MAP = {
     ],
   },
 
-  // 文本文件
+  // Text files
   text: {
     icon: 'i-mdi-file-document-outline',
     color: 'text-gray-500',
     extensions: ['.txt', '.md', '.log', '.json', '.xml', '.yml', '.yaml', '.ini', '.conf', '.cfg', '.toml'],
   },
 
-  // APK 文件
+  // APK files
   apk: {
     icon: 'i-mdi-android',
     color: 'text-green-600',
     extensions: ['.apk'],
   },
 
-  // 可执行文件
+  // Executable files
   executable: {
     icon: 'i-mdi-application',
     color: 'text-red-500',
     extensions: ['.exe', '.msi', '.app', '.dmg', '.deb', '.rpm', '.sh', '.bat', '.cmd'],
   },
 
-  // PDF 文件（单独处理以使用专用图标）
+  // PDF files (handled separately to use a dedicated icon)
   pdf: {
     icon: 'i-mdi-file-pdf-box',
     color: 'text-red-600',
     extensions: ['.pdf'],
   },
 
-  // Excel 文件
+  // Excel files
   excel: {
     icon: 'i-mdi-file-excel',
     color: 'text-green-600',
     extensions: ['.xls', '.xlsx', '.csv'],
   },
 
-  // Word 文件
+  // Word files
   word: {
     icon: 'i-mdi-file-word',
     color: 'text-blue-600',
     extensions: ['.doc', '.docx'],
   },
 
-  // PowerPoint 文件
+  // PowerPoint files
   powerpoint: {
     icon: 'i-mdi-file-powerpoint',
     color: 'text-orange-600',
     extensions: ['.ppt', '.pptx'],
   },
 
-  // 字体文件
+  // Font files
   font: {
     icon: 'i-mdi-format-font',
     color: 'text-purple-600',
     extensions: ['.ttf', '.otf', '.woff', '.woff2', '.eot'],
   },
 
-  // 数据库文件
+  // Database files
   database: {
     icon: 'i-mdi-database',
     color: 'text-teal-600',
     extensions: ['.db', '.sqlite', '.sql', '.mdb'],
   },
 
-  // 默认图标
+  // Default icon
   default: {
     icon: 'i-mdi-file',
     color: 'text-gray-400',
@@ -130,13 +130,13 @@ export const FILE_ICON_MAP = {
 }
 
 /**
- * 扩展名到图标类型的缓存映射
- * 用于提高查询性能
+ * Cached mapping from extension to icon type
+ * Used to improve lookup performance
  */
 let extensionCache = null
 
 /**
- * 构建扩展名缓存
+ * Build extension cache
  * @returns {Map<string, string>}
  */
 function buildExtensionCache() {
@@ -145,11 +145,11 @@ function buildExtensionCache() {
 
   extensionCache = new Map()
 
-  // 遍历所有图标类型，建立扩展名到类型的映射
+  // Iterate icon types and build extension -> type mapping
   for (const [type, config] of Object.entries(FILE_ICON_MAP)) {
     if (config.extensions) {
       for (const ext of config.extensions) {
-        // 优先级：后定义的类型会覆盖先定义的（如 pdf 覆盖 document）
+        // Priority: later-defined types override earlier ones (e.g., pdf overrides document)
         extensionCache.set(ext.toLowerCase(), type)
       }
     }
@@ -159,9 +159,9 @@ function buildExtensionCache() {
 }
 
 /**
- * 获取文件扩展名
- * @param {string} filename - 文件名
- * @returns {string} 小写的扩展名（包含点号）
+ * Get file extension
+ * @param {string} filename - Filename
+ * @returns {string} Lowercased extension (including dot)
  */
 export function getFileExtension(filename) {
   if (!filename || typeof filename !== 'string')
@@ -175,15 +175,15 @@ export function getFileExtension(filename) {
 }
 
 /**
- * 根据文件类型或文件名获取图标信息
- * @param {string|Object} fileOrType - 文件对象或文件类型字符串
- * @param {string} [fileOrType.type] - 文件类型（'directory' 或 'file'）
- * @param {string} [fileOrType.name] - 文件名
- * @param {boolean} [fileOrType.isDirectory] - 是否为目录
- * @returns {{icon: string, color: string, type: string}} 图标信息
+ * Get icon information based on file type or filename
+ * @param {string|Object} fileOrType - File object or type string
+ * @param {string} [fileOrType.type] - File type ('directory' or 'file')
+ * @param {string} [fileOrType.name] - Filename
+ * @param {boolean} [fileOrType.isDirectory] - Whether it's a directory
+ * @returns {{icon: string, color: string, type: string}} Icon information
  */
 export function getFileIconInfo(fileOrType) {
-  // 处理目录
+  // Handle directory
   if (
     fileOrType === 'directory'
     || fileOrType?.type === 'directory'
@@ -195,7 +195,7 @@ export function getFileIconInfo(fileOrType) {
     }
   }
 
-  // 获取文件名
+  // Get filename
   let filename = ''
   if (typeof fileOrType === 'string') {
     filename = fileOrType
@@ -204,7 +204,7 @@ export function getFileIconInfo(fileOrType) {
     filename = fileOrType.name
   }
 
-  // 如果没有文件名，返回默认图标
+  // If no filename, return default icon
   if (!filename) {
     return {
       ...FILE_ICON_MAP.default,
@@ -212,7 +212,7 @@ export function getFileIconInfo(fileOrType) {
     }
   }
 
-  // 获取扩展名
+  // Get extension
   const ext = getFileExtension(filename)
   if (!ext) {
     return {
@@ -221,7 +221,7 @@ export function getFileIconInfo(fileOrType) {
     }
   }
 
-  // 使用缓存查找图标类型
+  // Use cache to lookup icon type
   const cache = buildExtensionCache()
   const iconType = cache.get(ext)
 
@@ -232,7 +232,7 @@ export function getFileIconInfo(fileOrType) {
     }
   }
 
-  // 返回默认图标
+  // Return default icon
   return {
     ...FILE_ICON_MAP.default,
     type: 'default',

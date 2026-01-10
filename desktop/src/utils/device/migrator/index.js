@@ -48,16 +48,16 @@ export class ScrcpyConfigMigrator {
   migrateConfigFromOldToNew(oldDeviceId, newDeviceId) {
     const scrcpyConfig = this.getScrcpyConfig()
 
-    // 检查是否需要迁移配置
+    // Check whether migration is needed
     if (!this.hasConfig(scrcpyConfig, oldDeviceId)) {
       return false
     }
 
-    // 执行配置迁移
+    // Perform configuration migration
     scrcpyConfig[newDeviceId] = defaultsDeep(scrcpyConfig[newDeviceId] || {}, scrcpyConfig[oldDeviceId])
     this.saveScrcpyConfig(scrcpyConfig)
 
-    // 记录已处理的设备ID，用于后续清理
+    // Record processed device ID for later cleanup
     this.processedDeviceIds.add(oldDeviceId)
 
     console.log(`Successfully migrated scrcpy config: ${oldDeviceId} → ${newDeviceId}`)
@@ -65,7 +65,7 @@ export class ScrcpyConfigMigrator {
   }
 
   /**
-   * 清理已处理的旧设备配置
+   * Clean up processed old device configurations
    */
   cleanupProcessedConfigs() {
     if (this.processedDeviceIds.size === 0) {
@@ -83,29 +83,29 @@ export class ScrcpyConfigMigrator {
   }
 
   /**
-   * 获取 scrcpy 配置
+   * Get scrcpy configuration
    * @private
-   * @returns {Object} scrcpy 配置对象
+   * @returns {Object} scrcpy config object
    */
   getScrcpyConfig() {
     return window.appStore.get('scrcpy') || {}
   }
 
   /**
-   * 保存 scrcpy 配置
+   * Save scrcpy configuration
    * @private
-   * @param {Object} config - 配置对象
+   * @param {Object} config - Configuration object
    */
   saveScrcpyConfig(config) {
     window.appStore.set('scrcpy', config)
   }
 
   /**
-   * 检查设备是否有配置
+   * Check whether a device has configuration
    * @private
-   * @param {Object} config - 配置对象
-   * @param {string} deviceId - 设备ID
-   * @returns {boolean} 是否有配置
+   * @param {Object} config - Configuration object
+   * @param {string} deviceId - Device ID
+   * @returns {boolean} Whether configuration exists
    */
   hasConfig(config, deviceId) {
     return Object.keys(config[deviceId] || {}).length > 0

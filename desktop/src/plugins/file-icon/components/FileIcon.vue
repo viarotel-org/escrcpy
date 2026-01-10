@@ -41,7 +41,7 @@ const props = defineProps({
   },
 
   /**
-   * 自定义颜色类名（覆盖默认颜色）
+   * Custom color class name (overrides default color)
    */
   color: {
     type: String,
@@ -49,7 +49,7 @@ const props = defineProps({
   },
 
   /**
-   * 自定义图标类名（覆盖默认图标）
+   * Custom icon class name (overrides default icon)
    */
   icon: {
     type: String,
@@ -57,7 +57,7 @@ const props = defineProps({
   },
 
   /**
-   * 鼠标悬停提示文本
+   * Tooltip text on hover
    */
   title: {
     type: String,
@@ -75,7 +75,7 @@ const sizeMap = {
   '2xl': '2em',
 }
 
-// 计算图标类名
+// Compute icon class name
 const iconClass = computed(() => {
   if (props.icon)
     return props.icon
@@ -84,7 +84,7 @@ const iconClass = computed(() => {
   return iconInfo.icon
 })
 
-// 计算颜色类名
+// Compute color class name
 const colorClass = computed(() => {
   if (props.color)
     return props.color
@@ -93,7 +93,7 @@ const colorClass = computed(() => {
   return iconInfo.color
 })
 
-// 计算尺寸样式
+// Compute size style
 const sizeStyle = computed(() => {
   const size = sizeMap[props.size] || (Number.isNaN(Number(props.size)) ? props.size : `${props.size}px`)
   return {

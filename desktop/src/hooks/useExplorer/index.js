@@ -37,9 +37,9 @@ import {
 } from './modules/index.js'
 
 /**
- * ADB 文件管理器 Hook
- * @param {import('./types.js').ExplorerOptions} options - 配置选项
- * @returns {Object} 文件管理器实例
+ * ADB file manager hook
+ * @param {import('./types.js').ExplorerOptions} options - Options
+ * @returns {Object} File manager instance
  */
 export function useExplorer(options = {}) {
   const {
@@ -51,15 +51,15 @@ export function useExplorer(options = {}) {
 
   // ========== Device management ==========
 
-  /** @type {import('vue').Ref<string>} 设备 ID */
+  /** @type {import('vue').Ref<string>} Device ID */
   const deviceId = ref(device?.id || '')
 
-  /** @type {import('vue').Ref<import('./types.js').DeviceInfo|null>} 设备信息 */
+  /** @type {import('vue').Ref<import('./types.js').DeviceInfo|null>} Device info */
   const deviceInfo = ref(device || null)
 
   /**
-   * 设置设备
-   * @param {import('./types.js').DeviceInfo} newDevice - 新设备
+   * Set device
+   * @param {import('./types.js').DeviceInfo} newDevice - New device
    */
   function setDevice(newDevice) {
     deviceId.value = newDevice?.id || ''
@@ -252,12 +252,12 @@ export function useExplorer(options = {}) {
   }
 
   return {
-    // ========== 设备 ==========
+    // ========== Devices ==========
     deviceId: readonly(deviceId),
     deviceInfo: readonly(deviceInfo),
     setDevice,
 
-    // ========== 路径管理 ==========
+    // ========== Path management ==========
     currentPath: pathManager.currentPath,
     breadcrumbs: pathManager.breadcrumbs,
     pathSegments: pathManager.pathSegments,
@@ -272,14 +272,14 @@ export function useExplorer(options = {}) {
     enterDirectory,
     goUp,
 
-    // ========== 文件列表 ==========
+    // ========== File list ==========
     files: fileOps.files,
     loading: fileOps.loading,
     error: fileOps.error,
     lastRefreshTime: fileOps.lastRefreshTime,
     refresh,
 
-    // ========== 文件操作 ==========
+    // ========== File operations ==========
     operations: {
       createDirectory: fileOps.createDirectory,
       createFile: fileOps.createFile,
@@ -293,7 +293,7 @@ export function useExplorer(options = {}) {
       writeFile: fileOps.writeFile,
     },
 
-    // ========== 上传 ==========
+    // ========== Uploader ==========
     uploader: {
       uploading: uploader.uploading,
       progress: uploader.progress,
@@ -304,7 +304,7 @@ export function useExplorer(options = {}) {
       reset: uploader.reset,
     },
 
-    // ========== 下载 ==========
+    // ========== Downloader ==========
     downloader: {
       downloading: downloader.downloading,
       scanning: downloader.scanning,
@@ -319,7 +319,7 @@ export function useExplorer(options = {}) {
       getStatusSummary: downloader.getStatusSummary,
     },
 
-    // ========== 预览 ==========
+    // ========== Previewer ==========
     previewer: {
       previewing: previewer.previewing,
       error: previewer.error,
@@ -331,7 +331,7 @@ export function useExplorer(options = {}) {
       PREVIEW_SUPPORT: previewer.PREVIEW_SUPPORT,
     },
 
-    // ========== 选择管理 ==========
+    // ========== Selection management ==========
     selection: {
       selectedItems: selection.selectedItems,
       selectionState: selection.selectionState,
@@ -351,7 +351,7 @@ export function useExplorer(options = {}) {
       onSelectionChange: selection.onSelectionChange,
     },
 
-    // ========== 剪贴板 ==========
+    // ========== Clipboard ==========
     clipboard: {
       clipboardItems: clipboard.clipboardItems,
       clipboardAction: clipboard.clipboardAction,
@@ -368,11 +368,11 @@ export function useExplorer(options = {}) {
       isCut: clipboard.isCut,
     },
 
-    // ========== 自动刷新 ==========
+    // ========== Auto-refresh ==========
     startAutoRefresh,
     stopAutoRefresh,
 
-    // ========== 工具方法 ==========
+    // ========== Utility methods ==========
     path: {
       normalize: pathManager.normalizePath,
       join: pathManager.joinPath,
@@ -380,12 +380,12 @@ export function useExplorer(options = {}) {
       dirname: pathManager.getDirname,
     },
 
-    // ========== 状态 & 生命周期 ==========
+    // ========== Status & lifecycle ==========
     getStatus,
     reset,
     init,
 
-    // ========== 原始模块（高级用法） ==========
+    // ========== Raw modules (advanced usage) ==========
     _modules: {
       pathManager,
       fileOps,
@@ -400,5 +400,5 @@ export function useExplorer(options = {}) {
 
 export default useExplorer
 
-// 导出子模块，允许独立使用
+// Export submodules for standalone use
 export * from './modules/index.js'

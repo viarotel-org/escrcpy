@@ -1,6 +1,6 @@
 /**
- * @fileoverview 下载模块
- * 封装文件/文件夹下载功能，支持进度、取消、批量下载
+ * @fileoverview Download module
+ * Encapsulates file/folder download functionality with progress, cancel and batch support
  */
 
 import '../types.js'
@@ -9,19 +9,19 @@ import '../types.js'
 const $adb = window.adb
 
 /**
- * 下载 Hook
- * @param {Object} options - 配置选项
- * @param {import('vue').Ref<string>} options.deviceId - 设备 ID
- * @returns {Object} 下载器实例
+ * Download hook
+ * @param {Object} options - Options
+ * @param {import('vue').Ref<string>} options.deviceId - Device ID
+ * @returns {Object} Downloader instance
  */
 export function useDownloader({ deviceId }) {
-  /** @type {import('vue').Ref<boolean>} 下载中状态 */
+  /** @type {import('vue').Ref<boolean>} Downloading state */
   const downloading = ref(false)
 
-  /** @type {import('vue').Ref<boolean>} 扫描中状态 */
+  /** @type {import('vue').Ref<boolean>} Scanning state */
   const scanning = ref(false)
 
-  /** @type {import('vue').Ref<import('../types.js').ProgressInfo|null>} 下载进度 */
+  /** @type {import('vue').Ref<import('../types.js').ProgressInfo|null>} Download progress */
   const progress = ref(null)
 
   /** @type {import('vue').Ref<string|null>} 错误信息 */

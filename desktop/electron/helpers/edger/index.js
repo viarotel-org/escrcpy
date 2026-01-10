@@ -183,7 +183,7 @@ export class Edger {
     this.window.on('maximize', () => {
       this.isMaximized = true
       this.lastMaximizedState = true
-      // 如果之前已贴边，则取消贴边状态
+      // If previously docked, undock
       if (this.dockEdge) {
         this.undock()
       }

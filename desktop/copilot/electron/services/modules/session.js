@@ -244,10 +244,10 @@ export class SessionManager {
     try {
       // Batch stop tasks + clean up event listeners
       Array.from(this.deviceSessionMap.values()).forEach((session) => {
-        if (session.metadata.isRunning) {
+        if (session.metadata?.isRunning) {
           this.stopTask(session.deviceId, 'Batch session destruction')
         }
-        session.emitter.removeAllListeners()
+        session.emitter?.removeAllListeners?.()
       })
 
       // Clear all indexes

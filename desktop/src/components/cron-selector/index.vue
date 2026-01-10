@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <!-- 每周配置 -->
+      <!-- Weekly configuration -->
       <div v-if="presetType === 'weekly'" class="cron-config-section">
         <div class="flex items-center gap-2 mb-2 flex-wrap">
           <span>{{ $t('cron.weekly.on') }}</span>
@@ -81,7 +81,7 @@
         </div>
       </div>
 
-      <!-- 每月配置 -->
+      <!-- Monthly configuration -->
       <div v-if="presetType === 'monthly'" class="cron-config-section">
         <div class="flex items-center gap-2 mb-2 flex-wrap">
           <span>{{ $t('cron.monthly.on') }}</span>
@@ -117,7 +117,7 @@
       <div v-if="presetType === 'custom'" class="cron-config-section">
         <!-- Visual configuration panels -->
         <el-collapse v-model="activePanel" class="mb-4">
-          <!-- 分钟配置 -->
+          <!-- Minute configuration -->
           <el-collapse-item name="minute" :title="$t('cron.custom.minute')">
             <div class="cron-field-config">
               <el-radio-group v-model="customConfig.minute.type" class="mb-2">
@@ -167,7 +167,7 @@
             </div>
           </el-collapse-item>
 
-          <!-- 小时配置 -->
+          <!-- Hour configuration -->
           <el-collapse-item name="hour" :title="$t('cron.custom.hour')">
             <div class="cron-field-config">
               <el-radio-group v-model="customConfig.hour.type" class="mb-2">
@@ -217,7 +217,7 @@
             </div>
           </el-collapse-item>
 
-          <!-- 日期配置 -->
+          <!-- Day configuration -->
           <el-collapse-item name="day" :title="$t('cron.custom.day')">
             <div class="cron-field-config">
               <el-radio-group v-model="customConfig.day.type" class="mb-2">
@@ -258,7 +258,7 @@
             </div>
           </el-collapse-item>
 
-          <!-- 星期配置 -->
+          <!-- Weekday options -->
           <el-collapse-item name="weekday" :title="$t('cron.custom.weekday')">
             <div class="cron-field-config">
               <el-radio-group v-model="customConfig.weekday.type" class="mb-2">
@@ -287,7 +287,7 @@
       </div>
     </div>
 
-    <!-- 高级模式：直接输入 Cron 表达式 -->
+    <!-- Advanced mode: enter Cron expression directly -->
     <div class="cron-advanced mt-4">
       <el-divider>
         <el-button
@@ -317,7 +317,7 @@
           </el-input>
         </div>
 
-        <!-- 校验状态显示 -->
+        <!-- Validation status display -->
         <div class="cron-validation mt-2">
           <el-tag v-if="isValidCron && cronExpression" type="success">
             <el-icon class="mr-1">
@@ -333,7 +333,7 @@
           </el-tag>
         </div>
 
-        <!-- 下次执行时间预览 -->
+        <!-- Next run time preview -->
         <div v-if="isValidCron && nextExecutions.length > 0" class="next-executions mt-3">
           <div class="text-sm text-gray-500 mb-2">
             {{ $t('cron.nextExecutions') }}
@@ -351,7 +351,7 @@
       </div>
     </div>
 
-    <!-- 人性化描述 -->
+    <!-- Human-friendly description -->
     <div v-if="cronDescription" class="cron-description mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded">
       <div class="flex items-start gap-2">
         <el-icon class="text-primary mt-0.5">
@@ -381,10 +381,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change', 'valid-change'])
 
-// 预设类型
+// Preset types
 const presetType = ref('daily')
 
-// 是否显示高级模式
+// Whether to show advanced mode
 const showAdvanced = ref(false)
 
 // 自定义配置展开面板
@@ -401,12 +401,12 @@ const weekDays = [
   { label: 'cron.weekday.sat', value: 6 },
 ]
 
-// 简单配置
+// Simple configuration
 const config = reactive({
   minute: 0,
   time: '08:00',
-  weekdays: [1], // 默认周一
-  days: [1], // 默认每月1号
+  weekdays: [1], // Default: Monday
+  days: [1], // Default: day 1 of month
 })
 
 // 自定义配置（用于高级自定义）
@@ -437,19 +437,19 @@ const customConfig = reactive({
   },
 })
 
-// Cron 表达式
+// Cron expression
 const cronExpression = ref(props.modelValue || '')
 
 /**
- * 验证 Cron 表达式是否有效
- * 使用 croner 库的校验方法
+ * Validate whether a Cron expression is valid
+ * Use croner library for validation
  */
 const isValidCron = computed(() => {
   if (!cronExpression.value) {
     return false
   }
   try {
-    // 使用 Cron 构造函数验证表达式有效性
+    // Validate expression using the Cron constructor
     new Cron(cronExpression.value, { legacyMode: false })
     return true
   }
@@ -459,7 +459,7 @@ const isValidCron = computed(() => {
 })
 
 /**
- * 获取接下来的执行时间（最多5次）
+ * Get next execution times (up to 5)
  */
 const nextExecutions = computed(() => {
   if (!isValidCron.value) {
@@ -493,7 +493,7 @@ const cronDescription = computed(() => {
     return ''
   }
 
-  // 根据预设类型生成描述
+  // Generate description based on preset type
   switch (presetType.value) {
     case 'hourly':
       return t('cron.desc.hourly', { minute: config.minute })

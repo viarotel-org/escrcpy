@@ -71,16 +71,16 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
   }
 
   /**
-   * 上传文件
-   * @param {string|string[]} localPaths - 本地文件路径
-   * @param {Object} [options] - 选项
-   * @param {string} [options.remotePath] - 远程路径
-   * @param {boolean} [options.autoRefresh] - 是否自动刷新
-   * @param {Function} [options.onProgress] - 进度回调
-   * @param {Function} [options.onScanProgress] - 扫描进度回调
-   * @param {Function} [options.onError] - 错误回调
-   * @param {Function} [options.onFileStart] - 文件开始回调
-   * @param {Function} [options.onFileComplete] - 文件完成回调
+   * Upload files
+   * @param {string|string[]} localPaths - Local file path(s)
+   * @param {Object} [options] - Options
+   * @param {string} [options.remotePath] - Remote path
+   * @param {boolean} [options.autoRefresh] - Whether to auto-refresh
+   * @param {Function} [options.onProgress] - Progress callback
+   * @param {Function} [options.onScanProgress] - Scan progress callback
+   * @param {Function} [options.onError] - Error callback
+   * @param {Function} [options.onFileStart] - File start callback
+   * @param {Function} [options.onFileComplete] - File complete callback
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function upload(localPaths, options = {}) {
@@ -110,13 +110,13 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
     progress.value = { percent: 0, completed: 0, total: 0, currentFile: null }
 
     try {
-      // 扫描进度回调
+      // Scan progress callback
       const onScanProgress = (scanData) => {
         scanning.value = true
         externalOnScanProgress?.(scanData)
       }
 
-      // 进度回调
+      // Progress callback
       const onProgress = (progressData) => {
         scanning.value = false
         progress.value = {
@@ -131,7 +131,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
         externalOnProgress?.(progressData)
       }
 
-      // 文件开始回调
+      // File start callback
       const onFileStart = (file, stats) => {
         progress.value = {
           ...progress.value,
@@ -140,18 +140,18 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
         externalOnFileStart?.(file, stats)
       }
 
-      // 文件完成回调
+      // File complete callback
       const onFileComplete = (file, stats) => {
         externalOnFileComplete?.(file, stats)
       }
 
-      // 错误回调
+      // Error callback
       const onError = (err, file) => {
         console.warn(`Upload error for ${file}:`, err)
         externalOnError?.(err, file)
       }
 
-      // 创建上传器
+      // Create uploader
       uploaderInstance = $adb.uploader({
         deviceId: deviceId.value,
         localPaths: paths,
@@ -164,7 +164,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
         ...uploaderOptions,
       })
 
-      // 执行上传
+      // Execute upload
       const uploadResult = await uploaderInstance.start()
       result.value = uploadResult
 
@@ -193,7 +193,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
   }
 
   /**
-   * 取消上传
+   * Cancel upload
    */
   function cancel() {
     if (uploaderInstance) {
@@ -204,7 +204,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
   }
 
   /**
-   * 重置状态
+   * Reset state
    */
   function reset() {
     cancel()
@@ -215,7 +215,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
   }
 
   /**
-   * 获取状态摘要
+   * Get status summaryatus summary
    * @returns {Object}
    */
   function getStatusSummary() {
@@ -229,14 +229,14 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
   }
 
   return {
-    // 状态
+    // State
     uploading: readonly(uploading),
     scanning: readonly(scanning),
     progress: readonly(progress),
     error: readonly(error),
     result: readonly(result),
 
-    // 方法
+    // Methods
     selectAndUpload,
     upload,
     cancel,

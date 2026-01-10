@@ -15,17 +15,17 @@ export default (mainWindow) => {
     })
   }
 
-  // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
+  // Trigger update check (intended to be called from the renderer, e.g. when user clicks "check for updates")
   ipcMain.on('check-for-update', () => {
     autoUpdater.checkForUpdates()
   })
 
-  // 下载更新
+  // Download update
   ipcMain.on('download-update', () => {
     autoUpdater.downloadUpdate()
   })
 
-  // 安装更新
+  // Install update
   ipcMain.on('quit-and-install', () => {
     setImmediate(() => {
       app.isQuiting = true
@@ -33,20 +33,20 @@ export default (mainWindow) => {
     })
   })
 
-  // 设置自动下载为false(默认为true，检测到有更新就自动下载)
+  // Set auto-download to false (default true — automatically download when updates are found)
   autoUpdater.autoDownload = false
-  // 检测下载错误
+  // Handle update errors
   autoUpdater.on('error', (error) => {
     console.error('update-error')
     mainWindow.webContents.send('update-error', error)
   })
 
-  // 检测是否需要更新
+  // Checking for updates
   autoUpdater.on('checking-for-update', (ret) => {
     console.log('checking-for-update', ret)
   })
 
-  // 检测到可以更新时
+  // Update available
   autoUpdater.on('update-available', (ret) => {
     mainWindow.webContents.send('update-available', ret)
   })
@@ -56,7 +56,7 @@ export default (mainWindow) => {
     mainWindow.webContents.send('update-not-available', ret)
   })
 
-  // 更新下载进度
+  // Download progress
   autoUpdater.on('download-progress', (ret) => {
     mainWindow.webContents.send('download-progress', ret)
   })

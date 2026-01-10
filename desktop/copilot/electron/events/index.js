@@ -1,14 +1,14 @@
 function install(copilotWindow) {
-  // 通知渲染进程进行清理
+  // Notify renderer to perform cleanup
   copilotWindow.on('close', () => {
     copilotWindow.webContents.send('copilot-window-closing')
   })
 
-  // 窗口获得焦点时的处理
+  // Handle when window gains focus
   copilotWindow.on('focus', () => {
   })
 
-  // 窗口失去焦点时的处理
+  // Handle when window loses focus
   copilotWindow.on('blur', () => {
   })
 }

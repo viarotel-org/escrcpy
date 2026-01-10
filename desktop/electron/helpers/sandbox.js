@@ -1,14 +1,14 @@
 import { app } from 'electron'
 
 /**
- * 沙盒配置管理器（简化版）
- * 在 Linux 环境下默认禁用 Chromium 沙盒以提高兼容性
+ * Sandbox configuration manager (simplified)
+ * Defaults to disabling the Chromium sandbox on Linux to improve compatibility
  */
 class SandboxManager {
   /**
-   * 构造函数
-   * @param {Object} options - 配置选项
-   * @param {Object} options.processModule - 进程模块
+   * Constructor
+   * @param {Object} options - Configuration options
+   * @param {Object} options.processModule - Process module
    */
   constructor({
     processModule = process,
@@ -17,9 +17,9 @@ class SandboxManager {
   }
 
   /**
-   * 清理环境变量值
-   * @param {string|undefined} value - 环境变量值
-   * @returns {string} 清理后的值
+   * Sanitize environment variable value
+   * @param {string|undefined} value - Environment variable value
+   * @returns {string} Sanitized value
    */
   _sanitizeEnvVar(value) {
     if (typeof value !== 'string') {
@@ -29,13 +29,13 @@ class SandboxManager {
   }
 
   /**
-   * 配置沙盒设置（简化版）
-   * @returns {Promise<{disabled: boolean, reason: string, checks?: Object}>} 配置结果
+   * Configure sandbox settings (simplified)
+   * @returns {Promise<{disabled: boolean, reason: string, checks?: Object}>} Configuration result
    */
   async configureSandbox() {
     const startTime = Date.now()
 
-    // 非 Linux 平台直接返回
+    // Return early on non-Linux platforms
     if (this.process.platform !== 'linux') {
       console.debug('Not running on Linux, skipping sandbox configuration')
       return {
@@ -50,7 +50,7 @@ class SandboxManager {
     const checkResults = {}
 
     try {
-      // 检查环境变量控制
+      // Check env vars for overrides
       const forceEnable = this._sanitizeEnvVar(this.process.env.FORCE_SANDBOX) === '1'
       const forceDisable = this._sanitizeEnvVar(this.process.env.FORCE_NO_SANDBOX) === '1'
 
@@ -70,13 +70,13 @@ class SandboxManager {
         reason = 'FORCE_SANDBOX=1'
       }
       else {
-        // 默认在 Linux 下禁用沙盒以提高兼容性
+        // Default to disabling sandbox on Linux for compatibility
         shouldDisable = true
         reason = 'Default Linux compatibility mode'
         checkResults.defaultDisabled = true
       }
 
-      // 应用配置
+      // Apply configuration
       if (shouldDisable) {
         app.commandLine.appendSwitch('no-sandbox')
         app.commandLine.appendSwitch('disable-dev-shm-usage')
@@ -98,7 +98,7 @@ class SandboxManager {
     }
     catch (error) {
       console.error('Critical error during sandbox configuration:', error.message)
-      // 出现严重错误时，为了安全起见禁用沙盒
+      // On critical errors, disable sandbox for safety
       app.commandLine.appendSwitch('no-sandbox')
       app.commandLine.appendSwitch('disable-dev-shm-usage')
 

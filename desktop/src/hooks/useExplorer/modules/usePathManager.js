@@ -58,14 +58,14 @@ export function usePathManager(options = {}) {
     })
   })
 
-  /** 路径段列表 */
+  /** Path segment list */
   const pathSegments = computed(() => {
     if (currentPath.value === '/')
       return ['/']
     return currentPath.value.split('/').filter(Boolean)
   })
 
-  /** 父级路径 */
+  /** Parent path */
   const parentPath = computed(() => {
     if (currentPath.value === '/')
       return '/'
@@ -75,13 +75,13 @@ export function usePathManager(options = {}) {
     return `/${segments.slice(0, -1).join('/')}`
   })
 
-  /** 是否为根目录 */
+  /** Whether this is the root directory */
   const isRoot = computed(() => currentPath.value === '/')
 
-  /** 是否可以后退 */
+  /** Whether navigation can go back */
   const canGoBack = computed(() => historyIndex.value > 0)
 
-  /** 是否可以前进 */
+  /** Whether navigation can go forward */
   const canGoForward = computed(() => historyIndex.value < history.value.length - 1)
 
   /**
@@ -92,7 +92,7 @@ export function usePathManager(options = {}) {
    * @returns {string} Normalized path
    */
   function navigateTo(path, { addToHistory = true } = {}) {
-    // 规范化路径
+    // Normalize path
     const normalizedPath = normalizePath(path)
 
     if (normalizedPath === currentPath.value) {
@@ -102,11 +102,11 @@ export function usePathManager(options = {}) {
     currentPath.value = normalizedPath
 
     if (addToHistory) {
-      // 截断前进历史
+      // Truncate forward history
       history.value = history.value.slice(0, historyIndex.value + 1)
       history.value.push(normalizedPath)
 
-      // 限制历史记录数量
+      // Limit history length
       if (history.value.length > historyLimit) {
         history.value = history.value.slice(-historyLimit)
       }
@@ -127,7 +127,7 @@ export function usePathManager(options = {}) {
   }
 
   /**
-   * 导航到父目录
+   * Navigate to the parent directory
    */
   function navigateToParent() {
     if (!isRoot.value) {
@@ -137,8 +137,8 @@ export function usePathManager(options = {}) {
   }
 
   /**
-   * 通过面包屑导航
-   * @param {import('../types.js').BreadcrumbItem} item - 面包屑项
+   * Navigate via breadcrumb
+   * @param {import('../types.js').BreadcrumbItem} item - Breadcrumb item
    */
   function navigateByBreadcrumb(item) {
     const index = currentPath.value.indexOf(item.value)
@@ -149,7 +149,7 @@ export function usePathManager(options = {}) {
     return currentPath.value
   }
 
-  /** 后退 */
+  /** Go back */
   function goBack() {
     if (canGoBack.value) {
       historyIndex.value--
@@ -158,7 +158,7 @@ export function usePathManager(options = {}) {
     return currentPath.value
   }
 
-  /** 前进 */
+  /** Go forward */
   function goForward() {
     if (canGoForward.value) {
       historyIndex.value++
@@ -167,7 +167,7 @@ export function usePathManager(options = {}) {
     return currentPath.value
   }
 
-  /** 重置到初始路径 */
+  /** Reset to initial path */
   function reset() {
     currentPath.value = initialPath
     history.value = [initialPath]
@@ -175,35 +175,35 @@ export function usePathManager(options = {}) {
   }
 
   /**
-   * 规范化路径
-   * @param {string} path - 原始路径
-   * @returns {string} 规范化路径
+   * Normalize path
+   * @param {string} path - Original path
+   * @returns {string} Normalized path
    */
   function normalizePath(path) {
-    // 确保以 / 开头
+    // Ensure it starts with /
     let normalized = path.startsWith('/') ? path : `/${path}`
-    // 移除末尾的 /（除非是根目录）
+    // Remove trailing / (unless root)
     if (normalized.length > 1 && normalized.endsWith('/')) {
       normalized = normalized.slice(0, -1)
     }
-    // 处理连续的 /
+    // Handle consecutive /
     normalized = normalized.replace(/\/+/g, '/')
     return normalized
   }
 
   /**
-   * 连接路径
-   * @param {...string} paths - 路径片段
-   * @returns {string} 连接后的路径
+   * Join paths
+   * @param {...string} paths - Path segments
+   * @returns {string} Joined path
    */
   function joinPath(...paths) {
     return normalizePath(paths.join('/'))
   }
 
   /**
-   * 获取路径的基础名（文件/文件夹名）
-   * @param {string} path - 路径
-   * @returns {string} 基础名
+   * Get basename (file or folder name) of a path
+   * @param {string} path - Path
+   * @returns {string} Basename
    */
   function getBasename(path) {
     const segments = path.split('/').filter(Boolean)
@@ -211,9 +211,9 @@ export function usePathManager(options = {}) {
   }
 
   /**
-   * 获取路径的目录部分
-   * @param {string} path - 路径
-   * @returns {string} 目录路径
+   * Get the directory part of a path
+   * @param {string} path - Path
+   * @returns {string} Directory path
    */
   function getDirname(path) {
     const segments = path.split('/').filter(Boolean)

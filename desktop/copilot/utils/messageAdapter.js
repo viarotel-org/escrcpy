@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { MessageRoleEnum, MessageStatusEnum } from '$copilot/dicts/index.js'
 
 /**
- * 头像配置
+ * Avatar configuration
  */
 const AVATAR_CONFIG = {
   [MessageRoleEnum.USER]: null,
@@ -11,19 +11,18 @@ const AVATAR_CONFIG = {
 }
 
 /**
- * 获取角色对应的头像
- * @param {string} role - 消息角色
- * @returns {string|null} 头像URL
+ * Get avatar URL for a role
+ * @param {string} role - Message role
+ * @returns {string|null} Avatar URL
  */
 export function getAvatarByRole(role) {
   return AVATAR_CONFIG[role] || null
 }
 
 /**
- * 获取角色对应的名称
- * @param {string} role - 消息角色
- * @param {Function} t - i18n 翻译函数
- * @returns {string} 角色名称
+ * Get name key for a role
+ * @param {string} role - Message role
+ * @returns {string} i18n key for role name
  */
 export function getNameByRole(role) {
   const nameMap = {
@@ -36,10 +35,10 @@ export function getNameByRole(role) {
 }
 
 /**
- * 格式化时间戳
- * @param {number} timestamp - 时间戳
- * @param {string} format - 格式化模板
- * @returns {string} 格式化后的时间字符串
+ * Format timestamp
+ * @param {number} timestamp - Timestamp
+ * @param {string} format - Format template
+ * @returns {string} Formatted datetime string
  */
 export function formatDatetime(timestamp, format = 'YYYY-MM-DD HH:mm:ss') {
   if (!timestamp)
@@ -48,11 +47,11 @@ export function formatDatetime(timestamp, format = 'YYYY-MM-DD HH:mm:ss') {
 }
 
 /**
- * 将 Message 对象适配为 TDesign TdChatItemMeta 格式
+ * Adapt a Message object to TDesign TdChatItemMeta format
  *
- * @param {Object} message - 原始消息对象
- * @param {Object} options - 配置选项
- * @returns {Object} TDesign 格式的消息对象
+ * @param {Object} message - Original message object
+ * @param {Object} options - Options
+ * @returns {Object} Message object in TDesign format
  */
 export function adaptMessageForTDesign(message, options = {}) {
   if (!message) {
@@ -62,30 +61,30 @@ export function adaptMessageForTDesign(message, options = {}) {
   const role = message.role
 
   return {
-    // 原始 ID 保留，用于操作
+    // Preserve original ID for operations
     id: message.id,
-    // TDesign 所需字段
+    // TDesign required fields
     role,
     avatar: getAvatarByRole(message.role),
     name: getNameByRole(message.role),
     datetime: formatDatetime(message.timestamp),
     content: message.content || '',
-    // 扩展字段
+    // Extended fields
     reasoningCollapsed: false,
     status: message.status,
     steps: [],
-    // 保留原始数据引用
+    // Preserve original data reference
     _raw: message,
   }
 }
 
 /**
- * 批量适配消息列表
+ * Adapt an array of messages for TDesign in batch
  *
- * @param {Array} messages - 原始消息数组
- * @param {Object} options - 配置选项
- * @param {boolean} options.reverse - 是否倒序（用于 TDesign reverse=true 模式）
- * @returns {Array} TDesign 格式的消息数组
+ * @param {Array} messages - Original messages array
+ * @param {Object} options - Options
+ * @param {boolean} options.reverse - Whether to reverse order (used for TDesign reverse=true mode)
+ * @returns {Array} Array of messages formatted for TDesign
  */
 export function adaptMessagesForTDesign(messages, options = {}) {
   const { reverse = true } = options
@@ -98,17 +97,16 @@ export function adaptMessagesForTDesign(messages, options = {}) {
     .map(msg => adaptMessageForTDesign(msg))
     .filter(Boolean)
 
-  // 如果启用 reverse 模式，需要将消息倒序（useChatMessages 返回的是升序）
-  // TDesign reverse=true 时，新消息应在数组头部
+  // If reverse mode is enabled, reverse the message order (useChatMessages returns ascending order)
+  // For TDesign with reverse=true, new messages should appear at the start of the array
   return reverse ? [...adapted].reverse() : adapted
 }
 
 /**
- * 创建临时助手消息（用于实时输出流）
+ * Create a temporary assistant message (used for streaming output)
  *
- * @param {Object} options - 配置选项
- * @param {Function} options.t - i18n 翻译函数
- * @returns {Object} 临时消息对象
+ * @param {Object} options - Options
+ * @returns {Object} Temporary message object
  */
 export function createTemporaryAssistantMessage(options = {}) {
   const tempId = `temp-${Date.now()}`

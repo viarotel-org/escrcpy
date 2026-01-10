@@ -24,11 +24,11 @@ class BaseFormatter {
   }
 
   /**
-   * 格式化事件
-   * @param {string} event - 事件类型 (keyboard, thinking, action, task_complete, etc.)
-   * @param {object} payload - 事件数据 {message, time, success, ...}
-   * @param {object} context - 上下文信息 {stepNumber, sessionId, ...}
-   * @returns {string} 格式化后的文本
+   * Format an event
+   * @param {string} event - Event type (keyboard, thinking, action, task_complete, etc.)
+   * @param {object} payload - Event payload {message, time, success, ...}
+   * @param {object} context - Context info {stepNumber, sessionId, ...}
+   * @returns {string} Formatted text
    */
   format(event, payload, context = {}) {
     if (!payload) {

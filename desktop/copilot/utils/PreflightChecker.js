@@ -150,7 +150,7 @@ export class PreflightChecker {
         details: { deviceId, installed: isInstalled },
       }
 
-      // 缓存结果
+      // Cache result
       this._cacheResult(cacheKey, result)
 
       return result
@@ -167,15 +167,15 @@ export class PreflightChecker {
   }
 
   /**
-   * Layer 2: 检查 API 服务
+   * Layer 2: API service check
    *
-   * @param {Object} copilotConfig - Copilot 配置
+   * @param {Object} copilotConfig - Copilot configuration
    * @returns {Promise<CheckResult>}
    */
   async checkAPIService(copilotConfig) {
     const { baseUrl, apiKey, model } = copilotConfig
 
-    // 基础配置校验
+    // Basic configuration validation
     if (!baseUrl || !apiKey) {
       return {
         name: window.t('copilot.check.api.name'),
@@ -188,14 +188,14 @@ export class PreflightChecker {
 
     const cacheKey = `api-${baseUrl}-${apiKey.slice(0, 8)}`
 
-    // 检查缓存
+    // Check cache
     if (this._isCacheValid(cacheKey)) {
       const cached = this.cache.get(cacheKey)
       return cached.result
     }
 
     try {
-      // 通过 IPC 调用主进程检查 API 有效性
+      // Check API validity via IPC call to main process
       const apiStatus = await window.electron?.ipcRenderer.invoke(
         'copilot:checkModelApi',
         { baseUrl, apiKey, model },
@@ -215,7 +215,7 @@ export class PreflightChecker {
         },
       }
 
-      // 缓存结果
+      // Cache result
       if (apiStatus.success) {
         this._cacheResult(cacheKey, result)
       }
@@ -234,16 +234,16 @@ export class PreflightChecker {
   }
 
   /**
-   * Layer 3: 检查订阅状态
+   * Layer 3: subscription status check
    *
-   * @param {Object} copilotConfig - Copilot 配置
-   * @param {Object} subscribeStore - 订阅 Store
+   * @param {Object} copilotConfig - Copilot configuration
+   * @param {Object} subscribeStore - Subscription store
    * @returns {Promise<CheckResult>}
    */
   async checkSubscription(copilotConfig, subscribeStore) {
     const { apiKey } = copilotConfig
 
-    // 判断是否使用内置订阅服务
+    // Determine whether using built-in subscription service
     const isUsingBuiltinSubscription = apiKey === subscribeStore.accessToken
 
     if (!isUsingBuiltinSubscription) {
@@ -256,7 +256,7 @@ export class PreflightChecker {
       }
     }
 
-    // 检查订阅状态
+    // Check subscription status
     const purchaseStatus = subscribeStore.userInfo?.purchase_status || SubscriptionStatus.NOT_PURCHASED
 
     const statusMessages = {

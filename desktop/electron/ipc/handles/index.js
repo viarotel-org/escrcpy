@@ -70,7 +70,7 @@ export default (mainWindow) => {
     },
   )
 
-  // 复制文件到剪切板
+  // Copy file to clipboard
   ipcMain.handle('copy-file-to-clipboard', async (_, filePath) => {
     try {
       if (!filePath) {
@@ -93,7 +93,7 @@ export default (mainWindow) => {
     }
   })
 
-  // 复制文本到剪切板
+  // Copy text to clipboard
   ipcMain.handle('copy-text-to-clipboard', async (_, text) => {
     try {
       if (!text) {
@@ -116,11 +116,11 @@ export default (mainWindow) => {
     }
   })
 
-  // 获取系统临时目录
+  // Get system temporary directory
   ipcMain.handle('get-temp-path', async () => {
     try {
       const tempDir = app.getPath('temp')
-      // 创建应用专用临时目录
+      // Create app-specific temp directory
       const appTempDir = path.join(tempDir, 'escrcpy-preview')
       await fs.ensureDir(appTempDir)
       return appTempDir
@@ -131,14 +131,14 @@ export default (mainWindow) => {
     }
   })
 
-  // 重命名临时文件
+  // Rename temporary file
   ipcMain.handle('rename-temp-file', async (_, { oldPath, newPath }) => {
     try {
       if (!oldPath || !newPath) {
         throw new Error('Both oldPath and newPath are required')
       }
 
-      // 确保文件在临时目录中（安全检查）
+      // Ensure files are within temp directory (safety check)
       const tempDir = app.getPath('temp')
       const appTempDir = path.join(tempDir, 'escrcpy-preview')
 
@@ -146,13 +146,13 @@ export default (mainWindow) => {
         throw new Error('File paths must be within the app temp directory')
       }
 
-      // 检查源文件是否存在
+      // Check source file exists
       const exists = await fs.pathExists(oldPath)
       if (!exists) {
         throw new Error('Source file does not exist')
       }
 
-      // 执行重命名
+      // Perform rename
       await fs.rename(oldPath, newPath)
 
       return { success: true, newPath }
@@ -163,7 +163,7 @@ export default (mainWindow) => {
     }
   })
 
-  // 路由跳转
+  // Navigate to route
   ipcMain.handle('navigate-to-route', async (_, route) => {
     try {
       if (mainWindow && !mainWindow.isDestroyed()) {
@@ -190,7 +190,7 @@ export default (mainWindow) => {
   })
 
   /**
-   * 获取 Gitee 临时访问令牌
+   * Retrieve a temporary Gitee access token
    */
   ipcMain.handle('get-gitee-temporary-token', async (_, params) => {
     const response = await fetch(`${import.meta.env.VITE_GITEE_BASE_API}/tokens/temporary`, {

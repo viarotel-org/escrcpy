@@ -4,20 +4,20 @@ import path from 'node:path'
 import { Buffer } from 'node:buffer'
 
 /**
- * 将文件复制到系统剪切板
- * 支持 macOS、Windows、Linux 平台，能够复制任意类型的文件
+ * Copy a file to the system clipboard
+ * Supports macOS, Windows, and Linux; can copy arbitrary file types
  *
- * @param {string} filePath - 要复制的文件路径
- * @returns {Promise<boolean>} - 操作是否成功
+ * @param {string} filePath - Path to the file to copy
+ * @returns {Promise<boolean>} - Whether the operation succeeded
  */
 export async function copyFileToClipboard(filePath) {
   try {
-    // 检查文件是否存在
+    // Check if the file exists
     if (!fs.existsSync(filePath)) {
       throw new Error(`File does not exist: ${filePath}`)
     }
 
-    // 获取文件信息
+    // Get file stats
     const stats = fs.statSync(filePath)
     if (!stats.isFile()) {
       throw new Error('Path is not a file')
@@ -27,16 +27,16 @@ export async function copyFileToClipboard(filePath) {
     const absolutePath = path.resolve(filePath)
     const platform = process.platform
 
-    // 检查是否为图片文件
+    // Check if it's an image file
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.ico', '.tiff', '.tif']
     const isImageFile = imageExtensions.includes(ext)
 
-    // 对于图片文件，同时复制图片内容和文件路径
+    // For image files, copy both image content and file path
     if (isImageFile) {
       await copyImageFile(absolutePath, platform)
     }
     else {
-      // 对于非图片文件，只复制文件路径
+      // For non-image files, copy just the file path
       await copyFilePath(absolutePath, platform)
     }
 
@@ -76,9 +76,9 @@ export async function copyImageFile(absolutePath, platform) {
 }
 
 /**
- * 复制文件路径到剪切板
- * @param {string} absolutePath - 文件的绝对路径
- * @param {string} platform - 操作系统平台
+ * Copy file path to clipboard
+ * @param {string} absolutePath - Absolute path to the file
+ * @param {string} platform - Operating system platform
  */
 export async function copyFilePath(absolutePath, platform) {
   switch (platform) {
@@ -103,22 +103,22 @@ export async function copyFilePath(absolutePath, platform) {
 }
 
 /**
- * macOS 平台文件路径复制
- * 使用 NSFilenamesPboardType 格式（plist 格式）并提供备选格式
+ * macOS file path copy
+ * Uses public.file-url and NSFilenamesPboardType (plist) formats with fallbacks
  */
 export async function copyFilePathMacOS(absolutePath) {
-// 验证路径格式
+// Validate path format
   if (!absolutePath) {
     throw new Error('Invalid macOS path format: null or undefined')
   }
 
-  // 规范化路径（解析符号链接等）
+  // Normalize path (resolve symlinks, etc.)
   let normalizedPath
   try {
     normalizedPath = fs.realpathSync(absolutePath)
   }
   catch (error) {
-    // 如果无法解析真实路径，使用原路径
+    // If real path can't be resolved, use original path
     normalizedPath = absolutePath
     console.warn(`Could not resolve real path for ${absolutePath}, using original path`)
   }
@@ -160,35 +160,35 @@ export async function copyFilePathMacOS(absolutePath) {
 }
 
 /**
- * Windows 平台文件路径复制
- * 使用多种格式提高兼容性：FileNameW、CF_HDROP 等
+ * Windows file path copy
+ * Uses multiple formats for compatibility: FileNameW, CF_HDROP, etc.
  */
 export async function copyFilePathWindows(absolutePath) {
-  // 验证路径格式
+  // Validate path
   if (!absolutePath) {
     throw new Error('Invalid Windows path format: null or undefined')
   }
 
-  // 规范化路径
+  // Normalize path
   let normalizedPath
   try {
     normalizedPath = fs.realpathSync(absolutePath)
   }
   catch (error) {
-    // 如果无法解析真实路径，使用原路径
+    // If real path can't be resolved, use original path
     normalizedPath = absolutePath
     console.warn(`Could not resolve real path for ${absolutePath}, using original path`)
   }
 
-  // 处理长路径（添加 \\?\ 前缀）
+  // Handle long paths (add \\?\\ prefix)
   let processedPath = normalizedPath
   if (normalizedPath.length > 260 && !normalizedPath.startsWith('\\\\?\\')) {
     if (normalizedPath.startsWith('\\\\')) {
-      // UNC 路径：\\server\share -> \\?\UNC\server\share
+      // UNC paths: \\server\share -> \\?\\UNC\\server\\share
       processedPath = `\\\\?\\UNC\\${normalizedPath.slice(2)}`
     }
     else {
-      // 普通路径：C:\path -> \\?\C:\path
+      // Normal path: C:\\path -> \\?\\C:\\path
       processedPath = `\\\\?\\${normalizedPath}`
     }
   }
@@ -301,13 +301,13 @@ export async function copyFilePathLinux(absolutePath) {
 }
 
 /**
- * 创建 CF_HDROP 格式的数据
- * @param {string} filePath - 文件路径
- * @returns {Buffer} - CF_HDROP 格式的 buffer
+ * Create data for CF_HDROP format
+ * @param {string} filePath - File path
+ * @returns {Buffer} - Buffer in CF_HDROP format
  */
 export function createCFHDROPBuffer(filePath) {
-  // CF_HDROP 结构：
-  // DROPFILES 结构 (20 bytes) + 文件路径列表 + 双 null 终止符
+  // CF_HDROP structure:
+  // DROPFILES structure (20 bytes) + file path list + double null terminator
 
   const pathWithNull = `${filePath}\0`
   const pathBuffer = Buffer.from(pathWithNull, 'utf16le')
@@ -327,9 +327,9 @@ export function createCFHDROPBuffer(filePath) {
 }
 
 /**
- * XML 转义函数，用于处理 plist 中的特殊字符
- * @param {string} str - 需要转义的字符串
- * @returns {string} - 转义后的字符串
+ * XML escape function used for handling special characters in plist content
+ * @param {string} str - String to escape
+ * @returns {string} - Escaped string
  */
 export function escapeXml(str) {
   if (typeof str !== 'string') {
@@ -345,13 +345,13 @@ export function escapeXml(str) {
 }
 
 /**
- * 检查剪切板格式是否被系统真正支持
- * @param {string} format - 剪切板格式
- * @returns {boolean} - 格式是否被系统支持
+ * Check if the clipboard format is actually supported by the system
+ * @param {string} format - Clipboard format
+ * @returns {boolean} - Whether the format is supported by the system
  */
 export function verifyClipboardWrite(format) {
   try {
-    // 尝试读取刚写入的数据进行验证
+    // Try reading the just-written data to verify
     const readData = clipboard.readBuffer(format)
 
     if (readData && readData.length > 0) {

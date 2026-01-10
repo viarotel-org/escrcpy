@@ -1,23 +1,23 @@
 /**
- * @fileoverview 选择管理模块
- * 封装文件选择状态管理
+ * @fileoverview Selection management module
+ * Encapsulates file selection state management
  */
 
 import '../types.js'
 
 /**
- * 选择管理 Hook
- * @returns {Object} 选择管理器实例
+ * Selection management hook
+ * @returns {Object} Selection manager instance
  */
 export function useSelection() {
-  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} 已选择的项 */
+  /** @type {import('vue').Ref<import('../types.js').FileEntry[]>} Selected items */
   const selectedItems = ref([])
 
-  /** @type {import('vue').Ref<Set<string>>} 已选择的 ID 集合（用于快速查找） */
+  /** @type {import('vue').Ref<Set<string>>} Set of selected IDs (for fast lookup) */
   const selectedIds = ref(new Set())
 
   /**
-   * 选择状态计算属性
+   * Selection state computed property
    * @type {import('vue').ComputedRef<import('../types.js').SelectionState>}
    */
   const selectionState = computed(() => {
@@ -33,15 +33,15 @@ export function useSelection() {
     }
   })
 
-  /** 是否有选中项 */
+  /** Whether there is a selection */
   const hasSelection = computed(() => selectedItems.value.length > 0)
 
-  /** 选中数量 */
+  /** Selection count */
   const selectionCount = computed(() => selectedItems.value.length)
 
   /**
-   * 选择单个项
-   * @param {import('../types.js').FileEntry} item - 要选择的项
+   * Select a single item
+   * @param {import('../types.js').FileEntry} item - Item to select
    */
   function select(item) {
     if (!selectedIds.value.has(item.id)) {
@@ -51,8 +51,8 @@ export function useSelection() {
   }
 
   /**
-   * 取消选择单个项
-   * @param {import('../types.js').FileEntry} item - 要取消的项
+   * Deselect a single item
+   * @param {import('../types.js').FileEntry} item - Item to deselect
    */
   function deselect(item) {
     if (selectedIds.value.has(item.id)) {
@@ -62,8 +62,8 @@ export function useSelection() {
   }
 
   /**
-   * 切换选择状态
-   * @param {import('../types.js').FileEntry} item - 要切换的项
+   * Toggle selection state
+   * @param {import('../types.js').FileEntry} item - Item to toggle
    */
   function toggle(item) {
     if (isSelected(item)) {
@@ -75,8 +75,8 @@ export function useSelection() {
   }
 
   /**
-   * 批量选择
-   * @param {import('../types.js').FileEntry[]} items - 要选择的项列表
+   * Select multiple items
+   * @param {import('../types.js').FileEntry[]} items - Items to select
    */
   function selectMultiple(items) {
     const newItems = items.filter(item => !selectedIds.value.has(item.id))
@@ -87,8 +87,8 @@ export function useSelection() {
   }
 
   /**
-   * 批量取消选择
-   * @param {import('../types.js').FileEntry[]} items - 要取消的项列表
+   * Deselect multiple items
+   * @param {import('../types.js').FileEntry[]} items - Items to deselect
    */
   function deselectMultiple(items) {
     const idsToRemove = new Set(items.map(item => item.id))
@@ -97,8 +97,8 @@ export function useSelection() {
   }
 
   /**
-   * 全选
-   * @param {import('../types.js').FileEntry[]} allItems - 所有可选项
+   * Select all
+   * @param {import('../types.js').FileEntry[]} allItems - All selectable items
    */
   function selectAll(allItems) {
     selectedItems.value = [...allItems]
@@ -106,7 +106,7 @@ export function useSelection() {
   }
 
   /**
-   * 清空选择
+   * Clear selection
    */
   function clearSelection() {
     selectedItems.value = []
@@ -114,8 +114,8 @@ export function useSelection() {
   }
 
   /**
-   * 检查项是否被选中
-   * @param {import('../types.js').FileEntry} item - 要检查的项
+   * Check if an item is selected
+   * @param {import('../types.js').FileEntry} item - Item to check
    * @returns {boolean}
    */
   function isSelected(item) {
@@ -123,8 +123,8 @@ export function useSelection() {
   }
 
   /**
-   * 设置选择（替换当前选择）
-   * @param {import('../types.js').FileEntry[]} items - 新的选择列表
+   * Set selection (replace current selection)
+   * @param {import('../types.js').FileEntry[]} items - New selection list
    */
   function setSelection(items) {
     selectedItems.value = [...items]
@@ -132,16 +132,16 @@ export function useSelection() {
   }
 
   /**
-   * 处理选择变更（用于与 UI 组件绑定）
-   * @param {import('../types.js').FileEntry[]} selection - 新的选择
+   * Handle selection change (for UI binding)
+   * @param {import('../types.js').FileEntry[]} selection - New selection
    */
   function onSelectionChange(selection) {
     setSelection(selection)
   }
 
   /**
-   * 按类型过滤选择
-   * @param {'file'|'directory'} type - 文件类型
+   * Filter selection by type
+   * @param {'file'|'directory'} type - Item type
    * @returns {import('../types.js').FileEntry[]}
    */
   function getSelectionByType(type) {
@@ -149,8 +149,8 @@ export function useSelection() {
   }
 
   /**
-   * 反选
-   * @param {import('../types.js').FileEntry[]} allItems - 所有可选项
+   * Invert selection
+   * @param {import('../types.js').FileEntry[]} allItems - All selectable items
    */
   function invertSelection(allItems) {
     const currentIds = new Set(selectedItems.value.map(item => item.id))
@@ -159,19 +159,19 @@ export function useSelection() {
   }
 
   return {
-    // 状态
+    // State
     selectedItems: readonly(selectedItems),
     selectionState,
     hasSelection,
     selectionCount,
 
-    // 单项操作
+    // Single item operations
     select,
     deselect,
     toggle,
     isSelected,
 
-    // 批量操作
+    // Batch operations
     selectMultiple,
     deselectMultiple,
     selectAll,
@@ -179,10 +179,10 @@ export function useSelection() {
     setSelection,
     invertSelection,
 
-    // 查询
+    // Queries
     getSelectionByType,
 
-    // UI 绑定
+    // UI bindings
     onSelectionChange,
   }
 }

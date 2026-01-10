@@ -109,3 +109,11 @@
     @apply !dark:bg-[--el-bg-color-overlay];
   }
 }
+
+.el-card.el-card--beautify {
+  @apply !rounded-xl;
+
+  .el-card__header {
+    @apply !py-4 !px-4 !border-none;
+  }
+}

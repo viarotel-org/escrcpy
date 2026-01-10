@@ -9,248 +9,212 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <div class="h-full overflow-auto">
-      <div class="">
-        <!-- Form sections layout -->
-        <el-form
-          :key="model.taskType"
-          ref="formRef"
-          :model="model"
-          :rules="rules"
-          label-width="140px"
+    <div class="h-full overflow-auto pr-2">
+      <el-form
+        :key="model.taskType"
+        ref="formRef"
+        :model="model"
+        :rules="rules"
+        label-width="140px"
+      >
+        <div
+          class="space-y-4"
         >
-          <div
-            class="space-y-4"
-          >
-            <!-- Basic info section -->
-            <div class="form-section">
-              <div class="section-title mb-4">
-                <el-icon class="mr-2">
-                  <Setting />
-                </el-icon>
-                {{ $t('device.task.section.basic') }}
-              </div>
-
-              <el-form-item
-                :label="$t('device.task.type')"
-                prop="taskType"
+          <el-card :header="$t('device.task.section.basic')" shadow="never" class="el-card--beautify">
+            <el-form-item
+              :label="$t('device.task.type')"
+              prop="taskType"
+            >
+              <el-select
+                v-model="model.taskType"
+                :placeholder="$t('common.select.please')"
+                clearable
+                filterable
+                class="w-full"
+                @change="onTaskChange"
               >
-                <el-select
-                  v-model="model.taskType"
-                  :placeholder="$t('common.select.please')"
-                  clearable
-                  filterable
-                  class="w-full"
-                  @change="onTaskChange"
+                <el-option
+                  v-for="item in taskModel"
+                  :key="item.value"
+                  :label="$t(item.label)"
+                  :value="item.value"
                 >
-                  <el-option
-                    v-for="item in taskModel"
-                    :key="item.value"
-                    :label="$t(item.label)"
-                    :value="item.value"
-                  >
-                    <div class="flex items-center gap-2">
-                      <span>{{ $t(item.label) }}</span>
-                    </div>
-                  </el-option>
-                </el-select>
-              </el-form-item>
+                  <div class="flex items-center gap-2">
+                    <span>{{ $t(item.label) }}</span>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
 
-              <!-- Task extra params: install app -->
-              <el-form-item
-                v-if="['install'].includes(model.taskType)"
-                :label="$t('device.task.extra.app')"
-                prop="extra"
-              >
-                <InputPath
-                  v-model="model.extra"
-                  :placeholder="$t('device.control.install.placeholder')"
-                  :data="{
-                    properties: ['openFile', 'multiSelections'],
-                    filters: [
-                      {
-                        name: $t('device.control.install.placeholder'),
-                        extensions: ['apk'],
-                      },
-                    ],
-                  }"
-                />
-              </el-form-item>
-
-              <!-- Task extra params: execute script -->
-              <el-form-item
-                v-if="['shell'].includes(model.taskType)"
-                :label="$t('device.task.extra.shell')"
-                prop="extra"
-              >
-                <InputPath
-                  v-model="model.extra"
-                  :placeholder="$t('terminal.script.select')"
-                  :data="{
-                    properties: ['openFile'],
-                    filters: [
-                      {
-                        name: $t('terminal.script.select'),
-                        extensions: ['sh'],
-                      },
-                    ],
-                  }"
-                />
-              </el-form-item>
-
-              <!-- Copilot task extra params: command content -->
-              <el-form-item
-                v-if="['copilot'].includes(model.taskType)"
-                :label="$t('device.task.extra.copilot')"
-                prop="extra"
-              >
-                <div class="w-full space-y-2">
-                  <PromptBar class="!p-0" show-prompt-manager @select-prompt="selectQuickPrompt" />
-                  <el-input
-                    v-model="model.extra"
-                    type="textarea"
-                    :rows="4"
-                    :placeholder="$t('copilot.welcome.description')"
-                    :maxlength="2000"
-                    show-word-limit
-                  />
-                </div>
-              </el-form-item>
-            </div>
-
-            <!-- Execution frequency section -->
-            <div class="form-section">
-              <div class="section-title mb-4">
-                <el-icon class="mr-2">
-                  <Clock />
-                </el-icon>
-                {{ $t('device.task.section.frequency') }}
-              </div>
-
-              <el-form-item
-                :label="$t('device.task.frequency')"
-                prop="timerType"
-              >
-                <el-radio-group v-model="model.timerType" class="frequency-radio-group">
-                  <el-radio
-                    v-for="(item, index) of timerModel"
-                    :key="index"
-                    :value="item.value"
-                    class="frequency-radio"
-                  >
-                    <div class="flex items-center gap-1">
-                      <span>{{ $t(item.label) }}</span>
-                    </div>
-                  </el-radio>
-                </el-radio-group>
-              </el-form-item>
-
-              <!-- Single-run configuration -->
-              <el-form-item
-                v-if="['timeout'].includes(model.timerType)"
-                :label="$t('device.task.timeout')"
-                prop="timeout"
-              >
-                <el-date-picker
-                  v-model="model.timeout"
-                  type="datetime"
-                  placeholder="0000-00-00 00:00:00"
-                  clearable
-                  class="w-full"
-                  v-bind="{ disabledDate, defaultTime }"
-                />
-              </el-form-item>
-
-              <!-- Interval configuration -->
-              <el-form-item
-                v-if="['interval'].includes(model.timerType)"
-                :label="$t('device.task.interval')"
-                prop="interval"
-              >
-                <el-input
-                  v-model="model.interval"
-                  type="number"
-                  placeholder="0"
-                  clearable
-                  class="w-full"
-                >
-                  <template #append>
-                    <el-select
-                      v-model="model.intervalType"
-                      :placeholder="$t('common.select.please')"
-                      filterable
-                      class="!w-36"
-                    >
-                      <el-option
-                        v-for="(item, index) of intervalModel"
-                        :key="index"
-                        :label="$t(item.label)"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </template>
-                </el-input>
-              </el-form-item>
-
-              <!-- Cron expression configuration -->
-              <el-form-item
-                v-if="['cron'].includes(model.timerType)"
-                :label="$t('device.task.cronExpression')"
-                prop="cronExpression"
-              >
-                <CronSelector
-                  ref="cronSelectorRef"
-                  v-model="model.cronExpression"
-                  @valid-change="onCronValidChange"
-                />
-              </el-form-item>
-            </div>
-
-            <!-- Execution target block (device info display) -->
-            <div class="form-section">
-              <div class="section-title mb-4">
-                <el-icon class="mr-2">
-                  <Monitor />
-                </el-icon>
-                {{ $t('device.task.section.devices') }}
-              </div>
-
-              <div class="devices-info p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="text-gray-600 dark:text-gray-300">
-                    {{ $t('device.task.selectedDevices') }}:
-                  </span>
-                  <el-tag type="primary">
-                    {{ devices?.length || 0 }} {{ $t('common.device') }}
-                  </el-tag>
-                </div>
-                <div v-if="devices && devices.length > 0" class="devices-list">
-                  <ExTagCollapse
-                    effect="light"
-                    :value="devices"
-                    :label="(item) => deviceStore.getLabel(item, 'name')"
-                    :max="5"
-                  />
-                </div>
-                <div v-else class="text-gray-400 text-sm">
-                  {{ $t('device.task.noDeviceSelected') }}
-                </div>
-              </div>
-            </div>
-
-            <!-- Tips -->
-            <div>
-              <el-alert
-                :title="$t('device.task.tips')"
-                type="warning"
-                :closable="false"
-                show-icon
-                class="!mb-0"
+            <el-form-item
+              v-if="['install'].includes(model.taskType)"
+              :label="$t('device.task.extra.app')"
+              prop="extra"
+            >
+              <InputPath
+                v-model="model.extra"
+                :placeholder="$t('device.control.install.placeholder')"
+                :data="{
+                  properties: ['openFile', 'multiSelections'],
+                  filters: [
+                    {
+                      name: $t('device.control.install.placeholder'),
+                      extensions: ['apk'],
+                    },
+                  ],
+                }"
               />
+            </el-form-item>
+
+            <el-form-item
+              v-if="['shell'].includes(model.taskType)"
+              :label="$t('device.task.extra.shell')"
+              prop="extra"
+            >
+              <InputPath
+                v-model="model.extra"
+                :placeholder="$t('terminal.script.select')"
+                :data="{
+                  properties: ['openFile'],
+                  filters: [
+                    {
+                      name: $t('terminal.script.select'),
+                      extensions: ['sh'],
+                    },
+                  ],
+                }"
+              />
+            </el-form-item>
+
+            <el-form-item
+              v-if="['copilot'].includes(model.taskType)"
+              :label="$t('device.task.extra.copilot')"
+              prop="extra"
+            >
+              <div class="w-full space-y-2">
+                <PromptBar class="!p-0" show-prompt-manager @select-prompt="selectQuickPrompt" />
+                <el-input
+                  v-model="model.extra"
+                  type="textarea"
+                  :rows="4"
+                  :placeholder="$t('copilot.welcome.description')"
+                  :maxlength="2000"
+                  show-word-limit
+                />
+              </div>
+            </el-form-item>
+          </el-card>
+
+          <el-card :header="$t('device.task.section.frequency')" shadow="never" class="el-card--beautify">
+            <el-form-item
+              :label="$t('device.task.frequency')"
+              prop="timerType"
+            >
+              <el-radio-group v-model="model.timerType" class="frequency-radio-group">
+                <el-radio
+                  v-for="(item, index) of timerModel"
+                  :key="index"
+                  :value="item.value"
+                  class="frequency-radio"
+                >
+                  <div class="flex items-center gap-1">
+                    <span>{{ $t(item.label) }}</span>
+                  </div>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item
+              v-if="['timeout'].includes(model.timerType)"
+              :label="$t('device.task.timeout')"
+              prop="timeout"
+            >
+              <el-date-picker
+                v-model="model.timeout"
+                type="datetime"
+                placeholder="0000-00-00 00:00:00"
+                clearable
+                class="w-full"
+                v-bind="{ disabledDate, defaultTime }"
+              />
+            </el-form-item>
+
+            <el-form-item
+              v-if="['interval'].includes(model.timerType)"
+              :label="$t('device.task.interval')"
+              prop="interval"
+            >
+              <el-input
+                v-model="model.interval"
+                type="number"
+                placeholder="0"
+                clearable
+                class="w-full"
+              >
+                <template #append>
+                  <el-select
+                    v-model="model.intervalType"
+                    :placeholder="$t('common.select.please')"
+                    filterable
+                    class="!w-36"
+                  >
+                    <el-option
+                      v-for="(item, index) of intervalModel"
+                      :key="index"
+                      :label="$t(item.label)"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item
+              v-if="['cron'].includes(model.timerType)"
+              :label="$t('device.task.cronExpression')"
+              prop="cronExpression"
+            >
+              <CronSelector
+                ref="cronSelectorRef"
+                v-model="model.cronExpression"
+                @valid-change="onCronValidChange"
+              />
+            </el-form-item>
+          </el-card>
+
+          <el-card :header="$t('device.task.section.devices')" shadow="never" class="el-card--beautify">
+            <div class="devices-info p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-gray-600 dark:text-gray-300">
+                  {{ $t('device.task.selectedDevices') }}:
+                </span>
+                <el-tag type="primary">
+                  {{ devices?.length || 0 }} {{ $t('common.device') }}
+                </el-tag>
+              </div>
+              <div v-if="devices && devices.length > 0" class="devices-list">
+                <ExTagCollapse
+                  effect="light"
+                  :value="devices"
+                  :label="(item) => deviceStore.getLabel(item, 'name')"
+                  :max="5"
+                />
+              </div>
+              <div v-else class="text-gray-400 text-sm">
+                {{ $t('device.task.noDeviceSelected') }}
+              </div>
             </div>
-          </div>
-        </el-form>
-      </div>
+          </el-card>
+
+          <el-alert
+            :title="$t('device.task.tips')"
+            type="warning"
+            :closable="false"
+            show-icon
+            class="!mb-0"
+          />
+        </div>
+      </el-form>
     </div>
 
     <template #footer>

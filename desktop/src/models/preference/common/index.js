@@ -210,6 +210,13 @@ export default {
       placeholder: 'preferences.common.debug.placeholder',
       tips: 'preferences.common.debug.tips',
     },
+    autoLaunch: {
+      label: 'preferences.common.autoLaunch.name',
+      field: 'autoLaunch',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.autoLaunch.placeholder',
+    },
     enableSystemTerminal: {
       label: 'preferences.common.enableSystemTerminal.name',
       field: 'enableSystemTerminal',

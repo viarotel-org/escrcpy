@@ -523,6 +523,8 @@
   "preferences.common.auto-connect.placeholder": "啟用後，該軟體將在啟動時嘗試自動連線到歷史無線裝置",
   "preferences.common.auto-mirror.name": "自動執行鏡像",
   "preferences.common.auto-mirror.placeholder": "啟用後，裝置列表中的裝置將自動執行鏡像",
+  "preferences.common.autoLaunch.name": "开机自启",
+  "preferences.common.autoLaunch.placeholder": "启用后，该软件将在系统启动时自动运行",
   "preferences.common.concurrencyLimit.name": "並發上限",
   "preferences.common.concurrencyLimit.placeholder": "設定批量任務的最大並發連線數",
   "preferences.common.concurrencyLimit.tips": "批量任務的並發連線數越高，性能需求越大，請根據裝置效能合理設定。",

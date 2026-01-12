@@ -523,6 +523,8 @@
   "preferences.common.auto-connect.placeholder": "При включении программа попытается автоматически подключиться к историческим устройствам при запуске.",
   "preferences.common.auto-mirror.name": "Автозеркалирование",
   "preferences.common.auto-mirror.placeholder": "При включении устройства в списке устройств будут автоматически зеркалироваться.",
+  "preferences.common.autoLaunch.name": "开机自启",
+  "preferences.common.autoLaunch.placeholder": "启用后，该软件将在系统启动时自动运行",
   "preferences.common.concurrencyLimit.name": "Максимум одновременных соединений",
   "preferences.common.concurrencyLimit.placeholder": "Установите максимальное количество одновременных подключений для пакетных задач",
   "preferences.common.concurrencyLimit.tips": "Чем выше количество одновременных подключений в пакетных задачах, тем выше требования к производительности. Настройте в соответствии с возможностями устройства.",

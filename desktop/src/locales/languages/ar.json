@@ -523,6 +523,8 @@
   "preferences.common.auto-connect.placeholder": "عند تفعيل هذا الخيار، سيحاول البرنامج الاتصال تلقائيًا بالأجهزة المستخدمة سابقاً عند بدء التشغيل.",
   "preferences.common.auto-mirror.name": "عرض تلقائي",
   "preferences.common.auto-mirror.placeholder": "عند تفعيل هذا الخيار، سوف يتم عرض الأجهزة الموجودة في القائمة تلقائيًا.",
+  "preferences.common.autoLaunch.name": "开机自启",
+  "preferences.common.autoLaunch.placeholder": "启用后，该软件将在系统启动时自动运行",
   "preferences.common.concurrencyLimit.name": "الحد الأقصى للاتصالات المتزامنة",
   "preferences.common.concurrencyLimit.placeholder": "حدد الحد الأقصى للاتصالات المتزامنة للمهام الجماعية",
   "preferences.common.concurrencyLimit.tips": "كلما زاد عدد الاتصالات المتزامنة للمهام الجماعية، زادت متطلبات الأداء. يرجى التعيين وفقًا لقدرات الجهاز.",

@@ -20,6 +20,9 @@ lerna-debug.log*
 
 # User
 node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
 *.local
 *.d.ts
 **/.vitepress/cache

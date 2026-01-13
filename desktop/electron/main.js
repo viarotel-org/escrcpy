@@ -75,12 +75,7 @@ ensureSingleInstance({
  */
 async function onWhenReady(callback) {
   try {
-    const sandboxResult = await sandboxManager.configureSandbox()
-    console.info('Sandbox configuration completed:', {
-      disabled: sandboxResult.disabled,
-      reason: sandboxResult.reason,
-      duration: sandboxResult.duration,
-    })
+    await sandboxManager.configureSandbox()
   }
   catch (error) {
     console.error('Sandbox configuration failed:', error.message)

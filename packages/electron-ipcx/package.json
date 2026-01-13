@@ -12,8 +12,6 @@
     "./renderer": "./dist/renderer/index.mjs",
     "./package.json": "./package.json"
   },
-  "main": "./dist/main/index.js",
-  "module": "./dist/main/index.js",
   "types": "./dist/main/index.d.ts",
   "files": [
     "README.md",
@@ -34,7 +32,7 @@
   "devDependencies": {
     "bumpp": "^9.4.3",
     "electron": "^30.0.0",
-    "tsdown": "^0.18.3",
+    "tsdown": "*",
     "typescript": "^5.6.3",
     "vitest": "^2.1.5"
   }

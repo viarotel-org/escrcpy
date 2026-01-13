@@ -22,7 +22,6 @@
     "autoglm.js": "0.0.11"
   },
   "devDependencies": {
-
     "@devicefarmer/adbkit": "3.3.8",
     "@electron-toolkit/preload": "3.0.1",
     "@electron-toolkit/utils": "3.0.0",
@@ -30,7 +29,7 @@
     "@element-plus/icons-vue": "2.3.2",
     "@escrcpy/electron-ipcx": "workspace:^",
     "@iconify-json/mdi": "1.2.3",
-    "@intlify/unplugin-vue-i18n": "4.0.0",
+    "@intlify/unplugin-vue-i18n": "11.0.3",
     "@tdesign-vue-next/chat": "0.4.6",
     "@unocss/preset-icons": "66.5.10",
     "@unocss/preset-typography": "^0.62.3",
@@ -84,7 +83,7 @@
     "unplugin-vue-components": "0.27.5",
     "unplugin-vue-router": "0.10.9",
     "validator": "13.15.26",
-    "vite": "5.1.5",
+    "vite": "*",
     "vite-plugin-electron": "0.28.8",
     "vite-plugin-electron-renderer": "0.14.6",
     "vite-plugin-native": "2.2.2",
@@ -92,7 +91,7 @@
     "vue": "3.4.21",
     "vue-command": "35.2.1",
     "vue-draggable-resizable": "3.0.0",
-    "vue-i18n": "9.13.1",
+    "vue-i18n": "11.2.8",
     "vue-router": "4.5.0",
     "vue-screen": "2.4.2",
     "which": "6.0.0"

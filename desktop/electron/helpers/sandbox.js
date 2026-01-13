@@ -37,7 +37,6 @@ class SandboxManager {
 
     // Return early on non-Linux platforms
     if (this.process.platform !== 'linux') {
-      console.debug('Not running on Linux, skipping sandbox configuration')
       return {
         disabled: false,
         reason: 'Not applicable on non-Linux platforms',

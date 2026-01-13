@@ -4,10 +4,16 @@ trustPolicy: no-downgrade
 trustPolicyExclude:
   - vite@5.4.21
   - semver@6.3.1
+  - chokidar@4.0.3
+  - undici-types@6.21.0
 
 packages:
   - packages/*
   - desktop
+
+overrides:
+  sharp: 0.34.5
+  vite: 5.4.21
 
 patchedDependencies:
   autoglm.js@0.0.11: patches/autoglm.js@0.0.11.patch

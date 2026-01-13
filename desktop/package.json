@@ -19,7 +19,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "autoglm.js": "0.0.11"
+    "sharp": "*"
   },
   "devDependencies": {
     "@devicefarmer/adbkit": "3.3.8",
@@ -41,6 +41,7 @@
     "@vueuse/core": "10.9.0",
     "@vueuse/rxjs": "14.1.0",
     "auto-launch": "5.0.6",
+    "autoglm.js": "0.0.11",
     "bonjour-service": "1.3.0",
     "build-md": "0.4.5",
     "create-desktop-shortcuts": "1.11.0",

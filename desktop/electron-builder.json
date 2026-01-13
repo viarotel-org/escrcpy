@@ -8,7 +8,9 @@
   },
   "files": [
     "dist",
-    "dist-electron"
+    "dist-electron",
+    "!**/node_modules/@img/sharp-*/**/*",
+    "**/node_modules/@img/sharp-*${platform}-${arch}/**/*"
   ],
   "asar": true,
   "asarUnpack": [
@@ -66,10 +68,6 @@
     "target": [
       {
         "target": "dmg",
-        "arch": ["x64", "arm64"]
-      },
-      {
-        "target": "zip",
         "arch": ["x64", "arm64"]
       }
     ],

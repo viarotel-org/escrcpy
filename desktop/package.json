@@ -14,7 +14,6 @@
     "build:electron": "electron-builder",
     "electron-fix": "npx electron-fix start",
     "locale-sync": "node scripts/locale-sync.js",
-    "predev": "pnpm run electron-fix",
     "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -47,7 +46,7 @@
     "croner": "9.1.0",
     "dayjs": "1.11.11",
     "dexie": "4.2.1",
-    "electron": "*",
+    "electron": "33.0.2",
     "electron-builder": "25.1.8",
     "electron-context-menu": "4.0.4",
     "electron-find-in-page": "1.0.8",

@@ -11,19 +11,19 @@ export interface ChannelPoolOptions {
    * @default 10
    */
   poolSize?: number
-  
+
   /**
    * Whether to auto-expand when the pool is exhausted
    * @default true
    */
   autoExpand?: boolean
-  
+
   /**
    * Number of channels to add on each expansion
    * @default 5
    */
   expandSize?: number
-  
+
   /**
    * Channel prefix
    * @default ''
@@ -39,7 +39,7 @@ export class ChannelPool {
   private pool: string[] = []
   private inUse = new Set<string>()
   private options: Required<ChannelPoolOptions>
-  
+
   constructor(options: ChannelPoolOptions = {}) {
     this.options = {
       poolSize: options.poolSize ?? 10,
@@ -47,11 +47,11 @@ export class ChannelPool {
       expandSize: options.expandSize ?? 5,
       prefix: options.prefix ?? '',
     }
-    
+
     // Pre-allocate channels
     this.expand(this.options.poolSize)
   }
-  
+
   /**
    * Expand the pool
    */
@@ -61,7 +61,7 @@ export class ChannelPool {
       this.pool.push(channel)
     }
   }
-  
+
   /**
    * Generate a new channel
    */
@@ -69,7 +69,7 @@ export class ChannelPool {
     const suffix = nanoid(8)
     return this.options.prefix ? `${this.options.prefix}_${suffix}` : suffix
   }
-  
+
   /**
    * Acquire an available channel
    */
@@ -86,12 +86,12 @@ export class ChannelPool {
         return channel
       }
     }
-    
+
     const channel = this.pool.pop()!
     this.inUse.add(channel)
     return channel
   }
-  
+
   /**
    * Release a channel back to the pool
    */
@@ -99,22 +99,22 @@ export class ChannelPool {
     if (!this.inUse.has(channel)) {
       return // Channel was not allocated from the pool
     }
-    
+
     this.inUse.delete(channel)
-    
+
     // Avoid unbounded pool growth
     if (this.pool.length < this.options.poolSize * 2) {
       this.pool.push(channel)
     }
   }
-  
+
   /**
    * Release multiple channels
    */
   releaseAll(channels: string[]) {
     channels.forEach(channel => this.release(channel))
   }
-  
+
   /**
    * Get pool statistics
    */
@@ -125,7 +125,7 @@ export class ChannelPool {
       total: this.pool.length + this.inUse.size,
     }
   }
-  
+
   /**
    * Clear the pool
    */
@@ -141,11 +141,11 @@ export class ChannelPool {
 export class SimpleChannelGenerator {
   private counter = 0
   private prefix: string
-  
+
   constructor(prefix = '') {
     this.prefix = prefix
   }
-  
+
   /**
    * Generate a channel
    * Format: prefix_timestamp_counter
@@ -153,12 +153,12 @@ export class SimpleChannelGenerator {
   generate(): string {
     const timestamp = Date.now()
     const count = this.counter++
-    
+
     // Reset counter to prevent overflow
     if (this.counter > 9999) {
       this.counter = 0
     }
-    
+
     const suffix = `${timestamp}_${count.toString().padStart(4, '0')}`
     return this.prefix ? `${this.prefix}_${suffix}` : suffix
   }
@@ -172,7 +172,7 @@ export class HybridChannelProvider {
   private pool: ChannelPool
   private generator: SimpleChannelGenerator
   private threshold: number
-  
+
   constructor(
     poolOptions?: ChannelPoolOptions,
     threshold = 3, // Use on-demand generation if function argument count exceeds this threshold
@@ -181,7 +181,7 @@ export class HybridChannelProvider {
     this.generator = new SimpleChannelGenerator(poolOptions?.prefix)
     this.threshold = threshold
   }
-  
+
   /**
    * Acquire a channel (automatic selection strategy)
    */
@@ -197,7 +197,7 @@ export class HybridChannelProvider {
         release: () => {}, // On-demand channels do not require release
       }
     }
-    
+
     // Use pooling for low-argument calls
     const channel = this.pool.acquire()
     return {
@@ -205,7 +205,7 @@ export class HybridChannelProvider {
       release: () => this.pool.release(channel),
     }
   }
-  
+
   getStats() {
     return this.pool.getStats()
   }

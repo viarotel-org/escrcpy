@@ -10,8 +10,8 @@
     "noEmit": true,
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["./**/*.ts"],
   "exclude": ["dist", "node_modules"]

@@ -1,10 +1,11 @@
-import { ipcRenderer as electronIpcRenderer, type IpcRenderer as ElectronIpcRenderer, type IpcRendererEvent } from 'electron'
+import { ipcRenderer as electronIpcRenderer } from 'electron'
+import type { IpcRenderer as ElectronIpcRenderer, IpcRendererEvent } from 'electron'
 import { getByPath } from '../shared/paths'
 import { serializeArgs } from '../shared/serialize'
 import { exposeClassAPI } from '../shared/expose'
 import type { InvokeEnvelope, InvokeHandle } from '../shared/types'
 import { prepareInboundArgs } from '../shared/validators'
-import { unwrapError, safeCall, createCallbackError } from '../shared/errors'
+import { createCallbackError, safeCall, unwrapError } from '../shared/errors'
 import { debugLogger } from '../shared/debug'
 import { SimpleChannelGenerator } from '../shared/channel-pool'
 
@@ -25,7 +26,7 @@ export class IpcxRenderer {
    */
   invoke<T = unknown>(channel: string, ...args: unknown[]): Promise<T> {
     debugLogger.debug('Invoking channel', { channel, direction: 'send', argsCount: args.length })
-    
+
     const { envelope, dispose } = this.preparePayload(channel, args)
     const promise = (async () => {
       try {
@@ -50,7 +51,7 @@ export class IpcxRenderer {
    */
   invokeRetained<T = unknown>(channel: string, ...args: unknown[]): InvokeHandle<T> {
     debugLogger.debug('Invoking channel (retained)', { channel, direction: 'send', argsCount: args.length })
-    
+
     const { envelope, dispose } = this.preparePayload(channel, args)
     const promise = (async () => {
       try {
@@ -71,7 +72,7 @@ export class IpcxRenderer {
    */
   send(channel: string, ...args: unknown[]): void {
     debugLogger.debug('Sending to channel', { channel, direction: 'send', argsCount: args.length })
-    
+
     const { envelope, dispose } = this.preparePayload(channel, args)
     try {
       this.ipc.send(channel, envelope)
@@ -87,17 +88,17 @@ export class IpcxRenderer {
 
   on(channel: string, listener: (event: IpcRendererEvent, ...args: unknown[]) => void): () => void {
     debugLogger.info('Registering listener', { channel })
-    
+
     const wrapped = (event: IpcRendererEvent, payload: unknown, ...rest: unknown[]) => {
       try {
         const args = prepareInboundArgs(payload, rest)
-        
+
         debugLogger.debug('Listener invoked', {
           channel,
           direction: 'receive',
           argsCount: args.length,
         })
-        
+
         safeCall(() => listener(event, ...args), `listener on ${channel}`)
       }
       catch (error) {
@@ -130,7 +131,7 @@ export class IpcxRenderer {
     dispose: () => void
   } {
     const baseChannel = this.channelGenerator.generate()
-    
+
     const { sanitizedArgs, descriptors } = serializeArgs(args, baseChannel)
 
     debugLogger.debug('Payload prepared', {
@@ -151,14 +152,14 @@ export class IpcxRenderer {
           })
           return
         }
-        
+
         try {
           debugLogger.debug('Executing callback', {
             channel,
             callback: descriptor.index,
             argsCount: callArgs.length,
           })
-          
+
           target(...callArgs)
         }
         catch (error) {
@@ -177,15 +178,16 @@ export class IpcxRenderer {
 
     let disposed = false
     const dispose = () => {
-      if (disposed) return
+      if (disposed)
+        return
       disposed = true
-      
+
       debugLogger.debug('Disposing callback listeners', {
         channel,
         count: disposers.length,
       })
-      
-      disposers.splice(0).forEach((fn) => fn())
+
+      disposers.splice(0).forEach(fn => fn())
     }
 
     const envelope: InvokeEnvelope = {
@@ -195,7 +197,6 @@ export class IpcxRenderer {
 
     return { envelope, dispose }
   }
-
 }
 
 export const ipcxRenderer = exposeClassAPI(IpcxRenderer)

@@ -4,7 +4,7 @@
  */
 
 import type { FunctionDescriptor, InvokeEnvelope } from './types'
-import { IpcxErrorCode, createPayloadError } from './errors'
+import { createPayloadError, IpcxErrorCode } from './errors'
 import { parsePath } from './paths'
 import { debugLogger } from './debug'
 
@@ -12,8 +12,9 @@ import { debugLogger } from './debug'
  * Type guard: determines if a payload is an InvokeEnvelope
  */
 export function isInvokeEnvelope(payload: unknown): payload is InvokeEnvelope {
-  if (!payload || typeof payload !== 'object') return false
-  
+  if (!payload || typeof payload !== 'object')
+    return false
+
   const envelope = payload as Partial<InvokeEnvelope>
   return Array.isArray(envelope.args) && Array.isArray(envelope.fns)
 }
@@ -24,13 +25,13 @@ export function isInvokeEnvelope(payload: unknown): payload is InvokeEnvelope {
 export function normalizeDescriptor(descriptor: FunctionDescriptor): FunctionDescriptor {
   // Parse the index path
   const parsed = parsePath(descriptor.index)
-  
+
   // Remove leading 'args' prefix if present
   const trimmed = parsed[0] === 'args' ? parsed.slice(1) : parsed
-  
+
   // Prefer descriptor.segments; fall back to parsed path
   const segments = descriptor.segments?.length ? descriptor.segments : trimmed
-  
+
   return {
     label: descriptor.label,
     index: descriptor.index,
@@ -55,9 +56,9 @@ export function normalizeEnvelope(
       payload,
     )
   }
-  
+
   const envelope = payload as Partial<InvokeEnvelope>
-  
+
   // Validate args field
   if (!Array.isArray(envelope.args)) {
     throw createPayloadError(
@@ -66,7 +67,7 @@ export function normalizeEnvelope(
       payload,
     )
   }
-  
+
   // Validate fns field
   if (!Array.isArray(envelope.fns)) {
     throw createPayloadError(
@@ -75,7 +76,7 @@ export function normalizeEnvelope(
       payload,
     )
   }
-  
+
   // Normalize all function descriptors
   const fns = envelope.fns.map((descriptor, index) => {
     try {
@@ -91,13 +92,13 @@ export function normalizeEnvelope(
       throw err
     }
   })
-  
+
   debugLogger.debug('Envelope normalized', {
     channel,
     argsCount: envelope.args.length,
     fnsCount: fns.length,
   })
-  
+
   return { args: envelope.args, fns }
 }
 
@@ -107,7 +108,7 @@ export function normalizeEnvelope(
 export function validateEnvelope(
   payload: unknown,
   channel?: string,
-): { valid: true; envelope: InvokeEnvelope } | { valid: false; error: Error } {
+): { valid: true, envelope: InvokeEnvelope } | { valid: false, error: Error } {
   try {
     const envelope = normalizeEnvelope(payload, channel)
     return { valid: true, envelope }
@@ -138,12 +139,12 @@ export function prepareInboundArgs(
   if (isInvokeEnvelope(payload)) {
     return payload.args
   }
-  
+
   // If payload is undefined, return the remaining arguments
   if (typeof payload === 'undefined') {
     return restArgs
   }
-  
+
   // Otherwise treat payload as the first argument
   return [payload, ...restArgs]
 }

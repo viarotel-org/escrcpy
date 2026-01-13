@@ -9,8 +9,6 @@
   "homepage": "https://github.com/viarotel-org/escrcpy",
   "main": "dist-electron/main.js",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
     "dev": "vite dev",
     "build": "vite build",
     "build:electron": "electron-builder",
@@ -24,7 +22,7 @@
     "autoglm.js": "0.0.11"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "4.16.2",
+
     "@devicefarmer/adbkit": "3.3.8",
     "@electron-toolkit/preload": "3.0.1",
     "@electron-toolkit/utils": "3.0.0",
@@ -59,7 +57,6 @@
     "electron-updater": "6.3.9",
     "element-plus": "2.11.1",
     "enum-plus": "3.1.6",
-    "eslint": "9.31.0",
     "fix-path": "4.0.0",
     "fs-extra": "11.2.0",
     "ga-gtag": "1.2.0",

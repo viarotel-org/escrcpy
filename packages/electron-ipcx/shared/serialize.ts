@@ -5,7 +5,8 @@ import { createSerializeError, IpcxErrorCode } from './errors'
 import { debugLogger } from './debug'
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-  if (Object.prototype.toString.call(value) !== '[object Object]') return false
+  if (Object.prototype.toString.call(value) !== '[object Object]')
+    return false
   const prototype = Object.getPrototypeOf(value)
   return prototype === null || prototype === Object.prototype
 }
@@ -33,20 +34,21 @@ function cloneValue(
     const label = (value as Function).name || String(segments[segments.length - 1] ?? 'fn')
     const channel = `${baseChannel}_${nanoid(8)}`
     const index = formatPath(['args', ...segments])
-    
+
     descriptors.push({
       label,
       index,
       channel,
       segments: [...segments],
     })
-    
+
     debugLogger.debug('Function extracted', { index, channel, label })
-    
+
     return null
   }
 
-  if (typeof value !== 'object' || value === null) return value
+  if (typeof value !== 'object' || value === null)
+    return value
 
   if (seen.has(value)) {
     const cached = seen.get(value as object)
@@ -57,7 +59,7 @@ function cloneValue(
   if (Array.isArray(value)) {
     const cloned: unknown[] = []
     seen.set(value, cloned)
-    
+
     try {
       value.forEach((item, idx) => {
         cloned[idx] = cloneValue(item, [...segments, idx], descriptors, baseChannel, seen, depth + 1)
@@ -70,14 +72,14 @@ function cloneValue(
         { segments, arrayLength: value.length },
       )
     }
-    
+
     return cloned
   }
 
   if (isPlainObject(value)) {
     const cloned: Record<string, unknown> = {}
     seen.set(value, cloned)
-    
+
     try {
       Object.entries(value).forEach(([key, entry]) => {
         cloned[key] = cloneValue(entry, [...segments, key], descriptors, baseChannel, seen, depth + 1)
@@ -90,7 +92,7 @@ function cloneValue(
         { segments, keys: Object.keys(value) },
       )
     }
-    
+
     return cloned
   }
 
@@ -98,7 +100,7 @@ function cloneValue(
     segments,
     type: value.constructor?.name || typeof value,
   })
-  
+
   return value
 }
 
@@ -116,18 +118,18 @@ export function serializeArgs(args: unknown[], baseChannel: string): {
 
   const descriptors: FunctionDescriptor[] = []
   const seen = new WeakMap<object, unknown>()
-  
+
   try {
     const sanitizedArgs = cloneValue(args, [], descriptors, baseChannel, seen, 0)
-    
+
     const result = Array.isArray(sanitizedArgs) ? sanitizedArgs : [sanitizedArgs]
-    
+
     debugLogger.debug('Serialization completed', {
       originalArgsCount: args.length,
       sanitizedArgsCount: result.length,
       functionsExtracted: descriptors.length,
     })
-    
+
     return {
       sanitizedArgs: result,
       descriptors,
@@ -137,7 +139,7 @@ export function serializeArgs(args: unknown[], baseChannel: string): {
     if (error instanceof Error && 'code' in error) {
       throw error
     }
-    
+
     throw createSerializeError(
       'Serialization failed',
       error,

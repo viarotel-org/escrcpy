@@ -3,7 +3,7 @@ import antfu from '@antfu/eslint-config'
 
 const require = createRequire(import.meta.url)
 
-const autoImport = require('./.eslintrc-auto-import.json')
+const desktopAutoImport = require('./desktop/.eslintrc-auto-import.json')
 
 export default antfu(
   {
@@ -22,7 +22,7 @@ export default antfu(
     languageOptions: {
       globals: {
         definePage: 'readonly',
-        ...autoImport.globals,
+        ...desktopAutoImport.globals,
       },
     },
     rules: {
@@ -35,6 +35,7 @@ export default antfu(
       'vue/custom-event-name-casing': 'off',
       'vue/no-use-v-if-with-v-for': 'off',
       'vue/component-tags-order': 'off',
+      'vue/no-unused-vars': 'off',
 
       'regexp/no-unused-capturing-group': 'off',
       'regexp/no-dupe-disjunctions': 'off',
@@ -68,7 +69,9 @@ export default antfu(
       'unicorn/consistent-function-scoping': 'off',
       'perfectionist/sort-imports': 'off',
       'no-control-regex': 'off',
-      'vue/no-unused-vars': 'off',
+      'no-cond-assign': 'off',
+
+      'ts/no-unsafe-function-type': 'off',
     },
   },
 )

@@ -4,12 +4,12 @@ packages:
 
 ignoreWorkspaceRootCheck: true
 
+patchedDependencies:
+  autoglm.js@0.0.11: patches/autoglm.js@0.0.11.patch
+
 ignoredBuiltDependencies:
   - esbuild
   - electron
   - sharp
-
-patchedDependencies:
-  autoglm.js@0.0.11: patches/autoglm.js@0.0.11.patch
 
 shellEmulator: true

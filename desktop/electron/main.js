@@ -71,7 +71,7 @@ ensureSingleInstance({
 
 /**
  *  Run execute arguments after app is ready
- * @param {*} callback 
+ * @param {*} callback
  */
 async function onWhenReady(callback) {
   try {

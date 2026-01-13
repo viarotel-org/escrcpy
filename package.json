@@ -9,6 +9,8 @@
   "homepage": "https://github.com/viarotel-org/escrcpy",
   "main": "dist-electron/main.js",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "dev": "turbo dev",
     "build": "turbo build:electron",
     "build:win": "turbo run build:electron -- --win",
@@ -24,9 +26,11 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "4.16.2",
+    "eslint": "9.31.0",
     "husky": "9.0.11",
-    "turbo": "2.7.2",
     "tsdown": "0.17.3",
+    "turbo": "2.7.2",
     "vitepress": "1.6.4",
     "vitepress-i18n": "1.3.3",
     "vitepress-sidebar": "1.31.1"

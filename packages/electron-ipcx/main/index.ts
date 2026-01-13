@@ -1,9 +1,10 @@
-import { ipcMain as electronIpcMain, type IpcMain as ElectronIpcMain, type IpcMainInvokeEvent, type IpcMainEvent, type WebContents } from 'electron'
+import { ipcMain as electronIpcMain } from 'electron'
+import type { IpcMain as ElectronIpcMain, IpcMainEvent, IpcMainInvokeEvent, WebContents } from 'electron'
 import { clonePayload } from '../shared/clone'
 import { setByPath } from '../shared/paths'
-import { normalizeEnvelope, isInvokeEnvelope, prepareInboundArgs } from '../shared/validators'
-import { wrapError, safeCall } from '../shared/errors'
-import {  debugLogger } from '../shared/debug'
+import { isInvokeEnvelope, normalizeEnvelope, prepareInboundArgs } from '../shared/validators'
+import { safeCall, wrapError } from '../shared/errors'
+import { debugLogger } from '../shared/debug'
 
 /**
  * Main-process IPC extension that reconstructs function proxies for incoming invokes.
@@ -50,7 +51,7 @@ export class IpcxMain {
           `callback ${descriptor.index}`,
         )
       }
-      
+
       setByPath(args, descriptor.segments, proxy)
     })
 
@@ -67,7 +68,7 @@ export class IpcxMain {
       debugLogger.debugPayloadDetection(channel || 'unknown', payload, true)
       return this.hydratePayload(event, payload, channel)
     }
-    
+
     debugLogger.debugPayloadDetection(channel || 'unknown', payload, false)
     return prepareInboundArgs(payload, rest)
   }
@@ -77,19 +78,19 @@ export class IpcxMain {
     listener: (event: IpcMainInvokeEvent, ...args: any[]) => unknown | Promise<unknown>,
   ) {
     debugLogger.info('Registering handler', { channel })
-    
+
     return this.ipc.handle(channel, async (event, payload: unknown) => {
       try {
         const isIpcx = isInvokeEnvelope(payload)
-        
+
         debugLogger.debug('Handler invoked', {
           channel,
           direction: 'receive',
           isIpcxFormat: isIpcx,
         })
-        
+
         let args: unknown[]
-        
+
         if (isIpcx) {
           args = this.hydratePayload(event, payload, channel)
         }
@@ -98,14 +99,14 @@ export class IpcxMain {
             channel,
             payloadType: typeof payload,
           })
-          
+
           args = typeof payload === 'undefined' ? [] : [payload]
         }
-        
+
         const result = await listener(event, ...args)
-        
+
         debugLogger.debug('Handler completed', { channel })
-        
+
         return result
       }
       catch (error) {
@@ -122,7 +123,7 @@ export class IpcxMain {
 
   on(channel: string, listener: (event: IpcMainEvent, ...args: unknown[]) => void): () => void {
     debugLogger.info('Registering listener', { channel })
-    
+
     const wrapped = (event: IpcMainEvent, payload: unknown, ...rest: unknown[]) => {
       try {
         const args = this.safeHydrate(event, payload, rest, channel)
@@ -155,12 +156,12 @@ export class IpcxMain {
 
   sendTo(webContents: WebContents, channel: string, ...args: unknown[]) {
     debugLogger.debug('Sending to webContents', { channel, argsCount: args.length })
-    
+
     if (webContents.isDestroyed && webContents.isDestroyed()) {
       debugLogger.warn('Cannot send to destroyed webContents', { channel })
       return
     }
-    
+
     webContents.send(channel, ...args)
   }
 }

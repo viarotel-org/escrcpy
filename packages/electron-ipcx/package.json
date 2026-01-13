@@ -16,8 +16,8 @@
   "module": "./dist/main/index.js",
   "types": "./dist/main/index.d.ts",
   "files": [
-    "dist",
-    "README.md"
+    "README.md",
+    "dist"
   ],
   "scripts": {
     "build": "tsdown",
@@ -28,8 +28,8 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "nanoid": "^5.0.7",
-    "es-toolkit": "^1.43.0"
+    "es-toolkit": "^1.43.0",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "bumpp": "^9.4.3",

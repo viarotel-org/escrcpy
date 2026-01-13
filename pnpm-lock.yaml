@@ -13,6 +13,12 @@ importers:
 
   .:
     devDependencies:
+      '@antfu/eslint-config':
+        specifier: 4.16.2
+        version: 4.16.2(@vue/compiler-sfc@3.5.26)(eslint@9.31.0(jiti@2.6.1))(typescript@5.9.3)(vitest@2.1.9(@types/node@25.0.3)(terser@5.44.1))
+      eslint:
+        specifier: 9.31.0
+        version: 9.31.0(jiti@2.6.1)
       husky:
         specifier: 9.0.11
         version: 9.0.11
@@ -38,9 +44,6 @@ importers:
         specifier: 0.0.11
         version: 0.0.11(patch_hash=5cfac0f4bd144c9358a1bd3fba8abd995003c5b16c1e5790b9b55777c8e11561)
     devDependencies:
-      '@antfu/eslint-config':
-        specifier: 4.16.2
-        version: 4.16.2(@vue/compiler-sfc@3.5.26)(eslint@9.31.0(jiti@2.6.1))(typescript@5.9.3)(vitest@2.1.9(@types/node@25.0.3)(terser@5.44.1))
       '@devicefarmer/adbkit':
         specifier: 3.3.8
         version: 3.3.8
@@ -143,9 +146,6 @@ importers:
       enum-plus:
         specifier: 3.1.6
         version: 3.1.6
-      eslint:
-        specifier: 9.31.0
-        version: 9.31.0(jiti@2.6.1)
       fix-path:
         specifier: 4.0.0
         version: 4.0.0

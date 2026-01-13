@@ -51,17 +51,17 @@ export interface IpcxDebugConfig {
    * Whether debug logging is enabled
    */
   enabled: boolean
-  
+
   /**
    * Log level
    */
   level?: 'error' | 'warn' | 'info' | 'debug'
-  
+
   /**
    * Whether to log payload details
    */
   logPayload?: boolean
-  
+
   /**
    * Whether to log serialization comparisons
    */
@@ -76,12 +76,12 @@ export interface IpcxPerformanceConfig {
    * Whether to enable channel pooling
    */
   useChannelPool?: boolean
-  
+
   /**
    * Channel pool size
    */
   channelPoolSize?: number
-  
+
   /**
    * Threshold for using on-demand generation based on function parameter count
    */

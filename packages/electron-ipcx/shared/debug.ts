@@ -28,12 +28,15 @@ class DebugLogger {
   }
 
   private parseLogLevel(value: string | undefined): LogLevel {
-    if (!value) return LogLevel.NONE
-    
+    if (!value)
+      return LogLevel.NONE
+
     const normalized = value.toUpperCase()
-    if (normalized === 'TRUE' || normalized === '1') return LogLevel.INFO
-    if (normalized in LogLevel) return LogLevel[normalized as keyof typeof LogLevel]
-    
+    if (normalized === 'TRUE' || normalized === '1')
+      return LogLevel.INFO
+    if (normalized in LogLevel)
+      return LogLevel[normalized as keyof typeof LogLevel]
+
     return LogLevel.NONE
   }
 
@@ -51,15 +54,15 @@ class DebugLogger {
 
   private formatMessage(prefix: string, message: string, context?: DebugContext): string {
     let output = `[IPCX:${prefix}] ${message}`
-    
+
     if (context?.channel) {
       output += ` | channel: "${context.channel}"`
     }
-    
+
     if (context?.direction) {
       output += ` | ${context.direction}`
     }
-    
+
     return output
   }
 
@@ -69,8 +72,9 @@ class DebugLogger {
   }
 
   error(message: string, context?: DebugContext) {
-    if (!this.shouldLog(LogLevel.ERROR)) return
-    
+    if (!this.shouldLog(LogLevel.ERROR))
+      return
+
     const formatted = this.formatMessage('ERROR', message, context)
     if (context) {
       console.error(formatted, this.formatContext(context))
@@ -81,8 +85,9 @@ class DebugLogger {
   }
 
   warn(message: string, context?: DebugContext) {
-    if (!this.shouldLog(LogLevel.WARN)) return
-    
+    if (!this.shouldLog(LogLevel.WARN))
+      return
+
     const formatted = this.formatMessage('WARN', message, context)
     if (context) {
       console.warn(formatted, this.formatContext(context))
@@ -93,8 +98,9 @@ class DebugLogger {
   }
 
   info(message: string, context?: DebugContext) {
-    if (!this.shouldLog(LogLevel.INFO)) return
-    
+    if (!this.shouldLog(LogLevel.INFO))
+      return
+
     const formatted = this.formatMessage('INFO', message, context)
     if (context) {
       console.info(formatted, this.formatContext(context))
@@ -105,8 +111,9 @@ class DebugLogger {
   }
 
   debug(message: string, context?: DebugContext) {
-    if (!this.shouldLog(LogLevel.DEBUG)) return
-    
+    if (!this.shouldLog(LogLevel.DEBUG))
+      return
+
     const formatted = this.formatMessage('DEBUG', message, context)
     if (context) {
       console.debug(formatted, this.formatContext(context))
@@ -120,8 +127,9 @@ class DebugLogger {
    * Debug serialization comparison
    */
   debugSerialize(channel: string, originalArgs: unknown[], envelope: unknown) {
-    if (!this.shouldLog(LogLevel.DEBUG)) return
-    
+    if (!this.shouldLog(LogLevel.DEBUG))
+      return
+
     this.debug('Serialization comparison', {
       channel,
       direction: 'send',
@@ -134,8 +142,9 @@ class DebugLogger {
    * Debug payload format detection
    */
   debugPayloadDetection(channel: string, payload: unknown, isIpcxFormat: boolean) {
-    if (!this.shouldLog(LogLevel.DEBUG)) return
-    
+    if (!this.shouldLog(LogLevel.DEBUG))
+      return
+
     this.debug('Payload format detection', {
       channel,
       direction: 'receive',
@@ -148,15 +157,16 @@ class DebugLogger {
    * Truncate large payloads to prevent log flooding
    */
   private truncatePayload(payload: unknown): unknown {
-    if (typeof payload !== 'object' || payload === null) return payload
-    
+    if (typeof payload !== 'object' || payload === null)
+      return payload
+
     const str = JSON.stringify(payload)
-    if (str.length <= 500) return payload
-    
+    if (str.length <= 500)
+      return payload
+
     return `${str.slice(0, 500)}... (truncated, total ${str.length} chars)`
   }
 }
 
 // Global singleton
 export const debugLogger = new DebugLogger()
-

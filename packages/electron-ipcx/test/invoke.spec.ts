@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { ipcxMain } from '../main'
+import { ipcxRenderer } from '../renderer'
+
 const rendererListeners = new Map<string, Set<(...args: unknown[]) => void>>()
 const ipcMainHandlers = new Map<string, (...args: unknown[]) => unknown>()
 
@@ -7,15 +10,17 @@ vi.mock('electron', () => {
   const sender = {
     send: vi.fn((channel: string, ...args: unknown[]) => {
       const listeners = rendererListeners.get(channel)
-      if (!listeners) return
-      listeners.forEach((listener) => listener({}, ...args))
+      if (!listeners)
+        return
+      listeners.forEach(listener => listener({}, ...args))
     }),
   }
 
   const ipcRenderer = {
     invoke: vi.fn(async (channel: string, payload: unknown) => {
       const handler = ipcMainHandlers.get(channel)
-      if (!handler) throw new Error(`No handler for channel ${channel}`)
+      if (!handler)
+        throw new Error(`No handler for channel ${channel}`)
       return handler({ sender }, payload)
     }),
     on: vi.fn((channel: string, listener: (...args: unknown[]) => void) => {
@@ -25,9 +30,11 @@ vi.mock('electron', () => {
     }),
     removeListener: vi.fn((channel: string, listener: (...args: unknown[]) => void) => {
       const listeners = rendererListeners.get(channel)
-      if (!listeners) return
+      if (!listeners)
+        return
       listeners.delete(listener)
-      if (!listeners.size) rendererListeners.delete(channel)
+      if (!listeners.size)
+        rendererListeners.delete(channel)
     }),
   }
 
@@ -39,9 +46,6 @@ vi.mock('electron', () => {
 
   return { ipcRenderer, ipcMain }
 })
-
-import { ipcxMain } from '../main'
-import { ipcxRenderer } from '../renderer'
 
 beforeEach(() => {
   rendererListeners.clear()

@@ -1,9 +1,9 @@
 import type { AnyFn } from './types.js'
 /**
  * Expose all methods of a class instance that are functions as an object API.
- * @param Ctor 
- * @param ctorArgs 
- * @returns 
+ * @param Ctor
+ * @param ctorArgs
+ * @returns
  */
 export function exposeClassAPI<T extends object>(
   Ctor: new (...args: any[]) => T,
@@ -16,7 +16,8 @@ export function exposeClassAPI<T extends object>(
   const api: Record<string, AnyFn> = {}
 
   for (const key of Object.getOwnPropertyNames(proto)) {
-    if (key === 'constructor') continue
+    if (key === 'constructor')
+      continue
     const fn = (instance as any)[key]
     if (typeof fn === 'function') {
       api[key] = fn.bind(instance)

@@ -12,18 +12,18 @@ export enum IpcxErrorCode {
   INVALID_ARGS = 'IPCX_E1002',
   INVALID_FNS = 'IPCX_E1003',
   INVALID_DESCRIPTOR = 'IPCX_E1004',
-  
+
   // Serialization errors (2xxx)
   SERIALIZE_FAILED = 'IPCX_E2001',
   CIRCULAR_REFERENCE = 'IPCX_E2002',
   UNSUPPORTED_TYPE = 'IPCX_E2003',
-  
+
   // Runtime errors (3xxx)
   CALLBACK_FAILED = 'IPCX_E3001',
   SENDER_MISSING = 'IPCX_E3002',
   HYDRATION_FAILED = 'IPCX_E3003',
   LISTENER_ERROR = 'IPCX_E3004',
-  
+
   // System errors (9xxx)
   UNKNOWN = 'IPCX_E9999',
 }
@@ -31,7 +31,7 @@ export enum IpcxErrorCode {
 export class IpcxError extends Error {
   code: IpcxErrorCode
   context?: Record<string, unknown>
-  
+
   constructor(
     code: IpcxErrorCode,
     message: string,
@@ -41,13 +41,13 @@ export class IpcxError extends Error {
     this.name = 'IpcxError'
     this.code = code
     this.context = context
-    
+
     // Ensure stack trace is captured correctly
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, IpcxError)
     }
   }
-  
+
   toJSON() {
     return {
       name: this.name,
@@ -76,9 +76,9 @@ export function createPayloadError(
       payloadPreview: truncateValue(payload),
     },
   )
-  
+
   debugLogger.error(message, { channel, error })
-  
+
   return error
 }
 
@@ -95,15 +95,17 @@ export function createSerializeError(
     message,
     {
       ...context,
-      originalError: originalError instanceof Error ? {
-        name: originalError.name,
-        message: originalError.message,
-      } : String(originalError),
+      originalError: originalError instanceof Error
+        ? {
+            name: originalError.name,
+            message: originalError.message,
+          }
+        : String(originalError),
     },
   )
-  
+
   debugLogger.error(message, { error, ...context })
-  
+
   return error
 }
 
@@ -119,16 +121,18 @@ export function createCallbackError(
     `Callback execution failed: ${callbackIndex}`,
     {
       callbackIndex,
-      originalError: originalError instanceof Error ? {
-        name: originalError.name,
-        message: originalError.message,
-        stack: originalError.stack,
-      } : String(originalError),
+      originalError: originalError instanceof Error
+        ? {
+            name: originalError.name,
+            message: originalError.message,
+            stack: originalError.stack,
+          }
+        : String(originalError),
     },
   )
-  
+
   debugLogger.error(error.message, { error })
-  
+
   return error
 }
 
@@ -138,7 +142,7 @@ export function createCallbackError(
 export function wrapError(error: unknown): ErrorEnvelope {
   let err: Error
   let code: string | number | undefined
-  
+
   if (error instanceof IpcxError) {
     err = error
     code = error.code
@@ -151,18 +155,18 @@ export function wrapError(error: unknown): ErrorEnvelope {
   else {
     err = new Error(String(error))
   }
-  
+
   const envelope: ErrorEnvelope = {
     __ipcxError: true,
     name: err.name || 'Error',
     message: err.message,
     stack: err.stack,
   }
-  
+
   if (code !== undefined) {
     envelope.code = code
   }
-  
+
   return envelope
 }
 
@@ -174,8 +178,10 @@ export function unwrapError<T>(value: T | ErrorEnvelope): T {
     const error = new Error(value.message)
     error.name = value.name
     // @ts-expect-error non-standard property
-    if (value.code) error.code = value.code
-    if (value.stack) error.stack = value.stack
+    if (value.code)
+      error.code = value.code
+    if (value.stack)
+      error.stack = value.stack
     throw error
   }
   return value as T
@@ -197,9 +203,11 @@ export function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
  * Truncate values for log output
  */
 function truncateValue(value: unknown, maxLength = 200): string {
-  if (value === null) return 'null'
-  if (value === undefined) return 'undefined'
-  
+  if (value === null)
+    return 'null'
+  if (value === undefined)
+    return 'undefined'
+
   try {
     const str = typeof value === 'object' ? JSON.stringify(value) : String(value)
     return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str

@@ -14,88 +14,9 @@ export default (mainWindow) => {
     tray?.destroy?.()
   })
 
-  const showApp = () => {
-    if (process.platform === 'darwin') {
-      app.dock.show()
-    }
-
-    mainWindow.show()
-
-    if (tray) {
-      tray.destroy()
-      tray = null
-    }
-
-    return true
-  }
-
-  const hideApp = () => {
-    if (process.platform === 'darwin') {
-      app.dock.hide()
-    }
-
-    mainWindow.hide()
-
-    return true
-  }
-
-  const quitApp = async () => {
-    app.isQuiting = true
-
-    mainWindow.webContents.send('quit-before')
-
-    await sleep(1 * 1000)
-
-    app.quit()
-
-    return true
-  }
-
-  const closeApp = async (response) => {
-    if (response === 0) {
-      quitApp()
-      return true
-    }
-    else if (response === 1) {
-      hideApp()
-
-      tray = new Tray(trayPath)
-
-      tray.setToolTip('escrcpy')
-
-      tray.on('click', () => {
-        showApp()
-      })
-
-      const contextMenu = Menu.buildFromTemplate([
-        {
-          label: await t('common.open'),
-          click: () => {
-            showApp()
-          },
-        },
-        {
-          label: await t('common.restart'),
-          click: () => {
-            app.relaunch()
-            quitApp()
-          },
-        },
-        {
-          label: await t('appClose.quit'),
-          click: () => {
-            quitApp()
-          },
-        },
-      ])
-
-      tray.setContextMenu(contextMenu)
-
-      return true
-    }
-
-    return false
-  }
+  eventEmitter.on('tray:create', () => {
+    createTray()
+  })
 
   mainWindow.on('close', async (event) => {
     if (app.isQuiting) {
@@ -125,4 +46,90 @@ export default (mainWindow) => {
 
     closeApp(appCloseCode)
   })
+
+  function showApp() {
+    if (process.platform === 'darwin') {
+      app.dock.show()
+    }
+
+    mainWindow.show()
+
+    if (tray) {
+      tray.destroy()
+      tray = null
+    }
+
+    return true
+  }
+
+  function hideApp() {
+    if (process.platform === 'darwin') {
+      app.dock.hide()
+    }
+
+    mainWindow.hide()
+
+    return true
+  }
+
+  async function quitApp() {
+    app.isQuiting = true
+
+    mainWindow.webContents.send('quit-before')
+
+    await sleep(1 * 1000)
+
+    app.quit()
+
+    return true
+  }
+
+  function closeApp(response) {
+    if (response === 0) {
+      quitApp()
+      return true
+    }
+    else if (response === 1) {
+      createTray()
+      return true
+    }
+
+    return false
+  }
+
+  async function createTray() {
+    hideApp()
+
+    tray = new Tray(trayPath)
+
+    tray.setToolTip('escrcpy')
+
+    tray.on('click', () => {
+      showApp()
+    })
+
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: await t('common.open'),
+        click: () => {
+          showApp()
+        },
+      },
+      {
+        label: await t('common.restart'),
+        click: () => {
+          app.relaunch()
+          quitApp()
+        },
+      },
+      {
+        label: await t('appClose.quit'),
+        click: () => {
+          quitApp()
+        },
+      },
+    ])
+
+    tray.setContextMenu(contextMenu)
+  }
 }

@@ -4,7 +4,7 @@ import appStore from './helpers/store.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
-import { createRequire } from 'node:module'
+// import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import minimist from 'minimist'
@@ -17,7 +17,7 @@ import contextMenu from 'electron-context-menu'
 import sandboxManager from './helpers/sandbox.js'
 
 import { getLogoPath } from './configs/logo/index.js'
-import { browserWindowWidth, browserWindowHeight } from './configs/index.js'
+import { browserWindowHeight, browserWindowWidth } from './configs/index.js'
 
 import services from './services/index.js'
 
@@ -33,8 +33,12 @@ import { ensureSingleInstance } from './helpers/single.js'
 import { eventEmitter } from './helpers/emitter.js'
 import { snakeCase, toUpper } from 'lodash-es'
 
-const require = createRequire(import.meta.url)
+// const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+process.env.DIST = path.join(__dirname, '../dist')
+
+electronApp.setAppUserModelId('com.viarotel.escrcpy')
 
 contextMenu({
   showCopyImage: false,
@@ -44,10 +48,70 @@ contextMenu({
   showInspectElement: !isPackaged,
 })
 
-
-process.env.DIST = path.join(__dirname, '../dist')
-
 let mainWindow
+
+/** Ensure single instance application */
+ensureSingleInstance({
+  onSuccess() {
+    onWhenReady((mainWindow) => {
+      runExecuteArguments(mainWindow, process.argv)
+    }).catch((error) => {
+      console.error('Failed to initialize application:', error.message)
+    })
+  },
+  onShowWindow(mainWindow, commandLine, next) {
+    const executeArgs = runExecuteArguments(mainWindow, commandLine)
+
+    if (!executeArgs['device-id']) {
+      next()
+      eventEmitter.emit('tray:destroy')
+    }
+  },
+})
+
+/**
+ *  Run execute arguments after app is ready
+ * @param {*} callback 
+ */
+async function onWhenReady(callback) {
+  try {
+    const sandboxResult = await sandboxManager.configureSandbox()
+    console.info('Sandbox configuration completed:', {
+      disabled: sandboxResult.disabled,
+      reason: sandboxResult.reason,
+      duration: sandboxResult.duration,
+    })
+  }
+  catch (error) {
+    console.error('Sandbox configuration failed:', error.message)
+  }
+
+  await app.whenReady()
+
+  createWindow(callback)
+
+  app.on('browser-window-created', (_, window) => {
+    optimizer.watchWindowShortcuts(window)
+  })
+
+  // Application activated on macOS
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+      return
+    }
+
+    app.dock.show()
+    mainWindow.show()
+    eventEmitter.emit('tray:destroy')
+  })
+
+  app.on('window-all-closed', () => {
+    app.isQuiting = true
+    app.quit()
+    mainWindow = null
+  })
+}
 
 function createWindow(callback) {
   mainWindow = new BrowserWindow({
@@ -57,8 +121,8 @@ function createWindow(callback) {
     minHeight: browserWindowHeight,
     show: false,
     icon: getLogoPath(),
-    titleBarStyle: 'hidden', 
-    ...(['win32'].includes(process.platform) ? { titleBarOverlay: true, } : {}),
+    titleBarStyle: 'hidden',
+    ...(['win32'].includes(process.platform) ? { titleBarOverlay: true } : {}),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
@@ -83,7 +147,7 @@ function createWindow(callback) {
   })
 
   const edgeHidden = appStore.get('common.edgeHidden')
-  if(edgeHidden) {
+  if (edgeHidden) {
     new Edger(mainWindow)
   }
 
@@ -100,62 +164,12 @@ function createWindow(callback) {
   callback?.(mainWindow)
 }
 
-async function onWhenReady(callback) {
-  // Configure sandbox settings - must be called before app.whenReady()
-  try {
-    const sandboxResult = await sandboxManager.configureSandbox()
-    console.info('Sandbox configuration completed:', {
-      disabled: sandboxResult.disabled,
-      reason: sandboxResult.reason,
-      duration: sandboxResult.duration
-    })
-  } catch (error) {
-    console.error('Sandbox configuration failed:', error.message)
-  }
-  
-  await app.whenReady()
-
-  electronApp.setAppUserModelId('com.viarotel.escrcpy')
-
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  createWindow(callback)
-
-  // Application activated on macOS
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-      return
-    }
-
-    app.dock.show()
-    mainWindow.show()
-    eventEmitter.emit('tray:destroy')
-  })
-}
-
-ensureSingleInstance({
-  onSuccess() {
-    onWhenReady((mainWindow)=> {
-      runExecuteArguments(mainWindow, process.argv)
-    }).catch((error) => {
-      console.error('Failed to initialize application:', error.message)
-    })
-  },
-  onShowWindow(mainWindow, commandLine, next) {
-    const executeArgs = runExecuteArguments(mainWindow, commandLine)
-
-    if(!executeArgs['device-id']) {
-      next()
-      eventEmitter.emit('tray:destroy')
-    }
-  }
-})
-
 function runExecuteArguments(mainWindow, commandLine) {
   const executeArgs = minimist(commandLine)
+
+  if (executeArgs.minimized) {
+    eventEmitter.emit('tray:create')
+  }
 
   Object.entries(executeArgs).forEach(([key, value]) => {
     process.env[`EXECUTE_ARG_${toUpper(snakeCase(key))}`] = value
@@ -169,9 +183,3 @@ function runExecuteArguments(mainWindow, commandLine) {
 
   return executeArgs
 }
-
-app.on('window-all-closed', () => {
-  app.isQuiting = true
-  app.quit()
-  mainWindow = null
-})

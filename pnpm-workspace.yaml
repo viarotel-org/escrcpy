@@ -1,7 +1,9 @@
-ignoreWorkspaceRootCheck: true
-
 shellEmulator: true
+
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - vite@5.4.21
+  - semver@6.3.1
 
 packages:
   - packages/*

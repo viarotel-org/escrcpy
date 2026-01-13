@@ -19,7 +19,7 @@ import sandboxManager from './helpers/sandbox.js'
 import { getLogoPath } from './configs/logo/index.js'
 import { browserWindowWidth, browserWindowHeight } from './configs/index.js'
 
-import ipc from './ipc/index.js'
+import services from './services/index.js'
 
 import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
@@ -89,7 +89,7 @@ function createWindow(callback) {
 
   loadPage(mainWindow)
 
-  ipc(mainWindow)
+  services(mainWindow)
 
   control(mainWindow)
 

@@ -75,6 +75,8 @@ export default antfu(
       'no-control-regex': 'off',
       'no-cond-assign': 'off',
 
+      'pnpm/yaml-enforce-settings': 'off',
+
       'ts/no-unsafe-function-type': 'off',
     },
   },

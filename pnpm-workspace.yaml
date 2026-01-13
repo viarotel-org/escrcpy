@@ -1,18 +1,23 @@
+ignoreWorkspaceRootCheck: true
+
 shellEmulator: true
 
-trustPolicy: no-downgrade
-trustPolicyExclude:
-  - vite@5.4.21
-  - semver@6.3.1
-  - chokidar@4.0.3
-  - undici-types@6.21.0
+supportedArchitectures:
+  cpu:
+    - x64
+    - arm64
+  os:
+    - current
 
 packages:
   - packages/*
   - desktop
 
 overrides:
+  electron: 33.0.2
   sharp: 0.34.5
+  tsdown: 0.19.0
+  typescript: 5.6.3
   vite: 5.4.21
 
 patchedDependencies:

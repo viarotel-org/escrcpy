@@ -18,7 +18,7 @@
     "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "sharp": "*"
   },
   "devDependencies": {
@@ -48,7 +48,7 @@
     "croner": "9.1.0",
     "dayjs": "1.11.11",
     "dexie": "4.2.1",
-    "electron": "33.0.2",
+    "electron": "*",
     "electron-builder": "25.1.8",
     "electron-context-menu": "4.0.4",
     "electron-find-in-page": "1.0.8",

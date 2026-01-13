@@ -6,7 +6,15 @@
     "output": "dist-release",
     "buildResources": "electron/resources/build"
   },
-  "files": ["dist", "dist-electron"],
+  "files": [
+    "dist",
+    "dist-electron"
+  ],
+  "asar": true,
+  "asarUnpack": [
+    "**/node_modules/sharp/**/*",
+    "**/node_modules/@img/**/*"
+  ],
   "win": {
     "icon": "logo.ico",
     "target": [
@@ -103,7 +111,6 @@
       "filter": ["common", "linux", "linux-${arch}"]
     }
   },
-  "asar": true,
   "npmRebuild": true,
   "publish": {
     "provider": "github",

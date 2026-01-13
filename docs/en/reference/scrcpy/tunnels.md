@@ -7,7 +7,6 @@ To connect to a remote device, it is possible to connect a local `adb` client to
 a remote `adb` server (provided they use the same version of the _adb_
 protocol).
 
-
 ## Remote ADB server
 
 To connect to a remote _adb server_, make the server listen on all interfaces:
@@ -50,7 +49,6 @@ redirections are involved):
 ```
 scrcpy --tunnel-port=1234
 ```
-
 
 ## SSH tunnel
 

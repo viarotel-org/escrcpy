@@ -37,7 +37,6 @@ scrcpy --new-display=1920x1080 --no-vd-system-decorations --start-app=org.fossif
 
 [Fossify Launcher]: https://f-droid.org/en/packages/org.fossify.home/
 
-
 ## System decorations
 
 By default, virtual display system decorations are enabled. To disable them, use
@@ -53,7 +52,6 @@ any default launcher UI available in virtual displays.
 Note that if no app is started, no content will be rendered, so no video frame
 will be produced at all.
 
-
 ## Destroy on close
 
 By default, when the virtual display is closed, the running apps are destroyed.
@@ -63,7 +61,6 @@ To move them to the main display instead, use:
 ```
 scrcpy --new-display --no-vd-destroy-content
 ```
-
 
 ## Display IME policy
 

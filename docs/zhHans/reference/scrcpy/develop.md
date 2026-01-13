@@ -7,6 +7,7 @@ title: develop（开发者指南）
 ## 概述
 
 该应用由两部分组成：
+
 - 服务端（`scrcpy-server`），在设备上执行；
 - 客户端（`scrcpy` 可执行文件），在主机上执行。
 
@@ -25,10 +26,12 @@ title: develop（开发者指南）
 [scrcpy2]: https://blog.rom1v.com/2023/03/scrcpy-2-0-with-audio/
 
 需要注意的是，客户端和服务端的角色是从应用层面定义的：
+
 - 服务端提供视频和音频流，并处理客户端的请求；
 - 客户端通过服务端控制设备。
 
 然而，默认情况下（未设置 `--force-adb-forward` 时），网络层面的角色是相反的：
+
 - 客户端在启动服务端之前打开服务器套接字并监听端口；
 - 服务端连接到客户端。
 
@@ -96,6 +99,7 @@ adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobi
 ### 组件
 
 执行时，其 [`main()`][main] 方法（在“主”线程中运行）会解析参数，建立与客户端的连接，并启动其他“组件”：
+
 - **视频**流：捕获屏幕视频并通过 _video_ 套接字发送编码后的视频数据包（从 _video_ 线程）。
 - **音频**流：使用多个线程捕获原始数据包，提交编码并获取编码后的数据包，通过 _audio_ 套接字发送。
 - **控制器**：从一个线程接收 _control_ 套接字上的控制消息（通常是输入事件），并从另一个线程通过同一 _control_ 套接字发送设备消息（例如将设备剪贴板内容传输到客户端）。因此，_control_ 套接字是双向使用的（与 _video_ 和 _audio_ 套接字不同）。
@@ -112,6 +116,7 @@ adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobi
 在设备旋转（或折叠）时，编码会话会[重置][reset]并重新启动。
 
 仅当 Surface 发生变化时才会生成新帧。这避免了发送不必要的帧，但默认情况下可能存在以下问题：
+
 - 如果设备屏幕未变化，启动时不会发送任何帧；
 - 快速运动变化后，最后一帧的质量可能较差。
 
@@ -134,6 +139,7 @@ adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobi
 ### 输入事件注入
 
 _控制消息_ 由客户端通过 [`Controller`]（在单独线程中运行）接收。输入事件有多种类型：
+
 - 键码（参考 [`KeyEvent`]）；
 - 文本（特殊字符可能无法直接通过键码处理）；
 - 鼠标移动/点击；
@@ -161,6 +167,7 @@ _控制消息_ 由客户端通过 [`Controller`]（在单独线程中运行）�
 ### 初始化
 
 客户端解析命令行参数后，[运行以下两种代码路径之一][run]：
+
 - scrcpy 的“正常”模式（[`scrcpy.c`]）；
 - scrcpy 的 [OTG 模式](/zhHans/reference/scrcpy/otg)（[`scrcpy_otg.c`]）。
 
@@ -171,6 +178,7 @@ _控制消息_ 由客户端通过 [`Controller`]（在单独线程中运行）�
 在本文档的剩余部分，我们假设使用的是“正常”模式（OTG 模式的代码请自行阅读）。
 
 启动时，客户端：
+
 - 打开 _video_、_audio_ 和 _control_ 套接字；
 - 推送并启动设备上的服务端；
 - 初始化其组件（解复用器、解码器、录制器等）。
@@ -231,6 +239,7 @@ adb forward tcp:27183 localabstract:scrcpy_<SCID>
 （`<SCID>` 是一个 31 位随机数，以避免同一设备上同时启动多个 scrcpy 实例时失败。）
 
 随后，按顺序打开最多 3 个套接字：
+
 - _video_ 套接字；
 - _audio_ 套接字；
 - _control_ 套接字。
@@ -254,6 +263,7 @@ adb forward tcp:27183 localabstract:scrcpy_<SCID>
 ### 视频和音频
 
 在 _video_ 和 _audio_ 套接字上，设备首先发送一些[编解码器元数据][codec metadata]：
+
 - 在 _video_ 套接字上，12 字节：
   - 编解码器 ID（`u32`）（H264、H265 或 AV1）；
   - 初始视频宽度（`u32`）；
@@ -264,6 +274,7 @@ adb forward tcp:27183 localabstract:scrcpy_<SCID>
 [codec metadata]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Streamer.java#L33-L51
 
 随后，每个由 `MediaCodec` 生成的数据包会附带一个 12 字节的[帧头部][frame header]：
+
 - 配置包标志（`u1`）；
 - 关键帧标志（`u1`）；
 - PTS（`u62`）；
@@ -296,6 +307,7 @@ PTS 的最高位用于数据包标志：
 控制消息通过自定义二进制协议发送。
 
 该协议的唯一文档是双方的单元测试：
+
 - `ControlMessage`（从客户端到设备）：[序列化](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_control_msg_serialize.c) | [反序列化](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/ControlMessageReaderTest.java)；
 - `DeviceMessage`（从设备到客户端）：[序列化](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/DeviceMessageWriterTest.java) | [反序列化](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_device_msg_deserialize.c)。
 
@@ -306,6 +318,7 @@ PTS 的最高位用于数据包标志：
 尽管服务端设计用于 scrcpy 客户端，但它可以与任何使用相同协议的客户端一起使用。
 
 为了简化操作，添加了一些[服务端特定选项][server-specific options]以轻松生成原始流：
+
 - `send_device_meta=false`：禁用通过 _第一个_ 套接字发送的设备元数据（实际为设备名称）；
 - `send_frame_meta=false`：禁用每个数据包的 12 字节头部；
 - `send_dummy_byte`：禁用正向连接时发送的虚拟字节；
@@ -375,6 +388,7 @@ adb forward tcp:5005 jdwp:XXXX  # 替换 XXXX
 ```
 
 在 Android Studio 中，_Run_ > _Debug_ > _Edit configurations..._，在左侧点击 `+`，选择 _Remote_，并填写表单：
+
 - Host: `localhost`；
 - Port: `5005`。
 

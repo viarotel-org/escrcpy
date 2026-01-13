@@ -7,7 +7,7 @@ title: Gnirehtet
 
 # Gnirehtet (v2.5.1)
 
-该项目通过`adb`为Android设备提供**反向网络共享**功能：允许设备使用所连接计算机的网络连接。它不需要任何_root_权限（设备或计算机均无需）。支持_GNU/Linux_、_Windows_和_Mac OS_。
+该项目通过`adb`为Android设备提供**反向网络共享**功能：允许设备使用所连接计算机的网络连接。它不需要任何*root*权限（设备或计算机均无需）。支持*GNU/Linux*、*Windows*和*Mac OS*。
 
 目前，它通过[IPv4]转发[TCP]和[UDP]流量，但不支持[IPv6]（未来可能支持？）。
 
@@ -18,26 +18,24 @@ title: Gnirehtet
 
 _**该项目已不再积极维护，仅修复重大阻塞问题（如构建问题）。但功能仍可正常使用。**_
 
-
 ## 版本
 
-_Gnirehtet_提供两种实现：
- - **Java**版本；
- - **Rust**版本。
+*Gnirehtet*提供两种实现：
 
+- **Java**版本；
+- **Rust**版本。
 
 ### 如何选择？
 
-推荐使用**Rust**版本。原生二进制文件占用更少的CPU和内存资源，且无需安装_Java_运行时环境。
+推荐使用**Rust**版本。原生二进制文件占用更少的CPU和内存资源，且无需安装*Java*运行时环境。
 
-_Gnirehtet_的中继服务器最初仅以Java实现，其优势在于支持所有安装了_Java 8_运行时的平台。目前仍保留该版本，以便在Rust版本出现问题时作为备选方案。
-
+*Gnirehtet*的中继服务器最初仅以Java实现，其优势在于支持所有安装了*Java 8*运行时的平台。目前仍保留该版本，以便在Rust版本出现问题时作为备选方案。
 
 ## 要求
 
 Android应用至少需要API 21（Android 5.0）。
 
-仅针对_Java_版本，计算机需安装_Java 8_（JRE）。在基于Debian的系统中，请安装`openjdk-8-jre`包。
+仅针对*Java*版本，计算机需安装*Java 8*（JRE）。在基于Debian的系统中，请安装`openjdk-8-jre`包。
 
 ### adb
 
@@ -47,10 +45,11 @@ Android应用至少需要API 21（Android 5.0）。
 
 在基于Debian的系统中，也可安装`android-tools-adb`包。
 
-在Windows上，若仅为此应用需要`adb`，可直接下载[平台工具][platform-tools-windows]，并将以下文件解压至_gnirehtet_目录：
- - `adb.exe`
- - `AdbWinApi.dll`
- - `AdbWinUsbApi.dll`
+在Windows上，若仅为此应用需要`adb`，可直接下载[平台工具][platform-tools-windows]，并将以下文件解压至*gnirehtet*目录：
+
+- `adb.exe`
+- `AdbWinApi.dll`
+- `AdbWinUsbApi.dll`
 
 确保已在设备上[启用adb调试][enable-adb]。
 
@@ -58,7 +57,6 @@ Android应用至少需要API 21（Android 5.0）。
 [enable-adb]: https://developer.android.com/studio/command-line/adb.html#Enabling
 [platform-tools]: https://developer.android.com/studio/releases/platform-tools.html
 [platform-tools-windows]: https://dl.google.com/android/repository/platform-tools-latest-windows.zip
-
 
 ## 获取应用
 
@@ -76,16 +74,15 @@ brew install gnirehtet
 
 [latest]: https://github.com/Genymobile/gnirehtet/releases/latest
 
-
 #### Rust
 
- - **Linux:** [`gnirehtet-rust-linux64-v2.5.1.zip`][direct-rust-linux64]  
-   (SHA-256: _dee55499ca4fef00ce2559c767d2d8130163736d43fdbce753e923e75309c275_)
- - **Windows:** [`gnirehtet-rust-win64-v2.5.1.zip`][direct-rust-win64]  
-   (SHA-256: _7f5b1063e7895182aa60def1437e50363c3758144088dcd079037bb7c3c46a1c_)
- - **MacOS:** [`gnirehtet-rust-macos64-v2.2.1.zip`][direct-rust-macos64]
-   _（旧版本）_  
-   (SHA-256: _902103e6497f995e1e9b92421be212559950cca4a8b557e1f0403769aee06fc8_)
+- **Linux:** [`gnirehtet-rust-linux64-v2.5.1.zip`][direct-rust-linux64]
+  (SHA-256: _dee55499ca4fef00ce2559c767d2d8130163736d43fdbce753e923e75309c275_)
+- **Windows:** [`gnirehtet-rust-win64-v2.5.1.zip`][direct-rust-win64]
+  (SHA-256: _7f5b1063e7895182aa60def1437e50363c3758144088dcd079037bb7c3c46a1c_)
+- **MacOS:** [`gnirehtet-rust-macos64-v2.2.1.zip`][direct-rust-macos64]
+  _（旧版本）_
+  (SHA-256: _902103e6497f995e1e9b92421be212559950cca4a8b557e1f0403769aee06fc8_)
 
 [direct-rust-linux64]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-rust-linux64-v2.5.1.zip
 [direct-rust-win64]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-rust-win64-v2.5.1.zip
@@ -94,29 +91,30 @@ brew install gnirehtet
 下载后解压文件。
 
 Linux和MacOS压缩包包含：
- - `gnirehtet.apk`
- - `gnirehtet`
+
+- `gnirehtet.apk`
+- `gnirehtet`
 
 Windows压缩包包含：
- - `gnirehtet.apk`
- - `gnirehtet.exe`
- - `gnirehtet-run.cmd`
 
+- `gnirehtet.apk`
+- `gnirehtet.exe`
+- `gnirehtet-run.cmd`
 
 #### Java
 
- - **全平台:** [`gnirehtet-java-v2.5.1.zip`][direct-java]  
-   (SHA-256: _816748078fa6a304600a294a13338a06ac778bcc0e57b62d88328c7968ad2d3a_)
+- **全平台:** [`gnirehtet-java-v2.5.1.zip`][direct-java]
+  (SHA-256: _816748078fa6a304600a294a13338a06ac778bcc0e57b62d88328c7968ad2d3a_)
 
 [direct-java]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-java-v2.5.1.zip
 
 解压后包含：
- - `gnirehtet.apk`
- - `gnirehtet.jar`
- - `gnirehtet`
- - `gnirehtet.cmd`
- - `gnirehtet-run.cmd`
 
+- `gnirehtet.apk`
+- `gnirehtet.jar`
+- `gnirehtet`
+- `gnirehtet.cmd`
+- `gnirehtet-run.cmd`
 
 ## 运行（简单方式）
 
@@ -130,7 +128,7 @@ _注意：在Windows上，以下命令中的`./gnirehtet`需替换为`gnirehtet`
 ./gnirehtet run
 ```
 
-反向网络共享将持续生效，直至按下_Ctrl+C_终止。
+反向网络共享将持续生效，直至按下*Ctrl+C*终止。
 
 在Windows上，为方便起见，可直接双击`gnirehtet-run.cmd`（其功能等同于`gnirehtet run`，无需打开终端）。
 
@@ -138,7 +136,7 @@ _注意：在Windows上，以下命令中的`./gnirehtet`需替换为`gnirehtet`
 
 ![request](https://cdn.jsdelivr.net/gh/Genymobile/gnirehtet@master/assets/request.jpg)
 
-当_Gnirehtet_激活时，状态栏会显示“钥匙”图标：
+当*Gnirehtet*激活时，状态栏会显示“钥匙”图标：
 
 ![key](https://cdn.jsdelivr.net/gh/Genymobile/gnirehtet@master/assets/key.png)
 
@@ -176,16 +174,15 @@ _注意：在Windows上，以下命令中的`./gnirehtet`需替换为`gnirehtet`
 ./gnirehtet stop [serial]
 ```
 
-重置隧道（当设备在_Gnirehtet_激活时断开并重新连接后，可用于恢复连接）：
+重置隧道（当设备在*Gnirehtet*激活时断开并重新连接后，可用于恢复连接）：
 
 ```shell
 ./gnirehtet tunnel [serial]
 ```
 
-仅当`adb devices`输出多个设备时，才需指定_serial_参数。
+仅当`adb devices`输出多个设备时，才需指定*serial*参数。
 
 高级选项可通过不带参数的`./gnirehtet`命令查看详情。
-
 
 ## 手动运行
 
@@ -218,7 +215,6 @@ adb shell am start -a com.genymobile.gnirehtet.STOP \
     -n com.genymobile.gnirehtet/.GnirehtetActivity
 ```
 
-
 ## 环境变量
 
 `ADB`用于指定自定义的`adb`路径：
@@ -233,20 +229,17 @@ ADB=/path/to/my/adb ./gnirehtet run
 GNIREHTET_APK=/usr/share/gnirehtet/gnirehtet.apk ./gnirehtet run
 ```
 
-
-## 为什么叫_gnirehtet_？
+## 为什么叫*gnirehtet*？
 
     rev <<< tethering
 
-（在_Bash_中）
-
+（在*Bash*中）
 
 ## 开发者
 
 阅读[开发者页面]。
 
 [开发者页面]: https://github.com/Genymobile/gnirehtet/blob/master/DEVELOP.md
-
 
 ## 许可证
 
@@ -263,7 +256,6 @@ GNIREHTET_APK=/usr/share/gnirehtet/gnirehtet.apk ./gnirehtet run
 无任何明示或暗示的担保或条件。
 详见许可证中特定语言规定的权限和限制。
 ```
-
 
 ## 相关文章
 

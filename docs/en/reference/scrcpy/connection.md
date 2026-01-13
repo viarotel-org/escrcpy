@@ -7,29 +7,32 @@ automatically selected.
 
 However, if there are multiple devices connected, you must specify the one to
 use in one of 4 ways:
- - by its serial:
-   ```bash
-   scrcpy --serial=0123456789abcdef
-   scrcpy -s 0123456789abcdef   # short version
 
-   # the serial is the ip:port if connected over TCP/IP (same behavior as adb)
-   scrcpy --serial=192.168.1.1:5555
-   ```
- - the one connected over USB (if there is exactly one):
-   ```bash
-   scrcpy --select-usb
-   scrcpy -d   # short version
-   ```
- - the one connected over TCP/IP (if there is exactly one):
-   ```bash
-   scrcpy --select-tcpip
-   scrcpy -e   # short version
-   ```
- - a device already listening on TCP/IP (see [below](#tcpip-wireless)):
-   ```bash
-   scrcpy --tcpip=192.168.1.1:5555
-   scrcpy --tcpip=192.168.1.1        # default port is 5555
-   ```
+- by its serial:
+
+  ```bash
+  scrcpy --serial=0123456789abcdef
+  scrcpy -s 0123456789abcdef   # short version
+
+  # the serial is the ip:port if connected over TCP/IP (same behavior as adb)
+  scrcpy --serial=192.168.1.1:5555
+  ```
+
+- the one connected over USB (if there is exactly one):
+  ```bash
+  scrcpy --select-usb
+  scrcpy -d   # short version
+  ```
+- the one connected over TCP/IP (if there is exactly one):
+  ```bash
+  scrcpy --select-tcpip
+  scrcpy -e   # short version
+  ```
+- a device already listening on TCP/IP (see [below](#tcpip-wireless)):
+  ```bash
+  scrcpy --tcpip=192.168.1.1:5555
+  scrcpy --tcpip=192.168.1.1        # default port is 5555
+  ```
 
 The serial may also be provided via the environment variable `ANDROID_SERIAL`
 (also used by `adb`):
@@ -52,7 +55,6 @@ $env:ANDROID_SERIAL = '0123456789abcdef'
 scrcpy
 ```
 
-
 ## TCP/IP (wireless)
 
 _Scrcpy_ uses `adb` to communicate with the device, and `adb` can [connect] to a
@@ -60,7 +62,6 @@ device over TCP/IP. The device must be connected on the same network as the
 computer.
 
 [connect]: https://developer.android.com/studio/command-line/adb.html#wireless
-
 
 ### Automatic
 
@@ -91,7 +92,6 @@ Prefix the address with a '+' to force a reconnection:
 scrcpy --tcpip=+192.168.1.1
 ```
 
-
 ### Manual
 
 Alternatively, it is possible to enable the TCP/IP connection manually using
@@ -102,14 +102,14 @@ Alternatively, it is possible to enable the TCP/IP connection manually using
 3. Get your device IP address, in Settings → About phone → Status, or by
    executing this command:
 
-    ```bash
-    adb shell ip route | awk '{print $9}'
-    ```
+   ```bash
+   adb shell ip route | awk '{print $9}'
+   ```
 
 4. Enable `adb` over TCP/IP on your device: `adb tcpip 5555`.
 5. Unplug your device.
 6. Connect to your device: `adb connect DEVICE_IP:5555` _(replace `DEVICE_IP`
-with the device IP address you found)_.
+   with the device IP address you found)_.
 7. Run `scrcpy` as usual.
 8. Run `adb disconnect` once you're done.
 
@@ -117,7 +117,6 @@ Since Android 11, a [wireless debugging option][adb-wireless] allows you to
 bypass having to physically connect your device to your computer.
 
 [adb-wireless]: https://developer.android.com/studio/command-line/adb#wireless-android11-command-line
-
 
 ## Autostart
 

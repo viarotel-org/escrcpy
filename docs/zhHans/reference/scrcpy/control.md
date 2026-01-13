@@ -52,20 +52,23 @@ scrcpy --no-video --no-audio --keyboard=aoa --mouse=aoa
 Android剪贴板内容变化时会自动同步到电脑剪贴板。
 
 所有<kbd>Ctrl</kbd>快捷键都会转发到设备，例如：
- - <kbd>Ctrl</kbd>+<kbd>c</kbd> 通常执行复制
- - <kbd>Ctrl</kbd>+<kbd>x</kbd> 通常执行剪切
- - <kbd>Ctrl</kbd>+<kbd>v</kbd> 通常执行粘贴（在电脑到设备剪贴板同步后）
+
+- <kbd>Ctrl</kbd>+<kbd>c</kbd> 通常执行复制
+- <kbd>Ctrl</kbd>+<kbd>x</kbd> 通常执行剪切
+- <kbd>Ctrl</kbd>+<kbd>v</kbd> 通常执行粘贴（在电脑到设备剪贴板同步后）
 
 这些操作通常符合预期，但具体行为取决于当前应用。例如：
+
 - _Termux_ 会在<kbd>Ctrl</kbd>+<kbd>c</kbd>时发送SIGINT信号
 - _K-9 Mail_ 会触发新建邮件功能
 
 针对此类情况（仅支持Android 7及以上版本），可通过以下组合键实现复制/剪切/粘贴：
- - <kbd>MOD</kbd>+<kbd>c</kbd> 注入`COPY`命令
- - <kbd>MOD</kbd>+<kbd>x</kbd> 注入`CUT`命令
- - <kbd>MOD</kbd>+<kbd>v</kbd> 注入`PASTE`命令（在电脑到设备剪贴板同步后）
 
-此外，<kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>v</kbd>会将电脑剪贴板文本作为按键序列注入。这在组件不支持文本粘贴时（如_Termux_中）很有用，但可能破坏非ASCII内容。
+- <kbd>MOD</kbd>+<kbd>c</kbd> 注入`COPY`命令
+- <kbd>MOD</kbd>+<kbd>x</kbd> 注入`CUT`命令
+- <kbd>MOD</kbd>+<kbd>v</kbd> 注入`PASTE`命令（在电脑到设备剪贴板同步后）
+
+此外，<kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>v</kbd>会将电脑剪贴板文本作为按键序列注入。这在组件不支持文本粘贴时（如*Termux*中）很有用，但可能破坏非ASCII内容。
 
 **警告：** 将电脑剪贴板内容粘贴到设备（通过<kbd>Ctrl</kbd>+<kbd>v</kbd>或<kbd>MOD</kbd>+<kbd>v</kbd>）会将该内容存入Android剪贴板，导致任何应用均可读取。应避免以此方式粘贴敏感内容（如密码）。
 
@@ -87,7 +90,7 @@ https://github.com/Genymobile/scrcpy/assets/543275/1e252341-4a90-4b29-9d11-9153b
 
 类似地，模拟水平倾斜手势：<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+_点击并左右移动_。
 
-技术实现上，_scrcpy_会通过屏幕中心对称点生成"虚拟手指"的额外触摸事件。按下<kbd>Ctrl</kbd>时_x_和_y_坐标会反转，单独按下<kbd>Shift</kbd>仅反转_x_，而<kbd>Ctrl</kbd>+<kbd>Shift</kbd>仅反转_y_。
+技术实现上，*scrcpy*会通过屏幕中心对称点生成"虚拟手指"的额外触摸事件。按下<kbd>Ctrl</kbd>时*x*和*y*坐标会反转，单独按下<kbd>Shift</kbd>仅反转*x*，而<kbd>Ctrl</kbd>+<kbd>Shift</kbd>仅反转*y*。
 
 此功能仅适用于默认鼠标模式（`--mouse=sdk`）。
 
@@ -95,13 +98,13 @@ https://github.com/Genymobile/scrcpy/assets/543275/1e252341-4a90-4b29-9d11-9153b
 
 ### 安装APK
 
-安装APK时，只需将APK文件（后缀为`.apk`）拖放到_scrcpy_窗口。
+安装APK时，只需将APK文件（后缀为`.apk`）拖放到*scrcpy*窗口。
 
 无视觉反馈，操作日志会打印到控制台。
 
 ### 推送文件到设备
 
-推送文件到设备的`/sdcard/Download/`目录：将非APK文件拖放到_scrcpy_窗口。
+推送文件到设备的`/sdcard/Download/`目录：将非APK文件拖放到*scrcpy*窗口。
 
 无视觉反馈，操作日志会打印到控制台。
 

@@ -42,7 +42,6 @@
   }
 }
 
-
 .el-dialog--headless {
   .el-dialog__header,
   .el-dialog__footer {
@@ -69,7 +68,6 @@
   }
 }
 
-
 .el-segmented {
   &.el-segmented--parent {
     --el-border-radius-base: 6px;
@@ -92,7 +90,7 @@
   .el-collapse-item__wrap {
     @apply !border-0;
   }
-  
+
   .el-collapse-item {
     @apply !border !border-[--el-border-color-light] !rounded-xl;
   }

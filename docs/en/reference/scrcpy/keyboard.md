@@ -2,15 +2,14 @@
 
 Several keyboard input modes are available:
 
- - `--keyboard=sdk` (default)
- - `--keyboard=uhid` (or `-K`): simulates a physical HID keyboard using the UHID
-   kernel module on the device
- - `--keyboard=aoa`: simulates a physical HID keyboard using the AOAv2 protocol
- - `--keyboard=disabled`
+- `--keyboard=sdk` (default)
+- `--keyboard=uhid` (or `-K`): simulates a physical HID keyboard using the UHID
+  kernel module on the device
+- `--keyboard=aoa`: simulates a physical HID keyboard using the AOAv2 protocol
+- `--keyboard=disabled`
 
 By default, `sdk` is used, but if you use scrcpy regularly, it is recommended to
 use [`uhid`](#uhid) and configure the keyboard layout once and for all.
-
 
 ## SDK keyboard
 
@@ -25,12 +24,12 @@ options for this keyboard mode to work. See
 Additional parameters (specific to `--keyboard=sdk`) described below allow to
 customize the behavior.
 
-
 ### Text injection preference
 
 Two kinds of [events][textevents] are generated when typing text:
- - _key events_, signaling that a key is pressed or released;
- - _text events_, signaling that a text has been entered.
+
+- _key events_, signaling that a key is pressed or released;
+- _text events_, signaling that a text has been entered.
 
 By default, numbers and "special characters" are inserted using text events, but
 letters are injected using key events, so that the keyboard behaves as expected
@@ -54,7 +53,6 @@ scrcpy --raw-key-events
 [textevents]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-text-input
 [prefertext]: https://github.com/Genymobile/scrcpy/issues/650#issuecomment-512945343
 
-
 ### Key repeat
 
 By default, holding a key down generates repeated key events. Ths can cause
@@ -66,7 +64,6 @@ To avoid forwarding repeated key events:
 scrcpy --no-key-repeat
 ```
 
-
 ## Physical keyboard simulation
 
 Two modes allow to simulate a physical HID keyboard on the device.
@@ -75,16 +72,16 @@ To work properly, it is necessary to configure (once and for all) the keyboard
 layout on the device to match that of the computer.
 
 The configuration page can be opened in one of the following ways:
- - from the scrcpy window (when `uhid` or `aoa` is used), by pressing
-   <kbd>MOD</kbd>+<kbd>k</kbd> (see [shortcuts](/reference/scrcpy/shortcuts))
- - from the device, in Settings → System → Languages and input → Physical
-   devices
- - from a terminal on the computer, by executing `adb shell am start -a
-   android.settings.HARD_KEYBOARD_SETTINGS`
+
+- from the scrcpy window (when `uhid` or `aoa` is used), by pressing
+  <kbd>MOD</kbd>+<kbd>k</kbd> (see [shortcuts](/reference/scrcpy/shortcuts))
+- from the device, in Settings → System → Languages and input → Physical
+  devices
+- from a terminal on the computer, by executing `adb shell am start -a
+android.settings.HARD_KEYBOARD_SETTINGS`
 
 From this configuration page, it is also possible to enable or disable on-screen
 keyboard.
-
 
 ### UHID
 
@@ -103,14 +100,13 @@ scrcpy -K  # short version
 Once the keyboard layout is configured (see above), it is the best mode for
 using the keyboard while mirroring:
 
- - it works for all characters and IME (contrary to `--keyboard=sdk`)
- - the on-screen keyboard can be disabled (contrary to `--keyboard=sdk`)
- - it works over TCP/IP (wirelessly) (contrary to `--keyboard=aoa`)
- - there are no issues on Windows (contrary to `--keyboard=aoa`)
+- it works for all characters and IME (contrary to `--keyboard=sdk`)
+- the on-screen keyboard can be disabled (contrary to `--keyboard=sdk`)
+- it works over TCP/IP (wirelessly) (contrary to `--keyboard=aoa`)
+- there are no issues on Windows (contrary to `--keyboard=aoa`)
 
 One drawback is that it may not work on old Android versions due to permission
 errors.
-
 
 ### AOA
 

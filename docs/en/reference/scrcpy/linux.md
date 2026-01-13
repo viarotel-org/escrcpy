@@ -6,8 +6,8 @@
 
 Download a static build of the [latest release]:
 
- - [`scrcpy-linux-x86_64-v3.2.tar.gz`][direct-linux-x86_64] (x86_64)  
-   <sub>SHA-256: `df6cf000447428fcde322022848d655ff0211d98688d0f17cbbf21be9c1272be`</sub>
+- [`scrcpy-linux-x86_64-v3.2.tar.gz`][direct-linux-x86_64] (x86_64)
+  <sub>SHA-256: `df6cf000447428fcde322022848d655ff0211d98688d0f17cbbf21be9c1272be`</sub>
 
 [latest release]: https://github.com/Genymobile/scrcpy/releases/latest
 [direct-linux-x86_64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-linux-x86_64-v3.2.tar.gz
@@ -16,20 +16,18 @@ and extract it.
 
 _Static builds of scrcpy for Linux are still experimental._
 
-
 ### From your package manager
 
 <a href="https://repology.org/project/scrcpy/versions"><img src="https://repology.org/badge/vertical-allrepos/scrcpy.svg" alt="Packaging status" align="right"></a>
 
 Scrcpy is packaged in several distributions and package managers:
 
- - Debian/Ubuntu: ~~`apt install scrcpy`~~ _(obsolete version)_
- - Arch Linux: `pacman -S scrcpy`
- - Fedora: `dnf copr enable zeno/scrcpy && dnf install scrcpy`
- - Gentoo: `emerge scrcpy`
- - Snap: `snap install scrcpy`
- - … (see [repology](https://repology.org/project/scrcpy/versions))
-
+- Debian/Ubuntu: ~~`apt install scrcpy`~~ _(obsolete version)_
+- Arch Linux: `pacman -S scrcpy`
+- Fedora: `dnf copr enable zeno/scrcpy && dnf install scrcpy`
+- Gentoo: `emerge scrcpy`
+- Snap: `snap install scrcpy`
+- … (see [repology](https://repology.org/project/scrcpy/versions))
 
 ### From an install script
 
@@ -73,7 +71,6 @@ the development branch (`dev`)._
 
 _See [build.md](/reference/scrcpy/build) to build and install the app manually._
 
-
 ## Run
 
 _Make sure that your device meets the [prerequisites](/reference/scrcpy/#prerequisites)._
@@ -91,6 +88,7 @@ scrcpy --no-audio --record=file.mkv
 ```
 
 Documentation for command line arguments is available:
- - `man scrcpy`
- - `scrcpy --help`
- - on [github](https://github.com/Genymobile/scrcpy)
+
+- `man scrcpy`
+- `scrcpy --help`
+- on [github](https://github.com/Genymobile/scrcpy)

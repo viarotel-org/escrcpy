@@ -8,7 +8,6 @@ Here are the common reported problems and their status.
 
 If you encounter any error, the first step is to upgrade to the latest version.
 
-
 ## `adb` and USB issues
 
 `scrcpy` execute `adb` commands to initialize the connection with the device. If
@@ -16,14 +15,12 @@ If you encounter any error, the first step is to upgrade to the latest version.
 
 This is typically not a bug in _scrcpy_, but a problem in your environment.
 
-
 ### `adb` not found
 
 You need `adb` accessible from your `PATH`.
 
 On Windows, the current directory is in your `PATH`, and `adb.exe` is included
 in the release, so it should work out-of-the-box.
-
 
 ### Device not detected
 
@@ -43,7 +40,6 @@ If your device is not detected, you may need some [drivers] (on Windows). There 
 [drivers]: https://developer.android.com/studio/run/oem-usb.html
 [google-usb-driver]: https://developer.android.com/studio/run/win-usb
 
-
 ### Device unauthorized
 
 >     ERROR: Device is unauthorized:
@@ -56,7 +52,6 @@ debugging.
 If it does not open, check [stackoverflow][device-unauthorized].
 
 [device-unauthorized]: https://stackoverflow.com/questions/23081263/adb-android-device-unauthorized
-
 
 ### Several devices connected
 
@@ -92,7 +87,6 @@ case, scrcpy fallbacks to a different method, which should work.
 
 [#5]: https://github.com/Genymobile/scrcpy/issues/5
 
-
 ### Conflicts between adb versions
 
 >     adb server version (41) doesn't match this client (39); killing...
@@ -122,7 +116,6 @@ $env:ADB = 'C:\path\to\your\adb.exe'
 scrcpy
 ```
 
-
 ### Device disconnected
 
 If _scrcpy_ stops itself with the warning "Device disconnected", then the
@@ -133,7 +126,6 @@ Try with another USB cable or plug it into another USB port. See [#281] and
 
 [#281]: https://github.com/Genymobile/scrcpy/issues/281
 [#283]: https://github.com/Genymobile/scrcpy/issues/283
-
 
 ## OTG issues on Windows
 
@@ -150,7 +142,6 @@ one][#3654-comment2].
 [#3654-comment1]: https://github.com/Genymobile/scrcpy/issues/3654#issuecomment-1369278232
 [#3654-comment2]: https://github.com/Genymobile/scrcpy/issues/3654#issuecomment-1369295011
 
-
 ## Control issues
 
 ### Mouse and keyboard do not work
@@ -158,13 +149,12 @@ one][#3654-comment2].
 On some devices, you may need to enable an option to allow [simulating input].
 In developer options, enable:
 
-> **USB debugging (Security settings)**  
+> **USB debugging (Security settings)**
 > _Allow granting permissions and simulating input via USB debugging_
 
 Rebooting the device is necessary once this option is set.
 
 [simulating input]: https://github.com/Genymobile/scrcpy/issues/70#issuecomment-373286323
-
 
 ### Special characters do not work
 
@@ -179,7 +169,6 @@ keyboard][hid].
 [accented-characters]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-accented-characters
 [#37]: https://github.com/Genymobile/scrcpy/issues/37
 [hid]: /reference/scrcpy/keyboard#physical-keyboard-simulation
-
 
 ## Client issues
 
@@ -203,7 +192,6 @@ See issues [#2554] and [#2559].
 [#2554]: https://github.com/Genymobile/scrcpy/issues/2554
 [#2559]: https://github.com/Genymobile/scrcpy/issues/2559
 
-
 ### KWin compositor crashes
 
 On Plasma Desktop, compositor is disabled while _scrcpy_ is running.
@@ -211,7 +199,6 @@ On Plasma Desktop, compositor is disabled while _scrcpy_ is running.
 As a workaround, [disable "Block compositing"][kwin].
 
 [kwin]: https://github.com/Genymobile/scrcpy/issues/114#issuecomment-378778613
-
 
 ## Crashes
 

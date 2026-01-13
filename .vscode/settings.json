@@ -1,20 +1,15 @@
 {
-  // Disable the default formatter, use eslint instead
+    // Disable the default formatter, use eslint instead
   "prettier.enable": false,
-  "eslint.format.enable": true,
   "editor.formatOnSave": false,
-  
+
   // Auto fix
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
-  
-  "eslint.codeAction.showDocumentation": {
-    "enable": true
-  },
 
-  // Silent the stylistic rules in you IDE, but still auto fix them
+  // Silent the stylistic rules in your IDE, but still auto fix them
   "eslint.rules.customizations": [
     { "rule": "style/*", "severity": "off", "fixable": true },
     { "rule": "format/*", "severity": "off", "fixable": true },
@@ -52,6 +47,11 @@
     "pcss",
     "postcss"
   ],
+  
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+
   "vue.server.includeLanguages": ["vue", "markdown"],
   "i18n-ally.sourceLanguage": "zh-CN",
   "i18n-ally.localesPaths": [

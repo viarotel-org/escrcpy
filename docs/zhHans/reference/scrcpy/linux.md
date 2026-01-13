@@ -10,11 +10,11 @@ title: Linux（平台指南）
 
 下载[最新版本]的静态构建包：
 
-- [`scrcpy-linux-x86_64-v3.2.tar.gz`][direct-linux-x86_64] (x86_64)  
+- [`scrcpy-linux-x86_64-v3.2.tar.gz`][direct-linux-x86_64] (x86_64)
   <sub>SHA-256: `df6cf000447428fcde322022848d655ff0211d98688d0f17cbbf21be9c1272be`</sub>
 
-[最新版本]: https://github.com/Genymobile/scrcpy/releases/latest  
-[direct-linux-x86_64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-linux-x86_64-v3.2.tar.gz  
+[最新版本]: https://github.com/Genymobile/scrcpy/releases/latest
+[direct-linux-x86_64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-linux-x86_64-v3.2.tar.gz
 
 下载后解压即可。
 
@@ -26,12 +26,12 @@ _Linux平台的静态构建版本仍处于实验阶段。_
 
 Scrcpy已被多种发行版和包管理器收录：
 
-- Debian/Ubuntu: ~~`apt install scrcpy`~~ _(版本过旧)_  
-- Arch Linux: `pacman -S scrcpy`  
-- Fedora: `dnf copr enable zeno/scrcpy && dnf install scrcpy`  
-- Gentoo: `emerge scrcpy`  
-- Snap: `snap install scrcpy`  
-- … (详见 [repology](https://repology.org/project/scrcpy/versions))  
+- Debian/Ubuntu: ~~`apt install scrcpy`~~ _(版本过旧)_
+- Arch Linux: `pacman -S scrcpy`
+- Fedora: `dnf copr enable zeno/scrcpy && dnf install scrcpy`
+- Gentoo: `emerge scrcpy`
+- Snap: `snap install scrcpy`
+- … (详见 [repology](https://repology.org/project/scrcpy/versions))
 
 ### 使用安装脚本
 
@@ -47,7 +47,7 @@ sudo apt install ffmpeg libsdl2-2.0-0 adb wget \
                  libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
 ```
 
-然后克隆仓库并执行安装脚本  
+然后克隆仓库并执行安装脚本
 ([脚本源码](https://cdn.jsdelivr.net/gh/Genymobile/scrcpy@master/install_release.sh))：
 
 ```bash
@@ -89,7 +89,8 @@ scrcpy
 scrcpy --no-audio --record=file.mkv
 ```
 
-命令行参数文档可通过以下方式查看：  
-- `man scrcpy`  
-- `scrcpy --help`  
+命令行参数文档可通过以下方式查看：
+
+- `man scrcpy`
+- `scrcpy --help`
 - [GitHub文档](https://github.com/Genymobile/scrcpy)

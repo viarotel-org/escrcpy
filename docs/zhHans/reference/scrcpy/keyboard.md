@@ -26,6 +26,7 @@ title: keyboard（键盘）
 ### 文本注入偏好
 
 输入文本时会生成两种[事件][textevents]：
+
 - **按键事件**：表示按键的按下或释放；
 - **文本事件**：表示文本的输入。
 
@@ -45,8 +46,8 @@ scrcpy --prefer-text
 scrcpy --raw-key-events
 ```
 
-[textevents]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-text-input  
-[prefertext]: https://github.com/Genymobile/scrcpy/issues/650#issuecomment-512945343  
+[textevents]: https://blog.rom1v.com/2018/03/introducing-scrcpy/#handle-text-input
+[prefertext]: https://github.com/Genymobile/scrcpy/issues/650#issuecomment-512945343
 
 ### 按键重复
 
@@ -65,11 +66,12 @@ scrcpy --no-key-repeat
 两种模式可在设备上模拟物理 HID 键盘。为确保正常工作，需在设备上一次性配置与计算机匹配的键盘布局。
 
 可通过以下方式打开配置页面：
+
 - 使用 `uhid` 或 `aoa` 模式时，在 scrcpy 窗口中按 <kbd>MOD</kbd>+<kbd>k</kbd>（见[快捷键](/zhHans/reference/scrcpy/shortcuts)）
 - 在设备上进入：设置 → 系统 → 语言与输入 → 物理键盘
-- 通过计算机终端执行：  
-  ```bash  
-  adb shell am start -a android.settings.HARD_KEYBOARD_SETTINGS  
+- 通过计算机终端执行：
+  ```bash
+  adb shell am start -a android.settings.HARD_KEYBOARD_SETTINGS
   ```
 
 在此配置页面中，还可启用或禁用屏幕键盘。
@@ -78,7 +80,7 @@ scrcpy --no-key-repeat
 
 此模式通过设备的 [UHID] 内核模块模拟物理 HID 键盘。
 
-[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt  
+[UHID]: https://kernel.org/doc/Documentation/hid/uhid.txt
 
 启用 UHID 键盘：
 
@@ -88,6 +90,7 @@ scrcpy -K  # 简写形式
 ```
 
 配置键盘布局后（见上文），这是镜像时使用键盘的最佳模式：
+
 - 支持所有字符和输入法（与 `--keyboard=sdk` 不同）
 - 可禁用屏幕键盘（与 `--keyboard=sdk` 不同）
 - 支持 TCP/IP 无线连接（与 `--keyboard=aoa` 不同）
@@ -99,7 +102,7 @@ scrcpy -K  # 简写形式
 
 此模式通过 [AOAv2] 协议模拟物理 HID 键盘。
 
-[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support  
+[AOAv2]: https://source.android.com/devices/accessories/aoa2#hid-support
 
 启用 AOA 键盘：
 

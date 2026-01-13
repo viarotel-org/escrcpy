@@ -33,7 +33,7 @@ Priority from high to low:
 - Start APP(Multi-threaded) ✅
 - Main window edge hidden ✅
 - Group devices (by filtering remarks) ✅
-- Improved history device connection experience ✅  
+- Improved history device connection experience ✅
 - File management supports uploading directories ✅
 - Support adding open APP to desktop shortcut (Windows only) ✅
 - Support batch startup of devices ✅

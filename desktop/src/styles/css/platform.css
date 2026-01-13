@@ -11,7 +11,8 @@
     .el-dialog__header {
       @apply flex flex-row-reverse items-center justify-end;
 
-      .el-dialog__title, .el-dialog__headerbtn {
+      .el-dialog__title,
+      .el-dialog__headerbtn {
         @apply !relative !-left-4;
       }
 
@@ -27,4 +28,5 @@
   }
 }
 
-.linux-platform {}
+.linux-platform {
+}

@@ -17,6 +17,7 @@ Welcome, Hacktoberfest participants! Thank you for your interest in contributing
 ## Getting Started
 
 Check out the official documentation for installation, usage, and development guides:
+
 - [Getting Started](https://viarotel.eu.org/guide/started)
 - [Shortcuts](https://viarotel.eu.org/reference/scrcpy/shortcuts)
 - [Device Operations](https://viarotel.eu.org/guide/operation)
@@ -32,6 +33,7 @@ Check out the official documentation for installation, usage, and development gu
 ## Community & Support
 
 Support for this project comes from passionate volunteers. For help:
+
 - Check the [FAQ](https://viarotel.eu.org/help/escrcpy)
 - Report issues on GitHub: https://github.com/viarotel-org/escrcpy/issues
 - Contact via email: viarotel@qq.com
@@ -41,4 +43,3 @@ Support for this project comes from passionate volunteers. For help:
 Your contributions, no matter how small, make Escrcpy better for everyone. Happy Hacktoberfest and happy coding!
 
 ---
-

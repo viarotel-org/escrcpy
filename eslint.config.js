@@ -7,7 +7,11 @@ const desktopAutoImport = require('./desktop/.eslintrc-auto-import.json')
 
 export default antfu(
   {
-    markdown: false,
+    formatters: {
+      css: true,
+      html: true,
+      markdown: 'prettier',
+    },
     ignores: [
       '.github',
       '.vscode',

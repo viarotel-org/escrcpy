@@ -6,17 +6,16 @@
 
 Download the [latest release]:
 
- - [`scrcpy-win64-v3.2.zip`][direct-win64] (64-bit)  
-   <sub>SHA-256: `eaa27133e0520979873ba57ad651560a4cc2618373bd05450b23a84d32beafd0`</sub>
- - [`scrcpy-win32-v3.2.zip`][direct-win32] (32-bit)  
-   <sub>SHA-256: `4a3407d7f0c2c8a03e22a12cf0b5e1e585a5056fe23c8e5cf3252207c6fa8357`</sub>
+- [`scrcpy-win64-v3.2.zip`][direct-win64] (64-bit)
+  <sub>SHA-256: `eaa27133e0520979873ba57ad651560a4cc2618373bd05450b23a84d32beafd0`</sub>
+- [`scrcpy-win32-v3.2.zip`][direct-win32] (32-bit)
+  <sub>SHA-256: `4a3407d7f0c2c8a03e22a12cf0b5e1e585a5056fe23c8e5cf3252207c6fa8357`</sub>
 
 [latest release]: https://github.com/Genymobile/scrcpy/releases/latest
 [direct-win64]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-win64-v3.2.zip
 [direct-win32]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-win32-v3.2.zip
 
 and extract it.
-
 
 ### From a package manager
 
@@ -46,7 +45,6 @@ scoop install adb    # if you don't have it yet
 
 _See [build.md](/reference/scrcpy/build) to build and install the app manually._
 
-
 ## Run
 
 _Make sure that your device meets the [prerequisites](/reference/scrcpy/#prerequisites)._
@@ -69,15 +67,17 @@ scrcpy --no-audio --record=file.mkv
 ```
 
 Documentation for command line arguments is available:
- - `scrcpy --help`
- - on [github](/reference/scrcpy/)
+
+- `scrcpy --help`
+- on [github](/reference/scrcpy/)
 
 To start scrcpy directly without opening a terminal, double-click on one of
 these files:
- - `scrcpy-console.bat`: start with a terminal open (it will close when scrcpy
-   terminates, unless an error occurs);
- - `scrcpy-noconsole.vbs`: start without a terminal (but you won't see any error
-   message).
+
+- `scrcpy-console.bat`: start with a terminal open (it will close when scrcpy
+  terminates, unless an error occurs);
+- `scrcpy-noconsole.vbs`: start without a terminal (but you won't see any error
+  message).
 
 _Avoid double-clicking on `scrcpy.exe` directly: on error, the terminal would
 close immediately and you won't have time to read any error message (this

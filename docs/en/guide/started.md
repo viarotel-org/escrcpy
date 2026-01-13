@@ -56,6 +56,7 @@ See [homebrew-escrcpy](https://github.com/viarotel-org/homebrew-escrcpy)
 3. Follow steps in USB Connection and WIFI Connection after dependencies are installed successfully
 
 ## Gnirehtet Reverse Tethering
+
 > Gnirehtet is built into the Windows and Linux apps to provide reverse tethering from PC to Android devices.
 
 After connecting the device through the above steps, enable the reverse network function through `Devices` -> `Device Control Bar` -> `Gnirehtet`.

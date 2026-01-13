@@ -206,6 +206,6 @@ defineExpose({
 
 <style>
 .scrollable::-webkit-scrollbar {
- display: none;
+  display: none;
 }
 </style>

@@ -26,8 +26,9 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "4.16.2",
+    "@antfu/eslint-config": "6.7.3",
     "eslint": "9.31.0",
+    "eslint-plugin-format": "1.2.0",
     "husky": "9.0.11",
     "tsdown": "0.17.3",
     "turbo": "2.7.2",

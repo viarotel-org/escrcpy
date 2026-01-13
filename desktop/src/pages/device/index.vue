@@ -327,6 +327,6 @@ onActivated(() => {
     @apply py-1;
   }
 
-  --el-empty-image-width: 24vh
+  --el-empty-image-width: 24vh;
 }
 </style>

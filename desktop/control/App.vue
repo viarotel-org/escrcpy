@@ -103,7 +103,8 @@ onMounted(() => {
   -webkit-app-region: drag;
 }
 
-html,body {
+html,
+body {
   background-color: transparent;
 }
 </style>

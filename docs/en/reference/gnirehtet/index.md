@@ -23,13 +23,12 @@ support [IPv6] (yet?).
 _**This project is not actively maintained anymore, only major blockers (like
 build issues) are fixed. It should still work, though.**_
 
-
 ## Flavors
 
 Two implementations of _Gnirehtet_ are available:
- - one in **Java**;
- - one in **Rust**.
 
+- one in **Java**;
+- one in **Rust**.
 
 ### Which one to choose?
 
@@ -40,7 +39,6 @@ The relay server of _Gnirehtet_ was initially only implemented in Java. As a
 benefit, the same "binary" runs on every platform having _Java 8_ runtime
 installed. It is still maintained to provide a working alternative in case of
 problems with the Rust version.
-
 
 ## Requirements
 
@@ -62,9 +60,10 @@ On Debian-based distros, you can alternatively install the package
 On Windows, if you need `adb` only for this application, just download the
 [platform-tools][platform-tools-windows] and extract the following files to the
 _gnirehtet_ directory:
- - `adb.exe`
- - `AdbWinApi.dll`
- - `AdbWinUsbApi.dll`
+
+- `adb.exe`
+- `AdbWinApi.dll`
+- `AdbWinUsbApi.dll`
 
 Make sure you [enabled adb debugging][enable-adb] on your device(s).
 
@@ -72,7 +71,6 @@ Make sure you [enabled adb debugging][enable-adb] on your device(s).
 [enable-adb]: https://developer.android.com/studio/command-line/adb.html#Enabling
 [platform-tools]: https://developer.android.com/studio/releases/platform-tools.html
 [platform-tools-windows]: https://dl.google.com/android/repository/platform-tools-latest-windows.zip
-
 
 ## Get the app
 
@@ -91,16 +89,15 @@ Download the [latest release][latest] in the flavor you want.
 
 [latest]: https://github.com/Genymobile/gnirehtet/releases/latest
 
-
 #### Rust
 
- - **Linux:** [`gnirehtet-rust-linux64-v2.5.1.zip`][direct-rust-linux64]  
-   (SHA-256: _dee55499ca4fef00ce2559c767d2d8130163736d43fdbce753e923e75309c275_)
- - **Windows:** [`gnirehtet-rust-win64-v2.5.1.zip`][direct-rust-win64]  
-   (SHA-256: _7f5b1063e7895182aa60def1437e50363c3758144088dcd079037bb7c3c46a1c_)
- - **MacOS:** [`gnirehtet-rust-macos64-v2.2.1.zip`][direct-rust-macos64]
-   _(old release)_  
-   (SHA-256: _902103e6497f995e1e9b92421be212559950cca4a8b557e1f0403769aee06fc8_)
+- **Linux:** [`gnirehtet-rust-linux64-v2.5.1.zip`][direct-rust-linux64]
+  (SHA-256: _dee55499ca4fef00ce2559c767d2d8130163736d43fdbce753e923e75309c275_)
+- **Windows:** [`gnirehtet-rust-win64-v2.5.1.zip`][direct-rust-win64]
+  (SHA-256: _7f5b1063e7895182aa60def1437e50363c3758144088dcd079037bb7c3c46a1c_)
+- **MacOS:** [`gnirehtet-rust-macos64-v2.2.1.zip`][direct-rust-macos64]
+  _(old release)_
+  (SHA-256: _902103e6497f995e1e9b92421be212559950cca4a8b557e1f0403769aee06fc8_)
 
 [direct-rust-linux64]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-rust-linux64-v2.5.1.zip
 [direct-rust-win64]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-rust-win64-v2.5.1.zip
@@ -109,29 +106,30 @@ Download the [latest release][latest] in the flavor you want.
 Then extract it.
 
 The Linux and MacOS archives contain:
- - `gnirehtet.apk`
- - `gnirehtet`
+
+- `gnirehtet.apk`
+- `gnirehtet`
 
 The Windows archive contains:
- - `gnirehtet.apk`
- - `gnirehtet.exe`
- - `gnirehtet-run.cmd`
 
+- `gnirehtet.apk`
+- `gnirehtet.exe`
+- `gnirehtet-run.cmd`
 
 #### Java
 
- - **All platforms:** [`gnirehtet-java-v2.5.1.zip`][direct-java]  
-   (SHA-256: _816748078fa6a304600a294a13338a06ac778bcc0e57b62d88328c7968ad2d3a_)
+- **All platforms:** [`gnirehtet-java-v2.5.1.zip`][direct-java]
+  (SHA-256: _816748078fa6a304600a294a13338a06ac778bcc0e57b62d88328c7968ad2d3a_)
 
 [direct-java]: https://github.com/Genymobile/gnirehtet/releases/download/v2.5.1/gnirehtet-java-v2.5.1.zip
 
 Then extract it. The archive contains:
- - `gnirehtet.apk`
- - `gnirehtet.jar`
- - `gnirehtet`
- - `gnirehtet.cmd`
- - `gnirehtet-run.cmd`
 
+- `gnirehtet.apk`
+- `gnirehtet.jar`
+- `gnirehtet`
+- `gnirehtet.cmd`
+- `gnirehtet-run.cmd`
 
 ## Run (simple)
 
@@ -209,7 +207,6 @@ device.
 
 For advanced options, call `./gnirehtet` without arguments to get more details.
 
-
 ## Run manually
 
 The `gnirehtet` program exposes a simple command-line interface that executes
@@ -242,7 +239,6 @@ adb shell am start -a com.genymobile.gnirehtet.STOP \
     -n com.genymobile.gnirehtet/.GnirehtetActivity
 ```
 
-
 ## Environment variables
 
 `ADB` defines a custom path to the `adb` executable:
@@ -257,20 +253,17 @@ ADB=/path/to/my/adb ./gnirehtet run
 GNIREHTET_APK=/usr/share/gnirehtet/gnirehtet.apk ./gnirehtet run
 ```
 
-
 ## Why _gnirehtet_?
 
     rev <<< tethering
 
 (in _Bash_)
 
-
 ## Developers
 
 Read the [developers page].
 
 [developers page]: https://github.com/Genymobile/gnirehtet/blob/master/DEVELOP.md
-
 
 ## Licence
 
@@ -289,7 +282,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
 
 ## Articles
 

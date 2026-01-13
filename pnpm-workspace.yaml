@@ -1,8 +1,11 @@
+ignoreWorkspaceRootCheck: true
+
+shellEmulator: true
+trustPolicy: no-downgrade
+
 packages:
   - packages/*
   - desktop
-
-ignoreWorkspaceRootCheck: true
 
 patchedDependencies:
   autoglm.js@0.0.11: patches/autoglm.js@0.0.11.patch
@@ -11,5 +14,3 @@ ignoredBuiltDependencies:
   - esbuild
   - electron
   - sharp
-
-shellEmulator: true

@@ -74,7 +74,8 @@ function onHide() {
 
 <style lang="postcss">
 .dark .el-popover--scanner {
-  &, .el-popper__arrow::before {
+  &,
+  .el-popper__arrow::before {
     @apply !bg-primary-500;
   }
 }

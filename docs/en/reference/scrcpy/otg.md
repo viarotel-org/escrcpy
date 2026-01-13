@@ -47,7 +47,6 @@ It only works if the device is connected over USB.
 
 See [FAQ](/help/scrcpy#otg-issues-on-windows).
 
-
 ## Control only
 
 Note that the purpose of OTG is to control the device without USB debugging

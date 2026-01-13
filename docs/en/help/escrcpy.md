@@ -98,7 +98,6 @@ You need to customize the file paths for `scrcpy` and `adb` (ensuring they have 
 
 This might be due to Chinese or special characters in the installation path. Please try changing the installation path.
 
-
 ### Unable to Open After Installation in Linux System
 
 > New restrictions have been implemented for AppImage applications in some popular distributions, such as Ubuntu 24.04, limiting the use of sandboxes. A temporary workaround is as follows:

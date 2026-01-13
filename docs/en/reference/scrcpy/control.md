@@ -14,7 +14,6 @@ scrcpy -n   # short version
 
 Read [keyboard](/reference/scrcpy/keyboard) and [mouse](/reference/scrcpy/mouse).
 
-
 ## Control only
 
 To control the device without mirroring:
@@ -45,17 +44,17 @@ To use AOA instead (over USB only):
 scrcpy --no-video --no-audio --keyboard=aoa --mouse=aoa
 ```
 
-
 ## Copy-paste
 
 Any time the Android clipboard changes, it is automatically synchronized to the
 computer clipboard.
 
 Any <kbd>Ctrl</kbd> shortcut is forwarded to the device. In particular:
- - <kbd>Ctrl</kbd>+<kbd>c</kbd> typically copies
- - <kbd>Ctrl</kbd>+<kbd>x</kbd> typically cuts
- - <kbd>Ctrl</kbd>+<kbd>v</kbd> typically pastes (after computer-to-device
-   clipboard synchronization)
+
+- <kbd>Ctrl</kbd>+<kbd>c</kbd> typically copies
+- <kbd>Ctrl</kbd>+<kbd>x</kbd> typically cuts
+- <kbd>Ctrl</kbd>+<kbd>v</kbd> typically pastes (after computer-to-device
+  clipboard synchronization)
 
 This typically works as you expect.
 
@@ -64,10 +63,11 @@ _Termux_ sends SIGINT on <kbd>Ctrl</kbd>+<kbd>c</kbd> instead, and _K-9 Mail_
 composes a new message.
 
 To copy, cut and paste in such cases (but only supported on Android >= 7):
- - <kbd>MOD</kbd>+<kbd>c</kbd> injects `COPY`
- - <kbd>MOD</kbd>+<kbd>x</kbd> injects `CUT`
- - <kbd>MOD</kbd>+<kbd>v</kbd> injects `PASTE` (after computer-to-device
-   clipboard synchronization)
+
+- <kbd>MOD</kbd>+<kbd>c</kbd> injects `COPY`
+- <kbd>MOD</kbd>+<kbd>x</kbd> injects `CUT`
+- <kbd>MOD</kbd>+<kbd>v</kbd> injects `PASTE` (after computer-to-device
+  clipboard synchronization)
 
 In addition, <kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>v</kbd> injects the computer
 clipboard text as a sequence of key events. This is useful when the component
@@ -88,7 +88,6 @@ way as <kbd>MOD</kbd>+<kbd>Shift</kbd>+<kbd>v</kbd>).
 
 To disable automatic clipboard synchronization, use
 `--no-clipboard-autosync`.
-
 
 ## Pinch-to-zoom, rotate and tilt simulation
 
@@ -115,7 +114,6 @@ _y_.
 
 This only works for the default mouse mode (`--mouse=sdk`).
 
-
 ## File drop
 
 ### Install APK
@@ -124,7 +122,6 @@ To install an APK, drag & drop an APK file (ending with `.apk`) to the _scrcpy_
 window.
 
 There is no visual feedback, a log is printed to the console.
-
 
 ### Push file to device
 

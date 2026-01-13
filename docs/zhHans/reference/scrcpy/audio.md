@@ -6,9 +6,9 @@ title: Audio（音频）
 
 音频转发功能支持运行 Android 11 或更高版本的设备，并默认启用：
 
- - **Android 12 或更新版本**：开箱即用。
- - **Android 11**：需要确保在启动 scrcpy 时设备屏幕已解锁。此时会短暂弹出一个虚假窗口，让系统认为 shell 应用处于前台。若不满足此条件，音频捕获将失败。
- - **Android 10 或更早版本**：无法捕获音频，功能自动禁用。
+- **Android 12 或更新版本**：开箱即用。
+- **Android 11**：需要确保在启动 scrcpy 时设备屏幕已解锁。此时会短暂弹出一个虚假窗口，让系统认为 shell 应用处于前台。若不满足此条件，音频捕获将失败。
+- **Android 10 或更早版本**：无法捕获音频，功能自动禁用。
 
 如果音频捕获失败，镜像会继续仅传输视频（由于音频默认启用，若音频不可用，scrcpy 不会直接失败，除非设置了 `--require-audio`）。
 
@@ -62,17 +62,17 @@ scrcpy --audio-source=mic --no-video --no-playback --record=file.opus
 
 支持的音频源包括：
 
- - `output`（默认）：转发全部音频输出，并禁用设备播放（映射到 [`REMOTE_SUBMIX`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#REMOTE_SUBMIX)）。
- - `playback`：捕获音频播放（Android 应用可选择退出，因此不一定能捕获全部输出）。
- - `mic`：捕获麦克风输入（映射到 [`MIC`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#MIC)）。
- - `mic-unprocessed`：捕获未经处理的麦克风原始音频（映射到 [`UNPROCESSED`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#UNPROCESSED)）。
- - `mic-camcorder`：捕获为视频录制优化的麦克风音频，方向与摄像头一致（映射到 [`CAMCORDER`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#CAMCORDER)）。
- - `mic-voice-recognition`：捕获为语音识别优化的麦克风音频（映射到 [`VOICE_RECOGNITION`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_RECOGNITION)）。
- - `mic-voice-communication`：捕获为语音通信优化的麦克风音频（例如支持回声消除或自动增益控制）（映射到 [`VOICE_COMMUNICATION`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_COMMUNICATION)）。
- - `voice-call`：捕获语音通话（映射到 [`VOICE_CALL`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_CALL)）。
- - `voice-call-uplink`：仅捕获语音通话上行链路（映射到 [`VOICE_UPLINK`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_UPLINK)）。
- - `voice-call-downlink`：仅捕获语音通话下行链路（映射到 [`VOICE_DOWNLINK`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_DOWNLINK)）。
- - `voice-performance`：捕获适用于实时表演（如卡拉OK）的音频，包括麦克风和设备播放（映射到 [`VOICE_PERFORMANCE`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_PERFORMANCE)）。
+- `output`（默认）：转发全部音频输出，并禁用设备播放（映射到 [`REMOTE_SUBMIX`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#REMOTE_SUBMIX)）。
+- `playback`：捕获音频播放（Android 应用可选择退出，因此不一定能捕获全部输出）。
+- `mic`：捕获麦克风输入（映射到 [`MIC`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#MIC)）。
+- `mic-unprocessed`：捕获未经处理的麦克风原始音频（映射到 [`UNPROCESSED`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#UNPROCESSED)）。
+- `mic-camcorder`：捕获为视频录制优化的麦克风音频，方向与摄像头一致（映射到 [`CAMCORDER`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#CAMCORDER)）。
+- `mic-voice-recognition`：捕获为语音识别优化的麦克风音频（映射到 [`VOICE_RECOGNITION`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_RECOGNITION)）。
+- `mic-voice-communication`：捕获为语音通信优化的麦克风音频（例如支持回声消除或自动增益控制）（映射到 [`VOICE_COMMUNICATION`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_COMMUNICATION)）。
+- `voice-call`：捕获语音通话（映射到 [`VOICE_CALL`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_CALL)）。
+- `voice-call-uplink`：仅捕获语音通话上行链路（映射到 [`VOICE_UPLINK`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_UPLINK)）。
+- `voice-call-downlink`：仅捕获语音通话下行链路（映射到 [`VOICE_DOWNLINK`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_DOWNLINK)）。
+- `voice-performance`：捕获适用于实时表演（如卡拉OK）的音频，包括麦克风和设备播放（映射到 [`VOICE_PERFORMANCE`](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_PERFORMANCE)）。
 
 ### 音频复制
 

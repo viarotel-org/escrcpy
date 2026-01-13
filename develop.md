@@ -7,10 +7,12 @@
 ## Getting Started
 
 ### System Requirements
+
 - Node.js v20 or higher
 - Git
 
 ### Development Setup
+
 ```shell
 # Clone repository
 git clone https://github.com/viarotel-org/escrcpy.git
@@ -28,13 +30,14 @@ pnpm dev
 # Build applications
 pnpm build          # Auto-detect platform
 pnpm build:win      # Build for Windows
-pnpm build:mac      # Build for macOS 
+pnpm build:mac      # Build for macOS
 pnpm build:linux    # Build for Linux
 ```
 
 ## Technical Architecture
 
 ### Core Technologies
+
 - Electron - Cross-platform desktop application framework
 - Vue.js - Frontend framework
 - JavaScript - Primary programming language
@@ -43,6 +46,7 @@ pnpm build:linux    # Build for Linux
 - adbkit - Android Debug Bridge toolkit
 
 ### Project Structure
+
 ```
 📦Escrcpy
  ┣ 📂.github              # GitHub workflows and configurations
@@ -77,12 +81,14 @@ pnpm build:linux    # Build for Linux
 ## Development Guidelines
 
 ### Coding Standards
+
 - Adhere to ESLint configuration
 - Implement Vue 3 Composition API practices
 - Follow Angular's commit message conventions ([guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines))
 - Include documentation for complex implementations
 
 ### Contributing Process
+
 1. Review existing issues and pull requests
 2. Follow coding standards
 3. Implement and test changes

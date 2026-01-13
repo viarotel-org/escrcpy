@@ -53,7 +53,6 @@ scrcpy -f   # short version
 Fullscreen mode can then be toggled dynamically with <kbd>MOD</kbd>+<kbd>f</kbd>
 (see [shortcuts](/reference/scrcpy/shortcuts)).
 
-
 ## Disable screensaver
 
 By default, _scrcpy_ does not prevent the screensaver from running on the

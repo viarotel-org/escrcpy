@@ -20,30 +20,31 @@ installed on the device. It works on _Linux_, _Windows_, and _macOS_.
 
 It focuses on:
 
- - **lightness**: native, displays only the device screen
- - **performance**: 30~120fps, depending on the device
- - **quality**: 1920×1080 or above
- - **low latency**: [35~70ms][lowlatency]
- - **low startup time**: ~1 second to display the first image
- - **non-intrusiveness**: nothing is left installed on the Android device
- - **user benefits**: no account, no ads, no internet required
- - **freedom**: free and open source software
+- **lightness**: native, displays only the device screen
+- **performance**: 30~120fps, depending on the device
+- **quality**: 1920×1080 or above
+- **low latency**: [35~70ms][lowlatency]
+- **low startup time**: ~1 second to display the first image
+- **non-intrusiveness**: nothing is left installed on the Android device
+- **user benefits**: no account, no ads, no internet required
+- **freedom**: free and open source software
 
 [lowlatency]: https://github.com/Genymobile/scrcpy/pull/646
 
 Its features include:
- - [audio forwarding](/reference/scrcpy/audio) (Android 11+)
- - [recording](/reference/scrcpy/recording)
- - [virtual display](/reference/scrcpy/virtual_display)
- - mirroring with [Android device screen off](/reference/scrcpy/device#turn-screen-off)
- - [copy-paste](/reference/scrcpy/control#copy-paste) in both directions
- - [configurable quality](/reference/scrcpy/video)
- - [camera mirroring](/reference/scrcpy/camera) (Android 12+)
- - [mirroring as a webcam (V4L2)](/reference/scrcpy/v4l2) (Linux-only)
- - physical [keyboard][hid-keyboard] and [mouse][hid-mouse] simulation (HID)
- - [gamepad](/reference/scrcpy/gamepad) support
- - [OTG mode](/reference/scrcpy/otg)
- - and more…
+
+- [audio forwarding](/reference/scrcpy/audio) (Android 11+)
+- [recording](/reference/scrcpy/recording)
+- [virtual display](/reference/scrcpy/virtual_display)
+- mirroring with [Android device screen off](/reference/scrcpy/device#turn-screen-off)
+- [copy-paste](/reference/scrcpy/control#copy-paste) in both directions
+- [configurable quality](/reference/scrcpy/video)
+- [camera mirroring](/reference/scrcpy/camera) (Android 12+)
+- [mirroring as a webcam (V4L2)](/reference/scrcpy/v4l2) (Linux-only)
+- physical [keyboard][hid-keyboard] and [mouse][hid-mouse] simulation (HID)
+- [gamepad](/reference/scrcpy/gamepad) support
+- [OTG mode](/reference/scrcpy/otg)
+- and more…
 
 [hid-keyboard]: /reference/scrcpy/keyboard#physical-keyboard-simulation
 [hid-mouse]: /reference/scrcpy/mouse#physical-mouse-simulation
@@ -73,104 +74,99 @@ option is set.
 
 Note that USB debugging is not required to run scrcpy in [OTG mode](/reference/scrcpy/otg).
 
-
 ## Get the app
 
- - [Linux](/reference/scrcpy/linux)
- - [Windows](/reference/scrcpy/windows) (read [how to run](/reference/scrcpy/windows#run))
- - [macOS](/reference/scrcpy/macos)
-
+- [Linux](/reference/scrcpy/linux)
+- [Windows](/reference/scrcpy/windows) (read [how to run](/reference/scrcpy/windows#run))
+- [macOS](/reference/scrcpy/macos)
 
 ## Must-know tips
 
- - [Reducing resolution](/reference/scrcpy/video#size) may greatly improve performance
-   (`scrcpy -m1024`)
- - [_Right-click_](/reference/scrcpy/mouse#mouse-bindings) triggers `BACK`
- - [_Middle-click_](/reference/scrcpy/mouse#mouse-bindings) triggers `HOME`
- - <kbd>Alt</kbd>+<kbd>f</kbd> toggles [fullscreen](/reference/scrcpy/window#fullscreen)
- - There are many other [shortcuts](/reference/scrcpy/shortcuts)
-
+- [Reducing resolution](/reference/scrcpy/video#size) may greatly improve performance
+  (`scrcpy -m1024`)
+- [_Right-click_](/reference/scrcpy/mouse#mouse-bindings) triggers `BACK`
+- [_Middle-click_](/reference/scrcpy/mouse#mouse-bindings) triggers `HOME`
+- <kbd>Alt</kbd>+<kbd>f</kbd> toggles [fullscreen](/reference/scrcpy/window#fullscreen)
+- There are many other [shortcuts](/reference/scrcpy/shortcuts)
 
 ## Usage examples
 
 There are a lot of options, [documented](#user-documentation) in separate pages.
 Here are just some common examples.
 
- - Capture the screen in H.265 (better quality), limit the size to 1920, limit
-   the frame rate to 60fps, disable audio, and control the device by simulating
-   a physical keyboard:
+- Capture the screen in H.265 (better quality), limit the size to 1920, limit
+  the frame rate to 60fps, disable audio, and control the device by simulating
+  a physical keyboard:
 
-    ```bash
-    scrcpy --video-codec=h265 --max-size=1920 --max-fps=60 --no-audio --keyboard=uhid
-    scrcpy --video-codec=h265 -m1920 --max-fps=60 --no-audio -K  # short version
-    ```
+  ```bash
+  scrcpy --video-codec=h265 --max-size=1920 --max-fps=60 --no-audio --keyboard=uhid
+  scrcpy --video-codec=h265 -m1920 --max-fps=60 --no-audio -K  # short version
+  ```
 
- - Start VLC in a new virtual display (separate from the device display):
+- Start VLC in a new virtual display (separate from the device display):
 
-    ```bash
-    scrcpy --new-display=1920x1080 --start-app=org.videolan.vlc
-    ```
+  ```bash
+  scrcpy --new-display=1920x1080 --start-app=org.videolan.vlc
+  ```
 
- - Record the device camera in H.265 at 1920x1080 (and microphone) to an MP4
-   file:
+- Record the device camera in H.265 at 1920x1080 (and microphone) to an MP4
+  file:
 
-    ```bash
-    scrcpy --video-source=camera --video-codec=h265 --camera-size=1920x1080 --record=file.mp4
-    ```
+  ```bash
+  scrcpy --video-source=camera --video-codec=h265 --camera-size=1920x1080 --record=file.mp4
+  ```
 
- - Capture the device front camera and expose it as a webcam on the computer (on
-   Linux):
+- Capture the device front camera and expose it as a webcam on the computer (on
+  Linux):
 
-    ```bash
-    scrcpy --video-source=camera --camera-size=1920x1080 --camera-facing=front --v4l2-sink=/dev/video2 --no-playback
-    ```
+  ```bash
+  scrcpy --video-source=camera --camera-size=1920x1080 --camera-facing=front --v4l2-sink=/dev/video2 --no-playback
+  ```
 
- - Control the device without mirroring by simulating a physical keyboard and
-   mouse (USB debugging not required):
+- Control the device without mirroring by simulating a physical keyboard and
+  mouse (USB debugging not required):
 
-    ```bash
-    scrcpy --otg
-    ```
+  ```bash
+  scrcpy --otg
+  ```
 
- - Control the device using gamepad controllers plugged into the computer:
+- Control the device using gamepad controllers plugged into the computer:
 
-    ```bash
-    scrcpy --gamepad=uhid
-    scrcpy -G  # short version
-    ```
+  ```bash
+  scrcpy --gamepad=uhid
+  scrcpy -G  # short version
+  ```
 
 ## User documentation
 
 The application provides a lot of features and configuration options. They are
 documented in the following pages:
 
- - [Connection](/reference/scrcpy/connection)
- - [Video](/reference/scrcpy/video)
- - [Audio](/reference/scrcpy/audio)
- - [Control](/reference/scrcpy/control)
- - [Keyboard](/reference/scrcpy/keyboard)
- - [Mouse](/reference/scrcpy/mouse)
- - [Gamepad](/reference/scrcpy/gamepad)
- - [Device](/reference/scrcpy/device)
- - [Window](/reference/scrcpy/window)
- - [Recording](/reference/scrcpy/recording)
- - [Virtual display](/reference/scrcpy/virtual_display)
- - [Tunnels](/reference/scrcpy/tunnels)
- - [OTG](/reference/scrcpy/otg)
- - [Camera](/reference/scrcpy/camera)
- - [Video4Linux](/reference/scrcpy/v4l2)
- - [Shortcuts](/reference/scrcpy/shortcuts)
-
+- [Connection](/reference/scrcpy/connection)
+- [Video](/reference/scrcpy/video)
+- [Audio](/reference/scrcpy/audio)
+- [Control](/reference/scrcpy/control)
+- [Keyboard](/reference/scrcpy/keyboard)
+- [Mouse](/reference/scrcpy/mouse)
+- [Gamepad](/reference/scrcpy/gamepad)
+- [Device](/reference/scrcpy/device)
+- [Window](/reference/scrcpy/window)
+- [Recording](/reference/scrcpy/recording)
+- [Virtual display](/reference/scrcpy/virtual_display)
+- [Tunnels](/reference/scrcpy/tunnels)
+- [OTG](/reference/scrcpy/otg)
+- [Camera](/reference/scrcpy/camera)
+- [Video4Linux](/reference/scrcpy/v4l2)
+- [Shortcuts](/reference/scrcpy/shortcuts)
 
 ## Resources
 
- - [FAQ](/help/)
- - [Translations][wiki] (not necessarily up to date)
- - [Build instructions](/reference/scrcpy/build)
- - [Developers](/reference/scrcpy/develop)
+- [FAQ](/help/)
+- [Translations][wiki] (not necessarily up to date)
+- [Build instructions](/reference/scrcpy/build)
+- [Developers](/reference/scrcpy/develop)
 
 [wiki]: https://github.com/Genymobile/scrcpy/wiki
-
 
 ## Articles
 
@@ -193,9 +189,9 @@ to your problem immediately.
 
 You can also use:
 
- - Reddit: [`r/scrcpy`](https://www.reddit.com/r/scrcpy)
- - BlueSky: [`@scrcpy.bsky.social`](https://bsky.app/profile/scrcpy.bsky.social)
- - Twitter: [`@scrcpy_app`](https://twitter.com/scrcpy_app)
+- Reddit: [`r/scrcpy`](https://www.reddit.com/r/scrcpy)
+- BlueSky: [`@scrcpy.bsky.social`](https://bsky.app/profile/scrcpy.bsky.social)
+- Twitter: [`@scrcpy_app`](https://twitter.com/scrcpy_app)
 
 ## Donate
 
@@ -203,9 +199,10 @@ I'm [@rom1v](https://github.com/rom1v), the author and maintainer of _scrcpy_.
 
 If you appreciate this application, you can [support my open source
 work][donate]:
- - [GitHub Sponsors](https://github.com/sponsors/rom1v)
- - [Liberapay](https://liberapay.com/rom1v/)
- - [PayPal](https://paypal.me/rom2v)
+
+- [GitHub Sponsors](https://github.com/sponsors/rom1v)
+- [Liberapay](https://liberapay.com/rom1v/)
+- [PayPal](https://paypal.me/rom2v)
 
 [donate]: https://blog.rom1v.com/about/#support-my-open-source-work
 

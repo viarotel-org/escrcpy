@@ -3,8 +3,9 @@
 ## Overview
 
 This application is composed of two parts:
- - the server (`scrcpy-server`), to be executed on the device,
- - the client (the `scrcpy` binary), executed on the host computer.
+
+- the server (`scrcpy-server`), to be executed on the device,
+- the client (the `scrcpy` binary), executed on the host computer.
 
 The client is responsible to push the server to the device and start its
 execution.
@@ -42,23 +43,21 @@ is sent from the device to the client to support seamless copy-paste.
 
 Note that the client-server roles are expressed at the application level:
 
- - the server _serves_ video and audio streams, and handle requests from the
-   client,
- - the client _controls_ the device through the server.
+- the server _serves_ video and audio streams, and handle requests from the
+  client,
+- the client _controls_ the device through the server.
 
 However, by default (when `--force-adb-forward` is not set), the roles are
 reversed at the network level:
 
- - the client opens a server socket and listen on a port before starting the
-   server,
- - the server connects to the client.
+- the client opens a server socket and listen on a port before starting the
+  server,
+- the server connects to the client.
 
 This role inversion guarantees that the connection will not fail due to race
 conditions without polling.
 
-
 ## Server
-
 
 ### Privileges
 
@@ -89,7 +88,6 @@ build system, the server is built to an (unsigned) APK (renamed to
 [dex]: https://en.wikipedia.org/wiki/Dalvik_(software)
 [apk]: https://en.wikipedia.org/wiki/Android_application_package
 
-
 ### Hidden methods
 
 Although compiled against the Android framework, [hidden] methods and classes are
@@ -102,8 +100,6 @@ components is provided by [_wrappers_ classes][wrappers] and [aidl].
 [hidden]: https://stackoverflow.com/a/31908373/1987178
 [wrappers]: https://github.com/Genymobile/scrcpy/tree/master/server/src/main/java/com/genymobile/scrcpy/wrappers
 [aidl]: https://github.com/Genymobile/scrcpy/tree/master/server/src/main/aidl
-
-
 
 ### Execution
 
@@ -144,17 +140,17 @@ adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobi
 When executed, its [`main()`][main] method is executed (on the "main" thread).
 It parses the arguments, establishes the connection with the client and starts
 the other "components":
- - the **video** streamer: it captures the video screen and send encoded video
-   packets on the _video_ socket (from the _video_ thread).
- - the **audio** streamer: it uses several threads to capture raw packets,
-   submits them to encoding and retrieve encoded packets, which it sends on the
-   _audio_ socket.
- - the **controller**: it receives _control messages_ (typically input events)
-   on the _control_ socket from one thread, and sends _device messages_ (e.g. to
-   transmit the device clipboard content to the client) on the same _control
-   socket_ from another thread. Thus, the _control_ socket is used in both
-   directions (contrary to the _video_ and _audio_ sockets).
 
+- the **video** streamer: it captures the video screen and send encoded video
+  packets on the _video_ socket (from the _video_ thread).
+- the **audio** streamer: it uses several threads to capture raw packets,
+  submits them to encoding and retrieve encoded packets, which it sends on the
+  _audio_ socket.
+- the **controller**: it receives _control messages_ (typically input events)
+  on the _control_ socket from one thread, and sends _device messages_ (e.g. to
+  transmit the device clipboard content to the client) on the same _control
+  socket_ from another thread. Thus, the _control_ socket is used in both
+  directions (contrary to the _video_ and _audio_ sockets).
 
 ### Screen video encoding
 
@@ -172,8 +168,8 @@ On device rotation (or folding), the encoding session is [reset] and restarted.
 New frames are produced only when changes occur on the surface. This avoids to
 send unnecessary frames, but by default there might be drawbacks:
 
- - it does not send any frame on start if the device screen does not change,
- - after fast motion changes, the last frame may have poor quality.
+- it does not send any frame on start if the device screen does not change,
+- after fast motion changes, the last frame may have poor quality.
 
 Both problems are [solved][repeat] by the flag
 [`KEY_REPEAT_PREVIOUS_FRAME_AFTER`][repeat-flag].
@@ -182,7 +178,6 @@ Both problems are [solved][repeat] by the flag
 [rotation]: https://github.com/Genymobile/scrcpy/blob/ffe0417228fb78ab45b7ee4e202fc06fc8875bf3/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java#L90
 [repeat]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/ScreenEncoder.java#L246-L247
 [repeat-flag]: https://developer.android.com/reference/android/media/MediaFormat.html#KEY_REPEAT_PREVIOUS_FRAME_AFTER
-
 
 ### Audio encoding
 
@@ -195,16 +190,16 @@ More details are available on the [blog post][scrcpy2] introducing the audio fea
 [encoded]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/AudioEncoder.java
 [`AudioRecord`]: https://developer.android.com/reference/android/media/AudioRecord
 
-
 ### Input events injection
 
 _Control messages_ are received from the client by the [`Controller`] (run in a
 separate thread). There are several types of input events:
- - keycode (cf [`KeyEvent`]),
- - text (special characters may not be handled by keycodes directly),
- - mouse motion/click,
- - mouse scroll,
- - other commands (e.g. to switch the screen on or to copy the clipboard).
+
+- keycode (cf [`KeyEvent`]),
+- text (special characters may not be handled by keycodes directly),
+- mouse motion/click,
+- mouse scroll,
+- other commands (e.g. to switch the screen on or to copy the clipboard).
 
 Some of them need to inject input events to the system. To do so, they use the
 _hidden_ method [`InputManager.injectInputEvent()`] (exposed by the
@@ -216,8 +211,6 @@ _hidden_ method [`InputManager.injectInputEvent()`] (exposed by the
 [`InputManager.injectInputEvent()`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/wrappers/InputManager.java#L34
 [inject-wrapper]: https://github.com/Genymobile/scrcpy/blob/ffe0417228fb78ab45b7ee4e202fc06fc8875bf3/server/src/main/java/com/genymobile/scrcpy/wrappers/InputManager.java#L27
 
-
-
 ## Client
 
 The client relies on [SDL], which provides cross-platform API for UI, input
@@ -228,13 +221,13 @@ The video and audio streams are decoded by [FFmpeg].
 [SDL]: https://www.libsdl.org
 [ffmpeg]: https://ffmpeg.org/
 
-
 ### Initialization
 
 The client parses the command line arguments, then [runs one of two code
 paths][run]:
- - scrcpy in "normal" mode ([`scrcpy.c`])
- - scrcpy in [OTG mode](/reference/scrcpy/otg) ([`scrcpy_otg.c`])
+
+- scrcpy in "normal" mode ([`scrcpy.c`])
+- scrcpy in [OTG mode](/reference/scrcpy/otg) ([`scrcpy_otg.c`])
 
 [run]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/main.c#L81-L82
 [`scrcpy.c`]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/app/src/scrcpy.c#L292-L293
@@ -244,10 +237,10 @@ In the remaining of this document, we assume that the "normal" mode is used
 (read the code for the OTG mode).
 
 On startup, the client:
- - opens the _video_, _audio_ and _control_ sockets;
- - pushes and starts the server on the device;
- - initializes its components (demuxers, decoders, recorder…).
 
+- opens the _video_, _audio_ and _control_ sockets;
+- pushes and starts the server on the device;
+- initializes its components (demuxers, decoders, recorder…).
 
 ### Video and audio streams
 
@@ -282,7 +275,6 @@ They may also be sent to a [V4L2 sink](/reference/scrcpy/v4l2).
 
 Audio "frames" (an array of decoded samples) are sent to the audio player.
 
-
 ### Controller
 
 The _controller_ is responsible to send _control messages_ to the device. It
@@ -293,7 +285,6 @@ appropriate _control messages_. It is responsible to convert SDL events to
 Android events. It then pushes the _control messages_ to a queue hold by the
 controller. On its own thread, the controller takes messages from the queue,
 that it serializes and sends to the client.
-
 
 ## Protocol
 
@@ -322,9 +313,10 @@ adb forward tcp:27183 localabstract:scrcpy_<SCID>
 scrcpy instances start "at the same time" for the same device.)
 
 Then, up to 3 sockets are opened, in that order:
- - a _video_ socket
- - an _audio_ socket
- - a _control_ socket
+
+- a _video_ socket
+- an _audio_ socket
+- a _control_ socket
 
 Each one may be disabled (respectively by `--no-video`, `--no-audio` and
 `--no-control`, directly or indirectly). For example, if `--no-audio` is set,
@@ -354,21 +346,23 @@ Then each socket is used for its intended purpose.
 
 On the _video_ and _audio_ sockets, the device first sends some [codec
 metadata]:
- - On the _video_ socket, 12 bytes:
-   - the codec id (`u32`) (H264, H265 or AV1)
-   - the initial video width (`u32`)
-   - the initial video height (`u32`)
- - On the _audio_ socket, 4 bytes:
-   - the codec id (`u32`) (OPUS, AAC or RAW)
+
+- On the _video_ socket, 12 bytes:
+  - the codec id (`u32`) (H264, H265 or AV1)
+  - the initial video width (`u32`)
+  - the initial video height (`u32`)
+- On the _audio_ socket, 4 bytes:
+  - the codec id (`u32`) (OPUS, AAC or RAW)
 
 [codec metadata]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Streamer.java#L33-L51
 
 Then each packet produced by `MediaCodec` is sent, prefixed by a 12-byte [frame
 header]:
- - config packet flag (`u1`)
- - key frame flag (`u1`)
- - PTS (`u62`)
- - packet size (`u32`)
+
+- config packet flag (`u1`)
+- key frame flag (`u1`)
+- PTS (`u62`)
+- packet size (`u32`)
 
 Here is a schema describing the frame header:
 
@@ -392,15 +386,14 @@ The most significant bits of the PTS are used for packet flags:
 
 [frame header]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Streamer.java#L83
 
-
 ### Controls
 
 Controls messages are sent via a custom binary protocol.
 
 The only documentation for this protocol is the set of unit tests on both sides:
- - `ControlMessage` (from client to device): [serialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_control_msg_serialize.c) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/ControlMessageReaderTest.java)
- - `DeviceMessage` (from device to client) [serialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/DeviceMessageWriterTest.java) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_device_msg_deserialize.c)
 
+- `ControlMessage` (from client to device): [serialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_control_msg_serialize.c) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/ControlMessageReaderTest.java)
+- `DeviceMessage` (from device to client) [serialization](https://github.com/Genymobile/scrcpy/blob/master/server/src/test/java/com/genymobile/scrcpy/DeviceMessageWriterTest.java) | [deserialization](https://github.com/Genymobile/scrcpy/blob/master/app/tests/test_device_msg_deserialize.c)
 
 ## Standalone server
 
@@ -409,13 +402,14 @@ with any client which uses the same protocol.
 
 For simplicity, some [server-specific options] have been added to produce raw
 streams easily:
- - `send_device_meta=false`: disable the device metata (in practice, the device
-   name) sent on the _first_ socket
- - `send_frame_meta=false`: disable the 12-byte header for each packet
- - `send_dummy_byte`: disable the dummy byte sent on forward connections
- - `send_codec_meta`: disable the codec information (and initial device size for
-   video)
- - `raw_stream`: disable all the above
+
+- `send_device_meta=false`: disable the device metata (in practice, the device
+  name) sent on the _first_ socket
+- `send_frame_meta=false`: disable the 12-byte header for each packet
+- `send_dummy_byte`: disable the dummy byte sent on forward connections
+- `send_codec_meta`: disable the codec information (and initial device size for
+  video)
+- `raw_stream`: disable all the above
 
 [server-specific options]: https://github.com/Genymobile/scrcpy/blob/a3cdf1a6b86ea22786e1f7d09b9c202feabc6949/server/src/main/java/com/genymobile/scrcpy/Options.java#L309-L329
 
@@ -440,14 +434,12 @@ vlc -Idummy --demux=h264 --network-caching=0 tcp://localhost:1234
 
 [vlc-0latency]: https://code.videolan.org/rom1v/vlc/-/merge_requests/20
 
-
 ## Hack
 
 For more details, go read the code!
 
 If you find a bug, or have an awesome idea to implement, please discuss and
 contribute ;-)
-
 
 ### Debug the server
 
@@ -486,7 +478,7 @@ adb forward tcp:5005 jdwp:XXXX  # replace XXXX
 In Android Studio, _Run_ > _Debug_ > _Edit configurations..._ On the left, click
 on `+`, _Remote_, and fill the form:
 
- - Host: `localhost`
- - Port: `5005`
+- Host: `localhost`
+- Port: `5005`
 
 Then click on _Debug_.

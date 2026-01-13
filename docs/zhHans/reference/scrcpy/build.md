@@ -2,7 +2,6 @@
 title: Build（编译）
 ---
 
-
 # 编译 scrcpy
 
 以下是编译 _scrcpy_（客户端和服务器）的说明。
@@ -12,8 +11,9 @@ title: Build（编译）
 ## 分支
 
 项目有两个主要分支：
- - `master`：包含最新发布版本。这是 GitHub 上的项目主页。
- - `dev`：当前开发分支。所有提交到 `dev` 的代码将包含在下一个版本中。
+
+- `master`：包含最新发布版本。这是 GitHub 上的项目主页。
+- `dev`：当前开发分支。所有提交到 `dev` 的代码将包含在下一个版本中。
 
 如需贡献代码，请基于最新的 `dev` 分支提交。
 
@@ -22,9 +22,10 @@ title: Build（编译）
 需要 [adb]。可从 [Android SDK 平台工具][platform-tools] 获取，或通过系统包管理器安装（如 `adb`）。
 
 在 Windows 上，下载 [platform-tools][platform-tools-windows] 并将以下文件解压到 `PATH` 可访问的目录：
- - `adb.exe`
- - `AdbWinApi.dll`
- - `AdbWinUsbApi.dll`
+
+- `adb.exe`
+- `AdbWinApi.dll`
+- `AdbWinUsbApi.dll`
 
 scrcpy 的发布版本中也包含这些文件。
 
@@ -213,8 +214,8 @@ _注意：`ninja` [必须][ninja-user] 以非 root 用户运行（只有 `ninja 
 
 #### 选项 2：使用预构建服务器
 
- - [`scrcpy-server-v3.2`][direct-scrcpy-server]  
-   <sub>SHA-256: `b920e0ea01936bf2482f4ba2fa985c22c13c621999e3d33b45baa5acfc1ea3d0`</sub>
+- [`scrcpy-server-v3.2`][direct-scrcpy-server]
+  <sub>SHA-256: `b920e0ea01936bf2482f4ba2fa985c22c13c621999e3d33b45baa5acfc1ea3d0`</sub>
 
 [direct-scrcpy-server]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-server-v3.2
 
@@ -243,12 +244,13 @@ sudo ninja -Cx install    # Windows 上无需 sudo
 ```
 
 安装的文件包括：
- - `/usr/local/bin/scrcpy`（主程序）
- - `/usr/local/share/scrcpy/scrcpy-server`（推送到设备的服务器）
- - `/usr/local/share/man/man1/scrcpy.1`（手册页）
- - `/usr/local/share/icons/hicolor/256x256/apps/icon.png`（应用图标）
- - `/usr/local/share/zsh/site-functions/_scrcpy`（zsh 补全）
- - `/usr/local/share/bash-completion/completions/scrcpy`（bash 补全）
+
+- `/usr/local/bin/scrcpy`（主程序）
+- `/usr/local/share/scrcpy/scrcpy-server`（推送到设备的服务器）
+- `/usr/local/share/man/man1/scrcpy.1`（手册页）
+- `/usr/local/share/icons/hicolor/256x256/apps/icon.png`（应用图标）
+- `/usr/local/share/zsh/site-functions/_scrcpy`（zsh 补全）
+- `/usr/local/share/bash-completion/completions/scrcpy`（bash 补全）
 
 之后可直接运行 `scrcpy`。
 

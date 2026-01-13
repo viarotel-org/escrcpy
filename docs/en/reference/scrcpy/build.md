@@ -8,14 +8,14 @@ process described in [doc/linux.md](/reference/scrcpy/linux).
 ## Branches
 
 There are two main branches:
- - `master`: contains the latest release. It is the home page of the project on
-   GitHub.
- - `dev`: the current development branch. Every commit present in `dev` will be
-   in the next release.
+
+- `master`: contains the latest release. It is the home page of the project on
+  GitHub.
+- `dev`: the current development branch. Every commit present in `dev` will be
+  in the next release.
 
 If you want to contribute code, please base your commits on the latest `dev`
 branch.
-
 
 ## Requirements
 
@@ -24,9 +24,10 @@ tools][platform-tools], or packaged in your distribution (`adb`).
 
 On Windows, download the [platform-tools][platform-tools-windows] and extract
 the following files to a directory accessible from your `PATH`:
- - `adb.exe`
- - `AdbWinApi.dll`
- - `AdbWinUsbApi.dll`
+
+- `adb.exe`
+- `AdbWinApi.dll`
+- `AdbWinUsbApi.dll`
 
 It is also available in scrcpy releases.
 
@@ -37,8 +38,6 @@ The client requires [FFmpeg] and [LibSDL2]. Just follow the instructions.
 [platform-tools-windows]: https://dl.google.com/android/repository/platform-tools-latest-windows.zip
 [ffmpeg]: https://en.wikipedia.org/wiki/FFmpeg
 [LibSDL2]: https://en.wikipedia.org/wiki/Simple_DirectMedia_Layer
-
-
 
 ## System-specific steps
 
@@ -69,7 +68,6 @@ sudo apt install python3-pip
 pip3 install meson
 ```
 
-
 #### Fedora
 
 ```bash
@@ -82,8 +80,6 @@ sudo dnf install SDL2-devel ffms2-devel libusb1-devel libavdevice-free-devel mes
 # server build dependencies
 sudo dnf install java-devel
 ```
-
-
 
 ### Windows
 
@@ -110,7 +106,6 @@ Then generate the releases:
 ```
 
 It will generate win32 and win64 releases into `dist/`.
-
 
 #### In MSYS2
 
@@ -182,7 +177,6 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 See [pierlon/scrcpy-docker](https://github.com/pierlon/scrcpy-docker).
 
-
 ## Common steps
 
 **As a non-root user**, clone the project:
@@ -192,7 +186,6 @@ git clone https://github.com/Genymobile/scrcpy
 cd scrcpy
 ```
 
-
 ### Build
 
 You may want to build only the client: the server binary, which will be pushed
@@ -200,7 +193,6 @@ to the Android device, does not depend on your system and architecture. In that
 case, use the [prebuilt server] (so you will not need Java or the Android SDK).
 
 [prebuilt server]: #option-2-use-prebuilt-server
-
 
 #### Option 1: Build everything from sources
 
@@ -230,11 +222,10 @@ install` must be run as root)._
 
 [ninja-user]: https://github.com/Genymobile/scrcpy/commit/4c49b27e9f6be02b8e63b508b60535426bd0291a
 
-
 #### Option 2: Use prebuilt server
 
- - [`scrcpy-server-v3.2`][direct-scrcpy-server]  
-   <sub>SHA-256: `b920e0ea01936bf2482f4ba2fa985c22c13c621999e3d33b45baa5acfc1ea3d0`</sub>
+- [`scrcpy-server-v3.2`][direct-scrcpy-server]
+  <sub>SHA-256: `b920e0ea01936bf2482f4ba2fa985c22c13c621999e3d33b45baa5acfc1ea3d0`</sub>
 
 [direct-scrcpy-server]: https://github.com/Genymobile/scrcpy/releases/download/v3.2/scrcpy-server-v3.2
 
@@ -250,13 +241,11 @@ ninja -Cx  # DO NOT RUN AS ROOT
 The server only works with a matching client version (this server works with the
 `master` branch).
 
-
 ### Run without installing:
 
 ```bash
 ./run x [options]
 ```
-
 
 ### Install
 
@@ -268,15 +257,14 @@ sudo ninja -Cx install    # without sudo on Windows
 
 This installs several files:
 
- - `/usr/local/bin/scrcpy` (main app)
- - `/usr/local/share/scrcpy/scrcpy-server` (server to push to the device)
- - `/usr/local/share/man/man1/scrcpy.1` (manpage)
- - `/usr/local/share/icons/hicolor/256x256/apps/icon.png` (app icon)
- - `/usr/local/share/zsh/site-functions/_scrcpy` (zsh completion)
- - `/usr/local/share/bash-completion/completions/scrcpy` (bash completion)
+- `/usr/local/bin/scrcpy` (main app)
+- `/usr/local/share/scrcpy/scrcpy-server` (server to push to the device)
+- `/usr/local/share/man/man1/scrcpy.1` (manpage)
+- `/usr/local/share/icons/hicolor/256x256/apps/icon.png` (app icon)
+- `/usr/local/share/zsh/site-functions/_scrcpy` (zsh completion)
+- `/usr/local/share/bash-completion/completions/scrcpy` (bash completion)
 
 You can then run `scrcpy`.
-
 
 ### Uninstall
 

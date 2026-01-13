@@ -29,16 +29,16 @@ course, not if you capture your scrcpy window and audio output on the computer).
 
 [packet delay variation]: https://en.wikipedia.org/wiki/Packet_delay_variation
 
-
 ## Format
 
 The video and audio streams are encoded on the device, but are muxed on the
 client side. Several formats (containers) are supported:
- - MP4 (`.mp4`, `.m4a`, `.aac`)
- - Matroska (`.mkv`, `.mka`)
- - OPUS (`.opus`)
- - FLAC (`.flac`)
- - WAV (`.wav`)
+
+- MP4 (`.mp4`, `.m4a`, `.aac`)
+- Matroska (`.mkv`, `.mka`)
+- OPUS (`.opus`)
+- FLAC (`.flac`)
+- WAV (`.wav`)
 
 The container is automatically selected based on the filename.
 
@@ -49,12 +49,10 @@ needs not end with a known extension):
 scrcpy --record=file --record-format=mkv
 ```
 
-
 ## Rotation
 
 The video can be recorded rotated. See [video
 orientation](/reference/scrcpy/video#orientation).
-
 
 ## No playback
 

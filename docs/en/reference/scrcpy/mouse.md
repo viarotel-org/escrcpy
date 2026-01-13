@@ -2,12 +2,11 @@
 
 Several mouse input modes are available:
 
- - `--mouse=sdk` (default)
- - `--mouse=uhid` (or `-M`): simulates a physical HID mouse using the UHID
-   kernel module on the device
- - `--mouse=aoa`: simulates a physical HID mouse using the AOAv2 protocol
- - `--mouse=disabled`
-
+- `--mouse=sdk` (default)
+- `--mouse=uhid` (or `-M`): simulates a physical HID mouse using the UHID
+  kernel module on the device
+- `--mouse=aoa`: simulates a physical HID mouse using the AOAv2 protocol
+- `--mouse=disabled`
 
 ## SDK mouse
 
@@ -38,7 +37,6 @@ The [shortcut mod](/reference/scrcpy/shortcuts) (either <kbd>Alt</kbd> or <kbd>S
 default) toggle (disable or enable) the mouse capture. Use one of them to give
 the control of the mouse back to the computer.
 
-
 ### UHID
 
 This mode simulates a physical HID mouse using the [UHID] kernel module on the
@@ -54,7 +52,6 @@ scrcpy -M  # short version
 ```
 
 Note: UHID may not work on old Android versions due to permission errors.
-
 
 ### AOA
 
@@ -79,14 +76,14 @@ Note: On Windows, it may only work in [OTG mode](/reference/scrcpy/otg), not whi
 (it is not possible to open a USB device if it is already open by another
 process like the _adb daemon_).
 
-
 ## Mouse bindings
 
 By default, with SDK mouse:
- - right-click triggers `BACK` (or `POWER` on)
- - middle-click triggers `HOME`
- - the 4th click triggers `APP_SWITCH`
- - the 5th click expands the notification panel
+
+- right-click triggers `BACK` (or `POWER` on)
+- middle-click triggers `HOME`
+- the 4th click triggers `APP_SWITCH`
+- the 5th click expands the notification panel
 
 The secondary clicks may be forwarded to the device instead by pressing the
 <kbd>Shift</kbd> key (e.g. <kbd>Shift</kbd>+right-click injects a right click to
@@ -119,12 +116,12 @@ characters, one for each secondary click:
 
 Each character must be one of the following:
 
- - `+`: forward the click to the device
- - `-`: ignore the click
- - `b`: trigger shortcut `BACK` (or turn screen on if off)
- - `h`: trigger shortcut `HOME`
- - `s`: trigger shortcut `APP_SWITCH`
- - `n`: trigger shortcut "expand notification panel"
+- `+`: forward the click to the device
+- `-`: ignore the click
+- `b`: trigger shortcut `BACK` (or turn screen on if off)
+- `h`: trigger shortcut `HOME`
+- `s`: trigger shortcut `APP_SWITCH`
+- `n`: trigger shortcut "expand notification panel"
 
 For example:
 

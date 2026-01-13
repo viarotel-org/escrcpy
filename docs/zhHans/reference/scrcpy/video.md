@@ -90,6 +90,7 @@ scrcpy --video-codec=h264 --video-encoder=OMX.qcom.video.encoder.avc
 ## 方向
 
 方向可以在三个不同层级上设置：
+
 - 快捷键 <kbd>MOD</kbd>+<kbd>r</kbd> 会请求设备在竖屏和横屏之间切换（当前运行的应用程序可能会拒绝，如果不支持请求的方向）。
 - `--capture-orientation` 改变镜像方向（从设备发送到电脑的视频方向），这会影响录制。
 - `--orientation` 在客户端应用，影响显示和录制。对于显示，可以通过 [快捷键](/zhHans/reference/scrcpy/shortcuts) 动态改变。

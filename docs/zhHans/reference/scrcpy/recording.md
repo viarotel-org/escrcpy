@@ -34,6 +34,7 @@ scrcpy --no-video --audio-codec=raw --record=file.wav
 ## 格式
 
 视频和音频流在设备端编码，但在客户端混合。支持多种格式（容器）：
+
 - MP4（`.mp4`、`.m4a`、`.aac`）
 - Matroska（`.mkv`、`.mka`）
 - OPUS（`.opus`）

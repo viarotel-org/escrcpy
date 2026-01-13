@@ -6,8 +6,8 @@ title: OTG
 
 默认情况下，_scrcpy_ 通过 Android API 层级注入输入事件。作为替代方案，它可以发送 HID 事件，使得 scrcpy 的行为类似于连接到 Android 设备的[物理键盘]和/或[物理鼠标]（详见[键盘](/zhHans/reference/scrcpy/keyboard)和[鼠标](/zhHans/reference/scrcpy/mouse)）。
 
-[物理键盘]: /zhHans/reference/scrcpy/keyboard#physical-keyboard-simulation  
-[物理鼠标]: /zhHans/reference/scrcpy/mouse#physical-mouse-simulation  
+[物理键盘]: /zhHans/reference/scrcpy/keyboard#physical-keyboard-simulation
+[物理鼠标]: /zhHans/reference/scrcpy/mouse#physical-mouse-simulation
 
 一种特殊模式（OTG）允许使用 AOA [键盘](/zhHans/reference/scrcpy/keyboard#aoa)、[鼠标](/zhHans/reference/scrcpy/mouse#aoa)和[游戏手柄](/zhHans/reference/scrcpy/gamepad#aoa)控制设备，完全无需使用 _adb_（因此 USB 调试不是必需的）。在此模式下，视频和音频被禁用，且默认启用 `--keyboard=aoa` 和 `--mouse=aoa`。但游戏手柄默认禁用，因此需要显式设置 `--gamepad=aoa`（或在 OTG 模式下使用 `-G`）。
 

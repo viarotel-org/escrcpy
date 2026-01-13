@@ -8,7 +8,6 @@ It is possible to capture the device camera instead.
 
 See the dedicated [camera](/reference/scrcpy/camera) page.
 
-
 ## Size
 
 By default, scrcpy attempts to mirror at the Android device resolution.
@@ -30,7 +29,6 @@ If encoding fails, scrcpy automatically tries again with a lower definition
 For camera mirroring, the `--max-size` value is used to select the camera source
 size instead (among the available resolutions).
 
-
 ## Bit rate
 
 The default video bit rate is 8 Mbps. To change it:
@@ -40,7 +38,6 @@ scrcpy --video-bit-rate=2M
 scrcpy --video-bit-rate=2000000  # equivalent
 scrcpy -b 2M                     # short version
 ```
-
 
 ## Frame rate
 
@@ -63,7 +60,6 @@ The frame rate is intrinsically variable: a new frame is produced only when the
 screen content changes. For example, if you play a fullscreen video at 24fps on
 your device, you should not get more than 24 frames per second in scrcpy.
 
-
 ## Codec
 
 The video codec can be selected. The possible values are `h264` (default),
@@ -83,7 +79,6 @@ check `--video-codec-options` in the manpage or in `scrcpy --help`.
 
 [`MediaFormat`]: https://developer.android.com/reference/android/media/MediaFormat
 
-
 ## Encoder
 
 Several encoders may be available on the device. They can be listed by:
@@ -99,19 +94,19 @@ try another one:
 scrcpy --video-codec=h264 --video-encoder=OMX.qcom.video.encoder.avc
 ```
 
-
 ## Orientation
 
 The orientation may be applied at 3 different levels:
- - The [shortcut](/reference/scrcpy/shortcuts) <kbd>MOD</kbd>+<kbd>r</kbd> requests the
-   device to switch between portrait and landscape (the current running app may
-   refuse, if it does not support the requested orientation).
- - `--capture-orientation` changes the mirroring orientation (the orientation
-   of the video sent from the device to the computer). This affects the
-   recording.
- - `--orientation` is applied on the client side, and affects display and
-   recording. For the display, it can be changed dynamically using
-   [shortcuts](/reference/scrcpy/shortcuts).
+
+- The [shortcut](/reference/scrcpy/shortcuts) <kbd>MOD</kbd>+<kbd>r</kbd> requests the
+  device to switch between portrait and landscape (the current running app may
+  refuse, if it does not support the requested orientation).
+- `--capture-orientation` changes the mirroring orientation (the orientation
+  of the video sent from the device to the computer). This affects the
+  recording.
+- `--orientation` is applied on the client side, and affects display and
+  recording. For the display, it can be changed dynamically using
+  [shortcuts](/reference/scrcpy/shortcuts).
 
 To capture the video with a specific orientation:
 
@@ -164,7 +159,6 @@ The rotation is applied to a recorded file by writing a display transformation
 to the MP4 or MKV target file. Flipping is not supported, so only the 4 first
 values are allowed when recording.
 
-
 ## Angle
 
 To rotate the video content by a custom angle (in degrees, clockwise):
@@ -176,7 +170,6 @@ scrcpy --angle=23
 The center of rotation is the center of the visible area.
 
 This transformation is applied after `--crop` and `--capture-orientation`.
-
 
 ## Crop
 
@@ -197,7 +190,6 @@ For display mirroring, `--max-size` is applied after cropping. For camera,
 `--max-size` is applied first (because it selects the source size rather than
 resizing the content).
 
-
 ## Display
 
 If several displays are available on the Android device, it is possible to
@@ -217,7 +209,6 @@ A secondary display may only be controlled if the device runs at least Android
 10 (otherwise it is mirrored as read-only).
 
 It is also possible to create a [virtual display](/reference/scrcpy/virtual_display).
-
 
 ## Buffering
 
@@ -243,7 +234,6 @@ They can be applied simultaneously:
 scrcpy --video-buffer=50 --v4l2-buffer=300
 ```
 
-
 ## No playback
 
 It is possible to capture an Android device without playing video or audio on
@@ -266,7 +256,6 @@ scrcpy --v4l2-sink=/dev/video2 --no-video-playback
 scrcpy --record=file.mkv --no-audio-playback
 ```
 
-
 ## No video
 
 To disable video forwarding completely, so that only audio is forwarded:
@@ -274,7 +263,6 @@ To disable video forwarding completely, so that only audio is forwarded:
 ```
 scrcpy --no-video
 ```
-
 
 ## Video4Linux
 

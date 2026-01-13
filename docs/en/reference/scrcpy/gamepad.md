@@ -2,17 +2,15 @@
 
 Several gamepad input modes are available:
 
- - `--gamepad=disabled` (default)
- - `--gamepad=uhid` (or `-G`): simulates physical HID gamepads using the UHID
-   kernel module on the device
- - `--gamepad=aoa`: simulates physical HID gamepads using the AOAv2 protocol
-
+- `--gamepad=disabled` (default)
+- `--gamepad=uhid` (or `-G`): simulates physical HID gamepads using the UHID
+  kernel module on the device
+- `--gamepad=aoa`: simulates physical HID gamepads using the AOAv2 protocol
 
 ## Physical gamepad simulation
 
 Two modes allow to simulate physical HID gamepads on the device, one for each
 physical gamepad plugged into the computer.
-
 
 ### UHID
 
@@ -29,7 +27,6 @@ scrcpy -G  # short version
 ```
 
 Note: UHID may not work on old Android versions due to permission errors.
-
 
 ### AOA
 

@@ -10,10 +10,10 @@ title: MacOS（平台指南）
 
 下载[最新版本]的静态构建包：
 
-- [`scrcpy-macos-aarch64-v3.2.tar.gz`][direct-macos-aarch64] (aarch64 架构)  
+- [`scrcpy-macos-aarch64-v3.2.tar.gz`][direct-macos-aarch64] (aarch64 架构)
   <sub>SHA-256: `f6d1f3c5f74d4d46f5080baa5b56b69f5edbf698d47e0cf4e2a1fd5058f9507b`</sub>
 
-- [`scrcpy-macos-x86_64-v3.2.tar.gz`][direct-macos-x86_64] (x86_64 架构)  
+- [`scrcpy-macos-x86_64-v3.2.tar.gz`][direct-macos-x86_64] (x86_64 架构)
   <sub>SHA-256: `e337d5cf0ba4e1281699c338ce5f104aee96eb7b2893dc851399b6643eb4044e`</sub>
 
 [最新版本]: https://github.com/Genymobile/scrcpy/releases/latest
@@ -67,6 +67,7 @@ scrcpy --no-audio --record=file.mkv
 ```
 
 命令行参数的文档可通过以下方式查看：
+
 - `man scrcpy`
 - `scrcpy --help`
 - [GitHub 上的文档](/zhHans/reference/scrcpy/)

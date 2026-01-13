@@ -247,13 +247,15 @@ defineExpose({
   transition: all 0.2s ease;
 
   &.global-widget {
-    &, &:hover {
+    &,
+    &:hover {
       @apply bg-blue-500;
     }
   }
 
   &.device-widget {
-    &, &:hover {
+    &,
+    &:hover {
       @apply bg-green-500;
     }
   }

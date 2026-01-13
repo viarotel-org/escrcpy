@@ -20,7 +20,7 @@
 
 - 🤖 **Intelligent Control**: Natural-language commands powered by AutoGLM for smart control of Android devices
 - 🏃 **Automation & Efficiency**: Automated workflow execution with support for parallel operations across multiple devices
-- 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of multiple devices  
+- 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of multiple devices
 - 📡 **Connectivity & Networking**: Wireless connections with Gnirehtet reverse tethering support
 - ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring based on Scrcpy
 

@@ -23,7 +23,6 @@ changed manually:
 
 [`stay_on_while_plugged_in`]: https://developer.android.com/reference/android/provider/Settings.Global#STAY_ON_WHILE_PLUGGED_IN
 
-
 ```bash
 # get the current show_touches value
 adb shell settings get global stay_on_while_plugged_in
@@ -32,7 +31,6 @@ adb shell settings put global stay_on_while_plugged_in 7
 # disable
 adb shell settings put global stay_on_while_plugged_in 0
 ```
-
 
 ## Screen off timeout
 
@@ -57,7 +55,6 @@ adb shell settings put system screen_off_timeout 30000
 
 Note that the Android value is in milliseconds, but the scrcpy command line
 argument is in seconds.
-
 
 ## Turn screen off
 
@@ -94,7 +91,6 @@ adb shell cmd display power-off 0
 # turn screen on
 adb shell cmd display power-on 0
 ```
-
 
 ## Show touches
 
@@ -137,7 +133,6 @@ By default, on start, the device is powered on. To prevent this behavior:
 ```bash
 scrcpy --no-power-on
 ```
-
 
 ## Start Android app
 

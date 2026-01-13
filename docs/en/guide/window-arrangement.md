@@ -19,13 +19,17 @@ The Window Arrangement feature provides a fullscreen visual editing interface th
 ## Core Components
 
 ### Global Configuration Component
+
 The global configuration component is used to set default window parameters for all devices, including:
+
 - Default window width and height
 - Default window position coordinates
 - Other common window properties
 
 ### Device Window Component
+
 Each connected device can be added as an independent window component, supporting:
+
 - Independent position and size settings
 - Device-specific window configurations
 - Inheritance or override of global configurations
@@ -58,6 +62,7 @@ Each connected device can be added as an independent window component, supportin
 4. Each device can only be added once
 
 **Device Display Rules**:
+
 - Only currently connected devices are displayed
 - Already added devices will not appear repeatedly in the dropdown list
 - Device names prioritize custom names, followed by device models
@@ -138,21 +143,25 @@ Each connected device can be added as an independent window component, supportin
 ### Common Issues
 
 **Issue 1: Device not showing in add list**
+
 - Confirm device is properly connected
 - Check if device is already added to arrangement
 - Try refreshing device list
 
 **Issue 2: Window dragging not responsive**
+
 - Confirm mouse click is in draggable area of window
 - Check if other programs are occupying mouse events
 - Try reopening arrangement interface
 
 **Issue 3: Saved layout not taking effect**
+
 - Confirm "Save Layout" button was clicked
 - Check if configuration file has write permissions
 - Try restarting application and testing again
 
 **Issue 4: Abnormal window size**
+
 - Check if minimum size limits are exceeded
 - Confirm monitor resolution settings are correct
 - Try resetting layout and reconfiguring

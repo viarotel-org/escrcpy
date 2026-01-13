@@ -29,7 +29,6 @@ scrcpy --video-source=camera --no-audio --record=file.mp4
 scrcpy --video-source=camera --no-audio-playback --record=file.mp4
 ```
 
-
 ## List
 
 To list the cameras available (with their declared valid sizes and frame rates):
@@ -42,7 +41,6 @@ scrcpy --list-camera-sizes
 _Note that the sizes and frame rates are declarative. They are not accurate on
 all devices: some of them are declared but not supported, while some others are
 not declared but supported._
-
 
 ## Selection
 
@@ -68,7 +66,6 @@ already determines the camera):
 scrcpy --video-source=camera --camera-id=0 --camera-facing=front  # error
 ```
 
-
 ### Size selection
 
 It is possible to pass an explicit camera size:
@@ -89,9 +86,10 @@ Alternatively, a declared valid size (among the ones listed by
 `list-camera-sizes`) may be selected automatically.
 
 Two constraints are supported:
- - `-m`/`--max-size` (already used for display mirroring), for example `-m1920`;
- - `--camera-ar` to specify an aspect ratio (`<num>:<den>`, `<value>` or
-   `sensor`).
+
+- `-m`/`--max-size` (already used for display mirroring), for example `-m1920`;
+- `--camera-ar` to specify an aspect ratio (`<num>:<den>`, `<value>` or
+  `sensor`).
 
 Some examples:
 
@@ -111,7 +109,6 @@ forbidden (the size is determined by the value given explicitly):
 scrcpy --video-source=camera --camera-size=1920x1080 -m3000  # error
 ```
 
-
 ## Rotation
 
 To rotate the captured video, use the [video orientation](/reference/scrcpy/video#orientation)
@@ -120,7 +117,6 @@ option:
 ```
 scrcpy --video-source=camera --camera-size=1920x1080 --orientation=90
 ```
-
 
 ## Frame rate
 
@@ -131,7 +127,6 @@ To configure a different frame rate:
 ```
 scrcpy --video-source=camera --camera-fps=60
 ```
-
 
 ## High speed capture
 
@@ -145,7 +140,6 @@ scrcpy --video-source=camera --camera-size=1920x1080 --camera-fps=240
 ```
 
 [high speed]: https://developer.android.com/reference/android/hardware/camera2/CameraConstrainedHighSpeedCaptureSession
-
 
 ## Brace expansion tip
 
@@ -163,7 +157,6 @@ scrcpy --video-source=camera --camera-facing=back --camera-ar=16:9 --camera-high
 ```
 
 [brace expansion]: https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
-
 
 ## Webcam
 

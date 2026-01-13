@@ -15,6 +15,7 @@ export default () => {
 
     app.setLoginItemSettings({
       openAtLogin: flag,
+      openAsHidden: true,
       args: ['--minimized'],
     })
   })

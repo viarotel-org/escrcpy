@@ -4,7 +4,7 @@
     ".": {
       "release-type": "node",
       "package-name": "@escrcpy/workspace",
-      "component": "@escrcpy/workspace",
+      "component": "workspace",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -31,7 +31,7 @@
     "packages/electron-ipcx": {
       "release-type": "node",
       "package-name": "@escrcpy/electron-ipcx",
-      "component": "@escrcpy/electron-ipcx",
+      "component": "electron-ipcx",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     }
@@ -46,11 +46,11 @@
   "plugins": [
     {
       "type": "linked-versions",
-      "groupName": "@escrcpy/workspace",
+      "groupName": "workspace",
       "components": [
-        "@escrcpy/workspace",
+        "workspace",
         "escrcpy",
-        "@escrcpy/electron-ipcx"
+        "electron-ipcx"
       ]
     },
     {

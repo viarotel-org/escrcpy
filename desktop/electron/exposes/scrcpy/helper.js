@@ -1,4 +1,4 @@
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 
 /**
  * Parse scrcpy app list output into structured data
@@ -38,8 +38,8 @@ export function parseScrcpyAppList(rawText) {
  * @returns {string}
  */
 export function getDisplayOverlay(serial) {
-  const value = appStore.get('scrcpy')?.[serial]?.['--display-overlay']
-    || appStore.get('scrcpy.global.--display-overlay')
+  const value = electronStore.get('scrcpy')?.[serial]?.['--display-overlay']
+    || electronStore.get('scrcpy.global.--display-overlay')
     || ''
   return value
 }

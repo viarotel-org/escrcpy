@@ -52,7 +52,7 @@ function getSize(grid) {
 async function showTips() {
   const { getScrcpyPath } = window.electron?.configs || {}
 
-  const scrcpyPath = getScrcpyPath?.()
+  const scrcpyPath = getScrcpyPath?.({ store: window.electronStore })
 
   if (scrcpyPath) {
     return false

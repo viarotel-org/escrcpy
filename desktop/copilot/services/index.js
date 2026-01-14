@@ -220,7 +220,7 @@ class CopilotClient {
   }
 
   getConfig() {
-    const stored = window.appStore.get('copilot') || {}
+    const stored = window.electronStore.get('copilot') || {}
 
     return {
       ...defaultCopilotConfigs,
@@ -230,10 +230,10 @@ class CopilotClient {
 
   setConfig(value, key) {
     if (key) {
-      window.appStore.set(`copilot.${key}`, value)
+      window.electronStore.set(`copilot.${key}`, value)
     }
     else {
-      window.appStore.set('copilot', value)
+      window.electronStore.set('copilot', value)
     }
   }
 

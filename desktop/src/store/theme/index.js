@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 
 export const useThemeStore = defineStore('app-theme', () => {
-  const value = ref(window.appStore.get('common.theme') || 'system')
-  const isDark = ref(window.appStore.get('common.isDark') || false)
+  const value = ref(window.electronStore.get('common.theme') || 'system')
+  const isDark = ref(window.electronStore.get('common.isDark') || false)
 
   async function init(changeValue = value.value) {
     value.value = changeValue
@@ -10,13 +10,13 @@ export const useThemeStore = defineStore('app-theme', () => {
     await invokeAppTheme('update', changeValue)
 
     isDark.value = await invokeAppTheme('isDark')
-    window.appStore.set('common.isDark', isDark.value)
+    window.electronStore.set('common.isDark', isDark.value)
 
     await updateHtml(changeValue)
   }
 
   function setupWatcher() {
-    window.appStore.onDidChange('common.theme', (_value) => {
+    window.electronStore.onDidChange('common.theme', (_value) => {
       if (value.value === _value) {
         updateHtml(_value)
         return false
@@ -25,7 +25,7 @@ export const useThemeStore = defineStore('app-theme', () => {
       init(_value)
     })
 
-    window.appStore.onDidChange('common.isDark', (_value) => {
+    window.electronStore.onDidChange('common.isDark', (_value) => {
       if (isDark.value === _value) {
         return false
       }

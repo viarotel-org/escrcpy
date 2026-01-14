@@ -1,6 +1,6 @@
 import '$electron/helpers/debugger/renderer.js'
 import path from 'node:path'
-import store from '$electron/helpers/store.js'
+import store from '$electron/helpers/store/index.js'
 import adb from './adb/index.js'
 import electron from './electron/index.js'
 import gnirehtet from './gnirehtet/index.js'
@@ -15,7 +15,7 @@ export default {
 
     expose('nodePath', path)
 
-    expose('appStore', store)
+    expose('electronStore', store)
 
     expose('electron', electron)
 

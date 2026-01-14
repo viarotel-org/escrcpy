@@ -41,7 +41,11 @@ process.env.PATH = resolveEnvPath({
   ],
 })
 
-const isPackaged = ['true'].includes(process.env.IS_PACKAGED)
+process.env.EXE_PATH = app.getPath('exe')
+
+process.env.USER_DATA_PATH = app.getPath('userData')
+
+const isPackaged = process.env.IS_PACKAGED === 'true'
 
 export {
   isPackaged,

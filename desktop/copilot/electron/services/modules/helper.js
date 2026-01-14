@@ -5,7 +5,7 @@
  */
 import { AutoGLM } from 'autoglm.js'
 import copilotService from '$copilot/electron/services/index.js'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 
 /** Temporary device ID prefix */
 const TEMP_DEVICE_ID_PREFIX = 'temp-device'
@@ -25,7 +25,7 @@ const TEMP_DEVICE_ID_PREFIX = 'temp-device'
  * @private
  */
 function getDefaultConfig() {
-  return appStore.get('copilot') || {}
+  return electronStore.get('copilot') || {}
 }
 
 /**

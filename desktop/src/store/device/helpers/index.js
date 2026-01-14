@@ -12,7 +12,7 @@ export function getDeviceName(device) {
  * Get device remark
  */
 export function getRemark(deviceId) {
-  const value = window.appStore.get('device')?.[deviceId]?.remark
+  const value = window.electronStore.get('device')?.[deviceId]?.remark
   return value
 }
 
@@ -20,7 +20,7 @@ export function getRemark(deviceId) {
  * Get history devices list
  */
 export function getHistoryDevices() {
-  const devices = window.appStore.get('device') || {}
+  const devices = window.electronStore.get('device') || {}
 
   const value = Object.values(devices).map(device => ({
     ...device,
@@ -80,5 +80,5 @@ export function saveDevicesToStore(devices) {
       type: 'offline',
     }))
 
-  window.appStore.set('device', keyBy(cleanedDevices, 'id'))
+  window.electronStore.set('device', keyBy(cleanedDevices, 'id'))
 }

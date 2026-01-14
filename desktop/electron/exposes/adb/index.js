@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import util from 'node:util'
 import { getAdbPath } from '$electron/configs/index.js'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { ProcessManager } from '$electron/helpers/process/manager.js'
@@ -26,7 +26,7 @@ electronAPI.ipcRenderer.on('quit-before', () => {
   processManager.kill()
 })
 
-appStore.onDidChange('common.adbPath', async (value, oldValue) => {
+electronStore.onDidChange('common.adbPath', async (value, oldValue) => {
   if (value === oldValue) {
     return false
   }

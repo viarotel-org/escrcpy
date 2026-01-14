@@ -1,6 +1,6 @@
 import { Bonjour } from 'bonjour-service'
 import net from 'node:net'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import { parseDeviceId } from '$/utils/device/index.js'
 
 export const MDNS_CONFIG = {
@@ -242,7 +242,7 @@ export class AdbScanner {
   }
 
   getBackPort(device) {
-    const devices = appStore.get('device')
+    const devices = electronStore.get('device')
 
     const value = Object.entries(devices).reduce((port, [key, _]) => {
       if (key.includes(device.address)) {

@@ -113,3 +113,11 @@ export function autoUpdateTitleBarOverlay(win) {
     })
   }
 }
+
+export function isPortable() {
+  return process.platform === 'win32' && Boolean(process.env.PORTABLE_EXECUTABLE_DIR)
+}
+
+export function isPackaged() {
+  return process.env.IS_PACKAGED === 'true'
+}

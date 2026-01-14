@@ -1,7 +1,7 @@
 import { app, dialog, Menu, Tray } from 'electron'
 import { trayPath } from '$electron/configs/index.js'
 import { executeI18n } from '$electron/helpers/index.js'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import { eventEmitter } from '$electron/helpers/emitter.js'
 import { sleep } from '$/utils'
 
@@ -26,7 +26,7 @@ export default (mainWindow) => {
 
     event.preventDefault()
 
-    let appCloseCode = appStore.get('common.appCloseCode')
+    let appCloseCode = electronStore.get('common.appCloseCode')
 
     if (![0, 1].includes(appCloseCode)) {
       const { response } = await dialog.showMessageBox({

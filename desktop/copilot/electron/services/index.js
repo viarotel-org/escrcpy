@@ -5,7 +5,7 @@
  *
  * @module CopilotService
  */
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import { isEqual, omit } from 'lodash-es'
 import { sessionManager } from './modules/index.js'
 
@@ -59,7 +59,7 @@ class CopilotService {
       this.unsubscribeCopilotApiKey()
     }
 
-    this.unsubscribeCopilotApiKey = appStore.onDidChange('copilot', (val, oldVal) => {
+    this.unsubscribeCopilotApiKey = electronStore.onDidChange('copilot', (val, oldVal) => {
       if (!this._isCopilotConfigChanged(val, oldVal)) {
         return
       }
@@ -111,7 +111,7 @@ class CopilotService {
    * @returns {Object} Session configuration
    */
   _buildSessionConfig(options) {
-    const config = appStore.get('copilot') || {}
+    const config = electronStore.get('copilot') || {}
 
     return {
       baseUrl: config.baseUrl,

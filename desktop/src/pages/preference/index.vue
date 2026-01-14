@@ -98,7 +98,7 @@ async function handleImport() {
   try {
     await proxy.$electron.ipcRenderer.invoke('show-open-dialog', {
       preset: 'replaceFile',
-      filePath: window.appStore.getPath(),
+      filePath: window.electronStore.getPath(),
       filters: [
         {
           name: proxy.$t('preferences.config.import.placeholder'),
@@ -119,7 +119,7 @@ async function handleImport() {
 }
 
 function handleEdit() {
-  window.appStore.openInEditor()
+  window.electronStore.openInEditor()
 }
 
 async function handleExport() {
@@ -130,7 +130,7 @@ async function handleExport() {
   try {
     await proxy.$electron.ipcRenderer.invoke('show-save-dialog', {
       defaultPath: 'escrcpy-configs.json',
-      filePath: window.appStore.getPath(),
+      filePath: window.electronStore.getPath(),
       filters: [
         {
           name: proxy.$t('preferences.config.export.placeholder'),

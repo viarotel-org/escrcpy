@@ -92,9 +92,9 @@ export function useSubscribeConfigure() {
   const subscribeStore = useSubscribeStore()
 
   function update() {
-    const copilotConfig = window.appStore.get('copilot') || {}
+    const copilotConfig = window.electronStore.get('copilot') || {}
 
-    window.appStore.set('copilot', {
+    window.electronStore.set('copilot', {
       ...copilotConfig,
       apiKey: subscribeStore.accessToken,
       provider: 'Gitee',

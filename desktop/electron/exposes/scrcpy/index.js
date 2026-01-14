@@ -2,7 +2,7 @@ import { exec as _exec, spawn } from 'node:child_process'
 import util from 'node:util'
 import { electronAPI } from '@electron-toolkit/preload'
 import { getAdbPath, getScrcpyPath } from '$electron/configs/which/index.js'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
 import { ProcessManager } from '$electron/helpers/process/manager.js'
@@ -166,7 +166,7 @@ async function startApp(serial, args = {}) {
       commands += `=${displayOverlay}`
     }
 
-    const imeFix = appStore.get('common.imeFix')
+    const imeFix = electronStore.get('common.imeFix')
 
     if (imeFix) {
       commands += ` --display-ime-policy=local`

@@ -4,7 +4,7 @@
  * including core capabilities like creation, execution, destruction, and idle recycling.
  * @module SessionManager
  */
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import pLimit from 'p-limit'
 import { randomUUID } from 'node:crypto'
 import EventEmitter from 'node:events'
@@ -621,7 +621,7 @@ export class SessionManager {
       return customLimit
     }
     // Get from config, default to 5
-    return appStore.get('common.concurrencyLimit') ?? 5
+    return electronStore.get('common.concurrencyLimit') ?? 5
   }
 
   /**

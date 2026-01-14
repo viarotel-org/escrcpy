@@ -15,7 +15,7 @@ export default {
 
   methods: {
     handleClick() {
-      const enableSystemTerminal = window.appStore.get('common.enableSystemTerminal')
+      const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
 
       if (enableSystemTerminal) {
         this.openSystemTerminal()
@@ -25,7 +25,7 @@ export default {
       }
     },
     invoke(...args) {
-      const enableSystemTerminal = window.appStore.get('common.enableSystemTerminal')
+      const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
 
       if (enableSystemTerminal) {
         const [command] = args

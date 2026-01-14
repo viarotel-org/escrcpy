@@ -1,6 +1,6 @@
 /** process.js must be required at the top */
-import { isPackaged } from './helpers/process/index.js'
-import appStore from './helpers/store.js'
+import './helpers/process/index.js'
+import electronStore from '$electron/helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
@@ -25,7 +25,7 @@ import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
 import copilot from '$copilot/electron/main.js'
 
-import { loadPage } from './helpers/index.js'
+import { isPackaged, loadPage } from './helpers/index.js'
 
 import { Edger } from './helpers/edger/index.js'
 
@@ -45,7 +45,7 @@ contextMenu({
   showSelectAll: false,
   showSearchWithGoogle: false,
   showSaveImageAs: true,
-  showInspectElement: !isPackaged,
+  showInspectElement: !isPackaged(),
 })
 
 let mainWindow
@@ -141,7 +141,7 @@ function createWindow(callback) {
     return { action: 'deny' }
   })
 
-  const edgeHidden = appStore.get('common.edgeHidden')
+  const edgeHidden = electronStore.get('common.edgeHidden')
   if (edgeHidden) {
     new Edger(mainWindow)
   }

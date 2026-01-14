@@ -22,7 +22,7 @@ export function useWindowStateSync(options = {}) {
     window.electron.ipcRenderer.on('device-change', handleDeviceChange)
   }
 
-  window.appStore.onDidChange('common.language', (value) => {
+  window.electronStore.onDidChange('common.language', (value) => {
     i18n.global.locale.value = value
     options.onLanguageChange?.(value)
   })

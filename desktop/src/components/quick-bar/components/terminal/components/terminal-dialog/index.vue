@@ -111,7 +111,7 @@ commands.value.help = () => {
 }
 
 dispatchedQueries.value = new Set([
-  ...(window.appStore.get('terminal.dispatchedQueries') || []),
+  ...(window.electronStore.get('terminal.dispatchedQueries') || []),
   ...Object.keys(commands.value),
 ])
 
@@ -196,7 +196,7 @@ async function focus() {
 }
 
 function onDispatchedQueriesUpdate(value) {
-  window.appStore.set('terminal.dispatchedQueries', Array.from(value))
+  window.electronStore.set('terminal.dispatchedQueries', Array.from(value))
 
   dispatchedQueries.value = value
 }

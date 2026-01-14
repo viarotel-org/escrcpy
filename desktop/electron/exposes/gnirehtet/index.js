@@ -6,13 +6,13 @@ import {
   getGnirehtetPath,
   gnirehtetApkPath,
 } from '$electron/configs/index.js'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 
 import adb from '$electron/exposes/adb/index.js'
 
 import { ProcessManager } from '$electron/helpers/process/manager.js'
 
-const appDebug = appStore.get('common.debug') || false
+const appDebug = electronStore.get('common.debug') || false
 
 const processManager = new ProcessManager()
 
@@ -139,7 +139,7 @@ async function run(deviceId) {
 
   let installed = false
 
-  const gnirehtetFix = appStore.get('common.gnirehtetFix') || false
+  const gnirehtetFix = electronStore.get('common.gnirehtetFix') || false
 
   if (!gnirehtetFix) {
     installed = await isInstalled(deviceId)
@@ -151,7 +151,7 @@ async function run(deviceId) {
     })
   }
 
-  const gnirehtetAppend = appStore.get('common.gnirehtetAppend')
+  const gnirehtetAppend = electronStore.get('common.gnirehtetAppend')
 
   await start(deviceId, { append: gnirehtetAppend }).catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Start fail')

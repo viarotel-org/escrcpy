@@ -2,7 +2,7 @@ import messages from '@intlify/unplugin-vue-i18n/messages'
 import { createI18n } from 'vue-i18n'
 
 export const defaultLocale
-  = window.appStore?.get('common.language') || window.navigator.language
+  = window.electronStore?.get('common.language') || window.navigator.language
 
 export const i18n = createI18n({
   allowComposition: false,

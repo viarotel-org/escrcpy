@@ -88,7 +88,7 @@ export class ScrcpyConfigMigrator {
    * @returns {Object} scrcpy config object
    */
   getScrcpyConfig() {
-    return window.appStore.get('scrcpy') || {}
+    return window.electronStore.get('scrcpy') || {}
   }
 
   /**
@@ -97,7 +97,7 @@ export class ScrcpyConfigMigrator {
    * @param {Object} config - Configuration object
    */
   saveScrcpyConfig(config) {
-    window.appStore.set('scrcpy', config)
+    window.electronStore.set('scrcpy', config)
   }
 
   /**

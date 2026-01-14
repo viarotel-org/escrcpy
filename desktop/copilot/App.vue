@@ -86,8 +86,8 @@ import { isPlatform } from '$/utils/index.js'
 
 const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
   onLanguageChange(val) {
-    window.appStore.set('copilot', {
-      ...window.appStore.get('copilot'),
+    window.electronStore.set('copilot', {
+      ...window.electronStore.get('copilot'),
       lang: ['zh-CN', 'zh-TW'].includes(val) ? 'cn' : 'en',
     })
   },

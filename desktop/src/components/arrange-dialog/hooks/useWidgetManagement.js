@@ -42,7 +42,7 @@ export function useWidgetManagement(
     }
   }
   const addWidget = (command) => {
-    const scrcpy = window.appStore.get('scrcpy') || {}
+    const scrcpy = window.electronStore.get('scrcpy') || {}
     const globalConfig = scrcpy.global || {}
 
     if (command === 'global') {

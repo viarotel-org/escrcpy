@@ -33,7 +33,7 @@ export default (App, { router, install } = {}) => {
   install?.(app)
 
   app.config.globalProperties.$path = window.nodePath
-  app.config.globalProperties.$appStore = window.appStore
+  app.config.globalProperties.$electronStore = window.electronStore
   app.config.globalProperties.$electron = window.electron
 
   app.config.globalProperties.$adb = window.adb

@@ -122,7 +122,7 @@ export async function selectAndSendFileToDevice(
 }
 
 export function openFloatControl(deviceInfo) {
-  const floatControl = window.appStore.get('common.floatControl')
+  const floatControl = window.electronStore.get('common.floatControl')
 
   if (!floatControl) {
     return false
@@ -132,11 +132,11 @@ export function openFloatControl(deviceInfo) {
 }
 
 export function removeDevices(...devices) {
-  const storeDevices = { ...(window.appStore.get('device') || {}) }
+  const storeDevices = { ...(window.electronStore.get('device') || {}) }
 
   for (const device of devices) {
     delete storeDevices[device.id ?? device]
   }
 
-  window.appStore.set('device', storeDevices)
+  window.electronStore.set('device', storeDevices)
 }

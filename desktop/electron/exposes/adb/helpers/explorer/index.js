@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import prettyBytes from 'pretty-bytes'
 import pLimit from 'p-limit'
 import { Adb } from '@devicefarmer/adbkit'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 
 /**
  * High-performance directory listing with file stats; supports large files
@@ -21,7 +21,7 @@ export async function readDirWithStat(device, dirPath, options = {}) {
     map = null,
   } = options
 
-  const concurrencyLimit = options.concurrency ?? appStore.get('common.concurrencyLimit') ?? 5
+  const concurrencyLimit = options.concurrency ?? electronStore.get('common.concurrencyLimit') ?? 5
 
   const limit = pLimit(concurrencyLimit)
   const entries = await device.readdir(dirPath)

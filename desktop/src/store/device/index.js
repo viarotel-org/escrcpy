@@ -9,7 +9,7 @@ import {
   saveDevicesToStore,
 } from './helpers/index.js'
 
-const $appStore = window.appStore
+const $electronStore = window.electronStore
 
 export const useDeviceStore = defineStore('app-device', () => {
   const list = ref([])
@@ -17,7 +17,7 @@ export const useDeviceStore = defineStore('app-device', () => {
 
   function init() {
     config.value = {
-      ...($appStore.get('device') || {}),
+      ...($electronStore.get('device') || {}),
     }
     return config.value
   }
@@ -78,7 +78,7 @@ export const useDeviceStore = defineStore('app-device', () => {
   }
 
   function setRemark(deviceId, value) {
-    $appStore.set(['device', deviceId, 'remark'], value)
+    $electronStore.set(['device', deviceId, 'remark'], value)
     init()
   }
 

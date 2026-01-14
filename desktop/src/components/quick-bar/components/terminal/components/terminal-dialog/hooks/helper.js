@@ -8,7 +8,7 @@ export function useFixCursor(history) {
 }
 
 export async function useSystemTerminal(command) {
-  const enableSystemTerminal = window.appStore.get('common.enableSystemTerminal')
+  const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
 
   if (!enableSystemTerminal) {
     return false

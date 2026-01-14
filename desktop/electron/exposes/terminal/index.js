@@ -1,6 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
-import appStore from '$electron/helpers/store.js'
+import electronStore from '$electron/helpers/store/index.js'
 import { getAdbPath, getGnirehtetPath, getScrcpyPath } from '$electron/configs/index.js'
 
 /**
@@ -91,13 +91,13 @@ async function openSystemTerminal(options = {}) {
   } = options
 
   // Check if system terminal is enabled
-  const enableSystemTerminal = appStore.get('common.enableSystemTerminal')
+  const enableSystemTerminal = electronStore.get('common.enableSystemTerminal')
   if (!enableSystemTerminal) {
     throw new Error('System terminal is disabled. Enable it in preferences.')
   }
 
   // Get user's preferred terminal from settings
-  const userPreferredTerminal = preferredTerminal || appStore.get('common.preferredTerminal')
+  const userPreferredTerminal = preferredTerminal || electronStore.get('common.preferredTerminal')
 
   // Build environment with ADB and other paths
   const env = buildEnvironment(customEnv)

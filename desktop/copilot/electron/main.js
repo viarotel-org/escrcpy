@@ -7,8 +7,6 @@ import * as events from './events/index.js'
 export default (mainWindow) => {
   registerCopilotHandlers(mainWindow)
 
-  // Store Copilot windows per device
-  // key: deviceId (singleton per device)
   const copilotWindows = new Map()
 
   ipcMain.handle('open-copilot-window', (event, data) => {
@@ -19,18 +17,15 @@ export default (mainWindow) => {
       return false
     }
 
-    // Check whether a Copilot window already exists for the device
     let copilotWindow = copilotWindows.get(deviceId)
 
     if (!isWindowDestroyed(copilotWindow)) {
-      // Window exists: update device info and show
       copilotWindow.webContents.send('device-change', data)
       copilotWindow.show()
       copilotWindow.focus()
       return false
     }
 
-    // Create a new Copilot window
     copilotWindow = initCopilotWindow(mainWindow, {
       id: deviceId,
       name: data?.device?.name || data?.name,
@@ -39,10 +34,8 @@ export default (mainWindow) => {
 
     events.install(copilotWindow)
 
-    // Store window reference
     copilotWindows.set(deviceId, copilotWindow)
 
-    // Clean up reference on window closed
     copilotWindow.on('closed', () => {
       copilotWindows.delete(deviceId)
       copilotWindow = void 0
@@ -72,7 +65,6 @@ export default (mainWindow) => {
     return true
   })
 
-  // Close all Copilot windows
   ipcMain.handle('close-all-copilot-windows', () => {
     copilotWindows.forEach((window, key) => {
       if (!isWindowDestroyed(window)) {

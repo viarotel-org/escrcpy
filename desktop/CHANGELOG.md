@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.5](https://github.com/viarotel-org/escrcpy/compare/v2.1.4...v2.1.5) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* remove comments in copilot window handler ([f231998](https://github.com/viarotel-org/escrcpy/commit/f231998dfc8f4ca834dbf8d64b9ba4e038e3a507))
+* update version to 2.1.4 ([9bdf671](https://github.com/viarotel-org/escrcpy/commit/9bdf671d9dfced0811a07935d3bec36a2aca1c45))
+
 ## [2.1.2](https://github.com/viarotel-org/escrcpy/compare/escrcpy-v2.1.2...escrcpy-v2.1.2) (2026-01-14)
 
 

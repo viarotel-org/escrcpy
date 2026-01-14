@@ -346,6 +346,6 @@
     "useSubscribeSms": true,
     "useCountdown": true,
     "useSmsCountdown": true,
-    "useSubscribeConfigure": true
+    "useCopilotStore": true
   }
 }

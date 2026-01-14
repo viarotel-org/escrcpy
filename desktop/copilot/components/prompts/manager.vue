@@ -9,7 +9,6 @@
     center
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
     :close-on-click-modal="false"
-    @open="loadPrompts"
   >
     <div class="space-y-4 h-full flex flex-col overflow-hidden -mr-1">
       <!-- Add new prompt -->
@@ -134,8 +133,6 @@
 
 <script setup>
 import { t } from '$/locales/index.js'
-import copilotClient from '$copilot/services/index.js'
-import { copilotPromptBus } from './helper.js'
 
 const props = defineProps({
 
@@ -143,31 +140,28 @@ const props = defineProps({
 
 const emit = defineEmits([])
 
+const copilotStore = useCopilotStore()
+
 const dialog = useDialog()
 
-// Prompts list
-const prompts = ref([])
+const prompts = computed({
+  get() {
+    return copilotStore.config?.prompts || []
+  },
+  set(value) {
+    copilotStore.updateConfig({ prompts: value })
+  },
+})
 
-// New prompt input
 const newPrompt = ref('')
 
-// Edit state
 const editingIndex = ref(-1)
 const editingValue = ref('')
 
-// Load prompts
-const loadPrompts = async () => {
-  const config = await copilotClient.getConfig() || {}
-  prompts.value = [...(config.prompts || [])]
+const savePrompts = () => {
+  copilotStore.updateConfig()
 }
 
-// Save prompts
-const savePrompts = async () => {
-  await copilotClient.setConfig([...prompts.value], 'prompts')
-  copilotPromptBus.emit(prompts.value)
-}
-
-// Add prompt
 const addPrompt = () => {
   const text = newPrompt.value.trim()
   if (!text) {
@@ -186,13 +180,11 @@ const addPrompt = () => {
   ElMessage.success(t('copilot.promptManager.addSuccess'))
 }
 
-// Start editing
 const startEdit = (index) => {
   editingIndex.value = index
   editingValue.value = prompts.value[index]
 }
 
-// Save edit
 const saveEdit = (index) => {
   const text = editingValue.value.trim()
   if (!text) {
@@ -207,13 +199,11 @@ const saveEdit = (index) => {
   ElMessage.success(t('copilot.promptManager.editSuccess'))
 }
 
-// Cancel edit
 const cancelEdit = () => {
   editingIndex.value = -1
   editingValue.value = ''
 }
 
-// Delete prompt
 const deletePrompt = async (index) => {
   try {
     await ElMessageBox.confirm(
@@ -231,11 +221,9 @@ const deletePrompt = async (index) => {
     ElMessage.success(t('copilot.promptManager.deleteSuccess'))
   }
   catch {
-    // User cancelled
   }
 }
 
-// Clear all prompts
 const clearAllPrompts = async () => {
   if (prompts.value.length === 0)
     return
@@ -256,7 +244,6 @@ const clearAllPrompts = async () => {
     ElMessage.success(t('copilot.promptManager.clearAllSuccess'))
   }
   catch {
-    // User cancelled
   }
 }
 

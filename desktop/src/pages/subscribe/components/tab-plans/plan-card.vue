@@ -23,7 +23,7 @@
                 :content="formatDiscountPeriod(discount)"
                 placement="top"
               >
-                <el-link icon="InfoFilled" type="primary" class="!-mt-px" :underline="false"></el-link>
+                <el-link icon="InfoFilled" type="primary" class="!-mt-px" underline="never"></el-link>
               </el-tooltip>
             </el-tag>
 
@@ -50,7 +50,7 @@
               })"
               placement="top"
             >
-              <el-link icon="InfoFilled" type="primary" class="!-mt-px" :underline="false"></el-link>
+              <el-link icon="InfoFilled" type="primary" class="!-mt-px" underline="never"></el-link>
             </el-tooltip>
           </el-tag>
         </div>

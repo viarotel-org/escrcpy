@@ -143,7 +143,7 @@
   "copilot.event.task_complete": "Completed",
   "copilot.event.thinking": "Thinking",
   "copilot.executing": "Executing...",
-  "copilot.inputPlaceholder": "Enter command, e.g.: Open WeChat and send a message to John",
+  "copilot.inputPlaceholder": "Enter the command to execute",
   "copilot.morePrompts": "More",
   "copilot.noDevice": "No device selected",
   "copilot.noDeviceHint": "Please select a device from the device list to open {name}",

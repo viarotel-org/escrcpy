@@ -10,7 +10,7 @@
           {{ message }}
         </div>
 
-        <ElLink v-if="showClose" :underline="false" class="flex-none" @click="cancel">
+        <ElLink v-if="showClose" underline="never" class="flex-none" @click="cancel">
           <ElIcon class="">
             <ElIconClose />
           </ElIcon>

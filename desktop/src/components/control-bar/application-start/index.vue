@@ -27,8 +27,8 @@
           </div>
 
           <div class="absolute inset-y-center right-1 z-5 flex items-center">
-            <el-link v-if="['win32'].includes(platform)" type="primary" :underline="false" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
-            <el-link type="primary" :underline="false" icon="Monitor" class="" :title="$t('device.control.startApp.useMainScreen')" @click.stop="onMainStartClick(item)"></el-link>
+            <el-link v-if="['win32'].includes(platform)" type="primary" underline="never" icon="TopRight" class="" :title="$t('desktop.shortcut.add')" @click.stop="onShortcutClick(item)"></el-link>
+            <el-link type="primary" underline="never" icon="Monitor" class="" :title="$t('device.control.startApp.useMainScreen')" @click.stop="onMainStartClick(item)"></el-link>
           </div>
         </el-dropdown-item>
       </el-dropdown-menu>

@@ -143,7 +143,7 @@
   "copilot.event.task_complete": "完了",
   "copilot.event.thinking": "思考中",
   "copilot.executing": "実行中...",
-  "copilot.inputPlaceholder": "コマンドを入力してください（例：WeChatを開いてメッセージを送信）",
+  "copilot.inputPlaceholder": "実行するコマンドを入力してください",
   "copilot.morePrompts": "もっと見る",
   "copilot.noDevice": "デバイスが選択されていません",
   "copilot.noDeviceHint": "{name} を開くには、デバイスリストからデバイスを選択してください",

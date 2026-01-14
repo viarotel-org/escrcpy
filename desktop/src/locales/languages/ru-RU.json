@@ -143,7 +143,7 @@
   "copilot.event.task_complete": "Завершено",
   "copilot.event.thinking": "Обработка",
   "copilot.executing": "Выполнение...",
-  "copilot.inputPlaceholder": "Введите команду, например: Открыть WeChat и отправить сообщение",
+  "copilot.inputPlaceholder": "Введите команду для выполнения",
   "copilot.morePrompts": "Ещё",
   "copilot.noDevice": "Устройство не выбрано",
   "copilot.noDeviceHint": "Выберите устройство из списка для открытия {name}",

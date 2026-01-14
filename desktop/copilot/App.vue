@@ -64,7 +64,7 @@
         <ChatPanel
           v-if="currentDevice"
           :current-device="currentDevice"
-          @show-prompt-manager="showPromptManager = true"
+          @no-api-key="onConfigClick"
         />
       </div>
 

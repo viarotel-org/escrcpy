@@ -1,11 +1,8 @@
 import formatterManager from './formatters/index.js'
 import { eventStreamManager } from './streams/index.js'
-import { defaultCopilotConfigs } from '$copilot/configs/index.js'
 
-// Get ipcxRenderer exposed from preload
 const { ipcxRenderer } = window.electron
 
-// Service name prefix (must be consistent with the main process)
 const SERVICE_PREFIX = 'copilot'
 
 /**
@@ -57,7 +54,7 @@ export function parseDeviceList(output) {
 class CopilotClient {
   constructor() {
     this.formatter = formatterManager.create()
-    this.preflightChecker = null // Lazy-loaded (to avoid circular dependencies)
+    this.preflightChecker = null
   }
 
   /**
@@ -77,7 +74,6 @@ class CopilotClient {
    */
   async _getPreflightChecker() {
     if (!this.preflightChecker) {
-      // Dynamic import to avoid circular dependency
       const module = await import('$copilot/utils/PreflightChecker.js')
       this.preflightChecker = module.preflightChecker
     }
@@ -123,21 +119,21 @@ class CopilotClient {
       ...restOptions
     } = options
 
-    // Preflight checks (single-device only)
     if (!skipPreflightCheck && !Array.isArray(deviceId)) {
-      const config = await this.getConfig()
-      const checker = await this._getPreflightChecker()
       const subscribeStore = useSubscribeStore()
+      const copilotStore = useCopilotStore()
+      const copilotConfig = copilotStore.config || {}
+
+      const checker = await this._getPreflightChecker()
 
       await subscribeStore.init()
 
       const checkResult = await checker.runAll({
         deviceId,
-        copilotConfig: config,
+        copilotConfig,
         subscribeStore,
       })
 
-      // If checks fail, trigger callback and block execution
       if (!checkResult.passed) {
         console.warn('[CopilotClient] Preflight check failed:', checkResult.failedChecks)
 
@@ -219,24 +215,6 @@ class CopilotClient {
     return this._invoke('getActiveSessions')
   }
 
-  getConfig() {
-    const stored = window.electronStore.get('copilot') || {}
-
-    return {
-      ...defaultCopilotConfigs,
-      ...stored,
-    }
-  }
-
-  setConfig(value, key) {
-    if (key) {
-      window.electronStore.set(`copilot.${key}`, value)
-    }
-    else {
-      window.electronStore.set('copilot', value)
-    }
-  }
-
   /**
    * Check whether the ADB keyboard is installed
    *
@@ -292,12 +270,10 @@ class CopilotClient {
     return this._invoke('getSystemStats')
   }
 
-  // Utility functions (exposed)
   formatError = formatError
   parseDeviceList = parseDeviceList
 }
 
-// Create and export singleton
 const copilotClient = new CopilotClient()
 
 export default copilotClient

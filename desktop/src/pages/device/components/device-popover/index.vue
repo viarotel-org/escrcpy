@@ -10,7 +10,7 @@
     @after-leave="onAfterLeave"
   >
     <template #reference>
-      <el-link type="primary" :underline="false" icon="InfoFilled" :disabled="!connectFlag" class="flex-none"></el-link>
+      <el-link type="primary" underline="never" icon="InfoFilled" :disabled="!connectFlag" class="flex-none"></el-link>
     </template>
 
     <div v-loading="loading" :element-loading-text="$t('common.loading')" class="flex items-stretch p-2" :class="[horizontalFlag ? 'flex-col space-y-2' : 'space-x-2 h-60', { '!h-auto': !connectFlag }]">

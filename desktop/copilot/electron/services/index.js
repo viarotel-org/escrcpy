@@ -111,15 +111,18 @@ class CopilotService {
    * @returns {Object} Session configuration
    */
   _buildSessionConfig(options) {
-    const config = electronStore.get('copilot') || {}
+    const config = {
+      ...(electronStore.get('copilot') || {}),
+      ...(options || {}),
+    }
 
     return {
       baseUrl: config.baseUrl,
       apiKey: config.apiKey,
       model: config.model,
-      maxSteps: options.maxSteps || config.maxSteps,
+      maxSteps: config.maxSteps,
       lang: config.lang,
-      quiet: options.quiet || config.quiet,
+      quiet: config.quiet,
     }
   }
 

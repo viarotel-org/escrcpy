@@ -37,8 +37,6 @@
 </template>
 
 <script setup>
-import copilotClient from '$copilot/services/index.js'
-import { copilotPromptBus } from './helper.js'
 import { PromptManager } from '$copilot/components/prompts/index.js'
 
 const props = defineProps({
@@ -50,23 +48,13 @@ const props = defineProps({
 
 const emit = defineEmits(['select-prompt'])
 
-const quickPrompts = ref([])
+const copilotStore = useCopilotStore()
 
-const promptManagerRef = ref(null)
-
-onMounted(() => {
-  loadPrompts()
-
-  copilotPromptBus.on((val) => {
-    quickPrompts.value = val
-  })
+const quickPrompts = computed(() => {
+  return copilotStore.config?.prompts || []
 })
 
-// Load quick prompts
-async function loadPrompts() {
-  const config = await copilotClient.getConfig()
-  quickPrompts.value = config?.prompts || []
-}
+const promptManagerRef = ref(null)
 
 function onPromptClick(prompt) {
   emit('select-prompt', prompt)

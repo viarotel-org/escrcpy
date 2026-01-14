@@ -245,12 +245,13 @@ function createTimeoutPromise(timeout) {
  * @returns {Promise<string>} Execution output
  */
 async function executeCopilotCommandForDevice(device, command) {
+  const copilotStore = useCopilotStore()
   const deviceId = device.id
 
   let output = ''
 
-  // Check configuration
-  const config = await copilotClient.getConfig() || {}
+  const config = copilotStore.config || {}
+
   if (!config.apiKey) {
     throw copilotClient.formatError('CONFIG_MISSING', window.t('copilot.batch.error.missingApiKey'))
   }

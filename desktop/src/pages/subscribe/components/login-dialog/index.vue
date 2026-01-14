@@ -81,9 +81,10 @@ const visible = ref(false)
 
 const subscribeStore = useSubscribeStore()
 
+const copilotStore = useCopilotStore()
+
 const smsCountdown = reactive(useSmsCountdown())
 
-// Form
 const formRef = ref(null)
 
 const formInfo = reactive({
@@ -97,7 +98,6 @@ const subscribeValidator = reactive(
   }),
 )
 
-// Form rules
 const formRules = {
   account: [
     { required: true, message: t('subscribe.accountRequired'), trigger: 'blur' },
@@ -119,10 +119,8 @@ const formRules = {
   ],
 }
 
-// State
 const logging = ref(false)
 
-// resolve/reject for Promise
 let resolveLogin = null
 let rejectLogin = null
 
@@ -185,16 +183,17 @@ async function handleSubmit() {
     const result = await subscribeClient.getUserToken(data)
 
     if (result?.access_token) {
-      // Save token
       await subscribeStore.setAccessToken(result.access_token)
 
       await subscribeStore.init()
 
-      // Login success
+      if (!copilotStore.config.apiKey) {
+        copilotStore.switchGiteeConfig()
+      }
+
       visible.value = false
       ElMessage.success(t('subscribe.loginSuccess'))
 
-      // resolve Promise
       if (resolveLogin) {
         resolveLogin(result)
       }
@@ -207,7 +206,6 @@ async function handleSubmit() {
     console.error('Login failed:', error)
     ElMessage.error(error.message || t('subscribe.loginFailed'))
 
-    // reject Promise
     if (rejectLogin) {
       rejectLogin(error)
     }
@@ -218,21 +216,18 @@ async function handleSubmit() {
 }
 
 function handleClosed() {
-  // Reset form
   formRef.value?.resetFields()
   formInfo.account = ''
   formInfo.code = ''
 
   smsCountdown.reset()
 
-  // Reject Promise (if user closes the dialog)
   if (rejectLogin) {
     rejectLogin(new Error('Login cancelled'))
     rejectLogin = null
   }
 }
 
-// Open dialog (returns a Promise)
 function open() {
   visible.value = true
 
@@ -242,12 +237,10 @@ function open() {
   })
 }
 
-// Cleanup
 onUnmounted(() => {
   smsCountdown.reset()
 })
 
-// Expose methods
 defineExpose({
   open,
 })

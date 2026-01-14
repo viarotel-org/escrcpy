@@ -51,7 +51,7 @@
                         class="mr-1 !text-base"
                         icon="InfoFilled"
                         type="warning"
-                        :underline="false"
+                        underline="never"
                       >
                       </el-link>
                     </el-tooltip>

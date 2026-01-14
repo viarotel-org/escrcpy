@@ -93,7 +93,7 @@ const emit = defineEmits(['switchTab'])
 
 const subscribeStore = useSubscribeStore()
 
-const subscribeConfigure = useSubscribeConfigure()
+const copilotStore = useCopilotStore()
 
 // State
 const loading = ref(false)
@@ -133,7 +133,7 @@ function formatDate(timestamp) {
 }
 
 function updateSubscribeConfigure() {
-  subscribeConfigure.update()
+  copilotStore.switchGiteeConfig()
   ElMessage.success(window.t('common.success'))
 }
 

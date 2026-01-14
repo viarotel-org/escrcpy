@@ -60,15 +60,8 @@ export function registerCopilotHandlers(mainWindow) {
    * Execute a task (supports single-device and batch execution)
    */
   ipcxMain.handle(createChannel('execute'), async (_event, task, options = {}) => {
-    const { onSession, onData, onExit, ...restOptions } = options
-
     return safeExecute('execute', () =>
-      copilotService.execute(task, {
-        ...restOptions,
-        onSession,
-        onData,
-        onExit,
-      }),
+      copilotService.execute(task, options),
     )
   })
 

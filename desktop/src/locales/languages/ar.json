@@ -143,7 +143,7 @@
   "copilot.event.task_complete": "اكتمل",
   "copilot.event.thinking": "جارٍ التفكير",
   "copilot.executing": "جارٍ التنفيذ...",
-  "copilot.inputPlaceholder": "أدخل أمراً، مثال: افتح واتساب وأرسل رسالة",
+  "copilot.inputPlaceholder": "أدخل الأمر المراد تنفيذه",
   "copilot.morePrompts": "المزيد",
   "copilot.noDevice": "لم يتم اختيار جهاز",
   "copilot.noDeviceHint": "يرجى اختيار جهاز من القائمة لفتح {name}",

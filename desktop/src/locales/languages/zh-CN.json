@@ -143,7 +143,7 @@
   "copilot.event.task_complete": "已完成",
   "copilot.event.thinking": "思考中",
   "copilot.executing": "正在执行...",
-  "copilot.inputPlaceholder": "输入指令，例如：打开微信并发送消息给张三",
+  "copilot.inputPlaceholder": "请输入需要执行的指令",
   "copilot.morePrompts": "更多",
   "copilot.noDevice": "未选择设备",
   "copilot.noDeviceHint": "请从设备列表中选择一个设备后打开 {name}",

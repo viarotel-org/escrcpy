@@ -52,14 +52,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['showPromptManager'])
+const emit = defineEmits(['no-api-key'])
 
-// Session ID - use device ID as session identifier
+const copilotStore = useCopilotStore()
+
 const sessionId = computed(() => {
   return props.currentDevice?.id || 'default'
 })
 
-// Use chat messages hook for reactive synchronization
 const {
   messages,
   loading,
@@ -68,13 +68,11 @@ const {
   clearAll,
 } = useChatMessages(sessionId)
 
-// State
 const inputText = ref('')
 const isExecuting = ref(false)
 const currentOutput = ref('')
 const chatRef = ref(null)
 
-// Temporary message (for streaming output)
 const temporaryMessage = ref(null)
 
 const displayMessages = ref([])
@@ -85,7 +83,6 @@ watchEffect(() => {
     return false
   }
 
-  // Get adapted persisted messages
   const adapted = adaptMessagesForTDesign(messages.value, {
     reverse: true,
   })
@@ -108,14 +105,14 @@ async function handleSubmit(text) {
   if (!trimmedText || isExecuting.value)
     return
 
-  // Check configuration
-  const config = await copilotClient.getConfig() || {}
+  const config = copilotStore.config || {}
+
   if (!config.apiKey) {
     ElMessage.warning(t('copilot.error.noApiKey'))
+    emit('no-api-key')
     return
   }
 
-  // Add user message to database
   const userMessageResult = await addMessage({
     role: MessageRoleEnum.USER,
     content: trimmedText,
@@ -133,14 +130,11 @@ async function handleSubmit(text) {
   isExecuting.value = true
   currentOutput.value = ''
 
-  // Create temporary assistant message (for streaming output)
   temporaryMessage.value = createTemporaryAssistantMessage()
 
   try {
-    // Get device ID
     const deviceId = props.currentDevice?.id
 
-    // Execute task
     await copilotClient.execute(trimmedText, {
       deviceId,
       onData: (output, { payload }) => {
@@ -168,7 +162,6 @@ async function handleSubmit(text) {
     })
   }
   catch (error) {
-    // Add error message to database
     await addMessage({
       role: MessageRoleEnum.ASSISTANT,
       content: error.message ?? window.t('copilot.error.executionFailed'),
@@ -190,13 +183,11 @@ function scrollToBottom(behavior = 'smooth') {
   }
 }
 
-// Stop execution
 async function handleStop() {
   copilotClient.stop(props.currentDevice?.id)
   isExecuting.value = false
 }
 
-// Clear all messages
 async function handleClearAll() {
   try {
     const result = await clearAll()

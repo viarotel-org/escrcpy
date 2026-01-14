@@ -40,7 +40,7 @@
                 {{ row.id }}
               </div>
 
-              <el-link type="primary" :underline="false" title="WIFI" class="flex-none">
+              <el-link type="primary" underline="never" title="WIFI" class="flex-none">
                 <i v-if="row.wifi" class="i-bi-wifi"></i>
               </el-link>
             </div>
@@ -80,7 +80,7 @@
                 :content="$t('device.permission.error')"
                 placement="top"
               >
-                <el-link type="danger" :underline="false" icon="WarningFilled" class="mr-1 flex-none"></el-link>
+                <el-link type="danger" underline="never" icon="WarningFilled" class="mr-1 flex-none"></el-link>
               </el-tooltip>
 
               <span class="flex-none">{{ $t(getDictLabel('deviceStatus', row.status)) || '-' }}</span>

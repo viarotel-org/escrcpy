@@ -10,6 +10,7 @@
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen config-dialog"
     :close-on-click-modal="false"
     @open="onOpen"
+    @close="onClose"
   >
     <div class="h-full overflow-y-auto pr-2 pt-2">
       <el-form
@@ -184,7 +185,7 @@
         </div>
 
         <div class="flex items-center">
-          <el-button @click="dialog.close()">
+          <el-button @click="onCloseClick">
             {{ $t('common.cancel') }}
           </el-button>
           <el-button type="primary" @click="submitConfig">
@@ -201,32 +202,31 @@
 
 <script setup>
 import { t } from '$/locales/index.js'
-import copilotClient from '$copilot/services/index.js'
 import { ApiModelEnum } from '$copilot/dicts/api.js'
-import { defaultCopilotConfigs } from '$copilot/configs/index.js'
 
 const props = defineProps({
-
 })
 
 const emit = defineEmits([])
 
 const subscribeStore = useSubscribeStore()
+const copilotStore = useCopilotStore()
 
 const dialog = useDialog()
 
-// Indicate API key visibility
 const showApiKey = ref(false)
 
-// Form reference
 const configFormRef = ref(null)
 
-// Form data
-const configForm = reactive({
-  ...defaultCopilotConfigs,
+const configForm = computed({
+  get() {
+    return copilotStore.config
+  },
+  set(value) {
+    copilotStore.config = value
+  },
 })
 
-// Form validation rules
 const formRules = reactive({
   baseUrl: [
     {
@@ -255,43 +255,30 @@ const providerOptions = computed(() => {
 })
 
 function onProviderChange(val) {
-  configForm.model = ApiModelEnum.named[val].label
-  configForm.baseUrl = ApiModelEnum[val]
+  configForm.value.model = ApiModelEnum.named[val].label
+  configForm.value.baseUrl = ApiModelEnum[val]
 }
 
 async function onOpen() {
   subscribeStore.init()
-  loadConfig()
 }
 
-// Load configuration
-async function loadConfig() {
-  const savedConfig = await copilotClient.getConfig() || {}
-
-  Object.assign(configForm, {
-    ...savedConfig,
-  })
-
-  // Reset form validation state
-  if (configFormRef.value) {
-    configFormRef.value.clearValidate()
-  }
+function onClose() {
+  handleClearValidate()
 }
 
-// Submit configuration
 async function submitConfig() {
   try {
-    // Validate form first
     const valid = await configFormRef.value.validate()
     if (!valid)
       return
 
-    await copilotClient.setConfig({ ...toRaw(configForm) })
+    copilotStore.updateConfig()
+
     ElMessage.success(t('copilot.config.saveSuccess'))
     dialog.close()
   }
   catch (error) {
-    // Validation errors are shown automatically
     if (error.name !== 'ValidationError') {
       console.error('Config save failed:', error)
       ElMessage.error(t('copilot.config.saveFailed'))
@@ -299,21 +286,13 @@ async function submitConfig() {
   }
 }
 
-// Open subscribe page
 function openSubscribePage() {
-  // Notify main window via IPC to navigate to subscribe page
   window.electron?.ipcRenderer.invoke('navigate-to-route', '/subscribe')
 }
 
-// Import Copilot configuration from subscription
 async function onAutoConfigSubscribe() {
   try {
-    configForm.provider = 'Gitee'
-    configForm.baseUrl = 'https://ai.gitee.com/v1'
-    configForm.apiKey = subscribeStore.accessToken
-    configForm.model = 'AutoGLM-Phone-9B-Multilingual'
-
-    copilotClient.setConfig({ ...toRaw(configForm) })
+    copilotStore.switchGiteeConfig()
 
     ElMessage.success(t('common.success'))
   }
@@ -323,7 +302,6 @@ async function onAutoConfigSubscribe() {
   }
 }
 
-// Reset configuration
 async function resetConfig() {
   try {
     await ElMessageBox.confirm(
@@ -335,21 +313,30 @@ async function resetConfig() {
         type: 'warning',
       },
     )
-
-    Object.assign(configForm, {
-      ...defaultCopilotConfigs,
-    })
-
-    // Reset form validation state
-    if (configFormRef.value) {
-      configFormRef.value.clearValidate()
-    }
-
-    ElMessage.success(t('copilot.config.resetSuccess'))
   }
   catch {
-    // User cancelled
+    return false
   }
+
+  copilotStore.resetConfig()
+
+  handleClearValidate()
+
+  ElMessage.success(t('copilot.config.resetSuccess'))
+}
+
+function handleClearValidate() {
+  if (configFormRef.value) {
+    configFormRef.value.clearValidate()
+  }
+}
+
+function onCloseClick() {
+  copilotStore.resetConfig({
+    source: 'store',
+  })
+
+  dialog.close()
 }
 
 defineExpose({

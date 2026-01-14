@@ -101,8 +101,7 @@ const emit = defineEmits(['update:modelValue', 'success'])
 const dialog = useDialog()
 
 const subscribeStore = useSubscribeStore()
-
-const subscribeConfigure = useSubscribeConfigure()
+const copilotStore = useCopilotStore()
 
 const status = ref('generating') // generating | pending | success | failed | cancelled
 const orderInfo = ref(null)
@@ -226,7 +225,7 @@ async function checkPaymentStatus() {
       stopPolling()
       status.value = 'success'
 
-      subscribeConfigure.update()
+      copilotStore.switchGiteeConfig()
 
       await sleep()
 

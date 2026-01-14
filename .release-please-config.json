@@ -3,9 +3,8 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "release-name": "v${version}",
       "package-name": "@escrcpy/workspace",
-      "component": "workspace",
+      "component": "@escrcpy/workspace",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -26,34 +25,32 @@
       "release-type": "node",
       "package-name": "escrcpy",
       "component": "escrcpy",
-      "skip-github-release": true,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
     "packages/electron-ipcx": {
       "release-type": "node",
       "package-name": "@escrcpy/electron-ipcx",
-      "component": "electron-ipcx",
-      "skip-github-release": true,
+      "component": "@escrcpy/electron-ipcx",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     }
   },
-  "group-pull-request-title-pattern": "chore: release ${version}",
+  "bootstrap-sha": "46dec4a00acfde4b9f50b6644ee22fd1c37ce948",
   "release-search-depth": 10,
   "changelog-host": "https://github.com",
   "changelog-path": "CHANGELOG.md",
-  "pull-request-title-pattern": "chore: release ${version}",
-  "pull-request-header": "🚀 Release Please",
   "separate-pull-requests": false,
+  "group-pull-request-title-pattern": "chore: release v${version}",
+  "pull-request-header": ":robot: Release v${version}",
   "plugins": [
     {
       "type": "linked-versions",
-      "groupName": "workspace",
+      "groupName": "@escrcpy/workspace",
       "components": [
-        "workspace",
+        "@escrcpy/workspace",
         "escrcpy",
-        "electron-ipcx"
+        "@escrcpy/electron-ipcx"
       ]
     },
     {

@@ -20,7 +20,11 @@
         @selection-change="onSelectionChange"
       >
         <template #empty>
-          <el-empty :description="$t('device.list.empty')" />
+          <el-empty :description="$t('device.list.empty')">
+            <template #image>
+              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 text-white" />
+            </template>
+          </el-empty>
         </template>
 
         <el-table-column type="selection"></el-table-column>

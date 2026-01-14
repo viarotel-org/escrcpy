@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.1.2](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.1...workspace-v2.1.2) (2026-01-14)
+
+
+### Bug Fixes
+
+* 🐛 Fix automatic build issues ([aba8f27](https://github.com/viarotel-org/escrcpy/commit/aba8f27a76922211d02a8154b99afe2d5707bfff))
+
+
+### Miscellaneous Chores
+
+* add GH_TOKEN env to release workflow ([078bf18](https://github.com/viarotel-org/escrcpy/commit/078bf1806fbcd07374fd59274aff61dcd79119bf))
+* release 2.1.1 ([d1c04ce](https://github.com/viarotel-org/escrcpy/commit/d1c04cece7713050f4a6f25b1a87d1923dd538a8))
+* release 2.1.2 ([91d9bbd](https://github.com/viarotel-org/escrcpy/commit/91d9bbd03735d2e5ba6d906cc37d921f0f0aebae))
+* release 2.1.2 ([c7c8616](https://github.com/viarotel-org/escrcpy/commit/c7c861655b3af4c623be97331184112e1e5c7e58))
+* remove release creation step from workflow ([b73c179](https://github.com/viarotel-org/escrcpy/commit/b73c179d93055d9cd5b7cf37863d47a8a7d41d33))
+* remove unnecessary comments in App.vue ([22e331d](https://github.com/viarotel-org/escrcpy/commit/22e331df21566a39fda30ed6b2f6265be51b242a))
+* remove unnecessary comments in App.vue ([5ae8fbe](https://github.com/viarotel-org/escrcpy/commit/5ae8fbebbd361d56b6d7d69bcf73d19d6e3ec4b0))
+* update electron-builder config path and publish options ([d3b4914](https://github.com/viarotel-org/escrcpy/commit/d3b49142f1847d68927aa126a1a5a25f372ad53d))
+* update pull request title pattern ([060ad4a](https://github.com/viarotel-org/escrcpy/commit/060ad4a2c218a46bf2a78f52864728822e2165c6))
+* update release configuration and patterns ([0054fd4](https://github.com/viarotel-org/escrcpy/commit/0054fd4ff51345a1b16a889aade02b068b5be699))
+
 ## [2.1.0](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.0.1...workspace-v2.1.0) (2026-01-14)
 
 

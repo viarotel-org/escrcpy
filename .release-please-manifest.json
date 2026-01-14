@@ -1,5 +1,5 @@
 {
-  ".": "2.1.1",
-  "desktop": "2.1.1",
-  "packages/electron-ipcx": "2.1.1"
+  ".": "2.1.2",
+  "desktop": "2.1.2",
+  "packages/electron-ipcx": "2.1.2"
 }

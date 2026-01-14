@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.2...workspace-v2.1.3) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* add linked-versions plugin to release config ([415e4ae](https://github.com/viarotel-org/escrcpy/commit/415e4ae6c54fb167af8b1e31fec74b0056fa7e86))
+
 ## [2.1.2](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.1...workspace-v2.1.2) (2026-01-14)
 
 

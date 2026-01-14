@@ -3,7 +3,9 @@
   "packages": {
     ".": {
       "release-type": "node",
+      "release-name": "v${version}",
       "package-name": "@escrcpy/workspace",
+      "component": "workspace",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -23,12 +25,16 @@
     "desktop": {
       "release-type": "node",
       "package-name": "escrcpy",
+      "component": "escrcpy",
+      "skip-github-release": true,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
     "packages/electron-ipcx": {
       "release-type": "node",
       "package-name": "@escrcpy/electron-ipcx",
+      "component": "electron-ipcx",
+      "skip-github-release": true,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     }
@@ -43,17 +49,15 @@
   "plugins": [
     {
       "type": "linked-versions",
-      "groupName": "escrcpy",
+      "groupName": "workspace",
       "components": [
-        "@escrcpy/workspace",
-        "@escrcpy/electron-ipcx",
-        "escrcpy"
-      ],
-      "merge": true
+        "workspace",
+        "escrcpy",
+        "electron-ipcx"
+      ]
     },
     {
       "type": "node-workspace",
-      "merge": true,
       "updatePeerDependencies": true
     }
   ]

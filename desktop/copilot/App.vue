@@ -3,7 +3,6 @@
     <div
       class="flex flex-col h-screen"
     >
-      <!-- Top title bar - compact design -->
       <div
         :class="[
           {
@@ -30,7 +29,6 @@
           </div>
         </div>
 
-        <!-- Action buttons -->
         <div class="flex items-center gap-1 *:app-region-no-drag">
           <el-tooltip :content="$t('copilot.promptManager.title')" placement="bottom">
             <el-button
@@ -59,7 +57,6 @@
         </div>
       </div>
 
-      <!-- Main content area -->
       <div class="flex-1 min-h-0 overflow-hidden">
         <ChatPanel
           v-if="currentDevice"
@@ -68,10 +65,8 @@
         />
       </div>
 
-      <!-- Config dialog -->
       <ConfigDialog ref="configDialogRef" />
 
-      <!-- Quick commands -->
       <PromptManager ref="promptManagerRef" />
     </div>
   </el-config-provider>
@@ -96,7 +91,6 @@ const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
 const configDialogRef = ref(null)
 const promptManagerRef = ref(null)
 
-// Get device display name
 const getDeviceLabel = (device) => {
   if (!device)
     return ''

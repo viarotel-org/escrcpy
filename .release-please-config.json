@@ -21,9 +21,7 @@
       ],
       "extra-files": [
         "desktop/package.json",
-        "packages/autoglm.js/package.json",
-        "packages/electron-ipcx/package.json",
-        "packages/shared/package.json"
+        "packages/electron-ipcx/package.json"
       ]
     },
     "desktop": {
@@ -34,26 +32,10 @@
       "bump-patch-for-minor-pre-major": true,
       "skip-github-release": true
     },
-    "packages/autoglm.js": {
-      "release-type": "node",
-      "package-name": "autoglm.js",
-      "component": "autoglm.js",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "skip-github-release": true
-    },
     "packages/electron-ipcx": {
       "release-type": "node",
       "package-name": "@escrcpy/electron-ipcx",
       "component": "electron-ipcx",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "skip-github-release": true
-    },
-    "packages/shared": {
-      "release-type": "node",
-      "package-name": "@autoglm.js/shared",
-      "component": "shared",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "skip-github-release": true

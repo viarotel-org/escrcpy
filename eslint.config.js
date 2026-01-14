@@ -73,6 +73,7 @@ export default antfu(
       'perfectionist/sort-imports': 'off',
       'no-control-regex': 'off',
       'no-cond-assign': 'off',
+      'no-template-curly-in-string': 'off',
 
       'pnpm/yaml-enforce-settings': 'off',
 

@@ -21,6 +21,8 @@ export default {
     'openInEditor',
   ]),
 
+  getPath: () => appStore.path,
+
   getAll: () => appStore.store,
   setAll: value => (appStore.store = value),
 

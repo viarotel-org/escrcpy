@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/electron-ipcx",
   "type": "module",
-  "version": "2.1.2",
+  "version": "2.1.4",
   "private": false,
   "description": "A more intuitive electron ipc system with function proxy support",
   "author": "viarotel",
@@ -22,7 +22,6 @@
     "dev": "tsdown --watch",
     "typecheck": "tsc",
     "test": "vitest",
-    "release": "bumpp",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
@@ -30,7 +29,6 @@
     "nanoid": "^5.0.7"
   },
   "devDependencies": {
-    "bumpp": "^9.4.3",
     "electron": "*",
     "tsdown": "*",
     "typescript": "*",

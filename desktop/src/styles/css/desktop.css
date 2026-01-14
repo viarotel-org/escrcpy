@@ -2,10 +2,6 @@ html {
   font-size: 14px !important;
 }
 
-body {
-  @apply bg-gray-100 !dark:bg-gray-950;
-}
-
 .app-region-drag {
   -webkit-app-region: drag !important;
 }

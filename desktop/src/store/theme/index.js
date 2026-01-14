@@ -35,22 +35,25 @@ export const useThemeStore = defineStore('app-theme', () => {
   }
 
   async function updateHtml(value) {
-    const updateClass = (theme) => {
-      const htmlEl = document.querySelector('html')
-      if (theme === 'dark') {
-        htmlEl.classList.add('dark')
-        return
-      }
-
-      htmlEl.classList.remove('dark')
-    }
-
     if (value === 'system') {
       updateClass(isDark.value ? 'dark' : 'light')
       return
     }
 
     updateClass(value)
+  }
+
+  function updateClass(theme) {
+    const htmlEl = document.documentElement
+
+    if (theme === 'dark') {
+      htmlEl.classList.remove('bg-gray-100')
+      htmlEl.classList.add('dark', 'dark:bg-gray-900')
+      return
+    }
+
+    htmlEl.classList.remove('dark', 'dark:bg-gray-900')
+    htmlEl.classList.add('bg-gray-100')
   }
 
   init()

@@ -1,11 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
-    ".": {
+    "desktop": {
       "release-type": "node",
-      "release-name": "v${version}",
-      "package-name": "@escrcpy/workspace",
-      "component": "workspace",
+      "package-name": "escrcpy",
+      "include-component-in-tag": false,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -20,42 +19,12 @@
         { "type": "test", "section": "Tests", "hidden": true },
         { "type": "build", "section": "Build System", "hidden": true },
         { "type": "ci", "section": "Continuous Integration", "hidden": true }
+      ],
+      "extra-files": [
+        "./package.json",
+        "./packages/electron-ipcx/package.json"
       ]
-    },
-    "desktop": {
-      "release-type": "node",
-      "package-name": "escrcpy",
-      "component": "escrcpy",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
-    },
-    "packages/electron-ipcx": {
-      "release-type": "node",
-      "package-name": "@escrcpy/electron-ipcx",
-      "component": "electron-ipcx",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
     }
   },
-  "bootstrap-sha": "46dec4a00acfde4b9f50b6644ee22fd1c37ce948",
-  "release-search-depth": 10,
-  "changelog-host": "https://github.com",
-  "changelog-path": "CHANGELOG.md",
-  "separate-pull-requests": false,
-  "group-pull-request-title-pattern": "chore: release ${version}",
-  "plugins": [
-    {
-      "type": "linked-versions",
-      "groupName": "workspace",
-      "components": [
-        "workspace",
-        "escrcpy",
-        "electron-ipcx"
-      ]
-    },
-    {
-      "type": "node-workspace",
-      "updatePeerDependencies": true
-    }
-  ]
+  "bootstrap-sha": "46dec4a00acfde4b9f50b6644ee22fd1c37ce948"
 }

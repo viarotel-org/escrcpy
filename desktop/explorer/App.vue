@@ -1,9 +1,7 @@
 <template>
   <el-config-provider :locale="locale" :size="getSize($grid)">
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-4">
-      <!-- Navigation bar -->
       <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-        <!-- Back/Forward/Up buttons -->
         <div class="flex-none flex items-center">
           <el-button
             text
@@ -28,7 +26,6 @@
           ></el-button>
         </div>
 
-        <!-- Breadcrumb navigation -->
         <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
           <el-breadcrumb separator-icon="ArrowRight" class="!flex">
             <el-breadcrumb-item
@@ -44,7 +41,6 @@
           </el-breadcrumb>
         </Scrollable>
 
-        <!-- Refresh button -->
         <div class="flex-none">
           <el-button
             text
@@ -56,10 +52,8 @@
         </div>
       </div>
 
-      <!-- Toolbar -->
       <div class="flex items-center mb-4">
         <div class="-ml-px space-x-2 mr-auto">
-          <!-- New -->
           <AddPopover @success="handleAdd">
             <template #reference>
               <el-button type="default" icon="Plus">
@@ -68,7 +62,6 @@
             </template>
           </AddPopover>
 
-          <!-- Upload -->
           <el-dropdown ref="uploadDropdownRef" :trigger="uploadDropdownTrigger" @command="handleUpload">
             <el-button
               type="default"
@@ -92,7 +85,6 @@
           </el-dropdown>
         </div>
 
-        <!-- Paste -->
         <el-button
           v-if="explorer.clipboard.hasClipboard.value"
           type="primary"
@@ -104,7 +96,6 @@
           ({{ explorer.clipboard.clipboardState.value.count }})
         </el-button>
 
-        <!-- Batch actions -->
         <el-button-group>
           <el-button
             type="default"
@@ -142,7 +133,6 @@
         </el-button-group>
       </div>
 
-      <!-- File list -->
       <div class="flex-1 overflow-hidden">
         <el-table
           ref="tableRef"
@@ -177,7 +167,6 @@
 
           <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
             <template #default="{ row }">
-              <!-- Preview button (files only) -->
               <ExTooltipButton
                 effect="light"
                 placement="top"
@@ -243,7 +232,6 @@
         </el-table>
       </div>
 
-      <!-- Status bar -->
       <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
         <div>
           {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
@@ -265,7 +253,6 @@
       </div>
     </div>
 
-    <!-- Path selection dialog -->
     <MoveDialog
       ref="moveDialogRef"
       :device-id="device?.id"
@@ -273,7 +260,6 @@
       @confirm="handlePathSelectConfirm"
     />
 
-    <!-- Edit dialog -->
     <EditDialog ref="editDialogRef" :explorer />
   </el-config-provider>
 </template>
@@ -294,7 +280,6 @@ const pathSelectAction = ref('move')
 
 const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'hover'
 
-// Use file manager hooks
 const explorer = useExplorer()
 
 const { queryParams: device, locale, getSize } = useWindowStateSync({
@@ -310,12 +295,10 @@ watch(() => explorer.breadcrumbs.value.length, async () => {
   scrollableRef.value?.scrollToEnd?.()
 })
 
-// Handle selection change
 function handleSelectionChange(selection) {
   explorer.selection.setSelection(selection)
 }
 
-// Create new file or directory
 async function handleAdd({ name, type }) {
   let result
   if (type === 'file') {
@@ -333,7 +316,6 @@ async function handleAdd({ name, type }) {
   }
 }
 
-// Delete file/directory
 async function handleRemove(row) {
   try {
     await ElMessageBox.confirm(
@@ -359,12 +341,10 @@ async function handleRemove(row) {
   }
 }
 
-// Edit file
 function handleEdit(row) {
   editDialogRef.value?.open(row)
 }
 
-// Upload files/directories
 async function handleUpload(command) {
   const properties = ['multiSelections']
 
@@ -378,7 +358,6 @@ async function handleUpload(command) {
 
   properties.unshift(...openTypes)
 
-  // Select files and directories
   const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
     properties,
   })
@@ -386,7 +365,6 @@ async function handleUpload(command) {
   if (!files || files.length === 0)
     return
 
-  // Create progress notification
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.upload.scanning'),
     {
@@ -436,9 +414,7 @@ async function handleUpload(command) {
   }
 }
 
-// Preview file
 async function handlePreview(row) {
-  // Check whether preview is supported
   const supportCheck = explorer.previewer.checkPreviewSupport(row)
   if (!supportCheck.supported) {
     ElMessage.warning(
@@ -456,14 +432,12 @@ async function handlePreview(row) {
   try {
     const result = await explorer.previewer.previewFile(row, {
       onProgress: () => {
-        // Do not show detailed progress during preview
       },
     })
 
     messageLoading.close()
 
     if (result.success) {
-      // File opened successfully; no further action required
     }
     else if (result.error) {
       ElMessage.error(window.t('device.control.file.manager.preview.error', { error: result.error }))
@@ -476,7 +450,6 @@ async function handlePreview(row) {
   }
 }
 
-// Download file
 async function handleDownload(row) {
   try {
     await ElMessageBox.confirm(
@@ -495,7 +468,6 @@ async function handleDownload(row) {
 
   const savePath = preferenceStore.getData(device.value.id)?.savePath || './'
 
-  // Create progress notification
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.download.scanning'),
     {
@@ -546,7 +518,6 @@ async function handleDownload(row) {
   }
 }
 
-// Copy to clipboard
 function handleCopy() {
   const items = explorer.selection.selectedItems.value
   if (items.length > 0) {
@@ -555,7 +526,6 @@ function handleCopy() {
   }
 }
 
-// Cut to clipboard
 function handleCut() {
   const items = explorer.selection.selectedItems.value
   if (items.length > 0) {
@@ -564,7 +534,6 @@ function handleCut() {
   }
 }
 
-// Paste
 async function handlePaste() {
   const result = await explorer.clipboard.paste({ autoRefresh: true })
   if (result.success) {
@@ -577,13 +546,11 @@ async function handlePaste() {
   }
 }
 
-// Move a single item
 function handleMoveItem(row) {
   pathSelectAction.value = 'move'
   moveDialogRef.value?.open([row], explorer.currentPath.value)
 }
 
-// Confirm target path selection
 async function handlePathSelectConfirm({ targetPath, items }) {
   let result
   if (pathSelectAction.value === 'move') {
@@ -609,7 +576,6 @@ async function handlePathSelectConfirm({ targetPath, items }) {
   }
 }
 
-// Handle item click
 async function handleNameClick(row) {
   if (!['file'].includes(row.type)) {
     explorer.navigateTo(row.id)

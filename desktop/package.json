@@ -1,5 +1,5 @@
 {
-  "name": "@escrcpy/desktop",
+  "name": "escrcpy",
   "type": "module",
   "version": "2.0.1",
   "private": true,

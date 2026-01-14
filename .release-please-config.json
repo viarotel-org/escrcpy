@@ -26,7 +26,7 @@
     },
     "desktop": {
       "release-type": "node",
-      "package-name": "@escrcpy/desktop",
+      "package-name": "escrcpy",
       "component": "desktop",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,

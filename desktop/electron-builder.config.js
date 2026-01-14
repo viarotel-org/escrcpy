@@ -1,5 +1,4 @@
 /** @type {import('electron-builder').Configuration} */
-console.log('Electron Builder Config Loaded')
 export default {
   productName: 'Escrcpy',
   appId: 'org.viarotel.escrcpy',

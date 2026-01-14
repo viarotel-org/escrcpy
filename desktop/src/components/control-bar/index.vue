@@ -143,7 +143,7 @@ export default {
         },
         'app-start': {
           label: 'device.control.startApp',
-          fontIcon: 'i-bi-send',
+          fontIcon: 'i-famicons-rocket-outline',
           component: 'ApplicationStart',
         },
         'turn-screen-off': {

@@ -3,6 +3,7 @@
   "packages": {
     ".": {
       "release-type": "node",
+      "release-name": "v${version}",
       "package-name": "@escrcpy/workspace",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,

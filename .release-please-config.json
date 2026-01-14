@@ -26,6 +26,5 @@
         "packages/electron-ipcx/package.json"
       ]
     }
-  },
-  "bootstrap-sha": "46dec4a00acfde4b9f50b6644ee22fd1c37ce948"
+  }
 }

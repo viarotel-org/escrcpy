@@ -22,7 +22,7 @@
         <template #empty>
           <el-empty :description="$t('device.list.empty')">
             <template #image>
-              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 text-white" />
+              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 !-mb-6" />
             </template>
           </el-empty>
         </template>

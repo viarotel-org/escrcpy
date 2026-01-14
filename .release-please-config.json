@@ -45,7 +45,7 @@
   "release-search-depth": 10,
   "changelog-host": "https://github.com",
   "changelog-path": "CHANGELOG.md",
-  "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+  "pull-request-title-pattern": "chore: release${component} ${version}",
   "pull-request-header": "🚀 Release Please",
   "separate-pull-requests": false,
   "plugins": [

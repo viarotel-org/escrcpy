@@ -42,6 +42,16 @@
   "separate-pull-requests": false,
   "plugins": [
     {
+      "type": "linked-versions",
+      "groupName": "escrcpy",
+      "components": [
+        "@escrcpy/workspace",
+        "@escrcpy/electron-ipcx",
+        "escrcpy"
+      ],
+      "merge": true
+    },
+    {
       "type": "node-workspace",
       "merge": true,
       "updatePeerDependencies": true

@@ -64,7 +64,7 @@ const actionModel = [
   },
   {
     label: 'device.remove',
-    fontIcon: 'i-bi-trash',
+    elIcon: 'Delete',
     component: Delete,
   },
   {

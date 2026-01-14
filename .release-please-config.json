@@ -18,34 +18,26 @@
         { "type": "test", "section": "Tests", "hidden": true },
         { "type": "build", "section": "Build System", "hidden": true },
         { "type": "ci", "section": "Continuous Integration", "hidden": true }
-      ],
-      "extra-files": [
-        "desktop/package.json",
-        "packages/electron-ipcx/package.json"
       ]
     },
     "desktop": {
       "release-type": "node",
       "package-name": "escrcpy",
-      "component": "desktop",
       "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "skip-github-release": true
+      "bump-patch-for-minor-pre-major": true
     },
     "packages/electron-ipcx": {
       "release-type": "node",
       "package-name": "@escrcpy/electron-ipcx",
-      "component": "electron-ipcx",
       "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "skip-github-release": true
+      "bump-patch-for-minor-pre-major": true
     }
   },
-  "group-pull-request-title-pattern": "chore: release${component} ${version}",
+  "group-pull-request-title-pattern": "chore: release ${version}",
   "release-search-depth": 10,
   "changelog-host": "https://github.com",
   "changelog-path": "CHANGELOG.md",
-  "pull-request-title-pattern": "chore: release${component} ${version}",
+  "pull-request-title-pattern": "chore: release ${version}",
   "pull-request-header": "🚀 Release Please",
   "separate-pull-requests": false,
   "plugins": [

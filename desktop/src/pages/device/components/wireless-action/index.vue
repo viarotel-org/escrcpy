@@ -9,7 +9,7 @@
     @click="handleWifi(row)"
   >
     <template #icon>
-      <svg-icon name="wifi" class=""></svg-icon>
+      <i class="i-bi-wifi"></i>
     </template>
   </ExTooltipButton>
 

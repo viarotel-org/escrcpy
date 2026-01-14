@@ -28,14 +28,10 @@
           }"
         >
           <template #icon>
-            <svg-icon
-              v-if="item.svgIcon"
-              :name="item.svgIcon"
-              :class="item.iconClass"
-            ></svg-icon>
-            <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+            <el-icon v-if="item.elIcon" :class="item.iconClass">
               <component :is="item.elIcon" />
             </el-icon>
+            <i v-else-if="item.fontIcon" :class="item.fontIcon"></i>
           </template>
         </ExTooltipButton>
       </template>
@@ -56,32 +52,32 @@ const props = defineProps({})
 const actionModel = [
   {
     label: 'device.arrange.name',
-    svgIcon: 'window-split',
+    fontIcon: 'i-bi-window-split',
     component: Arrange,
   },
   {
     label: 'device.terminal.name',
-    svgIcon: 'command',
+    fontIcon: 'i-bi-terminal',
     component: Terminal,
   },
   {
     label: 'device.task.list',
-    elIcon: 'Clock',
+    fontIcon: 'i-bi-clock',
     component: Task,
   },
   {
     label: 'device.log.name',
-    elIcon: 'View',
+    fontIcon: 'i-qlementine-icons-run-debug-16',
     component: Log,
   },
   {
     label: 'device.restart.name',
-    elIcon: 'RefreshRight',
+    fontIcon: 'i-iconoir-refresh',
     component: Restart,
   },
   {
     label: 'common.search',
-    elIcon: 'Search',
+    fontIcon: 'i-bi-search',
     component: Search,
   },
 ]

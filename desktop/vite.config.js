@@ -8,7 +8,6 @@ import { defineConfig, mergeConfig } from 'vite'
 
 import useElectron from 'vite-plugin-electron/simple'
 import useRenderer from 'vite-plugin-electron-renderer'
-import useSvg from 'vite-svg-loader'
 
 import postcssConfig from './postcss.config.js'
 
@@ -61,7 +60,6 @@ export default function (args) {
       },
       plugins: [
         useUnoCSS(),
-        useSvg(),
         useVueRouter({
           exclude: ['src/pages/**/components'],
         }),

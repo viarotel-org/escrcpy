@@ -10,11 +10,13 @@
     <template #reference>
       <el-button
         type="primary"
-        :icon="loading ? '' : 'FullScreen'"
         :loading="loading"
         class="flex-none !border-none"
         @click="handleClick"
       >
+        <template v-if="!loading" #icon>
+          <i class="i-bi-hr"></i>
+        </template>
         {{ loading ? loadingText : $t('device.wireless.connect.qr') }}
       </el-button>
     </template>

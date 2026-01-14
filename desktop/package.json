@@ -14,7 +14,6 @@
     "build:electron": "electron-builder",
     "electron-fix": "npx electron-fix start",
     "locale-sync": "node scripts/locale-sync.js",
-    "svgo": "svgo --folder=src/icons/svgo --output=src/icons/svg --config=src/icons/svgo.config.js",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
@@ -27,7 +26,7 @@
     "@electron/remote": "2.1.2",
     "@element-plus/icons-vue": "2.3.2",
     "@escrcpy/electron-ipcx": "workspace:^",
-    "@iconify-json/mdi": "1.2.3",
+    "@iconify/json": "2.2.427",
     "@intlify/unplugin-vue-i18n": "11.0.3",
     "@tdesign-vue-next/chat": "0.4.6",
     "@unocss/preset-icons": "66.5.10",
@@ -86,7 +85,6 @@
     "vite-plugin-electron": "0.28.8",
     "vite-plugin-electron-renderer": "0.14.6",
     "vite-plugin-native": "2.2.2",
-    "vite-svg-loader": "5.1.0",
     "vue": "3.4.21",
     "vue-command": "35.2.1",
     "vue-draggable-resizable": "3.0.0",

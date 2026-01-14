@@ -27,14 +27,10 @@
             }"
           >
             <template #icon>
-              <svg-icon
-                v-if="item.svgIcon"
-                :name="item.svgIcon"
-                :class="item.iconClass"
-              ></svg-icon>
-              <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+              <el-icon v-if="item.elIcon" :class="item.iconClass">
                 <component :is="item.elIcon" />
               </el-icon>
+              <i v-else-if="item.fontIcon" :class="item.fontIcon"></i>
             </template>
           </el-button>
         </template>
@@ -68,37 +64,37 @@ const actionModel = [
   },
   {
     label: 'device.remove',
-    elIcon: 'Delete',
+    fontIcon: 'i-bi-trash',
     component: Delete,
   },
   {
     label: 'device.control.capture',
-    svgIcon: 'screenshot',
+    fontIcon: 'i-bi-camera',
     component: Screenshot,
   },
   {
     label: 'device.control.install',
-    svgIcon: 'mobile-install',
+    fontIcon: 'i-bi-file-arrow-up',
     component: Application,
   },
   {
     label: 'device.control.file.push',
-    elIcon: 'Folder',
+    fontIcon: 'i-bi-folder',
     component: FilePush,
   },
   {
     label: 'terminal.script.name',
-    svgIcon: 'command',
+    fontIcon: 'i-bi-terminal',
     component: Script,
   },
   {
     label: 'device.control.copilot',
-    svgIcon: 'copilot',
+    fontIcon: 'i-carbon-chat-bot',
     component: Copilot,
   },
   {
     label: 'device.task.name',
-    elIcon: 'Clock',
+    fontIcon: 'i-bi-clock',
     component: Tasks,
   },
 ]

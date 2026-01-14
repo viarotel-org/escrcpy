@@ -41,7 +41,7 @@
               </div>
 
               <el-link type="primary" :underline="false" title="WIFI" class="flex-none">
-                <svg-icon v-if="row.wifi" name="wifi" class=""></svg-icon>
+                <i v-if="row.wifi" class="i-bi-wifi"></i>
               </el-link>
             </div>
           </template>

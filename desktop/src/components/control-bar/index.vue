@@ -48,12 +48,7 @@
                 @click="handleClick(item, trigger || item.trigger)"
               >
                 <template #icon>
-                  <svg-icon
-                    v-if="item.svgIcon"
-                    :name="item.svgIcon"
-                    :class="item.iconClass"
-                  ></svg-icon>
-                  <el-icon v-else-if="item.elIcon" :class="item.iconClass">
+                  <el-icon v-if="item.elIcon" :class="item.iconClass">
                     <component :is="item.elIcon" />
                   </el-icon>
 
@@ -133,27 +128,27 @@ export default {
       const valueMap = {
         'switch': {
           label: 'device.control.switch',
-          elIcon: 'Switch',
+          fontIcon: 'i-bi-list',
           command: 'input keyevent 187',
         },
         'home': {
           label: 'device.control.home',
-          svgIcon: 'home',
+          fontIcon: 'i-bi-app',
           command: 'input keyevent 3',
         },
         'back': {
           label: 'device.control.return',
-          elIcon: 'Back',
+          fontIcon: 'i-cil-caret-left',
           command: 'input keyevent 4',
         },
         'app-start': {
           label: 'device.control.startApp',
-          svgIcon: 'launch',
+          fontIcon: 'i-bi-send',
           component: 'ApplicationStart',
         },
         'turn-screen-off': {
           label: 'device.control.turnScreenOff',
-          fontIcon: 'i-mdi-mobile-off',
+          fontIcon: 'i-bi-file-break',
           tips: 'device.control.turnScreenOff.tips',
           trigger: () => {
             window.scrcpy.helper(this.device.id, '--turn-screen-off')
@@ -161,67 +156,67 @@ export default {
         },
         'notification': {
           label: 'device.control.notification',
-          elIcon: 'Notification',
+          fontIcon: 'i-bi-bell',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
         },
         'power': {
           label: 'device.control.power',
-          elIcon: 'SwitchButton',
+          fontIcon: 'i-uiw-poweroff',
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
         },
         'rotation': {
           label: 'device.control.rotation.name',
-          svgIcon: 'rotation',
+          fontIcon: 'i-solar-smartphone-rotate-orientation-linear',
           component: 'Rotation',
         },
         'volume': {
           label: 'device.control.volume.name',
-          svgIcon: 'volume-up',
+          fontIcon: 'i-simple-line-icons-volume-2',
           component: 'Volume',
         },
         'screenshot': {
           label: 'device.control.capture',
-          svgIcon: 'screenshot',
+          fontIcon: 'i-simple-line-icons-camera',
           component: 'Screenshot',
         },
         'reboot': {
           label: 'device.control.reboot',
-          elIcon: 'RefreshLeft',
+          fontIcon: 'i-iconoir-refresh',
           command: 'reboot',
         },
         'app-install': {
           label: 'device.control.install',
-          svgIcon: 'mobile-install',
+          fontIcon: 'i-bi-file-arrow-up',
           component: 'Application',
         },
         'explorer': {
           label: 'device.control.file.name',
-          elIcon: 'Folder',
+          fontIcon: 'i-bi-folder',
           component: 'Explorer',
         },
         'terminal': {
           label: 'device.terminal.name',
-          svgIcon: 'command',
+          fontIcon: 'i-bi-terminal',
           component: 'Terminal',
           hiddenKeys: ['floating'],
         },
         'task': {
           label: 'device.task.name',
-          elIcon: 'Clock',
+          fontIcon: 'i-bi-clock',
           component: 'Tasks',
           hiddenKeys: ['floating'],
         },
         'gnirehtet': {
           label: 'device.control.gnirehtet',
-          elIcon: 'Link',
+          fontIcon: 'i-bi-hdd-network',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
         },
         'copilot': {
           label: 'device.control.copilot',
-          svgIcon: 'copilot',
+          fontIcon: 'i-carbon-chat-bot',
           component: 'Copilot',
           tips: 'copilot.welcome.description',
         },

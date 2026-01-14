@@ -6,10 +6,7 @@
           <img src="$electron/resources/build/logo.png" alt="" class="w-full h-full drop-shadow drop-shadow-color-gray-300">
         </div>
         <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center">
-          <svg-icon
-            name="copilot"
-            class="text-white"
-          ></svg-icon>
+          <i class="i-carbon-chat-bot text-white"></i>
         </div>
       </div>
 

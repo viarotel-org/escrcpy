@@ -19,7 +19,6 @@ export default antfu(
       'dist',
       'dist-electron',
       'dist-release',
-      'electron/main.js',
     ],
   },
   {

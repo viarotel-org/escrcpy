@@ -25,7 +25,7 @@ import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
 import copilot from '$copilot/electron/main.js'
 
-import { isPackaged, loadPage } from './helpers/index.js'
+import { getAppBackgroundColor, isPackaged, loadPage } from './helpers/index.js'
 
 import { Edger } from './helpers/edger/index.js'
 
@@ -110,15 +110,16 @@ async function onWhenReady(callback) {
 
 function createWindow(callback) {
   mainWindow = new BrowserWindow({
+    show: false,
+    icon: getLogoPath(),
     width: browserWindowWidth,
     minWidth: browserWindowWidth,
     height: browserWindowHeight,
     minHeight: browserWindowHeight,
-    show: false,
-    icon: getLogoPath(),
+    autoHideMenuBar: true,
+    backgroundColor: getAppBackgroundColor(),
     titleBarStyle: 'hidden',
     ...(['win32'].includes(process.platform) ? { titleBarOverlay: true } : {}),
-    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,

@@ -187,7 +187,7 @@ async function handleSubmit() {
 
       await subscribeStore.init()
 
-      if (!copilotStore.config.apiKey) {
+      if (!copilotStore.config.apiKey || ['gitee'].includes(copilotStore.config.provider)) {
         copilotStore.switchGiteeConfig()
       }
 

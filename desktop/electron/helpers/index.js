@@ -104,10 +104,14 @@ export function streamToBase64(stream) {
   })
 }
 
+export function getAppBackgroundColor() {
+  return nativeTheme.shouldUseDarkColors ? '#0A0A0A' : '#F5F5F5'
+}
+
 export function autoUpdateTitleBarOverlay(win) {
   if (['win32'].includes(process.platform)) {
     win.setTitleBarOverlay({
-      color: nativeTheme.shouldUseDarkColors ? '#0A0A0A' : '#F5F5F5',
+      color: getAppBackgroundColor(),
       symbolColor: nativeTheme.shouldUseDarkColors ? '#CFD3DC' : '#606266',
       height: 32,
     })

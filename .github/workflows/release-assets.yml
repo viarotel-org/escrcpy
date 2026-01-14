@@ -27,6 +27,8 @@ jobs:
             build_command: build:win
     env:
       VITE_GITEE_APP_TOKEN: ${{ secrets.VITE_GITEE_APP_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -46,5 +48,3 @@ jobs:
 
       - name: Build ${{ matrix.platform }}
         run: pnpm ${{ matrix.build_command }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

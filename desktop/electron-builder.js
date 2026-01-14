@@ -29,7 +29,7 @@ export default {
       { target: 'nsis', arch: ['x64', 'arm64'] },
       { target: 'zip', arch: ['x64', 'arm64'] },
       { target: 'portable', arch: ['x64', 'arm64'] },
-      { target: 'appx', arch: ['x64', 'arm64'] },
+      // { target: 'appx', arch: ['x64', 'arm64'] },
     ],
     artifactName: '${productName}-${version}-win-${arch}.${ext}',
     extraResources: {

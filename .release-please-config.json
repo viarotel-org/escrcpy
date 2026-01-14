@@ -21,8 +21,16 @@
         { "type": "ci", "section": "Continuous Integration", "hidden": true }
       ],
       "extra-files": [
-        "package.json",
-        "packages/electron-ipcx/package.json"
+        {
+          "type": "json",
+          "path": "package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "packages/electron-ipcx/package.json",
+          "jsonpath": "$.version"
+        }
       ]
     }
   },

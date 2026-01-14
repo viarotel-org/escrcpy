@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.5](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.4...workspace-v2.1.5) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* update version to 2.1.4 ([9bdf671](https://github.com/viarotel-org/escrcpy/commit/9bdf671d9dfced0811a07935d3bec36a2aca1c45))
+
 ## [2.1.4](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.3...workspace-v2.1.4) (2026-01-14)
 
 

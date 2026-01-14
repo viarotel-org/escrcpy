@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.1.2](https://github.com/viarotel-org/escrcpy/compare/electron-ipcx-v2.1.4...electron-ipcx-v2.1.2) (2026-01-14)
+
+
+### Features
+
+* 💥[Release-As: 2.0.0] major copilot overhaul with AutoGLM and multi-device automation ([7ad5ecd](https://github.com/viarotel-org/escrcpy/commit/7ad5ecd1164bdadad0b7b7be4b20b46cc8512f06))
+
+
+### Bug Fixes
+
+* **types:** allow typed payload handlers by using any[] for handle listener rest params ([b4e8058](https://github.com/viarotel-org/escrcpy/commit/b4e8058de275e42e2645095c70a3b5d6a5e64c07))
+
+
+### Miscellaneous Chores
+
+* release 2.0.0 ([7e5dfe0](https://github.com/viarotel-org/escrcpy/commit/7e5dfe010805ecdea7f3f0d2d8fa90e2edca62b3))
+* release 2.1.1 ([d1c04ce](https://github.com/viarotel-org/escrcpy/commit/d1c04cece7713050f4a6f25b1a87d1923dd538a8))
+* release 2.1.2 ([c7c8616](https://github.com/viarotel-org/escrcpy/commit/c7c861655b3af4c623be97331184112e1e5c7e58))
+
 ## [2.1.2](https://github.com/viarotel-org/escrcpy/compare/electron-ipcx-v2.1.2...electron-ipcx-v2.1.2) (2026-01-14)
 
 

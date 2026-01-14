@@ -617,11 +617,7 @@ export class SessionManager {
    * @returns {number} Final concurrency limit
    */
   _getConcurrencyLimit(customLimit) {
-    if (customLimit && typeof customLimit === 'number' && customLimit > 0) {
-      return customLimit
-    }
-    // Get from config, default to 5
-    return electronStore.get('common.concurrencyLimit') ?? 5
+    return Number(customLimit ?? electronStore.get('common.concurrencyLimit') ?? 5)
   }
 
   /**

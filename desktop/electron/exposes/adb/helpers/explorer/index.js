@@ -21,7 +21,7 @@ export async function readDirWithStat(device, dirPath, options = {}) {
     map = null,
   } = options
 
-  const concurrencyLimit = options.concurrency ?? electronStore.get('common.concurrencyLimit') ?? 5
+  const concurrencyLimit = Number(options.concurrency ?? electronStore.get('common.concurrencyLimit') ?? 5)
 
   const limit = pLimit(concurrencyLimit)
   const entries = await device.readdir(dirPath)

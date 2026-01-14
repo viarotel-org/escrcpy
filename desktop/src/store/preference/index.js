@@ -109,6 +109,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     if (dataToUse.scrcpyAppend) {
       value += ` ${dataToUse.scrcpyAppend}`
     }
+
     return value
   }
 

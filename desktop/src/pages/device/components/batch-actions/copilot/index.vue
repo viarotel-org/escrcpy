@@ -282,7 +282,7 @@ async function executeBatchCopilotTask(devices, options = {}) {
   loading.value = true
 
   const results = []
-  const concurrencyLimit = window.electronStore.get('common.concurrencyLimit') ?? 5
+  const concurrencyLimit = Number(window.electronStore.get('common.concurrencyLimit') ?? 5)
   const limit = pLimit(concurrencyLimit)
 
   try {
@@ -336,8 +336,6 @@ async function onSubmit(command) {
   })
 
   loading.close()
-
-  ElMessage.success(window.t('common.success'))
 }
 
 async function onStopClick() {

@@ -6,6 +6,7 @@
       clearable: true,
       ...(data.props || {}),
     }"
+    @update:model-value="(val) => $emit('update:model-value', Number(val))"
   >
     <template v-if="data.append" #append>
       {{ data.append }}
@@ -21,6 +22,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['update:model-value'],
 }
 </script>
 

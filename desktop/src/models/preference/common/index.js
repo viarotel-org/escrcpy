@@ -225,9 +225,9 @@ export default {
       placeholder: 'preferences.common.enableSystemTerminal.placeholder',
       tips: 'preferences.common.enableSystemTerminal.tips',
     },
-    concurrentNumber: {
+    concurrencyLimit: {
       label: 'preferences.common.concurrencyLimit.name',
-      field: 'concurrentNumber',
+      field: 'concurrencyLimit',
       type: 'InputNumber',
       value: 5,
       min: 1,

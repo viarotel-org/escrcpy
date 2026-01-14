@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.7](https://github.com/viarotel-org/escrcpy/compare/v2.1.6...v2.1.7) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* release 2.1.7 ([3b6b16a](https://github.com/viarotel-org/escrcpy/commit/3b6b16a3168eb9ae9c46dff5014cb0ec75a6db8c))
+
 ## [2.1.6](https://github.com/viarotel-org/escrcpy/compare/v2.1.5...v2.1.6) (2026-01-14)
 
 

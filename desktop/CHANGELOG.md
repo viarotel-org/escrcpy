@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.1](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.0...desktop-v2.1.1) (2026-01-14)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @escrcpy/electron-ipcx bumped to 2.0.2
+
 ## [2.1.0](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.0.1...desktop-v2.1.0) (2026-01-14)
 
 

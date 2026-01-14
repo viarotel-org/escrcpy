@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.0.1...electron-ipcx-v2.0.2) (2026-01-14)
+
+
+### Bug Fixes
+
+* **types:** allow typed payload handlers by using any[] for handle listener rest params ([b4e8058](https://github.com/viarotel-org/escrcpy/commit/b4e8058de275e42e2645095c70a3b5d6a5e64c07))
+
 ## [2.0.1](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.0.0...electron-ipcx-v2.0.1) (2026-01-14)
 
 

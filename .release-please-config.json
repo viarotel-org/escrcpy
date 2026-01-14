@@ -1,12 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
-    "desktop": {
+    ".": {
       "release-type": "node",
-      "package-name": "escrcpy",
+      "package-name": "@escrcpy/workspace",
       "include-component-in-tag": false,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
+      "changelog-path": "desktop/CHANGELOG.md",
       "changelog-sections": [
         { "type": "feat", "section": "Features", "hidden": false },
         { "type": "fix", "section": "Bug Fixes", "hidden": false },
@@ -21,16 +22,8 @@
         { "type": "ci", "section": "Continuous Integration", "hidden": true }
       ],
       "extra-files": [
-        {
-          "type": "json",
-          "path": "package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "packages/electron-ipcx/package.json",
-          "jsonpath": "$.version"
-        }
+        "desktop/package.json",
+        "packages/electron-ipcx/package.json"
       ]
     }
   },

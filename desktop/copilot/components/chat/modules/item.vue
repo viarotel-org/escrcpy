@@ -82,7 +82,7 @@ const props = defineProps({
 
 // Delete single message
 async function handleDeleteMessage(messageId) {
-  const result = await deleteMessage(messageId)
+  const result = await props.deleteMessage(messageId)
   if (result.success) {
     ElMessage.success(t('copilot.chat.deleteSuccess'))
   }

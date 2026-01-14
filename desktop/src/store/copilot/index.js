@@ -15,8 +15,9 @@ export const useCopilotStore = defineStore('app-copilot', () => {
 
   const config = ref({
     ...defaultConfig,
-    ...(window.electronStore.get('copilot') ?? {}),
   })
+
+  updateConfig(window.electronStore.get('copilot') ?? {})
 
   window.electronStore.onDidChange('copilot', (val) => {
     if (isEqual(val, config.value)) {
@@ -62,8 +63,4 @@ export const useCopilotStore = defineStore('app-copilot', () => {
     switchGiteeConfig,
     resetConfig,
   }
-}, {
-  persist: {
-    paths: ['config'],
-  },
 })

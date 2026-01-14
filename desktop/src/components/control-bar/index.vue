@@ -168,7 +168,7 @@ export default {
         },
         'rotation': {
           label: 'device.control.rotation.name',
-          fontIcon: 'i-solar-smartphone-rotate-orientation-linear',
+          fontIcon: 'i-solar-smartphone-rotate-2-outline',
           component: 'Rotation',
         },
         'volume': {

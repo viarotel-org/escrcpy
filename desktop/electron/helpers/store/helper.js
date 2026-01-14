@@ -10,8 +10,6 @@ export function createStore(options = {}) {
     ...options,
   })
 
-  console.log('Store path:', store.path)
-
   if (isEqual(store.store, {})) {
     store.store = {}
   }

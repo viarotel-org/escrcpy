@@ -42,8 +42,7 @@
   "changelog-host": "https://github.com",
   "changelog-path": "CHANGELOG.md",
   "separate-pull-requests": false,
-  "group-pull-request-title-pattern": "chore: release${component} ${version}",
-  "pull-request-header": ":robot: Release${component} ${version}",
+  "group-pull-request-title-pattern": "chore: release ${version}",
   "plugins": [
     {
       "type": "linked-versions",

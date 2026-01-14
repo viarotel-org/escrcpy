@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.4](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.3...workspace-v2.1.4) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* add release name format to config ([6db1b51](https://github.com/viarotel-org/escrcpy/commit/6db1b513202f0f29b9a185363c8d10a9adacc02c))
+* update release workflow and build commands ([8f5345b](https://github.com/viarotel-org/escrcpy/commit/8f5345bcf0a597b071416e6ea09a7693749bd2ed))
+
 ## [2.1.3](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.2...workspace-v2.1.3) (2026-01-14)
 
 

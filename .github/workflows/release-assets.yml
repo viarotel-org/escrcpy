@@ -48,23 +48,3 @@ jobs:
         run: pnpm ${{ matrix.build_command }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: false
-          prerelease: false
-          fail_on_unmatched_files: false
-          files: |
-            desktop/dist-release/*.exe
-            desktop/dist-release/*.zip
-            desktop/dist-release/*.dmg
-            desktop/dist-release/*.AppImage
-            desktop/dist-release/*.snap
-            desktop/dist-release/*.deb
-            desktop/dist-release/*.rpm
-            desktop/dist-release/*.tar.gz
-            desktop/dist-release/*.blockmap
-            desktop/dist-release/latest*.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

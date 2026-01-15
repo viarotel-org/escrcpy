@@ -1,15 +1,9 @@
-/**
- * Subscribe Client - Subscription service client
- */
-
 class SubscribeClient {
   constructor() {
     this.baseUrl = import.meta.env.VITE_GITEE_BASE_API
     this.appId = import.meta.env.VITE_GITEE_APP_ID
     this.accessToken = ''
   }
-
-  // ==================== HTTP Requests ====================
 
   /**
    * Sends an HTTP request using the fetch API
@@ -27,23 +21,19 @@ class SubscribeClient {
 
     const url = `${this.baseUrl}${path}`
 
-    // Build request headers
     const requestHeaders = {
       'Content-Type': 'application/json',
       ...headers,
     }
 
-    // Add development mode header
     if (devMode) {
       requestHeaders['X-Dev-Mode'] = 'true'
     }
 
-    // Update access token
-    if (accessToken) {
-      this.accessToken = accessToken
-    }
+    const subscribeStore = useSubscribeStore()
 
-    // Add authentication header
+    this.accessToken = accessToken ?? subscribeStore.accessToken
+
     if (useAppToken) {
       const temporaryToken = await window.electron.ipcRenderer.invoke('get-gitee-temporary-token')
       requestHeaders.Authorization = `Bearer ${temporaryToken}`
@@ -57,7 +47,6 @@ class SubscribeClient {
       headers: requestHeaders,
     }
 
-    // Attach request body (POST/PUT/PATCH only)
     if (data && ['POST', 'PUT', 'PATCH'].includes(method)) {
       fetchOptions.body = JSON.stringify(data)
     }
@@ -77,7 +66,6 @@ class SubscribeClient {
       }
     }
     catch (error) {
-      // Network or parse error
       if (!error.status) {
         error.message = `Network error: ${error.message}`
       }
@@ -97,8 +85,6 @@ class SubscribeClient {
     })
   }
 
-  // ==================== Verification Code ====================
-
   /**
    * Send verification code
    * @param {object} data - { mobile?, email?, channel_type? }
@@ -117,8 +103,6 @@ class SubscribeClient {
       useAppToken: true,
     })
   }
-
-  // ==================== User Authentication ====================
 
   /**
    * Obtain user access token
@@ -151,8 +135,6 @@ class SubscribeClient {
       accessToken,
     })
   }
-
-  // ==================== Payments ====================
 
   /**
    * Create a payment order
@@ -209,8 +191,6 @@ class SubscribeClient {
     })
   }
 
-  // ==================== Feedback ====================
-
   /**
    * Submit feedback (using multipart/form-data)
    * @param {object} data - { type, description, attachment?, contact_type?, contact? }
@@ -221,7 +201,6 @@ class SubscribeClient {
 
     const url = `${this.baseUrl}/app/feedback`
 
-    // Build FormData
     const formData = new FormData()
 
     formData.append('type', type)
@@ -233,7 +212,6 @@ class SubscribeClient {
       })
     }
 
-    // Append contact type
     if (contact_type) {
       formData.append('contact_type', contact_type)
     }

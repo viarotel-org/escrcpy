@@ -137,11 +137,10 @@ function updateSubscribeConfigure() {
   ElMessage.success(window.t('common.success'))
 }
 
-// Initialization
 onMounted(async () => {
   loading.value = true
   try {
-    await subscribeStore.fetchUserInfo()
+    await subscribeStore.init()
   }
   finally {
     loading.value = false

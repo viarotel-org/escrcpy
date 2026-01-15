@@ -1,18 +1,25 @@
-/**
- * Subscribe Store - Subscription billing state management
- */
 import { defineStore } from 'pinia'
 import subscribeClient from '$/services/subscribe/index.js'
 
 export const useSubscribeStore = defineStore('app-subscribe', () => {
-  // State
-  const accessToken = ref('')
   const userInfo = ref(null)
   const appInfo = ref(null)
   const paymentPlans = ref([])
   const loading = ref(false)
 
-  // Computed properties
+  const subscribeInfo = ref(window.electronStore.get('subscribe') ?? {})
+
+  const accessToken = computed({
+    get: () => {
+      subscribeInfo.value = window.electronStore.get('subscribe') ?? {}
+      return subscribeInfo.value.accessToken
+    },
+    set: (val) => {
+      subscribeInfo.value.accessToken = val
+      window.electronStore.set('subscribe.accessToken', val)
+    },
+  })
+
   const isLoggedIn = computed(() => !!accessToken.value)
 
   const subscriptionPlans = computed(() =>
@@ -37,7 +44,17 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     return userInfo.value.nickname || userInfo.value.email || userInfo.value.mobile || 'User'
   })
 
-  // Initialization
+  init()
+
+  window.electronStore.onDidChange('subscribe.accessToken', (val) => {
+    if (val === accessToken.value) {
+      return false
+    }
+
+    setAccessToken(val)
+    init()
+  })
+
   async function init() {
     if (!accessToken.value) {
       return false
@@ -47,18 +64,14 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
       await fetchUserInfo()
     }
     catch (error) {
-      // Ignore fetch user info failure (token may have expired)
       console.warn('[SubscribeStore] Fetch user info failed on init:', error)
     }
   }
 
-  // Set access token
   async function setAccessToken(token) {
     accessToken.value = token
-    subscribeClient.accessToken = token
   }
 
-  // Fetch app information
   async function fetchAppInfo() {
     try {
       loading.value = true
@@ -78,7 +91,6 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
   }
 
-  // Fetch user information
   async function fetchUserInfo() {
     if (!accessToken.value)
       return null
@@ -93,7 +105,6 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
     catch (error) {
       console.error('[SubscribeStore] Fetch user info failed:', error)
-      // Token invalid, clear login state
       if (error.status === 401) {
         logout()
       }
@@ -104,14 +115,11 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
   }
 
-  // Logout
   async function logout() {
     accessToken.value = ''
     userInfo.value = null
-    subscribeClient.accessToken = ''
   }
 
-  // Reset
   function $reset() {
     accessToken.value = ''
     userInfo.value = null
@@ -121,14 +129,12 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
   }
 
   return {
-    // State
     accessToken,
     userInfo,
     appInfo,
     paymentPlans,
     loading,
 
-    // Computed
     isLoggedIn,
     subscriptionPlans,
     usageBasedPlans,
@@ -137,7 +143,6 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     currentPlanIdent,
     displayUserName,
 
-    // Methods
     init,
     setAccessToken,
     fetchAppInfo,
@@ -145,9 +150,4 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     logout,
     $reset,
   }
-},
-{
-  persist: {
-    paths: ['accessToken'],
-  },
 })

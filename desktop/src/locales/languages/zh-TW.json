@@ -411,7 +411,7 @@
   "device.task.cronExpression": "定时规则",
   "device.task.devices": "涉及裝置",
   "device.task.extra.app": "選擇應用程式",
-  "device.task.extra.copilot": "Copilot 指令",
+  "device.task.extra.copilot": "操作指令",
   "device.task.extra.shell": "選擇腳本",
   "device.task.frequency": "執行頻率",
   "device.task.frequency.cron": "Cron 表达式",

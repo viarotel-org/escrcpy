@@ -411,7 +411,7 @@
   "device.task.cronExpression": "Расписание",
   "device.task.devices": "Устройства",
   "device.task.extra.app": "Выберите приложение",
-  "device.task.extra.copilot": "Команда Copilot",
+  "device.task.extra.copilot": "Команда действия",
   "device.task.extra.shell": "Выберите скрипт",
   "device.task.frequency": "Частота выполнения",
   "device.task.frequency.cron": "Cron-выражение",

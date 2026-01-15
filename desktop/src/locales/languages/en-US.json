@@ -411,7 +411,7 @@
   "device.task.cronExpression": "Schedule Rule",
   "device.task.devices": "Involved Devices",
   "device.task.extra.app": "Select Application",
-  "device.task.extra.copilot": "Copilot Command",
+  "device.task.extra.copilot": "Action Command",
   "device.task.extra.shell": "Select Script",
   "device.task.frequency": "Execution Frequency",
   "device.task.frequency.cron": "Cron Expression",

@@ -411,7 +411,7 @@
   "device.task.cronExpression": "قاعدة الجدولة",
   "device.task.devices": "الأجهزة المشمولة",
   "device.task.extra.app": "اختر تطبيقًا",
-  "device.task.extra.copilot": "تعليمات Copilot",
+  "device.task.extra.copilot": "أمر التنفيذ",
   "device.task.extra.shell": "اختر سكربتًا",
   "device.task.frequency": "تكرار التنفيذ",
   "device.task.frequency.cron": "تعبير Cron",

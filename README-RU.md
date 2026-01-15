@@ -12,7 +12,7 @@
 📱 Отображайте и управляйте своим Android-устройством с помощью scrcpy в графическом режиме, работающим на Electron. [Документация на китайском](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/ru-RU/overview.png" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/ru-RU/overview.png?version=2.1.7" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## Возможности

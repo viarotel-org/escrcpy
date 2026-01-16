@@ -27,7 +27,6 @@
   },
   "types": "./dist/index.d.mts",
   "files": [
-    "asset",
     "dist",
     "schema"
   ],

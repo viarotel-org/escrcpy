@@ -55,10 +55,7 @@
     "unzipper": "^0.12.3"
   },
   "optionalDependencies": {
-    "@autoglm.js/adb-keyboard": "workspace:*",
-    "@autoglm.js/platform-tools-darwin": "workspace:*",
-    "@autoglm.js/platform-tools-linux": "workspace:*",
-    "@autoglm.js/platform-tools-windows": "workspace:*"
+    "@autoglm.js/adb-keyboard": "workspace:*"
   },
   "devDependencies": {
     "@autoglm.js/shared": "workspace:*",

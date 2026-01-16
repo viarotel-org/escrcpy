@@ -438,6 +438,7 @@ async function handlePreview(row) {
     messageLoading.close()
 
     if (result.success) {
+      // Preview opened successfully
     }
     else if (result.error) {
       ElMessage.error(window.t('device.control.file.manager.preview.error', { error: result.error }))

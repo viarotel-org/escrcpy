@@ -123,6 +123,13 @@ class CopilotService {
       maxSteps: config.maxSteps,
       lang: config.lang,
       quiet: config.quiet,
+      customApps: config.customApps,
+      systemPrompt: config.systemPrompt,
+      temperature: config.temperature,
+      maxTokens: config.maxTokens,
+      topP: config.topP,
+      frequencyPenalty: config.frequencyPenalty,
+      screenshotQuality: config.screenshotQuality,
     }
   }
 

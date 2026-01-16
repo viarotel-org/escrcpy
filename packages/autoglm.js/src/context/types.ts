@@ -3,6 +3,12 @@ export interface AgentConfigType {
   lang: 'cn' | 'en'
   deviceId?: string
   systemPrompt?: string
+  /**
+   * Custom app name to package name mapping.
+   * These will override the built-in APP_PACKAGES.
+   * @example { '自定义应用': 'com.example.app' }
+   */
+  customApps?: Record<string, string>
   // ModelConfigType
   baseUrl: string
   apiKey: string

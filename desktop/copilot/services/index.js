@@ -162,13 +162,32 @@ class CopilotClient {
       onExit(result)
     }
 
+    const customApps = await this.getCustomApps(deviceId)
+
     return this._invoke('execute', task, {
       deviceId,
+      customApps,
       ...restOptions,
       onData: wrappedOnData,
       onExit: wrappedOnExit,
       onSession,
     })
+  }
+
+  /**
+   *  Get custom apps mapping from the device
+   * @param {string} deviceId
+   * @returns {Promise<Object>} Custom apps mapping {appName: packageName}
+   */
+  async getCustomApps(deviceId) {
+    const data = await window.scrcpy.getAppList(deviceId)
+
+    const value = data.reduce((obj, item) => {
+      obj[item.name] = item.packageName
+      return obj
+    }, {})
+
+    return value
   }
 
   /**

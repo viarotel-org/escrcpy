@@ -27,8 +27,9 @@ const LOG_CONFIG = {
 }
 
 /** AutoGLM event types (for event forwarding) */
+// ignored 'start'
 const AGENT_EVENT_TYPES = [
-  'start', 'thinking_stream', 'thinking', 'action', 'task_complete', 'error', 'aborted',
+  'thinking_stream', 'thinking', 'action', 'task_complete', 'error', 'aborted',
 ]
 
 // ==================== Error Code Definitions (Semantic & Extensible) ====================
@@ -170,11 +171,7 @@ export class SessionManager {
 
     // Create AutoGLM agent instance (core dependency)
     const agent = new AutoGLM({
-      maxSteps: config.maxSteps,
-      lang: config.lang,
-      baseUrl: config.baseUrl,
-      apiKey: config.apiKey,
-      model: config.model,
+      ...config,
       deviceId,
       adbKeyboardApkPath,
     })
@@ -306,7 +303,7 @@ export class SessionManager {
       // Update session running state
       this._updateSessionRunningState(session, task, true)
       // Execute agent task
-      const taskPromise = session.agent.run(task, { quiet: config.quiet || false })
+      const taskPromise = session.agent.run(task)
 
       return {
         session,

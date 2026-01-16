@@ -92,7 +92,8 @@ export class ActionHandler {
    * Execute launch action.
    */
   private async executeLaunchAction(action: LaunchAction): Promise<ActionResult> {
-    const success = await launchApp(action.app, this.deviceId)
+    const config = this.context.getConfig()
+    const success = await launchApp(action.app, this.deviceId, 1.0, config.customApps)
 
     if (!success) {
       return {

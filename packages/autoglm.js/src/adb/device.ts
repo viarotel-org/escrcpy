@@ -2,16 +2,29 @@ import { APP_PACKAGES } from '@/constants/app'
 import { runAdbCommand } from './utils'
 
 /**
+ * Merge custom apps with built-in APP_PACKAGES.
+ * Custom apps have higher priority.
+ */
+function mergeAppPackages(customApps?: Record<string, string>): Record<string, string> {
+  if (!customApps || Object.keys(customApps).length === 0) {
+    return APP_PACKAGES
+  }
+  return { ...APP_PACKAGES, ...customApps }
+}
+
+/**
  * Get the currently focused app name.
  */
-export async function getCurrentApp(deviceId?: string): Promise<string> {
+export async function getCurrentApp(deviceId?: string, customApps?: Record<string, string>): Promise<string> {
   const result = await runAdbCommand(deviceId, ['shell', 'dumpsys', 'window'])
   const output = result.stdout
+
+  const appPackages = mergeAppPackages(customApps)
 
   // Parse window focus info
   for (const line of output.split('\n')) {
     if (line.includes('mCurrentFocus') || line.includes('mFocusedApp')) {
-      for (const [appName, appPackage] of Object.entries(APP_PACKAGES)) {
+      for (const [appName, appPackage] of Object.entries(appPackages)) {
         if (line.includes(appPackage)) {
           return appName
         }
@@ -95,12 +108,19 @@ export async function home(deviceId?: string, delay: number = 1.0): Promise<void
 /**
  * Launch an app by name.
  */
-export async function launchApp(appName: string, deviceId?: string, delay: number = 1.0): Promise<boolean> {
-  if (!APP_PACKAGES[appName]) {
+export async function launchApp(
+  appName: string,
+  deviceId?: string,
+  delay: number = 1.0,
+  customApps?: Record<string, string>,
+): Promise<boolean> {
+  const appPackages = mergeAppPackages(customApps)
+
+  if (!appPackages[appName]) {
     return false
   }
 
-  const appPackage = APP_PACKAGES[appName]
+  const appPackage = appPackages[appName]
 
   await runAdbCommand(deviceId, ['shell', 'monkey', '-p', appPackage, '-c', 'android.intent.category.LAUNCHER', '1'])
   await new Promise(resolve => setTimeout(resolve, delay * 1000))

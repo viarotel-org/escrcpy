@@ -149,7 +149,7 @@ export class PhoneAgent {
       10,
       this.agentConfig.screenshotQuality,
     )
-    const currentApp = await getCurrentApp(this.agentConfig.deviceId)
+    const currentApp = await getCurrentApp(this.agentConfig.deviceId, this.agentConfig.customApps)
 
     // Build messages
     if (isFirst) {

@@ -1,0 +1,39 @@
+{
+  "name": "@autoglm.js/adb-keyboard",
+  "type": "module",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Keyboard tools for AutoGLM.js",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/FliPPeDround/autoglm.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FliPPeDround/autoglm.js"
+  },
+  "bugs": "https://github.com/FliPPeDround/autoglm.js/issues",
+  "keywords": [
+    "autoglm",
+    "open-autoglm",
+    "keyboard",
+    "ai"
+  ],
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "ADBKeyboard.apk",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsdown --watch",
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build",
+    "release": "bumpp"
+  },
+  "devDependencies": {
+    "@autoglm.js/shared": "workspace:*"
+  }
+}

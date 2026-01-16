@@ -1,0 +1,69 @@
+{
+  "name": "autoglm.js",
+  "type": "module",
+  "version": "0.0.11",
+  "private": false,
+  "packageManager": "pnpm@10.25.0",
+  "description": "AutoGLM.js is a JavaScript library for Open-AutoGLM",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "funding": "https://afdian.com/a/flippedround",
+  "homepage": "https://github.com/FliPPeDround/autoglm.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FliPPeDround/autoglm.js"
+  },
+  "bugs": "https://github.com/FliPPeDround/autoglm.js/issues",
+  "keywords": [
+    "autoglm",
+    "open-autoglm",
+    "agent",
+    "ai"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "asset",
+    "dist",
+    "schema"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "prepublishOnly": "pnpm build",
+    "release": "bumpp",
+    "typecheck": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "acorn": "^8.15.0",
+    "acorn-loose": "^8.5.2",
+    "consola": "^3.4.2",
+    "dayjs": "^1.11.19",
+    "fs-extra": "^11.3.3",
+    "kolorist": "^1.8.0",
+    "mitt": "^3.0.1",
+    "openai": "^6.10.0",
+    "sharp": "^0.34.5",
+    "std-env": "^3.10.0",
+    "tinyexec": "^1.0.2",
+    "unzipper": "^0.12.3"
+  },
+  "optionalDependencies": {
+    "@autoglm.js/adb-keyboard": "workspace:*",
+    "@autoglm.js/platform-tools-darwin": "workspace:*",
+    "@autoglm.js/platform-tools-linux": "workspace:*",
+    "@autoglm.js/platform-tools-windows": "workspace:*"
+  },
+  "devDependencies": {
+    "@autoglm.js/shared": "workspace:*",
+    "@types/fs-extra": "^11.0.4",
+    "@types/minimist": "^1.2.5",
+    "vitest": "^4.0.16"
+  }
+}

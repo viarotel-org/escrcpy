@@ -11,6 +11,8 @@
         class="!w-full"
         value-key="host"
         @select="onSelect"
+        @keydown.enter.prevent="handleConnect()"
+        @keydown.escape="handleUnConnect()"
       >
         <template #prepend>
           {{ $t('device.wireless.name') }}

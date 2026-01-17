@@ -266,7 +266,7 @@
   "device.control.capture.success.message.title": "Screenshot Successful, Copied to Clipboard",
   "device.control.copilot": "Auto Control",
   "device.control.file.manager.add": "New",
-  "device.control.file.manager.add.file.type.error": "Create directory or file (only supports .txt / .md / .log / .json)",
+  "device.control.file.manager.add.tips": "Create a directory or file (if the path includes an extension, a file will be created)",
   "device.control.file.manager.copy": "Copy",
   "device.control.file.manager.copy.error": "Copy failed: {error}",
   "device.control.file.manager.copy.select.path": "Select copy destination",

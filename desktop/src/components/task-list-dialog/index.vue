@@ -2,7 +2,6 @@
   <el-dialog
     v-model="visible"
     :title="$t('device.task.list')"
-    width="98%"
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen el-dialog--tasks"
     append-to-body
     fullscreen

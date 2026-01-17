@@ -2,7 +2,6 @@
   <el-dialog
     v-model="dialog.visible"
     :title="$t('subscribe.paymentTitle')"
-    width="480px"
     center
     :close-on-click-modal="false"
     :close-on-press-escape="false"

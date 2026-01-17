@@ -2,8 +2,10 @@
   <el-dialog
     v-model="visible"
     :title="$t('device.actions.more.custom.name')"
-    class="!w-[98%] el-dialog--flex el-dialog--beautify"
+    class="el-dialog--flex el-dialog--beautify el-dialog--fullscreen"
+    center
     append-to-body
+    fullscreen
     destroy-on-close
     @closed="onClosed"
   >
@@ -13,7 +15,6 @@
         v-model="preferenceData"
         tag="el-collapse-item"
         v-bind="{
-          collapseProps: { accordion: true },
           excludes: ['common'],
           deviceScope: device.id,
         }"

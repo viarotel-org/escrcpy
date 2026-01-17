@@ -266,7 +266,7 @@
   "device.control.capture.success.message.title": "Скриншот успешно создан, скопирован в буфер обмена",
   "device.control.copilot": "Автоконтроль",
   "device.control.file.manager.add": "Создать",
-  "device.control.file.manager.add.file.type.error": "Создать каталог или файл (поддерживается только .txt / .md / .log / .json)",
+  "device.control.file.manager.add.tips": "Создать каталог или файл (если путь содержит расширение, будет создан файл)",
   "device.control.file.manager.copy": "Копировать",
   "device.control.file.manager.copy.error": "Ошибка копирования: {error}",
   "device.control.file.manager.copy.select.path": "Выберите место назначения для копирования",

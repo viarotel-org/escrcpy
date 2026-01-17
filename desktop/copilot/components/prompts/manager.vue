@@ -2,7 +2,6 @@
   <el-dialog
     v-model="dialog.visible"
     :title="$t('copilot.promptManager.title')"
-    width="600px"
     destroy-on-close
     append-to-body
     fullscreen

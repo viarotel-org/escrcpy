@@ -9,7 +9,7 @@
     :fullscreen="isTextFile"
     :close-on-click-modal="false"
     :class="isTextFile ? 'el-dialog--flex el-dialog--fullscreen' : ''"
-    class="el-dialog--beautify "
+    class="el-dialog--beautify"
   >
     <div v-loading="loading" class="space-y-4 h-full overflow-auto pr-4">
       <!-- Filename input -->

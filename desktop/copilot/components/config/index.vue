@@ -2,7 +2,6 @@
   <el-dialog
     v-model="dialog.visible"
     :title="$t('copilot.config.title')"
-    width="95%"
     destroy-on-close
     append-to-body
     fullscreen

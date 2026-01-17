@@ -266,7 +266,7 @@
   "device.control.capture.success.message.title": "截图成功，并已复制到剪切板",
   "device.control.copilot": "自动操控",
   "device.control.file.manager.add": "新建",
-  "device.control.file.manager.add.file.type.error": "创建目录或文件（仅支持 .txt / .md / .log / .json）",
+  "device.control.file.manager.add.tips": "创建目录或文件（若路径包含扩展名，则创建文件）",
   "device.control.file.manager.copy": "复制",
   "device.control.file.manager.copy.error": "复制失败: {error}",
   "device.control.file.manager.copy.select.path": "选择复制目标路径",

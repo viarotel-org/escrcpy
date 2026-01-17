@@ -266,7 +266,7 @@
   "device.control.capture.success.message.title": "スクリーンショットが成功し、クリップボードにコピーされました",
   "device.control.copilot": "自動操作",
   "device.control.file.manager.add": "新規作成",
-  "device.control.file.manager.add.file.type.error": "ディレクトリまたはファイルを作成（.txt / .md / .log / .json のみサポート）",
+  "device.control.file.manager.add.tips": "ディレクトリまたはファイルを作成します（パスに拡張子が含まれている場合はファイルを作成します）",
   "device.control.file.manager.copy": "コピー",
   "device.control.file.manager.copy.error": "コピーに失敗しました: {error}",
   "device.control.file.manager.copy.select.path": "コピー先を選択",

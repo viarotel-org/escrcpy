@@ -19,7 +19,7 @@
       ></el-input>
 
       <div class="text-xs text-gray-500 dark:text-gray-400">
-        {{ $t('device.control.file.manager.add.file.type.error') }}
+        {{ $t('device.control.file.manager.add.tips') }}
       </div>
 
       <div class="flex justify-end">
@@ -96,15 +96,6 @@ function handleConfirm() {
 
   // Determine whether it's a file or a directory
   const isFileType = isFile(name)
-
-  if (isFileType) {
-    // Check whether the extension is whitelisted
-    const extension = getExtension(name)
-    if (!isAllowedExtension(extension)) {
-      ElMessage.error(t('device.control.file.manager.add.file.type.error'))
-      return
-    }
-  }
 
   emit('success', {
     name,

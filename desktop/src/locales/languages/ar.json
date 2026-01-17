@@ -266,7 +266,7 @@
   "device.control.capture.success.message.title": "تم اخذ لقطة شاشة بنجاح، وتم نسخها إلى الحافظة",
   "device.control.copilot": "التحكم التلقائي",
   "device.control.file.manager.add": "إنشاء",
-  "device.control.file.manager.add.file.type.error": "إنشاء دليل أو ملف (يدعم فقط .txt / .md / .log / .json)",
+  "device.control.file.manager.add.tips": "إنشاء مجلد أو ملف (إذا كان المسار يحتوي على امتداد، سيتم إنشاء ملف)",
   "device.control.file.manager.copy": "نسخ",
   "device.control.file.manager.copy.error": "فشل النسخ: {error}",
   "device.control.file.manager.copy.select.path": "حدد وجهة النسخ",

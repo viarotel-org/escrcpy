@@ -2,7 +2,6 @@
   <el-dialog
     v-model="visible"
     :title="$t('device.arrange.dialog.title')"
-    width="95%"
     center
     :close-on-click-modal="false"
     :close-on-press-escape="true"

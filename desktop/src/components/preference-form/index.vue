@@ -117,12 +117,7 @@ const preferenceModelKeys = Object.keys(preferenceModel.value ?? {})
 const collapseValue = ref([])
 
 if (preferenceModelKeys.length) {
-  if (props.collapseProps.accordion) {
-    collapseValue.value = preferenceModelKeys[0]
-  }
-  else {
-    collapseValue.value = preferenceModelKeys
-  }
+  collapseValue.value = preferenceModelKeys[0]
 }
 
 function subModel(item) {

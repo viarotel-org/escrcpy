@@ -176,7 +176,7 @@
     <template #footer>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <el-button @click="resetConfig">
+          <el-button @click="onResetClick">
             <el-icon class="mr-1">
               <RefreshRight />
             </el-icon>
@@ -188,7 +188,7 @@
           <el-button @click="onCloseClick">
             {{ $t('common.cancel') }}
           </el-button>
-          <el-button type="primary" @click="submitConfig">
+          <el-button type="primary" @click="onSaveClick">
             <el-icon class="mr-1">
               <Check />
             </el-icon>
@@ -271,7 +271,7 @@ function onClose() {
   })
 }
 
-async function submitConfig() {
+async function onSaveClick() {
   try {
     const valid = await configFormRef.value.validate()
     if (!valid)
@@ -279,7 +279,6 @@ async function submitConfig() {
 
     copilotStore.updateConfig()
 
-    ElMessage.success(t('copilot.config.saveSuccess'))
     dialog.close()
   }
   catch (error) {
@@ -306,11 +305,11 @@ async function onAutoConfigSubscribe() {
   }
 }
 
-async function resetConfig() {
+async function onResetClick() {
   try {
     await ElMessageBox.confirm(
       t('copilot.config.resetConfirm'),
-      t('copilot.config.resetTitle'),
+      t('common.tips'),
       {
         confirmButtonText: t('common.confirm'),
         cancelButtonText: t('common.cancel'),
@@ -326,7 +325,7 @@ async function resetConfig() {
 
   handleClearValidate()
 
-  ElMessage.success(t('copilot.config.resetSuccess'))
+  ElMessage.success(t('common.success'))
 }
 
 function handleClearValidate() {

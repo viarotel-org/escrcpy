@@ -45,7 +45,7 @@
                     clearable
                     type="textarea"
                     :placeholder="$t('copilot.promptManager.inputPlaceholder')"
-                    :autosize="{ minRows: 3 }"
+                    :autosize="{ minRows: 3, maxRows: 12 }"
                     @keydown.escape="onCancelClick"
                   />
                   <div class="flex-none space-x-1">
@@ -86,7 +86,7 @@
                       type="danger"
                       icon="Delete"
                       circle
-                      @click="deletePrompt(index)"
+                      @click="onRemoveClick(index)"
                     />
                   </div>
                 </div>
@@ -196,7 +196,9 @@ function onSaveClick(index) {
     return false
   }
 
-  if (prompts.value.includes(text)) {
+  const filterPrompts = prompts.value.filter((_, idx) => idx !== index)
+
+  if (filterPrompts.includes(text)) {
     ElMessage.warning(t('copilot.promptManager.duplicate'))
     return false
   }
@@ -205,7 +207,6 @@ function onSaveClick(index) {
   editingIndex.value = -1
   editingValue.value = ''
   savePrompts()
-  ElMessage.success(t('copilot.promptManager.editSuccess'))
 }
 
 function savePrompts() {
@@ -217,24 +218,24 @@ function onCancelClick() {
   editingValue.value = ''
 }
 
-async function deletePrompt(index) {
+async function onRemoveClick(index) {
   try {
     await ElMessageBox.confirm(
       t('copilot.promptManager.deleteConfirm'),
-      t('copilot.promptManager.deleteTitle'),
+      t('common.tips'),
       {
         confirmButtonText: t('common.confirm'),
         cancelButtonText: t('common.cancel'),
         type: 'warning',
       },
     )
-
-    prompts.value.splice(index, 1)
-    savePrompts()
-    ElMessage.success(t('copilot.promptManager.deleteSuccess'))
   }
   catch {
+    return false
   }
+
+  prompts.value.splice(index, 1)
+  savePrompts()
 }
 
 async function onResetClick() {
@@ -259,8 +260,6 @@ async function onResetClick() {
 
   prompts.value = []
   savePrompts()
-
-  ElMessage.success(t('copilot.promptManager.clearAllSuccess'))
 }
 
 function onSwapEnd(event) {

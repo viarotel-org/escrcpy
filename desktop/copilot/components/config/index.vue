@@ -136,14 +136,14 @@
                   </el-radio-group>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <!-- <el-col :span="12">
                 <el-form-item
                   prop="quiet"
                   :label="$t('copilot.config.quiet')"
                 >
                   <el-switch v-model="configForm.quiet" />
                 </el-form-item>
-              </el-col>
+              </el-col> -->
             </el-row>
 
             <el-form-item

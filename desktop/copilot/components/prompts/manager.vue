@@ -46,7 +46,6 @@
                     type="textarea"
                     :placeholder="$t('copilot.promptManager.inputPlaceholder')"
                     :autosize="{ minRows: 3 }"
-                    @keydown.enter.prevent="onSaveClick(index)"
                     @keydown.escape="onCancelClick"
                   />
                   <div class="flex-none space-x-1">

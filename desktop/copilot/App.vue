@@ -79,10 +79,11 @@ import { PromptManager } from './components/prompts/index.js'
 
 import { isPlatform } from '$/utils/index.js'
 
+const copilotStore = useCopilotStore()
+
 const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
   onLanguageChange(val) {
-    window.electronStore.set('copilot', {
-      ...window.electronStore.get('copilot'),
+    copilotStore.updateConfig({
       lang: ['zh-CN', 'zh-TW'].includes(val) ? 'cn' : 'en',
     })
   },

@@ -265,6 +265,10 @@ async function onOpen() {
 
 function onClose() {
   handleClearValidate()
+
+  copilotStore.resetConfig({
+    source: 'store',
+  })
 }
 
 async function submitConfig() {
@@ -332,10 +336,6 @@ function handleClearValidate() {
 }
 
 function onCloseClick() {
-  copilotStore.resetConfig({
-    source: 'store',
-  })
-
   dialog.close()
 }
 

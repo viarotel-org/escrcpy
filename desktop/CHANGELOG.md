@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.2.0](https://github.com/viarotel-org/escrcpy/compare/v2.1.7...v2.2.0) (2026-01-17)
+
+
+### Features
+
+* 🎉 Improve the accuracy and coverage of Copilot opening applications by obtaining information about installed applications on the device ([e2f27da](https://github.com/viarotel-org/escrcpy/commit/e2f27da08574d8ae3bcb8ee8c821909968115ce8))
+* add keyboard shortcuts for connect and disconnect ([39293af](https://github.com/viarotel-org/escrcpy/commit/39293af392246bf055862ec4ae9e927b297a085c))
+* auto-focus input when editing prompt ([d58b993](https://github.com/viarotel-org/escrcpy/commit/d58b993c6eff1d4ce227c4d158113aec74abae43))
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue where autoglm.js conversation request listener was not cleaned up causing memory overflow ([bac2126](https://github.com/viarotel-org/escrcpy/commit/bac21261207f0c97695af937f6e926a1d7e84657))
+
+
+### Code Refactoring
+
+* improve config management and prompt editing ([de2f708](https://github.com/viarotel-org/escrcpy/commit/de2f708142512787d3c8e384e6f4fb1d1d87abf2))
+* improve prompt manager UI and editing experience ([1697558](https://github.com/viarotel-org/escrcpy/commit/169755869a03925c31d1252ced9c756e1dfd8969))
+* optimize subscribe store initialization and token management ([0f00903](https://github.com/viarotel-org/escrcpy/commit/0f00903367e0c457a052e74514a66220ad924091))
+
 ## [2.1.7](https://github.com/viarotel-org/escrcpy/compare/v2.1.6...v2.1.7) (2026-01-14)
 
 

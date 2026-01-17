@@ -135,7 +135,7 @@ async function handleSubmit(text) {
   try {
     const deviceId = props.currentDevice?.id
 
-    await copilotClient.execute(trimmedText, {
+    const [,failureList] = await copilotClient.execute(trimmedText, {
       deviceId,
       onData: (output, { payload }) => {
         currentOutput.value += output
@@ -149,6 +149,10 @@ async function handleSubmit(text) {
         scrollToBottom()
       },
     })
+
+    if (failureList.length) {
+      throw new Error(`${temporaryMessage.value.content}\n\n${failureList[0].message}`)
+    }
 
     if ([MessageStatusEnum.PENDING, MessageStatusEnum.RUNNING].includes(temporaryMessage.value.status)) {
       throw new Error(`${temporaryMessage.value.content}\n\n${window.t('copilot.check.subscription.expired.maybe')}`)

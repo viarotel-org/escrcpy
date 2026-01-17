@@ -160,8 +160,8 @@
                   <el-slider
                     v-model="configForm.maxSteps"
                     :min="1"
-                    :max="500"
-                    :step="5"
+                    :max="100"
+                    :step="1"
                     class=""
                     show-input
                   />

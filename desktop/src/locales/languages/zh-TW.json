@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "錄製音訊",
   "device.actions.more.recordCamera.name": "錄製鏡頭",
   "device.arrange.clear.confirm": "確定要清除所有元件嗎？",
-  "device.arrange.clear.success": "已清除所有元件",
-  "device.arrange.clear.title": "確認",
   "device.arrange.device.notFound": "裝置未找到",
   "device.arrange.dialog.title": "視窗編排",
   "device.arrange.layout.clear": "清除全部",

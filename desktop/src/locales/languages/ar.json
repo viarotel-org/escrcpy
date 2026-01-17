@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "تسجيل الصوت",
   "device.actions.more.recordCamera.name": "تسجيل الكاميرا",
   "device.arrange.clear.confirm": "هل أنت متأكد من أنك تريد مسح جميع العناصر؟",
-  "device.arrange.clear.success": "تم مسح جميع العناصر",
-  "device.arrange.clear.title": "تأكيد",
   "device.arrange.device.notFound": "الجهاز غير موجود",
   "device.arrange.dialog.title": "ترتيب النوافذ",
   "device.arrange.layout.clear": "مسح الكل",

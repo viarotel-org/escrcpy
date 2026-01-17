@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "录制音频",
   "device.actions.more.recordCamera.name": "录制相机",
   "device.arrange.clear.confirm": "确定要清除所有组件吗？",
-  "device.arrange.clear.success": "已清除所有组件",
-  "device.arrange.clear.title": "确认",
   "device.arrange.device.notFound": "设备未找到",
   "device.arrange.dialog.title": "窗口编排",
   "device.arrange.layout.clear": "清除全部",

@@ -112,7 +112,7 @@ export function useWidgetManagement(
   const clearAllWidgets = () => {
     ElMessageBox.confirm(
       t('device.arrange.clear.confirm'),
-      t('device.arrange.clear.title'),
+      t('common.tips'),
       {
         type: 'warning',
       },
@@ -120,7 +120,6 @@ export function useWidgetManagement(
       // Mark all current widgets as removed for later cleanup in saveLayout
       arrangedWidgets.value.forEach(widget => markWidgetAsRemoved(widget))
       arrangedWidgets.value = []
-      ElMessage.success(t('device.arrange.clear.success'))
     }).catch(() => {})
   }
 

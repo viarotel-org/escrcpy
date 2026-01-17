@@ -25,8 +25,8 @@
             :y="widget.y"
             :w="widget.width"
             :h="widget.height"
-            :min-width="containerWidth / 6"
-            :min-height="containerHeight / 4"
+            :min-width="48"
+            :min-height="24"
             :parent="true"
             class="widget-window" :class="[`${widget.type}-widget`]"
             @dragging="(x, y) => onWidgetDragging(widget.id, { x, y })"
@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div class="widget-body">
-                <div class="widget-info bg-white/80 dark:bg-black/80">
+                <div class="widget-info bg-white/80 dark:bg-black/80 overflow-hidden">
                   <div>{{ Math.round(widget.realWidth) }} × {{ Math.round(widget.realHeight) }}</div>
                   <div>{{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</div>
                 </div>

@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "Записать аудио",
   "device.actions.more.recordCamera.name": "Запись камеры",
   "device.arrange.clear.confirm": "Вы уверены, что хотите очистить все виджеты?",
-  "device.arrange.clear.success": "Все виджеты очищены",
-  "device.arrange.clear.title": "Подтвердить",
   "device.arrange.device.notFound": "Устройство не найдено",
   "device.arrange.dialog.title": "Расположение окон",
   "device.arrange.layout.clear": "Очистить все",

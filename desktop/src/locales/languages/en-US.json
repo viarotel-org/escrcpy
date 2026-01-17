@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "Record Audio",
   "device.actions.more.recordCamera.name": "Record Camera",
   "device.arrange.clear.confirm": "Are you sure you want to clear all widgets?",
-  "device.arrange.clear.success": "All widgets cleared",
-  "device.arrange.clear.title": "Confirm",
   "device.arrange.device.notFound": "Device not found",
   "device.arrange.dialog.title": "Window Arrangement",
   "device.arrange.layout.clear": "Clear All",

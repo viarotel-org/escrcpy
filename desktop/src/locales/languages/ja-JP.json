@@ -232,8 +232,6 @@
   "device.actions.more.recordAudio.name": "オーディオを録音",
   "device.actions.more.recordCamera.name": "カメラを録画",
   "device.arrange.clear.confirm": "すべてのウィジェットをクリアしてもよろしいですか？",
-  "device.arrange.clear.success": "すべてのウィジェットをクリアしました",
-  "device.arrange.clear.title": "確認",
   "device.arrange.device.notFound": "デバイスが見つかりません",
   "device.arrange.dialog.title": "ウィンドウ配置",
   "device.arrange.layout.clear": "すべてクリア",

@@ -9,39 +9,22 @@
     center
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
     :close-on-click-modal="false"
+    @open="onOpen"
   >
-    <div class="space-y-4 h-full flex flex-col overflow-hidden -mr-1">
-      <!-- Add new prompt -->
-      <div class="flex-none flex space-x-2 pr-1">
-        <el-input
-          v-model="newPrompt"
-          :placeholder="$t('copilot.promptManager.inputPlaceholder')"
-          clearable
-          class="flex-1 min-w-0"
-          @keydown.enter.prevent="addPrompt"
-        >
-          <template #prefix>
-            <el-icon><EditPen /></el-icon>
-          </template>
-        </el-input>
-
-        <el-button class="flex-none" type="primary" icon="Plus" @click="addPrompt">
-          {{ $t('copilot.promptManager.add') }}
-        </el-button>
-      </div>
-
+    <div class="h-full flex flex-col overflow-auto">
       <div
-        class="flex-1 min-h-0 overflow-auto pr-1 relative"
+        class="flex-none pr-1"
       >
         <Swapy
-          v-if="prompts.length > 0"
+          :key="prompts.join()"
           class="space-y-2"
           :config="{ animation: 'dynamic', dragAxis: 'y', autoScrollOnDrag: true }"
+          :enabled="editingIndex === -1"
           @swap-end="onSwapEnd"
         >
           <SwapyItem
             v-for="(prompt, index) of prompts"
-            :key="prompt + index"
+            :key="prompt"
             class=""
             v-bind="{
               slotId: prompt,
@@ -53,29 +36,28 @@
               shadow="hover"
               body-class="!p-0"
             >
-              <div class="flex items-center p-4 justify-between group">
-                <!-- Edit mode -->
-                <template v-if="editingIndex === index">
-                  <el-autocomplete
+              <div class="p-4 justify-between group">
+                <div v-if="editingIndex === index" class="flex flex-col items-end gap-2">
+                  <el-input
                     v-model="editingValue"
-                    class="flex-1 mr-2"
+                    class="flex-none"
                     clearable
-                    :fetch-suggestions="fetchSuggestions"
-                    @keydown.enter.prevent="saveEdit(index)"
-                    @keydown.escape="cancelEdit"
+                    type="textarea"
+                    :placeholder="$t('copilot.promptManager.inputPlaceholder')"
+                    :autosize="{ minRows: 3 }"
+                    @keydown.enter.prevent="onSaveClick(index)"
+                    @keydown.escape="onCancelClick"
                   />
                   <div class="flex-none space-x-1">
-                    <el-button type="primary" @click="saveEdit(index)">
+                    <el-button type="primary" @click="onSaveClick(index)">
                       {{ $t('common.save') }}
                     </el-button>
-                    <el-button @click="cancelEdit">
+                    <el-button @click="onCancelClick">
                       {{ $t('common.cancel') }}
                     </el-button>
                   </div>
-                </template>
-
-                <!-- Display mode -->
-                <template v-else>
+                </div>
+                <div v-else class="flex items-center">
                   <div class="flex items-center flex-1 min-w-0 cursor-move">
                     <el-icon class="text-gray-400 mr-2 flex-none">
                       <Rank />
@@ -84,12 +66,20 @@
                       {{ prompt }}
                     </span>
                   </div>
-                  <div class="flex-none space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="flex-none space-x-1">
                     <el-button
                       text
+                      type="primary"
+                      icon="Plus"
+                      circle
+                      @click="onAddClick(index)"
+                    />
+                    <el-button
+                      text
+                      type="primary"
                       icon="Edit"
                       circle
-                      @click="startEdit(index)"
+                      @click="onEditClick(index)"
                     />
                     <el-button
                       text
@@ -99,17 +89,24 @@
                       @click="deletePrompt(index)"
                     />
                   </div>
-                </template>
+                </div>
               </div>
             </el-card>
           </SwapyItem>
         </Swapy>
+      </div>
 
-        <el-result v-else class="absolute inset-0 flex items-center justify-center" icon="info" :title="$t('copilot.promptManager.empty')" :sub-title="$t('copilot.promptManager.emptyHint')">
+      <div class="flex-1 min-h-0 relative">
+        <el-result v-if="!prompts.length" class="absolute inset-0 flex items-center justify-center" icon="info" :title="$t('copilot.promptManager.empty')" :sub-title="$t('copilot.promptManager.emptyHint')">
           <template #icon>
             <el-icon :size="64" class="text-gray-400">
-              <ElIconDocument />
+              <ElIconCollection />
             </el-icon>
+          </template>
+          <template #extra>
+            <el-button type="primary" icon="Plus" @click="onAddClick()">
+              {{ $t('copilot.promptManager.add') }}
+            </el-button>
           </template>
         </el-result>
       </div>
@@ -117,12 +114,13 @@
 
     <template #footer>
       <div class="flex justify-between">
-        <el-button type="danger" plain @click="clearAllPrompts">
+        <el-button :disabled="!prompts.length" type="danger" plain @click="onResetClick">
           <el-icon class="mr-1">
             <Delete />
           </el-icon>
           {{ $t('copilot.promptManager.clearAll') }}
         </el-button>
+
         <el-button type="primary" @click="dialog.close()">
           {{ $t('common.done') }}
         </el-button>
@@ -140,56 +138,60 @@ const props = defineProps({
 
 const emit = defineEmits([])
 
+const NEW_PROMPT = 'New Prompt'
+
 const copilotStore = useCopilotStore()
 
 const dialog = useDialog()
 
 const prompts = computed({
   get() {
-    return copilotStore.config?.prompts || []
+    const storedPrompts = copilotStore.config?.prompts || []
+    return storedPrompts
   },
-  set(value) {
-    copilotStore.updateConfig({ prompts: value })
+  set(val) {
+    copilotStore.updateConfig({ prompts: val })
   },
 })
-
-const newPrompt = ref('')
 
 const editingIndex = ref(-1)
 const editingValue = ref('')
 
-const savePrompts = () => {
-  copilotStore.updateConfig()
+function onOpen() {
 }
 
-const addPrompt = () => {
-  const text = newPrompt.value.trim()
-  if (!text) {
-    ElMessage.warning(t('copilot.promptManager.emptyInput'))
-    return
+function createPromptPlaceholder() {
+  const value = `${NEW_PROMPT} ${prompts.value.length + 1}`
+
+  if (!prompts.value.includes(value)) {
+    return value
   }
 
-  if (prompts.value.includes(text)) {
-    ElMessage.warning(t('copilot.promptManager.duplicate'))
-    return
-  }
-
-  prompts.value.push(text)
-  newPrompt.value = ''
-  savePrompts()
-  ElMessage.success(t('copilot.promptManager.addSuccess'))
+  return `${value}_${Date.now()}`
 }
 
-const startEdit = (index) => {
+function onAddClick(index = -1) {
+  prompts.value.splice(index + 1, 0, createPromptPlaceholder())
+  editingValue.value = ''
+  editingIndex.value = index + 1
+}
+
+function onEditClick(index) {
   editingIndex.value = index
   editingValue.value = prompts.value[index]
 }
 
-const saveEdit = (index) => {
+function onSaveClick(index) {
   const text = editingValue.value.trim()
+
   if (!text) {
     ElMessage.warning(t('copilot.promptManager.emptyInput'))
-    return
+    return false
+  }
+
+  if (prompts.value.includes(text)) {
+    ElMessage.warning(t('copilot.promptManager.duplicate'))
+    return false
   }
 
   prompts.value[index] = text
@@ -199,12 +201,16 @@ const saveEdit = (index) => {
   ElMessage.success(t('copilot.promptManager.editSuccess'))
 }
 
-const cancelEdit = () => {
+function savePrompts() {
+  copilotStore.updateConfig()
+}
+
+function onCancelClick() {
   editingIndex.value = -1
   editingValue.value = ''
 }
 
-const deletePrompt = async (index) => {
+async function deletePrompt(index) {
   try {
     await ElMessageBox.confirm(
       t('copilot.promptManager.deleteConfirm'),
@@ -224,9 +230,10 @@ const deletePrompt = async (index) => {
   }
 }
 
-const clearAllPrompts = async () => {
-  if (prompts.value.length === 0)
+async function onResetClick() {
+  if (prompts.value.length === 0) {
     return
+  }
 
   try {
     await ElMessageBox.confirm(
@@ -238,29 +245,21 @@ const clearAllPrompts = async () => {
         type: 'warning',
       },
     )
-
-    prompts.value = []
-    savePrompts()
-    ElMessage.success(t('copilot.promptManager.clearAllSuccess'))
   }
   catch {
+    return false
   }
+
+  prompts.value = []
+  savePrompts()
+
+  ElMessage.success(t('copilot.promptManager.clearAllSuccess'))
 }
 
 function onSwapEnd(event) {
   const sortPrompts = event.slotItemMap.asArray.map(obj => obj.item)
   prompts.value = sortPrompts
   savePrompts()
-}
-
-async function fetchSuggestions(queryString, cb) {
-  const prompts = []
-
-  const suggestions = prompts.filter(prompt =>
-    prompt.toLowerCase().includes(queryString.toLowerCase()) && prompt !== editingValue.value,
-  )
-
-  cb(suggestions.map(prompt => ({ value: prompt })))
 }
 
 defineExpose({

@@ -11,9 +11,12 @@
           :key="index"
           class="flex-none !text-xs !xl:text-sm"
           round
+          :title="prompt"
           @click="onPromptClick(prompt)"
         >
-          {{ prompt }}
+          <div class="max-w-32 overflow-hidden truncate">
+            {{ prompt }}
+          </div>
         </el-button>
       </div>
     </Scrollable>

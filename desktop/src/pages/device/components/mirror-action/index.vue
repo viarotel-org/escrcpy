@@ -1,15 +1,14 @@
 <template>
-  <ExTooltipButton
+  <el-button
     type="primary"
     text
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :loading="loading"
     :icon="loading ? '' : 'Monitor'"
-    placement="top"
-    :content="loading ? $t('common.starting') : $t('device.mirror.start')"
+    :title="loading ? $t('common.starting') : $t('device.mirror.start')"
     @click="handleClick(row)"
   >
-  </ExTooltipButton>
+  </el-button>
 </template>
 
 <script>

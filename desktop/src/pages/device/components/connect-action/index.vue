@@ -1,14 +1,13 @@
 <template>
-  <ExTooltipButton
+  <el-button
     type="primary"
     text
     :loading="loading"
     :icon="loading ? '' : 'Connection'"
-    placement="top"
-    :content="loading ? $t('common.connecting') : $t('device.wireless.connect.name')"
+    :title="loading ? $t('common.connecting') : $t('device.wireless.connect.name')"
     @click="handleClick(device)"
   >
-  </ExTooltipButton>
+  </el-button>
 </template>
 
 <script setup>

@@ -146,16 +146,15 @@
       </div>
 
       <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
-        <ExTooltipButton
+        <el-button
           type="default"
           :icon="loading ? '' : 'Refresh'"
           :loading="loading"
-          placement="right"
           circle
-          :content="$t('device.refresh.name')"
+          :title="$t('device.refresh.name')"
           @click="handleRefresh"
         >
-        </ExTooltipButton>
+        </el-button>
       </div>
     </div>
   </div>

@@ -1,32 +1,30 @@
 <template>
-  <ExTooltipButton
+  <el-button
     v-if="!row.wifi"
     type="primary"
     text
     :disabled="['unauthorized', 'offline'].includes(row.status)"
-    placement="top"
-    :content="$t('device.wireless.mode')"
+    :title="$t('device.wireless.mode')"
     @click="handleWifi(row)"
   >
     <template #icon>
       <i class="i-bi-wifi"></i>
     </template>
-  </ExTooltipButton>
+  </el-button>
 
-  <ExTooltipButton
+  <el-button
     v-if="row.wifi"
     type="danger"
     text
     :loading="stopLoading"
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :icon="stopLoading ? '' : 'Close'"
-    placement="top"
-    :content="stopLoading
+    :title="stopLoading
       ? $t('device.wireless.disconnect.progress')
       : $t('device.wireless.disconnect.start')"
     @click="handleStop(row)"
   >
-  </ExTooltipButton>
+  </el-button>
 </template>
 
 <script>

@@ -11,14 +11,14 @@
         />
       </div>
       <el-button-group class="flex-none">
-        <ExTooltipButton placement="bottom" :content="$t('preferences.config.import.name')" icon="Upload" plain @click="handleImport">
-        </ExTooltipButton>
-        <ExTooltipButton placement="bottom" :content="$t('preferences.config.export.name')" icon="Download" plain @click="handleExport">
-        </ExTooltipButton>
-        <ExTooltipButton placement="bottom" :content="$t('preferences.config.edit.name')" icon="Edit" plain @click="handleEdit">
-        </ExTooltipButton>
-        <ExTooltipButton placement="bottom" :content="$t('preferences.config.reset.name')" icon="RefreshRight" plain @click="handleReset">
-        </ExTooltipButton>
+        <el-button :title="$t('preferences.config.import.name')" icon="Upload" plain @click="handleImport">
+        </el-button>
+        <el-button :title="$t('preferences.config.export.name')" icon="Download" plain @click="handleExport">
+        </el-button>
+        <el-button :title="$t('preferences.config.edit.name')" icon="Edit" plain @click="handleEdit">
+        </el-button>
+        <el-button :title="$t('preferences.config.reset.name')" icon="RefreshRight" plain @click="handleReset">
+        </el-button>
       </el-button-group>
     </div>
 

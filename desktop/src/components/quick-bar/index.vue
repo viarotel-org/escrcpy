@@ -14,15 +14,13 @@
       }"
     >
       <template #default="{ trigger, ...slotProps } = {}">
-        <ExTooltipButton
+        <el-button
           v-bind="{
             type: 'default',
-            content: $t(item.tips || item.label),
+            title: $t(item.tips || item.label),
             circle: true,
             borderless: true,
             text: true,
-            size: 'small',
-            effect: 'light',
             ...slotProps,
             ...(trigger ? { onClick: trigger } : {}),
           }"
@@ -33,7 +31,7 @@
             </el-icon>
             <i v-else-if="item.fontIcon" :class="item.fontIcon"></i>
           </template>
-        </ExTooltipButton>
+        </el-button>
       </template>
     </component>
   </div>

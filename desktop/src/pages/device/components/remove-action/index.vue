@@ -1,14 +1,13 @@
 <template>
-  <ExTooltipButton
+  <el-button
     type="danger"
     text
     :loading
     :icon="loading ? '' : 'Delete'"
-    placement="top"
-    :content="$t('common.remove')"
+    :title="$t('common.remove')"
     @click="handleClick(device)"
   >
-  </ExTooltipButton>
+  </el-button>
 
   <ConfigMigrationDialog
     ref="configMigrationDialog"

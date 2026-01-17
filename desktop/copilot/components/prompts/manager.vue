@@ -39,6 +39,7 @@
               <div class="p-4 justify-between group">
                 <div v-if="editingIndex === index" class="flex flex-col items-end gap-2">
                   <el-input
+                    :ref="(val) => onInputRef(val, index)"
                     v-model="editingValue"
                     class="flex-none"
                     clearable
@@ -158,6 +159,13 @@ const editingIndex = ref(-1)
 const editingValue = ref('')
 
 function onOpen() {
+}
+
+async function onInputRef(val, index) {
+  if (index === editingIndex.value) {
+    await nextTick()
+    val?.textarea?.focus?.()
+  }
 }
 
 function createPromptPlaceholder() {

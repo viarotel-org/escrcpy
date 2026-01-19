@@ -7,7 +7,7 @@
       :class="[
         {
           'pl-17': isPlatform('macos'),
-          'pr-32': isPlatform('windows') || isPlatform('linux'),
+          'pr-[calc(128px+2vw)]': isPlatform('windows') || isPlatform('linux'),
         },
       ]"
     >

@@ -140,5 +140,5 @@ export function isPlatform(name) {
 
   const currentPlatform = model[name] || name
 
-  return currentPlatform === window.electron.process.platform
+  return currentPlatform === (import.meta.env.VITE_SIMULATE_PLATFORM ?? window.electron.process.platform)
 }

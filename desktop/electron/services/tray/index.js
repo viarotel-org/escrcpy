@@ -2,7 +2,7 @@ import { app, dialog, Menu, Tray } from 'electron'
 import { trayPath } from '$electron/configs/index.js'
 import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
-import { eventEmitter } from '$electron/helpers/emitter.js'
+import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
 
 export default (mainWindow) => {
@@ -10,11 +10,11 @@ export default (mainWindow) => {
 
   let tray = null
 
-  eventEmitter.on('tray:destroy', () => {
+  globalEventEmitter.on('tray:destroy', () => {
     tray?.destroy?.()
   })
 
-  eventEmitter.on('tray:create', () => {
+  globalEventEmitter.on('tray:create', () => {
     createTray()
   })
 

@@ -30,7 +30,7 @@ import { getAppBackgroundColor, isPackaged, loadPage } from './helpers/index.js'
 import { Edger } from './helpers/edger/index.js'
 
 import { ensureSingleInstance } from './helpers/single.js'
-import { eventEmitter } from './helpers/emitter.js'
+import { globalEventEmitter } from './helpers/emitter/index.js'
 import { ImmersiveTitleBar } from './helpers/immersive/index.js'
 
 // const require = createRequire(import.meta.url)
@@ -66,7 +66,7 @@ ensureSingleInstance({
 
     if (!executeArgs['device-id']) {
       next()
-      eventEmitter.emit('tray:destroy')
+      globalEventEmitter.emit('tray:destroy')
     }
   },
 })
@@ -100,7 +100,7 @@ async function onWhenReady(callback) {
 
     app.dock.show()
     mainWindow.show()
-    eventEmitter.emit('tray:destroy')
+    globalEventEmitter.emit('tray:destroy')
   })
 
   app.on('window-all-closed', () => {
@@ -169,7 +169,7 @@ function runExecuteArguments(mainWindow, commandLine) {
   const executeArgs = minimist(commandLine)
 
   if (executeArgs.minimized) {
-    eventEmitter.emit('tray:create')
+    globalEventEmitter.emit('tray:create')
   }
 
   Object.entries(executeArgs).forEach(([key, value]) => {

@@ -9,9 +9,7 @@ defineOptions({
 
 const themeStore = useThemeStore()
 
-const activeTab = inject('activeTab')
-
-watch([() => themeStore.value, () => activeTab.value], () => {
+watch([() => themeStore.value], () => {
   closeSearchModal()
 })
 

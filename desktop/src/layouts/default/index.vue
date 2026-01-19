@@ -1,13 +1,13 @@
 <template>
   <div
-    class="absolute inset-0 h-full flex flex-col px-4 pt-1 space-y-2 overflow-hidden"
+    class="absolute inset-0 h-full flex flex-col px-2 space-y-2 overflow-hidden"
   >
     <div
-      class="app-region-drag flex items-center flex-none"
+      class="app-region-drag flex items-center flex-none pt-[2px]"
       :class="[
         {
-          'pl-16': isPlatform('macos'),
-          'pr-42 pt-[2px]': isPlatform('windows'),
+          'pl-17': isPlatform('macos'),
+          'pr-32': isPlatform('windows') || isPlatform('linux'),
         },
       ]"
     >

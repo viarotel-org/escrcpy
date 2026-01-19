@@ -1,6 +1,5 @@
 import { primaryColor } from '$renderer/configs/index.js'
 import remote from '@electron/remote'
-import { FindInPage } from 'electron-find-in-page'
 
 const theme = {
   isDark: false,
@@ -14,7 +13,7 @@ async function open({ ...args } = {}) {
   return findInPage.openFindWindow()
 }
 
-function close() {
+async function close() {
   remote.getCurrentWebContents().stopFindInPage('clearSelection')
 
   if (!findInPage) {
@@ -47,6 +46,8 @@ async function create({ ...args } = {}) {
   }
 
   theme.isDark = args.isDark
+
+  const { FindInPage } = (await import('electron-find-in-page'))
 
   findInPage = new FindInPage(remote.getCurrentWebContents(), {
     ...args,

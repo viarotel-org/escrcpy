@@ -8,7 +8,7 @@ import './helpers/debugger/main.js'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import minimist from 'minimist'
-
+import { snakeCase, toUpper } from 'lodash-es'
 import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow, shell } from 'electron'
@@ -31,7 +31,7 @@ import { Edger } from './helpers/edger/index.js'
 
 import { ensureSingleInstance } from './helpers/single.js'
 import { eventEmitter } from './helpers/emitter.js'
-import { snakeCase, toUpper } from 'lodash-es'
+import { ImmersiveTitleBar } from './helpers/immersive/index.js'
 
 // const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -39,6 +39,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.DIST = path.join(__dirname, '../dist')
 
 electronApp.setAppUserModelId('com.viarotel.escrcpy')
+
+remote.initialize()
 
 contextMenu({
   showCopyImage: false,
@@ -109,6 +111,8 @@ async function onWhenReady(callback) {
 }
 
 function createWindow(callback) {
+  const immersiveTitleBar = new ImmersiveTitleBar()
+
   mainWindow = new BrowserWindow({
     show: false,
     icon: getLogoPath(),
@@ -118,8 +122,7 @@ function createWindow(callback) {
     minHeight: browserWindowHeight,
     autoHideMenuBar: true,
     backgroundColor: getAppBackgroundColor(),
-    titleBarStyle: 'hidden',
-    ...(['win32'].includes(process.platform) ? { titleBarOverlay: true } : {}),
+    ...immersiveTitleBar.settings,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,
@@ -128,10 +131,12 @@ function createWindow(callback) {
     },
   })
 
+  immersiveTitleBar.register(mainWindow)
+
   mainWindow.customId = 'mainWindow'
 
   remote.enable(mainWindow.webContents)
-  remote.initialize()
+  console.log('remote.enable')
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

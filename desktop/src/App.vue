@@ -1,6 +1,7 @@
 <template>
   <el-config-provider :locale :size="getSize($grid)">
     <Layouts />
+    <WindowControls />
   </el-config-provider>
 </template>
 
@@ -8,6 +9,7 @@
 import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
 import Layouts from './layouts/index.vue'
+import WindowControls from '$/components/window-controls/index.vue'
 
 const router = useRouter()
 

@@ -5,6 +5,7 @@ import theme from './theme/index.js'
 import tray from './tray/index.js'
 import updater from './updater/index.js'
 import launch from './launch/index.js'
+import window from './window/index.js'
 
 export default (mainWindow) => {
   appEvents(mainWindow)
@@ -14,4 +15,5 @@ export default (mainWindow) => {
   theme(mainWindow)
   shortcuts(mainWindow)
   launch(mainWindow)
+  window(mainWindow)
 }

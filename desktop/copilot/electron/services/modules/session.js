@@ -7,7 +7,7 @@
 import electronStore from '$electron/helpers/store/index.js'
 import pLimit from 'p-limit'
 import { randomUUID } from 'node:crypto'
-import EventEmitter from 'node:events'
+import { EventEmitter } from '$electron/helpers/emitter.js'
 import { AutoGLM } from 'autoglm.js'
 import { adbKeyboardApkPath } from '$electron/configs/index.js'
 import { sleep } from '$/utils'

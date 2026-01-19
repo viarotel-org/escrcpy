@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col pt-2">
+  <div class="h-full flex flex-col">
     <BatchActions
       class="overflow-hidden transition-all"
       :class="isMultipleRow ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 mb-0'"

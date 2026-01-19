@@ -1,6 +1,5 @@
 import { ipcMain, nativeTheme } from 'electron'
 import electronStore from '$electron/helpers/store/index.js'
-import { autoUpdateTitleBarOverlay } from '$electron/helpers/index.js'
 
 export default (mainWindow) => {
   const appTheme = {
@@ -15,15 +14,18 @@ export default (mainWindow) => {
     },
   }
 
-  autoUpdateTitleBarOverlay(mainWindow)
-
   Object.entries(appTheme).forEach(([key, handler]) => {
     ipcMain.handle(`app-theme-${key}`, (_, value) => handler(value))
   })
 
-  nativeTheme.on('updated', () => {
+  nativeTheme.on('updated', onUpdated)
+
+  mainWindow.on('closed', () => {
+    nativeTheme.off('updated', onUpdated)
+  })
+
+  function onUpdated() {
     electronStore.set('common.theme', appTheme.value())
     electronStore.set('common.isDark', appTheme.isDark())
-    autoUpdateTitleBarOverlay(mainWindow)
-  })
+  }
 }

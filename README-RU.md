@@ -51,7 +51,7 @@
 
 - [FAQ](https://viarotel.eu.org/help/escrcpy)
 - [Сообщить о проблеме](https://github.com/viarotel-org/escrcpy/issues)
-- [Контактный email](viarotel@qq.com)
+- [Контактный email](mailto:viarotel@qq.com)
 
 ## Что дальше?
 
@@ -67,6 +67,10 @@
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 - [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
+
+## Партнёрские ссылки
+
+- [ADB Device Manager 2](https://github.com/Shrey113/Adb-Device-Manager-2)
 
 ## Поддержка
 

@@ -26,8 +26,7 @@ jobs:
             platform: win
             build_command: build:win
     env:
-      VITE_GITEE_APP_TOKEN: ${{ secrets.VITE_GITEE_APP_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -48,7 +47,21 @@ jobs:
       - name: Build ${{ matrix.platform }}
         run: pnpm ${{ matrix.build_command }}
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.platform }}
+          path: |
+            desktop/dist-release/*.exe
+            desktop/dist-release/*.zip
+            desktop/dist-release/*.dmg
+            desktop/dist-release/*.AppImage
+            desktop/dist-release/*.deb
+            desktop/dist-release/*.rpm
+            desktop/dist-release/*.tar.gz
+
       - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           draft: false

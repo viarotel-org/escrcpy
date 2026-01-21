@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center fixed !space-x-2 top-[2px] right-2 z-9999 *:app-region-no-drag">
+  <div class="flex items-center fixed !space-x-2 top-2 right-2 z-1500 *:app-region-no-drag">
     <el-button text plain circle class="!hover:bg-gray-200 !active:bg-gray-300 !hover:dark:bg-gray-800 !active:dark:bg-gray-700" @click="onMinimizeClick">
       <template #icon>
         <i class="i-ph-minus"></i>

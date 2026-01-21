@@ -6,14 +6,14 @@
       <div
         :class="[
           {
-            'pl-24': isPlatform('macos'),
-            'pr-42': isPlatform('windows'),
+            'pl-20': isPlatform('macos'),
+            'pr-[calc(100px+3.6vw)]': isPlatform('windows') || isPlatform('linux'),
           },
         ]"
-        class="app-region-drag flex-none flex items-center justify-between px-3 h-10"
+        class="app-region-drag flex-none flex items-center justify-between px-2 h-11"
       >
         <div class="flex items-center gap-4">
-          <div class="text-sm font-semibold">
+          <div class="text-sm font-semibold pl-2">
             Escrcpy Copilot
           </div>
 
@@ -29,7 +29,7 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-1 *:app-region-no-drag">
+        <div class="flex items-center !space-x-2 *:app-region-no-drag">
           <el-tooltip :content="$t('copilot.promptManager.title')" placement="bottom">
             <el-button
               text
@@ -69,10 +69,12 @@
 
       <PromptManager ref="promptManagerRef" />
     </div>
+    <WindowControls v-if="isPlatform('windows') || isPlatform('linux')" />
   </el-config-provider>
 </template>
 
 <script setup>
+import WindowControls from '$/components/window-controls/index.vue'
 import ChatPanel from './components/chat/index.vue'
 import ConfigDialog from './components/config/index.vue'
 import { PromptManager } from './components/prompts/index.js'

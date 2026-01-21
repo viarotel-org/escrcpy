@@ -3,11 +3,11 @@
     class="absolute inset-0 h-full flex flex-col px-2 space-y-2 overflow-hidden"
   >
     <div
-      class="app-region-drag flex items-center flex-none pt-[2px]"
+      class="app-region-drag flex items-center flex-none pt-2"
       :class="[
         {
-          'pl-17': isPlatform('macos'),
-          'pr-[calc(100px+3vw)]': isPlatform('windows') || isPlatform('linux'),
+          'pl-20': isPlatform('macos'),
+          'pr-[calc(100px+3.6vw)]': isPlatform('windows') || isPlatform('linux'),
         },
       ]"
     >

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center space-x-4 relative z-10 *:app-region-no-drag">
+  <div class="flex items-center !space-x-2 relative z-10 *:app-region-no-drag">
     <component
       :is="item.component || 'div'"
       v-for="item in actionModel"

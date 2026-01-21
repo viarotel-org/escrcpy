@@ -138,7 +138,9 @@ export function isPlatform(name) {
     ios: 'ios',
   }
 
-  const currentPlatform = model[name] || name
+  const matchPlatform = model[name] || name
 
-  return currentPlatform === (import.meta.env.VITE_SIMULATE_PLATFORM ?? window.electron.process.platform)
+  const currentPlatform = import.meta.env.VITE_SIMULATION_PLATFORM ?? window.electron.process.platform
+
+  return currentPlatform === matchPlatform
 }

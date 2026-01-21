@@ -3,9 +3,12 @@ import { fileURLToPath } from 'node:url'
 import { BrowserWindow, shell } from 'electron'
 import { browserWindowWidth, getLogoPath } from '$electron/configs/index.js'
 import { autoUpdateTitleBarOverlay, getAppBackgroundColor, loadPage } from '$electron/helpers/index.js'
+import { ImmersiveTitleBar } from '$electron/helpers/immersive/index.js'
 
 export function initCopilotWindow(mainWindow, data) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+  const immersiveTitleBar = new ImmersiveTitleBar()
 
   const copilotWindow = new BrowserWindow({
     show: false,
@@ -16,8 +19,7 @@ export function initCopilotWindow(mainWindow, data) {
     minHeight: browserWindowWidth * 0.7,
     autoHideMenuBar: true,
     backgroundColor: getAppBackgroundColor(),
-    titleBarStyle: 'hidden',
-    ...(['win32'].includes(process.platform) ? { titleBarOverlay: true } : {}),
+    ...immersiveTitleBar.settings,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,

@@ -52,7 +52,7 @@ As an open-source project powered by passion, support is limited, and updates ar
 
 - [FAQ](https://viarotel.eu.org/help/escrcpy)
 - [Report Issues](https://github.com/viarotel-org/escrcpy/issues)
-- [Contact Email](viarotel@qq.com)
+- [Contact Email](mailto:viarotel@qq.com)
 
 ## What's Next?
 
@@ -68,6 +68,10 @@ This project owes its existence to the following open-source projects:
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 - [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
+
+## Friendly Links
+
+- [ADB Device Manager 2](https://github.com/Shrey113/Adb-Device-Manager-2)
 
 ## Donate
 

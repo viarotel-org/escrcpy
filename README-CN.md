@@ -51,7 +51,7 @@
 
 - [常见问题](https://viarotel.eu.org/zhHans/help/escrcpy)
 - [反馈问题](https://github.com/viarotel-org/escrcpy/issues)
-- [联系邮箱](viarotel@qq.com)
+- [联系邮箱](mailto:viarotel@qq.com)
 
 ## 下一步做什么？
 
@@ -67,6 +67,10 @@
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 - [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
+
+## 友情链接
+
+- [ADB Device Manager 2](https://github.com/Shrey113/Adb-Device-Manager-2)
 
 ## 捐赠项目
 

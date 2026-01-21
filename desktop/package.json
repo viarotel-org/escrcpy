@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "build:electron": "electron-builder --config ./electron-builder.config.js",
+    "build:electron": "electron-builder --config=./electron-builder.config.js --publish=never",
     "electron-fix": "npx electron-fix start",
     "locale-sync": "node scripts/locale-sync.js",
     "postinstall": "electron-builder install-app-deps"

@@ -1,12 +1,10 @@
-import path from 'node:path'
 import Store from 'electron-store'
 import { isEqual, set } from 'lodash-es'
-import { createProxy, isPackaged, isPortable } from '$electron/helpers/index.js'
+import { createProxy } from '$electron/helpers/index.js'
 
 export function createStore(options = {}) {
   const store = new Store({
     watch: true,
-    cwd: resolveStoreDir(),
     ...options,
   })
 
@@ -50,16 +48,4 @@ export function resolveStore(store) {
       store.set(...args)
     },
   }
-}
-
-export function resolveStoreDir() {
-  if (isPortable()) {
-    return process.env.PORTABLE_EXECUTABLE_DIR
-  }
-
-  if (!isPackaged()) {
-    return path.dirname(process.env.EXE_PATH)
-  }
-
-  return process.env.USER_DATA_PATH
 }

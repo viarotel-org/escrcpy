@@ -93,6 +93,7 @@ export default {
     target: [
       { target: 'AppImage', arch: ['x64', 'arm64'] },
       { target: 'deb', arch: ['x64', 'arm64'] },
+      { target: 'flatpak', arch: ['x64', 'arm64'] },
     ],
     artifactName: '${productName}-${version}-linux-${arch}.${ext}',
     extraResources: {
@@ -100,6 +101,27 @@ export default {
       to: 'extra',
       filter: ['common', 'linux', 'linux-${arch}'],
     },
+  },
+
+  flatpak: {
+    runtime: 'org.freedesktop.Platform',
+    runtimeVersion: '23.08',
+    sdk: 'org.freedesktop.Sdk',
+    base: 'org.electronjs.Electron2.BaseApp',
+    baseVersion: '23.08',
+    finishArgs: [
+      '--share=network',
+      '--share=ipc',
+      '--socket=x11',
+      '--socket=wayland',
+      '--socket=pulseaudio',
+      '--device=all',
+      '--filesystem=home',
+      '--filesystem=xdg-download',
+      '--talk-name=org.freedesktop.Notifications',
+      '--talk-name=org.kde.StatusNotifierWatcher',
+      '--system-talk-name=org.freedesktop.UDisks2',
+    ],
   },
 
   npmRebuild: true,

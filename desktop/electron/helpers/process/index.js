@@ -8,22 +8,13 @@
 
 import { app } from 'electron'
 import fixPath from 'fix-path'
-import path from 'node:path'
-import fs from 'node:fs'
+import { setupPortableMode } from './portable.js'
 
 import { resolveEnvPath } from './helper.js'
 import { extraResolve } from './resources.js'
 
-// ========== 便携模式：重定向 Electron 数据目录 ==========
-if (process.platform === 'win32' && process.env.PORTABLE_EXECUTABLE_DIR) {
-  const base = path.join(process.env.PORTABLE_EXECUTABLE_DIR, 'data')
-  fs.mkdirSync(base, { recursive: true })
-  app.setPath('userData', base)
-  app.setPath('sessionData', path.join(base, 'session'))
-  app.setPath('cache', path.join(base, 'cache'))
-  app.setPath('logs', path.join(base, 'logs'))
-}
-// ========== 便携模式结束 ==========
+// Setup portable mode if applicable
+setupPortableMode()
 
 if (process.platform === 'darwin') {
   fixPath()
@@ -52,10 +43,6 @@ process.env.PATH = resolveEnvPath({
     extraResolve(`linux-${process.arch}/gnirehtet`),
   ],
 })
-
-process.env.EXE_PATH = app.getPath('exe')
-
-process.env.USER_DATA_PATH = app.getPath('userData')
 
 const isPackaged = process.env.IS_PACKAGED === 'true'
 

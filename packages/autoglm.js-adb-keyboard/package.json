@@ -1,7 +1,7 @@
 {
   "name": "@autoglm.js/adb-keyboard",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.3.0",
   "private": false,
   "description": "Keyboard tools for AutoGLM.js",
   "author": "FliPPeDround <flippedround@qq.com>",

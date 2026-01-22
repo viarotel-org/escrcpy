@@ -9,7 +9,7 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <div class="h-full overflow-auto -mx-2 pr-2">
+    <div class="h-full overflow-auto -mx-2 -mt-4">
       <PreferenceForm
         ref="preferenceFormRef"
         v-model="preferenceData"
@@ -17,6 +17,7 @@
         v-bind="{
           excludes: ['common'],
           deviceScope: device.id,
+          reverse: true,
         }"
       />
     </div>

@@ -22,7 +22,7 @@
       </el-button-group>
     </div>
 
-    <div class="pr-2 pt-4 flex-1 h-0 overflow-auto">
+    <div class="pr-2 flex-1 min-h-0">
       <PreferenceForm
         v-model="preferenceData"
         v-bind="{
@@ -30,7 +30,6 @@
         }"
       >
       </PreferenceForm>
-      <div class="h-4"></div>
     </div>
   </div>
 </template>

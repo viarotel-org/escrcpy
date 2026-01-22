@@ -78,6 +78,7 @@
 
   &.el-segmented--child {
     --el-border-radius-base: 9999px;
+    --el-segmented-bg-color: transparent;
     .el-segmented__item {
       @apply py-[3px];
     }

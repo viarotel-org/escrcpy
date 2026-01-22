@@ -1,5 +1,11 @@
-import { shell } from 'electron'
+import { app, shell } from 'electron'
 import electronLog from 'electron-log/main'
+import path from 'node:path'
+
+electronLog.transports.file.resolvePathFn = () => {
+  const value = path.join(app.getPath('logs'), 'main.log')
+  return value
+}
 
 electronLog.initialize({ preload: true })
 

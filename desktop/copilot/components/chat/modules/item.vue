@@ -1,6 +1,5 @@
 <template>
   <t-chat-item v-bind="{ ...item, name: $t(item.name), variant: 'base' }" class="t-chat-item--copilot">
-    <!-- Custom message content -->
     <template #content>
       <div class="mt-2 space-y-2">
         <template v-if="[MessageRoleEnum.ASSISTANT].includes(item.role)">
@@ -22,7 +21,6 @@
           </t-chat-reasoning>
         </template>
 
-        <!-- Message content -->
         <t-chat-content
           v-else
           :content="item.content"
@@ -34,7 +32,6 @@
       </div>
     </template>
 
-    <!-- Action buttons -->
     <template #actions>
       <el-button-group class="mt-4">
         <el-button icon="CopyDocument" :title="$t('common.copy')" @click="onCopyClick(item)">
@@ -78,6 +75,14 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  messages: {
+    type: Array,
+    required: true,
+  },
+  handleSubmit: {
+    type: Function,
+    required: true,
+  },
 })
 
 // Delete single message
@@ -97,12 +102,11 @@ async function onCopyClick(item) {
 }
 
 function onRetryClick(item) {
-  const itemIndex = messages.value.findIndex(msg => msg.id === item.id)
+  const itemIndex = props.messages.findIndex(msg => msg.id === item.id)
   if (itemIndex >= 0) {
-    // Search backward in the original messages for the most recent user message (messages are in ascending order)
     for (let i = itemIndex - 1; i >= 0; i--) {
-      if (messages.value[i].role === 'user') {
-        handleSubmit(messages.value[i].content)
+      if (props.messages[i].role === 'user') {
+        props.handleSubmit(props.messages[i].content)
         break
       }
     }

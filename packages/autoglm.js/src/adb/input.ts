@@ -1,6 +1,7 @@
 import { Buffer } from 'node:buffer'
 import { sleep } from '@autoglm.js/shared'
 import { runAdbCommand } from './utils'
+import { ADBKeyboard } from './keyboard'
 
 /**
  * Get the current input method (IME) on the device.
@@ -53,10 +54,9 @@ export async function detectAndSetAdbKeyboard(deviceId?: string): Promise<string
 
   try {
     // Check if ADB Keyboard is installed
-    const checkResult = await runAdbCommand(deviceId, ['shell', 'pm', 'list', 'packages', 'com.android.adbkeyboard'])
+    const checkResult = await ADBKeyboard.prototype.isKeyboardInstalled(deviceId)
 
-    if (!checkResult.stdout.includes('com.android.adbkeyboard')) {
-      console.warn('ADB Keyboard is not installed')
+    if (!checkResult.success) {
       return currentIme
     }
 

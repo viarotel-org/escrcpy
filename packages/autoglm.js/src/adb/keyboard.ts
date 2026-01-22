@@ -15,17 +15,38 @@ export class ADBKeyboard {
   /**
    * Check ADB Keyboard is installed.
    */
-  async isKeyboardInstalled() {
+  async isKeyboardInstalled(deviceId?: string) {
     try {
-      // 首先检查已启用的输入法
-      const enabledResult = await runAdbCommand(this.deviceId, ['shell', 'ime', 'list', '-s'])
-      const enabledImeList = enabledResult.stdout.trim()
+      const checkResult = await runAdbCommand(deviceId ?? this.deviceId, ['shell', 'pm', 'list', 'packages', 'com.android.adbkeyboard'])
 
-      if (enabledImeList.includes('com.android.adbkeyboard/.AdbIME')) {
-        return { success: true, message: 'ADB Keyboard is installed and enabled' }
+      if (checkResult.stdout.includes('com.android.adbkeyboard')) {
+        return { success: true, message: 'ADB Keyboard is installed' }
       }
       else {
         return { success: false, message: 'ADB Keyboard is not installed' }
+      }
+    }
+    catch (error) {
+      return {
+        success: false,
+        message: getErrorMessage(error),
+      }
+    }
+  }
+
+  /**
+   * Check ADB Keyboard is enabled.
+   */
+  async isKeyboardEnabled(deviceId?: string) {
+    try {
+      const enabledResult = await runAdbCommand(deviceId ?? this.deviceId, ['shell', 'ime', 'list', '-s'])
+      const enabledImeList = enabledResult.stdout.trim()
+
+      if (enabledImeList.includes('com.android.adbkeyboard/.AdbIME')) {
+        return { success: true, message: 'ADB Keyboard is enabled' }
+      }
+      else {
+        return { success: false, message: 'ADB Keyboard is not enabled' }
       }
     }
     catch (error) {

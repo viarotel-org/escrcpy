@@ -116,7 +116,7 @@ export function registerCopilotHandlers(mainWindow) {
 
       // Automatically install if not installed
       if (!result?.success) {
-        await agent.adb.installKeyboard(adbKeyboardApkPath)
+        agent.adb.installKeyboard(adbKeyboardApkPath)
       }
 
       return result?.success || false

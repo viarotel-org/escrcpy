@@ -14,7 +14,7 @@
 
     <div class="p-4">
       <template v-for="item of reverseMessages" :key="item.id">
-        <ChatItem v-bind="{ item, deleteMessage }"></ChatItem>
+        <ChatItem v-bind="{ item, messages, deleteMessage, handleSubmit }"></ChatItem>
       </template>
     </div>
 

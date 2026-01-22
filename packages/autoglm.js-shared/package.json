@@ -1,7 +1,7 @@
 {
   "name": "@autoglm.js/shared",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "private": true,
   "packageManager": "pnpm@10.25.0",
   "description": "Shared utilities for autoglm.js",

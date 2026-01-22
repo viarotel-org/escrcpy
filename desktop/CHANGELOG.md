@@ -1,5 +1,40 @@
 # Changelog
 
+## [2.3.0](https://github.com/viarotel-org/escrcpy/compare/v2.2.0...v2.3.0) (2026-01-22)
+
+
+### Features
+
+* 🚀 Optimize portable package configuration and add linux flatpak package support ([a7982db](https://github.com/viarotel-org/escrcpy/commit/a7982db1d03107143a8ac64e85d3b895f21b4e17))
+* configure electron-log file path in debugger helper ([2242668](https://github.com/viarotel-org/escrcpy/commit/2242668afa139189a3f92efbff2e6460b5c69f90))
+
+
+### Bug Fixes
+
+* 🐛 handle copilot execution failures and adjust config max steps ([3601709](https://github.com/viarotel-org/escrcpy/commit/3601709dde4aeadcf8616d98bf7073c288c6c043))
+* **win:** fully redirect user data to portable folder and fix CI workflow ([fe2fd89](https://github.com/viarotel-org/escrcpy/commit/fe2fd8937ec33a440eb00f45b0d2764132dd530f))
+
+
+### Performance Improvements
+
+* ✨ Optimize windows and linux window layout ([b63b59c](https://github.com/viarotel-org/escrcpy/commit/b63b59ca723b310f854afc6e77cb0fe6501661e7))
+
+
+### Code Refactoring
+
+* add platform simulation support and adjust window controls layout ([9c3a5b1](https://github.com/viarotel-org/escrcpy/commit/9c3a5b1042ff795b5bd3a2f947fc53506eaf4a29))
+* adjust header and chat layout padding ([70fe60d](https://github.com/viarotel-org/escrcpy/commit/70fe60d3b62d34bf36f51094af28e01ebaba91ba))
+* adjust layout padding for windows and linux platforms ([4e153cc](https://github.com/viarotel-org/escrcpy/commit/4e153ccbf3b3524e71463453c0891a2cc62a1b87))
+* adjust widget dimensions and clear dialog messages ([ca6796f](https://github.com/viarotel-org/escrcpy/commit/ca6796f1fa95e8c17fa078084414edf5031e4948))
+* implement immersive title bar and optimize window layout ([1e76d11](https://github.com/viarotel-org/escrcpy/commit/1e76d11668e6c7c39f4b8471c665fe7db62770d6))
+* improve chat retry logic and ADB keyboard detection ([8e0e43c](https://github.com/viarotel-org/escrcpy/commit/8e0e43cd03b6094444cf37b25145ec6425159e78))
+* remove dialog width constraints and improve file creation ([54e5553](https://github.com/viarotel-org/escrcpy/commit/54e55535eff5989b3a57255ce4326a44ecad48fd))
+* remove quiet config option ([76f9d6c](https://github.com/viarotel-org/escrcpy/commit/76f9d6ce677fa645f5c50b981c3cba377feaff23))
+* remove redundant success messages and unify dialog titles ([b1eac32](https://github.com/viarotel-org/escrcpy/commit/b1eac328826bf6263cc29d6cb66f1711e3635ac8))
+* reorganize emitter module and update event emitter references ([4c3cc2d](https://github.com/viarotel-org/escrcpy/commit/4c3cc2d33879eeb74f8a12c23528d14d2fbce331))
+* reorganize preference form layout with tabs and scroll ([7f0f864](https://github.com/viarotel-org/escrcpy/commit/7f0f86449990329df4478e474930157773e5b882))
+* replace ExTooltipButton with native el-button title attribute ([8056977](https://github.com/viarotel-org/escrcpy/commit/80569772c6ff1e0a6d8d36ad7e28d0c8661db77b))
+
 ## [2.2.0](https://github.com/viarotel-org/escrcpy/compare/v2.1.7...v2.2.0) (2026-01-17)
 
 

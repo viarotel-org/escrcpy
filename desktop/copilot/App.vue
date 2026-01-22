@@ -10,7 +10,7 @@
             'pr-[calc(100px+3.6vw)]': isPlatform('windows') || isPlatform('linux'),
           },
         ]"
-        class="app-region-drag flex-none flex items-center justify-between px-2 h-11"
+        class="app-region-drag flex-none flex items-center justify-between px-2 py-2"
       >
         <div class="flex items-center gap-4">
           <div class="text-sm font-semibold pl-2">
@@ -30,30 +30,23 @@
         </div>
 
         <div class="flex items-center !space-x-2 *:app-region-no-drag">
-          <el-tooltip :content="$t('copilot.promptManager.title')" placement="bottom">
-            <el-button
-              text
-              size="small"
-              class="!w-8 !h-8"
-              @click="onPromptManagerClick"
-            >
-              <el-icon :size="16">
-                <Collection />
-              </el-icon>
-            </el-button>
-          </el-tooltip>
-          <el-tooltip :content="$t('copilot.config.title')" placement="bottom">
-            <el-button
-              text
-              size="small"
-              class="!w-8 !h-8"
-              @click="onConfigClick"
-            >
-              <el-icon :size="16">
-                <Setting />
-              </el-icon>
-            </el-button>
-          </el-tooltip>
+          <el-button
+            circle
+            text
+            icon="Collection"
+            :title="$t('copilot.promptManager.title')"
+            @click="onPromptManagerClick"
+          >
+          </el-button>
+
+          <el-button
+            circle
+            text
+            icon="Setting"
+            :title="$t('copilot.config.title')"
+            @click="onConfigClick"
+          >
+          </el-button>
         </div>
       </div>
 

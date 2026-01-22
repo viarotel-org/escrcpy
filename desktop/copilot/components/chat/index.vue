@@ -12,7 +12,7 @@
       class="mt-4"
     />
 
-    <div class="p-4">
+    <div class="p-2">
       <template v-for="item of reverseMessages" :key="item.id">
         <ChatItem v-bind="{ item, messages, deleteMessage, handleSubmit }"></ChatItem>
       </template>
@@ -22,7 +22,7 @@
     <template #footer>
       <ChatInput
         v-model="inputText"
-        class="px-4 pb-4"
+        class="px-2 pb-2"
         :is-executing="isExecuting"
         @submit="handleSubmit"
         @stop="handleStop"

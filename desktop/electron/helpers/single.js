@@ -101,7 +101,7 @@ function ensureSingleInstance(options = {}) {
         // Get all windows
         const windows = BrowserWindow.getAllWindows()
 
-        const mainWindow = windows.find(item => item.customId === 'mainWindow')
+        const mainWindow = windows.find(item => item.customId === 'main')
 
         const showWindowNext = () => {
           if (mainWindow) {

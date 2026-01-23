@@ -108,16 +108,6 @@ export function getAppBackgroundColor() {
   return nativeTheme.shouldUseDarkColors ? '#0A0A0A' : '#F5F5F5'
 }
 
-export function autoUpdateTitleBarOverlay(win) {
-  if (['win32'].includes(process.platform)) {
-    win.setTitleBarOverlay({
-      color: getAppBackgroundColor(),
-      symbolColor: nativeTheme.shouldUseDarkColors ? '#CFD3DC' : '#606266',
-      height: 32,
-    })
-  }
-}
-
 export function isPortable() {
   return process.platform === 'win32' && Boolean(process.env.PORTABLE_EXECUTABLE_DIR)
 }

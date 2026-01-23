@@ -20,7 +20,7 @@
           <el-tag v-if="currentDevice?.id" type="primary" class="">
             <div class="flex items-center gap-2">
               <div class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-              {{ getDeviceLabel(currentDevice) }}
+              {{ deviceLabel }}
             </div>
           </el-tag>
           <div v-else class="device-badge flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
@@ -75,6 +75,7 @@ import { PromptManager } from './components/prompts/index.js'
 import { isPlatform } from '$/utils/index.js'
 
 const copilotStore = useCopilotStore()
+const deviceStore = useDeviceStore()
 
 const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
   onLanguageChange(val) {
@@ -87,11 +88,9 @@ const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
 const configDialogRef = ref(null)
 const promptManagerRef = ref(null)
 
-const getDeviceLabel = (device) => {
-  if (!device)
-    return ''
-  return device.remark || device.name || device.id
-}
+const deviceLabel = computed(() => {
+  return deviceStore.getLabel(currentDevice.value, 'name')
+})
 
 function onConfigClick() {
   configDialogRef.value.open()

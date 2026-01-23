@@ -11,13 +11,10 @@ import minimist from 'minimist'
 import { snakeCase, toUpper } from 'lodash-es'
 import remote from '@electron/remote/main'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import contextMenu from 'electron-context-menu'
 
 import sandboxManager from './helpers/sandbox.js'
-
-import { getLogoPath } from './configs/logo/index.js'
-import { browserWindowHeight, browserWindowWidth } from './configs/index.js'
 
 import services from './services/index.js'
 
@@ -25,13 +22,13 @@ import control from '$control/electron/main.js'
 import explorer from '$explorer/electron/main.js'
 import copilot from '$copilot/electron/main.js'
 
-import { getAppBackgroundColor, isPackaged, loadPage } from './helpers/index.js'
+import { isPackaged } from './helpers/index.js'
 
 import { Edger } from './helpers/edger/index.js'
 
 import { ensureSingleInstance } from './helpers/single.js'
 import { globalEventEmitter } from './helpers/emitter/index.js'
-import { ImmersiveTitleBar } from './helpers/immersive/index.js'
+import { TemplateBrowserWindow } from './helpers/window/index.js'
 
 // const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -111,48 +108,23 @@ async function onWhenReady(callback) {
 }
 
 function createWindow(callback) {
-  const immersiveTitleBar = new ImmersiveTitleBar()
-
-  mainWindow = new BrowserWindow({
-    show: false,
-    icon: getLogoPath(),
-    width: browserWindowWidth,
-    minWidth: browserWindowWidth,
-    height: browserWindowHeight,
-    minHeight: browserWindowHeight,
-    autoHideMenuBar: true,
-    backgroundColor: getAppBackgroundColor(),
-    ...immersiveTitleBar.settings,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.mjs'),
-      nodeIntegration: true,
-      sandbox: false,
-      spellcheck: false,
-    },
+  mainWindow = new TemplateBrowserWindow({
+    __dirname,
   })
 
-  immersiveTitleBar.register(mainWindow)
-
-  mainWindow.customId = 'mainWindow'
+  mainWindow.loadPage()
 
   remote.enable(mainWindow.webContents)
-  console.log('remote.enable')
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
   const edgeHidden = electronStore.get('common.edgeHidden')
+
   if (edgeHidden) {
     new Edger(mainWindow)
   }
-
-  loadPage(mainWindow)
 
   services(mainWindow)
 

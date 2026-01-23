@@ -1,10 +1,11 @@
 <template>
   <div
-    class="flex  h-full" :class="[
+    class="flex  h-full"
+    :class="[
       reverse ? 'flex-col-reverse' : 'flex-col',
     ]"
   >
-    <div class="flex-1 min-h-0 overflow-auto pr-2">
+    <div class="flex-1 min-h-0 overflow-auto pr-2 relative">
       <el-form ref="elForm" :model="preferenceData" :label-width="$grid.lg ? '240px' : '140px'" class="">
         <el-collapse
           v-model="collapseValue"
@@ -23,6 +24,7 @@
             <template #title>
               <div
                 :id="`preference-${name}`"
+                v-intersection-observer="[onIntersectionObserver, { rootMargin: '0px 0px 0px 0px', threshold: 1 }]"
                 class="flex items-center w-full text-left -mr-10 overflow-hidden"
               >
                 <div class="flex-1 w-0 truncate pl-4 text-base">
@@ -101,6 +103,8 @@
 </template>
 
 <script setup>
+import { vIntersectionObserver } from '@vueuse/components'
+
 import { omit } from 'lodash-es'
 
 import { inputModel } from './components/index.js'
@@ -158,7 +162,6 @@ if (preferenceModelKeys.length) {
 
 function onTabChange(val) {
   document.querySelector(`#preference-${val}`).scrollIntoView({
-    behavior: 'smooth',
     block: 'start',
   })
 }
@@ -192,6 +195,16 @@ async function generateCommand() {
   })
 
   return value
+}
+
+function onIntersectionObserver([entry]) {
+  if (!entry.isIntersecting) {
+    return false
+  }
+
+  const currentId = entry.target.id.replace('preference-', '')
+
+  activeTab.value = currentId
 }
 
 defineExpose({

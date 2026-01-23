@@ -346,6 +346,12 @@
     "useSubscribeSms": true,
     "useCountdown": true,
     "useSmsCountdown": true,
-    "useCopilotStore": true
+    "useCopilotStore": true,
+    "createRef": true,
+    "onElementRemoval": true,
+    "refManualReset": true,
+    "usePreferredReducedTransparency": true,
+    "useSSRWidth": true,
+    "useTimeAgoIntl": true
   }
 }

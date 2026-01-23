@@ -16,7 +16,6 @@
       <template #default="{ trigger, ...slotProps } = {}">
         <el-button
           v-bind="{
-            type: 'default',
             title: $t(item.tips || item.label),
             circle: true,
             borderless: true,

@@ -5,7 +5,11 @@ import electronUpdater from 'electron-updater'
 
 const { autoUpdater } = electronUpdater
 
-export default (mainWindow) => {
+export default async () => {
+  const { getMainWindow } = await import('$electron/modules/window/index.js')
+
+  const mainWindow = getMainWindow()
+
   if (is.dev) {
     autoUpdater.updateConfigPath = devPublishPath
     Object.defineProperty(app, 'isPackaged', {

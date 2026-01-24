@@ -3,7 +3,7 @@ import { initExplorerWindow } from './helpers/index.js'
 import { isWindowDestroyed } from '$electron/helpers/index.js'
 import * as events from './events/index.js'
 
-export default (mainWindow) => {
+export default () => {
   // Store file explorer windows per device
   const explorerWindows = new Map()
 
@@ -19,7 +19,7 @@ export default (mainWindow) => {
     }
 
     // Create a new file explorer window
-    explorerWindow = initExplorerWindow(mainWindow, data)
+    explorerWindow = initExplorerWindow(data)
 
     events.install(explorerWindow)
 

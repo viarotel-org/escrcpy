@@ -7,13 +7,13 @@ import updater from './updater/index.js'
 import launch from './launch/index.js'
 import window from './window/index.js'
 
-export default (mainWindow) => {
-  appEvents(mainWindow)
-  handles(mainWindow)
-  updater(mainWindow)
-  tray(mainWindow)
-  theme(mainWindow)
-  shortcuts(mainWindow)
-  launch(mainWindow)
-  window(mainWindow)
+export default () => {
+  appEvents()
+  handles()
+  updater()
+  tray()
+  theme()
+  shortcuts()
+  launch()
+  window()
 }

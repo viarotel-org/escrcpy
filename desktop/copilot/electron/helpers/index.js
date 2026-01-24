@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { browserWindowWidth } from '$electron/configs/index.js'
 import { createBrowserWindow } from '$electron/helpers/window/index.js'
 
-export function initCopilotWindow(mainWindow, data) {
+export function initCopilotWindow(data) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
   const copilotWindow = createBrowserWindow({

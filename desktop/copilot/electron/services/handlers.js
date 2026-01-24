@@ -53,9 +53,8 @@ async function safeExecute(operation, fn) {
 
 /**
  * Register all Copilot-related IPC handlers
- * @param {Electron.BrowserWindow} [mainWindow] - Main window instance (optional, for special cases)
  */
-export function registerCopilotHandlers(mainWindow) {
+export function registerCopilotHandlers() {
   /**
    * Execute a task (supports single-device and batch execution)
    */

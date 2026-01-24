@@ -2,7 +2,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createBrowserWindow } from '$electron/helpers/window/index.js'
 
-export function initControlWindow(mainWindow) {
+export function initControlWindow() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
   const controlWindow = createBrowserWindow({

@@ -3,7 +3,7 @@ import { initControlWindow } from './helpers/index.js'
 import { isWindowDestroyed } from '$electron/helpers/index.js'
 import * as events from './events/index.js'
 
-export default (mainWindow) => {
+export default () => {
   let controlWindow
   let currentDevice
 
@@ -15,7 +15,7 @@ export default (mainWindow) => {
       return false
     }
 
-    controlWindow = initControlWindow(mainWindow, data)
+    controlWindow = initControlWindow(data)
 
     events.install(controlWindow)
 

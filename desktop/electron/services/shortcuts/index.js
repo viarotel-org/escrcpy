@@ -1,5 +1,5 @@
 // import { globalShortcut } from 'electron'
 
-export default (mainWindow) => {
+export default () => {
   // globalShortcut.register('Alt+O', () => {})
 }

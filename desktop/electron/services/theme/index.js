@@ -1,7 +1,7 @@
-import { ipcMain, nativeTheme } from 'electron'
+import { app, ipcMain, nativeTheme } from 'electron'
 import electronStore from '$electron/helpers/store/index.js'
 
-export default (mainWindow) => {
+export default () => {
   const appTheme = {
     value() {
       return nativeTheme.themeSource
@@ -20,7 +20,7 @@ export default (mainWindow) => {
 
   nativeTheme.on('updated', onUpdated)
 
-  mainWindow.on('closed', () => {
+  app.on('before-quit', () => {
     nativeTheme.off('updated', onUpdated)
   })
 

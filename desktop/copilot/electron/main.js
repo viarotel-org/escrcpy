@@ -4,8 +4,8 @@ import { isWindowDestroyed } from '$electron/helpers/index.js'
 import { registerCopilotHandlers } from './services/handlers.js'
 import * as events from './events/index.js'
 
-export default (mainWindow) => {
-  registerCopilotHandlers(mainWindow)
+export default () => {
+  registerCopilotHandlers()
 
   const copilotWindows = new Map()
 
@@ -26,7 +26,7 @@ export default (mainWindow) => {
       return false
     }
 
-    copilotWindow = initCopilotWindow(mainWindow, {
+    copilotWindow = initCopilotWindow({
       id: deviceId,
       name: data?.device?.name || data?.name,
       remark: data?.device?.remark || data?.remark,

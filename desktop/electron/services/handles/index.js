@@ -1,10 +1,10 @@
-import { app, clipboard, dialog, ipcMain, screen, shell } from 'electron'
+import { app, BrowserWindow, clipboard, dialog, ipcMain, screen, shell } from 'electron'
 import fs from 'fs-extra'
 import path from 'node:path'
 import { copyFileToClipboard } from '$electron/helpers/clipboard.js'
 import { openLogPath } from '$root/electron/helpers/debugger/index.js'
 
-export default (mainWindow) => {
+export default () => {
   ipcMain.handle(
     'show-open-dialog',
     async (_, { preset = '', ...options } = {}) => {
@@ -164,11 +164,13 @@ export default (mainWindow) => {
   })
 
   // Navigate to route
-  ipcMain.handle('navigate-to-route', async (_, route) => {
+  ipcMain.handle('navigate-to-route', async (event, route) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+
     try {
-      if (mainWindow && !mainWindow.isDestroyed()) {
-        mainWindow.show()
-        mainWindow.webContents.send('navigate-to-route', route)
+      if (win && !win.isDestroyed()) {
+        win.show()
+        win.webContents.send('navigate-to-route', route)
       }
       return true
     }
@@ -178,7 +180,7 @@ export default (mainWindow) => {
     }
   })
 
-  ipcMain.handle('open-log-path', async (_, route) => {
+  ipcMain.handle('open-log-path', async (event) => {
     try {
       await openLogPath()
       return true

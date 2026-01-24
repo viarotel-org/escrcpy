@@ -5,7 +5,11 @@ import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
 
-export default (mainWindow) => {
+export default async () => {
+  const { getMainWindow } = await import('$electron/modules/window/index.js')
+
+  const mainWindow = getMainWindow()
+
   const t = value => executeI18n(mainWindow, value)
 
   let tray = null
@@ -20,7 +24,6 @@ export default (mainWindow) => {
 
   mainWindow.on('close', async (event) => {
     if (app.isQuiting) {
-      mainWindow = null
       return true
     }
 

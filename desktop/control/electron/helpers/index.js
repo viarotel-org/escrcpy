@@ -1,12 +1,12 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { TemplateBrowserWindow } from '$electron/helpers/window/index.js'
+import { createBrowserWindow } from '$electron/helpers/window/index.js'
 
 export function initControlWindow(mainWindow) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-  const controlWindow = new TemplateBrowserWindow({
-    __dirname,
+  const controlWindow = createBrowserWindow({
+    preloadDir: __dirname,
     frame: false,
     transparent: true,
     backgroundColor: '#00000000',

@@ -28,7 +28,7 @@ import { Edger } from './helpers/edger/index.js'
 
 import { ensureSingleInstance } from './helpers/single.js'
 import { globalEventEmitter } from './helpers/emitter/index.js'
-import { TemplateBrowserWindow } from './helpers/window/index.js'
+import { createBrowserWindow } from './helpers/window/index.js'
 
 // const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -108,8 +108,8 @@ async function onWhenReady(callback) {
 }
 
 function createWindow(callback) {
-  mainWindow = new TemplateBrowserWindow({
-    __dirname,
+  mainWindow = createBrowserWindow({
+    preloadDir: __dirname,
   })
 
   mainWindow.loadPage()

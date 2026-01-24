@@ -1,87 +1,208 @@
 import path from 'node:path'
 import { BrowserWindow, shell } from 'electron'
-import { browserWindowHeight, browserWindowWidth, getLogoPath } from '$electron/configs/index.js'
-import { getAppBackgroundColor, loadPage } from '$electron/helpers/index.js'
 import { debounce } from 'lodash-es'
+
+import {
+  browserWindowHeight,
+  browserWindowWidth,
+  getLogoPath,
+} from '$electron/configs/index.js'
+
+import {
+  getAppBackgroundColor,
+  loadPage,
+} from '$electron/helpers/index.js'
+
 import electronStore from '$electron/helpers/store/index.js'
 
-export class TemplateBrowserWindow extends BrowserWindow {
+/**
+ * Electron Store key for persisting window bounds
+ * @type {string}
+ */
+const WINDOW_BOUNDS_KEY = 'common.bounds'
+
+export function createBrowserWindow(options) {
+  return new TemplateBrowserWindow(options).createProxy()
+}
+
+/**
+ * Template wrapper for Electron BrowserWindow
+ */
+export class TemplateBrowserWindow {
+  /**
+   * Underlying BrowserWindow instance
+   * @type {BrowserWindow}
+   */
+  win
+
+  /**
+   * Debounced resize handler
+   * @type {() => void}
+   */
+  #onResize
+
+  /**
+   * @param {Object} options
+   * @param {string} options.preloadDir - Absolute preload directory (required)
+   * @param {import('electron').BrowserWindowConstructorOptions} [options.browserWindowOverrides]
+   */
   constructor(options = {}) {
-    const { __dirname } = options
+    const { preloadDir, ...browserWindowOverrides } = options
 
-    const sizeOptions = electronStore.get('common.bounds') || {}
-
-    const titleBarOptions = (() => {
-      const platform = import.meta.env.VITE_SIMULATION_PLATFORM ?? process.platform
-
-      const value = {}
-
-      if (['win32', 'linux'].includes(platform)) {
-        value.frame = false
-      }
-
-      if (['darwin'].includes(platform)) {
-        value.titleBarStyle = 'hiddenInset'
-      }
-
-      return value
-    })()
-
-    const presetOptions = {
-      show: false,
-      icon: getLogoPath(),
-      width: browserWindowWidth,
-      minWidth: browserWindowWidth,
-      height: browserWindowHeight,
-      minHeight: browserWindowHeight,
-      autoHideMenuBar: true,
-      backgroundColor: getAppBackgroundColor(),
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.mjs'),
-        nodeIntegration: true,
-        sandbox: false,
-        spellcheck: false,
-      },
-      ...sizeOptions,
-      ...titleBarOptions,
+    if (!preloadDir) {
+      throw new Error('TemplateBrowserWindow: preloadDir is required')
     }
 
-    super({ ...presetOptions, ...options })
+    const defaultOptions = createDefaultWindowOptions({ preloadDir })
 
-    this.onResize = debounce(this.onResize.bind(this), 500)
+    this.win = new BrowserWindow({
+      ...defaultOptions,
+      ...browserWindowOverrides,
+    })
 
-    this.createListeners()
+    this.#onResize = debounce(this.#handleResize.bind(this), 500)
 
-    this.setWindowOpenHandler()
+    this.#bindEvents()
+    this.#setupExternalLinkHandler()
   }
 
-  setWindowOpenHandler() {
-    this.webContents.setWindowOpenHandler((details) => {
-      shell.openExternal(details.url)
+  /**
+   * Load renderer page
+   *
+   * @param {string} [prefix] - Page prefix
+   * @param {Record<string, any>} [query] - Optional query parameters
+   */
+  loadPage(prefix = 'main', query) {
+    this.win.customId = prefix
+    loadPage(this.win, `${prefix}/`, query)
+  }
+
+  /**
+   * Create proxy to forward methods to underlying BrowserWindow
+   */
+  createProxy() {
+    return new Proxy(this, {
+      get(target, prop) {
+        if (prop in target) {
+          return getProxyValue(target, prop)
+        }
+
+        return getProxyValue(target.win, prop)
+      },
+    })
+  }
+
+  /**
+   * Bind internal window events
+   * @private
+   */
+  #bindEvents() {
+    this.win.on('resize', this.#onResize)
+    this.win.on('closed', () => {
+      this.#onResize?.cancel?.()
+      this.win = null
+    })
+  }
+
+  /**
+   * Prevent new windows and open external links in browser
+   * @private
+   */
+  #setupExternalLinkHandler() {
+    this.win.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url)
       return { action: 'deny' }
     })
   }
 
-  createListeners() {
-    this.on('resize', this.onResize)
-  }
-
-  onResize() {
-    if (this.isMaximized()) {
-      return false
+  /**
+   * Persist window bounds on resize
+   * @private
+   */
+  #handleResize() {
+    if (this.win.isDestroyed() || this.win.isMaximized()) {
+      return
     }
 
-    const bounds = this.getBounds()
+    const { width, height } = this.win.getBounds()
 
-    electronStore.set('common.bounds', {
-      width: bounds.width,
-      height: bounds.height,
-    })
+    electronStore.set(WINDOW_BOUNDS_KEY, { width, height })
+  }
+}
+
+/**
+ * Resolve platform value (supports simulation via env)
+ * @returns {NodeJS.Platform}
+ */
+function resolvePlatform() {
+  return import.meta.env.VITE_SIMULATION_PLATFORM ?? process.platform
+}
+
+/**
+ * Get platform-specific title bar options
+ * @returns {import('electron').BrowserWindowConstructorOptions}
+ */
+function getTitleBarOptions() {
+  const platform = resolvePlatform()
+
+  if (platform === 'darwin') {
+    return { titleBarStyle: 'hiddenInset' }
   }
 
-  loadPage(prefix, query) {
-    this.customId = prefix || 'main'
-
-    loadPage(this, `${prefix}/`, query)
+  if (platform === 'win32' || platform === 'linux') {
+    return { frame: false }
   }
+
+  return {}
+}
+
+/**
+ * Create default BrowserWindow options with persisted bounds
+ *
+ * @param {Object} params
+ * @param {string} params.preloadDir - Absolute preload directory
+ * @returns {import('electron').BrowserWindowConstructorOptions}
+ */
+function createDefaultWindowOptions({ preloadDir }) {
+  const persistedBounds
+    /** @type {{ width?: number, height?: number }} */
+    = (electronStore.get(WINDOW_BOUNDS_KEY)) ?? {}
+
+  return {
+    show: false,
+    icon: getLogoPath(),
+
+    width: browserWindowWidth,
+    height: browserWindowHeight,
+    minWidth: browserWindowWidth,
+    minHeight: browserWindowHeight,
+
+    autoHideMenuBar: true,
+    backgroundColor: getAppBackgroundColor(),
+
+    webPreferences: {
+      preload: path.join(preloadDir, 'preload.mjs'),
+      nodeIntegration: true,
+      sandbox: false,
+      spellcheck: false,
+    },
+
+    ...persistedBounds,
+    ...getTitleBarOptions(),
+  }
+}
+
+/**
+ * Get proxy value
+ * @param {any} target
+ * @param {string|symbol} prop
+ */
+function getProxyValue(target, prop) {
+  const value = target[prop]
+
+  if (typeof value === 'function') {
+    return value.bind(target)
+  }
+
+  return value
 }

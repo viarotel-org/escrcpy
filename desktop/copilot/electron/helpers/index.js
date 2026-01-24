@@ -1,13 +1,13 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { browserWindowWidth } from '$electron/configs/index.js'
-import { TemplateBrowserWindow } from '$electron/helpers/window/index.js'
+import { createBrowserWindow } from '$electron/helpers/window/index.js'
 
 export function initCopilotWindow(mainWindow, data) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-  const copilotWindow = new TemplateBrowserWindow({
-    __dirname,
+  const copilotWindow = createBrowserWindow({
+    preloadDir: __dirname,
     width: browserWindowWidth,
     minWidth: browserWindowWidth,
     height: browserWindowWidth * 0.7,

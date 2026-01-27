@@ -2,7 +2,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { BrowserWindow, shell } from 'electron'
 import { browserWindowWidth, getLogoPath } from '$electron/configs/index.js'
-import { autoUpdateTitleBarOverlay, getAppBackgroundColor, loadPage } from '$electron/helpers/index.js'
+import { getAppBackgroundColor, loadPage } from '$electron/helpers/index.js'
 import { ImmersiveTitleBar } from '$electron/helpers/immersive/index.js'
 
 export function initCopilotWindow(mainWindow, data) {
@@ -29,8 +29,6 @@ export function initCopilotWindow(mainWindow, data) {
   })
 
   copilotWindow.customId = 'copilot'
-
-  autoUpdateTitleBarOverlay(copilotWindow)
 
   copilotWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)

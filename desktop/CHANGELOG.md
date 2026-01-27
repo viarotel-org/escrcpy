@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/viarotel-org/escrcpy/compare/v2.3.0...v2.3.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the problem of being unable to click to enter the co-pilot entrance under Windows and Linux. ([c563d11](https://github.com/viarotel-org/escrcpy/commit/c563d111f99c2080f729dc44fb8cb4dce53c3c83))
+
 ## [2.3.0](https://github.com/viarotel-org/escrcpy/compare/v2.2.0...v2.3.0) (2026-01-22)
 
 

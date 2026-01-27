@@ -206,5 +206,13 @@ export default {
       placeholder: 'preferences.common.debug.placeholder',
       tips: 'preferences.common.debug.tips',
     },
+    windowTitle: {
+      label: '自定义窗口标题',
+      field: 'windowTitle',
+      type: 'Input',
+      value: undefined,
+      placeholder: '请输入',
+      tips: '',
+    },
   },
 }

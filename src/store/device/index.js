@@ -24,6 +24,12 @@ export const useDeviceStore = defineStore('app-device', () => {
   }
 
   function getLabel(device, params) {
+    const windowTitle = window.appStore.get('common.windowTitle')
+
+    if (windowTitle) {
+      return windowTitle
+    }
+
     const data = device?.id
       ? device
       : list.value.find(item => item.id === device)

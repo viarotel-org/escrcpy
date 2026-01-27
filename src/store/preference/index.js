@@ -1,4 +1,4 @@
-import { cloneDeep, get, pickBy, set } from 'lodash-es'
+import { cloneDeep, get, set } from 'lodash-es'
 import {
   getDefaultData,
   getScrcpyExcludeKeys,
@@ -10,10 +10,8 @@ import {
 import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
 
-const { adbPath, scrcpyPath, gnirehtetPath } = window.electron?.configs || {}
-
 export const usePreferenceStore = defineStore('app-preference', () => {
-  // 定义响应式状态
+  // Define reactive state
   const deviceScope = ref(window.appStore.get('scrcpy.deviceScope') || 'global')
   const recordKeys = ref(Object.values(preferenceModel?.record?.children || {}).map((item) => {
     return item.field
@@ -40,27 +38,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   }
 
   function setData(dataToSet, scope = deviceScope.value) {
-    const pickData = pickBy(
-      dataToSet,
-      (value) => {
-        return !['', void 0].includes(value)
-      },
-    )
-
-    if (dataToSet.adbPath === adbPath) {
-      delete pickData.adbPath
-    }
-
-    if (dataToSet.scrcpyPath === scrcpyPath) {
-      delete pickData.scrcpyPath
-    }
-
-    if (dataToSet.gnirehtetPath === gnirehtetPath) {
-      delete pickData.gnirehtetPath
-    }
-
-    setStoreData(pickData, scope)
-    init(scope)
+    setStoreData(dataToSet, scope)
   }
 
   function reset(scope) {
@@ -131,6 +109,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     if (dataToUse.scrcpyAppend) {
       value += ` ${dataToUse.scrcpyAppend}`
     }
+
     return value
   }
 

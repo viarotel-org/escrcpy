@@ -1,14 +1,21 @@
-/**
- * Modules Entry Point
- * Unified exports for all application modules
- */
+import control from './control/index.js'
+import controlService from './control/service.js'
+import copilot from './copilot/index.js'
+import copilotService from './copilot/service.js'
+import explorer from './explorer/index.js'
+import explorerService from './explorer/service.js'
+import window from './window/index.js'
 
-// Application factory
-export { createElectronApp } from './app.js'
-
-// Module exports (alphabetical order)
-export * from './arguments/index.js'
-export * from './lifecycle/index.js'
-export * from './services/index.js'
-export * from './subapps/index.js'
-export * from './window/index.js'
+export default {
+  name: 'modules',
+  order: 10,
+  apply(app) {
+    app.use(window)
+    app.use(control)
+    app.use(controlService)
+    app.use(copilot)
+    app.use(copilotService)
+    app.use(explorer)
+    app.use(explorerService)
+  },
+}

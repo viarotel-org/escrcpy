@@ -1,8 +1,3 @@
-/**
- * Escrcpy Application Entry Point
- * Minimal application bootstrap - all logic delegated to modules
- */
-
 // Process configuration must be imported first
 import './helpers/process/index.js'
 
@@ -18,17 +13,18 @@ import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
 // Import application factory
-import { createElectronApp } from './modules/index.js'
+import { createElectronApp } from './helpers/core/index.js'
+
+import modules from './modules/index.js'
+import services from './services/index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-/**
- * Create and start application
- */
 const app = createElectronApp({
-  window: {
-    preloadDir: __dirname,
-  },
+  preloadDir: __dirname,
 })
+
+app.use(modules)
+app.use(services)
 
 app.start()

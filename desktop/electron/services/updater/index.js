@@ -1,18 +1,16 @@
 import { devPublishPath } from '$electron/configs/index.js'
 import { is } from '@electron-toolkit/utils'
-import { app, ipcMain } from 'electron'
+import { app as electronApp, ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
 
 const { autoUpdater } = electronUpdater
 
-export default async () => {
-  const { getMainWindow } = await import('$electron/modules/window/index.js')
-
-  const mainWindow = getMainWindow()
+export default async (appContext) => {
+  const mainWindow = await resolveMainWindow(appContext)
 
   if (is.dev) {
     autoUpdater.updateConfigPath = devPublishPath
-    Object.defineProperty(app, 'isPackaged', {
+    Object.defineProperty(electronApp, 'isPackaged', {
       get() {
         return true
       },
@@ -32,7 +30,7 @@ export default async () => {
   // Install update
   ipcMain.on('quit-and-install', () => {
     setImmediate(() => {
-      app.isQuiting = true
+      electronApp.isQuiting = true
       autoUpdater.quitAndInstall()
     })
   })
@@ -42,7 +40,7 @@ export default async () => {
   // Handle update errors
   autoUpdater.on('error', (error) => {
     console.error('update-error')
-    mainWindow.webContents.send('update-error', error)
+    mainWindow?.webContents?.send('update-error', error)
   })
 
   // Checking for updates
@@ -52,21 +50,39 @@ export default async () => {
 
   // Update available
   autoUpdater.on('update-available', (ret) => {
-    mainWindow.webContents.send('update-available', ret)
+    mainWindow?.webContents?.send('update-available', ret)
   })
 
   // When no update is available
   autoUpdater.on('update-not-available', (ret) => {
-    mainWindow.webContents.send('update-not-available', ret)
+    mainWindow?.webContents?.send('update-not-available', ret)
   })
 
   // Download progress
   autoUpdater.on('download-progress', (ret) => {
-    mainWindow.webContents.send('download-progress', ret)
+    mainWindow?.webContents?.send('download-progress', ret)
   })
 
   // After the update package has been downloaded
   autoUpdater.on('update-downloaded', (ret) => {
-    mainWindow.webContents.send('update-downloaded', ret)
+    mainWindow?.webContents?.send('update-downloaded', ret)
+  })
+}
+
+function resolveMainWindow(appContext) {
+  const injected = appContext?.inject?.('window:main')
+  if (injected) {
+    return Promise.resolve(injected)
+  }
+
+  return new Promise((resolve) => {
+    if (!appContext?.once) {
+      resolve(undefined)
+      return
+    }
+
+    appContext.once('window:main:ready', (win) => {
+      resolve(win)
+    })
   })
 }

@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron'
 import { ipcxMain } from '@escrcpy/electron-ipcx/main'
 
-export default () => {
+export default (appContext) => {
   ipcxMain.handle('window-minimize', (event) => {
     const win = BrowserWindow.fromWebContents(event.sender)
 
@@ -75,5 +75,52 @@ export default () => {
     const value = win.isMaximized()
 
     return callback(value)
+  })
+
+  ipcxMain.handle('window-open', (_event, payload = {}) => {
+    const { id, options } = payload || {}
+    if (!id) {
+      return false
+    }
+
+    const win = appContext?.openWindow?.(id, options)
+    return Boolean(win)
+  })
+
+  ipcxMain.handle('window-close-by-id', (_event, payload = {}) => {
+    const { id, instanceId } = payload || {}
+    if (!id) {
+      return false
+    }
+
+    const manager = appContext?.getWindowManager?.(id)
+    return Boolean(manager?.close?.({ instanceId }))
+  })
+
+  ipcxMain.handle('window-destroy-by-id', (_event, payload = {}) => {
+    const { id, instanceId } = payload || {}
+    if (!id) {
+      return false
+    }
+
+    const manager = appContext?.getWindowManager?.(id)
+    return Boolean(manager?.destroy?.({ instanceId }))
+  })
+
+  ipcxMain.handle('window-focus-by-id', (_event, payload = {}) => {
+    const { id, instanceId } = payload || {}
+    if (!id) {
+      return false
+    }
+
+    const manager = appContext?.getWindowManager?.(id)
+    const win = manager?.get?.(instanceId)
+    if (!win || win.isDestroyed?.()) {
+      return false
+    }
+
+    win.show?.()
+    win.focus?.()
+    return true
   })
 }

@@ -5,10 +5,13 @@ import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
 
-export default async () => {
-  const { getMainWindow } = await import('$electron/modules/window/index.js')
+export default async (appContext) => {
+  const mainWindow = await resolveMainWindow(appContext)
 
-  const mainWindow = getMainWindow()
+  if (!mainWindow) {
+    console.warn('[tray] main window not available')
+    return
+  }
 
   const t = value => executeI18n(mainWindow, value)
 
@@ -135,4 +138,22 @@ export default async () => {
 
     tray.setContextMenu(contextMenu)
   }
+}
+
+function resolveMainWindow(appContext) {
+  const injected = appContext?.inject?.('window:main')
+  if (injected) {
+    return Promise.resolve(injected)
+  }
+
+  return new Promise((resolve) => {
+    if (!appContext?.once) {
+      resolve(undefined)
+      return
+    }
+
+    appContext.once('window:main:ready', (win) => {
+      resolve(win)
+    })
+  })
 }

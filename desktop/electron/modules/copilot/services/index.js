@@ -52,168 +52,168 @@ import { sessionManager } from './modules/index.js'
  * Provides core features such as task execution and session management.
  */
 class CopilotService {
-	constructor() {
-		this.sessionManager = sessionManager
+  constructor() {
+    this.sessionManager = sessionManager
 
-		if (this.unsubscribeCopilotApiKey) {
-			this.unsubscribeCopilotApiKey()
-		}
+    if (this.unsubscribeCopilotApiKey) {
+      this.unsubscribeCopilotApiKey()
+    }
 
-		this.unsubscribeCopilotApiKey = electronStore.onDidChange('copilot', (val, oldVal) => {
-			if (!this._isCopilotConfigChanged(val, oldVal)) {
-				return
-			}
+    this.unsubscribeCopilotApiKey = electronStore.onDidChange('copilot', (val, oldVal) => {
+      if (!this._isCopilotConfigChanged(val, oldVal)) {
+        return
+      }
 
-			this.sessionManager.destroyAll()
-		})
-	}
+      this.sessionManager.destroyAll()
+    })
+  }
 
-	// ==================== Task Execution ====================
+  // ==================== Task Execution ====================
 
-	/**
-	 * Execute a Copilot task (supports both single-device and batch execution)
-	 *
-	 * @param {string} task - Task description
-	 * @param {ExecuteOptions} options - Execution options
-	 * @returns {Promise<ExecuteResult|ExecuteResult[]>} Execution result
-	 */
-	async execute(task, options = {}) {
-		const { deviceId } = options
+  /**
+   * Execute a Copilot task (supports both single-device and batch execution)
+   *
+   * @param {string} task - Task description
+   * @param {ExecuteOptions} options - Execution options
+   * @returns {Promise<ExecuteResult|ExecuteResult[]>} Execution result
+   */
+  async execute(task, options = {}) {
+    const { deviceId } = options
 
-		// Build session configuration
-		const sessionConfig = this._buildSessionConfig(options)
+    // Build session configuration
+    const sessionConfig = this._buildSessionConfig(options)
 
-		// Normalize device ID list
-		const deviceIds = Array.isArray(deviceId) ? deviceId : [deviceId]
+    // Normalize device ID list
+    const deviceIds = Array.isArray(deviceId) ? deviceId : [deviceId]
 
-		// Execute task
-		return this.sessionManager.executeTaskList(
-			task,
-			deviceIds,
-			sessionConfig,
-			options,
-		)
-	}
+    // Execute task
+    return this.sessionManager.executeTaskList(
+      task,
+      deviceIds,
+      sessionConfig,
+      options,
+    )
+  }
 
-	_isCopilotConfigChanged(nextValue = {}, prevValue = {}) {
-		const IGNORED_KEYS = ['prompts']
+  _isCopilotConfigChanged(nextValue = {}, prevValue = {}) {
+    const IGNORED_KEYS = ['prompts']
 
-		const normalizedNext = omit(nextValue, IGNORED_KEYS)
-		const normalizedPrev = omit(prevValue, IGNORED_KEYS)
+    const normalizedNext = omit(nextValue, IGNORED_KEYS)
+    const normalizedPrev = omit(prevValue, IGNORED_KEYS)
 
-		return !isEqual(normalizedNext, normalizedPrev)
-	}
+    return !isEqual(normalizedNext, normalizedPrev)
+  }
 
-	/**
-	 * Build session configuration
-	 * @private
-	 * @param {ExecuteOptions} options - Execution options
-	 * @returns {Object} Session configuration
-	 */
-	_buildSessionConfig(options) {
-		const config = {
-			...(electronStore.get('copilot') || {}),
-			...(options || {}),
-		}
+  /**
+   * Build session configuration
+   * @private
+   * @param {ExecuteOptions} options - Execution options
+   * @returns {Object} Session configuration
+   */
+  _buildSessionConfig(options) {
+    const config = {
+      ...(electronStore.get('copilot') || {}),
+      ...(options || {}),
+    }
 
-		return {
-			baseUrl: config.baseUrl,
-			apiKey: config.apiKey,
-			model: config.model,
-			maxSteps: config.maxSteps,
-			lang: config.lang,
-			quiet: config.quiet,
-			customApps: config.customApps,
-			systemPrompt: config.systemPrompt,
-			temperature: config.temperature,
-			maxTokens: config.maxTokens,
-			topP: config.topP,
-			frequencyPenalty: config.frequencyPenalty,
-			screenshotQuality: config.screenshotQuality,
-		}
-	}
+    return {
+      baseUrl: config.baseUrl,
+      apiKey: config.apiKey,
+      model: config.model,
+      maxSteps: config.maxSteps,
+      lang: config.lang,
+      quiet: config.quiet,
+      customApps: config.customApps,
+      systemPrompt: config.systemPrompt,
+      temperature: config.temperature,
+      maxTokens: config.maxTokens,
+      topP: config.topP,
+      frequencyPenalty: config.frequencyPenalty,
+      screenshotQuality: config.screenshotQuality,
+    }
+  }
 
-	// ==================== Task Control ====================
+  // ==================== Task Control ====================
 
-	/**
-	 * Stop the current task on a device
-	 *
-	 * @param {string} deviceId - Device ID
-	 * @param {string} [reason] - Abort reason (default: 'User termination')
-	 */
-	stop(deviceId, reason = 'User termination') {
-		this.sessionManager.stopTask(deviceId, reason)
-	}
+  /**
+   * Stop the current task on a device
+   *
+   * @param {string} deviceId - Device ID
+   * @param {string} [reason] - Abort reason (default: 'User termination')
+   */
+  stop(deviceId, reason = 'User termination') {
+    this.sessionManager.stopTask(deviceId, reason)
+  }
 
-	/**
-	 * Destroy the session of a device
-	 *
-	 * @param {string} deviceId - Device ID
-	 */
-	destroy(deviceId) {
-		this.sessionManager.destroySession(deviceId)
-	}
+  /**
+   * Destroy the session of a device
+   *
+   * @param {string} deviceId - Device ID
+   */
+  destroy(deviceId) {
+    this.sessionManager.destroySession(deviceId)
+  }
 
-	/**
-	 * Destroy all sessions
-	 */
-	destroyAll() {
-		this.sessionManager.destroyAll()
-	}
+  /**
+   * Destroy all sessions
+   */
+  destroyAll() {
+    this.sessionManager.destroyAll()
+  }
 
-	// ==================== Session Queries ====================
+  // ==================== Session Queries ====================
 
-	/**
-	 * Get session information by device
-	 *
-	 * @param {string} deviceId - Device ID
-	 * @returns {SessionInfo|null} Session information
-	 */
-	getSessionByDevice(deviceId) {
-		const session = this.sessionManager.getSessionByDevice(deviceId)
-		if (!session) {
-			return null
-		}
+  /**
+   * Get session information by device
+   *
+   * @param {string} deviceId - Device ID
+   * @returns {SessionInfo|null} Session information
+   */
+  getSessionByDevice(deviceId) {
+    const session = this.sessionManager.getSessionByDevice(deviceId)
+    if (!session) {
+      return null
+    }
 
-		return this._formatSessionInfo(session)
-	}
+    return this._formatSessionInfo(session)
+  }
 
-	/**
-	 * Get all active sessions
-	 *
-	 * @returns {Array<SessionInfo>} Session list
-	 */
-	getActiveSessions() {
-		return this.sessionManager.getActiveSessions()
-	}
+  /**
+   * Get all active sessions
+   *
+   * @returns {Array<SessionInfo>} Session list
+   */
+  getActiveSessions() {
+    return this.sessionManager.getActiveSessions()
+  }
 
-	/**
-	 * Format session information
-	 * @private
-	 * @param {Object} session - Session instance
-	 * @returns {SessionInfo} Formatted session information
-	 */
-	_formatSessionInfo(session) {
-		return {
-			id: session.id,
-			deviceId: session.deviceId,
-			isRunning: session.metadata.isRunning,
-			currentTask: session.metadata.currentTask,
-			createdAt: session.metadata.createdAt,
-			lastActiveAt: session.metadata.lastActiveAt,
-		}
-	}
+  /**
+   * Format session information
+   * @private
+   * @param {Object} session - Session instance
+   * @returns {SessionInfo} Formatted session information
+   */
+  _formatSessionInfo(session) {
+    return {
+      id: session.id,
+      deviceId: session.deviceId,
+      isRunning: session.metadata.isRunning,
+      currentTask: session.metadata.currentTask,
+      createdAt: session.metadata.createdAt,
+      lastActiveAt: session.metadata.lastActiveAt,
+    }
+  }
 
-	// ==================== Advanced Configuration ====================
+  // ==================== Advanced Configuration ====================
 
-	/**
-	 * Set idle timeout
-	 *
-	 * @param {number} timeout - Timeout in milliseconds
-	 */
-	setIdleTimeout(timeout) {
-		this.sessionManager.setIdleTimeout(timeout)
-	}
+  /**
+   * Set idle timeout
+   *
+   * @param {number} timeout - Timeout in milliseconds
+   */
+  setIdleTimeout(timeout) {
+    this.sessionManager.setIdleTimeout(timeout)
+  }
 }
 
 // ==================== Singleton Export ====================

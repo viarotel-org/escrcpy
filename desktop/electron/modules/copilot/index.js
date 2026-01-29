@@ -1,22 +1,35 @@
-import { createWindowManager } from '$electron/helpers/core/index.js'
-import { browserWindowWidth } from '$electron/configs/index.js'
+import window from './window.js'
+import events from './events.js'
+import service from './service.js'
+
+const plugins = [
+  {
+    name: 'module:copilot:window',
+    apply(app) {
+      return window(app)
+    },
+  },
+  {
+    name: 'module:copilot:service',
+    apply(app) {
+      return service(app)
+    },
+  },
+  {
+    name: 'module:copilot:events',
+    apply(app) {
+      return events(app)
+    },
+  },
+]
 
 export default {
   name: 'module:copilot',
+  order: 100,
   apply(app) {
-    createWindowManager('copilot', {
-      app,
-      singleton: false,
-      load(win, context) {
-        win.loadPage?.('copilot', context?.payload)
-      },
-      windowOptions: {
-        preloadDir: app.preloadDir,
-        width: browserWindowWidth,
-        minWidth: browserWindowWidth,
-        height: browserWindowWidth * 0.7,
-        minHeight: browserWindowWidth * 0.7,
-      },
-    })
+    plugins.forEach((plugin, index) => app.use({
+      ...plugin,
+      order: plugin.order ?? (index + 1) * 10,
+    }))
   },
 }

@@ -23,7 +23,7 @@ const app = createElectronApp({
   preloadDir: __dirname,
 })
 
-app.use(services)
 app.use(modules)
+app.use(services)
 
 app.start()

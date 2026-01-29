@@ -92,7 +92,6 @@ const plugins = [
 
 export default {
   name: 'services',
-  order: 100,
   apply(app) {
     plugins.forEach((plugin, index) => app.use({
       ...plugin,

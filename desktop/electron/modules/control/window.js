@@ -24,6 +24,12 @@ export default {
         shown(win, { payload }) {
           win.webContents.send('device-change', payload.query)
         },
+        focus(win) {
+          win.webContents.send('window-focus', true)
+        },
+        blur(win) {
+          win.webContents.send('window-focus', false)
+        },
       },
     })
   },

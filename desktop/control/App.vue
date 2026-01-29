@@ -85,7 +85,7 @@ async function switchDevice(e) {
     }
   })
 
-  window.electron.ipcRenderer.send('open-system-menu', {
+  window.electron.ipcRenderer.invoke('open-system-menu', {
     channel: 'device-change',
     options,
   })
@@ -94,11 +94,11 @@ async function switchDevice(e) {
 const focusFlag = ref(false)
 
 onMounted(() => {
-  window.electron.ipcRenderer.send('control-mounted')
-
   window.electron.ipcRenderer.on('window-focus', (event, value) => {
     focusFlag.value = value
   })
+
+  deviceStore.getList()
 })
 </script>
 

@@ -78,7 +78,7 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.send('open-system-menu', {
+      window.electron.ipcRenderer.invoke('open-system-menu', {
         channel,
         options,
       })

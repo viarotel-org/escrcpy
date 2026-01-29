@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, Menu, screen, shell } from 'electron'
 import fs from 'fs-extra'
 import path from 'node:path'
 import { openLogPath } from '$root/electron/helpers/debugger/index.js'
@@ -165,5 +165,36 @@ export default {
 
       return data.token
     })
+
+    ipcMain.handle('open-system-menu', (event, args = {}) => {
+      const win = BrowserWindow.fromWebContents(event.sender)
+
+      const { options = [], channel = 'system-menu-click' } = args
+
+      const template = options.map((item) => {
+        return {
+          label: item.label,
+          click() {
+            win.webContents.send(channel, item.value, item)
+          },
+        }
+      })
+
+      const menu = Menu.buildFromTemplate(template)
+      menu.popup(BrowserWindow.fromWebContents(event.sender))
+
+      return true
+    })
+
+    return () => {
+      ipcMain.removeHandler('show-open-dialog')
+      ipcMain.removeHandler('show-save-dialog')
+      ipcMain.removeHandler('get-temp-path')
+      ipcMain.removeHandler('rename-temp-file')
+      ipcMain.removeHandler('navigate-to-route')
+      ipcMain.removeHandler('open-log-path')
+      ipcMain.removeHandler('get-gitee-temporary-token')
+      ipcMain.removeHandler('open-system-menu')
+    }
   },
 }

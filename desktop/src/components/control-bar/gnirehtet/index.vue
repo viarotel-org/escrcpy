@@ -75,7 +75,7 @@ export default {
         },
       ]
 
-      window.electron.ipcRenderer.send('open-system-menu', {
+      window.electron.ipcRenderer.invoke('open-system-menu', {
         channel,
         options,
       })

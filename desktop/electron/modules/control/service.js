@@ -9,5 +9,4 @@ export default {
     return () => {
     }
   },
-
 }

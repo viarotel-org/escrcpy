@@ -1,47 +1,50 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
-export default (app) => {
-  const manager = app.getWindowManager('control')
+export default {
+  name: 'module:control:events',
+  apply(app) {
+    const manager = app.getWindowManager('control')
 
-  if (!manager) {
-    return
-  }
+    if (!manager) {
+      return
+    }
 
-  const controlWindow = manager.get()
+    const controlWindow = manager.get()
 
-  const onFocus = () => {
-    controlWindow.webContents.send('window-focus', true)
-  }
+    const onFocus = () => {
+      controlWindow.webContents.send('window-focus', true)
+    }
 
-  const onBlur = () => {
-    controlWindow.webContents.send('window-focus', false)
-  }
+    const onBlur = () => {
+      controlWindow.webContents.send('window-focus', false)
+    }
 
-  const onOpenSystemMenu = (event, args = {}) => {
-    const { options = [], channel = 'system-menu-click' } = args
+    const onOpenSystemMenu = (event, args = {}) => {
+      const { options = [], channel = 'system-menu-click' } = args
 
-    const template = options.map((item) => {
-      return {
-        label: item.label,
-        click() {
-          controlWindow.webContents.send(channel, item.value, item)
-        },
-      }
-    })
+      const template = options.map((item) => {
+        return {
+          label: item.label,
+          click() {
+            controlWindow.webContents.send(channel, item.value, item)
+          },
+        }
+      })
 
-    const menu = Menu.buildFromTemplate(template)
-    menu.popup(BrowserWindow.fromWebContents(event.sender))
-  }
+      const menu = Menu.buildFromTemplate(template)
+      menu.popup(BrowserWindow.fromWebContents(event.sender))
+    }
 
-  controlWindow.on('focus', onFocus)
-  controlWindow.on('blur', onBlur)
+    controlWindow.on('focus', onFocus)
+    controlWindow.on('blur', onBlur)
 
-  ipcMain.off('open-system-menu', onOpenSystemMenu)
-  ipcMain.on('open-system-menu', onOpenSystemMenu)
-
-  return () => {
-    controlWindow.off('focus', onFocus)
-    controlWindow.off('blur', onBlur)
     ipcMain.off('open-system-menu', onOpenSystemMenu)
-  }
+    ipcMain.on('open-system-menu', onOpenSystemMenu)
+
+    return () => {
+      controlWindow.off('focus', onFocus)
+      controlWindow.off('blur', onBlur)
+      ipcMain.off('open-system-menu', onOpenSystemMenu)
+    }
+  },
 }

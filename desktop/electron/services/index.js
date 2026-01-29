@@ -11,91 +11,20 @@ import updater from './updater/index.js'
 import launch from './launch/index.js'
 import window from './window/index.js'
 
-const plugins = [
-  {
-    name: 'service:sandbox',
-    order: -100,
-    apply(app) {
-      return sandbox(app)
-    },
-  },
-  {
-    name: 'service:context-menu',
-    apply(app) {
-      return contextMenu(app)
-    },
-  },
-  {
-    name: 'service:listeners',
-    apply(app) {
-      return listeners(app)
-    },
-  },
-  {
-    name: 'service:execute-arguments',
-    apply(app) {
-      return executeArguments(app)
-    },
-  },
-  {
-    name: 'service:clipboard',
-    apply(app) {
-      return clipboard(app)
-    },
-  },
-  {
-    name: 'service:handles',
-    apply(app) {
-      return handles(app)
-    },
-  },
-  {
-    name: 'service:updater',
-    deps: ['module:window'],
-    apply(app) {
-      return updater(app)
-    },
-  },
-  {
-    name: 'service:tray',
-    deps: ['module:window'],
-    apply(app) {
-      return tray(app)
-    },
-  },
-  {
-    name: 'service:theme',
-    apply(app) {
-      return theme(app)
-    },
-  },
-  {
-    name: 'service:shortcuts',
-    apply(app) {
-      return shortcuts(app)
-    },
-  },
-  {
-    name: 'service:launch',
-    apply(app) {
-      return launch(app)
-    },
-  },
-  {
-    name: 'service:window',
-    deps: ['modules'],
-    apply(app) {
-      return window(app)
-    },
-  },
-]
-
 export default {
   name: 'services',
   apply(app) {
-    plugins.forEach((plugin, index) => app.use({
-      ...plugin,
-      order: plugin.order ?? (index + 1) * 10,
-    }))
+    app.use(sandbox)
+    app.use(contextMenu)
+    app.use(listeners)
+    app.use(executeArguments)
+    app.use(clipboard)
+    app.use(handles)
+    app.use(updater)
+    app.use(tray)
+    app.use(theme)
+    app.use(shortcuts)
+    app.use(launch)
+    app.use(window)
   },
 }

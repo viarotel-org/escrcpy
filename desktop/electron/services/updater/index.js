@@ -6,66 +6,70 @@ import { resolveMainWindow } from '$electron/helpers/core/index.js'
 
 const { autoUpdater } = electronUpdater
 
-export default async (appContext) => {
-  const mainWindow = await resolveMainWindow(appContext)
+export default {
+  name: 'service:updater',
+  async apply(appContext) {
+    const mainWindow = await resolveMainWindow(appContext)
 
-  if (is.dev) {
-    autoUpdater.updateConfigPath = devPublishPath
-    Object.defineProperty(electronApp, 'isPackaged', {
-      get() {
-        return true
-      },
+    if (is.dev) {
+      autoUpdater.updateConfigPath = devPublishPath
+      Object.defineProperty(electronApp, 'isPackaged', {
+        get() {
+          return true
+        },
+      })
+    }
+
+    // Trigger update check (intended to be called from the renderer, e.g. when user clicks "check for updates")
+    ipcMain.on('check-for-update', () => {
+      autoUpdater.checkForUpdates()
     })
-  }
 
-  // Trigger update check (intended to be called from the renderer, e.g. when user clicks "check for updates")
-  ipcMain.on('check-for-update', () => {
-    autoUpdater.checkForUpdates()
-  })
-
-  // Download update
-  ipcMain.on('download-update', () => {
-    autoUpdater.downloadUpdate()
-  })
-
-  // Install update
-  ipcMain.on('quit-and-install', () => {
-    setImmediate(() => {
-      electronApp.isQuiting = true
-      autoUpdater.quitAndInstall()
+    // Download update
+    ipcMain.on('download-update', () => {
+      autoUpdater.downloadUpdate()
     })
-  })
 
-  // Set auto-download to false (default true — automatically download when updates are found)
-  autoUpdater.autoDownload = false
-  // Handle update errors
-  autoUpdater.on('error', (error) => {
-    console.error('update-error')
-    mainWindow?.webContents?.send('update-error', error)
-  })
+    // Install update
+    ipcMain.on('quit-and-install', () => {
+      setImmediate(() => {
+        electronApp.isQuiting = true
+        autoUpdater.quitAndInstall()
+      })
+    })
 
-  // Checking for updates
-  autoUpdater.on('checking-for-update', (ret) => {
-    console.log('checking-for-update', ret)
-  })
+    // Set auto-download to false (default true — automatically download when updates are found)
+    autoUpdater.autoDownload = false
+    // Handle update errors
+    autoUpdater.on('error', (error) => {
+      console.error('update-error')
+      mainWindow?.webContents?.send('update-error', error)
+    })
 
-  // Update available
-  autoUpdater.on('update-available', (ret) => {
-    mainWindow?.webContents?.send('update-available', ret)
-  })
+    // Checking for updates
+    autoUpdater.on('checking-for-update', (ret) => {
+      console.log('checking-for-update', ret)
+    })
 
-  // When no update is available
-  autoUpdater.on('update-not-available', (ret) => {
-    mainWindow?.webContents?.send('update-not-available', ret)
-  })
+    // Update available
+    autoUpdater.on('update-available', (ret) => {
+      mainWindow?.webContents?.send('update-available', ret)
+    })
 
-  // Download progress
-  autoUpdater.on('download-progress', (ret) => {
-    mainWindow?.webContents?.send('download-progress', ret)
-  })
+    // When no update is available
+    autoUpdater.on('update-not-available', (ret) => {
+      mainWindow?.webContents?.send('update-not-available', ret)
+    })
 
-  // After the update package has been downloaded
-  autoUpdater.on('update-downloaded', (ret) => {
-    mainWindow?.webContents?.send('update-downloaded', ret)
-  })
+    // Download progress
+    autoUpdater.on('download-progress', (ret) => {
+      mainWindow?.webContents?.send('download-progress', ret)
+    })
+
+    // After the update package has been downloaded
+    autoUpdater.on('update-downloaded', (ret) => {
+      mainWindow?.webContents?.send('update-downloaded', ret)
+    })
+  },
+
 }

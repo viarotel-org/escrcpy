@@ -2,7 +2,7 @@ import { ipcMain } from 'electron'
 import { isWindowDestroyed } from '$electron/helpers/index.js'
 
 export default {
-  name: 'module:copilot:service',
+  name: 'module:explorer:service',
   apply(app) {
     const manager = app.getWindowManager('explorer')
     if (!manager) {

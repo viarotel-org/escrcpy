@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const handleOpen = () => {
-  window.electron.ipcRenderer.invoke('open-copilot-window', {
+  window.electron.window.open('copilot', {
     device: toRaw(props.device),
   })
 }

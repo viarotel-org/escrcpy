@@ -11,6 +11,10 @@ export default {
 
     const controlWindow = manager.get()
 
+    if (!controlWindow) {
+      return
+    }
+
     const onFocus = () => {
       controlWindow.webContents.send('window-focus', true)
     }

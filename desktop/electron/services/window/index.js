@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron'
 import { ipcxMain } from '@escrcpy/electron-ipcx/main'
 
 export default {
-  name: 'service:window',
+  name: 'service:window:ipc',
   apply(appContext) {
     ipcxMain.handle('window-minimize', (event) => {
       const win = BrowserWindow.fromWebContents(event.sender)

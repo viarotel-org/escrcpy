@@ -57,6 +57,7 @@ export function createElectronApp(config = {}) {
     }
 
     if (normalized.name && plugins.has(normalized.name)) {
+      console.warn(`⚠️ Plugin "${normalized.name}" already registered!`)
       return app
     }
 
@@ -107,6 +108,15 @@ export function createElectronApp(config = {}) {
         installPlugin(item)
         changed = true
       }
+    }
+
+    // Warn about unresolved dependencies
+    if (pending.length > 0) {
+      const unresolved = pending.map(item => ({
+        name: item.name,
+        missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || []
+      }))
+      console.warn('⚠️ Unresolved plugin dependencies:', unresolved)
     }
   }
 

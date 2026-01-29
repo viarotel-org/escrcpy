@@ -125,5 +125,16 @@ export default {
       win.focus?.()
       return true
     })
+
+    return () => {
+      ipcxMain.removeHandler('window-minimize')
+      ipcxMain.removeHandler('window-maximize')
+      ipcxMain.removeHandler('window-close')
+      ipcxMain.removeHandler('window-is-maximized')
+      ipcxMain.removeHandler('window-open')
+      ipcxMain.removeHandler('window-close-by-id')
+      ipcxMain.removeHandler('window-destroy-by-id')
+      ipcxMain.removeHandler('window-focus-by-id')
+    }
   },
 }

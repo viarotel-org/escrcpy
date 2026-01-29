@@ -4,6 +4,7 @@ import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
+import { resolveMainWindow } from '$electron/helpers/core/index.js'
 
 export default async (appContext) => {
   const mainWindow = await resolveMainWindow(appContext)
@@ -138,22 +139,4 @@ export default async (appContext) => {
 
     tray.setContextMenu(contextMenu)
   }
-}
-
-function resolveMainWindow(appContext) {
-  const injected = appContext?.inject?.('window:main')
-  if (injected) {
-    return Promise.resolve(injected)
-  }
-
-  return new Promise((resolve) => {
-    if (!appContext?.once) {
-      resolve(undefined)
-      return
-    }
-
-    appContext.once('window:main:ready', (win) => {
-      resolve(win)
-    })
-  })
 }

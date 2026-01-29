@@ -2,6 +2,7 @@ import { devPublishPath } from '$electron/configs/index.js'
 import { is } from '@electron-toolkit/utils'
 import { app as electronApp, ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
+import { resolveMainWindow } from '$electron/helpers/core/index.js'
 
 const { autoUpdater } = electronUpdater
 
@@ -66,23 +67,5 @@ export default async (appContext) => {
   // After the update package has been downloaded
   autoUpdater.on('update-downloaded', (ret) => {
     mainWindow?.webContents?.send('update-downloaded', ret)
-  })
-}
-
-function resolveMainWindow(appContext) {
-  const injected = appContext?.inject?.('window:main')
-  if (injected) {
-    return Promise.resolve(injected)
-  }
-
-  return new Promise((resolve) => {
-    if (!appContext?.once) {
-      resolve(undefined)
-      return
-    }
-
-    appContext.once('window:main:ready', (win) => {
-      resolve(win)
-    })
   })
 }

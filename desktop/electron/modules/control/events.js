@@ -1,6 +1,14 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
 
-export function install(controlWindow) {
+export default (app) => {
+  const manager = app.getWindowManager('control')
+
+  if (!manager) {
+    return
+  }
+
+  const controlWindow = manager.get()
+
   const onFocus = () => {
     controlWindow.webContents.send('window-focus', true)
   }
@@ -36,8 +44,4 @@ export function install(controlWindow) {
     controlWindow.off('blur', onBlur)
     ipcMain.off('open-system-menu', onOpenSystemMenu)
   }
-}
-
-export default {
-  install,
 }

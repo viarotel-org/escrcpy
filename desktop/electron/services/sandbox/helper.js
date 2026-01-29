@@ -111,6 +111,4 @@ class SandboxManager {
   }
 }
 
-const sandboxManager = new SandboxManager()
-
-export default sandboxManager
+export const sandboxManager = new SandboxManager()

@@ -12,7 +12,6 @@ import './helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
-// Import application factory
 import { createElectronApp } from './helpers/core/index.js'
 
 import modules from './modules/index.js'
@@ -24,7 +23,7 @@ const app = createElectronApp({
   preloadDir: __dirname,
 })
 
-app.use(modules)
 app.use(services)
+app.use(modules)
 
 app.start()

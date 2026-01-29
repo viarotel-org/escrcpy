@@ -67,7 +67,6 @@ export function createElectronApp(config = {}) {
   }
 
   app.start = () => {
-    flushPending()
     app.emit('app:started', app)
     return app
   }
@@ -89,6 +88,8 @@ export function createElectronApp(config = {}) {
 
   function flushPending() {
     let changed = true
+
+    console.log('pending', pending.map(item => item.name))
 
     while (changed) {
       changed = false

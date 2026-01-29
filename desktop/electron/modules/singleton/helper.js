@@ -5,7 +5,7 @@ import { app, BrowserWindow } from 'electron'
  * @typedef {Object} SingleInstanceOptions
  * @property {Function} [onSecondInstance] - Callback when a second instance is launched
  * @property {boolean} [enableSandbox=false] - Whether to enable sandbox mode
- * @property {Function} [onSuccess] - Callback after acquiring the single-instance lock
+ * @property {Function} [onSuccess] - Callback after acquiring the singleton lock
  * @property {Function} [onShowWindow] - Callback when main window should be shown
  * @property {boolean} [forceFocus=true] - Whether to force-focus an existing window
  * @property {boolean} [silentMode=false] - Silent mode, suppress logs
@@ -24,7 +24,7 @@ import { app, BrowserWindow } from 'electron'
 /**
  * Ensure the application runs as a single instance
  * @param {SingleInstanceOptions} options - Options
- * @returns {boolean} Whether the single-instance lock was acquired
+ * @returns {boolean} Whether the singleton lock was acquired
  *
  * @example
  * // Basic usage
@@ -151,7 +151,7 @@ function isMainInstance() {
 }
 
 /**
- * Release the single-instance lock to allow other instances to start
+ * Release the singleton lock to allow other instances to start
  * @returns {void}
  */
 function releaseSingleInstanceLock() {

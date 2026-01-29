@@ -57,6 +57,29 @@ export default {
         catch (error) {
           console.warn('[window] remote enable failed:', error?.message || error)
         }
+
+        // Send initial execute arguments to renderer process
+        try {
+          const executeArgsService = app?.inject?.('service:execute-arguments')
+          if (executeArgsService) {
+            const args = executeArgsService.getArguments?.()
+            if (args) {
+              win.webContents.send('execute-arguments-change', {
+                deviceId: args['device-id'],
+                appName: args['app-name'],
+                packageName: args['package-name'],
+              })
+            }
+          }
+        }
+        catch (error) {
+          console.warn('[window] Failed to send execute arguments:', error?.message || error)
+        }
+
+        // Handle minimize with tray
+        win.on('minimize', () => {
+          globalEventEmitter.emit('tray:create')
+        })
       }
 
       if (electronStore.get('common.edgeHidden')) {

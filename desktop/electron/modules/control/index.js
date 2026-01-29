@@ -1,25 +1,35 @@
-import { createWindowManager } from '$electron/helpers/core/index.js'
+import window from './window.js'
+import events from './events.js'
+import service from './service.js'
+
+const plugins = [
+  {
+    name: 'module:control:window',
+    apply(app) {
+      return window(app)
+    },
+  },
+  {
+    name: 'module:control:service',
+    apply(app) {
+      return service(app)
+    },
+  },
+  {
+    name: 'module:control:events',
+    apply(app) {
+      return events(app)
+    },
+  },
+]
 
 export default {
   name: 'module:control',
+  order: 100,
   apply(app) {
-    createWindowManager('control', {
-      app,
-      load(win) {
-        win.loadPage?.('control')
-      },
-      windowOptions: {
-        preloadDir: app.preloadDir,
-        frame: false,
-        transparent: true,
-        backgroundColor: '#00000000',
-        width: 700,
-        minWidth: 700,
-        height: 28,
-        maxHeight: 28,
-        alwaysOnTop: true,
-        skipTaskbar: true,
-      },
-    })
+    plugins.forEach((plugin, index) => app.use({
+      ...plugin,
+      order: plugin.order ?? (index + 1) * 10,
+    }))
   },
 }

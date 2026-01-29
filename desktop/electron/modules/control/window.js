@@ -5,20 +5,25 @@ export default {
   apply(app) {
     createWindowManager('control', {
       app,
-      load(win) {
-        win.loadPage?.('control')
-      },
+      singleton: true,
       windowOptions: {
         preloadDir: app.preloadDir,
         frame: false,
+        titleBarStyle: 'default',
         transparent: true,
         backgroundColor: '#00000000',
         width: 700,
         minWidth: 700,
         height: 28,
         maxHeight: 28,
+        minHeight: 28,
         alwaysOnTop: true,
         skipTaskbar: true,
+      },
+      hooks: {
+        shown(win, { payload }) {
+          win.webContents.send('device-change', payload.query)
+        },
       },
     })
   },

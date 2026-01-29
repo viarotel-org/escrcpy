@@ -1,14 +1,13 @@
-/**
- * Copilot Agent Helper
- *
- * @module CopilotAgentHelper
- */
 import { AutoGLM } from 'autoglm.js'
 import copilotService from '../index.js'
 import electronStore from '$electron/helpers/store/index.js'
 
-/** Temporary device ID prefix */
+export { default as copilotService } from './service.js'
+export * from './session.js'
+
 const TEMP_DEVICE_ID_PREFIX = 'temp-device'
+const SERVICE_PREFIX = 'copilot'
+const LOG_PREFIX = '[CopilotHandlers]'
 
 /**
  * Agent configuration
@@ -25,7 +24,7 @@ const TEMP_DEVICE_ID_PREFIX = 'temp-device'
  * @private
  */
 function getDefaultConfig() {
-	return electronStore.get('copilot') || {}
+  return electronStore.get('copilot') || {}
 }
 
 /**
@@ -35,7 +34,7 @@ function getDefaultConfig() {
  * @private
  */
 function generateDeviceId(customId) {
-	return customId || `${TEMP_DEVICE_ID_PREFIX}-${Date.now()}`
+  return customId || `${TEMP_DEVICE_ID_PREFIX}-${Date.now()}`
 }
 
 /**
@@ -49,19 +48,19 @@ function generateDeviceId(customId) {
  * const agent = await createTempAgent({ deviceId: 'my-device' })
  */
 export async function createTempAgent(customConfig = {}) {
-	const defaultConfig = getDefaultConfig()
+  const defaultConfig = getDefaultConfig()
 
-	const agentConfig = {
-		baseUrl: defaultConfig.baseUrl,
-		apiKey: defaultConfig.apiKey,
-		model: defaultConfig.model,
-		...customConfig,
-		deviceId: generateDeviceId(customConfig.deviceId),
-	}
+  const agentConfig = {
+    baseUrl: defaultConfig.baseUrl,
+    apiKey: defaultConfig.apiKey,
+    model: defaultConfig.model,
+    ...customConfig,
+    deviceId: generateDeviceId(customConfig.deviceId),
+  }
 
-	const agent = new AutoGLM(agentConfig)
+  const agent = new AutoGLM(agentConfig)
 
-	return agent
+  return agent
 }
 
 /**
@@ -76,17 +75,35 @@ export async function createTempAgent(customConfig = {}) {
  * const agent = await createOrGetAgent({ deviceId: 'device-123' })
  */
 export async function createOrGetAgent(customConfig = {}) {
-	const { deviceId } = customConfig
+  const { deviceId } = customConfig
 
-	// If a device ID is provided, try to retrieve it from an existing session
-	if (deviceId) {
-		const sessionInfo = copilotService.getSessionByDevice(deviceId)
+  // If a device ID is provided, try to retrieve it from an existing session
+  if (deviceId) {
+    const sessionInfo = copilotService.getSessionByDevice(deviceId)
 
-		if (sessionInfo?.agent) {
-			return sessionInfo.agent
-		}
-	}
+    if (sessionInfo?.agent) {
+      return sessionInfo.agent
+    }
+  }
 
-	// No session found or no device ID provided; create a temporary agent
-	return createTempAgent(customConfig)
+  // No session found or no device ID provided; create a temporary agent
+  return createTempAgent(customConfig)
+}
+
+export function createChannel(method) {
+  return `${SERVICE_PREFIX}:${method}`
+}
+
+export function handleError(operation, error) {
+  console.error(`${LOG_PREFIX} ${operation} failed:`, error)
+  throw error
+}
+
+export async function safeExecute(operation, fn) {
+  try {
+    return await fn()
+  }
+  catch (error) {
+    handleError(operation, error)
+  }
 }

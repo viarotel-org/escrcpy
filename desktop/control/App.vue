@@ -59,14 +59,18 @@
 <script setup>
 import ControlBar from '$/components/control-bar/index.vue'
 
-const { currentDevice, locale } = useWindowStateSync()
+const { currentDevice, queryParams, locale } = useWindowStateSync({
+  onQueryMounted() {
+    currentDevice.value = { ...queryParams.value }
+  },
+})
 
 const deviceStore = useDeviceStore()
 
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.ipcRenderer.invoke('close-control-window')
+  window.electron.window.close('control')
 }
 
 async function switchDevice(e) {

@@ -16,8 +16,12 @@ function handleFile(device) {
     return
   }
 
-  // Open file explorer window via IPC
-  window.electron.ipcRenderer.invoke('open-explorer-window', toRaw(device))
+  window.electron.window.open('explorer', {
+    query: {
+      ...toRaw(device),
+    },
+    instanceId: device.id,
+  })
 }
 </script>
 

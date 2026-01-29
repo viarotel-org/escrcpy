@@ -7,7 +7,7 @@
  */
 import electronStore from '$electron/helpers/store/index.js'
 import { isEqual, omit } from 'lodash-es'
-import { sessionManager } from './modules/index.js'
+import { sessionManager } from './session.js'
 
 // ==================== Type Definitions ====================
 

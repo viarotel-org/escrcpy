@@ -21,7 +21,6 @@ let isInitialized = false
 
 export default {
   name: 'module:singleton',
-  order: -10,
   deps: ['service:execute-arguments'],
   apply(app) {
     return new Promise((resolve, reject) => {

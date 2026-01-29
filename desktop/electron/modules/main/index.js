@@ -18,7 +18,7 @@ export function setMainWindow(win) {
 }
 
 export default {
-  name: 'module:window',
+  name: 'module:main',
   order: 0,
   apply(app) {
     if (!app?.has?.('remote:initialized')) {
@@ -29,6 +29,10 @@ export default {
     const manager = createWindowManager('main', {
       app,
       singleton: true,
+      windowOptions: {
+        preloadDir: app.preloadDir,
+        persistenceBounds: true,
+      },
       hooks: {
         created(win) {
           setMainWindow(win)
@@ -39,6 +43,7 @@ export default {
           win.show?.()
         },
       },
+
     })
 
     app?.provide?.('window:main:manager', manager)

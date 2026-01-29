@@ -208,11 +208,7 @@ async function handleClearAll() {
 }
 
 onMounted(() => {
-  window.electron.ipcRenderer.on('copilot-window-closing', () => {
-    if (isExecuting.value) {
-      copilotClient.destroy(props.currentDevice?.id)
-    }
-  })
+
 })
 
 onUnmounted(() => {

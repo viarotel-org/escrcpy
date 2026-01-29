@@ -1,89 +1,109 @@
-import { ipcMain } from 'electron'
-import { isWindowDestroyed } from '$electron/helpers/index.js'
-import { registerCopilotHandlers, unregisterCopilotHandlers } from './services/handlers.js'
+import { ipcxMain } from '@escrcpy/electron-ipcx/main'
+
+import {
+  copilotService,
+  createChannel,
+  createOrGetAgent,
+  safeExecute,
+} from './helpers/index.js'
+
+import { adbKeyboardApkPath } from '$electron/configs/index.js'
 
 export default {
   name: 'module:copilot:service',
   apply(app) {
-    registerCopilotHandlers()
-
     const manager = app.getWindowManager('copilot')
     if (!manager) {
       return
     }
 
-    ipcMain.handle('open-copilot-window', (_event, data) => {
-      const deviceId = data?.device?.id || data?.id
-
-      if (!deviceId) {
-        console.error('Device ID is required to open Copilot window')
-        return false
-      }
-
-      let copilotWindow = manager.get(deviceId)
-
-      if (!isWindowDestroyed(copilotWindow)) {
-        copilotWindow.webContents.send('device-change', data)
-        copilotWindow.show()
-        copilotWindow.focus()
-        return false
-      }
-
-      copilotWindow = manager.open({
-        payload: {
-          id: deviceId,
-          name: data?.device?.name || data?.name,
-          remark: data?.device?.remark || data?.remark,
-        },
-        show: false,
-        instanceId: deviceId,
-      })
-
-      if (!copilotWindow) {
-        return false
-      }
-
-      copilotWindow.on('closed', () => {
-        copilotWindow = void 0
-      })
-
-      copilotWindow.show()
-
-      return true
+    ipcxMain.handle(createChannel('execute'), async (_event, task, options = {}) => {
+      return safeExecute('execute', () =>
+        copilotService.execute(task, options),
+      )
     })
 
-    ipcMain.handle('close-copilot-window', (_event, data) => {
-      const deviceId = data?.device?.id || data?.id
+    ipcxMain.handle(createChannel('stop'), async (_, deviceId, reason) =>
+      safeExecute('stop', () =>
+        copilotService.stop(deviceId, reason),
+      ),
+    )
 
-      if (!deviceId) {
-        return false
-      }
+    ipcxMain.handle(createChannel('destroy'), async (_, deviceId) =>
+      safeExecute('destroy', () =>
+        copilotService.destroy(deviceId),
+      ),
+    )
 
-      const targetWindow = manager.get(deviceId)
+    ipcxMain.handle(createChannel('destroyAll'), async () =>
+      safeExecute('destroyAll', () =>
+        copilotService.destroyAll(),
+      ),
+    )
 
-      if (isWindowDestroyed(targetWindow)) {
-        return false
-      }
+    ipcxMain.handle(createChannel('getSessionByDevice'), async (_, deviceId) =>
+      copilotService.getSessionByDevice(deviceId),
+    )
 
-      targetWindow.close()
+    ipcxMain.handle(createChannel('getActiveSessions'), async () =>
+      copilotService.getActiveSessions(),
+    )
 
-      return true
-    })
+    ipcxMain.handle(createChannel('checkKeyboard'), async (_, deviceId) =>
+      safeExecute('checkKeyboard', async () => {
+        const agent = await createOrGetAgent({ deviceId })
+        const result = await agent.adb.isKeyboardInstalled()
 
-    ipcMain.handle('close-all-copilot-windows', () => {
-      manager.getAll().forEach((window) => {
-        if (!isWindowDestroyed(window)) {
-          window.close()
+        // Automatically install if not installed
+        if (!result?.success) {
+          agent.adb.installKeyboard(adbKeyboardApkPath)
         }
-      })
+
+        return result?.success || false
+      }),
+    )
+
+    ipcxMain.handle(createChannel('installKeyboard'), async (_, deviceId) =>
+      safeExecute('installKeyboard', async () => {
+        const agent = await createOrGetAgent({ deviceId })
+        await agent.adb.installKeyboard(adbKeyboardApkPath)
+        return await agent.adb.isKeyboardInstalled()
+      }),
+    )
+
+    ipcxMain.handle(createChannel('checkModelApi'), async (_, config) =>
+      safeExecute('checkModelApi', async () => {
+        const agent = await createOrGetAgent({
+          baseUrl: config.baseUrl,
+          apiKey: config.apiKey,
+          model: config.model,
+        })
+        return await agent.checkModelApi()
+      }),
+    )
+
+    ipcxMain.handle(createChannel('setIdleTimeout'), async (_, timeout) => {
+      copilotService.setIdleTimeout(timeout)
       return true
     })
 
     return () => {
-      unregisterCopilotHandlers()
-      ipcMain.removeHandler('open-copilot-window')
-      ipcMain.removeHandler('close-copilot-window')
-      ipcMain.removeHandler('close-all-copilot-windows')
+      const methods = [
+        'execute',
+        'stop',
+        'destroy',
+        'destroyAll',
+        'getSessionByDevice',
+        'getActiveSessions',
+        'checkKeyboard',
+        'installKeyboard',
+        'checkModelApi',
+        'setIdleTimeout',
+      ]
+
+      methods.forEach((method) => {
+        ipcxMain.removeHandler(createChannel(method))
+      })
     }
   },
 }

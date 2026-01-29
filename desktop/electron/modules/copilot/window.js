@@ -1,5 +1,6 @@
 import { createWindowManager } from '$electron/helpers/core/index.js'
 import { browserWindowWidth } from '$electron/configs/index.js'
+import { copilotService } from './helpers/index.js'
 
 export default {
   name: 'module:copilot:window',
@@ -8,14 +9,17 @@ export default {
       app,
       singleton: false,
       windowOptions: {
+        persistenceBounds: true,
         preloadDir: app.preloadDir,
         width: browserWindowWidth,
         minWidth: browserWindowWidth,
         height: browserWindowWidth * 0.7,
         minHeight: browserWindowWidth * 0.7,
       },
-      beforeClose(win) {
-        win.webContents.send('copilot-window-closing')
+      hooks: {
+        beforeClose(win, ctx) {
+          copilotService.destroy(ctx.payload.instanceId)
+        },
       },
     })
   },

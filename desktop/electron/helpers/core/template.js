@@ -42,25 +42,35 @@ export class TemplateBrowserWindow {
   #onResize
 
   /**
+   * Create TemplateBrowserWindow instance
+   *
+   * @param {Object}
+   */
+  options = {}
+
+  /**
    * @param {Object} options
    * @param {string} options.preloadDir - Absolute preload directory (required)
    * @param {import('electron').BrowserWindowConstructorOptions} [options.browserWindowOverrides]
    */
   constructor(options = {}) {
-    const { preloadDir, ...browserWindowOverrides } = options
+    const { preloadDir, persistenceBounds = false, ...browserWindowOverrides } = options
+    this.options = options
 
     if (!preloadDir) {
       throw new Error('TemplateBrowserWindow: preloadDir is required')
     }
 
-    const defaultOptions = createDefaultWindowOptions({ preloadDir })
+    const defaultOptions = createDefaultWindowOptions({ preloadDir, persistenceBounds })
 
     this.win = new BrowserWindow({
       ...defaultOptions,
       ...browserWindowOverrides,
     })
 
-    this.#onResize = debounce(this.#handleResize.bind(this), 500)
+    if (this.options.persistenceBounds) {
+      this.#onResize = debounce(this.#handleResize.bind(this), 500)
+    }
 
     this.#bindEvents()
     this.#setupExternalLinkHandler()
@@ -97,7 +107,10 @@ export class TemplateBrowserWindow {
    * @private
    */
   #bindEvents() {
-    this.win.on('resize', this.#onResize)
+    if (this.options.persistenceBounds) {
+      this.win.on('resize', this.#onResize)
+    }
+
     this.win.on('closed', () => {
       this.#onResize?.cancel?.()
       this.win = null
@@ -163,10 +176,8 @@ function getTitleBarOptions() {
  * @param {string} params.preloadDir - Absolute preload directory
  * @returns {import('electron').BrowserWindowConstructorOptions}
  */
-function createDefaultWindowOptions({ preloadDir }) {
-  const persistedBounds
-    /** @type {{ width?: number, height?: number }} */
-    = (electronStore.get(WINDOW_BOUNDS_KEY)) ?? {}
+function createDefaultWindowOptions({ preloadDir, persistenceBounds }) {
+  const persistedBounds = (persistenceBounds ? electronStore.get(WINDOW_BOUNDS_KEY) : {}) || {}
 
   return {
     show: false,

@@ -8,7 +8,7 @@ export function createWindowManager(name, options = {}) {
 
   const {
     app,
-    singleton = true,
+    singleton = false,
     windowOptions,
     create,
     load,
@@ -50,7 +50,11 @@ export function createWindowManager(name, options = {}) {
   }
 
   function createWindow(rawPayload = {}) {
-    const meta = normalizePayload(rawPayload)
+    const meta = normalizePayload({
+      ...rawPayload,
+      page: rawPayload.page ?? manager.id,
+    })
+
     const payload = meta.payload
 
     hooks?.beforeCreate?.({ app, payload, meta, manager })
@@ -95,17 +99,19 @@ export function createWindowManager(name, options = {}) {
     const meta = normalizePayload(rawPayload)
     const payload = meta.payload
 
-    if (singleton) {
-      const existing = get()
-      if (existing && !existing.isDestroyed?.()) {
-        hooks?.beforeShow?.(existing, { app, payload, meta, manager })
-        emitter.emit('before-show', existing)
-        existing.show?.()
-        existing.focus?.()
-        hooks?.shown?.(existing, { app, payload, meta, manager })
-        emitter.emit('shown', existing)
-        return existing
-      }
+    const existing = meta.instanceId
+      ? get(meta.instanceId)
+      : (singleton ? get() : undefined)
+
+    if (existing && !existing.isDestroyed?.()) {
+      hooks?.beforeShow?.(existing, { app, payload, meta, manager })
+      emitter.emit('before-show', existing)
+      existing.restore?.()
+      existing.show?.()
+      existing.focus?.()
+      hooks?.shown?.(existing, { app, payload, meta, manager })
+      emitter.emit('shown', existing)
+      return existing
     }
 
     return createWindow(meta)

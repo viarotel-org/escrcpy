@@ -1,5 +1,5 @@
 <template>
-  <slot :trigger="handleOpen" />
+  <slot :trigger="onTriggerClick" />
 </template>
 
 <script setup>
@@ -16,9 +16,16 @@ const props = defineProps({
   },
 })
 
-const handleOpen = () => {
+function onTriggerClick() {
+  const device = props.device
+
   window.electron.window.open('copilot', {
-    device: toRaw(props.device),
+    query: {
+      id: device.id,
+      name: device.name,
+      remark: device.remark,
+    },
+    instanceId: device.id,
   })
 }
 </script>

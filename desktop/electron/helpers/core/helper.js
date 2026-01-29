@@ -1,5 +1,5 @@
 export function resolveMainWindow(appContext) {
-  const injected = appContext?.inject?.('window:main')
+  const injected = appContext?.inject?.('modules:main')
 
   if (injected) {
     return Promise.resolve(injected)

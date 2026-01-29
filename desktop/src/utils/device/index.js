@@ -128,12 +128,7 @@ export function openFloatControl(deviceInfo) {
     return false
   }
 
-  if (window.electron?.window?.open) {
-    window.electron.window.open('control', { payload: deviceInfo })
-    return true
-  }
-
-  window.electron.ipcRenderer.invoke('open-control-window', deviceInfo)
+  window.electron.window.open('control', { query: deviceInfo })
   return true
 }
 

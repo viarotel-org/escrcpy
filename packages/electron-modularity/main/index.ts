@@ -49,4 +49,4 @@ export { createElectronApp, useElectronApp } from './app'
 export type * from './types'
 
 // Window manager
-export { createWindowManager, useWindowContext } from './window-manager'
+export { createWindowManager, useWindowContext } from './window'

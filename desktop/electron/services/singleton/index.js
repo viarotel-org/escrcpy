@@ -13,7 +13,6 @@ export default {
          * Called when first instance successfully acquires the lock
          */
         onSuccess() {
-          console.log('[module:singleton] Application is running as single instance')
           app?.emit?.('singleton:ready')
         },
 

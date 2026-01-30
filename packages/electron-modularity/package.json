@@ -8,10 +8,18 @@
   "homepage": "https://github.com/viarotel-org/escrcpy",
   "sideEffects": false,
   "exports": {
-    ".": "./dist/index.mjs",
+    "./main": "./dist/main/index.mjs",
+    "./plugins": "./dist/plugins/index.mjs",
     "./package.json": "./package.json"
   },
   "types": "./dist/main/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "plugins": [
+        "./dist/plugins/index.d.mts"
+      ]
+    }
+  },
   "files": [
     "README.md",
     "dist"

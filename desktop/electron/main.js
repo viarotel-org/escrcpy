@@ -12,7 +12,7 @@ import './helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
-import { createElectronApp } from '@escrcpy/electron-modularity'
+import { createElectronApp } from '@escrcpy/electron-modularity/main'
 
 import { browserWindowHeight, browserWindowWidth, getLogoPath } from './configs/index.js'
 import { getAppBackgroundColor } from './helpers/index.js'

@@ -2,15 +2,30 @@
 
 > Modular Electron application architecture with unctx-powered plugin system
 
+---
+
+## 🎉 What's New in v2.4
+
+- ✨ **Type System Overhaul** - Eliminated all `any` types, full generic support
+- 🔌 **Official Plugins** - Theme & Window IPC plugins included
+- ⚠️ **Enhanced Robustness** - Circular dependency detection, conflict checking
+- 📚 **Better DX** - Comprehensive examples, migration guide, improved docs
+
+👉 **[See Upgrade Guide](./UPGRADE.md)** | **[Migration from Services](./MIGRATION.md)** | **[Examples](./examples/)**
+
+---
+
 ## Features
 
 - 🔌 **Plugin System** - Dependency injection and lifecycle management
 - 🪟 **Window Manager** - Unified window lifecycle with hooks
 - 🎯 **unctx Integration** - Async context propagation with `useElectronApp()` / `useWindowContext()`
-- � **Storage Abstraction** - Pluggable storage via dependency injection (supports electron-store, Redis, memory, etc.)
-- 📦 **TypeScript-first** - Full type safety and IntelliSense
+- 💾 **Storage Abstraction** - Pluggable storage via dependency injection (supports electron-store, Redis, memory, etc.)
+- 📦 **TypeScript-first** - Full type safety and IntelliSense with generics
 - 🌳 **Tree-shakeable** - ESM-only with zero side effects
 - 🧪 **Testable** - Fully mockable storage and dependencies
+- 🎨 **Official Plugins** - Theme management, window IPC handlers, and more
+- ⚠️ **Robust** - Circular dependency detection, conflict checking, error handling
 
 ## Installation
 
@@ -103,6 +118,34 @@ export default {
     }
   }
 }
+```
+
+### 4. Use Official Plugins (Optional)
+
+```typescript
+import { createElectronApp } from '@escrcpy/electron-modularity'
+import { themePlugin, windowIPCPlugin } from '@escrcpy/electron-modularity/plugins'
+
+const app = createElectronApp({ /* ... */ })
+
+// Add theme management
+app.use(themePlugin, {
+  storagePrefix: 'app',
+  persist: true
+})
+
+// Add window IPC handlers
+app.use(windowIPCPlugin)
+
+app.start()
+```
+
+**Available Official Plugins:**
+
+- **`themePlugin`** - Native theme management (system/light/dark) with IPC and persistence
+- **`windowIPCPlugin`** - Window control IPC handlers (minimize, maximize, close, focus, etc.)
+
+See [plugins/README.md](./plugins/README.md) for detailed plugin documentation.
 ```
 
 ## unctx Enhanced API

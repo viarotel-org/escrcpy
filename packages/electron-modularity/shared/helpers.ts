@@ -77,7 +77,7 @@ export function resolveMainWindow(appContext?: ElectronApp): Promise<BrowserWind
   const injected = appContext?.inject?.('modules:main')
 
   if (injected) {
-    return Promise.resolve(injected)
+    return Promise.resolve(injected as BrowserWindow)
   }
 
   return new Promise((resolve) => {

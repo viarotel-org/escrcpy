@@ -3,8 +3,10 @@ import type { IStorage } from '../shared/interfaces'
 
 /**
  * Plugin interface for Electron app
+ * @template TApi - The API type returned by the plugin
+ * @template TOptions - The options type accepted by the plugin
  */
-export interface Plugin<T = any> {
+export interface Plugin<TApi = unknown, TOptions = unknown> {
   /**
    * Unique plugin name (used for dependency resolution and service injection)
    */
@@ -26,7 +28,7 @@ export interface Plugin<T = any> {
    * @param options - Plugin options
    * @returns Plugin API or cleanup function
    */
-  apply: (app: ElectronApp, options?: any) => T
+  apply: (app: ElectronApp, options?: TOptions) => TApi
 
   /**
    * Cleanup function called when app stops
@@ -36,14 +38,15 @@ export interface Plugin<T = any> {
 
 /**
  * Plugin state tracking
+ * @template TApi - The API type returned by the plugin
  */
-export interface PluginState<T = any> {
+export interface PluginState<TApi = unknown> {
   name: string
-  api: T
+  api: TApi
   dispose?: () => void | Promise<void>
   order: number
   deps: string[]
-  plugin: Plugin<T>
+  plugin: Plugin<TApi>
 }
 
 /**
@@ -103,7 +106,7 @@ export interface ElectronApp {
   /**
    * Internal provides map
    */
-  provides: Map<string, any>
+  provides: Map<string, unknown>
 
   /**
    * Registered window managers
@@ -124,23 +127,36 @@ export interface ElectronApp {
 
   /**
    * Retrieve an injected service or value
+   * @template T - Expected service type
    * @param key - Service key
    * @param fallback - Fallback value if key not found
    */
-  inject: <T = any>(key: string, fallback?: T) => T | undefined
+  inject<T = unknown>(key: string, fallback?: T): T | undefined
 
   /**
    * Check if a service exists
    * @param key - Service key
    */
-  has: (key: string) => boolean
+  hasService(key: string): boolean
+
+  /**
+   * Check if a service exists (backward compatibility alias)
+   * @param key - Service key
+   * @deprecated Use hasService instead
+   */
+  has(key: string): boolean
 
   /**
    * Register a plugin
+   * @template TApi - Plugin API type
+   * @template TOptions - Plugin options type
    * @param plugin - Plugin to register
    * @param options - Plugin options
    */
-  use<T>(plugin: Plugin<T> | ((app: ElectronApp, options?: any) => T), options?: any): this
+  use<TApi = unknown, TOptions = unknown>(
+    plugin: Plugin<TApi, TOptions> | ((app: ElectronApp, options?: TOptions) => TApi),
+    options?: TOptions
+  ): this
 
   /**
    * Register a window manager
@@ -153,14 +169,15 @@ export interface ElectronApp {
    * Get a registered window manager
    * @param id - Window manager identifier
    */
-  getWindowManager: (id: string) => WindowManager | undefined
+  getWindowManager(id: string): WindowManager | undefined
 
   /**
    * Open a window by manager id
+   * @template TPayload - Window payload type
    * @param id - Window manager identifier
    * @param payload - Window payload
    */
-  openWindow: (id: string, payload?: any) => BrowserWindow | null
+  openWindow<TPayload = unknown>(id: string, payload?: TPayload): BrowserWindow | null
 
   /**
    * Start the application
@@ -175,10 +192,10 @@ export interface ElectronApp {
   /**
    * Event emitter methods
    */
-  on(event: string, handler: (...args: any[]) => void): this
-  once(event: string, handler: (...args: any[]) => void): this
-  off(event: string, handler: (...args: any[]) => void): this
-  emit: (event: string, ...args: any[]) => boolean
+  on<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
+  once<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
+  off<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
+  emit(event: string, ...args: unknown[]): boolean
 }
 
 /**
@@ -239,12 +256,13 @@ export interface ElectronAppConfig {
 
 /**
  * Window metadata
+ * @template TPayload - User-provided payload type
  */
-export interface WindowMeta {
+export interface WindowMeta<TPayload = unknown> {
   /**
    * User-provided payload
    */
-  payload: any
+  payload: TPayload
 
   /**
    * Page to load
@@ -254,7 +272,7 @@ export interface WindowMeta {
   /**
    * Query parameters
    */
-  query?: Record<string, any>
+  query?: Record<string, unknown>
 
   /**
    * Whether to show window after creation
@@ -269,8 +287,9 @@ export interface WindowMeta {
 
 /**
  * Window context passed to hooks
+ * @template TPayload - Payload type
  */
-export interface WindowContext {
+export interface WindowContext<TPayload = unknown> {
   /**
    * Window manager ID
    */
@@ -284,12 +303,12 @@ export interface WindowContext {
   /**
    * User payload
    */
-  payload: any
+  payload: TPayload
 
   /**
    * Window metadata
    */
-  meta: WindowMeta
+  meta: WindowMeta<TPayload>
 
   /**
    * Resolved window options
@@ -299,68 +318,70 @@ export interface WindowContext {
   /**
    * Window manager instance
    */
-  manager: WindowManager
+  manager: WindowManager<TPayload>
 }
 
 /**
  * Window lifecycle hooks
+ * @template TPayload - Payload type
  */
-export interface WindowHooks {
+export interface WindowHooks<TPayload = unknown> {
   /**
    * Called before window creation
    */
-  beforeCreate?: (context: WindowContext) => void
+  beforeCreate?: (context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called after window created
    */
-  created?: (win: BrowserWindow, context: WindowContext) => void
+  created?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is ready to show
    */
-  ready?: (win: BrowserWindow, context: WindowContext) => void
+  ready?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called before showing existing window
    */
-  beforeShow?: (win: BrowserWindow, context: WindowContext) => void
+  beforeShow?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is shown
    */
-  shown?: (win: BrowserWindow, context: WindowContext) => void
+  shown?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is hidden
    */
-  hidden?: (win: BrowserWindow, context: WindowContext) => void
+  hidden?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window gains focus
    */
-  focus?: (win: BrowserWindow, context: WindowContext) => void
+  focus?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window loses focus
    */
-  blur?: (win: BrowserWindow, context: WindowContext) => void
+  blur?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called before window closes
    */
-  beforeClose?: (win: BrowserWindow, context: WindowContext) => void
+  beforeClose?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called after window closed
    */
-  closed?: (win: BrowserWindow, context: WindowContext) => void
+  closed?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 }
 
 /**
  * Window manager options
+ * @template TPayload - Payload type
  */
-export interface WindowManagerOptions {
+export interface WindowManagerOptions<TPayload = unknown> {
   /**
    * Parent app instance
    */
@@ -374,28 +395,29 @@ export interface WindowManagerOptions {
   /**
    * Window options (static or factory function)
    */
-  windowOptions?: BrowserWindowConstructorOptions | ((context: WindowContext) => BrowserWindowConstructorOptions)
+  windowOptions?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload>) => BrowserWindowConstructorOptions)
 
   /**
    * Custom window creation function
    */
-  create?: (context: WindowContext) => BrowserWindow
+  create?: (context: WindowContext<TPayload>) => BrowserWindow
 
   /**
    * Custom window load function
    */
-  load?: (win: BrowserWindow, context: WindowContext) => void
+  load?: (win: BrowserWindow, context: WindowContext<TPayload>) => void
 
   /**
    * Lifecycle hooks
    */
-  hooks?: WindowHooks
+  hooks?: WindowHooks<TPayload>
 }
 
 /**
  * Window manager instance
+ * @template TPayload - Payload type
  */
-export interface WindowManager {
+export interface WindowManager<TPayload = unknown> {
   /**
    * Window manager ID
    */
@@ -410,43 +432,43 @@ export interface WindowManager {
    * Create a new window instance
    * @param payload - Window payload
    */
-  create: (payload?: any) => BrowserWindow | null
+  create(payload?: TPayload): Promise<BrowserWindow | null>
 
   /**
    * Open a window (reuse existing if singleton)
    * @param payload - Window payload
    */
-  open: (payload?: any) => BrowserWindow | null
+  open(payload?: TPayload): Promise<BrowserWindow | null>
 
   /**
    * Close a window
    * @param payload - Window payload or instance ID
    */
-  close: (payload?: any) => boolean
+  close(payload?: TPayload | { instanceId?: string }): boolean
 
   /**
    * Destroy a window
    * @param payload - Window payload or instance ID
    */
-  destroy: (payload?: any) => boolean
+  destroy(payload?: TPayload | { instanceId?: string }): boolean
 
   /**
    * Get a window instance
    * @param instanceId - Instance ID (optional for singleton)
    */
-  get: (instanceId?: string) => BrowserWindow | undefined
+  get(instanceId?: string): BrowserWindow | undefined
 
   /**
    * Get all window instances
    */
-  getAll: () => BrowserWindow[]
+  getAll(): BrowserWindow[]
 
   /**
    * Event emitter methods
    */
-  on(event: string, handler: (...args: any[]) => void): this
-  once(event: string, handler: (...args: any[]) => void): this
-  off(event: string, handler: (...args: any[]) => void): this
+  on<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
+  once<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
+  off<TEventData = unknown>(event: string, handler: (data: TEventData, ...args: unknown[]) => void): this
 }
 
 /**

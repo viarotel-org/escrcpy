@@ -1,9 +1,11 @@
 import { EventEmitter } from 'node:events'
 import { AsyncLocalStorage } from 'node:async_hooks'
-import type { BrowserWindow } from 'electron'
+import type { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import { createContext } from 'unctx'
+import { nanoid } from 'nanoid'
 import type {
   WindowContext,
+  WindowHooks,
   WindowManager,
   WindowManagerOptions,
   WindowMeta,
@@ -39,13 +41,19 @@ export const useWindowContext = windowContext.use
 /**
  * Create a window manager for handling window lifecycle
  *
+ * @template TPayload - Window payload type
  * @param name - Unique window manager identifier
  * @param options - Window manager options
  * @returns Window manager instance
  *
  * @example
  * ```ts
- * const manager = createWindowManager('main', {
+ * interface MyPayload {
+ *   deviceId: string
+ *   appName?: string
+ * }
+ * 
+ * const manager = createWindowManager<MyPayload>('main', {
  *   app,
  *   singleton: true,
  *   windowOptions: {
@@ -54,13 +62,17 @@ export const useWindowContext = windowContext.use
  *   },
  *   hooks: {
  *     created(win, ctx) {
+ *       console.log('Device ID:', ctx.payload.deviceId)
  *       ctx.app.provide('window:main', win)
  *     }
  *   }
  * })
  * ```
  */
-export function createWindowManager(name: string, options: WindowManagerOptions = {}): WindowManager {
+export function createWindowManager<TPayload = unknown>(
+  name: string,
+  options: WindowManagerOptions<TPayload> = {},
+): WindowManager<TPayload> {
   if (!name) {
     throw new Error('createWindowManager: name is required')
   }
@@ -76,13 +88,12 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
 
   const emitter = new EventEmitter()
   const instances = new Map<string, BrowserWindow>()
-  let seed = 0
 
-  const manager: WindowManager = {
+  const manager: WindowManager<TPayload> = {
     id: name,
     singleton,
-    create: createWindow as any,
-    open: open as any,
+    create: createWindow,
+    open,
     close,
     destroy,
     get,
@@ -106,9 +117,9 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
 
   return manager
 
-  function resolveOptions(payload: any, meta: WindowMeta) {
+  function resolveOptions(payload: TPayload, meta: WindowMeta<TPayload>): BrowserWindowConstructorOptions {
     const base: any = typeof windowOptions === 'function'
-      ? windowOptions({ id: name, app, payload, meta, manager } as WindowContext)
+      ? windowOptions({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload>)
       : { ...(windowOptions ?? {}) }
 
     // Inherit from app config if not specified
@@ -143,15 +154,15 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
     return base
   }
 
-  async function createWindow(rawPayload: any = {}): Promise<BrowserWindow | null> {
+  async function createWindow(rawPayload?: TPayload): Promise<BrowserWindow | null> {
     const meta = normalizePayload({
-      ...rawPayload,
-      page: rawPayload.page ?? manager.id,
-    })
+      ...(rawPayload as any),
+      page: (rawPayload as any)?.page ?? manager.id,
+    } as TPayload)
 
     const payload = meta.payload
-    const options = resolveOptions(payload, meta)
-    const context: WindowContext = { id: name, app, payload, meta, options, manager }
+    const options = resolveOptions(meta.payload, meta)
+    const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options, manager }
 
     // Run in window context (allows hooks to use useWindowContext())
     return await windowContext.callAsync(context, async () => {
@@ -169,7 +180,7 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
       }
 
       // Set metadata
-      const instanceId = meta.instanceId ?? `${name}:${Date.now()}-${++seed}`;
+      const instanceId = meta.instanceId ?? `${name}:${nanoid(10)}`;
       (win as any).__managerId = name;
       (win as any).__instanceId = instanceId
 
@@ -197,7 +208,7 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
     })
   }
 
-  async function open(rawPayload: any = {}): Promise<BrowserWindow | null> {
+  async function open(rawPayload?: TPayload): Promise<BrowserWindow | null> {
     const meta = normalizePayload(rawPayload)
     const payload = meta.payload
 
@@ -206,7 +217,7 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
       : (singleton ? get() : undefined)
 
     if (existing && !existing.isDestroyed?.()) {
-      const context: WindowContext = { id: name, app, payload, meta, options: {}, manager }
+      const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options: {}, manager }
 
       return await windowContext.callAsync(context, async () => {
         await runHook('beforeShow', existing, context)
@@ -220,10 +231,10 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
       })
     }
 
-    return createWindow(meta)
+    return createWindow(rawPayload)
   }
 
-  function close(payload: any = {}): boolean {
+  function close(payload?: TPayload | { instanceId?: string }): boolean {
     const target = resolveTarget(payload)
     if (!target || target.isDestroyed?.()) {
       return false
@@ -232,7 +243,7 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
     return true
   }
 
-  function destroy(payload: any = {}): boolean {
+  function destroy(payload?: TPayload | { instanceId?: string }): boolean {
     const target = resolveTarget(payload)
     if (!target || target.isDestroyed?.()) {
       return false
@@ -257,19 +268,19 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
     return Array.from(instances.values())
   }
 
-  function resolveTarget(payload: any): BrowserWindow | undefined {
-    if (payload?.instanceId) {
-      return instances.get(payload.instanceId)
+  function resolveTarget(payload?: TPayload | { instanceId?: string }): BrowserWindow | undefined {
+    if (payload && typeof payload === 'object' && 'instanceId' in payload) {
+      return instances.get(payload.instanceId!)
     }
 
-    if (payload?.win) {
-      return payload.win
+    if (payload && typeof payload === 'object' && 'win' in payload) {
+      return (payload as any).win
     }
 
     return get()
   }
 
-  function bindWindowEvents(win: BrowserWindow, context: WindowContext) {
+  function bindWindowEvents(win: BrowserWindow, context: WindowContext<TPayload>) {
     win.on?.('ready-to-show', () => {
       windowContext.callAsync(context, async () => {
         await runHook('ready', win, context)
@@ -325,18 +336,18 @@ export function createWindowManager(name: string, options: WindowManagerOptions 
    * Run hook with backward compatibility (pass both win and context as parameters)
    * Also sets up window context for useWindowContext()
    */
-  async function runHook(hookName: keyof typeof hooks, ...args: any[]) {
-    const hook = hooks[hookName] as any
+  async function runHook(hookName: keyof WindowHooks<TPayload>, ...args: any[]) {
+    const hook = hooks[hookName]
     if (typeof hook === 'function') {
-      await hook(...args)
+      await (hook as any)(...args)
     }
   }
 }
 
-function normalizePayload(payload: any): WindowMeta {
+function normalizePayload<T>(payload?: T): WindowMeta<T> {
   if (!payload || typeof payload !== 'object') {
     return {
-      payload,
+      payload: payload as T,
       page: undefined,
       query: undefined,
       show: true,
@@ -345,14 +356,14 @@ function normalizePayload(payload: any): WindowMeta {
   }
 
   const innerPayload = Object.prototype.hasOwnProperty.call(payload, 'payload')
-    ? payload.payload
+    ? (payload as any).payload
     : payload
 
   return {
     payload: innerPayload,
-    page: payload.page,
-    query: payload.query,
-    show: payload.show,
-    instanceId: payload.instanceId,
+    page: (payload as any).page,
+    query: (payload as any).query,
+    show: (payload as any).show,
+    instanceId: (payload as any).instanceId,
   }
 }

@@ -1,4 +1,4 @@
-import { createWindowManager } from '@escrcpy/electron-modularity'
+import { createWindowManager } from '@escrcpy/electron-modularity/main'
 
 export default {
   name: 'module:control:window',

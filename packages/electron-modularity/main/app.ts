@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events'
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { createContext } from 'unctx'
+import type { BrowserWindow } from 'electron'
 import { createDefaultStorage } from '../shared/adapters/storage-adapter.js'
 import type {
   ElectronApp,
@@ -69,7 +70,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
   } = config
 
   const emitter = new EventEmitter()
-  const provides = new Map<string, any>()
+  const provides = new Map<string, unknown>()
   const plugins = new Map<string, PluginState>()
   const pending: Array<NormalizedPlugin> = []
 
@@ -109,11 +110,16 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       return app
     },
 
-    inject(key, fallback) {
-      return provides.has(key) ? provides.get(key) : fallback
+    inject<T = unknown>(key: string, fallback?: T): T | undefined {
+      return provides.has(key) ? (provides.get(key) as T) : fallback
     },
 
-    has(key) {
+    hasService(key: string): boolean {
+      return provides.has(key)
+    },
+
+    // Backward compatibility alias
+    has(key: string): boolean {
       return provides.has(key)
     },
 
@@ -130,9 +136,11 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       return app.windows.get(id)
     },
 
-    openWindow(id, payload) {
+    openWindow<TPayload = unknown>(id: string, payload?: TPayload): BrowserWindow | null {
       const manager = app.getWindowManager(id)
-      return manager?.open?.(payload) ?? null
+      const win = manager?.open?.(payload as any)
+      // Handle both sync and async window managers
+      return win instanceof Promise ? null : (win ?? null)
     },
 
     use(plugin, options) {
@@ -142,12 +150,33 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         return app
       }
 
+      // Check for duplicate plugin names
       if (normalized.name && plugins.has(normalized.name)) {
         console.warn(`⚠️ Plugin "${normalized.name}" already registered!`)
+        app.emit('plugin:warning', {
+          type: 'duplicate-plugin',
+          pluginName: normalized.name,
+        })
         return app
       }
 
-      pending.push(normalized)
+      // Check for order conflicts (same name and order)
+      const conflictingPlugin = pending.find(
+        p => p.name && p.name === normalized.name && p.order === normalized.order,
+      )
+      if (conflictingPlugin) {
+        console.warn(
+          `⚠️ Plugin "${normalized.name}" has same name and order as existing plugin. `
+          + `This may cause unexpected behavior.`,
+        )
+        app.emit('plugin:warning', {
+          type: 'order-conflict',
+          pluginName: normalized.name,
+          order: normalized.order,
+        })
+      }
+
+      pending.push(normalized as NormalizedPlugin)
       flushPending()
 
       return app
@@ -178,11 +207,33 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
   // This allows useElectronApp() to work anywhere
   appContext.set(app)
 
+  // Default error handler
+  app.on<{ error: unknown, state?: { name?: string } }>('plugin:error', (data: unknown) => {
+    const payload = data as { error: unknown, state?: { name?: string } }
+    console.error(`❌ Plugin error${payload.state?.name ? ` in "${payload.state.name}"` : ''}:`, payload.error || data)
+  })
+
+  // Default warning handler
+  app.on('plugin:warning', (warning) => {
+    console.warn('⚠️ Plugin warning:', warning)
+  })
+
   function flushPending() {
     let changed = true
+    let iterations = 0
+    const maxIterations = pending.length + 1
 
     while (changed) {
       changed = false
+      iterations++
+
+      // Detect infinite loops (circular dependencies)
+      if (iterations > maxIterations) {
+        const cyclePlugins = pending.map(p => p.name || '<anonymous>')
+        console.error('❌ Circular dependency detected in plugins:', cyclePlugins)
+        app.emit('plugin:error', new Error(`Circular dependency detected: ${cyclePlugins.join(', ')}`))
+        break
+      }
 
       pending.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 
@@ -206,6 +257,10 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || [],
       }))
       console.warn('⚠️ Unresolved plugin dependencies:', unresolved)
+      app.emit('plugin:warning', {
+        type: 'unresolved-dependencies',
+        plugins: unresolved,
+      })
     }
   }
 
@@ -247,20 +302,20 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 /**
  * Normalized plugin internal type
  */
-interface NormalizedPlugin {
+interface NormalizedPlugin<TApi = unknown, TOptions = unknown> {
   name: string
-  apply: (app: ElectronApp, options?: any) => any
+  apply: (app: ElectronApp, options?: TOptions) => TApi
   deps: string[]
   order: number
-  options?: any
-  raw: Plugin | ((app: ElectronApp, options?: any) => any)
+  options?: TOptions
+  raw: Plugin<TApi, TOptions> | ((app: ElectronApp, options?: TOptions) => TApi)
   dispose?: () => void | Promise<void>
 }
 
-function normalizePlugin(
-  plugin: Plugin | ((app: ElectronApp, options?: any) => any),
-  options?: any,
-): NormalizedPlugin | null {
+function normalizePlugin<TApi = unknown, TOptions = unknown>(
+  plugin: Plugin<TApi, TOptions> | ((app: ElectronApp, options?: TOptions) => TApi),
+  options?: TOptions,
+): NormalizedPlugin<TApi, TOptions> | null {
   if (!plugin) {
     return null
   }
@@ -297,21 +352,21 @@ function normalizePlugin(
   return null
 }
 
-function resolveDispose(item: NormalizedPlugin, api: any): (() => void | Promise<void>) | undefined {
+function resolveDispose<TApi>(item: NormalizedPlugin<TApi>, api: TApi): (() => void | Promise<void>) | undefined {
   if (typeof item.dispose === 'function') {
     return item.dispose
   }
 
   if (typeof api === 'function') {
-    return api
+    return api as (() => void | Promise<void>)
   }
 
-  if (api && typeof api.dispose === 'function') {
-    return () => api.dispose()
+  if (api && typeof api === 'object' && 'dispose' in api && typeof (api as any).dispose === 'function') {
+    return () => (api as any).dispose()
   }
 
-  if (api && typeof api.destroy === 'function') {
-    return () => api.destroy()
+  if (api && typeof api === 'object' && 'destroy' in api && typeof (api as any).destroy === 'function') {
+    return () => (api as any).destroy()
   }
 
   return undefined

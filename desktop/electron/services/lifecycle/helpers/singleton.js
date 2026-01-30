@@ -8,7 +8,7 @@ import { app, BrowserWindow } from 'electron'
  *        Callback when a second instance is launched
  * @param {boolean} [options.enableSandbox]
  *        Whether to enable sandbox mode (skips single instance check)
- * @param {() => void} [options.onSuccess]
+ * @param {() => void} [options.onCreateWindow]
  *        Callback after acquiring the singleton lock
  * @param {(commandLine: string[], next: () => void) => void} [options.onShowWindow]
  *        Callback when main window should be shown
@@ -25,7 +25,7 @@ export function ensureSingleInstance(options = {}) {
   const {
     onSecondInstance,
     enableSandbox = false,
-    onSuccess,
+    onCreateWindow,
     onShowWindow,
     onError,
     silentMode = false,
@@ -45,7 +45,7 @@ export function ensureSingleInstance(options = {}) {
     // Sandbox mode check
     if (enableSandbox) {
       !silentMode && console.log('Sandbox mode enabled, skipping single instance check')
-      onSuccess && onSuccess()
+      onCreateWindow && onCreateWindow()
       return true
     }
 
@@ -85,7 +85,7 @@ export function ensureSingleInstance(options = {}) {
       }
     })
 
-    onSuccess && onSuccess()
+    onCreateWindow && onCreateWindow()
     return true
   }
   catch (error) {

@@ -221,6 +221,4 @@ class CopilotService {
 /**
  * Export the CopilotService singleton
  */
-const copilotService = new CopilotService()
-
-export default copilotService
+export const copilotService = new CopilotService()

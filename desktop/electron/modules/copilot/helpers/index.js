@@ -1,9 +1,9 @@
 import { AutoGLM } from 'autoglm.js'
-import copilotService from '../index.js'
+import { copilotService } from './service.js'
 import electronStore from '$electron/helpers/store/index.js'
 
-export { default as copilotService } from './service.js'
 export * from './session.js'
+export { copilotService }
 
 const TEMP_DEVICE_ID_PREFIX = 'temp-device'
 const SERVICE_PREFIX = 'copilot'

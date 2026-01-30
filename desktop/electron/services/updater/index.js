@@ -2,15 +2,12 @@ import { devPublishPath } from '$electron/configs/index.js'
 import { is } from '@electron-toolkit/utils'
 import { app as electronApp, ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
-import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
 
 const { autoUpdater } = electronUpdater
 
 export default {
   name: 'service:updater',
-  async apply(appContext) {
-    const mainWindow = await resolveMainWindow(appContext)
-
+  apply(app) {
     if (is.dev) {
       autoUpdater.updateConfigPath = devPublishPath
       Object.defineProperty(electronApp, 'isPackaged', {
@@ -40,9 +37,11 @@ export default {
 
     // Set auto-download to false (default true — automatically download when updates are found)
     autoUpdater.autoDownload = false
+
     // Handle update errors
     autoUpdater.on('error', (error) => {
       console.error('update-error')
+      const mainWindow = app.getMainWindow()
       mainWindow?.webContents?.send('update-error', error)
     })
 
@@ -53,23 +52,26 @@ export default {
 
     // Update available
     autoUpdater.on('update-available', (ret) => {
+      const mainWindow = app.getMainWindow()
       mainWindow?.webContents?.send('update-available', ret)
     })
 
     // When no update is available
     autoUpdater.on('update-not-available', (ret) => {
+      const mainWindow = app.getMainWindow()
       mainWindow?.webContents?.send('update-not-available', ret)
     })
 
     // Download progress
     autoUpdater.on('download-progress', (ret) => {
+      const mainWindow = app.getMainWindow()
       mainWindow?.webContents?.send('download-progress', ret)
     })
 
     // After the update package has been downloaded
     autoUpdater.on('update-downloaded', (ret) => {
+      const mainWindow = app.getMainWindow()
       mainWindow?.webContents?.send('update-downloaded', ret)
     })
   },
-
 }

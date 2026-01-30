@@ -1,5 +1,5 @@
 import electronStore from '$electron/helpers/store/index.js'
-import { app } from 'electron'
+import { app as electronApp } from 'electron'
 import { platform } from '@electron-toolkit/utils'
 
 export default {
@@ -15,7 +15,7 @@ export default {
         return
       }
 
-      app.setLoginItemSettings({
+      electronApp.setLoginItemSettings({
         openAtLogin: flag,
         openAsHidden: true,
         args: ['--minimized'],

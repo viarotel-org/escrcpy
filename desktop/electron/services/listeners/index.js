@@ -1,12 +1,12 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, app as electronApp, ipcMain } from 'electron'
 
 export default {
   name: 'service:listeners',
   apply() {
     ipcMain.on('restart-app', () => {
-      app.isQuiting = true
-      app.relaunch()
-      app.quit()
+      electronApp.isQuiting = true
+      electronApp.relaunch()
+      electronApp.quit()
     })
 
     ipcMain.on('close-active-window', (event) => {

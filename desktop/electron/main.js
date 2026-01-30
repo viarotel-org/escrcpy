@@ -12,6 +12,7 @@ import './helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
+import { app as electronApp } from 'electron'
 import { createElectronApp } from '@escrcpy/electron-modularity/main'
 
 import {
@@ -55,25 +56,27 @@ const app = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
-app.use(sandboxPlugin)
-app.use(main)
-app.use(lifecycle)
+electronApp.whenReady().then(() => {
+  app.use(sandboxPlugin)
+  app.use(main)
+  app.use(lifecycle)
 
-app.use(control)
-app.use(copilot)
-app.use(explorer)
+  app.use(control)
+  app.use(copilot)
+  app.use(explorer)
 
-app.use(clipboardPlugin)
-app.use(themePlugin)
-app.use(windowIPCPlugin)
+  app.use(clipboardPlugin)
+  app.use(themePlugin)
+  app.use(windowIPCPlugin)
 
-app.use(edger)
-app.use(listeners)
-app.use(handles)
-app.use(tray)
-app.use(contextMenu)
-app.use(updater)
-app.use(launch)
-app.use(shortcuts)
+  app.use(edger)
+  app.use(listeners)
+  app.use(handles)
+  app.use(tray)
+  app.use(contextMenu)
+  app.use(updater)
+  app.use(launch)
+  app.use(shortcuts)
 
-app.start()
+  app.start()
+})

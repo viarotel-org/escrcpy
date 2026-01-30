@@ -1,7 +1,6 @@
 import type { BrowserWindow } from 'electron'
 import type { ElectronApp } from '../main/types'
 import path from 'node:path'
-import { app as electronApp } from 'electron'
 
 /**
  * Load page in BrowserWindow
@@ -170,67 +169,4 @@ export async function resolveMainWindow(
       resolve(win)
     }
   })
-}
-
-/**
- * Restore and focus a browser window
- *
- * Handles common window restoration patterns:
- * - Restores minimized windows
- * - Shows hidden windows
- * - Optionally focuses the window
- * - Supports macOS dock show/hide
- *
- * @param win - BrowserWindow instance to restore
- * @param options - Restoration options
- * @param options.forceFocus - Force focus the window (default: true)
- * @param options.showDock - Show dock on macOS (default: true on macOS, false otherwise)
- * @returns true if window was restored, false if window is null/destroyed
- *
- * @example
- * ```ts
- * // Basic usage
- * restoreAndFocusWindow(mainWindow)
- *
- * // Without forcing focus
- * restoreAndFocusWindow(mainWindow, { forceFocus: false })
- *
- * // With explicit dock control
- * restoreAndFocusWindow(mainWindow, { showDock: true })
- * ```
- */
-export function restoreAndFocusWindow(
-  win: BrowserWindow | null | undefined,
-  options: {
-    forceFocus?: boolean
-    showDock?: boolean
-  } = {},
-): boolean {
-  if (!win || win.isDestroyed?.()) {
-    return false
-  }
-
-  const { forceFocus = true, showDock = process.platform === 'darwin' } = options
-
-  // Restore if minimized
-  if (win.isMinimized?.()) {
-    win.restore?.()
-  }
-
-  // Show if hidden
-  if (!win.isVisible?.()) {
-    win.show?.()
-  }
-
-  // Focus if requested
-  if (forceFocus) {
-    win.focus?.()
-  }
-
-  // Show dock on macOS if requested
-  if (showDock && process.platform === 'darwin') {
-    electronApp?.dock?.show?.()
-  }
-
-  return true
 }

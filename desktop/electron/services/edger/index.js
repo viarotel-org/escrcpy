@@ -4,23 +4,24 @@ import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
 
 export default {
   name: 'service:edger',
-  async apply(appContext) {
-    const mainWindow = await resolveMainWindow(appContext)
+  async apply(app) {
+    if (!electronStore.get('common.edgeHidden')) {
+      return false
+    }
+
+    const mainWindow = await resolveMainWindow(app)
 
     if (!mainWindow) {
       console.warn('[edger] main window not available')
-      return
+      return false
     }
 
     // Initialize Edger if edgeHidden is enabled in settings
-    if (electronStore.get('common.edgeHidden')) {
-      try {
-        new Edger(mainWindow)
-        console.log('[edger] Edger initialized successfully')
-      }
-      catch (error) {
-        console.warn('[edger] Edger initialization failed:', error?.message || error)
-      }
+    try {
+      new Edger(mainWindow)
+    }
+    catch (error) {
+      console.warn('[edger] Edger initialization failed:', error?.message || error)
     }
   },
 }

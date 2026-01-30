@@ -12,17 +12,11 @@ export default {
     const windowManager = appContext.getWindowManager('main')
 
     ensureSingleInstance({
-      onSuccess() {
-        openMainWindow()
-      },
-      onShowWindow(commandLine) {
-        showMainWindow(commandLine)
-      },
+      onCreateWindow: openMainWindow,
+      onShowWindow: showMainWindow,
     })
 
     async function openMainWindow() {
-      await electronApp.whenReady()
-
       windowManager.open({ show: false })
 
       const mainWindow = await resolveMainWindow(appContext)

@@ -12,11 +12,6 @@ import { adbKeyboardApkPath } from '$electron/configs/index.js'
 export default {
   name: 'module:copilot:service',
   apply(app) {
-    const manager = app.getWindowManager('copilot')
-    if (!manager) {
-      return
-    }
-
     ipcxMain.handle(createChannel('execute'), async (_event, task, options = {}) => {
       return safeExecute('execute', () =>
         copilotService.execute(task, options),
@@ -41,9 +36,9 @@ export default {
       ),
     )
 
-    ipcxMain.handle(createChannel('getSessionByDevice'), async (_, deviceId) =>
-      copilotService.getSessionByDevice(deviceId),
-    )
+    ipcxMain.handle(createChannel('getSessionByDevice'), async (_, deviceId) => {
+      return copilotService.getSessionByDevice(deviceId)
+    })
 
     ipcxMain.handle(createChannel('getActiveSessions'), async () =>
       copilotService.getActiveSessions(),

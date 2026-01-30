@@ -3,7 +3,7 @@ import { isPackaged } from '$electron/helpers/index.js'
 
 export default {
   name: 'service:context-menu',
-  apply(appContext) {
+  apply() {
     try {
       contextMenu({
       // Hide image copy option
@@ -22,12 +22,10 @@ export default {
         showInspectElement: !isPackaged(),
       })
 
-      appContext?.emit?.('context-menu:initialized')
       return { initialized: true }
     }
     catch (error) {
       console.error('[service:context-menu] Failed to initialize context menu:', error)
-      appContext?.emit?.('context-menu:error', error)
       return { initialized: false, error }
     }
   },

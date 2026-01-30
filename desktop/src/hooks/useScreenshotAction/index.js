@@ -55,7 +55,7 @@ export function useScreenshotAction({ floating } = {}) {
 
     const successMessage = `${window.t(
       'device.control.capture.success.message.title',
-    )}: ${savePath}`
+    )}`
 
     adaptiveMessage(successMessage, { type: 'success', system: floating })
   }

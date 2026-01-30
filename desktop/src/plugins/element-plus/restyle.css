@@ -68,6 +68,12 @@
   }
 }
 
+.el-dialog.is-fullscreen {
+  .el-dialog__header {
+    @apply !-mt-2;
+  }
+}
+
 .el-segmented {
   &.el-segmented--parent {
     --el-border-radius-base: 6px;

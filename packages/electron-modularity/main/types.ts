@@ -3,11 +3,13 @@ import type { IStorage } from '../shared/interfaces'
 
 /**
  * Enhanced BrowserWindow with additional properties and methods
- * @template TExtensions - Additional properties/methods type
+ * This is now an interface that TemplateBrowserWindow implements
+ * @internal
  */
-export interface EnhancedBrowserWindow<TExtensions = object> extends BrowserWindow {
+export interface EnhancedBrowserWindow {
   /**
    * Access the raw Electron BrowserWindow instance
+   * All native BrowserWindow methods must be accessed via this property
    */
   readonly raw: BrowserWindow
 
@@ -20,29 +22,18 @@ export interface EnhancedBrowserWindow<TExtensions = object> extends BrowserWind
 
   /**
    * Internal window manager ID
+   * Set by window manager when creating the window
    * @internal
    */
-  __managerId?: string
+  managerId?: string
 
   /**
    * Internal instance ID
+   * Set by window manager when creating the window
    * @internal
    */
-  __instanceId?: string
-
-  /**
-   * Custom window identifier (dynamically set via loadPage)
-   */
-  customId?: string
+  instanceId?: string
 }
-
-/**
- * Enhanced BrowserWindow type with custom extensions
- * Business layer can use this to define their window types:
- * @example
- * type MyWindow = EnhancedBrowserWindow<{ customId: 'main' | 'control' }>
- */
-export type ExtendedBrowserWindow<T = object> = EnhancedBrowserWindow<T> & T
 
 /**
  * Main window resolver function type
@@ -391,9 +382,8 @@ export interface WindowMeta<TPayload = unknown> {
 /**
  * Window context passed to hooks
  * @template TPayload - Payload type
- * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowContext<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
+export interface WindowContext<TPayload = unknown> {
   /**
    * Window manager ID
    */
@@ -422,72 +412,80 @@ export interface WindowContext<TPayload = unknown, TWindow extends BrowserWindow
   /**
    * Window manager instance
    */
-  manager: WindowManager<TPayload, TWindow>
+  manager: WindowManager<TPayload>
 }
 
 /**
  * Window lifecycle hooks
+ * Business code receives native BrowserWindow instances
  * @template TPayload - Payload type
- * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowHooks<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
+export interface WindowHooks<TPayload = unknown> {
   /**
    * Called before window creation
    */
-  beforeCreate?: (context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  beforeCreate?: (context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called after window created
+   * @param win - Native BrowserWindow instance
    */
-  created?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  created?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is ready to show
+   * @param win - Native BrowserWindow instance
    */
-  ready?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  ready?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called before showing existing window
+   * @param win - Native BrowserWindow instance
    */
-  beforeShow?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  beforeShow?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is shown
+   * @param win - Native BrowserWindow instance
    */
-  shown?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  shown?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window is hidden
+   * @param win - Native BrowserWindow instance
    */
-  hidden?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  hidden?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window gains focus
+   * @param win - Native BrowserWindow instance
    */
-  focus?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  focus?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called when window loses focus
+   * @param win - Native BrowserWindow instance
    */
-  blur?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  blur?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called before window closes
+   * @param win - Native BrowserWindow instance
    */
-  beforeClose?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  beforeClose?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 
   /**
    * Called after window closed
+   * @param win - Native BrowserWindow instance
    */
-  closed?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
+  closed?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
 }
 
 /**
  * Window manager options
  * @template TPayload - Payload type
- * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowManagerOptions<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
+export interface WindowManagerOptions<TPayload = unknown> {
   /**
    * Parent app instance
    */
@@ -521,30 +519,32 @@ export interface WindowManagerOptions<TPayload = unknown, TWindow extends Browse
    *   height: context.payload.height || 600
    * })
    */
-  browserWindow?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload, TWindow>) => BrowserWindowConstructorOptions)
+  browserWindow?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload>) => BrowserWindowConstructorOptions)
 
   /**
-   * Custom window creation function
+   * Custom window creation function (for internal use)
+   * @internal
    */
-  create?: (context: WindowContext<TPayload, TWindow>) => TWindow
+  create?: (context: WindowContext<TPayload>) => any
 
   /**
-   * Custom window load function
+   * Custom window load function (for internal use)
+   * @internal
    */
-  load?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void
+  load?: (win: any, context: WindowContext<TPayload>) => void
 
   /**
    * Lifecycle hooks
    */
-  hooks?: WindowHooks<TPayload, TWindow>
+  hooks?: WindowHooks<TPayload>
 }
 
 /**
  * Window manager instance
+ * All methods return native BrowserWindow instances
  * @template TPayload - Payload type
- * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowManager<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
+export interface WindowManager<TPayload = unknown> {
   /**
    * Window manager ID
    */
@@ -558,14 +558,16 @@ export interface WindowManager<TPayload = unknown, TWindow extends BrowserWindow
   /**
    * Create a new window instance
    * @param payload - Window payload
+   * @returns Native BrowserWindow instance
    */
-  create(payload?: TPayload): Promise<TWindow | null>
+  create(payload?: TPayload): Promise<BrowserWindow | null>
 
   /**
    * Open a window (reuse existing if singleton)
    * @param payload - Window payload
+   * @returns Native BrowserWindow instance
    */
-  open(payload?: TPayload): Promise<TWindow | null>
+  open(payload?: TPayload): Promise<BrowserWindow | null>
 
   /**
    * Close a window
@@ -582,13 +584,15 @@ export interface WindowManager<TPayload = unknown, TWindow extends BrowserWindow
   /**
    * Get a window instance
    * @param instanceId - Instance ID (optional for singleton)
+   * @returns Native BrowserWindow instance
    */
-  get(instanceId?: string): TWindow | undefined
+  get(instanceId?: string): BrowserWindow | undefined
 
   /**
    * Get all window instances
+   * @returns Array of native BrowserWindow instances
    */
-  getAll(): TWindow[]
+  getAll(): BrowserWindow[]
 
   /**
    * Event emitter methods

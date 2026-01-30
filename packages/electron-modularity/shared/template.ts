@@ -15,9 +15,8 @@ const WINDOW_BOUNDS_KEY = 'common.bounds'
 /**
  * Create a BrowserWindow with standard template configuration
  *
- * @template TExtensions - Additional properties/methods type
  * @param options - Window options
- * @returns Proxied window instance with enhanced functionality
+ * @returns TemplateBrowserWindow instance with enhanced functionality
  *
  * @example
  * ```ts
@@ -29,13 +28,13 @@ const WINDOW_BOUNDS_KEY = 'common.bounds'
  *
  * win.loadPage('main')
  * win.raw.show() // Access raw BrowserWindow
- * console.log(win.__instanceId) // Type-safe access to internal properties
+ * win.raw.focus() // All BrowserWindow methods accessed via .raw
  * ```
  */
-export function createBrowserWindow<TExtensions = object>(
+export function createBrowserWindow(
   options: TemplateBrowserWindowOptions,
-): EnhancedBrowserWindow<TExtensions> {
-  return new TemplateBrowserWindow(options).createProxy() as EnhancedBrowserWindow<TExtensions>
+): TemplateBrowserWindow {
+  return new TemplateBrowserWindow(options)
 }
 
 /**
@@ -44,8 +43,9 @@ export function createBrowserWindow<TExtensions = object>(
  * - External link handling
  * - Platform-specific title bar configuration
  * - Convenient page loading
+ *
  */
-export class TemplateBrowserWindow {
+export class TemplateBrowserWindow implements EnhancedBrowserWindow {
   /**
    * Underlying BrowserWindow instance
    */
@@ -65,6 +65,16 @@ export class TemplateBrowserWindow {
    * Storage adapter for window state persistence
    */
   #storage: IStorage
+
+  /**
+   * manager ID
+   */
+  managerId?: string
+
+  /**
+   * instance ID
+   */
+  instanceId?: string
 
   /**
    * Create TemplateBrowserWindow instance
@@ -110,9 +120,8 @@ export class TemplateBrowserWindow {
    * @param query - Optional query parameters
    */
   loadPage(pagePath: string = 'main', query?: Record<string, any>) {
-    // Type-safe property assignment (will be in EnhancedBrowserWindow interface)
-    const win = this.win as any
-    win.customId = pagePath
+    // Bind customId to raw BrowserWindow instance
+    (this.win as any).customId = pagePath
 
     const loadPageFn = this.options.loadPage ?? builtInLoadPage
 
@@ -122,22 +131,6 @@ export class TemplateBrowserWindow {
       rendererDir: this.options.rendererDir,
       devRendererDir: this.options.devRendererDir,
     })
-  }
-
-  /**
-   * Create proxy to forward methods to underlying BrowserWindow
-   * The proxy will have type EnhancedBrowserWindow with all additional properties
-   */
-  createProxy(): EnhancedBrowserWindow {
-    return new Proxy(this, {
-      get(target, prop: string | symbol) {
-        if (prop in target) {
-          return getProxyValue(target, prop)
-        }
-
-        return getProxyValue(target.win, prop)
-      },
-    }) as unknown as EnhancedBrowserWindow
   }
 
   /**
@@ -244,17 +237,4 @@ function createDefaultWindowOptions(
     ...(persistedBounds as any),
     ...getTitleBarOptions(),
   }
-}
-
-/**
- * Get proxy value
- */
-function getProxyValue(target: any, prop: string | symbol) {
-  const value = target[prop]
-
-  if (typeof value === 'function') {
-    return value.bind(target)
-  }
-
-  return value
 }

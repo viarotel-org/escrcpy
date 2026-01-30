@@ -4,19 +4,19 @@ import type { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import { createContext } from 'unctx'
 import { nanoid } from 'nanoid'
 import type {
-  EnhancedBrowserWindow,
   WindowContext,
   WindowHooks,
   WindowManager,
   WindowManagerOptions,
   WindowMeta,
 } from './types'
+import type { TemplateBrowserWindow } from '../shared/template.js'
 
 /**
  * Window context - allows hooks to access window context via useWindowContext()
  * This is optional - hooks still receive context as parameter for backward compatibility
  */
-const windowContext = createContext<WindowContext<any, any>>({
+const windowContext = createContext<WindowContext<any>>({
   asyncContext: true,
   AsyncLocalStorage,
 })
@@ -26,7 +26,6 @@ const windowContext = createContext<WindowContext<any, any>>({
  * Can be used in window hooks instead of relying on the `context` parameter
  *
  * @template TPayload - Payload type
- * @template TWindow - Window type
  * @example
  * ```ts
  * hooks: {
@@ -39,44 +38,42 @@ const windowContext = createContext<WindowContext<any, any>>({
  * }
  * ```
  */
-export const useWindowContext = windowContext.use as <TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow>() => WindowContext<TPayload, TWindow>
+export const useWindowContext = windowContext.use as <TPayload = unknown>() => WindowContext<TPayload>
 
 /**
  * Create a window manager for handling window lifecycle
  *
  * @template TPayload - Window payload type
- * @template TWindow - Window type (defaults to BrowserWindow for backward compatibility)
  * @param name - Unique window manager identifier
  * @param options - Window manager options
  * @returns Window manager instance
  *
  * @example
  * ```ts
- * // Without custom window type (backward compatible)
+ * // Basic usage
  * const manager = createWindowManager('main', {
  *   app,
  *   singleton: true,
  * })
  *
- * // With custom window type
- * type MyWindow = EnhancedBrowserWindow<{ customId: string }>
- * const manager = createWindowManager<unknown, MyWindow>('control', {
+ * // With hooks receiving native BrowserWindow
+ * const manager = createWindowManager('control', {
  *   app,
  *   singleton: true,
  *   hooks: {
  *     created(win, ctx) {
- *       console.log(win.customId) // Type-safe!
- *       console.log(win.__instanceId) // Type-safe!
- *       win.loadPage('control') // Type-safe!
+ *       // win is native BrowserWindow
+ *       win.webContents.send('ready')
+ *       win.show()
  *     }
  *   }
  * })
  * ```
  */
-export function createWindowManager<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow>(
+export function createWindowManager<TPayload = unknown>(
   name: string,
-  options: WindowManagerOptions<TPayload, TWindow> = {},
-): WindowManager<TPayload, TWindow> {
+  options: WindowManagerOptions<TPayload> = {},
+): WindowManager<TPayload> {
   if (!name) {
     throw new Error('createWindowManager: name is required')
   }
@@ -91,13 +88,16 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
     hooks = {},
   } = options
 
+  // Internal: store TemplateBrowserWindow instances
+  const instances = new Map<string, TemplateBrowserWindow>()
+
   // Wrap hooks to auto-register main window
   const wrappedHooks = { ...hooks }
   if (mainWindow && app?.registerMainWindow) {
     const originalCreated = hooks.created
-    wrappedHooks.created = async (win: TWindow, context: WindowContext<TPayload, TWindow>) => {
+    wrappedHooks.created = async (win: BrowserWindow, context: WindowContext<TPayload>) => {
       // Auto-register as main window
-      app.registerMainWindow(win as any)
+      app.registerMainWindow(win)
       // Call original hook if exists
       if (originalCreated) {
         await originalCreated(win, context)
@@ -106,9 +106,8 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
   }
 
   const emitter = new EventEmitter()
-  const instances = new Map<string, TWindow>()
 
-  const manager: WindowManager<TPayload, TWindow> = {
+  const manager: WindowManager<TPayload> = {
     id: name,
     singleton,
     create: createWindow,
@@ -138,7 +137,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
 
   function resolveOptions(payload: TPayload, meta: WindowMeta<TPayload>): BrowserWindowConstructorOptions {
     const base: any = typeof browserWindow === 'function'
-      ? browserWindow({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload, TWindow>)
+      ? browserWindow({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload>)
       : { ...(browserWindow ?? {}) }
 
     // Auto-set main flag if mainWindow option is true
@@ -178,7 +177,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
     return base
   }
 
-  async function createWindow(rawPayload?: TPayload): Promise<TWindow | null> {
+  async function createWindow(rawPayload?: TPayload): Promise<BrowserWindow | null> {
     const meta = normalizePayload({
       ...(rawPayload as any),
       page: (rawPayload as any)?.page ?? manager.id,
@@ -186,7 +185,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
 
     const payload = meta.payload
     const options = resolveOptions(meta.payload, meta)
-    const context: WindowContext<TPayload, TWindow> = { id: name, app, payload: meta.payload, meta, options, manager }
+    const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options, manager }
 
     // Run in window context (allows hooks to use useWindowContext())
     return await windowContext.callAsync(context, async () => {
@@ -194,65 +193,67 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
       await runHook('beforeCreate', context)
       emitter.emit('before-create', context)
 
-      // Create window
-      const win = typeof create === 'function'
+      // Create window (internal TemplateBrowserWindow)
+      const internalWin = typeof create === 'function'
         ? create(context)
-        : (await import('../shared/template.js')).createBrowserWindow(options) as unknown as TWindow
+        : (await import('../shared/template.js')).createBrowserWindow(options)
 
-      if (!win) {
+      if (!internalWin) {
         return null
       }
 
-      // Set metadata (type-safe via EnhancedBrowserWindow)
+      // Set metadata on TemplateBrowserWindow instance
       const instanceId = meta.instanceId ?? `${name}:${nanoid(10)}`
-      const enhancedWin = win as unknown as EnhancedBrowserWindow
-      enhancedWin.__managerId = name
-      enhancedWin.__instanceId = instanceId
+      internalWin.managerId = name
+      internalWin.instanceId = instanceId
 
-      instances.set(instanceId, win)
-      bindWindowEvents(win, context)
+      instances.set(instanceId, internalWin)
+      bindWindowEvents(internalWin, context)
 
       // Load page
       if (typeof load === 'function') {
-        load(win, context)
+        load(internalWin, context)
       }
-      else if (meta.page && typeof enhancedWin?.loadPage === 'function') {
-        enhancedWin.loadPage(meta.page, meta.query)
+      else if (meta.page && typeof internalWin?.loadPage === 'function') {
+        internalWin.loadPage(meta.page, meta.query)
       }
 
-      // After create hooks
-      await runHook('created', win, context)
-      emitter.emit('created', win, context)
+      // After create hooks (pass raw BrowserWindow to business layer)
+      await runHook('created', internalWin.raw, context)
+      emitter.emit('created', internalWin.raw, context)
 
       // Show if needed
-      if (meta.show !== false && typeof win?.show === 'function') {
-        win.show()
+      if (meta.show !== false && typeof internalWin.raw?.show === 'function') {
+        internalWin.raw.show()
       }
 
-      return win
+      // Return raw BrowserWindow to business layer
+      return internalWin.raw
     })
   }
 
-  async function open(rawPayload?: TPayload): Promise<TWindow | null> {
+  async function open(rawPayload?: TPayload): Promise<BrowserWindow | null> {
     const meta = normalizePayload(rawPayload)
     const payload = meta.payload
 
-    const existing = meta.instanceId
-      ? get(meta.instanceId)
-      : (singleton ? get() : undefined)
+    // Internal: get TemplateBrowserWindow
+    const internalExisting = meta.instanceId
+      ? instances.get(meta.instanceId)
+      : (singleton ? instances.values().next().value : undefined)
 
-    if (existing && !existing.isDestroyed?.()) {
-      const context: WindowContext<TPayload, TWindow> = { id: name, app, payload: meta.payload, meta, options: {}, manager }
+    if (internalExisting && !internalExisting.raw.isDestroyed?.()) {
+      const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options: {}, manager }
 
       return await windowContext.callAsync(context, async () => {
-        await runHook('beforeShow', existing, context)
-        emitter.emit('before-show', existing)
-        existing.restore?.()
-        existing.show?.()
-        existing.focus?.()
-        await runHook('shown', existing, context)
-        emitter.emit('shown', existing)
-        return existing
+        await runHook('beforeShow', internalExisting.raw, context)
+        emitter.emit('before-show', internalExisting.raw)
+        internalExisting.raw.restore?.()
+        internalExisting.raw.show?.()
+        internalExisting.raw.focus?.()
+        await runHook('shown', internalExisting.raw, context)
+        emitter.emit('shown', internalExisting.raw)
+        // Return raw BrowserWindow
+        return internalExisting.raw
       })
     }
 
@@ -277,83 +278,90 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
     return true
   }
 
-  function get(instanceId?: string): TWindow | undefined {
+  function get(instanceId?: string): BrowserWindow | undefined {
+    let internalWin: TemplateBrowserWindow | undefined
+
     if (!instanceId && singleton) {
-      return instances.values().next().value
+      internalWin = instances.values().next().value
+    }
+    else if (instanceId) {
+      internalWin = instances.get(instanceId)
     }
 
-    if (instanceId) {
-      return instances.get(instanceId)
-    }
-
-    return undefined
+    // Return raw BrowserWindow
+    return internalWin?.raw
   }
 
-  function getAll(): TWindow[] {
-    return Array.from(instances.values())
+  function getAll(): BrowserWindow[] {
+    // Return array of raw BrowserWindow instances
+    return Array.from(instances.values()).map(win => win.raw)
   }
 
-  function resolveTarget(payload?: TPayload | { instanceId?: string }): TWindow | undefined {
+  function resolveTarget(payload?: TPayload | { instanceId?: string }): BrowserWindow | undefined {
+    let internalWin: TemplateBrowserWindow | undefined
+
     if (payload && typeof payload === 'object' && 'instanceId' in payload) {
-      return instances.get(payload.instanceId!)
+      internalWin = instances.get(payload.instanceId!)
     }
-
-    if (payload && typeof payload === 'object' && 'win' in payload) {
+    else if (payload && typeof payload === 'object' && 'win' in payload) {
+      // This case seems unusual, but keep for compatibility
       return (payload as any).win
     }
+    else if (!payload && singleton) {
+      internalWin = instances.values().next().value
+    }
 
-    return get()
+    return internalWin?.raw
   }
 
-  function bindWindowEvents(win: TWindow, context: WindowContext<TPayload, TWindow>) {
-    win.on?.('ready-to-show', () => {
+  function bindWindowEvents(internalWin: TemplateBrowserWindow, context: WindowContext<TPayload>) {
+    internalWin.raw.on?.('ready-to-show', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('ready', win, context)
-        emitter.emit('ready', win, context)
+        await runHook('ready', internalWin.raw, context)
+        emitter.emit('ready', internalWin.raw, context)
       })
     })
 
-    win.on?.('show', () => {
+    internalWin.raw.on?.('show', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('shown', win, context)
-        emitter.emit('shown', win, context)
+        await runHook('shown', internalWin.raw, context)
+        emitter.emit('shown', internalWin.raw, context)
       })
     })
 
-    win.on?.('hide', () => {
+    internalWin.raw.on?.('hide', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('hidden', win, context)
-        emitter.emit('hidden', win, context)
+        await runHook('hidden', internalWin.raw, context)
+        emitter.emit('hidden', internalWin.raw, context)
       })
     })
 
-    win.on?.('focus', () => {
+    internalWin.raw.on?.('focus', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('focus', win, context)
-        emitter.emit('focus', win, context)
+        await runHook('focus', internalWin.raw, context)
+        emitter.emit('focus', internalWin.raw, context)
       })
     })
 
-    win.on?.('blur', () => {
+    internalWin.raw.on?.('blur', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('blur', win, context)
-        emitter.emit('blur', win, context)
+        await runHook('blur', internalWin.raw, context)
+        emitter.emit('blur', internalWin.raw, context)
       })
     })
 
-    win.on?.('close', () => {
+    internalWin.raw.on?.('close', () => {
       windowContext.callAsync(context, async () => {
-        await runHook('beforeClose', win, context)
-        emitter.emit('before-close', win, context)
+        await runHook('beforeClose', internalWin.raw, context)
+        emitter.emit('before-close', internalWin.raw, context)
       })
     })
 
-    win.on?.('closed', () => {
-      const enhancedWin = win as unknown as EnhancedBrowserWindow
-      instances.delete(enhancedWin.__instanceId!)
+    internalWin.raw.on?.('closed', () => {
+      instances.delete(internalWin.instanceId!)
       windowContext.callAsync(context, async () => {
-        await runHook('closed', win, context)
-        emitter.emit('closed', win, context)
+        await runHook('closed', internalWin.raw, context)
+        emitter.emit('closed', internalWin.raw, context)
       })
     })
   }
@@ -362,7 +370,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
    * Run hook with backward compatibility (pass both win and context as parameters)
    * Also sets up window context for useWindowContext()
    */
-  async function runHook(hookName: keyof WindowHooks<TPayload, TWindow>, ...args: any[]) {
+  async function runHook(hookName: keyof WindowHooks<TPayload>, ...args: any[]) {
     const hook = wrappedHooks[hookName]
     if (typeof hook === 'function') {
       await (hook as any)(...args)

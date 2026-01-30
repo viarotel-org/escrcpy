@@ -16,15 +16,11 @@ export default {
     const manager = createWindowManager('main', {
       app,
       singleton: true,
-      windowOptions: {
-        main: true,
+      mainWindow: true, // Auto-register as main window and set browserWindow.main
+      browserWindow: {
         persistenceBounds: true,
       },
       hooks: {
-        created(win) {
-          // Register main window for easy access
-          app?.registerMainWindow?.(win)
-        },
         ready(win) {
           win.show?.()
         },

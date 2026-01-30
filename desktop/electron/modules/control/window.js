@@ -6,7 +6,7 @@ export default {
     createWindowManager('control', {
       app,
       singleton: true,
-      windowOptions: {
+      browserWindow: {
         frame: false,
         titleBarStyle: 'default',
         transparent: true,

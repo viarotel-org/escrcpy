@@ -496,9 +496,29 @@ export interface WindowManagerOptions<TPayload = unknown, TWindow extends Browse
   singleton?: boolean
 
   /**
-   * Window options (static or factory function)
+   * Mark this window as the main window
+   * When true, automatically:
+   * - Sets browserWindow.main = true (affects loadPage prefix)
+   * - Registers window via app.registerMainWindow() in created hook
+   * @default false
    */
-  windowOptions?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload, TWindow>) => BrowserWindowConstructorOptions)
+  mainWindow?: boolean
+
+  /**
+   * BrowserWindow configuration options (static or factory function)
+   * Can be a static config object or a factory function that receives window context
+   * @example
+   * // Static configuration
+   * browserWindow: { width: 800, height: 600 }
+   *
+   * @example
+   * // Dynamic configuration
+   * browserWindow: (context) => ({
+   *   width: context.payload.width || 800,
+   *   height: context.payload.height || 600
+   * })
+   */
+  browserWindow?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload, TWindow>) => BrowserWindowConstructorOptions)
 
   /**
    * Custom window creation function
@@ -597,7 +617,7 @@ export interface TemplateBrowserWindowOptions extends BrowserWindowConstructorOp
   /**
    * Whether this is the main window
    */
-  main?: boolean
+  mainWindow?: boolean
 
   /**
    * Whether to persist window bounds

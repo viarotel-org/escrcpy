@@ -6,7 +6,7 @@ export default {
     createWindowManager('explorer', {
       app,
       singleton: false,
-      windowOptions: {
+      browserWindow: {
         frame: true,
         titleBarStyle: 'default',
       },

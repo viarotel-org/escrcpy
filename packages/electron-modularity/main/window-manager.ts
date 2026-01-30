@@ -84,11 +84,26 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
   const {
     app,
     singleton = false,
-    windowOptions,
+    mainWindow = false,
+    browserWindow,
     create,
     load,
     hooks = {},
   } = options
+
+  // Wrap hooks to auto-register main window
+  const wrappedHooks = { ...hooks }
+  if (mainWindow && app?.registerMainWindow) {
+    const originalCreated = hooks.created
+    wrappedHooks.created = async (win: TWindow, context: WindowContext<TPayload, TWindow>) => {
+      // Auto-register as main window
+      app.registerMainWindow(win as any)
+      // Call original hook if exists
+      if (originalCreated) {
+        await originalCreated(win, context)
+      }
+    }
+  }
 
   const emitter = new EventEmitter()
   const instances = new Map<string, TWindow>()
@@ -122,9 +137,14 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
   return manager
 
   function resolveOptions(payload: TPayload, meta: WindowMeta<TPayload>): BrowserWindowConstructorOptions {
-    const base: any = typeof windowOptions === 'function'
-      ? windowOptions({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload, TWindow>)
-      : { ...(windowOptions ?? {}) }
+    const base: any = typeof browserWindow === 'function'
+      ? browserWindow({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload, TWindow>)
+      : { ...(browserWindow ?? {}) }
+
+    // Auto-set main flag if mainWindow option is true
+    if (mainWindow && base.mainWindow === undefined) {
+      base.mainWindow = true
+    }
 
     // Inherit from app config if not specified
     if (!base.preloadDir && app?.preloadDir) {
@@ -343,7 +363,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
    * Also sets up window context for useWindowContext()
    */
   async function runHook(hookName: keyof WindowHooks<TPayload, TWindow>, ...args: any[]) {
-    const hook = hooks[hookName]
+    const hook = wrappedHooks[hookName]
     if (typeof hook === 'function') {
       await (hook as any)(...args)
     }

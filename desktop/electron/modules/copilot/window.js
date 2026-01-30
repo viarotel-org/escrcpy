@@ -8,7 +8,7 @@ export default {
     createWindowManager('copilot', {
       app,
       singleton: false,
-      windowOptions: {
+      browserWindow: {
         persistenceBounds: true,
         width: browserWindowWidth,
         minWidth: browserWindowWidth,

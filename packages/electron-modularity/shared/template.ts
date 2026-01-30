@@ -114,24 +114,14 @@ export class TemplateBrowserWindow {
     const win = this.win as any
     win.customId = pagePath
 
-    const loadPageFn = this.options.loadPage
+    const loadPageFn = this.options.loadPage ?? builtInLoadPage
 
-    if (loadPageFn) {
-      loadPageFn(this.win, {
-        prefix: this.options.main ? '' : `${pagePath}/`,
-        query,
-        rendererDir: this.options.rendererDir,
-        devRendererDir: this.options.devRendererDir,
-      })
-    }
-    else {
-      builtInLoadPage(this.win, {
-        prefix: this.options.main ? '' : `${pagePath}/`,
-        query,
-        rendererDir: this.options.rendererDir,
-        devRendererDir: this.options.devRendererDir,
-      })
-    }
+    loadPageFn(this.win, {
+      prefix: this.options.mainWindow ? '' : `${pagePath}/`,
+      query,
+      rendererDir: this.options.rendererDir,
+      devRendererDir: this.options.devRendererDir,
+    })
   }
 
   /**

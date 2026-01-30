@@ -16,7 +16,7 @@
  * const mainWindow = createWindowManager('main', {
  *   app,
  *   singleton: true,
- *   windowOptions: {
+ *   browserWindow: {
  *     width: 1200,
  *     height: 800,
  *   },

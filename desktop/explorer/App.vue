@@ -167,11 +167,8 @@
 
           <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
             <template #default="{ row }">
-              <ExTooltipButton
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('device.control.file.manager.preview')"
+              <el-button
+                :title="$t('device.control.file.manager.preview')"
                 text
                 type="success"
                 icon="View"
@@ -180,11 +177,8 @@
                 @click.stop="handlePreview(row)"
               />
 
-              <ExTooltipButton
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('common.download')"
+              <el-button
+                :title="$t('common.download')"
                 text
                 type="primary"
                 icon="Download"
@@ -192,11 +186,8 @@
                 @click.stop="handleDownload(row)"
               />
 
-              <ExTooltipButton
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('device.control.file.manager.edit')"
+              <el-button
+                :title="$t('device.control.file.manager.edit')"
                 text
                 type="success"
                 icon="Edit"
@@ -204,11 +195,8 @@
                 @click.stop="handleEdit(row)"
               />
 
-              <ExTooltipButton
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('device.control.file.manager.move')"
+              <el-button
+                :title="$t('device.control.file.manager.move')"
                 text
                 type="info"
                 icon="Rank"
@@ -216,11 +204,8 @@
                 @click.stop="handleMoveItem(row)"
               />
 
-              <ExTooltipButton
-                effect="light"
-                placement="top"
-                :offset="2"
-                :content="$t('common.delete')"
+              <el-button
+                :title="$t('common.delete')"
                 text
                 type="danger"
                 icon="Delete"
@@ -503,7 +488,6 @@ async function handleDownload(row) {
     ElMessage.warning(window.t('device.control.file.manager.download.cancelled'))
   }
   else if (result.success) {
-    console.log('result', result)
     ElMessage.success(
       window.t('device.control.file.manager.download.success', {
         total: result.stats?.totalFiles || 0,

@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'node:path'
+import { getFileSize } from '../index.js'
 
 /**
  * ADB file/directory downloader
@@ -35,6 +36,8 @@ export class ADBDownloader {
     this.taskQueue = []
     // Failed task list
     this.failedTasks = []
+    // File progress tracking map (key: remotePath, value: downloadedBytes)
+    this.fileProgressMap = new Map()
   }
 
   /**
@@ -60,6 +63,18 @@ export class ADBDownloader {
     }
     this.taskQueue = []
     this.failedTasks = []
+    this.fileProgressMap.clear()
+  }
+
+  /**
+   * Get accurate file size using stat command
+   * @private
+   * @param {object} device - ADB device object
+   * @param {string} filePath - Remote file path
+   * @returns {Promise<number>} File size in bytes
+   */
+  async _getAccurateFileSize(device, filePath) {
+    return getFileSize(device, filePath)
   }
 
   /**
@@ -88,12 +103,15 @@ export class ADBDownloader {
         const relativePath = path.posix.relative(effectiveBasePath, fullRemotePath)
 
         if (entry.isFile()) {
+          // Get accurate file size using stat command
+          const accurateSize = await this._getAccurateFileSize(device, fullRemotePath)
+
           tasks.push({
             type: 'file',
             remotePath: fullRemotePath,
             relativePath,
             name: entry.name,
-            size: entry.size || 0,
+            size: accurateSize,
           })
 
           // Scan progress callback
@@ -159,7 +177,17 @@ export class ADBDownloader {
       const name = path.posix.basename(remotePath)
       const entries = await device.readdir(parentPath)
       const entry = entries.find(e => e.name === name)
-      return entry ? { size: entry.size || 0, isFile: entry.isFile() } : null
+
+      if (!entry) {
+        return null
+      }
+
+      // Get accurate file size for files
+      const accurateSize = entry.isFile()
+        ? await this._getAccurateFileSize(device, remotePath)
+        : 0
+
+      return { size: accurateSize, isFile: entry.isFile() }
     }
     catch {
       return null
@@ -286,7 +314,7 @@ export class ADBDownloader {
         // Continue with other files; do not abort the entire process
       }
 
-      // Update overall progress
+      // Update overall progress after each task completion
       this._updateProgress()
     }
   }
@@ -329,33 +357,47 @@ export class ADBDownloader {
    */
   async _downloadSingleFile(device, remotePath, localPath, fileSize) {
     return new Promise((resolve, reject) => {
+      // Initialize file progress tracking
+      this.fileProgressMap.set(remotePath, 0)
+      const fileStartBytes = this.stats.downloadedBytes
+
       device.pull(remotePath)
         .then((transfer) => {
           const writeStream = fs.createWriteStream(localPath)
 
-          let downloadedBytes = 0
-
           transfer.on('progress', (stats) => {
-            const delta = stats.bytesTransferred - downloadedBytes
-            downloadedBytes = stats.bytesTransferred
-            this.stats.downloadedBytes += delta
+            // Use absolute bytesTransferred value from ADB
+            const currentFileBytes = stats.bytesTransferred
+
+            // Update file progress tracking
+            this.fileProgressMap.set(remotePath, currentFileBytes)
+
+            // Update global downloadedBytes: remove old file progress, add new progress
+            this.stats.downloadedBytes = fileStartBytes + currentFileBytes
+
+            // Calculate percentages with upper bound protection
+            const filePercent = fileSize > 0
+              ? Math.min(100, Math.round((currentFileBytes / fileSize) * 100))
+              : 100
+
+            const totalPercent = this.stats.totalBytes > 0
+              ? Math.min(100, Math.round((this.stats.downloadedBytes / this.stats.totalBytes) * 100))
+              : 0
 
             this.options.onProgress?.({
               file: {
                 path: remotePath,
                 localPath,
                 size: fileSize,
-                downloaded: downloadedBytes,
-                percent: fileSize > 0 ? Math.round((downloadedBytes / fileSize) * 100) : 100,
+                downloaded: currentFileBytes,
+                percent: filePercent,
               },
               total: {
                 files: this.stats.totalFiles,
                 completedFiles: this.stats.completedFiles,
                 size: this.stats.totalBytes,
                 downloaded: this.stats.downloadedBytes,
-                percent: this.stats.totalBytes > 0
-                  ? Math.round((this.stats.downloadedBytes / this.stats.totalBytes) * 100)
-                  : 0,
+                percent: totalPercent,
                 elapsed: Date.now() - this.stats.startTime,
               },
             })
@@ -363,23 +405,34 @@ export class ADBDownloader {
 
           transfer.on('end', () => {
             writeStream.end()
+            // Ensure final progress is set to file size (handles edge cases)
+            this.fileProgressMap.set(remotePath, fileSize)
+            this.stats.downloadedBytes = fileStartBytes + fileSize
             resolve()
           })
 
           transfer.on('error', (err) => {
             writeStream.destroy()
-            // Clean up failed file
+            // Clean up failed file and reset progress
+            this.fileProgressMap.delete(remotePath)
+            this.stats.downloadedBytes = fileStartBytes
             fs.unlink(localPath).catch(() => {})
             reject(err)
           })
 
           writeStream.on('error', (err) => {
+            this.fileProgressMap.delete(remotePath)
+            this.stats.downloadedBytes = fileStartBytes
             reject(err)
           })
 
           transfer.pipe(writeStream)
         })
-        .catch(reject)
+        .catch((err) => {
+          this.fileProgressMap.delete(remotePath)
+          this.stats.downloadedBytes = fileStartBytes
+          reject(err)
+        })
     })
   }
 
@@ -391,6 +444,15 @@ export class ADBDownloader {
     const totalTasks = this.taskQueue.filter(t => t.type === 'file').length
     const completedTasks = this.stats.completedFiles + this.stats.failedFiles
 
+    // Calculate progress percentage with upper bound protection
+    const percentByCount = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100
+    const percentByBytes = this.stats.totalBytes > 0
+      ? Math.round((this.stats.downloadedBytes / this.stats.totalBytes) * 100)
+      : 0
+
+    // Use byte-based percentage as primary, with upper limit of 100%
+    const finalPercent = Math.min(100, percentByBytes)
+
     this.options.onProgress?.({
       file: null,
       total: {
@@ -399,7 +461,7 @@ export class ADBDownloader {
         failedFiles: this.stats.failedFiles,
         size: this.stats.totalBytes,
         downloaded: this.stats.downloadedBytes,
-        percent: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100,
+        percent: finalPercent,
         elapsed: Date.now() - this.stats.startTime,
       },
     })

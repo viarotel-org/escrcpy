@@ -2,8 +2,8 @@ import path from 'node:path'
 import dayjs from 'dayjs'
 import prettyBytes from 'pretty-bytes'
 import pLimit from 'p-limit'
-import { Adb } from '@devicefarmer/adbkit'
 import electronStore from '$electron/helpers/store/index.js'
+import { getFileSize } from '../index.js'
 
 /**
  * High-performance directory listing with file stats; supports large files
@@ -38,10 +38,7 @@ export async function readDirWithStat(device, dirPath, options = {}) {
           try {
             if (item.isFile()) {
               // Use a more reliable command to obtain file size
-              const output = await device.shell(`stat -c %s "${fullPath}"`)
-              const buffer = await Adb.util.readAll(output)
-              const sizeStr = buffer.toString().trim()
-              size = BigInt(sizeStr)
+              size = await getFileSize(device, fullPath, { asBigInt: true })
             }
           }
           catch (err) {

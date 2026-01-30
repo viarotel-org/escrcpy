@@ -60,13 +60,9 @@ mainApp.use(sandboxPlugin)
 mainApp.use(main)
 mainApp.use(lifecycle)
 
-mainApp.use(control)
-mainApp.use(copilot)
-mainApp.use(explorer)
-
-mainApp.use(clipboardPlugin)
 mainApp.use(themePlugin)
 mainApp.use(windowIPCPlugin)
+mainApp.use(clipboardPlugin)
 
 mainApp.use(edger)
 mainApp.use(listeners)
@@ -76,6 +72,10 @@ mainApp.use(contextMenu)
 mainApp.use(updater)
 mainApp.use(launch)
 mainApp.use(shortcuts)
+
+mainApp.use(control)
+mainApp.use(copilot)
+mainApp.use(explorer)
 
 app.whenReady().then(() => {
   mainApp.start()

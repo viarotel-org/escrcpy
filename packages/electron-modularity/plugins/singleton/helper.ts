@@ -128,10 +128,10 @@ export function ensureSingleInstance(options: SingleInstanceOptions = {}): boole
     // Listen for second instance launch
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       try {
-        // Get all windows
-        const windows = BrowserWindow.getAllWindows()
-
-        const mainWindow = windows.find((item: any) => item.customId === 'main') || null
+        // Note: mainWindow should be provided by the onShowWindow callback
+        // We no longer hardcode 'customId === main' here
+        // This makes the helper more generic and reusable
+        const mainWindow: BrowserWindow | null = null
 
         const showWindowNext = () => {
           if (mainWindow) {

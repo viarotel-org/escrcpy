@@ -62,31 +62,73 @@ export function loadPage(
 
 /**
  * Resolve the main window instance from app context
- * This function waits for the main window to be ready if it's not available yet
+ * This function supports multiple resolution strategies:
+ * 1. Use custom resolver if set via app.setMainWindowResolver()
+ * 2. Use registered main window via app.registerMainWindow()
+ * 3. Fall back to legacy behavior (inject 'modules:main' or wait for 'window:main:ready' event)
  *
  * @param appContext - Electron app instance
  * @returns Promise resolving to main window or undefined
  *
  * @example
  * ```ts
- * const mainWindow = await resolveMainWindow(app)
- * mainWindow?.webContents.send('update-available')
+ * // Recommended: Register main window in business layer
+ * const mainWindow = await manager.open()
+ * app.registerMainWindow(mainWindow)
+ * 
+ * // Then resolve anywhere
+ * const win = await resolveMainWindow(app)
+ * win?.webContents.send('update-available')
+ * ```
+ * 
+ * @example
+ * ```ts
+ * // Custom resolver for complex scenarios
+ * app.setMainWindowResolver(async (app) => {
+ *   const manager = app.getWindowManager('main')
+ *   return manager?.get()
+ * })
+ * 
+ * const win = await resolveMainWindow(app)
  * ```
  */
-export function resolveMainWindow(appContext?: ElectronApp): Promise<BrowserWindow | undefined> {
-  const injected = appContext?.inject?.('modules:main')
-
-  if (injected) {
-    return Promise.resolve(injected as BrowserWindow)
+export async function resolveMainWindow(appContext?: ElectronApp): Promise<BrowserWindow | undefined> {
+  if (!appContext) {
+    return undefined
   }
 
+  // Strategy 1: Use custom resolver (highest priority)
+  if (appContext._mainWindowResolver) {
+    return await appContext._mainWindowResolver(appContext)
+  }
+
+  // Strategy 2: Use registered main window
+  const registered = appContext.getMainWindow?.()
+  if (registered) {
+    return registered
+  }
+
+  // Strategy 3: Fall back to legacy DI/event-based resolution
+  // This maintains backward compatibility but is NOT recommended for new code
+  const injected = appContext.inject?.('modules:main')
+  if (injected) {
+    return injected as BrowserWindow
+  }
+
+  // Strategy 4: Wait for legacy event (backward compatibility)
   return new Promise((resolve) => {
-    if (!appContext?.once) {
+    if (!appContext.once) {
       resolve(undefined)
       return
     }
 
+    // Set a timeout to avoid infinite waiting
+    const timeout = setTimeout(() => {
+      resolve(undefined)
+    }, 10000) // 10 second timeout
+
     appContext.once('window:main:ready', (win: BrowserWindow) => {
+      clearTimeout(timeout)
       resolve(win)
     })
   })

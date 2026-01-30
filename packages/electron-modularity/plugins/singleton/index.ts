@@ -1,5 +1,5 @@
 import type { BrowserWindow } from 'electron'
-import type { ElectronApp, Plugin } from '../../main/types'
+import type { ElectronApp, MainWindowProvider, Plugin } from '../../main/types'
 import { ensureSingleInstance } from './helper'
 
 /**
@@ -43,8 +43,31 @@ export interface SingletonPluginOptions {
   silentMode?: boolean
 
   /**
-   * Custom window ID to find main window
-   * @default 'main'
+   * Custom main window provider function
+   * Use this to provide custom logic for resolving the main window
+   * @default Uses app.getMainWindow() if available, falls back to 'main' window manager
+   *
+   * @example
+   * ```ts
+   * // Using window manager
+   * app.use(singletonPlugin, {
+   *   mainWindowProvider: () => {
+   *     const manager = app.getWindowManager('control')
+   *     return manager?.get()
+   *   }
+   * })
+   *
+   * // Using dependency injection
+   * app.use(singletonPlugin, {
+   *   mainWindowProvider: () => app.inject('window:custom')
+   * })
+   * ```
+   */
+  mainWindowProvider?: MainWindowProvider
+
+  /**
+   * @deprecated Use `mainWindowProvider` instead
+   * This option will be removed in next major version
    */
   mainWindowId?: string
 }
@@ -65,7 +88,17 @@ export interface SingletonPluginOptions {
  *
  * // Must load execute-arguments plugin first
  * app.use(executeArgumentsPlugin)
+ *
+ * // Option 1: Use default behavior (app.getMainWindow())
  * app.use(singletonPlugin)
+ *
+ * // Option 2: Provide custom main window resolver
+ * app.use(singletonPlugin, {
+ *   mainWindowProvider: () => {
+ *     const manager = app.getWindowManager('main')
+ *     return manager?.get()
+ *   }
+ * })
  *
  * // Listen for singleton ready event
  * app.on('singleton:ready', () => {
@@ -94,12 +127,53 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
       autoStartChannel = 'auto-start-app',
       forceFocus = true,
       silentMode = false,
-      mainWindowId = 'main',
+      mainWindowProvider,
+      mainWindowId, // Deprecated, kept for backward compatibility
     } = options
 
     // Override plugin name if custom service name is provided
     if (serviceName) {
       singletonPlugin.name = serviceName
+    }
+
+    /**
+     * Default main window provider implementation
+     * Priority:
+     * 1. Custom mainWindowProvider option
+     * 2. app.getMainWindow() (recommended)
+     * 3. Legacy mainWindowId fallback
+     */
+    const resolveMainWindow = async (): Promise<BrowserWindow | null> => {
+      // Use custom provider if provided
+      if (mainWindowProvider) {
+        const result = mainWindowProvider()
+        return result instanceof Promise ? await result : result ?? null
+      }
+
+      // Use registered main window (recommended approach)
+      const registered = app?.getMainWindow?.()
+      if (registered) {
+        return registered
+      }
+
+      // Legacy fallback: try to get window from manager by ID
+      if (mainWindowId) {
+        const manager = app?.getWindowManager?.(mainWindowId)
+        if (manager) {
+          const win = manager.get?.()
+          // Handle both BrowserWindow and EnhancedBrowserWindow
+          return (win as any)?.raw ?? win ?? null
+        }
+      }
+
+      // Default fallback: try 'main' window manager for backward compatibility
+      const defaultManager = app?.getWindowManager?.('main')
+      if (defaultManager) {
+        const win = defaultManager.get?.()
+        return (win as any)?.raw ?? win ?? null
+      }
+
+      return null
     }
 
     function onAppStarted() {
@@ -116,21 +190,14 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
         /**
          * Called when a second instance tries to launch
          */
-        onShowWindow(existingMainWindow: BrowserWindow | null, commandLine: string[], next: () => void) {
+        async onShowWindow(existingMainWindow: BrowserWindow | null, commandLine: string[], next: () => void) {
           try {
             console.log('[plugin:singleton] Second instance detected, handling parameters')
 
-            // Store reference to main window if available
-            if (existingMainWindow) {
-              mainWindow = existingMainWindow
-            }
-            else {
-              // Try to get window from manager if not provided
-              const manager = app?.getWindowManager?.(mainWindowId)
-              if (manager) {
-                const win: any = manager.get?.() || null
-                mainWindow = win?.raw
-              }
+            // Resolve main window using configured strategy
+            let mainWindow = existingMainWindow
+            if (!mainWindow) {
+              mainWindow = await resolveMainWindow()
             }
 
             const executeArgsService = app?.inject?.('plugin:execute-arguments') as any

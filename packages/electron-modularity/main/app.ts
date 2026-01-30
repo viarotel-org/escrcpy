@@ -74,6 +74,10 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
   const plugins = new Map<string, PluginState>()
   const pending: Array<NormalizedPlugin> = []
 
+  // Internal main window reference
+  let mainWindow: BrowserWindow | undefined
+  let mainWindowResolver: ((app?: ElectronApp) => Promise<BrowserWindow | undefined>) | undefined
+
   // Use provided storage or create default instance
   const appStorage = storage || createDefaultStorage()
 
@@ -91,6 +95,25 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
     provides,
     windows: new Map(),
     pluginStates: plugins,
+    _mainWindow: undefined,
+    _mainWindowResolver: undefined,
+
+    registerMainWindow(win: BrowserWindow) {
+      mainWindow = win
+      this._mainWindow = win
+      return app
+    },
+
+    getMainWindow() {
+      return mainWindow
+    },
+
+    setMainWindowResolver(resolver) {
+      mainWindowResolver = resolver
+      this._mainWindowResolver = resolver
+      return app
+    },
+
     on: (event, handler) => {
       emitter.on(event, handler)
       return app

@@ -2,6 +2,61 @@ import type { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import type { IStorage } from '../shared/interfaces'
 
 /**
+ * Enhanced BrowserWindow with additional properties and methods
+ * @template TExtensions - Additional properties/methods type
+ */
+export interface EnhancedBrowserWindow<TExtensions = object> extends BrowserWindow {
+  /**
+   * Access the raw Electron BrowserWindow instance
+   */
+  readonly raw: BrowserWindow
+
+  /**
+   * Load a page by path with optional query parameters
+   * @param pagePath - Page path (e.g., 'main', 'settings')
+   * @param query - URL query parameters
+   */
+  loadPage(pagePath?: string, query?: Record<string, any>): void
+
+  /**
+   * Internal window manager ID
+   * @internal
+   */
+  __managerId?: string
+
+  /**
+   * Internal instance ID
+   * @internal
+   */
+  __instanceId?: string
+
+  /**
+   * Custom window identifier (dynamically set via loadPage)
+   */
+  customId?: string
+}
+
+/**
+ * Enhanced BrowserWindow type with custom extensions
+ * Business layer can use this to define their window types:
+ * @example
+ * type MyWindow = EnhancedBrowserWindow<{ customId: 'main' | 'control' }>
+ */
+export type ExtendedBrowserWindow<T = object> = EnhancedBrowserWindow<T> & T
+
+/**
+ * Main window resolver function type
+ * Business layer should provide implementation to resolve main window
+ */
+export type MainWindowResolver = (app?: ElectronApp) => Promise<BrowserWindow | undefined>
+
+/**
+ * Main window provider for plugins
+ * Plugins can accept this to get main window without hardcoding
+ */
+export type MainWindowProvider = () => BrowserWindow | undefined | Promise<BrowserWindow | undefined>
+
+/**
  * Plugin interface for Electron app
  * @template TApi - The API type returned by the plugin
  * @template TOptions - The options type accepted by the plugin
@@ -117,6 +172,51 @@ export interface ElectronApp {
    * Plugin states
    */
   pluginStates: Map<string, PluginState>
+
+  /**
+   * Internal main window reference (set via registerMainWindow)
+   * @internal
+   */
+  _mainWindow?: BrowserWindow
+
+  /**
+   * Custom main window resolver (set via setMainWindowResolver)
+   * @internal
+   */
+  _mainWindowResolver?: MainWindowResolver
+
+  /**
+   * Register the main window for easy access
+   * @param win - Main window instance
+   * @example
+   * ```ts
+   * const mainWindow = await manager.open()
+   * app.registerMainWindow(mainWindow)
+   * ```
+   */
+  registerMainWindow(win: BrowserWindow): this
+
+  /**
+   * Get the registered main window
+   * @returns Main window or undefined if not registered
+   * @example
+   * ```ts
+   * const mainWindow = app.getMainWindow()
+   * ```
+   */
+  getMainWindow(): BrowserWindow | undefined
+
+  /**
+   * Set a custom main window resolver
+   * @param resolver - Custom resolver function
+   * @example
+   * ```ts
+   * app.setMainWindowResolver(async (app) => {
+   *   return app.inject('modules:main') as BrowserWindow
+   * })
+   * ```
+   */
+  setMainWindowResolver(resolver: MainWindowResolver): this
 
   /**
    * Inject a service or value
@@ -288,8 +388,9 @@ export interface WindowMeta<TPayload = unknown> {
 /**
  * Window context passed to hooks
  * @template TPayload - Payload type
+ * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowContext<TPayload = unknown> {
+export interface WindowContext<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
   /**
    * Window manager ID
    */
@@ -318,70 +419,72 @@ export interface WindowContext<TPayload = unknown> {
   /**
    * Window manager instance
    */
-  manager: WindowManager<TPayload>
+  manager: WindowManager<TPayload, TWindow>
 }
 
 /**
  * Window lifecycle hooks
  * @template TPayload - Payload type
+ * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowHooks<TPayload = unknown> {
+export interface WindowHooks<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
   /**
    * Called before window creation
    */
-  beforeCreate?: (context: WindowContext<TPayload>) => void | Promise<void>
+  beforeCreate?: (context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called after window created
    */
-  created?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  created?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called when window is ready to show
    */
-  ready?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  ready?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called before showing existing window
    */
-  beforeShow?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  beforeShow?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called when window is shown
    */
-  shown?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  shown?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called when window is hidden
    */
-  hidden?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  hidden?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called when window gains focus
    */
-  focus?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  focus?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called when window loses focus
    */
-  blur?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  blur?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called before window closes
    */
-  beforeClose?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  beforeClose?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 
   /**
    * Called after window closed
    */
-  closed?: (win: BrowserWindow, context: WindowContext<TPayload>) => void | Promise<void>
+  closed?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void | Promise<void>
 }
 
 /**
  * Window manager options
  * @template TPayload - Payload type
+ * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowManagerOptions<TPayload = unknown> {
+export interface WindowManagerOptions<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
   /**
    * Parent app instance
    */
@@ -395,29 +498,30 @@ export interface WindowManagerOptions<TPayload = unknown> {
   /**
    * Window options (static or factory function)
    */
-  windowOptions?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload>) => BrowserWindowConstructorOptions)
+  windowOptions?: BrowserWindowConstructorOptions | ((context: WindowContext<TPayload, TWindow>) => BrowserWindowConstructorOptions)
 
   /**
    * Custom window creation function
    */
-  create?: (context: WindowContext<TPayload>) => BrowserWindow
+  create?: (context: WindowContext<TPayload, TWindow>) => TWindow
 
   /**
    * Custom window load function
    */
-  load?: (win: BrowserWindow, context: WindowContext<TPayload>) => void
+  load?: (win: TWindow, context: WindowContext<TPayload, TWindow>) => void
 
   /**
    * Lifecycle hooks
    */
-  hooks?: WindowHooks<TPayload>
+  hooks?: WindowHooks<TPayload, TWindow>
 }
 
 /**
  * Window manager instance
  * @template TPayload - Payload type
+ * @template TWindow - Window type (defaults to BrowserWindow for compatibility)
  */
-export interface WindowManager<TPayload = unknown> {
+export interface WindowManager<TPayload = unknown, TWindow extends BrowserWindow = BrowserWindow> {
   /**
    * Window manager ID
    */
@@ -432,13 +536,13 @@ export interface WindowManager<TPayload = unknown> {
    * Create a new window instance
    * @param payload - Window payload
    */
-  create(payload?: TPayload): Promise<BrowserWindow | null>
+  create(payload?: TPayload): Promise<TWindow | null>
 
   /**
    * Open a window (reuse existing if singleton)
    * @param payload - Window payload
    */
-  open(payload?: TPayload): Promise<BrowserWindow | null>
+  open(payload?: TPayload): Promise<TWindow | null>
 
   /**
    * Close a window
@@ -456,12 +560,12 @@ export interface WindowManager<TPayload = unknown> {
    * Get a window instance
    * @param instanceId - Instance ID (optional for singleton)
    */
-  get(instanceId?: string): BrowserWindow | undefined
+  get(instanceId?: string): TWindow | undefined
 
   /**
    * Get all window instances
    */
-  getAll(): BrowserWindow[]
+  getAll(): TWindow[]
 
   /**
    * Event emitter methods

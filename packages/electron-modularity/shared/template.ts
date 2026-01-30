@@ -4,7 +4,7 @@ import { debounce } from 'es-toolkit'
 import { loadPage as builtInLoadPage } from './helpers.js'
 import { createDefaultStorage } from './adapters/storage-adapter.js'
 import type { BrowserWindowConstructorOptions } from 'electron'
-import type { TemplateBrowserWindowOptions } from '../main/types'
+import type { EnhancedBrowserWindow, TemplateBrowserWindowOptions } from '../main/types'
 import type { IStorage } from './interfaces'
 
 /**
@@ -15,8 +15,9 @@ const WINDOW_BOUNDS_KEY = 'common.bounds'
 /**
  * Create a BrowserWindow with standard template configuration
  *
+ * @template TExtensions - Additional properties/methods type
  * @param options - Window options
- * @returns Proxied window instance
+ * @returns Proxied window instance with enhanced functionality
  *
  * @example
  * ```ts
@@ -27,11 +28,14 @@ const WINDOW_BOUNDS_KEY = 'common.bounds'
  * })
  *
  * win.loadPage('main')
- * win.show()
+ * win.raw.show() // Access raw BrowserWindow
+ * console.log(win.__instanceId) // Type-safe access to internal properties
  * ```
  */
-export function createBrowserWindow(options: TemplateBrowserWindowOptions) {
-  return new TemplateBrowserWindow(options).createProxy()
+export function createBrowserWindow<TExtensions = object>(
+  options: TemplateBrowserWindowOptions,
+): EnhancedBrowserWindow<TExtensions> {
+  return new TemplateBrowserWindow(options).createProxy() as EnhancedBrowserWindow<TExtensions>
 }
 
 /**
@@ -106,7 +110,9 @@ export class TemplateBrowserWindow {
    * @param query - Optional query parameters
    */
   loadPage(pagePath: string = 'main', query?: Record<string, any>) {
-    (this.win as any).customId = pagePath
+    // Type-safe property assignment (will be in EnhancedBrowserWindow interface)
+    const win = this.win as any
+    win.customId = pagePath
 
     const loadPageFn = this.options.loadPage
 
@@ -130,8 +136,9 @@ export class TemplateBrowserWindow {
 
   /**
    * Create proxy to forward methods to underlying BrowserWindow
+   * The proxy will have type EnhancedBrowserWindow with all additional properties
    */
-  createProxy() {
+  createProxy(): EnhancedBrowserWindow {
     return new Proxy(this, {
       get(target, prop: string | symbol) {
         if (prop in target) {
@@ -140,7 +147,7 @@ export class TemplateBrowserWindow {
 
         return getProxyValue(target.win, prop)
       },
-    }) as any as BrowserWindow
+    }) as unknown as EnhancedBrowserWindow
   }
 
   /**

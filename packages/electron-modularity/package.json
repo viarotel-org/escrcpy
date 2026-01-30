@@ -31,6 +31,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
+    "@escrcpy/electron-ipcx": "workspace:*",
     "electron-store": "^10.0.0",
     "es-toolkit": "^1.43.0",
     "nanoid": "^5.0.7",

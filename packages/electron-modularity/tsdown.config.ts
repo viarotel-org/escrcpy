@@ -11,5 +11,6 @@ export default defineConfig({
   external: [
     'electron',
     'electron-store',
+    '@escrcpy/electron-ipcx',
   ],
 })

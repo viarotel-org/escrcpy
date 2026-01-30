@@ -1,6 +1,7 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow } from 'electron'
 import type { IpcMainInvokeEvent } from 'electron'
 import type { ElectronApp, Plugin } from '../../main/types'
+import { ipcxMain } from '@escrcpy/electron-ipcx/main'
 
 /**
  * Window IPC plugin options
@@ -76,7 +77,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Window minimize handler
     if (minimize) {
       const channel = `${channelPrefix}-minimize`
-      ipcMain.handle(channel, (event: IpcMainInvokeEvent) => {
+      ipcxMain.handle(channel, (event: IpcMainInvokeEvent) => {
         const win = BrowserWindow.fromWebContents(event.sender)
         if (!win) {
           return false
@@ -90,7 +91,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Window maximize/unmaximize handler
     if (maximize) {
       const channel = `${channelPrefix}-maximize`
-      ipcMain.handle(channel, (event: IpcMainInvokeEvent) => {
+      ipcxMain.handle(channel, (event: IpcMainInvokeEvent) => {
         const win = BrowserWindow.fromWebContents(event.sender)
         if (!win) {
           return false
@@ -109,7 +110,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Window close handler
     if (close) {
       const channel = `${channelPrefix}-close`
-      ipcMain.handle(channel, (event: IpcMainInvokeEvent) => {
+      ipcxMain.handle(channel, (event: IpcMainInvokeEvent) => {
         const win = BrowserWindow.fromWebContents(event.sender)
         if (!win) {
           return false
@@ -123,7 +124,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Window is-maximized state tracker
     if (isMaximized) {
       const channel = `${channelPrefix}-is-maximized`
-      ipcMain.handle(channel, (event: IpcMainInvokeEvent, callback: (state: boolean) => void) => {
+      ipcxMain.handle(channel, (event: IpcMainInvokeEvent, callback: (state: boolean) => void) => {
         const win = BrowserWindow.fromWebContents(event.sender)
         if (!win) {
           return false
@@ -160,7 +161,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Open window by manager ID
     if (open) {
       const channel = `${channelPrefix}-open`
-      ipcMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, options?: unknown } = { id: '' }) => {
+      ipcxMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, options?: unknown } = { id: '' }) => {
         const { id, options: openOptions } = payload
         if (!id) {
           return false
@@ -174,7 +175,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Close window by ID
     if (closeById) {
       const channel = `${channelPrefix}-close-by-id`
-      ipcMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
+      ipcxMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
         const { id, instanceId } = payload
         if (!id) {
           return false
@@ -188,7 +189,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Destroy window by ID
     if (destroyById) {
       const channel = `${channelPrefix}-destroy-by-id`
-      ipcMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
+      ipcxMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
         const { id, instanceId } = payload
         if (!id) {
           return false
@@ -202,7 +203,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Focus window by ID
     if (focusById) {
       const channel = `${channelPrefix}-focus-by-id`
-      ipcMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
+      ipcxMain.handle(channel, (_event: IpcMainInvokeEvent, payload: { id: string, instanceId?: string } = { id: '' }) => {
         const { id, instanceId } = payload
         if (!id) {
           return false
@@ -222,7 +223,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
     // Cleanup function
     const cleanup = () => {
       // Remove all IPC handlers
-      channels.forEach(channel => ipcMain.removeHandler(channel))
+      channels.forEach(channel => ipcxMain.removeHandler(channel))
 
       // Cleanup window state listeners
       const states: BrowserWindow[] = []

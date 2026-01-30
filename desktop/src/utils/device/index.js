@@ -121,14 +121,14 @@ export async function selectAndSendFileToDevice(
   return successFiles
 }
 
-export function openFloatControl(deviceInfo) {
+export function openFloatControl(device) {
   const floatControl = window.electronStore.get('common.floatControl')
 
   if (!floatControl) {
     return false
   }
 
-  window.electron.window.open('control', { query: deviceInfo })
+  window.electron.window.open('control', { query: { ...device } })
   return true
 }
 

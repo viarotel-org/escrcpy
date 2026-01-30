@@ -59,13 +59,15 @@
 <script setup>
 import ControlBar from '$/components/control-bar/index.vue'
 
+const deviceStore = useDeviceStore()
+
 const { currentDevice, queryParams, locale } = useWindowStateSync({
-  onQueryMounted() {
-    currentDevice.value = { ...queryParams.value }
+  async onQueryMounted() {
+    await deviceStore.getList()
+    const findDevice = deviceStore.list.find(item => item.id === queryParams.value.id)
+    currentDevice.value = findDevice ?? queryParams.value
   },
 })
-
-const deviceStore = useDeviceStore()
 
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
@@ -97,8 +99,6 @@ onMounted(() => {
   window.electron.ipcRenderer.on('window-focus', (event, value) => {
     focusFlag.value = value
   })
-
-  deviceStore.getList()
 })
 </script>
 

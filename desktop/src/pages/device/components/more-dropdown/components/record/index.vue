@@ -138,7 +138,7 @@ export default {
     },
     async handleSuccess(savePath) {
       return this.$message.success(
-        `${this.$t('device.record.success.title')}: ${savePath}`,
+        `${this.$t('device.record.success.title')}`,
       )
     },
   },

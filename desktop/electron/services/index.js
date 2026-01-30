@@ -14,6 +14,8 @@ import shortcuts from './shortcuts/index.js'
 import tray from './tray/index.js'
 import updater from './updater/index.js'
 import launch from './launch/index.js'
+import lifecycle from './lifecycle/index.js'
+import edger from './edger/index.js'
 
 export default {
   name: 'services',
@@ -24,11 +26,13 @@ export default {
     app.use(clipboardPlugin)
 
     // Application-specific services
+    app.use(lifecycle)
     app.use(listeners)
     app.use(contextMenu)
     app.use(handles)
     app.use(updater)
     app.use(tray)
+    app.use(edger)
     app.use(themePlugin)
     app.use(shortcuts)
     app.use(launch)

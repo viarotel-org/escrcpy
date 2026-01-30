@@ -1,18 +1,17 @@
-import { BrowserWindow, app as electronApp } from 'electron'
+import { app as electronApp } from 'electron'
 import remote from '@electron/remote/main'
-import { Edger } from '$electron/helpers/edger/index.js'
 import { createWindowManager } from '@escrcpy/electron-modularity/main'
-import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
-import electronStore from '$electron/helpers/store/index.js'
 
 export default {
   name: 'module:main',
   apply(app) {
+    // Initialize @electron/remote once
     if (!app?.hasService?.('remote:initialized')) {
       remote.initialize()
       app?.provide?.('remote:initialized', true)
     }
 
+    // Create main window manager with configuration
     const manager = createWindowManager('main', {
       app,
       singleton: true,
@@ -21,94 +20,41 @@ export default {
         persistenceBounds: true,
       },
       hooks: {
+        created(win) {
+          const mainWindow = win?.raw
+
+          if (!mainWindow) {
+            console.error('[module:main] Failed to get browser window instance')
+            return
+          }
+
+          // Enable @electron/remote for main window
+          try {
+            remote.enable(mainWindow.webContents)
+          }
+          catch (error) {
+            console.warn('[module:main] remote enable failed:', error?.message || error)
+          }
+        },
         ready(win) {
+          // Show window when ready
           win.show?.()
+
+          // Emit lifecycle:ready event to trigger execute-arguments processing
+          app?.emit?.('lifecycle:ready')
         },
       },
     })
 
-    const openMainWindow = () => {
-      const win = manager.open({ show: false })
-      const mainWindow = win?.raw
-
-      if (!mainWindow) {
-        console.error('[module:main] Failed to create browser window')
-        return null
-      }
-
-      try {
-        remote.enable(mainWindow.webContents)
-      }
-      catch (error) {
-        console.warn('[window] remote enable failed:', error?.message || error)
-      }
-
-      try {
-        const executeArgsService = app?.inject?.('plugin:execute-arguments')
-        if (executeArgsService) {
-          const args = executeArgsService.getArguments?.()
-
-          if (args) {
-            mainWindow.webContents.send('execute-arguments-change', {
-              deviceId: args['device-id'],
-              appName: args['app-name'],
-              packageName: args['package-name'],
-            })
-          }
-        }
-      }
-      catch (error) {
-        console.warn('[window] Failed to send execute arguments:', error?.message || error)
-      }
-
-      mainWindow.on('minimize', () => {
-        globalEventEmitter.emit('tray:create')
-      })
-
-      if (electronStore.get('common.edgeHidden')) {
-        try {
-          new Edger(mainWindow)
-        }
-        catch (error) {
-          console.warn('[window] Edger initialization failed:', error?.message || error)
-        }
-      }
-
-      return mainWindow
-    }
-
+    // Open main window when singleton is ready
     app?.once?.('singleton:ready', async () => {
       try {
         await electronApp.whenReady()
-        openMainWindow()
+        manager.open({ show: false })
       }
       catch (error) {
-        console.error('[module:main] Error waiting for app ready:', error)
+        console.error('[module:main] Error opening main window:', error)
       }
-    })
-
-    electronApp.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        openMainWindow()
-        return
-      }
-
-      const win = manager.get?.()
-      const mainWindow = win?.raw
-
-      mainWindow?.show?.()
-      mainWindow?.focus?.()
-
-      if (process.platform === 'darwin') {
-        electronApp.dock.show()
-      }
-
-      globalEventEmitter.emit('tray:destroy')
-    })
-
-    electronApp.on('window-all-closed', () => {
-      electronApp.isQuiting = true
-      electronApp.quit()
     })
   },
 }

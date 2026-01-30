@@ -6,7 +6,6 @@ export default {
   name: 'module:copilot:window',
   apply(ctx) {
     createWindowManager('copilot', {
-      app: ctx,
       singleton: false,
       browserWindow: {
         persistenceBounds: true,

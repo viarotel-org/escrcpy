@@ -66,7 +66,7 @@ export const clipboardPlugin: Plugin<ClipboardPluginAPI, ClipboardPluginOptions>
   name: 'plugin:clipboard',
   priority: 'normal',
 
-  apply(electronApp: ElectronApp, options: ClipboardPluginOptions = {}) {
+  apply(ctx: ElectronApp, options: ClipboardPluginOptions = {}) {
     const {
       ipcPrefix = '',
       serviceName = '',

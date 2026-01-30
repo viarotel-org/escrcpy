@@ -70,7 +70,7 @@ export const themePlugin: Plugin<ThemePluginAPI, ThemePluginOptions> = {
   name: 'plugin:theme',
   priority: 'pre', // Load early
 
-  apply(electronApp: ElectronApp, options: ThemePluginOptions = {}) {
+  apply(ctx: ElectronApp, options: ThemePluginOptions = {}) {
     const {
       storagePrefix = 'common',
       persist = true,
@@ -114,14 +114,14 @@ export const themePlugin: Plugin<ThemePluginAPI, ThemePluginOptions> = {
     // Persistence logic
     let onUpdated: (() => void) | undefined
 
-    if (persist && electronApp.storage) {
+    if (persist && ctx.storage) {
       onUpdated = () => {
         try {
-          electronApp.storage?.set(`${storagePrefix}.theme`, appTheme.value())
-          electronApp.storage?.set(`${storagePrefix}.isDark`, appTheme.isDark())
+          ctx.storage?.set(`${storagePrefix}.theme`, appTheme.value())
+          ctx.storage?.set(`${storagePrefix}.isDark`, appTheme.isDark())
         }
         catch (error) {
-          electronApp.emit('plugin:error', error, { name: 'plugin:theme' })
+          ctx.emit('plugin:error', error, { name: 'plugin:theme' })
         }
       }
 

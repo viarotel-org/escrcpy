@@ -54,7 +54,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
   name: 'plugin:window-ipc',
   priority: 'normal',
 
-  apply(app: ElectronApp, options: WindowIPCPluginOptions = {}) {
+  apply(ctx: ElectronApp, options: WindowIPCPluginOptions = {}) {
     const {
       channelPrefix = 'window',
       handlers = {},
@@ -166,7 +166,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const win = app.openWindow(id, openOptions)
+        const win = ctx.openWindow(id, openOptions)
         return Boolean(win)
       })
       channels.push(channel)
@@ -180,7 +180,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = app.getWindowManager(id)
+        const manager = ctx.getWindowManager(id)
         return Boolean(manager?.close({ instanceId }))
       })
       channels.push(channel)
@@ -194,7 +194,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = app.getWindowManager(id)
+        const manager = ctx.getWindowManager(id)
         return Boolean(manager?.destroy({ instanceId }))
       })
       channels.push(channel)
@@ -208,7 +208,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = app.getWindowManager(id)
+        const manager = ctx.getWindowManager(id)
         const win = manager?.get(instanceId)
         if (!win || win.isDestroyed()) {
           return false

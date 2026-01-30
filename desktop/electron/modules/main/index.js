@@ -4,7 +4,6 @@ export default {
   name: 'module:main',
   apply(ctx) {
     createWindowManager('main', {
-      app: ctx,
       singleton: true,
       mainWindow: true,
       browserWindow: {

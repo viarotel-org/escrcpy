@@ -487,11 +487,6 @@ export interface WindowHooks<TPayload = unknown> {
  */
 export interface WindowManagerOptions<TPayload = unknown> {
   /**
-   * Parent app instance
-   */
-  app?: ElectronApp
-
-  /**
    * Whether to allow only one instance
    */
   singleton?: boolean

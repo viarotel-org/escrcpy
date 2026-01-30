@@ -97,7 +97,7 @@ export const sandboxPlugin: Plugin<SandboxConfigResult, SandboxPluginOptions> = 
   name: 'plugin:sandbox',
   priority: 'pre', // Load very early (before app ready)
 
-  apply(app: ElectronApp, options: SandboxPluginOptions = {}) {
+  apply(ctx: ElectronApp, options: SandboxPluginOptions = {}) {
     const {
       serviceName = '',
       configuredEventName = 'sandbox:configured',
@@ -114,12 +114,12 @@ export const sandboxPlugin: Plugin<SandboxConfigResult, SandboxPluginOptions> = 
 
     try {
       const result = manager.configureSandbox()
-      app?.emit?.(configuredEventName, result)
+      ctx?.emit?.(configuredEventName, result)
       return result
     }
     catch (error: any) {
       console.error('[plugin:sandbox] Failed to configure sandbox:', error)
-      app?.emit?.(errorEventName, error)
+      ctx?.emit?.(errorEventName, error)
       throw error
     }
   },

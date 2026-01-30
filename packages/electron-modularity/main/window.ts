@@ -11,6 +11,7 @@ import type {
   WindowMeta,
 } from './types'
 import type { TemplateBrowserWindow } from '../shared/template.js'
+import { useElectronApp } from './app.js'
 
 /**
  * Window context - allows hooks to access window context via useWindowContext()
@@ -79,7 +80,6 @@ export function createWindowManager<TPayload = unknown>(
   }
 
   const {
-    app,
     singleton = false,
     mainWindow = false,
     browserWindow,
@@ -87,6 +87,8 @@ export function createWindowManager<TPayload = unknown>(
     load,
     hooks = {},
   } = options
+
+  const app = useElectronApp()
 
   // Internal: store TemplateBrowserWindow instances
   const instances = new Map<string, TemplateBrowserWindow>()

@@ -4,7 +4,6 @@ export default {
   name: 'module:control:window',
   apply(ctx) {
     createWindowManager('control', {
-      app: ctx,
       singleton: true,
       browserWindow: {
         frame: false,

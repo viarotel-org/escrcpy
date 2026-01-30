@@ -207,12 +207,11 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       }
 
       pending.push(normalized as NormalizedPlugin)
-      flushPending()
-
       return app
     },
 
     start() {
+      flushPending()
       app.emit('app:started', app)
       return app
     },

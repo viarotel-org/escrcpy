@@ -56,27 +56,27 @@ const ctx = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
+ctx.use(sandboxPlugin)
+ctx.use(main)
+ctx.use(lifecycle)
+
+ctx.use(control)
+ctx.use(copilot)
+ctx.use(explorer)
+
+ctx.use(clipboardPlugin)
+ctx.use(themePlugin)
+ctx.use(windowIPCPlugin)
+
+ctx.use(edger)
+ctx.use(listeners)
+ctx.use(handles)
+ctx.use(tray)
+ctx.use(contextMenu)
+ctx.use(updater)
+ctx.use(launch)
+ctx.use(shortcuts)
+
 app.whenReady().then(() => {
-  ctx.use(sandboxPlugin)
-  ctx.use(main)
-  ctx.use(lifecycle)
-
-  ctx.use(control)
-  ctx.use(copilot)
-  ctx.use(explorer)
-
-  ctx.use(clipboardPlugin)
-  ctx.use(themePlugin)
-  ctx.use(windowIPCPlugin)
-
-  ctx.use(edger)
-  ctx.use(listeners)
-  ctx.use(handles)
-  ctx.use(tray)
-  ctx.use(contextMenu)
-  ctx.use(updater)
-  ctx.use(launch)
-  ctx.use(shortcuts)
-
   ctx.start()
 })

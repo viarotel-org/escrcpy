@@ -1,61 +1,91 @@
 import { app, BrowserWindow } from 'electron'
 
 /**
- * Utility to ensure the Electron app runs as a single instance
- * @typedef {Object} SingleInstanceOptions
- * @property {Function} [onSecondInstance] - Callback when a second instance is launched
- * @property {boolean} [enableSandbox=false] - Whether to enable sandbox mode
- * @property {Function} [onSuccess] - Callback after acquiring the singleton lock
- * @property {Function} [onShowWindow] - Callback when main window should be shown
- * @property {boolean} [forceFocus=true] - Whether to force-focus an existing window
- * @property {boolean} [silentMode=false] - Silent mode, suppress logs
- * @property {Function} [onError] - Error handler callback
+ * Options for single instance management
  */
+export interface SingleInstanceOptions {
+  /**
+   * Callback when a second instance is launched
+   */
+  onSecondInstance?: (event: Event, commandLine: string[], workingDirectory: string, mainWindow: BrowserWindow | null) => void
 
-/**
- * Callback type for a second instance launch
- * @callback OnSecondInstanceCallback
- * @param {Event} event - Electron event object
- * @param {string[]} commandLine - Command line arguments array
- * @param {string} workingDirectory - Working directory
- * @param {BrowserWindow|null} mainWindow - Main window instance, if available
- */
+  /**
+   * Whether to enable sandbox mode (skips single instance check)
+   * @default false
+   */
+  enableSandbox?: boolean
+
+  /**
+   * Callback after acquiring the singleton lock
+   */
+  onSuccess?: () => void
+
+  /**
+   * Callback when main window should be shown
+   * @param mainWindow - Main window instance
+   * @param commandLine - Command line arguments
+   * @param next - Call this to show and focus window
+   */
+  onShowWindow?: (mainWindow: BrowserWindow | null, commandLine: string[], next: () => void) => void
+
+  /**
+   * Whether to force-focus an existing window
+   * @default true
+   */
+  forceFocus?: boolean
+
+  /**
+   * Silent mode, suppress logs
+   * @default false
+   */
+  silentMode?: boolean
+
+  /**
+   * Error handler callback
+   */
+  onError?: (error: Error) => void
+}
 
 /**
  * Ensure the application runs as a single instance
- * @param {SingleInstanceOptions} options - Options
- * @returns {boolean} Whether the singleton lock was acquired
+ *
+ * @param options - Configuration options
+ * @returns Whether the singleton lock was acquired
  *
  * @example
+ * ```ts
  * // Basic usage
  * ensureSingleInstance({
- *     onSuccess: () => {
- *         app.whenReady().then(createWindow)
- *     }
- * });
+ *   onSuccess: () => {
+ *     app.whenReady().then(createWindow)
+ *   }
+ * })
+ * ```
  *
  * @example
+ * ```ts
  * // Advanced usage
  * ensureSingleInstance({
- *     onSecondInstance: (event, commandLine, workingDirectory, mainWindow) => {
- *         if (mainWindow) {
- *             mainWindow.webContents.send('new-instance-launched', commandLine);
- *         }
- *     },
- *     onSuccess: () => {
- *         console.log('Successfully acquired lock');
- *         createWindow();
- *     },
- *     onError: (error) => {
- *         console.error('Error in single instance check:', error);
- *     },
- *     forceFocus: true,
- *     silentMode: false
- * });
+ *   onSecondInstance: (event, commandLine, workingDirectory, mainWindow) => {
+ *     if (mainWindow) {
+ *       mainWindow.webContents.send('new-instance-launched', commandLine)
+ *     }
+ *   },
+ *   onSuccess: () => {
+ *     console.log('Successfully acquired lock')
+ *     createWindow()
+ *   },
+ *   onError: (error) => {
+ *     console.error('Error in single instance check:', error)
+ *   },
+ *   forceFocus: true,
+ *   silentMode: false
+ * })
+ * ```
  *
  * @throws {Error} If called outside an Electron environment
  */
-function ensureSingleInstance(options = {}) {
+export function ensureSingleInstance(options: SingleInstanceOptions = {}): boolean {
   // Destructure options and set defaults
   const {
     onSecondInstance,
@@ -101,7 +131,7 @@ function ensureSingleInstance(options = {}) {
         // Get all windows
         const windows = BrowserWindow.getAllWindows()
 
-        const mainWindow = windows.find(item => item.customId === 'main')
+        const mainWindow = windows.find((item: any) => item.customId === 'main') || null
 
         const showWindowNext = () => {
           if (mainWindow) {
@@ -123,9 +153,9 @@ function ensureSingleInstance(options = {}) {
         }
 
         // Invoke user-defined callback
-        onSecondInstance?.(event, commandLine, workingDirectory, mainWindow)
+        onSecondInstance?.(event as any, commandLine, workingDirectory, mainWindow)
       }
-      catch (error) {
+      catch (error: any) {
         !silentMode && console.error('Error handling second instance:', error)
         onError?.(error)
       }
@@ -135,7 +165,7 @@ function ensureSingleInstance(options = {}) {
     onSuccess?.()
     return true
   }
-  catch (error) {
+  catch (error: any) {
     !silentMode && console.error('Error in ensureSingleInstance:', error)
     onError?.(error)
     return false
@@ -144,22 +174,15 @@ function ensureSingleInstance(options = {}) {
 
 /**
  * Check if current process is the main application instance
- * @returns {boolean} Returns true when running as main instance
+ * @returns Returns true when running as main instance
  */
-function isMainInstance() {
+export function isMainInstance(): boolean {
   return app.requestSingleInstanceLock()
 }
 
 /**
  * Release the singleton lock to allow other instances to start
- * @returns {void}
  */
-function releaseSingleInstanceLock() {
+export function releaseSingleInstanceLock(): void {
   app.releaseSingleInstanceLock()
-}
-
-export {
-  ensureSingleInstance,
-  isMainInstance,
-  releaseSingleInstanceLock,
 }

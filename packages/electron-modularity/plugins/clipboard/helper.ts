@@ -7,10 +7,10 @@ import { Buffer } from 'node:buffer'
  * Copy a file to the system clipboard
  * Supports macOS, Windows, and Linux; can copy arbitrary file types
  *
- * @param {string} filePath - Path to the file to copy
- * @returns {Promise<boolean>} - Whether the operation succeeded
+ * @param filePath - Path to the file to copy
+ * @returns Whether the operation succeeded
  */
-export async function copyFileToClipboard(filePath) {
+export async function copyFileToClipboard(filePath: string): Promise<boolean> {
   try {
     // Check if the file exists
     if (!fs.existsSync(filePath)) {
@@ -43,7 +43,7 @@ export async function copyFileToClipboard(filePath) {
     console.log(`Successfully copied file to clipboard: ${filePath}`)
     return true
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to copy file to clipboard:', error.message)
     return false
   }
@@ -51,10 +51,10 @@ export async function copyFileToClipboard(filePath) {
 
 /**
  * Copy an image file to the clipboard (writes both image content and file path)
- * @param {string} absolutePath - Absolute path to the image file
- * @param {string} platform - Operating system platform
+ * @param absolutePath - Absolute path to the image file
+ * @param platform - Operating system platform
  */
-export async function copyImageFile(absolutePath, platform) {
+export async function copyImageFile(absolutePath: string, platform: string): Promise<void> {
   try {
     // Read file buffer and create a native image object
     const imageBuffer = fs.readFileSync(absolutePath)
@@ -68,7 +68,7 @@ export async function copyImageFile(absolutePath, platform) {
     clipboard.writeImage(image)
     console.log('Image content copied to clipboard')
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('Failed to copy image content, falling back to file path only:', error.message)
     // If image copy fails, fall back to copying the file path only
     await copyFilePath(absolutePath, platform)
@@ -77,10 +77,10 @@ export async function copyImageFile(absolutePath, platform) {
 
 /**
  * Copy file path to clipboard
- * @param {string} absolutePath - Absolute path to the file
- * @param {string} platform - Operating system platform
+ * @param absolutePath - Absolute path to the file
+ * @param platform - Operating system platform
  */
-export async function copyFilePath(absolutePath, platform) {
+export async function copyFilePath(absolutePath: string, platform: string): Promise<void> {
   switch (platform) {
     case 'darwin': // macOS
       await copyFilePathMacOS(absolutePath)
@@ -106,14 +106,14 @@ export async function copyFilePath(absolutePath, platform) {
  * macOS file path copy
  * Uses public.file-url and NSFilenamesPboardType (plist) formats with fallbacks
  */
-export async function copyFilePathMacOS(absolutePath) {
-// Validate path format
+export async function copyFilePathMacOS(absolutePath: string): Promise<void> {
+  // Validate path format
   if (!absolutePath) {
     throw new Error('Invalid macOS path format: null or undefined')
   }
 
   // Normalize path (resolve symlinks, etc.)
-  let normalizedPath
+  let normalizedPath: string
   try {
     normalizedPath = fs.realpathSync(absolutePath)
   }
@@ -163,14 +163,14 @@ export async function copyFilePathMacOS(absolutePath) {
  * Windows file path copy
  * Uses multiple formats for compatibility: FileNameW, CF_HDROP, etc.
  */
-export async function copyFilePathWindows(absolutePath) {
+export async function copyFilePathWindows(absolutePath: string): Promise<void> {
   // Validate path
   if (!absolutePath) {
     throw new Error('Invalid Windows path format: null or undefined')
   }
 
   // Normalize path
-  let normalizedPath
+  let normalizedPath: string
   try {
     normalizedPath = fs.realpathSync(absolutePath)
   }
@@ -233,14 +233,14 @@ export async function copyFilePathWindows(absolutePath) {
  * Copy file path to clipboard on Linux
  * Uses multiple formats for compatibility: text/uri-list, application/x-kde-cutselection, etc.
  */
-export async function copyFilePathLinux(absolutePath) {
+export async function copyFilePathLinux(absolutePath: string): Promise<void> {
   // Validate path format
   if (!absolutePath) {
     throw new Error('Invalid Linux path format: null or undefined')
   }
 
   // Normalize path (resolve symlinks etc.)
-  let normalizedPath
+  let normalizedPath: string
   try {
     normalizedPath = fs.realpathSync(absolutePath)
   }
@@ -302,10 +302,10 @@ export async function copyFilePathLinux(absolutePath) {
 
 /**
  * Create data for CF_HDROP format
- * @param {string} filePath - File path
- * @returns {Buffer} - Buffer in CF_HDROP format
+ * @param filePath - File path
+ * @returns Buffer in CF_HDROP format
  */
-export function createCFHDROPBuffer(filePath) {
+export function createCFHDROPBuffer(filePath: string): Buffer {
   // CF_HDROP structure:
   // DROPFILES structure (20 bytes) + file path list + double null terminator
 
@@ -328,10 +328,10 @@ export function createCFHDROPBuffer(filePath) {
 
 /**
  * XML escape function used for handling special characters in plist content
- * @param {string} str - String to escape
- * @returns {string} - Escaped string
+ * @param str - String to escape
+ * @returns Escaped string
  */
-export function escapeXml(str) {
+export function escapeXml(str: string): string {
   if (typeof str !== 'string') {
     return String(str)
   }
@@ -346,10 +346,10 @@ export function escapeXml(str) {
 
 /**
  * Check if the clipboard format is actually supported by the system
- * @param {string} format - Clipboard format
- * @returns {boolean} - Whether the format is supported by the system
+ * @param format - Clipboard format
+ * @returns Whether the format is supported by the system
  */
-export function verifyClipboardWrite(format) {
+export function verifyClipboardWrite(format: string): boolean {
   try {
     // Try reading the just-written data to verify
     const readData = clipboard.readBuffer(format)

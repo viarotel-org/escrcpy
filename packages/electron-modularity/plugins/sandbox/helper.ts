@@ -1,27 +1,49 @@
 import { app } from 'electron'
 
 /**
- * Sandbox configuration manager (simplified)
- * Defaults to disabling the Chromium sandbox on Linux to improve compatibility
+ * Sandbox configuration manager options
  */
-class SandboxManager {
+export interface SandboxManagerOptions {
+  /**
+   * Process module (for testing)
+   */
+  processModule?: NodeJS.Process
+}
+
+/**
+ * Sandbox configuration result
+ */
+export interface SandboxConfigResult {
+  disabled: boolean
+  reason: string
+  checks?: Record<string, any>
+  duration?: number
+  error?: boolean
+}
+
+/**
+ * Sandbox configuration manager
+ *
+ * Manages Chromium sandbox settings on Linux.
+ * Defaults to disabling the sandbox to improve compatibility.
+ */
+export class SandboxManager {
+  private process: NodeJS.Process
+
   /**
    * Constructor
-   * @param {Object} options - Configuration options
-   * @param {Object} options.processModule - Process module
+   * @param options - Configuration options
    */
-  constructor({
-    processModule = process,
-  } = {}) {
-    this.process = processModule
+  constructor(options: SandboxManagerOptions = {}) {
+    this.process = options.processModule || process
   }
 
   /**
    * Sanitize environment variable value
-   * @param {string|undefined} value - Environment variable value
-   * @returns {string} Sanitized value
+   * @param value - Environment variable value
+   * @returns Sanitized value
    */
-  _sanitizeEnvVar(value) {
+  private _sanitizeEnvVar(value: string | undefined): string {
     if (typeof value !== 'string') {
       return ''
     }
@@ -29,10 +51,10 @@ class SandboxManager {
   }
 
   /**
-   * Configure sandbox settings (simplified)
-   * @returns {Promise<{disabled: boolean, reason: string, checks?: Object}>} Configuration result
+   * Configure sandbox settings
+   * @returns Configuration result
    */
-  async configureSandbox() {
+  configureSandbox(): SandboxConfigResult {
     const startTime = Date.now()
 
     // Return early on non-Linux platforms
@@ -46,7 +68,7 @@ class SandboxManager {
 
     let shouldDisable = false
     let reason = ''
-    const checkResults = {}
+    const checkResults: Record<string, any> = {}
 
     try {
       // Check env vars for overrides
@@ -95,7 +117,7 @@ class SandboxManager {
         duration,
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Critical error during sandbox configuration:', error.message)
       // On critical errors, disable sandbox for safety
       app.commandLine.appendSwitch('no-sandbox')
@@ -110,5 +132,3 @@ class SandboxManager {
     }
   }
 }
-
-export const sandboxManager = new SandboxManager()

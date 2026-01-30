@@ -50,7 +50,7 @@ export default {
       }
 
       try {
-        const executeArgsService = app?.inject?.('service:execute-arguments')
+        const executeArgsService = app?.inject?.('plugin:execute-arguments')
         if (executeArgsService) {
           const args = executeArgsService.getArguments?.()
 

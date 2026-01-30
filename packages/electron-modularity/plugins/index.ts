@@ -8,17 +8,9 @@
 export { clipboardPlugin } from './clipboard/index.js'
 export type { ClipboardPluginAPI, ClipboardPluginOptions } from './clipboard/index.js'
 
-// Execute arguments plugin
-export { executeArgumentsPlugin } from './execute-arguments/index.js'
-export type { ExecuteArgumentsPluginAPI, ExecuteArgumentsPluginOptions } from './execute-arguments/index.js'
-
 // Sandbox plugin
 export { sandboxPlugin } from './sandbox/index.js'
 export type { SandboxConfigResult, SandboxPluginOptions } from './sandbox/index.js'
-
-// Singleton plugin
-export { singletonPlugin } from './singleton/index.js'
-export type { SingletonPluginOptions } from './singleton/index.js'
 
 // Theme plugin
 export { themePlugin } from './theme/index.js'

@@ -14,10 +14,34 @@ import './helpers/debugger/main.js'
 
 import { createElectronApp } from '@escrcpy/electron-modularity/main'
 
+import {
+  clipboardPlugin,
+  sandboxPlugin,
+  themePlugin,
+  windowIPCPlugin,
+} from '@escrcpy/electron-modularity/plugins'
+
 import { browserWindowHeight, browserWindowWidth, getLogoPath } from './configs/index.js'
 import { getAppBackgroundColor } from './helpers/index.js'
-import services from './services/index.js'
-import modules from './modules/index.js'
+
+import {
+  contextMenu,
+  edger,
+  handles,
+  launch,
+  lifecycle,
+  listeners,
+  shortcuts,
+  tray,
+  updater,
+} from './services/index.js'
+
+import {
+  control,
+  copilot,
+  explorer,
+  main,
+} from './modules/index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -31,7 +55,25 @@ const app = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
-app.use(services)
-app.use(modules)
+app.use(sandboxPlugin)
+app.use(main)
+app.use(lifecycle)
+
+app.use(control)
+app.use(copilot)
+app.use(explorer)
+
+app.use(clipboardPlugin)
+app.use(themePlugin)
+app.use(windowIPCPlugin)
+
+app.use(edger)
+app.use(listeners)
+app.use(handles)
+app.use(shortcuts)
+app.use(tray)
+app.use(updater)
+app.use(launch)
+app.use(contextMenu)
 
 app.start()

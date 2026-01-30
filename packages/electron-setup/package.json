@@ -1,9 +1,9 @@
 {
-  "name": "@escrcpy/electron-modularity",
+  "name": "@escrcpy/electron-setup",
   "type": "module",
   "version": "2.3.1",
   "private": true,
-  "description": "Modular Electron application architecture with unctx-powered plugin system",
+  "description": "A modular setup and runtime framework for Electron with plugins, window management, and contextual dependency injection.",
   "author": "viarotel",
   "homepage": "https://github.com/viarotel-org/escrcpy",
   "sideEffects": false,

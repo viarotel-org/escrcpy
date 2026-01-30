@@ -26,7 +26,7 @@
     "@electron/remote": "2.1.2",
     "@element-plus/icons-vue": "2.3.2",
     "@escrcpy/electron-ipcx": "workspace:*",
-    "@escrcpy/electron-modularity": "workspace:*",
+    "@escrcpy/electron-setup": "workspace:*",
     "@iconify/json": "2.2.427",
     "@intlify/unplugin-vue-i18n": "11.0.3",
     "@tdesign-vue-next/chat": "0.4.6",

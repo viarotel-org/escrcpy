@@ -3,13 +3,13 @@ import remote from '@electron/remote/main'
 import { optimizer } from '@electron-toolkit/utils'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { ensureSingleInstance, injectExecuteArguments, parseExecuteArguments, restoreAndFocusWindow } from './helpers/index.js'
-import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
+import { resolveMainWindow } from '@escrcpy/electron-setup/main'
 
 export default {
   name: 'service:lifecycle',
   deps: ['module:main'],
-  apply(ctx) {
-    const windowManager = ctx.getWindowManager('main')
+  apply(mainApp) {
+    const windowManager = mainApp.getWindowManager('main')
 
     ensureSingleInstance({
       onCreateWindow: openMainWindow,
@@ -19,10 +19,10 @@ export default {
     async function openMainWindow() {
       windowManager.open({ show: false })
 
-      const mainWindow = await resolveMainWindow(ctx)
+      const mainWindow = await resolveMainWindow(mainApp)
 
-      if (!ctx?.hasService?.('remote:initialized')) {
-        ctx?.provide?.('remote:initialized', true)
+      if (!mainApp?.hasService?.('remote:initialized')) {
+        mainApp?.provide?.('remote:initialized', true)
         remote.initialize()
         remote.enable(mainWindow.webContents)
       }
@@ -33,7 +33,7 @@ export default {
     }
 
     async function showMainWindow(commandLine) {
-      const mainWindow = await resolveMainWindow(ctx)
+      const mainWindow = await resolveMainWindow(mainApp)
 
       const args = runExecuteArguments(commandLine, mainWindow)
 
@@ -59,7 +59,7 @@ export default {
         return
       }
 
-      const mainWindow = await resolveMainWindow(ctx)
+      const mainWindow = await resolveMainWindow(mainApp)
 
       restoreAndFocusWindow(mainWindow)
     })

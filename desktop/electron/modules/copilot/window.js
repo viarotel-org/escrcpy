@@ -1,10 +1,10 @@
-import { createWindowManager } from '@escrcpy/electron-modularity/main'
+import { createWindowManager } from '@escrcpy/electron-setup/main'
 import { browserWindowWidth } from '$electron/configs/index.js'
 import { copilotService } from './helpers/index.js'
 
 export default {
   name: 'module:copilot:window',
-  apply(ctx) {
+  apply(mainApp) {
     createWindowManager('copilot', {
       singleton: false,
       browserWindow: {

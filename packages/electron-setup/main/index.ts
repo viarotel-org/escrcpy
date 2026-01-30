@@ -1,13 +1,13 @@
 /**
- * @escrcpy/electron-modularity
+ * @escrcpy/electron-setup
  *
- * Modular Electron application architecture with unctx-powered plugin system
+ * A modular setup and runtime framework for Electron with plugins, window management, and contextual dependency injection.
  *
  * @example
  * ```ts
- * import { createElectronApp, createWindowManager } from '@escrcpy/electron-modularity'
+ * import { createElectronApp, createWindowManager } from '@escrcpy/electron-setup'
  *
- * const ctx = createElectronApp({
+ * const mainApp = createElectronApp({
  *   name: 'MyApp',
  *   preloadDir: __dirname,
  *   rendererDir: path.join(__dirname, '../dist'),
@@ -21,14 +21,14 @@
  *     height: 800,
  *   },
  *   hooks: {
- *     created(win, ctx) {
+ *     created(win, mainApp) {
  *       console.log('Main window created', win.id)
  *     }
  *   }
  * })
  *
- * ctx.use(myPlugin)
- * ctx.start()
+ * mainApp.use(myPlugin)
+ * mainApp.start()
  * ```
  */
 

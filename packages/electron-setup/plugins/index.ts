@@ -1,5 +1,5 @@
 /**
- * Official plugins for @escrcpy/electron-modularity
+ * Official plugins for @escrcpy/electron-setup
  *
  * @packageDocumentation
  */

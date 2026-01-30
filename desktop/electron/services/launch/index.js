@@ -4,7 +4,7 @@ import { platform } from '@electron-toolkit/utils'
 
 export default {
   name: 'service:launch',
-  apply(ctx) {
+  apply() {
     electronStore.onDidChange('common.autoLaunch', async (flag) => {
       if (platform.isLinux) {
         const AutoLaunch = (await import('auto-launch')).default

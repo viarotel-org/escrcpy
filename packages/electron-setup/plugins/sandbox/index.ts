@@ -68,8 +68,8 @@ export interface SandboxConfigResult {
  *
  * @example
  * ```ts
- * import { createElectronApp } from '@escrcpy/electron-modularity'
- * import { sandboxPlugin } from '@escrcpy/electron-modularity/plugins'
+ * import { createElectronApp } from '@escrcpy/electron-setup'
+ * import { sandboxPlugin } from '@escrcpy/electron-setup/plugins'
  *
  * const app = createElectronApp({ ... })
  *
@@ -97,7 +97,7 @@ export const sandboxPlugin: Plugin<SandboxConfigResult, SandboxPluginOptions> = 
   name: 'plugin:sandbox',
   priority: 'pre', // Load very early (before app ready)
 
-  apply(ctx: ElectronApp, options: SandboxPluginOptions = {}) {
+  apply(mainApp: ElectronApp, options: SandboxPluginOptions = {}) {
     const {
       serviceName = '',
       configuredEventName = 'sandbox:configured',
@@ -114,12 +114,12 @@ export const sandboxPlugin: Plugin<SandboxConfigResult, SandboxPluginOptions> = 
 
     try {
       const result = manager.configureSandbox()
-      ctx?.emit?.(configuredEventName, result)
+      mainApp?.emit?.(configuredEventName, result)
       return result
     }
     catch (error: any) {
       console.error('[plugin:sandbox] Failed to configure sandbox:', error)
-      ctx?.emit?.(errorEventName, error)
+      mainApp?.emit?.(errorEventName, error)
       throw error
     }
   },

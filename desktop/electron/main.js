@@ -13,14 +13,14 @@ import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
 import { app } from 'electron'
-import { createElectronApp } from '@escrcpy/electron-modularity/main'
+import { createElectronApp } from '@escrcpy/electron-setup/main'
 
 import {
   clipboardPlugin,
   sandboxPlugin,
   themePlugin,
   windowIPCPlugin,
-} from '@escrcpy/electron-modularity/plugins'
+} from '@escrcpy/electron-setup/plugins'
 
 import { browserWindowHeight, browserWindowWidth, getLogoPath } from './configs/index.js'
 import { getAppBackgroundColor } from './helpers/index.js'
@@ -46,7 +46,7 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const ctx = createElectronApp({
+const mainApp = createElectronApp({
   preloadDir: __dirname,
   rendererDir: path.join(__dirname, '../dist'),
   devRendererDir: process.env.VITE_DEV_SERVER_URL,
@@ -56,27 +56,27 @@ const ctx = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
-ctx.use(sandboxPlugin)
-ctx.use(main)
-ctx.use(lifecycle)
+mainApp.use(sandboxPlugin)
+mainApp.use(main)
+mainApp.use(lifecycle)
 
-ctx.use(control)
-ctx.use(copilot)
-ctx.use(explorer)
+mainApp.use(control)
+mainApp.use(copilot)
+mainApp.use(explorer)
 
-ctx.use(clipboardPlugin)
-ctx.use(themePlugin)
-ctx.use(windowIPCPlugin)
+mainApp.use(clipboardPlugin)
+mainApp.use(themePlugin)
+mainApp.use(windowIPCPlugin)
 
-ctx.use(edger)
-ctx.use(listeners)
-ctx.use(handles)
-ctx.use(tray)
-ctx.use(contextMenu)
-ctx.use(updater)
-ctx.use(launch)
-ctx.use(shortcuts)
+mainApp.use(edger)
+mainApp.use(listeners)
+mainApp.use(handles)
+mainApp.use(tray)
+mainApp.use(contextMenu)
+mainApp.use(updater)
+mainApp.use(launch)
+mainApp.use(shortcuts)
 
 app.whenReady().then(() => {
-  ctx.start()
+  mainApp.start()
 })

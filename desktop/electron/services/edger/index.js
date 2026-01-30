@@ -1,15 +1,15 @@
 import electronStore from '$electron/helpers/store/index.js'
 import { Edger } from './helper.js'
-import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
+import { resolveMainWindow } from '@escrcpy/electron-setup/main'
 
 export default {
   name: 'service:edger',
-  async apply(ctx) {
+  async apply(mainApp) {
     if (!electronStore.get('common.edgeHidden')) {
       return false
     }
 
-    const mainWindow = await resolveMainWindow(ctx)
+    const mainWindow = await resolveMainWindow(mainApp)
 
     if (!mainWindow) {
       console.warn('[edger] main window not available')

@@ -4,12 +4,12 @@ import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
-import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
+import { resolveMainWindow } from '@escrcpy/electron-setup/main'
 
 export default {
   name: 'service:tray',
-  async apply(ctx) {
-    const mainWindow = await resolveMainWindow(ctx)
+  async apply(mainApp) {
+    const mainWindow = await resolveMainWindow(mainApp)
 
     if (!mainWindow) {
       console.warn('[tray] main window not available')

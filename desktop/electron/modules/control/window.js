@@ -1,8 +1,8 @@
-import { createWindowManager } from '@escrcpy/electron-modularity/main'
+import { createWindowManager } from '@escrcpy/electron-setup/main'
 
 export default {
   name: 'module:control:window',
-  apply(ctx) {
+  apply(mainApp) {
     createWindowManager('control', {
       singleton: true,
       browserWindow: {

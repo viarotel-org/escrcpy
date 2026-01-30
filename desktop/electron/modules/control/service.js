@@ -1,6 +1,6 @@
 export default {
   name: 'module:control:service',
-  apply(ctx) {
+  apply(mainApp) {
     return () => {
     }
   },

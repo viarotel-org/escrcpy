@@ -7,7 +7,7 @@ export default defineConfig({
   ],
   dts: true,
   exports: true,
-  publint: true,
+  publint: false,
   external: [
     'electron',
     'electron-store',

@@ -35,8 +35,8 @@ export interface WindowIPCPluginOptions {
  *
  * @example
  * ```ts
- * import { createElectronApp } from '@escrcpy/electron-modularity'
- * import { windowIPCPlugin } from '@escrcpy/electron-modularity/plugins'
+ * import { createElectronApp } from '@escrcpy/electron-setup'
+ * import { windowIPCPlugin } from '@escrcpy/electron-setup/plugins'
  *
  * const app = createElectronApp({ ... })
  *
@@ -54,7 +54,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
   name: 'plugin:window-ipc',
   priority: 'normal',
 
-  apply(ctx: ElectronApp, options: WindowIPCPluginOptions = {}) {
+  apply(mainApp: ElectronApp, options: WindowIPCPluginOptions = {}) {
     const {
       channelPrefix = 'window',
       handlers = {},
@@ -166,7 +166,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const win = ctx.openWindow(id, openOptions)
+        const win = mainApp.openWindow(id, openOptions)
         return Boolean(win)
       })
       channels.push(channel)
@@ -180,7 +180,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = ctx.getWindowManager(id)
+        const manager = mainApp.getWindowManager(id)
         return Boolean(manager?.close({ instanceId }))
       })
       channels.push(channel)
@@ -194,7 +194,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = ctx.getWindowManager(id)
+        const manager = mainApp.getWindowManager(id)
         return Boolean(manager?.destroy({ instanceId }))
       })
       channels.push(channel)
@@ -208,7 +208,7 @@ export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
         if (!id) {
           return false
         }
-        const manager = ctx.getWindowManager(id)
+        const manager = mainApp.getWindowManager(id)
         const win = manager?.get(instanceId)
         if (!win || win.isDestroyed()) {
           return false

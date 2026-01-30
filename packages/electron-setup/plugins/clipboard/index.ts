@@ -46,8 +46,8 @@ export interface ClipboardPluginAPI {
  *
  * @example
  * ```ts
- * import { createElectronApp } from '@escrcpy/electron-modularity'
- * import { clipboardPlugin } from '@escrcpy/electron-modularity/plugins'
+ * import { createElectronApp } from '@escrcpy/electron-setup'
+ * import { clipboardPlugin } from '@escrcpy/electron-setup/plugins'
  *
  * const app = createElectronApp({ ... })
  *
@@ -66,7 +66,7 @@ export const clipboardPlugin: Plugin<ClipboardPluginAPI, ClipboardPluginOptions>
   name: 'plugin:clipboard',
   priority: 'normal',
 
-  apply(ctx: ElectronApp, options: ClipboardPluginOptions = {}) {
+  apply(mainApp: ElectronApp, options: ClipboardPluginOptions = {}) {
     const {
       ipcPrefix = '',
       serviceName = '',

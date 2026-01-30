@@ -51,8 +51,8 @@ export interface ThemePluginAPI {
  *
  * @example
  * ```ts
- * import { createElectronApp } from '@escrcpy/electron-modularity'
- * import { themePlugin } from '@escrcpy/electron-modularity/plugins'
+ * import { createElectronApp } from '@escrcpy/electron-setup'
+ * import { themePlugin } from '@escrcpy/electron-setup/plugins'
  *
  * const app = createElectronApp({ ... })
  *
@@ -70,7 +70,7 @@ export const themePlugin: Plugin<ThemePluginAPI, ThemePluginOptions> = {
   name: 'plugin:theme',
   priority: 'pre', // Load early
 
-  apply(ctx: ElectronApp, options: ThemePluginOptions = {}) {
+  apply(mainApp: ElectronApp, options: ThemePluginOptions = {}) {
     const {
       storagePrefix = 'common',
       persist = true,
@@ -114,14 +114,14 @@ export const themePlugin: Plugin<ThemePluginAPI, ThemePluginOptions> = {
     // Persistence logic
     let onUpdated: (() => void) | undefined
 
-    if (persist && ctx.storage) {
+    if (persist && mainApp.storage) {
       onUpdated = () => {
         try {
-          ctx.storage?.set(`${storagePrefix}.theme`, appTheme.value())
-          ctx.storage?.set(`${storagePrefix}.isDark`, appTheme.isDark())
+          mainApp.storage?.set(`${storagePrefix}.theme`, appTheme.value())
+          mainApp.storage?.set(`${storagePrefix}.isDark`, appTheme.isDark())
         }
         catch (error) {
-          ctx.emit('plugin:error', error, { name: 'plugin:theme' })
+          mainApp.emit('plugin:error', error, { name: 'plugin:theme' })
         }
       }
 

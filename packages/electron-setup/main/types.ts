@@ -39,7 +39,7 @@ export interface EnhancedBrowserWindow {
  * Main window resolver function type
  * Business layer should provide implementation to resolve main window
  */
-export type MainWindowResolver = (app?: ElectronApp) => Promise<BrowserWindow | undefined>
+export type MainWindowResolver = (mainApp?: ElectronApp) => Promise<BrowserWindow | undefined>
 
 /**
  * Main window provider for plugins
@@ -80,11 +80,11 @@ export interface Plugin<TApi = unknown, TOptions = unknown> {
 
   /**
    * Plugin installation function
-   * @param ctx - The Electron ctx instance
+   * @param mainApp - The Electron mainApp instance
    * @param options - Plugin options
    * @returns Plugin API or cleanup function
    */
-  apply: (ctx: ElectronApp, options?: TOptions) => TApi
+  apply: (mainApp: ElectronApp, options?: TOptions) => TApi
 
   /**
    * Cleanup function called when app stops
@@ -192,7 +192,7 @@ export interface ElectronApp {
    * @example
    * ```ts
    * const mainWindow = await manager.open()
-   * ctx.registerMainWindow(mainWindow)
+   * mainApp.registerMainWindow(mainWindow)
    * ```
    */
   registerMainWindow(win: BrowserWindow): this
@@ -202,7 +202,7 @@ export interface ElectronApp {
    * @returns Main window or undefined if not registered
    * @example
    * ```ts
-   * const mainWindow = ctx.getMainWindow()
+   * const mainWindow = mainApp.getMainWindow()
    * ```
    */
   getMainWindow(): BrowserWindow | undefined
@@ -212,8 +212,8 @@ export interface ElectronApp {
    * @param resolver - Custom resolver function
    * @example
    * ```ts
-   * ctx.setMainWindowResolver(async (ctx) => {
-   *   return ctx.inject('modules:main') as BrowserWindow
+   * mainApp.setMainWindowResolver(async (mainApp) => {
+   *   return mainApp.inject('modules:main') as BrowserWindow
    * })
    * ```
    */
@@ -392,7 +392,7 @@ export interface WindowContext<TPayload = unknown> {
   /**
    * App instance
    */
-  ctx?: ElectronApp
+  mainApp?: ElectronApp
 
   /**
    * User payload
@@ -495,7 +495,7 @@ export interface WindowManagerOptions<TPayload = unknown> {
    * Mark this window as the main window
    * When true, automatically:
    * - Sets browserWindow.main = true (affects loadPage prefix)
-   * - Registers window via ctx.registerMainWindow() in created hook
+   * - Registers window via mainApp.registerMainWindow() in created hook
    * @default false
    */
   mainWindow?: boolean

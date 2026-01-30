@@ -11,7 +11,7 @@ import { adbKeyboardApkPath } from '$electron/configs/index.js'
 
 export default {
   name: 'module:copilot:service',
-  apply(ctx) {
+  apply(mainApp) {
     ipcxMain.handle(createChannel('execute'), async (_event, task, options = {}) => {
       return safeExecute('execute', () =>
         copilotService.execute(task, options),

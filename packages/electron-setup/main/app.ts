@@ -1,5 +1,4 @@
 import { EventEmitter } from 'node:events'
-import { AsyncLocalStorage } from 'node:async_hooks'
 import { createContext } from 'unctx'
 import type { BrowserWindow } from 'electron'
 import { createDefaultStorage } from '../shared/adapters/storage-adapter.js'
@@ -24,13 +23,10 @@ const PRIORITY_VALUES: Record<PluginPriority, number> = {
  * Application context - allows plugins to access app instance via useElectronApp()
  * This uses AsyncLocalStorage for proper async context propagation
  */
-const appContext = createContext<ElectronApp>({
-  asyncContext: true,
-  AsyncLocalStorage,
-})
+const appContext = createContext<ElectronApp>()
 
 /**
- * Get current electron app instance (unctx-enhanced API)
+ * Get current electron app instance
  * Can be used in plugins instead of relying on the `app` parameter
  *
  * @example
@@ -55,14 +51,14 @@ export const useElectronApp = appContext.use
  *
  * @example
  * ```ts
- * const ctx = createElectronApp({
+ * const mainApp = createElectronApp({
  *   name: 'MyApp',
  *   preloadDir: __dirname,
  *   rendererDir: path.join(__dirname, '../dist'),
  * })
  *
- * ctx.use(myPlugin)
- * ctx.start()
+ * mainApp.use(myPlugin)
+ * mainApp.start()
  * ```
  */
 export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
@@ -91,7 +87,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
   // Use provided storage or create default instance
   const appStorage = storage || createDefaultStorage()
 
-  const ctx: ElectronApp = {
+  const mainApp: ElectronApp = {
     name,
     preloadDir,
     rendererDir,
@@ -112,8 +108,8 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       mainWindow = win
       this._mainWindow = win
       // Emit event to notify waiters that main window is ready
-      ctx.emit('main-window:registered', win)
-      return ctx
+      mainApp.emit('main-window:registered', win)
+      return mainApp
     },
 
     getMainWindow() {
@@ -123,26 +119,26 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
     setMainWindowResolver(resolver) {
       mainWindowResolver = resolver
       this._mainWindowResolver = resolver
-      return ctx
+      return mainApp
     },
 
     on: (event, handler) => {
       emitter.on(event, handler)
-      return ctx
+      return mainApp
     },
     once: (event, handler) => {
       emitter.once(event, handler)
-      return ctx
+      return mainApp
     },
     off: (event, handler) => {
       emitter.off(event, handler)
-      return ctx
+      return mainApp
     },
     emit: emitter.emit.bind(emitter),
 
     provide(key, value) {
       provides.set(key, value)
-      return ctx
+      return mainApp
     },
 
     inject<T = unknown>(key: string, fallback?: T): T | undefined {
@@ -155,19 +151,19 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
     registerWindowManager(id, manager) {
       if (!id) {
-        return ctx
+        return mainApp
       }
 
-      ctx.windows.set(id, manager)
-      return ctx
+      mainApp.windows.set(id, manager)
+      return mainApp
     },
 
     getWindowManager(id) {
-      return ctx.windows.get(id)
+      return mainApp.windows.get(id)
     },
 
     openWindow<TPayload = unknown>(id: string, payload?: TPayload): BrowserWindow | null {
-      const manager = ctx.getWindowManager(id)
+      const manager = mainApp.getWindowManager(id)
       const win = manager?.open?.(payload as any)
       // Handle both sync and async window managers
       return win instanceof Promise ? null : (win ?? null)
@@ -177,17 +173,17 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       const normalized = normalizePlugin(plugin, options)
 
       if (!normalized) {
-        return ctx
+        return mainApp
       }
 
       // Check for duplicate plugin names
       if (normalized.name && plugins.has(normalized.name)) {
         console.warn(`⚠️ Plugin "${normalized.name}" already registered!`)
-        ctx.emit('plugin:warning', {
+        mainApp.emit('plugin:warning', {
           type: 'duplicate-plugin',
           pluginName: normalized.name,
         })
-        return ctx
+        return mainApp
       }
 
       // Check for priority conflicts
@@ -199,7 +195,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
           `⚠️ Plugin "${normalized.name}" has same name and priority as existing plugin. `
           + `This may cause unexpected behavior.`,
         )
-        ctx.emit('plugin:warning', {
+        mainApp.emit('plugin:warning', {
           type: 'priority-conflict',
           pluginName: normalized.name,
           priority: normalized.priority,
@@ -207,13 +203,13 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       }
 
       pending.push(normalized as NormalizedPlugin)
-      return ctx
+      return mainApp
     },
 
     start() {
       flushPending()
-      ctx.emit('app:started', ctx)
-      return ctx
+      mainApp.emit('app:started', mainApp)
+      return mainApp
     },
 
     async stop() {
@@ -224,26 +220,26 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
           await state.dispose?.()
         }
         catch (error) {
-          ctx.emit('plugin:error', error, state)
+          mainApp.emit('plugin:error', error, state)
         }
       }
-      ctx.emit('app:stopped', ctx)
-      return ctx
+      mainApp.emit('app:stopped', mainApp)
+      return mainApp
     },
   }
 
-  // Set app as singleton in unctx context
+  // Set app as singleton in context
   // This allows useElectronApp() to work anywhere
-  appContext.set(ctx)
+  appContext.set(mainApp)
 
   // Default error handler
-  ctx.on<{ error: unknown, state?: { name?: string } }>('plugin:error', (data: unknown) => {
+  mainApp.on<{ error: unknown, state?: { name?: string } }>('plugin:error', (data: unknown) => {
     const payload = data as { error: unknown, state?: { name?: string } }
     console.error(`❌ Plugin error${payload.state?.name ? ` in "${payload.state.name}"` : ''}:`, payload.error || data)
   })
 
   // Default warning handler
-  ctx.on('plugin:warning', (warning) => {
+  mainApp.on('plugin:warning', (warning) => {
     console.warn('⚠️ Plugin warning:', warning)
   })
 
@@ -260,7 +256,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       if (iterations > maxIterations) {
         const cyclePlugins = pending.map(p => p.name || '<anonymous>')
         console.error('❌ Circular dependency detected in plugins:', cyclePlugins)
-        ctx.emit('plugin:error', new Error(`Circular dependency detected: ${cyclePlugins.join(', ')}`))
+        mainApp.emit('plugin:error', new Error(`Circular dependency detected: ${cyclePlugins.join(', ')}`))
         break
       }
 
@@ -290,7 +286,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || [],
       }))
       console.warn('⚠️ Unresolved plugin dependencies:', unresolved)
-      ctx.emit('plugin:warning', {
+      mainApp.emit('plugin:warning', {
         type: 'unresolved-dependencies',
         plugins: unresolved,
       })
@@ -307,7 +303,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
   function installPlugin(item: NormalizedPlugin) {
     const { name: pluginName, apply, options: pluginOptions } = item
-    const api = typeof apply === 'function' ? apply(ctx, pluginOptions) : undefined
+    const api = typeof apply === 'function' ? apply(mainApp, pluginOptions) : undefined
 
     const dispose = resolveDispose(item, api)
 
@@ -322,14 +318,14 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
     if (pluginName) {
       plugins.set(pluginName, state)
-      ctx.provide(`plugin:${pluginName}`, api ?? true)
+      mainApp.provide(`plugin:${pluginName}`, api ?? true)
     }
 
-    ctx.emit('plugin:installed', state)
+    mainApp.emit('plugin:installed', state)
     return state
   }
 
-  return ctx
+  return mainApp
 }
 
 /**

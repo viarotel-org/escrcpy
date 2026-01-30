@@ -64,21 +64,21 @@ export function loadPage(
  * Resolve the main window from app context.
  *
  * Resolution order:
- * 1. Custom resolver (`ctx.setMainWindowResolver`)
- * 2. Registered main window (`ctx.registerMainWindow`)
+ * 1. Custom resolver (`mainApp.setMainWindowResolver`)
+ * 2. Registered main window (`mainApp.registerMainWindow`)
  * 3. Wait for `main-window:registered` event (with timeout)
  *
- * @param ctx - Electron app instance
+ * @param mainApp - Electron app instance
  * @param options - Resolve options
  * @param options.timeout - Max wait time in ms (default: 10000)
  * @param options.throwOnTimeout - Throw on timeout instead of returning undefined
  * @returns Promise resolving to the main window or undefined
  *
  * @example
- * const win = await resolveMainWindow(ctx, { timeout: 5000 })
+ * const win = await resolveMainWindow(mainApp, { timeout: 5000 })
  */
 export async function resolveMainWindow(
-  ctx?: ElectronApp,
+  mainApp?: ElectronApp,
   options: {
     timeout?: number
     throwOnTimeout?: boolean
@@ -86,17 +86,17 @@ export async function resolveMainWindow(
 ): Promise<BrowserWindow | undefined> {
   const { timeout = 10000, throwOnTimeout = false } = options
 
-  if (!ctx) {
+  if (!mainApp) {
     return undefined
   }
 
   // Strategy 1: Use custom resolver (highest priority)
-  if (ctx._mainWindowResolver) {
-    return await ctx._mainWindowResolver(ctx)
+  if (mainApp._mainWindowResolver) {
+    return await mainApp._mainWindowResolver(mainApp)
   }
 
   // Strategy 2: Check if main window is already registered
-  const existingWindow = ctx.getMainWindow?.()
+  const existingWindow = mainApp.getMainWindow?.()
   if (existingWindow) {
     return existingWindow
   }
@@ -108,8 +108,8 @@ export async function resolveMainWindow(
     // Set timeout to avoid infinite waiting
     const timeoutId = setTimeout(() => {
       // Clean up event listener
-      if (ctx.off) {
-        ctx.off('main-window:registered', onWindowRegistered)
+      if (mainApp.off) {
+        mainApp.off('main-window:registered', onWindowRegistered)
       }
 
       const message = `Timeout (${timeout}ms) waiting for main window registration`
@@ -122,8 +122,8 @@ export async function resolveMainWindow(
       }
     }, timeout)
 
-    if (ctx.once) {
-      ctx.once('main-window:registered', onWindowRegistered)
+    if (mainApp.once) {
+      mainApp.once('main-window:registered', onWindowRegistered)
     }
     else {
       clearTimeout(timeoutId)

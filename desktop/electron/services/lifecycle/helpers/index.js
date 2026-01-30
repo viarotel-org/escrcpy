@@ -29,6 +29,7 @@ export function restoreAndFocusWindow(
     electronApp.dock.show()
   }
 
+  // Emit tray destroy event to remove tray icon if any
   globalEventEmitter.emit('tray:destroy')
 
   return true

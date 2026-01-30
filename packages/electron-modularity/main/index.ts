@@ -35,7 +35,7 @@
 export { createDefaultStorage, ElectronStoreAdapter } from '../shared/adapters/storage-adapter'
 
 // Helpers
-export { loadPage, resolveMainWindow } from '../shared/helpers'
+export { loadPage, resolveMainWindow, restoreAndFocusWindow } from '../shared/helpers'
 
 // Storage interface and adapters
 export type { IStorage } from '../shared/interfaces'

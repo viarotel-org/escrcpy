@@ -68,7 +68,7 @@ export interface ThemePluginAPI {
  */
 export const themePlugin: Plugin<ThemePluginAPI, ThemePluginOptions> = {
   name: 'plugin:theme',
-  order: -20, // Load early
+  priority: 'pre', // Load early
 
   apply(electronApp: ElectronApp, options: ThemePluginOptions = {}) {
     const {

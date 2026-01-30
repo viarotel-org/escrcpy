@@ -1,6 +1,7 @@
 import type { BrowserWindow } from 'electron'
 import type { ElectronApp, MainWindowProvider, Plugin } from '../../main/types'
 import { ensureSingleInstance } from './helper'
+import { resolveMainWindow as resolveMainWindowHelper, restoreAndFocusWindow } from '../../shared/helpers'
 
 /**
  * Singleton plugin options
@@ -110,7 +111,7 @@ export interface SingletonPluginOptions {
  */
 export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
   name: 'plugin:singleton',
-  order: -50, // Load before most plugins
+  priority: 'pre', // Load before most plugins
   deps: ['plugin:execute-arguments'],
 
   apply(app: ElectronApp, options: SingletonPluginOptions = {}) {
@@ -129,22 +130,6 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
       singletonPlugin.name = serviceName
     }
 
-    /**
-     * Resolve main window using configured provider or registered window
-     */
-    const resolveMainWindow = async (): Promise<BrowserWindow | null> => {
-      // Use custom provider if provided
-      if (mainWindowProvider) {
-        const result = mainWindowProvider()
-        const resolved = result instanceof Promise ? await result : result
-        return resolved ?? null
-      }
-
-      // Use registered main window (recommended approach)
-      const registered = app?.getMainWindow?.()
-      return registered ?? null
-    }
-
     function onAppStarted() {
       ensureSingleInstance({
         /**
@@ -161,8 +146,15 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
           try {
             console.log('[plugin:singleton] Second instance detected, handling parameters')
 
-            // Resolve main window using configured strategy
-            const mainWindow = await resolveMainWindow()
+            // Resolve main window using shared helper (supports custom provider)
+            let mainWindow: BrowserWindow | null = null
+            if (mainWindowProvider) {
+              const result = mainWindowProvider()
+              mainWindow = (result instanceof Promise ? await result : result) ?? null
+            }
+            else {
+              mainWindow = (await resolveMainWindowHelper(app)) ?? null
+            }
 
             const executeArgsService = app?.inject?.('plugin:execute-arguments') as any
 
@@ -200,14 +192,14 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
               }
               else {
                 // No device ID provided, show and focus the window
-                restoreMainWindow(mainWindow, forceFocus)
+                restoreAndFocusWindow(mainWindow, { forceFocus })
               }
             }
             else {
               // Fallback if service is not available
               console.warn('[plugin:singleton] Execute arguments service not available')
               // Still show and focus window
-              restoreMainWindow(mainWindow, forceFocus)
+              restoreAndFocusWindow(mainWindow, { forceFocus })
             }
           }
           catch (error) {
@@ -228,22 +220,6 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
 
     app?.once?.('app:started', onAppStarted)
   },
-}
-
-function restoreMainWindow(win: BrowserWindow | null, forceFocus: boolean) {
-  if (!win) {
-    return false
-  }
-
-  if (win.isMinimized?.()) {
-    win.restore?.()
-  }
-  if (!win.isVisible?.()) {
-    win.show?.()
-  }
-  if (forceFocus) {
-    win.focus?.()
-  }
 }
 
 export default singletonPlugin

@@ -81,7 +81,7 @@ export interface ExecuteArgumentsPluginAPI {
  */
 export const executeArgumentsPlugin: Plugin<ExecuteArgumentsPluginAPI, ExecuteArgumentsPluginOptions> = {
   name: 'plugin:execute-arguments',
-  order: 0,
+  priority: 'normal',
 
   apply(electronApp: ElectronApp, options: ExecuteArgumentsPluginOptions = {}) {
     const {

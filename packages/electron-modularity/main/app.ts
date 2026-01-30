@@ -7,8 +7,18 @@ import type {
   ElectronApp,
   ElectronAppConfig,
   Plugin,
+  PluginPriority,
   PluginState,
 } from './types'
+
+/**
+ * Priority to numeric value mapping for sorting
+ */
+const PRIORITY_VALUES: Record<PluginPriority, number> = {
+  pre: -50,
+  normal: 0,
+  post: 50,
+}
 
 /**
  * Application context - allows plugins to access app instance via useElectronApp()
@@ -143,11 +153,6 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       return provides.has(key)
     },
 
-    // Backward compatibility alias
-    has(key: string): boolean {
-      return provides.has(key)
-    },
-
     registerWindowManager(id, manager) {
       if (!id) {
         return app
@@ -185,19 +190,19 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         return app
       }
 
-      // Check for order conflicts (same name and order)
+      // Check for priority conflicts
       const conflictingPlugin = pending.find(
-        p => p.name && p.name === normalized.name && p.order === normalized.order,
+        p => p.name && p.name === normalized.name && p.priority === normalized.priority,
       )
       if (conflictingPlugin) {
         console.warn(
-          `⚠️ Plugin "${normalized.name}" has same name and order as existing plugin. `
+          `⚠️ Plugin "${normalized.name}" has same name and priority as existing plugin. `
           + `This may cause unexpected behavior.`,
         )
         app.emit('plugin:warning', {
-          type: 'order-conflict',
+          type: 'priority-conflict',
           pluginName: normalized.name,
-          order: normalized.order,
+          priority: normalized.priority,
         })
       }
 
@@ -260,7 +265,11 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         break
       }
 
-      pending.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      pending.sort((a, b) => {
+        const aValue = PRIORITY_VALUES[a.priority ?? 'normal']
+        const bValue = PRIORITY_VALUES[b.priority ?? 'normal']
+        return aValue - bValue
+      })
 
       for (let i = 0; i < pending.length; i += 1) {
         const item = pending[i]
@@ -307,7 +316,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       name: pluginName || '',
       api,
       dispose,
-      order: item.order,
+      priority: item.priority,
       deps: item.deps,
       plugin: item.raw as Plugin,
     }
@@ -331,7 +340,7 @@ interface NormalizedPlugin<TApi = unknown, TOptions = unknown> {
   name: string
   apply: (app: ElectronApp, options?: TOptions) => TApi
   deps: string[]
-  order: number
+  priority: PluginPriority
   options?: TOptions
   raw: Plugin<TApi, TOptions> | ((app: ElectronApp, options?: TOptions) => TApi)
   dispose?: () => void | Promise<void>
@@ -350,7 +359,7 @@ function normalizePlugin<TApi = unknown, TOptions = unknown>(
       name: plugin.name || '',
       apply: plugin,
       deps: [],
-      order: 0,
+      priority: 'normal',
       options,
       raw: plugin,
     }
@@ -367,7 +376,7 @@ function normalizePlugin<TApi = unknown, TOptions = unknown>(
       name: plugin.name || '',
       apply,
       deps: plugin.deps || [],
-      order: plugin.order ?? 0,
+      priority: plugin.priority ?? 'normal',
       options: options ?? undefined,
       raw: plugin,
       dispose: plugin.dispose,

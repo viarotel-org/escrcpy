@@ -51,7 +51,7 @@ export interface WindowIPCPluginOptions {
  */
 export const windowIPCPlugin: Plugin<void, WindowIPCPluginOptions> = {
   name: 'plugin:window-ipc',
-  order: 0,
+  priority: 'normal',
 
   apply(app: ElectronApp, options: WindowIPCPluginOptions = {}) {
     const {

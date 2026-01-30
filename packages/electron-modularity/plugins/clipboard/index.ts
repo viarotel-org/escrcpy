@@ -64,7 +64,7 @@ export interface ClipboardPluginAPI {
  */
 export const clipboardPlugin: Plugin<ClipboardPluginAPI, ClipboardPluginOptions> = {
   name: 'plugin:clipboard',
-  order: 0,
+  priority: 'normal',
 
   apply(electronApp: ElectronApp, options: ClipboardPluginOptions = {}) {
     const {

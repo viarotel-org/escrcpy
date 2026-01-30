@@ -57,6 +57,12 @@ export type MainWindowResolver = (app?: ElectronApp) => Promise<BrowserWindow | 
 export type MainWindowProvider = () => BrowserWindow | undefined | Promise<BrowserWindow | undefined>
 
 /**
+ * Plugin priority levels
+ * Determines the load order of plugins
+ */
+export type PluginPriority = 'pre' | 'normal' | 'post'
+
+/**
  * Plugin interface for Electron app
  * @template TApi - The API type returned by the plugin
  * @template TOptions - The options type accepted by the plugin
@@ -68,9 +74,13 @@ export interface Plugin<TApi = unknown, TOptions = unknown> {
   name?: string
 
   /**
-   * Plugin load order (lower numbers load first)
+   * Plugin load priority
+   * - pre: Loads first (e.g., sandbox, singleton, theme)
+   * - normal: Default priority (e.g., clipboard, IPC handlers)
+   * - post: Loads last
+   * @default 'normal'
    */
-  order?: number
+  priority?: PluginPriority
 
   /**
    * Plugin dependencies (other plugin names)
@@ -99,7 +109,7 @@ export interface PluginState<TApi = unknown> {
   name: string
   api: TApi
   dispose?: () => void | Promise<void>
-  order: number
+  priority: PluginPriority
   deps: string[]
   plugin: Plugin<TApi>
 }
@@ -238,13 +248,6 @@ export interface ElectronApp {
    * @param key - Service key
    */
   hasService(key: string): boolean
-
-  /**
-   * Check if a service exists (backward compatibility alias)
-   * @param key - Service key
-   * @deprecated Use hasService instead
-   */
-  has(key: string): boolean
 
   /**
    * Register a plugin

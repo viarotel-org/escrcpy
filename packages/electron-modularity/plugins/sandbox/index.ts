@@ -89,13 +89,13 @@ export interface SandboxConfigResult {
  * - **Linux**: Sandbox disabled by default for compatibility
  * - **macOS/Windows**: No configuration needed (skipped)
  *
- * ## Load Order
- * This plugin uses `order: -100` to ensure it loads very early,
+ * ## Load Priority
+ * This plugin uses `priority: 'pre'` to ensure it loads very early,
  * before app.commandLine becomes immutable.
  */
 export const sandboxPlugin: Plugin<SandboxConfigResult, SandboxPluginOptions> = {
   name: 'plugin:sandbox',
-  order: -100, // Load very early (before app ready)
+  priority: 'pre', // Load very early (before app ready)
 
   apply(app: ElectronApp, options: SandboxPluginOptions = {}) {
     const {

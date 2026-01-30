@@ -8,7 +8,7 @@ import electronStore from '$electron/helpers/store/index.js'
 export default {
   name: 'module:main',
   apply(app) {
-    if (!app?.has?.('remote:initialized')) {
+    if (!app?.hasService?.('remote:initialized')) {
       remote.initialize()
       app?.provide?.('remote:initialized', true)
     }

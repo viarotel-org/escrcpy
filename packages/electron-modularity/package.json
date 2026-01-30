@@ -1,0 +1,36 @@
+{
+  "name": "@escrcpy/electron-modularity",
+  "type": "module",
+  "version": "2.3.1",
+  "private": true,
+  "description": "Modular Electron application architecture with unctx-powered plugin system",
+  "author": "viarotel",
+  "homepage": "https://github.com/viarotel-org/escrcpy",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/main/index.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "electron-store": "^10.0.0",
+    "es-toolkit": "^1.43.0",
+    "nanoid": "^5.0.7",
+    "unctx": "^2.4.0"
+  },
+  "devDependencies": {
+    "electron": "*",
+    "tsdown": "*",
+    "typescript": "*"
+  }
+}

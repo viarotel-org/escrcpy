@@ -2,7 +2,7 @@ import { BrowserWindow, app as electronApp } from 'electron'
 import remote from '@electron/remote/main'
 import electronStore from '$electron/helpers/store/index.js'
 import { Edger } from '$electron/helpers/edger/index.js'
-import { createWindowManager } from '$electron/helpers/core/index.js'
+import { createWindowManager } from '@escrcpy/electron-modularity'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 
 export default {

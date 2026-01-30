@@ -4,7 +4,7 @@ import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
-import { resolveMainWindow } from '$electron/helpers/core/index.js'
+import { resolveMainWindow } from '@escrcpy/electron-modularity'
 
 export default {
   name: 'service:tray',

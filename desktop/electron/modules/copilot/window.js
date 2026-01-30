@@ -1,4 +1,4 @@
-import { createWindowManager } from '$electron/helpers/core/index.js'
+import { createWindowManager } from '@escrcpy/electron-modularity'
 import { browserWindowWidth } from '$electron/configs/index.js'
 import { copilotService } from './helpers/index.js'
 

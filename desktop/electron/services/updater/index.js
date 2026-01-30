@@ -2,7 +2,7 @@ import { devPublishPath } from '$electron/configs/index.js'
 import { is } from '@electron-toolkit/utils'
 import { app as electronApp, ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
-import { resolveMainWindow } from '$electron/helpers/core/index.js'
+import { resolveMainWindow } from '@escrcpy/electron-modularity'
 
 const { autoUpdater } = electronUpdater
 

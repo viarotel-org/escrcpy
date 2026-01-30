@@ -26,7 +26,8 @@
         "packages/autoglm.js/package.json",
         "packages/autoglm.js-adb-keyboard/package.json",
         "packages/autoglm.js-shared/package.json",
-        "packages/electron-ipcx/package.json"
+        "packages/electron-ipcx/package.json",
+        "packages/electron-modularity/package.json"
       ]
     }
   }

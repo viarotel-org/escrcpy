@@ -12,8 +12,10 @@ import './helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
-import { createElectronApp } from './helpers/core/index.js'
+import { createElectronApp } from '@escrcpy/electron-modularity'
 
+import { browserWindowHeight, browserWindowWidth, getLogoPath } from './configs/index.js'
+import { getAppBackgroundColor } from './helpers/index.js'
 import services from './services/index.js'
 import modules from './modules/index.js'
 
@@ -22,6 +24,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = createElectronApp({
   preloadDir: __dirname,
   rendererDir: path.join(__dirname, '../dist'),
+  devRendererDir: process.env.VITE_DEV_SERVER_URL,
+  icon: getLogoPath(),
+  width: browserWindowWidth,
+  height: browserWindowHeight,
+  backgroundColor: getAppBackgroundColor(),
 })
 
 app.use(services)

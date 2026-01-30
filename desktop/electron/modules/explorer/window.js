@@ -1,4 +1,4 @@
-import { createWindowManager } from '$electron/helpers/core/index.js'
+import { createWindowManager } from '@escrcpy/electron-modularity'
 
 export default {
   name: 'module:explorer:window',

@@ -55,14 +55,14 @@ export const useElectronApp = appContext.use
  *
  * @example
  * ```ts
- * const app = createElectronApp({
+ * const ctx = createElectronApp({
  *   name: 'MyApp',
  *   preloadDir: __dirname,
  *   rendererDir: path.join(__dirname, '../dist'),
  * })
  *
- * app.use(myPlugin)
- * app.start()
+ * ctx.use(myPlugin)
+ * ctx.start()
  * ```
  */
 export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
@@ -91,7 +91,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
   // Use provided storage or create default instance
   const appStorage = storage || createDefaultStorage()
 
-  const app: ElectronApp = {
+  const ctx: ElectronApp = {
     name,
     preloadDir,
     rendererDir,
@@ -112,8 +112,8 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       mainWindow = win
       this._mainWindow = win
       // Emit event to notify waiters that main window is ready
-      app.emit('main-window:registered', win)
-      return app
+      ctx.emit('main-window:registered', win)
+      return ctx
     },
 
     getMainWindow() {
@@ -123,26 +123,26 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
     setMainWindowResolver(resolver) {
       mainWindowResolver = resolver
       this._mainWindowResolver = resolver
-      return app
+      return ctx
     },
 
     on: (event, handler) => {
       emitter.on(event, handler)
-      return app
+      return ctx
     },
     once: (event, handler) => {
       emitter.once(event, handler)
-      return app
+      return ctx
     },
     off: (event, handler) => {
       emitter.off(event, handler)
-      return app
+      return ctx
     },
     emit: emitter.emit.bind(emitter),
 
     provide(key, value) {
       provides.set(key, value)
-      return app
+      return ctx
     },
 
     inject<T = unknown>(key: string, fallback?: T): T | undefined {
@@ -155,19 +155,19 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
     registerWindowManager(id, manager) {
       if (!id) {
-        return app
+        return ctx
       }
 
-      app.windows.set(id, manager)
-      return app
+      ctx.windows.set(id, manager)
+      return ctx
     },
 
     getWindowManager(id) {
-      return app.windows.get(id)
+      return ctx.windows.get(id)
     },
 
     openWindow<TPayload = unknown>(id: string, payload?: TPayload): BrowserWindow | null {
-      const manager = app.getWindowManager(id)
+      const manager = ctx.getWindowManager(id)
       const win = manager?.open?.(payload as any)
       // Handle both sync and async window managers
       return win instanceof Promise ? null : (win ?? null)
@@ -177,17 +177,17 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       const normalized = normalizePlugin(plugin, options)
 
       if (!normalized) {
-        return app
+        return ctx
       }
 
       // Check for duplicate plugin names
       if (normalized.name && plugins.has(normalized.name)) {
         console.warn(`⚠️ Plugin "${normalized.name}" already registered!`)
-        app.emit('plugin:warning', {
+        ctx.emit('plugin:warning', {
           type: 'duplicate-plugin',
           pluginName: normalized.name,
         })
-        return app
+        return ctx
       }
 
       // Check for priority conflicts
@@ -199,7 +199,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
           `⚠️ Plugin "${normalized.name}" has same name and priority as existing plugin. `
           + `This may cause unexpected behavior.`,
         )
-        app.emit('plugin:warning', {
+        ctx.emit('plugin:warning', {
           type: 'priority-conflict',
           pluginName: normalized.name,
           priority: normalized.priority,
@@ -207,13 +207,13 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       }
 
       pending.push(normalized as NormalizedPlugin)
-      return app
+      return ctx
     },
 
     start() {
       flushPending()
-      app.emit('app:started', app)
-      return app
+      ctx.emit('app:started', ctx)
+      return ctx
     },
 
     async stop() {
@@ -224,26 +224,26 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
           await state.dispose?.()
         }
         catch (error) {
-          app.emit('plugin:error', error, state)
+          ctx.emit('plugin:error', error, state)
         }
       }
-      app.emit('app:stopped', app)
-      return app
+      ctx.emit('app:stopped', ctx)
+      return ctx
     },
   }
 
   // Set app as singleton in unctx context
   // This allows useElectronApp() to work anywhere
-  appContext.set(app)
+  appContext.set(ctx)
 
   // Default error handler
-  app.on<{ error: unknown, state?: { name?: string } }>('plugin:error', (data: unknown) => {
+  ctx.on<{ error: unknown, state?: { name?: string } }>('plugin:error', (data: unknown) => {
     const payload = data as { error: unknown, state?: { name?: string } }
     console.error(`❌ Plugin error${payload.state?.name ? ` in "${payload.state.name}"` : ''}:`, payload.error || data)
   })
 
   // Default warning handler
-  app.on('plugin:warning', (warning) => {
+  ctx.on('plugin:warning', (warning) => {
     console.warn('⚠️ Plugin warning:', warning)
   })
 
@@ -260,7 +260,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
       if (iterations > maxIterations) {
         const cyclePlugins = pending.map(p => p.name || '<anonymous>')
         console.error('❌ Circular dependency detected in plugins:', cyclePlugins)
-        app.emit('plugin:error', new Error(`Circular dependency detected: ${cyclePlugins.join(', ')}`))
+        ctx.emit('plugin:error', new Error(`Circular dependency detected: ${cyclePlugins.join(', ')}`))
         break
       }
 
@@ -290,7 +290,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
         missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || [],
       }))
       console.warn('⚠️ Unresolved plugin dependencies:', unresolved)
-      app.emit('plugin:warning', {
+      ctx.emit('plugin:warning', {
         type: 'unresolved-dependencies',
         plugins: unresolved,
       })
@@ -307,7 +307,7 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
   function installPlugin(item: NormalizedPlugin) {
     const { name: pluginName, apply, options: pluginOptions } = item
-    const api = typeof apply === 'function' ? apply(app, pluginOptions) : undefined
+    const api = typeof apply === 'function' ? apply(ctx, pluginOptions) : undefined
 
     const dispose = resolveDispose(item, api)
 
@@ -322,14 +322,14 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
 
     if (pluginName) {
       plugins.set(pluginName, state)
-      app.provide(`plugin:${pluginName}`, api ?? true)
+      ctx.provide(`plugin:${pluginName}`, api ?? true)
     }
 
-    app.emit('plugin:installed', state)
+    ctx.emit('plugin:installed', state)
     return state
   }
 
-  return app
+  return ctx
 }
 
 /**

@@ -80,11 +80,11 @@ export interface Plugin<TApi = unknown, TOptions = unknown> {
 
   /**
    * Plugin installation function
-   * @param app - The Electron app instance
+   * @param ctx - The Electron ctx instance
    * @param options - Plugin options
    * @returns Plugin API or cleanup function
    */
-  apply: (app: ElectronApp, options?: TOptions) => TApi
+  apply: (ctx: ElectronApp, options?: TOptions) => TApi
 
   /**
    * Cleanup function called when app stops
@@ -192,7 +192,7 @@ export interface ElectronApp {
    * @example
    * ```ts
    * const mainWindow = await manager.open()
-   * app.registerMainWindow(mainWindow)
+   * ctx.registerMainWindow(mainWindow)
    * ```
    */
   registerMainWindow(win: BrowserWindow): this
@@ -202,7 +202,7 @@ export interface ElectronApp {
    * @returns Main window or undefined if not registered
    * @example
    * ```ts
-   * const mainWindow = app.getMainWindow()
+   * const mainWindow = ctx.getMainWindow()
    * ```
    */
   getMainWindow(): BrowserWindow | undefined
@@ -212,8 +212,8 @@ export interface ElectronApp {
    * @param resolver - Custom resolver function
    * @example
    * ```ts
-   * app.setMainWindowResolver(async (app) => {
-   *   return app.inject('modules:main') as BrowserWindow
+   * ctx.setMainWindowResolver(async (ctx) => {
+   *   return ctx.inject('modules:main') as BrowserWindow
    * })
    * ```
    */
@@ -392,7 +392,7 @@ export interface WindowContext<TPayload = unknown> {
   /**
    * App instance
    */
-  app?: ElectronApp
+  ctx?: ElectronApp
 
   /**
    * User payload
@@ -495,7 +495,7 @@ export interface WindowManagerOptions<TPayload = unknown> {
    * Mark this window as the main window
    * When true, automatically:
    * - Sets browserWindow.main = true (affects loadPage prefix)
-   * - Registers window via app.registerMainWindow() in created hook
+   * - Registers window via ctx.registerMainWindow() in created hook
    * @default false
    */
   mainWindow?: boolean

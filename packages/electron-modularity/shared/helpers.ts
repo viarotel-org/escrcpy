@@ -61,57 +61,24 @@ export function loadPage(
 }
 
 /**
- * Resolve the main window instance from app context
+ * Resolve the main window from app context.
  *
- * This function handles timing issues by:
- * - Returning immediately if window is already registered
- * - Waiting for window registration if not yet available (with timeout)
+ * Resolution order:
+ * 1. Custom resolver (`ctx.setMainWindowResolver`)
+ * 2. Registered main window (`ctx.registerMainWindow`)
+ * 3. Wait for `main-window:registered` event (with timeout)
  *
- * Resolution strategies:
- * 1. Custom resolver set via `app.setMainWindowResolver()` (highest priority)
- * 2. Registered main window via `app.registerMainWindow()` (recommended)
- * 3. Wait for 'main-window:registered' event if window not yet created (auto-fallback)
- *
- * @param appContext - Electron app instance
- * @param options - Resolution options
- * @param options.timeout - Maximum wait time in milliseconds (default: 10000)
- * @param options.throwOnTimeout - Throw error on timeout instead of returning undefined (default: false)
- * @returns Promise resolving to main window or undefined
+ * @param ctx - Electron app instance
+ * @param options - Resolve options
+ * @param options.timeout - Max wait time in ms (default: 10000)
+ * @param options.throwOnTimeout - Throw on timeout instead of returning undefined
+ * @returns Promise resolving to the main window or undefined
  *
  * @example
- * ```ts
- * // In service initialization (handles timing automatically)
- * export default {
- *   async apply(app) {
- *     // Will wait if window not ready yet
- *     const mainWindow = await resolveMainWindow(app)
- *     if (!mainWindow) {
- *       console.warn('Main window not available')
- *       return
- *     }
- *     // Safe to use mainWindow here
- *   }
- * }
- * ```
- *
- * @example
- * ```ts
- * // With custom timeout
- * const win = await resolveMainWindow(app, { timeout: 5000 })
- * ```
- *
- * @example
- * ```ts
- * // Throw error on timeout
- * try {
- *   const win = await resolveMainWindow(app, { throwOnTimeout: true })
- * } catch (error) {
- *   console.error('Timeout waiting for main window')
- * }
- * ```
+ * const win = await resolveMainWindow(ctx, { timeout: 5000 })
  */
 export async function resolveMainWindow(
-  appContext?: ElectronApp,
+  ctx?: ElectronApp,
   options: {
     timeout?: number
     throwOnTimeout?: boolean
@@ -119,17 +86,17 @@ export async function resolveMainWindow(
 ): Promise<BrowserWindow | undefined> {
   const { timeout = 10000, throwOnTimeout = false } = options
 
-  if (!appContext) {
+  if (!ctx) {
     return undefined
   }
 
   // Strategy 1: Use custom resolver (highest priority)
-  if (appContext._mainWindowResolver) {
-    return await appContext._mainWindowResolver(appContext)
+  if (ctx._mainWindowResolver) {
+    return await ctx._mainWindowResolver(ctx)
   }
 
   // Strategy 2: Check if main window is already registered
-  const existingWindow = appContext.getMainWindow?.()
+  const existingWindow = ctx.getMainWindow?.()
   if (existingWindow) {
     return existingWindow
   }
@@ -141,8 +108,8 @@ export async function resolveMainWindow(
     // Set timeout to avoid infinite waiting
     const timeoutId = setTimeout(() => {
       // Clean up event listener
-      if (appContext.off) {
-        appContext.off('main-window:registered', onWindowRegistered)
+      if (ctx.off) {
+        ctx.off('main-window:registered', onWindowRegistered)
       }
 
       const message = `Timeout (${timeout}ms) waiting for main window registration`
@@ -155,8 +122,8 @@ export async function resolveMainWindow(
       }
     }, timeout)
 
-    if (appContext.once) {
-      appContext.once('main-window:registered', onWindowRegistered)
+    if (ctx.once) {
+      ctx.once('main-window:registered', onWindowRegistered)
     }
     else {
       clearTimeout(timeoutId)

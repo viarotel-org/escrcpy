@@ -17,7 +17,7 @@ import { useElectronApp } from './app.js'
  * Window context - allows hooks to access window context via useWindowContext()
  * This is optional - hooks still receive context as parameter for backward compatibility
  */
-const windowContext = createContext<WindowContext<any>>({
+const windowContext = createContext<WindowContext<unknown>>({
   asyncContext: true,
   AsyncLocalStorage,
 })
@@ -31,10 +31,10 @@ const windowContext = createContext<WindowContext<any>>({
  * ```ts
  * hooks: {
  *   async created(win) {
- *     const ctx = useWindowContext()
- *     const app = ctx.app
+ *     const windowContext = useWindowContext()
+ *     const ctx = windowContext.ctx
  *     // OR use useElectronApp() directly
- *     const app2 = useElectronApp()
+ *     const ctx2 = useElectronApp()
  *   }
  * }
  * ```
@@ -88,18 +88,18 @@ export function createWindowManager<TPayload = unknown>(
     hooks = {},
   } = options
 
-  const app = useElectronApp()
+  const ctx = useElectronApp()
 
   // Internal: store TemplateBrowserWindow instances
   const instances = new Map<string, TemplateBrowserWindow>()
 
   // Wrap hooks to auto-register main window
   const wrappedHooks = { ...hooks }
-  if (mainWindow && app?.registerMainWindow) {
+  if (mainWindow && ctx?.registerMainWindow) {
     const originalCreated = hooks.created
     wrappedHooks.created = async (win: BrowserWindow, context: WindowContext<TPayload>) => {
       // Auto-register as main window
-      app.registerMainWindow(win)
+      ctx.registerMainWindow(win)
       // Call original hook if exists
       if (originalCreated) {
         await originalCreated(win, context)
@@ -133,13 +133,13 @@ export function createWindowManager<TPayload = unknown>(
   }
 
   // Auto-register to app if provided
-  app?.registerWindowManager?.(name, manager)
+  ctx?.registerWindowManager?.(name, manager)
 
   return manager
 
   function resolveOptions(payload: TPayload, meta: WindowMeta<TPayload>): BrowserWindowConstructorOptions {
     const base: any = typeof browserWindow === 'function'
-      ? browserWindow({ id: name, app, payload, meta, manager, options: {} } as WindowContext<TPayload>)
+      ? browserWindow({ id: name, ctx, payload, meta, manager, options: {} } as WindowContext<TPayload>)
       : { ...(browserWindow ?? {}) }
 
     // Auto-set main flag if mainWindow option is true
@@ -148,32 +148,32 @@ export function createWindowManager<TPayload = unknown>(
     }
 
     // Inherit from app config if not specified
-    if (!base.preloadDir && app?.preloadDir) {
-      base.preloadDir = app.preloadDir
+    if (!base.preloadDir && ctx?.preloadDir) {
+      base.preloadDir = ctx.preloadDir
     }
-    if (!base.rendererDir && app?.rendererDir) {
-      base.rendererDir = app.rendererDir
+    if (!base.rendererDir && ctx?.rendererDir) {
+      base.rendererDir = ctx.rendererDir
     }
-    if (!base.devRendererDir && app?.devRendererDir) {
-      base.devRendererDir = app.devRendererDir
+    if (!base.devRendererDir && ctx?.devRendererDir) {
+      base.devRendererDir = ctx.devRendererDir
     }
-    if (!base.loadPage && app?.loadPage) {
-      base.loadPage = app.loadPage
+    if (!base.loadPage && ctx?.loadPage) {
+      base.loadPage = ctx.loadPage
     }
-    if (!base.icon && app?.icon) {
-      base.icon = app.icon
+    if (!base.icon && ctx?.icon) {
+      base.icon = ctx.icon
     }
-    if (!base.width && app?.width) {
-      base.width = app.width
+    if (!base.width && ctx?.width) {
+      base.width = ctx.width
     }
-    if (!base.height && app?.height) {
-      base.height = app.height
+    if (!base.height && ctx?.height) {
+      base.height = ctx.height
     }
-    if (!base.backgroundColor && app?.backgroundColor) {
-      base.backgroundColor = app.backgroundColor
+    if (!base.backgroundColor && ctx?.backgroundColor) {
+      base.backgroundColor = ctx.backgroundColor
     }
-    if (!base.storage && app?.storage) {
-      base.storage = app.storage
+    if (!base.storage && ctx?.storage) {
+      base.storage = ctx.storage
     }
 
     return base
@@ -187,7 +187,7 @@ export function createWindowManager<TPayload = unknown>(
 
     const payload = meta.payload
     const options = resolveOptions(meta.payload, meta)
-    const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options, manager }
+    const context: WindowContext<TPayload> = { id: name, ctx, payload: meta.payload, meta, options, manager }
 
     // Run in window context (allows hooks to use useWindowContext())
     return await windowContext.callAsync(context, async () => {
@@ -244,7 +244,7 @@ export function createWindowManager<TPayload = unknown>(
       : (singleton ? instances.values().next().value : undefined)
 
     if (internalExisting && !internalExisting.raw.isDestroyed?.()) {
-      const context: WindowContext<TPayload> = { id: name, app, payload: meta.payload, meta, options: {}, manager }
+      const context: WindowContext<TPayload> = { id: name, ctx, payload: meta.payload, meta, options: {}, manager }
 
       return await windowContext.callAsync(context, async () => {
         await runHook('beforeShow', internalExisting.raw, context)

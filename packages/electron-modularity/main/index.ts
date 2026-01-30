@@ -7,28 +7,28 @@
  * ```ts
  * import { createElectronApp, createWindowManager } from '@escrcpy/electron-modularity'
  *
- * const app = createElectronApp({
+ * const ctx = createElectronApp({
  *   name: 'MyApp',
  *   preloadDir: __dirname,
  *   rendererDir: path.join(__dirname, '../dist'),
  * })
  *
- * const mainWindow = createWindowManager('main', {
- *   app,
+ * const windowManager = createWindowManager('main', {
  *   singleton: true,
+ *   mainWindow: true,
  *   browserWindow: {
  *     width: 1200,
  *     height: 800,
  *   },
  *   hooks: {
  *     created(win, ctx) {
- *       app.provide('window:main', win)
+ *       console.log('Main window created', win.id)
  *     }
  *   }
  * })
  *
- * app.use(myPlugin)
- * app.start()
+ * ctx.use(myPlugin)
+ * ctx.start()
  * ```
  */
 

@@ -18,12 +18,12 @@ export function isIpv6(string) {
  */
 export async function getFileSize(device, filePath, options = {}) {
   const { asBigInt = false } = options
-  
+
   try {
     const output = await device.shell(`stat -c %s "${filePath}"`)
     const buffer = await Adb.util.readAll(output)
     const sizeStr = buffer.toString().trim()
-    
+
     return asBigInt ? BigInt(sizeStr) : (Number(sizeStr) || 0)
   }
   catch (error) {

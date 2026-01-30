@@ -262,7 +262,7 @@ export function createWindowManager<TPayload = unknown>(
     return createWindow(rawPayload)
   }
 
-  function close(payload?: TPayload | { instanceId?: string }): boolean {
+  function close(payload?: TPayload & {}): boolean {
     const target = resolveTarget(payload)
     if (!target || target.isDestroyed?.()) {
       return false
@@ -271,7 +271,7 @@ export function createWindowManager<TPayload = unknown>(
     return true
   }
 
-  function destroy(payload?: TPayload | { instanceId?: string }): boolean {
+  function destroy(payload?: TPayload & {}): boolean {
     const target = resolveTarget(payload)
     if (!target || target.isDestroyed?.()) {
       return false
@@ -299,18 +299,17 @@ export function createWindowManager<TPayload = unknown>(
     return Array.from(instances.values()).map(win => win.raw)
   }
 
-  function resolveTarget(payload?: TPayload | { instanceId?: string }): BrowserWindow | undefined {
+  function resolveTarget(payload?: TPayload & { instanceId?: string, win?: BrowserWindow }): BrowserWindow | undefined {
     let internalWin: TemplateBrowserWindow | undefined
 
-    if (payload && typeof payload === 'object' && 'instanceId' in payload) {
+    if (singleton) {
+      internalWin = instances.values().next().value
+    }
+    else if (payload?.instanceId) {
       internalWin = instances.get(payload.instanceId!)
     }
-    else if (payload && typeof payload === 'object' && 'win' in payload) {
-      // This case seems unusual, but keep for compatibility
-      return (payload as any).win
-    }
-    else if (!payload && singleton) {
-      internalWin = instances.values().next().value
+    else if (payload?.win) {
+      return payload.win
     }
 
     return internalWin?.raw

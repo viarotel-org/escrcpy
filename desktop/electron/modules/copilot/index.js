@@ -3,8 +3,8 @@ import service from './service.js'
 
 export default {
   name: 'module:copilot',
-  apply(app) {
-    app.use(window)
-    app.use(service)
+  apply(ctx) {
+    ctx.use(window)
+    ctx.use(service)
   },
 }

@@ -4,12 +4,12 @@ import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
 
 export default {
   name: 'service:edger',
-  async apply(app) {
+  async apply(ctx) {
     if (!electronStore.get('common.edgeHidden')) {
       return false
     }
 
-    const mainWindow = await resolveMainWindow(app)
+    const mainWindow = await resolveMainWindow(ctx)
 
     if (!mainWindow) {
       console.warn('[edger] main window not available')

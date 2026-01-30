@@ -2,9 +2,9 @@ import { createWindowManager } from '@escrcpy/electron-modularity/main'
 
 export default {
   name: 'module:main',
-  apply(app) {
+  apply(ctx) {
     createWindowManager('main', {
-      app,
+      app: ctx,
       singleton: true,
       mainWindow: true,
       browserWindow: {

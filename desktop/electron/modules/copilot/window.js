@@ -4,9 +4,9 @@ import { copilotService } from './helpers/index.js'
 
 export default {
   name: 'module:copilot:window',
-  apply(app) {
+  apply(ctx) {
     createWindowManager('copilot', {
-      app,
+      app: ctx,
       singleton: false,
       browserWindow: {
         persistenceBounds: true,
@@ -16,8 +16,8 @@ export default {
         minHeight: browserWindowWidth * 0.7,
       },
       hooks: {
-        beforeClose(win, ctx) {
-          copilotService.destroy(ctx.payload.instanceId)
+        beforeClose(win, context) {
+          copilotService.destroy(context.payload.instanceId)
         },
       },
     })

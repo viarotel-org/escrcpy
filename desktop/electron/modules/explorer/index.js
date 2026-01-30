@@ -4,8 +4,8 @@ import service from './service.js'
 export default {
   name: 'module:explorer',
   order: 100,
-  apply(app) {
-    app.use(window)
-    app.use(service)
+  apply(ctx) {
+    ctx.use(window)
+    ctx.use(service)
   },
 }

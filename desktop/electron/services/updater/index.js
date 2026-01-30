@@ -1,16 +1,16 @@
 import { devPublishPath } from '$electron/configs/index.js'
 import { is } from '@electron-toolkit/utils'
-import { app as electronApp, ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
 
 const { autoUpdater } = electronUpdater
 
 export default {
   name: 'service:updater',
-  apply(app) {
+  apply(ctx) {
     if (is.dev) {
       autoUpdater.updateConfigPath = devPublishPath
-      Object.defineProperty(electronApp, 'isPackaged', {
+      Object.defineProperty(app, 'isPackaged', {
         get() {
           return true
         },
@@ -30,7 +30,7 @@ export default {
     // Install update
     ipcMain.on('quit-and-install', () => {
       setImmediate(() => {
-        electronApp.isQuiting = true
+        app.isQuiting = true
         autoUpdater.quitAndInstall()
       })
     })
@@ -41,7 +41,7 @@ export default {
     // Handle update errors
     autoUpdater.on('error', (error) => {
       console.error('update-error')
-      const mainWindow = app.getMainWindow()
+      const mainWindow = ctx.getMainWindow()
       mainWindow?.webContents?.send('update-error', error)
     })
 
@@ -52,25 +52,25 @@ export default {
 
     // Update available
     autoUpdater.on('update-available', (ret) => {
-      const mainWindow = app.getMainWindow()
+      const mainWindow = ctx.getMainWindow()
       mainWindow?.webContents?.send('update-available', ret)
     })
 
     // When no update is available
     autoUpdater.on('update-not-available', (ret) => {
-      const mainWindow = app.getMainWindow()
+      const mainWindow = ctx.getMainWindow()
       mainWindow?.webContents?.send('update-not-available', ret)
     })
 
     // Download progress
     autoUpdater.on('download-progress', (ret) => {
-      const mainWindow = app.getMainWindow()
+      const mainWindow = ctx.getMainWindow()
       mainWindow?.webContents?.send('download-progress', ret)
     })
 
     // After the update package has been downloaded
     autoUpdater.on('update-downloaded', (ret) => {
-      const mainWindow = app.getMainWindow()
+      const mainWindow = ctx.getMainWindow()
       mainWindow?.webContents?.send('update-downloaded', ret)
     })
   },

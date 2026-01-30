@@ -12,7 +12,7 @@ import './helpers/store/index.js'
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 
-import { app as electronApp } from 'electron'
+import { app } from 'electron'
 import { createElectronApp } from '@escrcpy/electron-modularity/main'
 
 import {
@@ -46,7 +46,7 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const app = createElectronApp({
+const ctx = createElectronApp({
   preloadDir: __dirname,
   rendererDir: path.join(__dirname, '../dist'),
   devRendererDir: process.env.VITE_DEV_SERVER_URL,
@@ -56,27 +56,27 @@ const app = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
-electronApp.whenReady().then(() => {
-  app.use(sandboxPlugin)
-  app.use(main)
-  app.use(lifecycle)
+app.whenReady().then(() => {
+  ctx.use(sandboxPlugin)
+  ctx.use(main)
+  ctx.use(lifecycle)
 
-  app.use(control)
-  app.use(copilot)
-  app.use(explorer)
+  ctx.use(control)
+  ctx.use(copilot)
+  ctx.use(explorer)
 
-  app.use(clipboardPlugin)
-  app.use(themePlugin)
-  app.use(windowIPCPlugin)
+  ctx.use(clipboardPlugin)
+  ctx.use(themePlugin)
+  ctx.use(windowIPCPlugin)
 
-  app.use(edger)
-  app.use(listeners)
-  app.use(handles)
-  app.use(tray)
-  app.use(contextMenu)
-  app.use(updater)
-  app.use(launch)
-  app.use(shortcuts)
+  ctx.use(edger)
+  ctx.use(listeners)
+  ctx.use(handles)
+  ctx.use(tray)
+  ctx.use(contextMenu)
+  ctx.use(updater)
+  ctx.use(launch)
+  ctx.use(shortcuts)
 
-  app.start()
+  ctx.start()
 })

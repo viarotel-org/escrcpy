@@ -1,4 +1,4 @@
-import { BrowserWindow, app as electronApp } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import remote from '@electron/remote/main'
 import { optimizer } from '@electron-toolkit/utils'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
@@ -8,8 +8,8 @@ import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
 export default {
   name: 'service:lifecycle',
   deps: ['module:main'],
-  apply(appContext) {
-    const windowManager = appContext.getWindowManager('main')
+  apply(ctx) {
+    const windowManager = ctx.getWindowManager('main')
 
     ensureSingleInstance({
       onCreateWindow: openMainWindow,
@@ -19,10 +19,10 @@ export default {
     async function openMainWindow() {
       windowManager.open({ show: false })
 
-      const mainWindow = await resolveMainWindow(appContext)
+      const mainWindow = await resolveMainWindow(ctx)
 
-      if (!appContext?.hasService?.('remote:initialized')) {
-        appContext?.provide?.('remote:initialized', true)
+      if (!ctx?.hasService?.('remote:initialized')) {
+        ctx?.provide?.('remote:initialized', true)
         remote.initialize()
         remote.enable(mainWindow.webContents)
       }
@@ -33,7 +33,7 @@ export default {
     }
 
     async function showMainWindow(commandLine) {
-      const mainWindow = await resolveMainWindow(appContext)
+      const mainWindow = await resolveMainWindow(ctx)
 
       const args = runExecuteArguments(commandLine, mainWindow)
 
@@ -45,7 +45,7 @@ export default {
     /**
      * Enable keyboard shortcut monitoring for all windows
      */
-    electronApp.on('browser-window-created', (_, window) => {
+    app.on('browser-window-created', (_, window) => {
       optimizer.watchWindowShortcuts(window)
     })
 
@@ -53,13 +53,13 @@ export default {
      * activate event (macOS)
      * Restore window when clicking dock icon
      */
-    electronApp.on('activate', async () => {
+    app.on('activate', async () => {
       // If no windows exist, let singleton plugin handle window creation
       if (BrowserWindow.getAllWindows().length === 0) {
         return
       }
 
-      const mainWindow = await resolveMainWindow(appContext)
+      const mainWindow = await resolveMainWindow(ctx)
 
       restoreAndFocusWindow(mainWindow)
     })
@@ -68,9 +68,9 @@ export default {
      * window-all-closed event
      * Quit application when all windows are closed
      */
-    electronApp.on('window-all-closed', () => {
-      electronApp.isQuiting = true
-      electronApp.quit()
+    app.on('window-all-closed', () => {
+      app.isQuiting = true
+      app.quit()
     })
 
     /**

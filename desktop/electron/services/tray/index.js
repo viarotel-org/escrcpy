@@ -1,4 +1,4 @@
-import { dialog, app as electronApp, Menu, Tray } from 'electron'
+import { app, dialog, Menu, Tray } from 'electron'
 import { trayPath } from '$electron/configs/index.js'
 import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
@@ -8,8 +8,8 @@ import { resolveMainWindow } from '@escrcpy/electron-modularity/main'
 
 export default {
   name: 'service:tray',
-  async apply(app) {
-    const mainWindow = await resolveMainWindow(app)
+  async apply(ctx) {
+    const mainWindow = await resolveMainWindow(ctx)
 
     if (!mainWindow) {
       console.warn('[tray] main window not available')
@@ -29,7 +29,7 @@ export default {
     })
 
     mainWindow.on('close', async (event) => {
-      if (electronApp.isQuiting) {
+      if (app.isQuiting) {
         return true
       }
 
@@ -58,7 +58,7 @@ export default {
 
     function showApp() {
       if (process.platform === 'darwin') {
-        electronApp.dock.show()
+        app.dock.show()
       }
 
       mainWindow.show()
@@ -73,7 +73,7 @@ export default {
 
     function hideApp() {
       if (process.platform === 'darwin') {
-        electronApp.dock.hide()
+        app.dock.hide()
       }
 
       mainWindow.hide()
@@ -82,13 +82,13 @@ export default {
     }
 
     async function quitApp() {
-      electronApp.isQuiting = true
+      app.isQuiting = true
 
       mainWindow.webContents.send('quit-before')
 
       await sleep(1 * 1000)
 
-      electronApp.quit()
+      app.quit()
 
       return true
     }
@@ -127,7 +127,7 @@ export default {
         {
           label: await t('common.restart'),
           click: () => {
-            electronApp.relaunch()
+            app.relaunch()
             quitApp()
           },
         },

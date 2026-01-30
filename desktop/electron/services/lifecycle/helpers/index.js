@@ -1,4 +1,5 @@
 import { app as electronApp } from 'electron'
+import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 
 export * from './arguments.js'
 export * from './singleton.js'
@@ -32,6 +33,8 @@ export function restoreAndFocusWindow(
   if (showDock && process.platform === 'darwin') {
     electronApp.dock.show()
   }
+
+  globalEventEmitter.emit('tray:destroy')
 
   return true
 }

@@ -7,7 +7,6 @@ import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 
 export default {
   name: 'module:main',
-  order: 0,
   apply(app) {
     if (!app?.has?.('remote:initialized')) {
       remote.initialize()
@@ -19,7 +18,6 @@ export default {
       singleton: true,
       windowOptions: {
         main: true,
-        preloadDir: app.preloadDir,
         persistenceBounds: true,
       },
       hooks: {
@@ -85,7 +83,7 @@ export default {
       return mainWindow
     }
 
-    app?.once?.('app:started', async () => {
+    app?.once?.('singleton:ready', async () => {
       try {
         await electronApp.whenReady()
         openMainWindow()

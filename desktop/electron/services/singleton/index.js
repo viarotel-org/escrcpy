@@ -1,21 +1,20 @@
 import { ensureSingleInstance } from './helper.js'
 
-let mainWindow = null
-let isInitialized = false
-
 export default {
-  name: 'module:singleton',
+  name: 'service:singleton',
+  order: -50,
   deps: ['service:execute-arguments'],
   apply(app) {
-    const executeArgsService = app?.inject?.('service:execute-arguments')
+    function onAppStarted() {
+      let mainWindow = null
 
-    app?.once?.('app:started', () => {
       ensureSingleInstance({
         /**
          * Called when first instance successfully acquires the lock
          */
         onSuccess() {
-          isInitialized = true
+          console.log('[module:singleton] Application is running as single instance')
+          app?.emit?.('singleton:ready')
         },
 
         /**
@@ -37,6 +36,8 @@ export default {
                 mainWindow = manager.get?.()
               }
             }
+
+            const executeArgsService = app?.inject?.('service:execute-arguments')
 
             // Parse and inject new arguments from second instance
             if (executeArgsService) {
@@ -100,6 +101,8 @@ export default {
         forceFocus: true,
         silentMode: false,
       })
-    })
+    }
+
+    app?.once?.('app:started', onAppStarted)
   },
 }

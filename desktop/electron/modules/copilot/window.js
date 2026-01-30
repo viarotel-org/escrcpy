@@ -10,7 +10,6 @@ export default {
       singleton: false,
       windowOptions: {
         persistenceBounds: true,
-        preloadDir: app.preloadDir,
         width: browserWindowWidth,
         minWidth: browserWindowWidth,
         height: browserWindowWidth * 0.7,

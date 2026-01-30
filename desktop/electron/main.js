@@ -21,6 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = createElectronApp({
   preloadDir: __dirname,
+  rendererDir: path.join(__dirname, '../dist'),
 })
 
 app.use(services)

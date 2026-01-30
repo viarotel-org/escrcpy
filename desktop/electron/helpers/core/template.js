@@ -54,8 +54,9 @@ export class TemplateBrowserWindow {
    * @param {import('electron').BrowserWindowConstructorOptions} [options.browserWindowOverrides]
    */
   constructor(options = {}) {
-    const { preloadDir, persistenceBounds = false, ...browserWindowOverrides } = options
     this.options = options
+
+    const { preloadDir, persistenceBounds = false, ...browserWindowOverrides } = options
 
     if (!preloadDir) {
       throw new Error('TemplateBrowserWindow: preloadDir is required')
@@ -83,13 +84,17 @@ export class TemplateBrowserWindow {
   /**
    * Load renderer page
    *
-   * @param {string} [prefix] - Page prefix
+   * @param {string} [path] - Page path
    * @param {Record<string, any>} [query] - Optional query parameters
    */
-  loadPage(prefix = 'main', query) {
-    this.win.customId = prefix
+  loadPage(path = 'main', query) {
+    this.win.customId = path
 
-    loadPage(this.win, this.options.main ? '' : `${prefix}/`, query)
+    loadPage(this.win, {
+      prefix: this.options.main ? '' : `${path}/`,
+      query,
+      rendererDir: this.options.rendererDir,
+    })
   }
 
   /**

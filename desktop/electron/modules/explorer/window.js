@@ -7,7 +7,6 @@ export default {
       app,
       singleton: false,
       windowOptions: {
-        preloadDir: app.preloadDir,
         frame: true,
         titleBarStyle: 'default',
       },

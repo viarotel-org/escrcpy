@@ -45,6 +45,9 @@ export function createWindowManager(name, options = {}) {
     if (!base.preloadDir && app?.preloadDir) {
       base.preloadDir = app.preloadDir
     }
+    if (!base.rendererDir && app?.rendererDir) {
+      base.rendererDir = app.rendererDir
+    }
 
     return base
   }

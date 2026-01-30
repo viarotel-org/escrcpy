@@ -68,9 +68,8 @@ export function isWindowDestroyed(win) {
   return !win || win?.isDestroyed?.()
 }
 
-export function loadPage(win, prefix = '', query) {
-  // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
-  const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+export function loadPage(win, options) {
+  const { prefix = '', query, rendererDir = '' } = options || {}
 
   let stringifyQuery = ''
 
@@ -78,11 +77,13 @@ export function loadPage(win, prefix = '', query) {
     stringifyQuery = typeof query === 'string' ? query : `?${(new URLSearchParams(omitBy(query || {}, isEmpty))).toString()}`
   }
 
+  const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(join(VITE_DEV_SERVER_URL, prefix) + stringifyQuery)
   }
   else {
-    win.loadFile(join(process.env.DIST, prefix, 'index.html'), {
+    win.loadFile(join(rendererDir, prefix, 'index.html'), {
       search: stringifyQuery,
     })
   }

@@ -1,7 +1,7 @@
 import { EventEmitter } from '$electron/helpers/emitter/index.js'
 
 export function createElectronApp(config = {}) {
-  const { preloadDir, name } = config
+  const { preloadDir, rendererDir, name } = config
 
   const emitter = new EventEmitter()
   const provides = new Map()
@@ -11,6 +11,7 @@ export function createElectronApp(config = {}) {
   const app = {
     name,
     preloadDir,
+    rendererDir,
     provides,
     windows: new Map(),
     pluginStates: plugins,

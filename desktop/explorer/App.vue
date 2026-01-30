@@ -297,7 +297,7 @@ async function handleAdd({ name, type }) {
     ElMessage.success(window.t('common.success'))
   }
   else {
-    ElMessage.error(result.error || window.t('common.faileded'))
+    ElMessage.error(result.error || window.t('common.failed'))
   }
 }
 

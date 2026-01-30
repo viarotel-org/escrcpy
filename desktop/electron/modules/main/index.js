@@ -1,21 +1,9 @@
 import { BrowserWindow, app as electronApp } from 'electron'
 import remote from '@electron/remote/main'
-
 import electronStore from '$electron/helpers/store/index.js'
 import { Edger } from '$electron/helpers/edger/index.js'
 import { createWindowManager } from '$electron/helpers/core/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
-
-let mainWindow
-
-export function getMainWindow() {
-  return mainWindow
-}
-
-export function setMainWindow(win) {
-  mainWindow = win
-  return mainWindow
-}
 
 export default {
   name: 'module:main',
@@ -30,12 +18,12 @@ export default {
       app,
       singleton: true,
       windowOptions: {
+        main: true,
         preloadDir: app.preloadDir,
         persistenceBounds: true,
       },
       hooks: {
         created(win) {
-          setMainWindow(win)
           app?.provide?.('window:main', win)
           app?.emit?.('window:main:ready', win)
         },
@@ -43,58 +31,69 @@ export default {
           win.show?.()
         },
       },
-
     })
 
     app?.provide?.('window:main:manager', manager)
 
     const openMainWindow = () => {
-      if (mainWindow && !mainWindow.isDestroyed?.()) {
-        return mainWindow
+      const win = manager.open({ show: false })
+      const mainWindow = win?.raw
+
+      if (!mainWindow) {
+        console.error('[module:main] Failed to create browser window')
+        return null
       }
 
-      const win = manager.open({ page: 'main', show: false })
+      try {
+        remote.enable(mainWindow.webContents)
+      }
+      catch (error) {
+        console.warn('[window] remote enable failed:', error?.message || error)
+      }
 
-      if (win?.webContents) {
-        try {
-          remote.enable(win.webContents)
-        }
-        catch (error) {
-          console.warn('[window] remote enable failed:', error?.message || error)
-        }
+      try {
+        const executeArgsService = app?.inject?.('service:execute-arguments')
+        if (executeArgsService) {
+          const args = executeArgsService.getArguments?.()
 
-        // Send initial execute arguments to renderer process
-        try {
-          const executeArgsService = app?.inject?.('service:execute-arguments')
-          if (executeArgsService) {
-            const args = executeArgsService.getArguments?.()
-            if (args) {
-              win.webContents.send('execute-arguments-change', {
-                deviceId: args['device-id'],
-                appName: args['app-name'],
-                packageName: args['package-name'],
-              })
-            }
+          if (args) {
+            mainWindow.webContents.send('execute-arguments-change', {
+              deviceId: args['device-id'],
+              appName: args['app-name'],
+              packageName: args['package-name'],
+            })
           }
         }
-        catch (error) {
-          console.warn('[window] Failed to send execute arguments:', error?.message || error)
-        }
-
-        // Handle minimize with tray
-        win.on('minimize', () => {
-          globalEventEmitter.emit('tray:create')
-        })
       }
+      catch (error) {
+        console.warn('[window] Failed to send execute arguments:', error?.message || error)
+      }
+
+      mainWindow.on('minimize', () => {
+        globalEventEmitter.emit('tray:create')
+      })
 
       if (electronStore.get('common.edgeHidden')) {
-        new Edger(win)
+        try {
+          new Edger(mainWindow)
+        }
+        catch (error) {
+          console.warn('[window] Edger initialization failed:', error?.message || error)
+        }
       }
 
-      return win
+      return mainWindow
     }
 
-    electronApp.whenReady().then(openMainWindow)
+    app?.once?.('app:started', async () => {
+      try {
+        await electronApp.whenReady()
+        openMainWindow()
+      }
+      catch (error) {
+        console.error('[module:main] Error waiting for app ready:', error)
+      }
+    })
 
     electronApp.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -102,12 +101,16 @@ export default {
         return
       }
 
+      const win = manager.get?.()
+      const mainWindow = win?.raw
+
+      mainWindow?.show?.()
+      mainWindow?.focus?.()
+
       if (process.platform === 'darwin') {
         electronApp.dock.show()
       }
 
-      mainWindow?.show?.()
-      mainWindow?.focus?.()
       globalEventEmitter.emit('tray:destroy')
     })
 

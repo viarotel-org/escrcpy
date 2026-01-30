@@ -1,19 +1,3 @@
-/**
- * Single instance module - Ensures the app runs as a single instance.
- *
- * This module:
- * 1. Acquires singleton lock on first app startup
- * 2. Handles second instance launches with proper window focus and parameter passing
- * 3. Bridges command-line arguments from second instance to the main window
- * 4. Manages tray interaction when second instance has device parameters
- *
- * Dependencies:
- * - service:execute-arguments (required for argument parsing and injection)
- *
- * This module must run very early (order: -10) before window creation,
- * and after sandbox configuration (which runs at order: -100).
- */
-
 import { ensureSingleInstance } from './helper.js'
 
 let mainWindow = null
@@ -23,28 +7,35 @@ export default {
   name: 'module:singleton',
   deps: ['service:execute-arguments'],
   apply(app) {
-    return new Promise((resolve, reject) => {
-      const executeArgsService = app?.inject?.('service:execute-arguments')
-      const windowManager = app?.getWindowManager?.('main')
+    const executeArgsService = app?.inject?.('service:execute-arguments')
 
+    app?.once?.('app:started', () => {
       ensureSingleInstance({
         /**
          * Called when first instance successfully acquires the lock
          */
         onSuccess() {
           isInitialized = true
-          resolve()
         },
 
         /**
          * Called when a second instance tries to launch
-         * Handles parameter passing and window focus
+         * At this point, windowManager('main') should be available
          */
         onShowWindow(existingMainWindow, commandLine, next) {
           try {
+            console.log('[module:singleton] Second instance detected, handling parameters')
+
             // Store reference to main window if available
             if (existingMainWindow) {
               mainWindow = existingMainWindow
+            }
+            else {
+              // Try to get window from manager if not provided
+              const manager = app?.getWindowManager?.('main')
+              if (manager) {
+                mainWindow = manager.get?.()
+              }
             }
 
             // Parse and inject new arguments from second instance
@@ -54,11 +45,16 @@ export default {
 
               // Send updated arguments to renderer process
               if (mainWindow?.webContents && !mainWindow.isDestroyed?.()) {
-                mainWindow.webContents.send('execute-arguments-change', {
-                  deviceId: newArgs['device-id'],
-                  appName: newArgs['app-name'],
-                  packageName: newArgs['package-name'],
-                })
+                try {
+                  mainWindow.webContents.send('execute-arguments-change', {
+                    deviceId: newArgs['device-id'],
+                    appName: newArgs['app-name'],
+                    packageName: newArgs['package-name'],
+                  })
+                }
+                catch (error) {
+                  console.warn('[module:singleton] Failed to send arguments to renderer:', error?.message)
+                }
               }
 
               // Behavior: If second instance has device-id parameter, auto-start app
@@ -66,7 +62,12 @@ export default {
               if (newArgs['device-id']) {
                 // Auto-start the app with provided device parameters
                 if (mainWindow?.webContents && !mainWindow.isDestroyed?.()) {
-                  mainWindow.webContents.send('auto-start-app')
+                  try {
+                    mainWindow.webContents.send('auto-start-app')
+                  }
+                  catch (error) {
+                    console.warn('[module:singleton] Failed to send auto-start signal:', error?.message)
+                  }
                 }
               }
               else {
@@ -76,6 +77,7 @@ export default {
             }
             else {
               // Fallback if service is not available
+              console.warn('[module:singleton] Execute arguments service not available')
               next()
             }
           }
@@ -90,7 +92,6 @@ export default {
          */
         onError(error) {
           console.error('[module:singleton] Single instance check failed:', error)
-          reject(error)
         },
 
         /**

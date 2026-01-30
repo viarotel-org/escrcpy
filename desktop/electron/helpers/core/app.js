@@ -90,8 +90,6 @@ export function createElectronApp(config = {}) {
   function flushPending() {
     let changed = true
 
-    console.log('pending', pending.map(item => item.name))
-
     while (changed) {
       changed = false
 
@@ -114,7 +112,7 @@ export function createElectronApp(config = {}) {
     if (pending.length > 0) {
       const unresolved = pending.map(item => ({
         name: item.name,
-        missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || []
+        missingDeps: item.deps?.filter(dep => !plugins.has(dep)) || [],
       }))
       console.warn('⚠️ Unresolved plugin dependencies:', unresolved)
     }

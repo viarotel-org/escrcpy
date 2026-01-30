@@ -76,6 +76,10 @@ export class TemplateBrowserWindow {
     this.#setupExternalLinkHandler()
   }
 
+  get raw() {
+    return this.win
+  }
+
   /**
    * Load renderer page
    *
@@ -84,7 +88,8 @@ export class TemplateBrowserWindow {
    */
   loadPage(prefix = 'main', query) {
     this.win.customId = prefix
-    loadPage(this.win, `${prefix}/`, query)
+
+    loadPage(this.win, this.options.main ? '' : `${prefix}/`, query)
   }
 
   /**

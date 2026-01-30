@@ -177,7 +177,7 @@ export function createWindowManager<TPayload = unknown, TWindow extends BrowserW
       // Create window
       const win = typeof create === 'function'
         ? create(context)
-        : (await import('../shared/template.js')).createBrowserWindow(options) as TWindow
+        : (await import('../shared/template.js')).createBrowserWindow(options) as unknown as TWindow
 
       if (!win) {
         return null

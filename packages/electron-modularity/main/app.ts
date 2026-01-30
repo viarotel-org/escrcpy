@@ -101,6 +101,8 @@ export function createElectronApp(config: ElectronAppConfig = {}): ElectronApp {
     registerMainWindow(win: BrowserWindow) {
       mainWindow = win
       this._mainWindow = win
+      // Emit event to notify waiters that main window is ready
+      app.emit('main-window:registered', win)
       return app
     },
 

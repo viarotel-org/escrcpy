@@ -62,37 +62,63 @@ export function loadPage(
 
 /**
  * Resolve the main window instance from app context
- * This function supports multiple resolution strategies:
- * 1. Use custom resolver if set via app.setMainWindowResolver()
- * 2. Use registered main window via app.registerMainWindow()
- * 3. Fall back to legacy behavior (inject 'modules:main' or wait for 'window:main:ready' event)
+ *
+ * This function handles timing issues by:
+ * - Returning immediately if window is already registered
+ * - Waiting for window registration if not yet available (with timeout)
+ *
+ * Resolution strategies:
+ * 1. Custom resolver set via `app.setMainWindowResolver()` (highest priority)
+ * 2. Registered main window via `app.registerMainWindow()` (recommended)
+ * 3. Wait for 'main-window:registered' event if window not yet created (auto-fallback)
  *
  * @param appContext - Electron app instance
+ * @param options - Resolution options
+ * @param options.timeout - Maximum wait time in milliseconds (default: 10000)
+ * @param options.throwOnTimeout - Throw error on timeout instead of returning undefined (default: false)
  * @returns Promise resolving to main window or undefined
  *
  * @example
  * ```ts
- * // Recommended: Register main window in business layer
- * const mainWindow = await manager.open()
- * app.registerMainWindow(mainWindow)
- * 
- * // Then resolve anywhere
- * const win = await resolveMainWindow(app)
- * win?.webContents.send('update-available')
+ * // In service initialization (handles timing automatically)
+ * export default {
+ *   async apply(app) {
+ *     // Will wait if window not ready yet
+ *     const mainWindow = await resolveMainWindow(app)
+ *     if (!mainWindow) {
+ *       console.warn('Main window not available')
+ *       return
+ *     }
+ *     // Safe to use mainWindow here
+ *   }
+ * }
  * ```
- * 
+ *
  * @example
  * ```ts
- * // Custom resolver for complex scenarios
- * app.setMainWindowResolver(async (app) => {
- *   const manager = app.getWindowManager('main')
- *   return manager?.get()
- * })
- * 
- * const win = await resolveMainWindow(app)
+ * // With custom timeout
+ * const win = await resolveMainWindow(app, { timeout: 5000 })
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Throw error on timeout
+ * try {
+ *   const win = await resolveMainWindow(app, { throwOnTimeout: true })
+ * } catch (error) {
+ *   console.error('Timeout waiting for main window')
+ * }
  * ```
  */
-export async function resolveMainWindow(appContext?: ElectronApp): Promise<BrowserWindow | undefined> {
+export async function resolveMainWindow(
+  appContext?: ElectronApp,
+  options: {
+    timeout?: number
+    throwOnTimeout?: boolean
+  } = {},
+): Promise<BrowserWindow | undefined> {
+  const { timeout = 10000, throwOnTimeout = false } = options
+
   if (!appContext) {
     return undefined
   }
@@ -102,34 +128,45 @@ export async function resolveMainWindow(appContext?: ElectronApp): Promise<Brows
     return await appContext._mainWindowResolver(appContext)
   }
 
-  // Strategy 2: Use registered main window
-  const registered = appContext.getMainWindow?.()
-  if (registered) {
-    return registered
+  // Strategy 2: Check if main window is already registered
+  const existingWindow = appContext.getMainWindow?.()
+  if (existingWindow) {
+    return existingWindow
   }
 
-  // Strategy 3: Fall back to legacy DI/event-based resolution
-  // This maintains backward compatibility but is NOT recommended for new code
-  const injected = appContext.inject?.('modules:main')
-  if (injected) {
-    return injected as BrowserWindow
-  }
+  // Strategy 3: Wait for main window registration (handles timing issues)
+  // This ensures services can safely call resolveMainWindow during initialization
+  // even if the main window is created later
+  return new Promise((resolve, reject) => {
+    // Set timeout to avoid infinite waiting
+    const timeoutId = setTimeout(() => {
+      // Clean up event listener
+      if (appContext.off) {
+        appContext.off('main-window:registered', onWindowRegistered)
+      }
 
-  // Strategy 4: Wait for legacy event (backward compatibility)
-  return new Promise((resolve) => {
-    if (!appContext.once) {
+      const message = `Timeout (${timeout}ms) waiting for main window registration`
+      if (throwOnTimeout) {
+        reject(new Error(message))
+      }
+      else {
+        console.warn(`[resolveMainWindow] ${message}`)
+        resolve(undefined)
+      }
+    }, timeout)
+
+    if (appContext.once) {
+      appContext.once('main-window:registered', onWindowRegistered)
+    }
+    else {
+      clearTimeout(timeoutId)
       resolve(undefined)
-      return
     }
 
-    // Set a timeout to avoid infinite waiting
-    const timeout = setTimeout(() => {
-      resolve(undefined)
-    }, 10000) // 10 second timeout
-
-    appContext.once('window:main:ready', (win: BrowserWindow) => {
-      clearTimeout(timeout)
+    // Listen for main window registration event
+    function onWindowRegistered(win: BrowserWindow) {
+      clearTimeout(timeoutId)
       resolve(win)
-    })
+    }
   })
 }

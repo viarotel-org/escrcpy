@@ -7,7 +7,7 @@ export interface SingleInstanceOptions {
   /**
    * Callback when a second instance is launched
    */
-  onSecondInstance?: (event: Event, commandLine: string[], workingDirectory: string, mainWindow: BrowserWindow | null) => void
+  onSecondInstance?: (event: Event, commandLine: string[], workingDirectory: string) => void
 
   /**
    * Whether to enable sandbox mode (skips single instance check)
@@ -26,13 +26,7 @@ export interface SingleInstanceOptions {
    * @param commandLine - Command line arguments
    * @param next - Call this to show and focus window
    */
-  onShowWindow?: (mainWindow: BrowserWindow | null, commandLine: string[], next: () => void) => void
-
-  /**
-   * Whether to force-focus an existing window
-   * @default true
-   */
-  forceFocus?: boolean
+  onShowWindow?: (commandLine: string[], next: () => void) => void
 
   /**
    * Silent mode, suppress logs
@@ -93,7 +87,6 @@ export function ensureSingleInstance(options: SingleInstanceOptions = {}): boole
     onSuccess,
     onShowWindow,
     onError,
-    forceFocus = true,
     silentMode = false,
   } = options
 
@@ -128,32 +121,24 @@ export function ensureSingleInstance(options: SingleInstanceOptions = {}): boole
     // Listen for second instance launch
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       try {
-        // Note: mainWindow should be provided by the onShowWindow callback
-        // We no longer hardcode 'customId === main' here
-        // This makes the helper more generic and reusable
-        const mainWindow: BrowserWindow | null = null
+        // Note: mainWindow will be provided by the callback handler
+        // This helper is now decoupled from specific window resolution logic
+        // The caller is responsible for providing the window via onShowWindow callback
 
-        const showWindowNext = () => {
-          if (mainWindow) {
-            if (mainWindow.isMinimized() || !mainWindow.isVisible()) {
-              mainWindow.show()
-            }
-            if (forceFocus) {
-              mainWindow.focus()
-            }
-          }
+        // Default fallback handler that does nothing (caller should provide onShowWindow)
+        const defaultShowNext = () => {
+          !silentMode && console.warn('No onShowWindow handler provided, second instance detected but window not focused')
         }
 
-        // Handle window focus
+        // Delegate window handling to the callback
         if (onShowWindow) {
-          onShowWindow?.(mainWindow, commandLine, showWindowNext)
-        }
-        else {
-          showWindowNext()
+          onShowWindow(commandLine, defaultShowNext)
         }
 
-        // Invoke user-defined callback
-        onSecondInstance?.(event as any, commandLine, workingDirectory, mainWindow)
+        // Invoke user-defined callback (legacy support)
+        if (onSecondInstance) {
+          onSecondInstance(event as any, commandLine, workingDirectory)
+        }
       }
       catch (error: any) {
         !silentMode && console.error('Error handling second instance:', error)

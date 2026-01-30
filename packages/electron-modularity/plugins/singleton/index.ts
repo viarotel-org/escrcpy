@@ -45,7 +45,7 @@ export interface SingletonPluginOptions {
   /**
    * Custom main window provider function
    * Use this to provide custom logic for resolving the main window
-   * @default Uses app.getMainWindow() if available, falls back to 'main' window manager
+   * @default Uses app.getMainWindow()
    *
    * @example
    * ```ts
@@ -64,12 +64,6 @@ export interface SingletonPluginOptions {
    * ```
    */
   mainWindowProvider?: MainWindowProvider
-
-  /**
-   * @deprecated Use `mainWindowProvider` instead
-   * This option will be removed in next major version
-   */
-  mainWindowId?: string
 }
 
 /**
@@ -128,7 +122,6 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
       forceFocus = true,
       silentMode = false,
       mainWindowProvider,
-      mainWindowId, // Deprecated, kept for backward compatibility
     } = options
 
     // Override plugin name if custom service name is provided
@@ -137,48 +130,22 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
     }
 
     /**
-     * Default main window provider implementation
-     * Priority:
-     * 1. Custom mainWindowProvider option
-     * 2. app.getMainWindow() (recommended)
-     * 3. Legacy mainWindowId fallback
+     * Resolve main window using configured provider or registered window
      */
     const resolveMainWindow = async (): Promise<BrowserWindow | null> => {
       // Use custom provider if provided
       if (mainWindowProvider) {
         const result = mainWindowProvider()
-        return result instanceof Promise ? await result : result ?? null
+        const resolved = result instanceof Promise ? await result : result
+        return resolved ?? null
       }
 
       // Use registered main window (recommended approach)
       const registered = app?.getMainWindow?.()
-      if (registered) {
-        return registered
-      }
-
-      // Legacy fallback: try to get window from manager by ID
-      if (mainWindowId) {
-        const manager = app?.getWindowManager?.(mainWindowId)
-        if (manager) {
-          const win = manager.get?.()
-          // Handle both BrowserWindow and EnhancedBrowserWindow
-          return (win as any)?.raw ?? win ?? null
-        }
-      }
-
-      // Default fallback: try 'main' window manager for backward compatibility
-      const defaultManager = app?.getWindowManager?.('main')
-      if (defaultManager) {
-        const win = defaultManager.get?.()
-        return (win as any)?.raw ?? win ?? null
-      }
-
-      return null
+      return registered ?? null
     }
 
     function onAppStarted() {
-      let mainWindow: BrowserWindow | null = null
-
       ensureSingleInstance({
         /**
          * Called when first instance successfully acquires the lock
@@ -190,15 +157,12 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
         /**
          * Called when a second instance tries to launch
          */
-        async onShowWindow(existingMainWindow: BrowserWindow | null, commandLine: string[], next: () => void) {
+        async onShowWindow(commandLine: string[]) {
           try {
             console.log('[plugin:singleton] Second instance detected, handling parameters')
 
             // Resolve main window using configured strategy
-            let mainWindow = existingMainWindow
-            if (!mainWindow) {
-              mainWindow = await resolveMainWindow()
-            }
+            const mainWindow = await resolveMainWindow()
 
             const executeArgsService = app?.inject?.('plugin:execute-arguments') as any
 
@@ -222,7 +186,7 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
               }
 
               // Behavior: If second instance has device-id parameter, auto-start app
-              // Otherwise, show window and destroy tray if present
+              // Otherwise, show and focus window
               if (newArgs['device-id']) {
                 // Auto-start the app with provided device parameters
                 if (mainWindow?.webContents && !mainWindow.isDestroyed?.()) {
@@ -235,19 +199,19 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
                 }
               }
               else {
-                // No device ID provided, just show the window
-                next()
+                // No device ID provided, show and focus the window
+                restoreMainWindow(mainWindow, forceFocus)
               }
             }
             else {
               // Fallback if service is not available
               console.warn('[plugin:singleton] Execute arguments service not available')
-              next()
+              // Still show and focus window
+              restoreMainWindow(mainWindow, forceFocus)
             }
           }
           catch (error) {
             console.error('[plugin:singleton] Error handling second instance:', error)
-            next()
           }
         },
 
@@ -258,13 +222,28 @@ export const singletonPlugin: Plugin<void, SingletonPluginOptions> = {
           console.error('[plugin:singleton] Single instance check failed:', error)
         },
 
-        forceFocus,
         silentMode,
       })
     }
 
     app?.once?.('app:started', onAppStarted)
   },
+}
+
+function restoreMainWindow(win: BrowserWindow | null, forceFocus: boolean) {
+  if (!win) {
+    return false
+  }
+
+  if (win.isMinimized?.()) {
+    win.restore?.()
+  }
+  if (!win.isVisible?.()) {
+    win.show?.()
+  }
+  if (forceFocus) {
+    win.focus?.()
+  }
 }
 
 export default singletonPlugin

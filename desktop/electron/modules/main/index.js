@@ -22,20 +22,14 @@ export default {
       },
       hooks: {
         created(win) {
-          // New recommended approach: Register main window for easy access
+          // Register main window for easy access
           app?.registerMainWindow?.(win)
-
-          // Legacy approach: Still supported for backward compatibility
-          app?.provide?.('window:main', win)
-          app?.emit?.('window:main:ready', win)
         },
         ready(win) {
           win.show?.()
         },
       },
     })
-
-    app?.provide?.('window:main:manager', manager)
 
     const openMainWindow = () => {
       const win = manager.open({ show: false })

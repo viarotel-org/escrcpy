@@ -17,6 +17,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "i18next-fs-backend": "2.6.1",
     "sharp": "*"
   },
   "devDependencies": {
@@ -60,7 +61,6 @@
     "fs-extra": "11.2.0",
     "ga-gtag": "1.2.0",
     "i18next": "25.8.0",
-    "i18next-fs-backend": "2.6.1",
     "i18next-json-sync": "3.1.2",
     "ip-regex": "5.0.0",
     "lodash-es": "4.17.21",

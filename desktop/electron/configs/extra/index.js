@@ -18,3 +18,5 @@ export const trayPath = getTrayPath()
 export const gnirehtetApkPath = extraResolve('common/gnirehtet/gnirehtet.apk')
 
 export const adbKeyboardApkPath = extraResolve('common/adb-keyboard/ADBKeyboard.apk')
+
+export const localesDir = extraResolve('common/locales/')

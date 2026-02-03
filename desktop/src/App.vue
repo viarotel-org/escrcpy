@@ -1,18 +1,18 @@
 <template>
-  <el-config-provider :locale :size="getSize($grid)">
+  <el-config-provider :locale="locale" :size="getSize($grid)">
     <Layouts />
     <WindowControls v-if="isPlatform('windows') || isPlatform('linux')" />
   </el-config-provider>
 </template>
 
 <script setup>
-import { i18n } from '$/locales/index.js'
-import localeModel from '$/plugins/element-plus/locale.js'
 import Layouts from './layouts/index.vue'
 import WindowControls from '$/components/window-controls/index.vue'
 import { isPlatform } from '$/utils/index.js'
 
 const router = useRouter()
+
+const { locale, getSize } = useWindowStateSync({ deviceSync: false })
 
 window.electron.ipcRenderer.on('quit-before', async () => {
   ElLoading.service({
@@ -32,24 +32,9 @@ window.electron.ipcRenderer.on('navigate-to-route', (event, route) => {
 })
 
 onMounted(() => {
+  showTips()
   startApp.open()
 })
-
-const locale = computed(() => {
-  const i18nLocale = i18n.global.locale.value
-
-  const value = localeModel[i18nLocale]
-
-  return value
-})
-
-showTips()
-
-function getSize(grid) {
-  const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
-
-  return value
-}
 
 async function showTips() {
   const { getScrcpyPath } = window.electron?.configs || {}

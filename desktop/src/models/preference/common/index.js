@@ -37,7 +37,7 @@ export default {
     language: {
       label: 'common.language.name',
       field: 'language',
-      type: 'LanguageSelect',
+      type: 'Select',
       value: window.navigator.language,
       placeholder: 'common.language.placeholder',
       options: [

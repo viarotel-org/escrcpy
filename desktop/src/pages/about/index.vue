@@ -53,12 +53,11 @@
 <script setup>
 import { homepage, version } from '/package.json'
 import SponsorDialog from './components/sponsor-dialog/index.vue'
-import { i18n } from '$/locales/index.js'
 
 const loading = ref(false)
 const percent = ref(0)
 const escrcpyURL = homepage
-const locale = i18n.global.locale
+const { language: locale } = useI18n()
 
 const { proxy } = getCurrentInstance()
 

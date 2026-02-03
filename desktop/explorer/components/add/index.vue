@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
 import { TEXT_FILE_EXTENSIONS } from '$/dicts/index.js'
 
 const emit = defineEmits(['success'])

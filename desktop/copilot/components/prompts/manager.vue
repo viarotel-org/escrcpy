@@ -129,8 +129,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
-
 const props = defineProps({
 
 })

@@ -34,7 +34,6 @@
 
 <script setup>
 import { nextTick, ref, watch } from 'vue'
-import { t } from '$/locales/index.js'
 import ChatInput from '$copilot/components/chat/modules/input.vue'
 
 const props = defineProps({

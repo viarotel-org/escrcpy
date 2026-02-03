@@ -96,8 +96,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
-
 const subscribeStore = useSubscribeStore()
 
 const userInfo = computed(() => subscribeStore.userInfo || {})

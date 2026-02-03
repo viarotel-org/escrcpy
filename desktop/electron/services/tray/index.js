@@ -1,10 +1,10 @@
 import { app, dialog, Menu, Tray } from 'electron'
 import { trayPath } from '$electron/configs/index.js'
-import { executeI18n } from '$electron/helpers/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 import { sleep } from '$/utils'
 import { resolveMainWindow } from '@escrcpy/electron-setup/main'
+import { t } from '$electron/helpers/i18n/index.js'
 
 export default {
   name: 'service:tray',
@@ -15,8 +15,6 @@ export default {
       console.warn('[tray] main window not available')
       return
     }
-
-    const t = value => executeI18n(mainWindow, value)
 
     let tray = null
 
@@ -42,12 +40,12 @@ export default {
           type: 'question',
           cancelId: 2,
           buttons: [
-            await t('appClose.quit'),
-            await t('appClose.minimize'),
-            await t('appClose.quit.cancel'),
+            t('appClose.quit'),
+            t('appClose.minimize'),
+            t('appClose.quit.cancel'),
           ],
-          title: await t('common.tips'),
-          message: await t('appClose.message'),
+          title: t('common.tips'),
+          message: t('appClose.message'),
         })
 
         appCloseCode = response
@@ -119,20 +117,20 @@ export default {
 
       const contextMenu = Menu.buildFromTemplate([
         {
-          label: await t('common.open'),
+          label: t('common.open'),
           click: () => {
             showApp()
           },
         },
         {
-          label: await t('common.restart'),
+          label: t('common.restart'),
           click: () => {
             app.relaunch()
             quitApp()
           },
         },
         {
-          label: await t('appClose.quit'),
+          label: t('appClose.quit'),
           click: () => {
             quitApp()
           },

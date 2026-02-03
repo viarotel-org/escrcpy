@@ -1,4 +1,3 @@
-import { t } from '$/locales/index.js'
 import { usePreferenceStore } from '$/store/preference/index.js'
 
 /**
@@ -48,11 +47,11 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
 
     const totalChanges = arrangedWidgets.value.length + removedWidgets.length
     if (totalChanges === 0) {
-      ElMessage.warning(t('device.arrange.save.noChanges'))
+      ElMessage.warning(window.t('device.arrange.save.noChanges'))
     }
     else {
-      const removedText = removedWidgets.length > 0 ? t('device.arrange.save.removed', { count: removedWidgets.length }) : ''
-      ElMessage.success(t('device.arrange.save.success', { count: arrangedWidgets.value.length, removed: removedText }))
+      const removedText = removedWidgets.length > 0 ? window.t('device.arrange.save.removed', { count: removedWidgets.length }) : ''
+      ElMessage.success(window.t('device.arrange.save.success', { count: arrangedWidgets.value.length, removed: removedText }))
     }
 
     close()

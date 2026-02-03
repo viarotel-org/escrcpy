@@ -1,5 +1,3 @@
-import { t } from '$/locales/index.js'
-
 /**
  * Widget management composable
  * Handles adding, removing, and managing widgets
@@ -47,7 +45,7 @@ export function useWidgetManagement(
 
     if (command === 'global') {
       if (hasGlobalWidget.value) {
-        ElMessage.warning(t('device.arrange.widget.global.exists'))
+        ElMessage.warning(window.t('device.arrange.widget.global.exists'))
         return
       }
 
@@ -61,7 +59,7 @@ export function useWidgetManagement(
       const widget = createWidgetFromConfig(config, {
         id: 'global',
         type: 'global',
-        name: t('device.arrange.widget.global.name'),
+        name: window.t('device.arrange.widget.global.name'),
       })
 
       arrangedWidgets.value.push(widget)
@@ -73,7 +71,7 @@ export function useWidgetManagement(
 
     const device = allDevices.value.find(d => d.id === command)
     if (!device) {
-      ElMessage.error(t('device.arrange.device.notFound'))
+      ElMessage.error(window.t('device.arrange.device.notFound'))
       return
     }
 
@@ -111,8 +109,8 @@ export function useWidgetManagement(
 
   const clearAllWidgets = () => {
     ElMessageBox.confirm(
-      t('device.arrange.clear.confirm'),
-      t('common.tips'),
+      window.t('device.arrange.clear.confirm'),
+      window.t('common.tips'),
       {
         type: 'warning',
       },

@@ -36,8 +36,6 @@ import WelcomePanel from './modules/welcome.vue'
 import ChatItem from './modules/item.vue'
 import ChatInput from './modules/input.vue'
 
-import { t } from '$/locales/index.js'
-
 import copilotClient from '$copilot/services/index.js'
 
 import { useChatMessages } from '$/database/index.js'

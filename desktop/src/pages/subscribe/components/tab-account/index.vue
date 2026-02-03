@@ -86,7 +86,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
 import Subscriptions from './subscriptions/index.vue'
 
 const emit = defineEmits(['switchTab'])

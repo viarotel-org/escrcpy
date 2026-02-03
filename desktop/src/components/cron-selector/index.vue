@@ -364,7 +364,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
 import { Cron } from 'croner'
 import dayjs from 'dayjs'
 import { ArrowDown, ArrowUp, Check, Close, InfoFilled } from '@element-plus/icons-vue'

@@ -1,7 +1,5 @@
 import '$/utils/console.js'
 
-import { i18n, t } from '$/locales/index.js'
-
 import plugins from '$/plugins/index.js'
 
 import store from '$/store/index.js'
@@ -22,9 +20,6 @@ export default (App, { router, install } = {}) => {
   app.use(store)
 
   app.use(plugins)
-
-  app.use(i18n)
-  window.t = t
 
   install?.(app)
 

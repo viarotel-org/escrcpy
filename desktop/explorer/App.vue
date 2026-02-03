@@ -268,6 +268,7 @@ const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platfo
 const explorer = useExplorer()
 
 const { queryParams: device, locale, getSize } = useWindowStateSync({
+  deviceSync: false,
   onQueryMounted() {
     explorer.init(device.value, '/sdcard')
     const deviceName = deviceStore.getLabel(device.value, 'name')

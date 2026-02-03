@@ -6,6 +6,7 @@ import '$electron/helpers/debugger/renderer.js'
 
 import path from 'node:path'
 import store from '$electron/helpers/store/index.js'
+import i18n from '$electron/helpers/i18n/index.js'
 import adb from './adb/index.js'
 import electron from './electron/index.js'
 import gnirehtet from './gnirehtet/index.js'
@@ -22,6 +23,8 @@ export function createMiddleware() {
   defineMiddleware('nodePath', path)
 
   defineMiddleware('electronStore', store)
+
+  defineMiddleware('i18n', i18n)
 
   defineMiddleware('electron', electron)
 

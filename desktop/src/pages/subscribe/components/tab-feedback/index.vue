@@ -70,7 +70,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
 import subscribeClient from '$/services/subscribe/index.js'
 
 const subscribeStore = useSubscribeStore()

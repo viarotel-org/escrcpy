@@ -1,4 +1,3 @@
-import { i18n } from '$/locales/index.js'
 import localeModel from '$/plugins/element-plus/locale.js'
 
 /**
@@ -6,26 +5,28 @@ import localeModel from '$/plugins/element-plus/locale.js'
  * @returns {Object} Window state sync instance
  */
 export function useWindowStateSync(options = {}) {
-  const { useDeviceSync = true } = options
+  const { deviceSync = true } = options
 
+  const { language } = useI18n()
   const themeStore = useThemeStore()
+
   const queryParams = ref({})
   const currentDevice = ref({})
 
   const locale = computed(() => {
-    const i18nLocale = i18n.global.locale.value
-    const value = localeModel[i18nLocale]
+    const value = localeModel[language.value]
     return value
   })
 
-  if (useDeviceSync) {
-    window.electron.ipcRenderer.on('device-change', handleDeviceChange)
+  if (deviceSync) {
+    window.electron.ipcRenderer?.on?.('device-change', handleDeviceChange)
   }
 
-  window.electronStore.onDidChange('common.language', (value) => {
-    i18n.global.locale.value = value
-    options.onLanguageChange?.(value)
-  })
+  if (options.onLanguageChange) {
+    watch(() => language.value, (val) => {
+      options.onLanguageChange?.(val)
+    })
+  }
 
   onMounted(() => {
     queryParams.value = Object.fromEntries(new URLSearchParams(location.search))
@@ -33,7 +34,9 @@ export function useWindowStateSync(options = {}) {
   })
 
   onUnmounted(() => {
-    window.electron.ipcRenderer.off('device-change', handleDeviceChange)
+    if (deviceSync) {
+      window.electron.ipcRenderer?.off?.('device-change', handleDeviceChange)
+    }
   })
 
   function getSize(grid) {

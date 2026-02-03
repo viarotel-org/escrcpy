@@ -200,7 +200,6 @@
 </template>
 
 <script setup>
-import { t } from '$/locales/index.js'
 import { ApiModelEnum } from '$copilot/dicts/api.js'
 
 const props = defineProps({

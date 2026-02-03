@@ -91,7 +91,6 @@
 <script setup>
 import { CircleCheck, CircleClose, Loading } from '@element-plus/icons-vue'
 import QRCode from 'qrcode'
-import { t } from '$/locales/index.js'
 import subscribeClient from '$/services/subscribe/index.js'
 import { sleep } from '$/utils/index.js'
 

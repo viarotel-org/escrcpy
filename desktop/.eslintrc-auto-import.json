@@ -352,6 +352,7 @@
     "refManualReset": true,
     "usePreferredReducedTransparency": true,
     "useSSRWidth": true,
-    "useTimeAgoIntl": true
+    "useTimeAgoIntl": true,
+    "useI18n": true
   }
 }

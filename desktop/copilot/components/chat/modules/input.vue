@@ -27,7 +27,6 @@ import {
 } from '@tdesign-vue-next/chat'
 import '$/plugins/tdesign-next-chat/styles/theme.css'
 import { PromptBar } from '$copilot/components/prompts/index.js'
-import { t } from '$/locales/index.js'
 
 const props = defineProps({
   modelValue: {

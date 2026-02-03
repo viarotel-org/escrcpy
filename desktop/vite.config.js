@@ -1,5 +1,4 @@
 import { resolve } from 'node:path'
-import useI18n from '@intlify/unplugin-vue-i18n/vite'
 import useVueRouter from 'unplugin-vue-router/vite'
 import useVue from '@vitejs/plugin-vue'
 import useVueJsx from '@vitejs/plugin-vue-jsx'
@@ -34,6 +33,7 @@ function mergeCommon(config, { command = '' } = {}) {
         rollupOptions: {
           external: [
             'sharp',
+            'i18next-fs-backend',
           ],
         },
       },
@@ -65,9 +65,6 @@ export default function (args) {
         }),
         useVue(),
         useVueJsx(),
-        useI18n({
-          include: [resolve('src/locales/languages/**')],
-        }),
         useElectron({
           main: {
             entry: 'electron/main.js',

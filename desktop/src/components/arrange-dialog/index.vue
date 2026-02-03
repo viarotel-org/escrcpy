@@ -25,8 +25,8 @@
             :y="widget.y"
             :w="widget.width"
             :h="widget.height"
-            :min-width="48"
-            :min-height="24"
+            :min-width="minWidth"
+            :min-height="minHeight"
             :parent="true"
             class="widget-window" :class="[`${widget.type}-widget`]"
             @dragging="(x, y) => onWidgetDragging(widget.id, { x, y })"
@@ -56,9 +56,15 @@
                 </div>
               </div>
               <div class="widget-body">
-                <div class="widget-info bg-white/80 dark:bg-black/80 overflow-hidden">
-                  <div>{{ Math.round(widget.realWidth) }} × {{ Math.round(widget.realHeight) }}</div>
-                  <div>{{ Math.round(widget.realX) }}, {{ Math.round(widget.realY) }}</div>
+                <div class="widget-info bg-white/80 dark:bg-black/80 overflow-hidden relative">
+                  <WidgetRect
+                    v-bind="{
+                      widget,
+                      scaleConverter,
+                      minWidth,
+                      minHeight,
+                    }"
+                  />
                 </div>
               </div>
             </div>
@@ -137,12 +143,15 @@ import {
   useWidgetManagement,
 } from './hooks/index.js'
 
-// Dialog state
+import WidgetRect from './modules/widget-rect/index.vue'
+
 const visible = ref(false)
 const arrangementAreaRef = ref(null)
 const screenContainerRef = ref(null)
 
-// Initialize scale screen hook
+const minWidth = 48
+const minHeight = 24
+
 const {
   scaleConverter,
   containerWidth,
@@ -153,13 +162,10 @@ const {
   containerRef: arrangementAreaRef,
 })
 
-// State management
 const arrangedWidgets = ref([])
 
-// Initialize device management
 const { allDevices, loadDevices } = useDeviceManagement()
 
-// Computed properties
 const hasGlobalWidget = computed(() => {
   return arrangedWidgets.value.some(w => w.type === 'global')
 })
@@ -179,14 +185,12 @@ const screenContainerStyle = computed(() => {
   }
 })
 
-// Initialize layout management
 const { loadLayout, updateLayout, createWidgetFromConfig } = useLayoutManagement(
   scaleConverter,
   arrangedWidgets,
   allDevices,
 )
 
-// Initialize widget management
 const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemovedWidgets } = useWidgetManagement(
   arrangedWidgets,
   allDevices,
@@ -201,7 +205,6 @@ const resetLayout = () => {
   loadLayout()
 }
 
-// Initialize widget events
 const {
   onWidgetDragging,
   onWidgetResizing,
@@ -209,17 +212,14 @@ const {
   onWidgetResizeStop,
 } = useWidgetEvents(scaleConverter, arrangedWidgets)
 
-// Initialize dialog management
 const { open, close, onClosed } = useDialogManagement(visible, arrangedWidgets, loadDevices, loadLayout)
 
-// Initialize save layout
 const { saveLayout } = useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets)
 
 watch(() => `${containerWidth.value}${containerHeight.value}`, () => {
   updateLayout()
 }, { flush: 'post' })
 
-// Expose public methods for parent components
 defineExpose({
   open,
   close,
@@ -283,11 +283,6 @@ defineExpose({
 
 .widget-info {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }

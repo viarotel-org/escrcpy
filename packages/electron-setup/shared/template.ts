@@ -93,14 +93,18 @@ export class TemplateBrowserWindow implements EnhancedBrowserWindow {
 
     const defaultOptions = createDefaultWindowOptions(options, this.#storage)
 
-    this.win = new BrowserWindow({
-      ...defaultOptions,
-      ...browserWindowOverrides,
-    })
+    const persistedBounds = {}
 
     if (this.options.persistenceBounds) {
       this.#onResize = debounce(this.#handleResize.bind(this), 500)
+      Object.assign(persistedBounds, this.#storage.get(WINDOW_BOUNDS_KEY) ?? {})
     }
+
+    this.win = new BrowserWindow({
+      ...defaultOptions,
+      ...browserWindowOverrides,
+      ...persistedBounds,
+    })
 
     this.#bindEvents()
     this.#setupExternalLinkHandler()
@@ -204,7 +208,6 @@ function createDefaultWindowOptions(
 ): BrowserWindowConstructorOptions {
   const {
     preloadDir,
-    persistenceBounds,
     icon,
     width = 900,
     height = 650,
@@ -212,8 +215,6 @@ function createDefaultWindowOptions(
     minHeight,
     backgroundColor = '#00000000',
   } = options
-
-  const persistedBounds = (persistenceBounds ? storage.get(WINDOW_BOUNDS_KEY) : {}) || {}
 
   return {
     show: false,
@@ -234,7 +235,6 @@ function createDefaultWindowOptions(
       spellcheck: false,
     },
 
-    ...(persistedBounds as any),
     ...getTitleBarOptions(),
   }
 }

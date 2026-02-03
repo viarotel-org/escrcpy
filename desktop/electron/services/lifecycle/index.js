@@ -27,7 +27,12 @@ export default {
         remote.enable(mainWindow.webContents)
       }
 
-      runExecuteArguments(process.argv, mainWindow)
+      const args = runExecuteArguments(process.argv, mainWindow)
+
+      if (args.minimized) {
+        globalEventEmitter.emit('tray:create')
+        return false
+      }
 
       mainWindow.show?.()
     }
@@ -88,11 +93,6 @@ export default {
 
         // Inject arguments into environment variables
         injectExecuteArguments(args)
-
-        // Handle minimized argument - create tray
-        if (args.minimized) {
-          globalEventEmitter.emit('tray:create')
-        }
 
         // Send IPC message to renderer process
         if (mainWindow?.webContents && !mainWindow.isDestroyed?.()) {

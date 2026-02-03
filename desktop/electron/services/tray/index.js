@@ -9,13 +9,6 @@ import { t } from '$electron/helpers/i18n/index.js'
 export default {
   name: 'service:tray',
   async apply(mainApp) {
-    const mainWindow = await resolveMainWindow(mainApp)
-
-    if (!mainWindow) {
-      console.warn('[tray] main window not available')
-      return
-    }
-
     let tray = null
 
     globalEventEmitter.on('tray:destroy', () => {
@@ -26,40 +19,48 @@ export default {
       createTray()
     })
 
-    mainWindow.on('close', async (event) => {
-      if (app.isQuiting) {
-        return true
-      }
+    registerWindowCloseHandler()
 
-      event.preventDefault()
+    async function registerWindowCloseHandler() {
+      const mainWindow = await resolveMainWindow(mainApp)
 
-      let appCloseCode = electronStore.get('common.appCloseCode')
+      mainWindow?.on?.('close', async (event) => {
+        if (app.isQuiting) {
+          return true
+        }
 
-      if (![0, 1].includes(appCloseCode)) {
-        const { response } = await dialog.showMessageBox({
-          type: 'question',
-          cancelId: 2,
-          buttons: [
-            t('appClose.quit'),
-            t('appClose.minimize'),
-            t('appClose.quit.cancel'),
-          ],
-          title: t('common.tips'),
-          message: t('appClose.message'),
-        })
+        event.preventDefault()
 
-        appCloseCode = response
-      }
+        let appCloseCode = electronStore.get('common.appCloseCode')
 
-      closeApp(appCloseCode)
-    })
+        if (![0, 1].includes(appCloseCode)) {
+          const { response } = await dialog.showMessageBox({
+            type: 'question',
+            cancelId: 2,
+            buttons: [
+              t('appClose.quit'),
+              t('appClose.minimize'),
+              t('appClose.quit.cancel'),
+            ],
+            title: t('common.tips'),
+            message: t('appClose.message'),
+          })
+
+          appCloseCode = response
+        }
+
+        closeApp(appCloseCode)
+      })
+    }
 
     function showApp() {
       if (process.platform === 'darwin') {
         app.dock.show()
       }
 
-      mainWindow.show()
+      const mainWindow = mainApp.getMainWindow()
+
+      mainWindow?.show?.()
 
       if (tray) {
         tray.destroy()
@@ -74,15 +75,19 @@ export default {
         app.dock.hide()
       }
 
-      mainWindow.hide()
+      const mainWindow = mainApp.getMainWindow()
+
+      mainWindow?.hide?.()
 
       return true
     }
 
     async function quitApp() {
+      const mainWindow = mainApp.getMainWindow()
+
       app.isQuiting = true
 
-      mainWindow.webContents.send('quit-before')
+      mainWindow?.webContents?.send?.('quit-before')
 
       await sleep(1 * 1000)
 
@@ -104,7 +109,7 @@ export default {
       return false
     }
 
-    async function createTray() {
+    function createTray() {
       hideApp()
 
       tray = new Tray(trayPath)

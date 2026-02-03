@@ -102,7 +102,10 @@ export default {
         })
       }
       catch (error) {
-        this.$message.warning(error.message || 'Start service failure')
+        adaptiveMessage(error.message || 'Start service failure', {
+          system: this.floating,
+          type: 'warning',
+        })
         this.device.$gnirehtetLoading = false
         this.device.$gnirehtetLoadingText = ''
       }

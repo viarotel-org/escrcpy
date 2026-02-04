@@ -18,9 +18,10 @@ const alias = {
   $docs: resolve('docs'),
   $renderer: resolve('src'),
   $electron: resolve('electron'),
-  $control: resolve('control'),
-  $explorer: resolve('explorer'),
-  $copilot: resolve('copilot'),
+  $control: resolve('entries/control'),
+  $explorer: resolve('entries/explorer'),
+  $copilot: resolve('entries/copilot'),
+  $terminal: resolve('entries/terminal'),
 }
 
 function mergeCommon(config, { command = '' } = {}) {
@@ -52,9 +53,10 @@ export default function (args) {
         rollupOptions: {
           input: {
             main: resolve('index.html'),
-            control: resolve('control/index.html'),
-            explorer: resolve('explorer/index.html'),
-            copilot: resolve('copilot/index.html'),
+            control: resolve('entries/control/index.html'),
+            explorer: resolve('entries/explorer/index.html'),
+            copilot: resolve('entries/copilot/index.html'),
+            terminal: resolve('entries/terminal/index.html'),
           },
         },
       },

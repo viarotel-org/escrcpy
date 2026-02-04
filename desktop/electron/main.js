@@ -26,22 +26,23 @@ import { browserWindowHeight, browserWindowWidth, getLogoPath } from './configs/
 import { getAppBackgroundColor } from './helpers/index.js'
 
 import {
-  contextMenu,
-  edger,
-  handles,
-  launch,
-  lifecycle,
-  listeners,
-  shortcuts,
-  tray,
-  updater,
+  contextMenuService,
+  edgerService,
+  handlesService,
+  launchService,
+  lifecycleService,
+  listenersService,
+  shortcutsService,
+  trayService,
+  updaterService,
 } from './services/index.js'
 
 import {
-  control,
-  copilot,
-  explorer,
-  main,
+  controlModule,
+  copilotModule,
+  explorerModule,
+  mainModule,
+  terminalModule,
 } from './modules/index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -57,25 +58,26 @@ const mainApp = createElectronApp({
 })
 
 mainApp.use(sandboxPlugin)
-mainApp.use(main)
-mainApp.use(lifecycle)
+mainApp.use(mainModule)
+mainApp.use(lifecycleService)
 
 mainApp.use(themePlugin)
 mainApp.use(windowIPCPlugin)
 mainApp.use(clipboardPlugin)
 
-mainApp.use(edger)
-mainApp.use(listeners)
-mainApp.use(handles)
-mainApp.use(tray)
-mainApp.use(contextMenu)
-mainApp.use(updater)
-mainApp.use(launch)
-mainApp.use(shortcuts)
+mainApp.use(edgerService)
+mainApp.use(listenersService)
+mainApp.use(handlesService)
+mainApp.use(trayService)
+mainApp.use(contextMenuService)
+mainApp.use(updaterService)
+mainApp.use(launchService)
+mainApp.use(shortcutsService)
 
-mainApp.use(control)
-mainApp.use(copilot)
-mainApp.use(explorer)
+mainApp.use(controlModule)
+mainApp.use(copilotModule)
+mainApp.use(explorerModule)
+mainApp.use(terminalModule)
 
 app.whenReady().then(() => {
   mainApp.start()

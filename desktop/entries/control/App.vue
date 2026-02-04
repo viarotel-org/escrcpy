@@ -72,7 +72,7 @@ const { currentDevice, queryParams, locale } = useWindowStateSync({
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.window.close('control')
+  window.electron.window.close('entries/control')
 }
 
 async function switchDevice(e) {
@@ -93,12 +93,10 @@ async function switchDevice(e) {
   })
 }
 
-const focusFlag = ref(false)
+const focusFlag = ref(true)
 
-onMounted(() => {
-  window.electron.ipcRenderer.on('window-focus', (event, value) => {
-    focusFlag.value = value
-  })
+window.electron.ipcRenderer.on('window-focus', (event, value) => {
+  focusFlag.value = value
 })
 </script>
 

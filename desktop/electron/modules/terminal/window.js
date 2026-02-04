@@ -1,9 +1,9 @@
 import { createWindowManager } from '@escrcpy/electron-setup/main'
 
 export default {
-  name: 'module:explorer:window',
+  name: 'module:terminal:window',
   apply(mainApp) {
-    createWindowManager('entries/explorer', {
+    createWindowManager('entries/terminal', {
       singleton: false,
       browserWindow: {
         frame: true,

@@ -128,7 +128,7 @@ export function openFloatControl(device) {
     return false
   }
 
-  window.electron.window.open('control', { query: { ...device } })
+  window.electron.window.open('entries/control', { query: { ...device } })
   return true
 }
 

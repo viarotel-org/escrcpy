@@ -19,7 +19,7 @@ const props = defineProps({
 function onTriggerClick() {
   const device = props.device
 
-  window.electron.window.open('copilot', {
+  window.electron.window.open('entries/copilot', {
     query: {
       id: device.id,
       name: device.name,

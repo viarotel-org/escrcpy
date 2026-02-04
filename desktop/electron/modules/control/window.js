@@ -3,7 +3,7 @@ import { createWindowManager } from '@escrcpy/electron-setup/main'
 export default {
   name: 'module:control:window',
   apply(mainApp) {
-    createWindowManager('control', {
+    createWindowManager('entries/control', {
       singleton: true,
       browserWindow: {
         frame: false,

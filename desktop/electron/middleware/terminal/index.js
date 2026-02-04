@@ -200,6 +200,47 @@ async function openWithGnirehtetCommand(command = '', options = {}) {
   })
 }
 
+/**
+ * Create ADB shell instance
+ * @param {string} deviceId - Device ID
+ * @returns {Promise<{success: boolean, shellId?: string, error?: string}>}
+ */
+async function createShell(deviceId) {
+  const { ipcRenderer } = await import('electron')
+  return ipcRenderer.invoke('terminal:create-shell', deviceId)
+}
+
+/**
+ * Write data to shell
+ * @param {string} shellId - Shell ID
+ * @param {string} data - Data to write
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function writeShell(shellId, data) {
+  const { ipcRenderer } = await import('electron')
+  return ipcRenderer.invoke('terminal:write-shell', shellId, data)
+}
+
+/**
+ * Destroy shell instance
+ * @param {string} shellId - Shell ID
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function destroyShell(shellId) {
+  const { ipcRenderer } = await import('electron')
+  return ipcRenderer.invoke('terminal:destroy-shell', shellId)
+}
+
+/**
+ * Destroy all shells for a device
+ * @param {string} deviceId - Device ID
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function destroyDeviceShells(deviceId) {
+  const { ipcRenderer } = await import('electron')
+  return ipcRenderer.invoke('terminal:destroy-device-shells', deviceId)
+}
+
 export default {
   openSystemTerminal,
   getAvailableTerminals,
@@ -207,4 +248,8 @@ export default {
   openWithScrcpyCommand,
   openWithGnirehtetCommand,
   buildEnvironment,
+  createShell,
+  writeShell,
+  destroyShell,
+  destroyDeviceShells,
 }

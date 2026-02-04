@@ -1,4 +1,5 @@
 import { createWindowManager } from '@escrcpy/electron-setup/main'
+import { trySend } from '$electron/helpers/index.js'
 
 export default {
   name: 'module:control:window',
@@ -20,13 +21,13 @@ export default {
       },
       hooks: {
         shown(win, { payload }) {
-          win.webContents.send('device-change', payload.query)
+          trySend(win, 'device-change', payload.query)
         },
         focus(win) {
-          win.webContents.send('window-focus', true)
+          trySend(win, 'window-focus', true)
         },
         blur(win) {
-          win.webContents.send('window-focus', false)
+          trySend(win, 'window-focus', false)
         },
       },
     })

@@ -9,8 +9,7 @@ export default {
       browserWindow: {
         persistenceBounds: true,
       },
-      hooks: {
-      },
+      hooks: {},
     })
   },
 }

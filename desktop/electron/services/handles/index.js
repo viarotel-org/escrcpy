@@ -2,6 +2,7 @@ import { app, BrowserWindow, dialog, ipcMain, Menu, screen, shell } from 'electr
 import fs from 'fs-extra'
 import path from 'node:path'
 import { openLogPath } from '$root/electron/helpers/debugger/index.js'
+import { isWindowDestroyed } from '$electron/helpers/index.js'
 
 export default {
   name: 'service:handles',
@@ -122,11 +123,13 @@ export default {
     ipcMain.handle('navigate-to-route', async (event, route) => {
       const win = BrowserWindow.fromWebContents(event.sender)
 
+      if (isWindowDestroyed(win)) {
+        return false
+      }
+
       try {
-        if (win && !win.isDestroyed()) {
-          win.show()
-          win.webContents.send('navigate-to-route', route)
-        }
+        win.show()
+        win.webContents.send('navigate-to-route', route)
         return true
       }
       catch (error) {
@@ -169,19 +172,32 @@ export default {
     ipcMain.handle('open-system-menu', (event, args = {}) => {
       const win = BrowserWindow.fromWebContents(event.sender)
 
+      if (isWindowDestroyed(win)) {
+        return false
+      }
+
       const { options = [], channel = 'system-menu-click' } = args
 
       const template = options.map((item) => {
         return {
           label: item.label,
           click() {
-            win.webContents.send(channel, item.value, item)
+            if (isWindowDestroyed(win)) {
+              return false
+            }
+
+            try {
+              win.webContents.send(channel, item.value, item)
+            }
+            catch (error) {
+              console.warn(`[Handles] Failed to send ${channel}:`, error.message)
+            }
           },
         }
       })
 
       const menu = Menu.buildFromTemplate(template)
-      menu.popup(BrowserWindow.fromWebContents(event.sender))
+      menu.popup(win)
 
       return true
     })

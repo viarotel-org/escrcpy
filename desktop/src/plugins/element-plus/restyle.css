@@ -122,3 +122,18 @@
     @apply !py-4 !px-4 !border-none;
   }
 }
+
+.el-switch.el-switch--theme {
+  .el-switch__action {
+    @apply !bg-gray-50 !text-gray-800;
+  }
+
+  .dark & {
+    .el-switch__core {
+      @apply !bg-gray-700 !border !border-gray-700;
+    }
+    .el-switch__action {
+      @apply !bg-gray-900 !text-gray-100;
+    }
+  }
+}

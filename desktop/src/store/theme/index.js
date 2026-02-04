@@ -64,6 +64,7 @@ export const useThemeStore = defineStore('app-theme', () => {
     isDark,
     init,
     update: init,
+    updateHtml,
   }
 })
 

@@ -24,7 +24,7 @@
       v-model="inputValue"
       class="px-2 pb-2"
       :is-executing="isExecuting"
-      :placeholder="t('copilot.inputPlaceholder')"
+      :placeholder="$t('copilot.inputPlaceholder')"
       show-prompt-manager
       @submit="handleSubmit"
       @stop="handleStop"

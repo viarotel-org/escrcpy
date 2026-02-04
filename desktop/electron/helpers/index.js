@@ -104,3 +104,14 @@ export function isPortable() {
 export function isPackaged() {
   return process.env.IS_PACKAGED === 'true'
 }
+
+export function trySend(sender, channel, ...args) {
+  if (!sender.isDestroyed()) {
+    try {
+      sender.send(channel, ...args)
+    }
+    catch (error) {
+      console.warn(`[Terminal Service] Failed to send ${channel}:`, error.message)
+    }
+  }
+}

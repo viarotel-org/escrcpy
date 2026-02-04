@@ -14,13 +14,13 @@ watch([() => themeStore.value], () => {
 })
 
 function openSearchModal() {
-  window.findInPageModal.open({ isDark: themeStore.isDark })
+  window.$preload.search.open({ isDark: themeStore.isDark })
 }
 
 const handleClick = openSearchModal
 
 function closeSearchModal() {
-  window.findInPageModal.close()
+  window.$preload.search.close()
 }
 
 const { ctrl_f } = useMagicKeys()

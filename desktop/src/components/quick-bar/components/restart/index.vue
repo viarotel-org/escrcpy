@@ -8,7 +8,7 @@ defineOptions({
 })
 
 function handleClick() {
-  window.electron.ipcRenderer.send('restart-app')
+  window.$preload.ipcRenderer.send('restart-app')
 }
 </script>
 

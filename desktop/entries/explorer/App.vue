@@ -263,7 +263,7 @@ const moveDialogRef = ref()
 const editDialogRef = ref()
 const pathSelectAction = ref('move')
 
-const uploadDropdownTrigger = ['darwin'].includes(window.electron.process.platform) ? 'contextmenu' : 'hover'
+const uploadDropdownTrigger = ['darwin'].includes(window.$preload.process.platform) ? 'contextmenu' : 'hover'
 
 const explorer = useExplorer()
 
@@ -344,7 +344,7 @@ async function handleUpload(command) {
 
   properties.unshift(...openTypes)
 
-  const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+  const files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
     properties,
   })
 

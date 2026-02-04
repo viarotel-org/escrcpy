@@ -60,7 +60,7 @@ export function useScaleScreen(options = {}) {
   }
 
   async function getPrimaryDisplay() {
-    display.value = await window.electron?.ipcRenderer?.invoke('get-primary-display')
+    display.value = await window.$preload.ipcRenderer?.invoke('get-primary-display')
   }
 
   function scaleCalculator(val, real = false) {

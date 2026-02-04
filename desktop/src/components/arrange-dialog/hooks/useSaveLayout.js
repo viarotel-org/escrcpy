@@ -9,7 +9,7 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
 
   const saveLayout = () => {
     // First, handle removed widgets - clean up their configurations
-    const scrcpy = window.electronStore.get('scrcpy') || {}
+    const scrcpy = window.$preload.store.get('scrcpy') || {}
 
     const removedWidgets = getRemovedWidgets()
 
@@ -22,7 +22,7 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
       delete scopeConfig['--window-x']
       delete scopeConfig['--window-y']
 
-      window.electronStore.set(['scrcpy', scope], scopeConfig)
+      window.$preload.store.set(['scrcpy', scope], scopeConfig)
     })
 
     // Then, save current widgets' configurations
@@ -37,7 +37,7 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
       const scope = widget.type === 'global' ? 'global' : widget.deviceId
 
       const scopeConfig = { ...scrcpy[scope] || {}, ...rectConfig }
-      window.electronStore.set(['scrcpy', scope], scopeConfig)
+      window.$preload.store.set(['scrcpy', scope], scopeConfig)
     })
 
     // Clear the removed widgets list

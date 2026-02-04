@@ -282,7 +282,7 @@ async function executeBatchCopilotTask(devices, options = {}) {
   loading.value = true
 
   const results = []
-  const concurrencyLimit = Number(window.electronStore.get('common.concurrencyLimit') ?? 5)
+  const concurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
   const limit = pLimit(concurrencyLimit)
 
   try {

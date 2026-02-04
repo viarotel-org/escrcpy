@@ -2,7 +2,7 @@ import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
 import { useFixCursor, useSystemTerminal } from './helper.js'
 
-const $scrcpy = window.scrcpy
+const $scrcpy = window.$preload.scrcpy
 
 export function useScrcpy({ vShell, history, loading } = {}) {
   const scrcpy = async (args) => {

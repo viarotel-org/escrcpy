@@ -5,7 +5,7 @@ export function useStartApp() {
   const env = getEnv()
 
   function getEnv() {
-    return window.electron.process.env
+    return window.$preload.process.env
   }
 
   async function open(options = {}) {
@@ -19,7 +19,7 @@ export function useStartApp() {
 
     loading.value = true
 
-    await window.adb.waitForDevice(deviceId)
+    await window.$preload.adb.waitForDevice(deviceId)
 
     const title = `${appName}-${deviceStore.getLabel(deviceId, 'synergy')}`
 
@@ -27,7 +27,7 @@ export function useStartApp() {
       excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
     })
 
-    await window.scrcpy.startApp(deviceId, { ...options, title, commands, packageName })
+    await window.$preload.scrcpy.startApp(deviceId, { ...options, title, commands, packageName })
       .catch((e) => {
         console.error('mirror.commands', commands)
         console.error('mirror.error', e)

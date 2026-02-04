@@ -1,6 +1,6 @@
 import electronLog from 'electron-log/renderer'
 
-const debug = import.meta.env.MODE === 'production' ? window.electronStore.get('common.debug') : false
+const debug = import.meta.env.MODE === 'production' ? window.$preload.store.get('common.debug') : false
 
 if (debug) {
   Object.assign(console, electronLog.functions)

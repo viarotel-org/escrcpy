@@ -5,8 +5,8 @@
 
 import '../types.js'
 
-/** @type {typeof window.adb} */
-const $adb = window.adb
+/** @type {typeof window.$preload.adb} */
+const $adb = window.$preload.adb
 
 /**
  * Download hook
@@ -191,7 +191,7 @@ export function useDownloader({ deviceId }) {
    */
   async function selectAndDownload(items, options = {}) {
     try {
-      const savePath = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+      const savePath = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
         properties: ['openDirectory', 'createDirectory'],
         title: 'Select Save Location',
       })

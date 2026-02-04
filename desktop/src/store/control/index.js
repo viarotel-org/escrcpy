@@ -7,7 +7,7 @@ export const useControlStore = defineStore('app-control', () => {
 
   // Initialize layout
   const getBarLayout = () => {
-    barLayout.value = window.electronStore.get('control.barLayout') || []
+    barLayout.value = window.$preload.store.get('control.barLayout') || []
     return barLayout.value
   }
 
@@ -22,12 +22,12 @@ export const useControlStore = defineStore('app-control', () => {
     }
 
     barLayout.value = value
-    window.electronStore.set('control.barLayout', value)
+    window.$preload.store.set('control.barLayout', value)
   }
 
   // Subscribe to external changes
   function setupWatcher() {
-    window.electronStore.onDidChange('control.barLayout', () => {
+    window.$preload.store.onDidChange('control.barLayout', () => {
       getBarLayout()
     })
   }

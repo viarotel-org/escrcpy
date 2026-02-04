@@ -7,16 +7,16 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
   const paymentPlans = ref([])
   const loading = ref(false)
 
-  const subscribeInfo = ref(window.electronStore.get('subscribe') ?? {})
+  const subscribeInfo = ref(window.$preload.store.get('subscribe') ?? {})
 
   const accessToken = computed({
     get: () => {
-      subscribeInfo.value = window.electronStore.get('subscribe') ?? {}
+      subscribeInfo.value = window.$preload.store.get('subscribe') ?? {}
       return subscribeInfo.value.accessToken
     },
     set: (val) => {
       subscribeInfo.value.accessToken = val
-      window.electronStore.set('subscribe.accessToken', val)
+      window.$preload.store.set('subscribe.accessToken', val)
     },
   })
 
@@ -46,7 +46,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
 
   init()
 
-  window.electronStore.onDidChange('subscribe.accessToken', (val) => {
+  window.$preload.store.onDidChange('subscribe.accessToken', (val) => {
     if (val === accessToken.value) {
       return false
     }

@@ -34,7 +34,7 @@ export default {
     async handleInstall(device, { files, silent = false } = {}) {
       if (!files) {
         try {
-          files = await this.$electron.ipcRenderer.invoke('show-open-dialog', {
+          files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
             properties: ['openFile', 'multiSelections'],
             filters: [
               {

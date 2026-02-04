@@ -12,7 +12,7 @@ import command from '$/utils/command/index.js'
 
 export const usePreferenceStore = defineStore('app-preference', () => {
   // Define reactive state
-  const deviceScope = ref(window.electronStore.get('scrcpy.deviceScope') || 'global')
+  const deviceScope = ref(window.$preload.store.get('scrcpy.deviceScope') || 'global')
   const recordKeys = ref(Object.values(preferenceModel?.record?.children || {}).map((item) => {
     return item.field
   }))
@@ -33,7 +33,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
 
   function setScope(value) {
     deviceScope.value = value
-    window.electronStore.set('scrcpy.deviceScope', deviceScope.value)
+    window.$preload.store.set('scrcpy.deviceScope', deviceScope.value)
     init()
   }
 
@@ -43,17 +43,17 @@ export const usePreferenceStore = defineStore('app-preference', () => {
 
   function reset(scope) {
     if (!scope || ['global'].includes(scope)) {
-      window.electronStore.clear()
+      window.$preload.store.clear()
     }
     else {
       const fields = getTopFields()
       fields.forEach((key) => {
         if (key === 'scrcpy') {
           deviceScope.value = scope
-          window.electronStore.set(['scrcpy', scope], {})
+          window.$preload.store.set(['scrcpy', scope], {})
           return false
         }
-        window.electronStore.set(key, {})
+        window.$preload.store.set(key, {})
       })
     }
     init()
@@ -62,14 +62,14 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   function resetDeps(type) {
     switch (type) {
       case 'adb':
-        window.electronStore.set('common.adbPath', '')
+        window.$preload.store.set('common.adbPath', '')
         break
       case 'scrcpy':
-        window.electronStore.set('common.scrcpyPath', '')
+        window.$preload.store.set('common.scrcpyPath', '')
         break
       default:
-        window.electronStore.set('common.adbPath', '')
-        window.electronStore.set('common.scrcpyPath', '')
+        window.$preload.store.set('common.adbPath', '')
+        window.$preload.store.set('common.scrcpyPath', '')
         break
     }
     init()

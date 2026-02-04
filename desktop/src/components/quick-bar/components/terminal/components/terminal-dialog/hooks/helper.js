@@ -8,14 +8,14 @@ export function useFixCursor(history) {
 }
 
 export async function useSystemTerminal(command) {
-  const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
+  const enableSystemTerminal = window.$preload.store.get('common.enableSystemTerminal')
 
   if (!enableSystemTerminal) {
     return false
   }
 
   try {
-    await window.terminal.openSystemTerminal({
+    await window.$preload.terminal.openSystemTerminal({
       command,
     })
   }

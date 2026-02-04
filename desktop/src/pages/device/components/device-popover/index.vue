@@ -108,7 +108,7 @@ async function onBeforeEnter() {
 
 async function getScreencap() {
   try {
-    const screencap = await window.adb.screencap(props.device.id, { returnBase64: true })
+    const screencap = await window.$preload.adb.screencap(props.device.id, { returnBase64: true })
     Object.assign(deviceInfo.value, { screencap: `data:image/png;base64,${screencap}` })
   }
   catch (error) {
@@ -119,7 +119,7 @@ async function getScreencap() {
 
 async function getBattery() {
   try {
-    const battery = await window.adb.battery(props.device.id)
+    const battery = await window.$preload.adb.battery(props.device.id)
     Object.assign(deviceInfo.value, { battery: battery.computed })
   }
   catch (error) {

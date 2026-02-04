@@ -8,7 +8,7 @@ defineOptions({
 })
 
 function handleClick() {
-  window.electron.ipcRenderer.invoke('open-log-path')
+  window.$preload.ipcRenderer.invoke('open-log-path')
 }
 </script>
 

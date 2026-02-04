@@ -19,7 +19,7 @@ export function useMirrorAction() {
         excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
       })
 
-      const mirroring = window.scrcpy.mirror(deviceId, {
+      const mirroring = window.$preload.scrcpy.mirror(deviceId, {
         title: deviceStore.getLabel(deviceId, 'mirror'),
         args,
         ...options,

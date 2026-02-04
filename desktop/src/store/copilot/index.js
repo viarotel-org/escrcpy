@@ -17,9 +17,9 @@ export const useCopilotStore = defineStore('app-copilot', () => {
     ...defaultConfig,
   })
 
-  updateConfig(window.electronStore.get('copilot') ?? {})
+  updateConfig(window.$preload.store.get('copilot') ?? {})
 
-  window.electronStore.onDidChange('copilot', (val) => {
+  window.$preload.store.onDidChange('copilot', (val) => {
     if (isEqual(val, config.value)) {
       return false
     }
@@ -33,7 +33,7 @@ export const useCopilotStore = defineStore('app-copilot', () => {
       ...val,
     }
 
-    window.electronStore.set('copilot', toRaw(config.value))
+    window.$preload.store.set('copilot', toRaw(config.value))
   }
 
   function switchGiteeConfig() {
@@ -49,7 +49,7 @@ export const useCopilotStore = defineStore('app-copilot', () => {
 
   function resetConfig(options = {}) {
     if (options.source === 'store') {
-      updateConfig(window.electronStore.get('copilot') ?? defaultConfig)
+      updateConfig(window.$preload.store.get('copilot') ?? defaultConfig)
       return
     }
 

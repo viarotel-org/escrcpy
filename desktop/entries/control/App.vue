@@ -72,7 +72,7 @@ const { currentDevice, queryParams, locale } = useWindowStateSync({
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.electron.window.close('entries/control')
+  window.$preload.win.close('entries/control')
 }
 
 async function switchDevice(e) {
@@ -87,7 +87,7 @@ async function switchDevice(e) {
     }
   })
 
-  window.electron.ipcRenderer.invoke('open-system-menu', {
+  window.$preload.ipcRenderer.invoke('open-system-menu', {
     channel: 'device-change',
     options,
   })
@@ -95,7 +95,7 @@ async function switchDevice(e) {
 
 const focusFlag = ref(true)
 
-window.electron.ipcRenderer.on('window-focus', (event, value) => {
+window.$preload.ipcRenderer.on('window-focus', (event, value) => {
   focusFlag.value = value
 })
 </script>

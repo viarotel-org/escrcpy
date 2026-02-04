@@ -108,7 +108,7 @@ export default {
 
         await recording
 
-        window.electron.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
+        window.$preload.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
 
         await this.handleSuccess(savePath)
       }

@@ -135,7 +135,7 @@ export class PreflightChecker {
 
     try {
       // Check keyboard status via IPC call to main process
-      const isInstalled = await window.electron?.ipcRenderer.invoke(
+      const isInstalled = await window.$preload.ipcRenderer.invoke(
         'copilot:checkKeyboard',
         deviceId,
       )
@@ -196,7 +196,7 @@ export class PreflightChecker {
 
     try {
       // Check API validity via IPC call to main process
-      const apiStatus = await window.electron?.ipcRenderer.invoke(
+      const apiStatus = await window.$preload.ipcRenderer.invoke(
         'copilot:checkModelApi',
         { baseUrl, apiKey, model },
       )

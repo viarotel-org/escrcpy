@@ -1,5 +1,5 @@
 const { getDefaultAdbPath, getDefaultScrcpyPath, getDefaultGnirehtetPath, desktopPath }
-  = window.electron?.configs || {}
+  = window.$preload.configs || {}
 
 const defaultAdbPath = getDefaultAdbPath?.()
 const defaultScrcpyPath = getDefaultScrcpyPath?.()

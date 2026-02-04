@@ -6,8 +6,8 @@
 
 import '../types.js'
 
-/** @type {typeof window.adb} */
-const $adb = window.adb
+/** @type {typeof window.$preload.adb} */
+const $adb = window.$preload.adb
 
 /**
  * File preview hook
@@ -136,7 +136,7 @@ export function useFilePreview({ deviceId }) {
 
     try {
       // Get temp directory
-      const tempDir = await window.electron.ipcRenderer.invoke('get-temp-path')
+      const tempDir = await window.$preload.ipcRenderer.invoke('get-temp-path')
 
       // Generate unique filename (append timestamp to avoid collisions)
       const timestamp = Date.now()
@@ -146,7 +146,7 @@ export function useFilePreview({ deviceId }) {
         ? fileName.substring(0, fileName.lastIndexOf('.'))
         : fileName
       const uniqueFileName = `${fileBaseName}_${timestamp}${fileExt}`
-      const tempFilePath = window.nodePath.join(tempDir, uniqueFileName)
+      const tempFilePath = window.$preload.path.join(tempDir, uniqueFileName)
 
       // Convert to downloader format
       const downloadItem = {
@@ -176,14 +176,14 @@ export function useFilePreview({ deviceId }) {
       }
 
       // Build downloaded file path
-      const downloadedPath = window.nodePath.join(tempDir, fileName)
+      const downloadedPath = window.$preload.path.join(tempDir, fileName)
 
       // Rename file via IPC if necessary
       let finalPath = downloadedPath
       if (fileName !== uniqueFileName) {
         try {
           // Use IPC to call main process for file rename
-          await window.electron.ipcRenderer.invoke('rename-temp-file', {
+          await window.$preload.ipcRenderer.invoke('rename-temp-file', {
             oldPath: downloadedPath,
             newPath: tempFilePath,
           })
@@ -197,7 +197,7 @@ export function useFilePreview({ deviceId }) {
       }
 
       // Open file with system default app (via IPC)
-      const openResult = await window.electron.ipcRenderer.invoke('open-path', finalPath)
+      const openResult = await window.$preload.ipcRenderer.invoke('open-path', finalPath)
 
       if (openResult) {
         // openPath returns a non-empty string on error

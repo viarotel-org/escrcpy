@@ -59,10 +59,9 @@ const percent = ref(0)
 const escrcpyURL = homepage
 const { language: locale } = useI18n()
 
-const { proxy } = getCurrentInstance()
-
+const sponsorDialogRef = ref()
 function onClickDonate() {
-  proxy.$refs.sponsorDialogRef.open()
+  sponsorDialogRef.value.open()
 }
 
 function onClickDocs() {
@@ -75,36 +74,36 @@ function onClickDocs() {
 
 function handleUpdate() {
   loading.value = true
-  proxy.$electron.ipcRenderer.send('check-for-update')
+  window.$preload.ipcRenderer.send('check-for-update')
 }
 
 function onUpdateNotAvailable() {
-  proxy.$electron.ipcRenderer.on('update-not-available', () => {
+  window.$preload.ipcRenderer.on('update-not-available', () => {
     loading.value = false
-    proxy.$message.success(proxy.$t('about.update-not-available'))
+    ElMessage.success(window.t('about.update-not-available'))
   })
 }
 
 function onDownloadProgress() {
-  proxy.$electron.ipcRenderer.on('download-progress', (event, ret) => {
+  window.$preload.ipcRenderer.on('download-progress', (event, ret) => {
     percent.value = ret.percent
   })
 }
 
 function onUpdateDownloaded() {
-  proxy.$electron.ipcRenderer.on('update-downloaded', async () => {
+  window.$preload.ipcRenderer.on('update-downloaded', async () => {
     loading.value = false
     try {
-      await proxy.$confirm(
-        proxy.$t('about.update-downloaded.message'),
-        proxy.$t('about.update-downloaded.title'),
+      await ElMessageBox.confirm(
+        window.t('about.update-downloaded.message'),
+        window.t('about.update-downloaded.title'),
         {
-          confirmButtonText: proxy.$t('about.update-downloaded.confirm'),
-          cancelButtonText: proxy.$t('common.cancel'),
+          confirmButtonText: window.t('about.update-downloaded.confirm'),
+          cancelButtonText: window.t('common.cancel'),
           closeOnClickModal: false,
         },
       )
-      proxy.$electron.ipcRenderer.send('quit-and-install')
+      window.$preload.ipcRenderer.send('quit-and-install')
     }
     catch (error) {
       console.warn(error.message)
@@ -113,12 +112,12 @@ function onUpdateDownloaded() {
 }
 
 function onUpdateError() {
-  proxy.$electron.ipcRenderer.on('update-error', async (_, ret) => {
+  window.$preload.ipcRenderer.on('update-error', async (_, ret) => {
     loading.value = false
     try {
-      await proxy.$confirm(
-        proxy.$t('about.update-error.message'),
-        proxy.$t('about.update-error.title'),
+      await ElMessageBox.confirm(
+        window.t('about.update-error.message'),
+        window.t('about.update-error.title'),
         {
           closeOnClickModal: false,
           type: 'error',
@@ -133,20 +132,20 @@ function onUpdateError() {
 }
 
 function onUpdateAvailable() {
-  proxy.$electron.ipcRenderer.on('update-available', async (_, ret) => {
+  window.$preload.ipcRenderer.on('update-available', async (_, ret) => {
     loading.value = false
     try {
-      await proxy.$confirm(
+      await ElMessageBox.confirm(
         ret.releaseNotes,
-        proxy.$t('about.update-available.title'),
+        window.t('about.update-available.title'),
         {
           dangerouslyUseHTMLString: true,
           closeOnClickModal: false,
-          confirmButtonText: proxy.$t('about.update-available.confirm'),
-          cancelButtonText: proxy.$t('common.cancel'),
+          confirmButtonText: window.t('about.update-available.confirm'),
+          cancelButtonText: window.t('common.cancel'),
         },
       )
-      proxy.$electron.ipcRenderer.send('download-update')
+      window.$preload.ipcRenderer.send('download-update')
       loading.value = true
     }
     catch (error) {

@@ -75,7 +75,7 @@ export default {
 
       const channel = 'rotationScreen'
 
-      window.electron.ipcRenderer.once(
+      window.$preload.ipcRenderer.once(
         channel,
         (event, data) => {
           this.handleCommand(data)
@@ -84,7 +84,7 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.invoke('open-system-menu', {
+      window.$preload.ipcRenderer.invoke('open-system-menu', {
         channel,
         options,
       })

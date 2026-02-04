@@ -5,7 +5,7 @@ export function ipcRendererHelper() {
     channel: `ipcRendererHelper:${nanoid()}`,
 
     once(callback) {
-      window.electron.ipcRenderer.once(this.channel, (...args) => {
+      window.$preload.ipcRenderer.once(this.channel, (...args) => {
         callback(...args)
         context = void 0
       })
@@ -18,7 +18,7 @@ export function ipcRendererHelper() {
 
       this.ipcRenderer.removeAllListeners(this.channel, listener)
 
-      window.electron.ipcRenderer.on(this.channel, listener)
+      window.$preload.ipcRenderer.on(this.channel, listener)
     },
   }
 

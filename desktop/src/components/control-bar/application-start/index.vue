@@ -61,7 +61,7 @@ export default {
     return {
       deviceStore,
       startApp,
-      platform: window.electron?.process?.platform,
+      platform: window.$preload.process?.platform,
     }
   },
   data() {
@@ -110,7 +110,7 @@ export default {
         return false
       }
 
-      const data = await window.scrcpy.getAppList(this.device.id)
+      const data = await window.$preload.scrcpy.getAppList(this.device.id)
 
       this.appList = data || []
     },
@@ -120,7 +120,7 @@ export default {
       }
       const channel = 'startApp'
 
-      window.electron.ipcRenderer.once(
+      window.$preload.ipcRenderer.once(
         channel,
         (event, value, item) => {
           this.onStartClick(item)
@@ -129,7 +129,7 @@ export default {
 
       const options = toRaw(this.options)
 
-      window.electron.ipcRenderer.invoke('open-system-menu', {
+      window.$preload.ipcRenderer.invoke('open-system-menu', {
         channel,
         options,
       })

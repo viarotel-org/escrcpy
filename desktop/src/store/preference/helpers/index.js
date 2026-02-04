@@ -51,7 +51,7 @@ export const getStoreData = (scope) => {
   const value = {}
 
   topFields.forEach((key) => {
-    const storeValue = window.electronStore.get(key) || {}
+    const storeValue = window.$preload.store.get(key) || {}
 
     if (['scrcpy'].includes(key)) {
       Object.assign(value, storeValue[scope || 'global'])
@@ -96,7 +96,7 @@ export function setStoreData(data, scope) {
 
     if (['common'].includes(item.field)) {
       value = {
-        ...window.electronStore.get(item.field),
+        ...window.$preload.store.get(item.field),
         ...item.value,
       }
     }
@@ -108,7 +108,7 @@ export function setStoreData(data, scope) {
       },
     )
 
-    window.electronStore.set(item.field, pickValue)
+    window.$preload.store.set(item.field, pickValue)
   })
 }
 

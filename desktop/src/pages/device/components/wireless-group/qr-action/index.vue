@@ -54,7 +54,7 @@ async function handleClick() {
   loading.value = true
 
   try {
-    await window.adb.scannerConnect(data.password, {
+    await window.$preload.adb.scannerConnect(data.password, {
       onStatus,
     })
   }

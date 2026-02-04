@@ -22,7 +22,7 @@
         <template #empty>
           <el-empty :description="$t('device.list.empty')">
             <template #image>
-              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 !-mb-6" />
+              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 !-mb-6"></svg>
             </template>
           </el-empty>
         </template>
@@ -186,14 +186,15 @@ const loading = ref(false)
 const mirrorActionRefs = ref([])
 const selectionRows = ref([])
 
+const tableRef = ref(null)
+const wirelessGroupRef = ref(null)
+
 const deviceList = computed({
   get: () => deviceStore.list,
   set: (val) => {
     deviceStore.list = val
   },
 })
-
-const { proxy } = getCurrentInstance()
 
 const isMultipleRow = computed(() => selectionRows.value.length > 0)
 
@@ -240,7 +241,7 @@ async function getDeviceData(options = {}) {
     }
 
     if (message) {
-      proxy.$message.warning(message)
+      ElMessage.warning(message)
     }
 
     deviceList.value = []
@@ -293,11 +294,11 @@ async function getMirrorActionRefs(ref) {
 }
 
 function toggleRowExpansion(...args) {
-  proxy.$refs.tableRef.toggleRowExpansion(...args)
+  tableRef.value.toggleRowExpansion(...args)
 }
 
 function handleConnect(...args) {
-  proxy.$refs.wirelessGroupRef.connect(...args)
+  wirelessGroupRef.value.connect(...args)
 }
 
 async function handleRefresh() {
@@ -312,7 +313,7 @@ let unAdbWatch = null
 
 onMounted(async () => {
   await getDeviceData()
-  unAdbWatch = await proxy.$adb.watch(onAdbWatch)
+  unAdbWatch = await window.$preload.adb.watch(onAdbWatch)
 })
 
 onBeforeUnmount(() => {

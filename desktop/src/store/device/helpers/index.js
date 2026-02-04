@@ -12,7 +12,7 @@ export function getDeviceName(device) {
  * Get device remark
  */
 export function getRemark(deviceId) {
-  const value = window.electronStore.get('device')?.[deviceId]?.remark
+  const value = window.$preload.store.get('device')?.[deviceId]?.remark
   return value
 }
 
@@ -20,7 +20,7 @@ export function getRemark(deviceId) {
  * Get history devices list
  */
 export function getHistoryDevices() {
-  const devices = window.electronStore.get('device') || {}
+  const devices = window.$preload.store.get('device') || {}
 
   const value = Object.values(devices).map(device => ({
     ...device,
@@ -33,7 +33,7 @@ export function getHistoryDevices() {
  * Get currently connected devices
  */
 export async function getCurrentDevices() {
-  const devices = await window.adb.getDeviceList() || []
+  const devices = await window.$preload.adb.getDeviceList() || []
 
   return devices.map(device => ({
     ...device,
@@ -80,5 +80,5 @@ export function saveDevicesToStore(devices) {
       type: 'offline',
     }))
 
-  window.electronStore.set('device', keyBy(cleanedDevices, 'id'))
+  window.$preload.store.set('device', keyBy(cleanedDevices, 'id'))
 }

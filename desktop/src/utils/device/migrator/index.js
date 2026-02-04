@@ -88,7 +88,7 @@ export class ScrcpyConfigMigrator {
    * @returns {Object} scrcpy config object
    */
   getScrcpyConfig() {
-    return window.electronStore.get('scrcpy') || {}
+    return window.$preload.store.get('scrcpy') || {}
   }
 
   /**
@@ -97,7 +97,7 @@ export class ScrcpyConfigMigrator {
    * @param {Object} config - Configuration object
    */
   saveScrcpyConfig(config) {
-    window.electronStore.set('scrcpy', config)
+    window.$preload.store.set('scrcpy', config)
   }
 
   /**

@@ -34,11 +34,11 @@ export function useScreenshotAction({ floating } = {}) {
     )}.jpg`
 
     const deviceConfig = preferenceStore.getData(device.id)
-    const savePath = window.nodePath.resolve(deviceConfig.savePath, fileName)
+    const savePath = window.$preload.path.resolve(deviceConfig.savePath, fileName)
 
     try {
-      await window.adb.screencap(device.id, { savePath })
-      window.electron.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
+      await window.$preload.adb.screencap(device.id, { savePath })
+      window.$preload.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
     }
     catch (error) {
       if (error.message) {

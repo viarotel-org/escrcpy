@@ -96,7 +96,7 @@ async function handleDeleteMessage(messageId) {
 }
 
 async function onCopyClick(item) {
-  await window.electron.ipcRenderer.invoke('copy-text-to-clipboard', item.content)
+  await window.$preload.ipcRenderer.invoke('copy-text-to-clipboard', item.content)
   ElMessage.success(t('copilot.chat.copySuccess'))
 }
 

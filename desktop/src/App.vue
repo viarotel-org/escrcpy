@@ -14,7 +14,7 @@ const router = useRouter()
 
 const { locale, getSize } = useWindowStateSync({ deviceSync: false })
 
-window.electron.ipcRenderer.on('quit-before', async () => {
+window.$preload.ipcRenderer.on('quit-before', async () => {
   ElLoading.service({
     lock: true,
     text: window.t('appClose.quit.loading'),
@@ -23,11 +23,11 @@ window.electron.ipcRenderer.on('quit-before', async () => {
 
 const startApp = useStartApp()
 
-window.electron.ipcRenderer.on('execute-arguments-change', async (event, params) => {
+window.$preload.ipcRenderer.on('execute-arguments-change', async (event, params) => {
   startApp.open(params)
 })
 
-window.electron.ipcRenderer.on('navigate-to-route', (event, route) => {
+window.$preload.ipcRenderer.on('navigate-to-route', (event, route) => {
   router.push(route)
 })
 
@@ -37,9 +37,9 @@ onMounted(() => {
 })
 
 async function showTips() {
-  const { getScrcpyPath } = window.electron?.configs || {}
+  const { getScrcpyPath } = window.$preload.configs || {}
 
-  const scrcpyPath = getScrcpyPath?.({ store: window.electronStore })
+  const scrcpyPath = getScrcpyPath?.({ store: window.$preload.store })
 
   if (scrcpyPath) {
     return false

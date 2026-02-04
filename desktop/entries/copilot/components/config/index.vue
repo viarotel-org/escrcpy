@@ -288,7 +288,7 @@ async function onSaveClick() {
 }
 
 function openSubscribePage() {
-  window.electron?.ipcRenderer.invoke('navigate-to-route', '/subscribe')
+  window.$preload.ipcRenderer.invoke('navigate-to-route', '/subscribe')
 }
 
 async function onAutoConfigSubscribe() {

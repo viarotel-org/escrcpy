@@ -6,8 +6,8 @@
 import '../types.js'
 import { decodeBase64, encodeBase64 } from '../helpers/index.js'
 
-/** @type {typeof window.adb} */
-const $adb = window.adb
+/** @type {typeof window.$preload.adb} */
+const $adb = window.$preload.adb
 
 /**
  * File operations hook

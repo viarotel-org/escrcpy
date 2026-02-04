@@ -62,7 +62,7 @@ export default {
 
       const channel = 'stop-device-gnirehtet'
 
-      window.electron.ipcRenderer.once(
+      window.$preload.ipcRenderer.once(
         channel,
         (event, data) => {
           this.handleStop()
@@ -75,7 +75,7 @@ export default {
         },
       ]
 
-      window.electron.ipcRenderer.invoke('open-system-menu', {
+      window.$preload.ipcRenderer.invoke('open-system-menu', {
         channel,
         options,
       })

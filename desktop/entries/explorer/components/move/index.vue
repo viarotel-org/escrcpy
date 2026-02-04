@@ -139,7 +139,7 @@ watch(() => breadcrumbs.value.length, async () => {
 async function loadDirectories() {
   loading.value = true
   try {
-    const data = await window.adb.readdir(props.deviceId, currentPath.value)
+    const data = await window.$preload.adb.readdir(props.deviceId, currentPath.value)
     directories.value = data.filter(item => item.type === 'directory')
   }
   catch (error) {

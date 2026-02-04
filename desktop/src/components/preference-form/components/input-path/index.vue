@@ -54,7 +54,7 @@ export default {
       const { properties, filters } = cloneDeep(options)
       try {
         const defaultPath = this.modelValue
-        const files = await this.$electron.ipcRenderer.invoke(
+        const files = await window.$preload.ipcRenderer.invoke(
           'show-open-dialog',
           {
             properties: properties || [],

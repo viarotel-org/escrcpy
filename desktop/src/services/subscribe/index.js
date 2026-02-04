@@ -35,7 +35,7 @@ class SubscribeClient {
     this.accessToken = accessToken ?? subscribeStore.accessToken
 
     if (useAppToken) {
-      const temporaryToken = await window.electron.ipcRenderer.invoke('get-gitee-temporary-token')
+      const temporaryToken = await window.$preload.ipcRenderer.invoke('get-gitee-temporary-token')
       requestHeaders.Authorization = `Bearer ${temporaryToken}`
     }
     else if (this.accessToken) {

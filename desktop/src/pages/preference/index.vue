@@ -40,8 +40,6 @@ import { debounce } from 'lodash-es'
 import PreferenceForm from '$/components/preference-form/index.vue'
 import ScopeSelect from './components/scope-select/index.vue'
 
-const { proxy } = getCurrentInstance()
-
 const preferenceStore = usePreferenceStore()
 const themeStore = useThemeStore()
 
@@ -95,55 +93,55 @@ function onScopeChange(value) {
 
 async function handleImport() {
   try {
-    await proxy.$electron.ipcRenderer.invoke('show-open-dialog', {
+    await window.$preload.ipcRenderer.invoke('show-open-dialog', {
       preset: 'replaceFile',
-      filePath: window.electronStore.getPath(),
+      filePath: window.$preload.store.getPath(),
       filters: [
         {
-          name: proxy.$t('preferences.config.import.placeholder'),
+          name: window.t('preferences.config.import.placeholder'),
           extensions: ['json'],
         },
       ],
     })
 
-    proxy.$message.success(proxy.$t('preferences.config.import.success'))
+    ElMessage.success(window.t('preferences.config.import.success'))
     preferenceStore.init()
   }
   catch (error) {
     if (error.message) {
       const message = error.message?.match(/Error: (.*)/)?.[1]
-      proxy.$message.warning(message || error.message)
+      ElMessage.warning(message || error.message)
     }
   }
 }
 
 function handleEdit() {
-  window.electronStore.openInEditor()
+  window.$preload.store.openInEditor()
 }
 
 async function handleExport() {
-  const message = proxy.$message.loading(
-    proxy.$t('preferences.config.export.message'),
+  const message = ElMessage.loading(
+    window.t('preferences.config.export.message'),
   )
 
   try {
-    await proxy.$electron.ipcRenderer.invoke('show-save-dialog', {
+    await window.$preload.ipcRenderer.invoke('show-save-dialog', {
       defaultPath: 'escrcpy-configs.json',
-      filePath: window.electronStore.getPath(),
+      filePath: window.$preload.store.getPath(),
       filters: [
         {
-          name: proxy.$t('preferences.config.export.placeholder'),
+          name: window.t('preferences.config.export.placeholder'),
           extensions: ['json'],
         },
       ],
     })
 
-    proxy.$message.success(proxy.$t('preferences.config.export.success'))
+    ElMessage.success(window.t('preferences.config.export.success'))
   }
   catch (error) {
     if (error.message) {
       const message = error.message?.match(/Error: (.*)/)?.[1]
-      proxy.$message.warning(message || error.message)
+      ElMessage.warning(message || error.message)
     }
   }
 

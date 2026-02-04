@@ -23,15 +23,15 @@ export default (App, { router, install } = {}) => {
 
   install?.(app)
 
-  app.config.globalProperties.$path = window.nodePath
-  app.config.globalProperties.$electronStore = window.electronStore
+  app.config.globalProperties.$path = window.$preload.path
+  app.config.globalProperties.$electronStore = window.$preload.store
   app.config.globalProperties.$electron = window.electron
 
-  app.config.globalProperties.$adb = window.adb
-  app.config.globalProperties.$scrcpy = window.scrcpy
-  app.config.globalProperties.$gnirehtet = window.gnirehtet
+  app.config.globalProperties.$adb = window.$preload.adb
+  app.config.globalProperties.$scrcpy = window.$preload.scrcpy
+  app.config.globalProperties.$gnirehtet = window.$preload.gnirehtet
 
-  app.config.globalProperties.$desktop = window.desktop
+  app.config.globalProperties.$desktop = window.$preload.desktop
 
   app.config.globalProperties.$toRaw = toRaw
 

@@ -2,7 +2,7 @@ import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
 import { useFixCursor, useSystemTerminal } from './helper.js'
 
-const $gnirehtet = window.gnirehtet
+const $gnirehtet = window.$preload.gnirehtet
 
 export function useGnirehtet({ vShell, history, loading } = {}) {
   const gnirehtet = async (args) => {

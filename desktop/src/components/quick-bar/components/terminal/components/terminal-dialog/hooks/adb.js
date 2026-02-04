@@ -2,7 +2,7 @@ import { debounce } from 'lodash-es'
 import { createStderr, createStdout, textFormatter } from 'vue-command'
 import { useFixCursor, useSystemTerminal } from './helper.js'
 
-const $adb = window.adb
+const $adb = window.$preload.adb
 
 export function useAdb({ vShell, history, loading } = {}) {
   const adb = async (args) => {

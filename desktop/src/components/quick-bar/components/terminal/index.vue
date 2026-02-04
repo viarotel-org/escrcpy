@@ -15,7 +15,7 @@ export default {
 
   methods: {
     handleClick() {
-      const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
+      const enableSystemTerminal = window.$preload.store.get('common.enableSystemTerminal')
 
       if (enableSystemTerminal) {
         this.openSystemTerminal()
@@ -25,7 +25,7 @@ export default {
       }
     },
     invoke(...args) {
-      const enableSystemTerminal = window.electronStore.get('common.enableSystemTerminal')
+      const enableSystemTerminal = window.$preload.store.get('common.enableSystemTerminal')
 
       if (enableSystemTerminal) {
         const [command] = args
@@ -37,7 +37,7 @@ export default {
     },
     async openSystemTerminal(command = '') {
       try {
-        await window.terminal.openSystemTerminal({
+        await window.$preload.terminal.openSystemTerminal({
           command,
         })
       }

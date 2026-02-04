@@ -49,7 +49,7 @@ export function useShellAction() {
 
     if (!files) {
       try {
-        files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+        files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
           properties: ['openFile'],
           filters: [
             {
@@ -88,7 +88,7 @@ export function useShellAction() {
       const filePath = successFiles?.[0]
 
       if (filePath) {
-        window.adb.deviceShell(device.id, `sh ${filePath}`)
+        window.$preload.adb.deviceShell(device.id, `sh ${filePath}`)
       }
     })
 

@@ -71,7 +71,7 @@ export async function selectAndSendFileToDevice(
         properties.push('multiSelections')
       }
 
-      files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+      files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
         properties,
         filters: [
           {
@@ -95,7 +95,7 @@ export async function selectAndSendFileToDevice(
   const failFiles = []
 
   await allSettledWrapper(files, async (item) => {
-    const ret = await window.adb.push(deviceId, item).catch((e) => {
+    const ret = await window.$preload.adb.push(deviceId, item).catch((e) => {
       console.warn(e?.message)
       failFiles.push(`${deviceId}-${item}`)
     })
@@ -122,22 +122,22 @@ export async function selectAndSendFileToDevice(
 }
 
 export function openFloatControl(device) {
-  const floatControl = window.electronStore.get('common.floatControl')
+  const floatControl = window.$preload.store.get('common.floatControl')
 
   if (!floatControl) {
     return false
   }
 
-  window.electron.window.open('entries/control', { query: { ...device } })
+  window.$preload.win.open('entries/control', { query: { ...device } })
   return true
 }
 
 export function removeDevices(...devices) {
-  const storeDevices = { ...(window.electronStore.get('device') || {}) }
+  const storeDevices = { ...(window.$preload.store.get('device') || {}) }
 
   for (const device of devices) {
     delete storeDevices[device.id ?? device]
   }
 
-  window.electronStore.set('device', storeDevices)
+  window.$preload.store.set('device', storeDevices)
 }

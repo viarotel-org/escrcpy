@@ -19,7 +19,7 @@ export function useWindowStateSync(options = {}) {
   })
 
   if (deviceSync) {
-    window.electron.ipcRenderer?.on?.('device-change', handleDeviceChange)
+    window.$preload.ipcRenderer?.on?.('device-change', handleDeviceChange)
   }
 
   if (options.onLanguageChange) {
@@ -35,7 +35,7 @@ export function useWindowStateSync(options = {}) {
 
   onUnmounted(() => {
     if (deviceSync) {
-      window.electron.ipcRenderer?.off?.('device-change', handleDeviceChange)
+      window.$preload.ipcRenderer?.off?.('device-change', handleDeviceChange)
     }
   })
 

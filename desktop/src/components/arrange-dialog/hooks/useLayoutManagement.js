@@ -26,7 +26,7 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
 
   const loadLayout = () => {
     arrangedWidgets.value = []
-    const scrcpy = window.electronStore.get('scrcpy')
+    const scrcpy = window.$preload.store.get('scrcpy')
 
     // Load global widget
     const globalConfig = scrcpy.global || {}

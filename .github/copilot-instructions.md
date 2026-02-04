@@ -139,7 +139,7 @@ input: {
 Each window has its own `App.vue` and `index.js` bootstrapper.
 
 ### Persistence Strategy
-- **Electron Store**: Config persisted via `electron-store` (accessed as `window.electronStore` in renderer)
+- **Electron Store**: Config persisted via `electron-store` (accessed as `window.$preload.store` in renderer)
 - **Pinia Persistence**: `pinia-plugin-persistedstate` for selective store persistence
 - **Dexie**: IndexedDB wrapper (seen in dependencies, likely for device history)
 

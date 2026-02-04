@@ -17,7 +17,7 @@ export function useInstallAction() {
 
   async function selectFiles() {
     try {
-      const files = await window.electron.ipcRenderer.invoke(
+      const files = await window.$preload.ipcRenderer.invoke(
         'show-open-dialog',
         {
           properties: ['openFile', 'multiSelections'],
@@ -61,7 +61,7 @@ export function useInstallAction() {
     let failCount = 0
 
     await allSettledWrapper(files, (item) => {
-      return window.adb.install(device.id, item).catch((e) => {
+      return window.$preload.adb.install(device.id, item).catch((e) => {
         console.warn(e)
         ++failCount
       })

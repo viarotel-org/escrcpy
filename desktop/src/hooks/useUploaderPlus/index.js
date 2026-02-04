@@ -171,7 +171,7 @@ export function useUploaderPlus() {
     }
 
     // Create uploader
-    const uploader = window.adb.uploader({
+    const uploader = window.$preload.adb.uploader({
       deviceId: device.id,
       localPaths,
       remotePath,
@@ -638,7 +638,7 @@ export async function selectFiles(options = {}) {
   const { properties = ['openFile', 'openDirectory', 'multiSelections'] } = options
 
   try {
-    const files = await window.electron.ipcRenderer.invoke(
+    const files = await window.$preload.ipcRenderer.invoke(
       'show-open-dialog',
       {
         properties,

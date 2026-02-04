@@ -1,7 +1,7 @@
 import formatterManager from './formatters/index.js'
 import { eventStreamManager } from './streams/index.js'
 
-const { ipcxRenderer } = window.electron
+const { ipcxRenderer } = window.$preload
 
 const SERVICE_PREFIX = 'copilot'
 
@@ -180,7 +180,7 @@ class CopilotClient {
    * @returns {Promise<Object>} Custom apps mapping {appName: packageName}
    */
   async getCustomApps(deviceId) {
-    const data = await window.scrcpy.getAppList(deviceId)
+    const data = await window.$preload.scrcpy.getAppList(deviceId)
 
     const value = data.reduce((obj, item) => {
       obj[item.name] = item.packageName

@@ -151,7 +151,7 @@ export default {
           fontIcon: 'i-bi-file-break',
           tips: 'device.control.turnScreenOff.tips',
           trigger: () => {
-            window.scrcpy.helper(this.device.id, '--turn-screen-off')
+            window.$preload.scrcpy.helper(this.device.id, '--turn-screen-off')
           },
         },
         'notification': {

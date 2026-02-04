@@ -5,8 +5,8 @@
 
 import '../types.js'
 
-/** @type {typeof window.adb} */
-const $adb = window.adb
+/** @type {typeof window.$preload.adb} */
+const $adb = window.$preload.adb
 
 /**
  * Upload hook
@@ -53,7 +53,7 @@ export function useUploader({ deviceId, currentPath, onRefresh }) {
 
     try {
       // Select files
-      const files = await window.electron.ipcRenderer.invoke('show-open-dialog', {
+      const files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
         properties: [openType, 'multiSelections'],
         filters: [{ name: 'All Files', extensions: ['*'] }],
       })

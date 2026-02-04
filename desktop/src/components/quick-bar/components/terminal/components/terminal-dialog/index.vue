@@ -111,7 +111,7 @@ commands.value.help = () => {
 }
 
 dispatchedQueries.value = new Set([
-  ...(window.electronStore.get('terminal.dispatchedQueries') || []),
+  ...(window.$preload.store.get('terminal.dispatchedQueries') || []),
   ...Object.keys(commands.value),
 ])
 
@@ -196,7 +196,7 @@ async function focus() {
 }
 
 function onDispatchedQueriesUpdate(value) {
-  window.electronStore.set('terminal.dispatchedQueries', Array.from(value))
+  window.$preload.store.set('terminal.dispatchedQueries', Array.from(value))
 
   dispatchedQueries.value = value
 }
@@ -205,9 +205,9 @@ async function killAllProcesses() {
   try {
     // Kill all running processes
     const results = await Promise.allSettled([
-      window.adb.killProcesses(),
-      window.scrcpy.killProcesses(),
-      window.gnirehtet.killProcesses(),
+      window.$preload.adb.killProcesses(),
+      window.$preload.scrcpy.killProcesses(),
+      window.$preload.gnirehtet.killProcesses(),
     ])
 
     // Log any errors but don't throw

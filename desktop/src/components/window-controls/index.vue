@@ -25,7 +25,7 @@ const maximized = ref(false)
 let disposeWindowMaximizeSubscribe = null
 
 onMounted(async () => {
-  const { dispose } = await window.electron.ipcxRenderer.invokeRetained(
+  const { dispose } = await window.$preload.ipcxRenderer.invokeRetained(
     'window-is-maximized',
     (isMaximized) => {
       maximized.value = isMaximized
@@ -39,15 +39,15 @@ onBeforeUnmount(() => {
 })
 
 function onMinimizeClick() {
-  window.electron.ipcRenderer.invoke('window-minimize')
+  window.$preload.ipcRenderer.invoke('window-minimize')
 }
 
 function onMaximizeClick() {
-  window.electron.ipcRenderer.invoke('window-maximize')
+  window.$preload.ipcRenderer.invoke('window-maximize')
 }
 
 function onCloseClick() {
-  window.electron.ipcRenderer.invoke('window-close')
+  window.$preload.ipcRenderer.invoke('window-close')
 }
 </script>
 

@@ -9,7 +9,7 @@ import {
   saveDevicesToStore,
 } from './helpers/index.js'
 
-const $electronStore = window.electronStore
+const $electronStore = window.$preload.store
 
 export const useDeviceStore = defineStore('app-device', () => {
   const list = ref([])

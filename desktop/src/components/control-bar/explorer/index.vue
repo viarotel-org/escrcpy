@@ -16,7 +16,7 @@ function handleFile(device) {
     return
   }
 
-  window.electron.window.open('entries/explorer', {
+  window.$preload.win.open('entries/explorer', {
     query: {
       ...toRaw(device),
     },

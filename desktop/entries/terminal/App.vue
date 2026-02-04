@@ -1,23 +1,16 @@
 <template>
-  <el-config-provider :locale="locale">
+  <el-config-provider :locale="locale" :size="getSize">
     <div class=""></div>
+    <WindowControls v-if="isPlatform('windows') || isPlatform('linux')" />
   </el-config-provider>
 </template>
 
 <script setup>
-const deviceStore = useDeviceStore()
+import WindowControls from '$/components/window-controls/index.vue'
 
-const { currentDevice, queryParams, locale } = useWindowStateSync({
-  async onQueryMounted() {
-    await deviceStore.getList()
-    const findDevice = deviceStore.list.find(item => item.id === queryParams.value.id)
-    currentDevice.value = findDevice ?? queryParams.value
-  },
-})
+const { queryParams: currentDevice, locale, getSize } = useWindowStateSync()
 
-onMounted(() => {
-
-})
+onMounted(() => {})
 </script>
 
 <style lang="postcss">

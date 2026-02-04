@@ -78,7 +78,6 @@ const copilotStore = useCopilotStore()
 const deviceStore = useDeviceStore()
 
 const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
-  deviceSync: false,
   onLanguageChange(val) {
     copilotStore.updateConfig({
       lang: ['zh-CN', 'zh-TW'].includes(val) ? 'cn' : 'en',

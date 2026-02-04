@@ -62,6 +62,7 @@ import ControlBar from '$/components/control-bar/index.vue'
 const deviceStore = useDeviceStore()
 
 const { currentDevice, queryParams, locale } = useWindowStateSync({
+  deviceSync: true,
   async onQueryMounted() {
     await deviceStore.getList()
     const findDevice = deviceStore.list.find(item => item.id === queryParams.value.id)

@@ -5,7 +5,7 @@ import localeModel from '$/plugins/element-plus/locale.js'
  * @returns {Object} Window state sync instance
  */
 export function useWindowStateSync(options = {}) {
-  const { deviceSync = true } = options
+  const { deviceSync = false } = options
 
   const { language } = useI18n()
   const themeStore = useThemeStore()

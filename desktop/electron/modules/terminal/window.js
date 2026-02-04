@@ -6,8 +6,7 @@ export default {
     createWindowManager('entries/terminal', {
       singleton: false,
       browserWindow: {
-        frame: true,
-        titleBarStyle: 'default',
+
       },
     })
   },

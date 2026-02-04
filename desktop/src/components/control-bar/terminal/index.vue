@@ -26,9 +26,12 @@ const props = defineProps({
 const { loading, invoke: handleScript } = useShellAction()
 
 async function handleCommand(device) {
-  const taskStore = useTaskStore()
-  const command = `adb -s ${device.id} `
-  taskStore.emit('terminal', { command })
+  window.$preload.win.open('entries/terminal', {
+    query: {
+      ...toRaw(device),
+    },
+    instanceId: device.id,
+  })
 }
 </script>
 

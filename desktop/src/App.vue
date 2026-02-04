@@ -12,7 +12,7 @@ import { isPlatform } from '$/utils/index.js'
 
 const router = useRouter()
 
-const { locale, getSize } = useWindowStateSync({ deviceSync: false })
+const { locale, getSize } = useWindowStateSync()
 
 window.$preload.ipcRenderer.on('quit-before', async () => {
   ElLoading.service({

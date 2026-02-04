@@ -1,4 +1,5 @@
 import localeModel from '$/plugins/element-plus/locale.js'
+import { useGrid } from 'vue-screen'
 
 /**
  * Window state sync hook
@@ -9,12 +10,18 @@ export function useWindowStateSync(options = {}) {
 
   const { language } = useI18n()
   const themeStore = useThemeStore()
+  const grid = useGrid()
 
   const queryParams = ref({})
   const currentDevice = ref({})
 
   const locale = computed(() => {
     const value = localeModel[language.value]
+    return value
+  })
+
+  const size = computed(() => {
+    const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
     return value
   })
 
@@ -39,12 +46,6 @@ export function useWindowStateSync(options = {}) {
     }
   })
 
-  function getSize(grid) {
-    const value = ['sm', 'md'].includes(grid.breakpoint) ? 'small' : 'default'
-
-    return value
-  }
-
   function handleDeviceChange(event, data) {
     currentDevice.value = data
     options.onDeviceChange?.(data)
@@ -54,7 +55,7 @@ export function useWindowStateSync(options = {}) {
     themeStore,
     queryParams,
     locale,
-    getSize,
+    size,
     currentDevice,
   }
 }

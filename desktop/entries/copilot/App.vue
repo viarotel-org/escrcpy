@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="locale" :size="getSize($grid)">
+  <el-config-provider :locale="locale" :size="size">
     <div
       class="flex flex-col h-screen"
     >
@@ -77,7 +77,7 @@ import { isPlatform } from '$/utils/index.js'
 const copilotStore = useCopilotStore()
 const deviceStore = useDeviceStore()
 
-const { queryParams: currentDevice, locale, getSize } = useWindowStateSync({
+const { queryParams: currentDevice, locale, size } = useWindowStateSync({
   onLanguageChange(val) {
     copilotStore.updateConfig({
       lang: ['zh-CN', 'zh-TW'].includes(val) ? 'cn' : 'en',

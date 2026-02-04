@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="locale" :size="getSize($grid)">
+  <el-config-provider :locale="locale" :size="size">
     <Layouts />
     <WindowControls v-if="isPlatform('windows') || isPlatform('linux')" />
   </el-config-provider>
@@ -12,7 +12,7 @@ import { isPlatform } from '$/utils/index.js'
 
 const router = useRouter()
 
-const { locale, getSize } = useWindowStateSync()
+const { locale, size } = useWindowStateSync()
 
 window.$preload.ipcRenderer.on('quit-before', async () => {
   ElLoading.service({

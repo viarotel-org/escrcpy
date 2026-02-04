@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="locale" :size="getSize($grid)">
+  <el-config-provider :locale="locale" :size="size">
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-4">
       <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
         <div class="flex-none flex items-center">
@@ -267,7 +267,7 @@ const uploadDropdownTrigger = ['darwin'].includes(window.$preload.process.platfo
 
 const explorer = useExplorer()
 
-const { queryParams: device, locale, getSize } = useWindowStateSync({
+const { queryParams: device, locale, size } = useWindowStateSync({
   onQueryMounted() {
     explorer.init(device.value, '/sdcard')
     const deviceName = deviceStore.getLabel(device.value, 'name')

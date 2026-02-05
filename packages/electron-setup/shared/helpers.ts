@@ -137,3 +137,28 @@ export async function resolveMainWindow(
     }
   })
 }
+
+/**
+ *
+ * @param val
+ * @returns Base64 encoded string
+ */
+export function encodePayload(val: unknown): string {
+  const json = JSON.stringify(val ?? null)
+  return Buffer.from(json, 'utf8').toString('base64')
+}
+
+/**
+ *
+ * @param val Base64 encoded string
+ * @returns Decoded payload object
+ */
+export function decodePayload<T = unknown>(val: string): T {
+  try {
+    const jsonString = Buffer.from(val, 'base64').toString('utf8')
+    return JSON.parse(jsonString) as T
+  }
+  catch (err) {
+    return null as unknown as T
+  }
+}

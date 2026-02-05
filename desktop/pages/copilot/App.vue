@@ -77,7 +77,7 @@ import { isPlatform } from '$/utils/index.js'
 const copilotStore = useCopilotStore()
 const deviceStore = useDeviceStore()
 
-const { queryParams: currentDevice, locale, size } = useWindowStateSync({
+const { currentDevice, locale, size } = useWindowStateSync({
   onLanguageChange(val) {
     copilotStore.updateConfig({
       lang: ['zh-CN', 'zh-TW'].includes(val) ? 'cn' : 'en',

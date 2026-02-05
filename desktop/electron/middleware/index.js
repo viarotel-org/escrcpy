@@ -8,6 +8,7 @@ import * as configs from '$electron/configs/index.js'
 
 import useLoading from './loading/index.js'
 import path from 'node:path'
+import payload from './payload/index.js'
 import store from '$electron/helpers/store/index.js'
 import i18n from '$electron/helpers/i18n/index.js'
 import adb from './adb/index.js'
@@ -26,6 +27,7 @@ export function createMiddleware() {
 
   defineMiddleware('$preload', {
     path,
+    payload,
     store,
     i18n,
     electron,

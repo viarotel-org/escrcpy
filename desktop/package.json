@@ -17,6 +17,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@lydell/node-pty": "1.2.0-beta.3",
     "i18next-fs-backend": "2.6.1",
     "sharp": "*"
   },

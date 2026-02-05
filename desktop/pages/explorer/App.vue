@@ -240,7 +240,7 @@
 
     <MoveDialog
       ref="moveDialogRef"
-      :device-id="device?.id"
+      :device-id="currentDevice?.id"
       :action="pathSelectAction"
       @confirm="handlePathSelectConfirm"
     />
@@ -267,10 +267,10 @@ const uploadDropdownTrigger = ['darwin'].includes(window.$preload.process.platfo
 
 const explorer = useExplorer()
 
-const { queryParams: device, locale, size } = useWindowStateSync({
+const { currentDevice, locale, size } = useWindowStateSync({
   onQueryMounted() {
-    explorer.init(device.value, '/sdcard')
-    const deviceName = deviceStore.getLabel(device.value, 'name')
+    explorer.init(currentDevice.value, '/sdcard')
+    const deviceName = deviceStore.getLabel(currentDevice.value, 'name')
     document.title = `${deviceName} - Escrcpy Explorer`
   },
 })
@@ -452,7 +452,7 @@ async function handleDownload(row) {
   if (items.length === 0)
     return
 
-  const savePath = preferenceStore.getData(device.value.id)?.savePath || './'
+  const savePath = preferenceStore.getData(currentDevice.value.id)?.savePath || './'
 
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.download.scanning'),

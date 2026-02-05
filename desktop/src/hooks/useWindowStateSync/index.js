@@ -12,8 +12,8 @@ export function useWindowStateSync(options = {}) {
   const themeStore = useThemeStore()
   const grid = useGrid()
 
-  const queryParams = ref({})
-  const currentDevice = ref({})
+  const queryParams = ref({ ...window.$preload.payload?.query ?? {} })
+  const currentDevice = ref({ ...window.$preload.payload?.device ?? {} })
 
   const locale = computed(() => {
     const value = localeModel[language.value]
@@ -36,7 +36,6 @@ export function useWindowStateSync(options = {}) {
   }
 
   onMounted(() => {
-    queryParams.value = Object.fromEntries(new URLSearchParams(location.search))
     options.onQueryMounted?.(queryParams.value)
   })
 

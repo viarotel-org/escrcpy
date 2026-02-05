@@ -201,9 +201,58 @@ async function openWithGnirehtetCommand(command = '', options = {}) {
 }
 
 /**
- * Create ADB shell instance
- * @param {string} deviceId - Device ID
- * @returns {Promise<{success: boolean, shellId?: string, error?: string}>}
+ * Create terminal session
+ * @param {Object} config
+ * @param {string} config.type - Terminal type ('device' | 'local')
+ * @param {string} config.instanceId - Instance ID
+ * @param {Object} config.options - Provider-specific options
+ * @param {Function} config.onData - Data output callback
+ * @param {Function} config.onExit - Exit callback
+ * @param {Function} config.onError - Error callback
+ * @returns {Promise<{success: boolean, sessionId?: string, error?: string}>}
+ */
+async function createSession(config) {
+  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+  return ipcxRenderer.invoke('terminal:create-session', config)
+}
+
+/**
+ * Write data to session
+ * @param {string} sessionId - Session ID
+ * @param {string} data - Data to write
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function writeSession(sessionId, data) {
+  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+  return ipcxRenderer.invoke('terminal:write-session', { sessionId, data })
+}
+
+/**
+ * Resize session terminal
+ * @param {string} sessionId - Session ID
+ * @param {number} cols - Columns
+ * @param {number} rows - Rows
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function resizeSession(sessionId, cols, rows) {
+  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+  return ipcxRenderer.invoke('terminal:resize-session', { sessionId, cols, rows })
+}
+
+/**
+ * Destroy session
+ * @param {string} sessionId - Session ID
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function destroySession(sessionId) {
+  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+  return ipcxRenderer.invoke('terminal:destroy-session', { sessionId })
+}
+
+// ===== Legacy API (Deprecated, for backward compatibility) =====
+
+/**
+ * @deprecated Use createSession({ type: 'device', instanceId: deviceId, options: { deviceId } }) instead
  */
 async function createShell(deviceId) {
   const { ipcRenderer } = await import('electron')
@@ -211,10 +260,7 @@ async function createShell(deviceId) {
 }
 
 /**
- * Write data to shell
- * @param {string} shellId - Shell ID
- * @param {string} data - Data to write
- * @returns {Promise<{success: boolean, error?: string}>}
+ * @deprecated Use writeSession(sessionId, data) instead
  */
 async function writeShell(shellId, data) {
   const { ipcRenderer } = await import('electron')
@@ -222,9 +268,7 @@ async function writeShell(shellId, data) {
 }
 
 /**
- * Destroy shell instance
- * @param {string} shellId - Shell ID
- * @returns {Promise<{success: boolean, error?: string}>}
+ * @deprecated Use destroySession(sessionId) instead
  */
 async function destroyShell(shellId) {
   const { ipcRenderer } = await import('electron')
@@ -232,9 +276,7 @@ async function destroyShell(shellId) {
 }
 
 /**
- * Destroy all shells for a device
- * @param {string} deviceId - Device ID
- * @returns {Promise<{success: boolean, error?: string}>}
+ * @deprecated No longer needed with new session management
  */
 async function destroyDeviceShells(deviceId) {
   const { ipcRenderer } = await import('electron')
@@ -248,6 +290,12 @@ export default {
   openWithScrcpyCommand,
   openWithGnirehtetCommand,
   buildEnvironment,
+  // New API
+  createSession,
+  writeSession,
+  resizeSession,
+  destroySession,
+  // Legacy API (deprecated)
   createShell,
   writeShell,
   destroyShell,

@@ -17,16 +17,13 @@
             Escrcpy Terminal
           </div>
 
-          <el-tag v-if="currentDevice?.id" type="primary" class="">
+          <!-- 终端类型标签 -->
+          <el-tag :type="terminalTypeConfig.tagType" class="">
             <div class="flex items-center gap-2">
               <div class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-              {{ deviceLabel }}
+              {{ terminalTypeConfig.label }}
             </div>
           </el-tag>
-          <div v-else class="device-badge flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-            <span class="text-xs">{{ $t('copilot.noDevice') }}</span>
-          </div>
         </div>
 
         <div class="flex items-center !space-x-2 *:app-region-no-drag">
@@ -69,16 +66,49 @@ import WindowControls from '$/components/window-controls/index.vue'
 import { primaryShades } from '$/configs/index.js'
 
 const deviceStore = useDeviceStore()
-const { queryParams: currentDevice, locale, size, themeStore } = useWindowStateSync()
+const { currentDevice, locale, size, themeStore } = useWindowStateSync()
 
 const terminalRef = ref(null)
 const terminal = shallowRef(null)
 const fitAddon = shallowRef(null)
-const shellId = ref(null)
+const sessionId = ref(null)
 const connected = ref(false)
 
-const deviceLabel = computed(() => {
-  return deviceStore.getLabel(currentDevice.value, 'name')
+const terminalConfig = computed(() => {
+  const type = window.$preload.payload.type || 'local'
+  const instanceId = window.$preload.payload.instanceId
+
+  return {
+    type,
+    instanceId: String(instanceId),
+    options: type === 'device'
+      ? { deviceId: currentDevice.value?.id }
+      : {},
+  }
+})
+
+const terminalTypeConfig = computed(() => {
+  const type = terminalConfig.value.type
+
+  if (type === 'local') {
+    return {
+      label: 'Debug',
+      tagType: 'primary',
+    }
+  }
+
+  if (type === 'device') {
+    const device = currentDevice.value
+    return {
+      label: device?.id ? deviceStore.getLabel(device, 'name') : 'Device Terminal',
+      tagType: 'primary',
+    }
+  }
+
+  return {
+    label: `${type} Terminal`,
+    tagType: 'primary',
+  }
 })
 
 const isDark = computed({
@@ -93,7 +123,7 @@ const isDark = computed({
 
 onMounted(() => {
   initTerminal()
-  connectShell()
+  connectSession()
 })
 
 onUnmounted(() => {
@@ -126,6 +156,8 @@ function initTerminal() {
 
   terminal.value.onData(handleInput)
 
+  terminal.value.onResize(handleTerminalResize)
+
   watchThemeChange()
 }
 
@@ -157,32 +189,35 @@ function getCurrentTheme() {
   return value
 }
 
-async function connectShell() {
+async function connectSession() {
   try {
-    const result = await window.$preload.terminal.createShell(currentDevice.value.id)
+    const { type, instanceId, options } = terminalConfig.value
+
+    const result = await window.$preload.terminal.createSession({
+      type,
+      instanceId,
+      options,
+      onData: (data) => {
+        terminal.value?.write(data)
+      },
+      onExit: (code, signal) => {
+        connected.value = false
+        terminal.value?.writeln(`\r\n\x1B[33mProcess exited with code ${code}\x1B[0m`)
+      },
+      onError: (error) => {
+        terminal.value?.writeln(`\r\n\x1B[31mError: ${error.message || error}\x1B[0m`)
+      },
+    })
 
     if (!result.success) {
       terminal.value.writeln(`\r\n\x1B[31mError: ${result.error}\x1B[0m`)
       return
     }
 
-    shellId.value = result.shellId
+    sessionId.value = result.sessionId
     connected.value = true
 
-    window.$preload.ipcRenderer.on(
-      `terminal:shell-output-${shellId.value}`,
-      handleOutput,
-    )
-
-    window.$preload.ipcRenderer.on(
-      `terminal:shell-error-${shellId.value}`,
-      handleError,
-    )
-
-    window.$preload.ipcRenderer.on(
-      `terminal:shell-exit-${shellId.value}`,
-      handleExit,
-    )
+    console.log(`[Terminal] Connected to session: ${sessionId.value}`)
   }
   catch (error) {
     terminal.value.writeln(`\r\n\x1B[31mFailed to connect: ${error.message}\x1B[0m`)
@@ -190,53 +225,36 @@ async function connectShell() {
 }
 
 function handleInput(data) {
-  if (!shellId.value) {
+  if (!sessionId.value) {
     return
   }
 
   if (data === '\r') {
-    window.$preload.terminal.writeShell(shellId.value, '\r\n')
+    window.$preload.terminal.writeSession(sessionId.value, '\r\n')
   }
   else {
-    window.$preload.terminal.writeShell(shellId.value, data)
+    window.$preload.terminal.writeSession(sessionId.value, data)
   }
-}
-
-function handleOutput(event, data) {
-  terminal.value?.write(data)
-}
-
-function handleError(event, { message, code }) {
-  terminal.value?.writeln(`\r\n\x1B[31mError (${code}): ${message}\x1B[0m`)
-  onRefreshClick()
-}
-
-function handleExit(event, { code, signal }) {
-  connected.value = false
-  terminal.value?.writeln(`\r\n\x1B[33mProcess exited with code ${code}\x1B[0m`)
 }
 
 function handleResize() {
   fitAddon.value?.fit()
 }
 
+function handleTerminalResize({ cols, rows }) {
+  if (!sessionId.value) {
+    return
+  }
+
+  window.$preload.terminal.resizeSession(sessionId.value, cols, rows)
+}
+
 function cleanup() {
   window.removeEventListener('resize', handleResize)
+  unwatchTheme?.()
 
-  if (shellId.value) {
-    window.$preload.ipcRenderer.off(
-      `terminal:shell-output-${shellId.value}`,
-      handleOutput,
-    )
-    window.$preload.ipcRenderer.off(
-      `terminal:shell-error-${shellId.value}`,
-      handleError,
-    )
-    window.$preload.ipcRenderer.off(
-      `terminal:shell-exit-${shellId.value}`,
-      handleExit,
-    )
-    window.$preload.terminal.destroyShell(shellId.value)
+  if (sessionId.value) {
+    window.$preload.terminal.destroySession(sessionId.value)
   }
 
   terminal.value?.dispose()

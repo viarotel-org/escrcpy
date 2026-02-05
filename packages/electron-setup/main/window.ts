@@ -10,8 +10,9 @@ import type {
   WindowManagerOptions,
   WindowMeta,
 } from './types'
-import type { TemplateBrowserWindow } from '../shared/template.js'
-import { useElectronApp } from './app.js'
+import type { TemplateBrowserWindow } from '../shared/template'
+import { useElectronApp } from './app'
+import { encodePayload } from '../shared/helpers'
 
 /**
  * Window context - allows hooks to access window context via useWindowContext()
@@ -174,6 +175,13 @@ export function createWindowManager<TPayload = unknown>(
     }
     if (!base.storage && mainApp?.storage) {
       base.storage = mainApp.storage
+    }
+
+    base.webPreferences = {
+      ...(base.webPreferences || {}),
+      additionalArguments: base.webPreferences?.additionalArguments
+        ?? mainApp?.additionalArguments
+        ?? [`--payload=${encodePayload(payload)}`],
     }
 
     return base

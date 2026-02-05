@@ -1,78 +1,98 @@
-import { ipcMain } from 'electron'
-import { shellManager } from './helpers/index.js'
-import { trySend } from '$electron/helpers/index.js'
+import { ipcxMain } from '@escrcpy/electron-ipcx/main'
+import { sessionManager } from './session-manager.js'
 
+/**
+ * Terminal Service
+ * 提供通用终端会话管理的 IPC 接口
+ */
 export default {
   name: 'module:terminal:service',
   apply(mainApp) {
-    ipcMain.handle('terminal:create-shell', async (event, deviceId) => {
+    /**
+     * 创建终端会话
+     * @param {Object} payload
+     * @param {string} payload.type - 终端类型 ('device' | 'local')
+     * @param {string} payload.instanceId - 实例 ID
+     * @param {Object} payload.options - Provider 特定选项
+     * @param {Function} payload.onData - 数据输出回调（通过 electron-ipcx 支持）
+     * @param {Function} payload.onExit - 退出回调
+     * @param {Function} payload.onError - 错误回调
+     */
+    ipcxMain.handle('terminal:create-session', async (_event, payload) => {
       try {
-        const { id } = await shellManager.createAdbShell(deviceId, {
-          stdout(data) {
-            trySend(event.sender, `terminal:shell-output-${id}`, data)
+        const { type, instanceId, options, onData, onExit, onError } = payload
+
+        const { sessionId } = await sessionManager.create({
+          type,
+          instanceId,
+          callbacks: {
+            onData,
+            onExit,
+            onError,
           },
-          stderr(data) {
-            trySend(event.sender, `terminal:shell-output-${id}`, data)
-          },
-          error(message, code) {
-            trySend(event.sender, `terminal:shell-error-${id}`, { message, code })
-          },
-          exit(code, signal) {
-            trySend(event.sender, `terminal:shell-exit-${id}`, { code, signal })
-          },
+          options,
         })
 
-        return { success: true, shellId: id }
+        return { success: true, sessionId }
       }
       catch (error) {
-        console.error('[Terminal Service] Failed to create shell:', error)
+        console.error('[Terminal Service] Failed to create session:', error)
         return { success: false, error: error.message }
       }
     })
 
-    ipcMain.handle('terminal:write-shell', async (event, shellId, data) => {
+    /**
+     * 写入数据到会话
+     */
+    ipcxMain.handle('terminal:write-session', async (_event, payload) => {
       try {
-        const shell = shellManager.get(shellId)
-        if (!shell) {
-          throw new Error(`Shell ${shellId} not found`)
-        }
-        shell.controller.send(data)
+        const { sessionId, data } = payload
+        sessionManager.write(sessionId, data)
         return { success: true }
       }
       catch (error) {
-        console.error('[Terminal Service] Failed to write shell:', error)
+        console.error('[Terminal Service] Failed to write session:', error)
         return { success: false, error: error.message }
       }
     })
 
-    ipcMain.handle('terminal:destroy-shell', async (event, shellId) => {
+    /**
+     * 调整会话终端大小
+     */
+    ipcxMain.handle('terminal:resize-session', async (_event, payload) => {
       try {
-        shellManager.destroy(shellId)
+        const { sessionId, cols, rows } = payload
+        sessionManager.resize(sessionId, cols, rows)
         return { success: true }
       }
       catch (error) {
-        console.error('[Terminal Service] Failed to destroy shell:', error)
+        console.error('[Terminal Service] Failed to resize session:', error)
         return { success: false, error: error.message }
       }
     })
 
-    ipcMain.handle('terminal:destroy-device-shells', async (event, deviceId) => {
+    /**
+     * 销毁会话
+     */
+    ipcxMain.handle('terminal:destroy-session', async (_event, payload) => {
       try {
-        shellManager.destroyByDevice(deviceId)
+        const { sessionId } = payload
+        await sessionManager.destroy(sessionId)
         return { success: true }
       }
       catch (error) {
-        console.error('[Terminal Service] Failed to destroy device shells:', error)
+        console.error('[Terminal Service] Failed to destroy session:', error)
         return { success: false, error: error.message }
       }
     })
 
+    // 清理函数
     return () => {
-      shellManager.destroyAll()
-      ipcMain.removeHandler('terminal:create-shell')
-      ipcMain.removeHandler('terminal:write-shell')
-      ipcMain.removeHandler('terminal:destroy-shell')
-      ipcMain.removeHandler('terminal:destroy-device-shells')
+      sessionManager.destroyAll()
+      ipcxMain.removeHandler('terminal:create-session')
+      ipcxMain.removeHandler('terminal:write-session')
+      ipcxMain.removeHandler('terminal:resize-session')
+      ipcxMain.removeHandler('terminal:destroy-session')
     }
   },
 }

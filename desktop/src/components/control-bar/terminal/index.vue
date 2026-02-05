@@ -19,17 +19,18 @@
 const props = defineProps({
   device: {
     type: Object,
-    default: () => null,
+    default: () => ({}),
   },
 })
 
 const { loading, invoke: handleScript } = useShellAction()
 
-async function handleCommand(device) {
+function handleCommand() {
+  const device = toRaw(props.device ?? {})
+
   window.$preload.win.open('pages/terminal', {
-    query: {
-      ...toRaw(device),
-    },
+    type: 'device',
+    device,
     instanceId: device.id,
   })
 }

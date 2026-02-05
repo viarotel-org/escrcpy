@@ -17,14 +17,10 @@ const props = defineProps({
 })
 
 function onTriggerClick() {
-  const device = props.device
+  const device = toRaw(props.device ?? {})
 
   window.$preload.win.open('pages/copilot', {
-    query: {
-      id: device.id,
-      name: device.name,
-      remark: device.remark,
-    },
+    device,
     instanceId: device.id,
   })
 }

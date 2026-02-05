@@ -24,9 +24,8 @@ export default antfu(
   {
     languageOptions: {
       globals: {
-        definePage: 'readonly',
-        i18n: 'readonly',
-        t: 'readonly',
+        'window.$preload': 'readonly',
+        't': 'readonly',
         ...desktopAutoImport.globals,
       },
     },

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events'
 import { createContext } from 'unctx'
 import type { BrowserWindow } from 'electron'
-import { createDefaultStorage } from '../shared/adapters/storage-adapter.js'
+import { createDefaultStorage } from '../shared/adapters/storage-adapter'
 import type {
   ElectronApp,
   ElectronAppConfig,

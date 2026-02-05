@@ -35,6 +35,7 @@ function mergeCommon(config, { command = '' } = {}) {
           external: [
             'sharp',
             'i18next-fs-backend',
+            '@lydell/node-pty',
           ],
         },
       },

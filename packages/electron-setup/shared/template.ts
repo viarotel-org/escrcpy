@@ -1,8 +1,8 @@
 import path from 'node:path'
 import { BrowserWindow, shell } from 'electron'
 import { debounce } from 'es-toolkit'
-import { loadPage as builtInLoadPage } from './helpers.js'
-import { createDefaultStorage } from './adapters/storage-adapter.js'
+import { loadPage as builtInLoadPage } from './helpers'
+import { createDefaultStorage } from './adapters/storage-adapter'
 import type { BrowserWindowConstructorOptions } from 'electron'
 import type { EnhancedBrowserWindow, TemplateBrowserWindowOptions } from '../main/types'
 import type { IStorage } from './interfaces'
@@ -91,7 +91,7 @@ export class TemplateBrowserWindow implements EnhancedBrowserWindow {
       throw new Error('TemplateBrowserWindow: preloadDir is required')
     }
 
-    const defaultOptions = createDefaultWindowOptions(options, this.#storage)
+    const windowOptions = createWindowOptions(options, browserWindowOverrides)
 
     const persistedBounds = {}
 
@@ -101,8 +101,7 @@ export class TemplateBrowserWindow implements EnhancedBrowserWindow {
     }
 
     this.win = new BrowserWindow({
-      ...defaultOptions,
-      ...browserWindowOverrides,
+      ...windowOptions,
       ...persistedBounds,
     })
 
@@ -202,9 +201,9 @@ function getTitleBarOptions(): BrowserWindowConstructorOptions {
 /**
  * Create default BrowserWindow options with persisted bounds
  */
-function createDefaultWindowOptions(
+function createWindowOptions(
   options: TemplateBrowserWindowOptions,
-  storage: IStorage,
+  overrides: Partial<BrowserWindowConstructorOptions> = {},
 ): BrowserWindowConstructorOptions {
   const {
     preloadDir,
@@ -228,13 +227,16 @@ function createDefaultWindowOptions(
     autoHideMenuBar: true,
     backgroundColor,
 
+    ...getTitleBarOptions(),
+
+    ...overrides,
+
     webPreferences: {
       preload: path.join(preloadDir!, 'preload.mjs'),
       nodeIntegration: true,
       sandbox: false,
       spellcheck: false,
+      ...(overrides.webPreferences ?? {}),
     },
-
-    ...getTitleBarOptions(),
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <slot :trigger="() => handleFile(device)" />
+  <slot :trigger="() => handleFile()" />
 </template>
 
 <script setup>
@@ -7,19 +7,15 @@ defineOptions({ inheritAttrs: false })
 const props = defineProps({
   device: {
     type: Object,
-    default: () => null,
+    default: () => ({}),
   },
 })
 
-function handleFile(device) {
-  if (!device) {
-    return
-  }
+function handleFile() {
+  const device = toRaw(props.device ?? {})
 
   window.$preload.win.open('pages/explorer', {
-    query: {
-      ...toRaw(device),
-    },
+    device,
     instanceId: device.id,
   })
 }

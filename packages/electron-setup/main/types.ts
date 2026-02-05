@@ -155,6 +155,11 @@ export interface ElectronApp {
   backgroundColor?: string
 
   /**
+   * Additional command line arguments for Electron
+   */
+  additionalArguments?: string[]
+
+  /**
    * Storage adapter for persisting app and window state
    */
   storage?: IStorage

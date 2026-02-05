@@ -20,6 +20,7 @@ export default {
   asarUnpack: [
     '**/node_modules/sharp/**/*',
     '**/node_modules/@img/**/*',
+    '**/node_modules/@lydell/**/*',
   ],
 
   win: {

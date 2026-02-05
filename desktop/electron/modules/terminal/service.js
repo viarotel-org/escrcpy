@@ -1,5 +1,5 @@
 import { ipcxMain } from '@escrcpy/electron-ipcx/main'
-import { sessionManager } from './session-manager.js'
+import { sessionManager } from './helpers/index.js'
 
 /**
  * Terminal Service

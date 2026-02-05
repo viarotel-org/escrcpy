@@ -33,9 +33,10 @@ class TerminalSessionManager {
 
     const sessionId = `${type}:${instanceId}`
 
-    // 检查会话是否已存在
+    // 检查会话是否已存在，如果存在则先销毁（页面刷新场景）
     if (this.sessions.has(sessionId)) {
-      return { sessionId }
+      console.warn(`[SessionManager] Session already exists, destroying old session: ${sessionId}`)
+      await this.destroy(sessionId)
     }
 
     // 获取对应的 Provider 类

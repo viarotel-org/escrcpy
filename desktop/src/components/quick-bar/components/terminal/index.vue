@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid'
 import TerminalDialog from './components/terminal-dialog/index.vue'
 
 export default {
@@ -15,14 +16,10 @@ export default {
 
   methods: {
     handleClick() {
-      const enableSystemTerminal = window.$preload.store.get('common.enableSystemTerminal')
-
-      if (enableSystemTerminal) {
-        this.openSystemTerminal()
-      }
-      else {
-        this.$refs.terminalDialog.open()
-      }
+      window.$preload.win.open('pages/terminal', {
+        type: 'local',
+        instanceId: `local_terminal_${nanoid(8)}`,
+      })
     },
     invoke(...args) {
       const enableSystemTerminal = window.$preload.store.get('common.enableSystemTerminal')

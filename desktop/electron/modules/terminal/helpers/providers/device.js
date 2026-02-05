@@ -1,5 +1,4 @@
-import { spawn } from 'node:child_process'
-import treeKill from 'tree-kill'
+import { spawnShell } from '$electron/helpers/shell/index.js'
 import { getAdbPath } from '$electron/configs/index.js'
 import { BaseTerminalProvider } from './base.js'
 
@@ -15,7 +14,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    */
   constructor(config) {
     super(config)
-    this.process = null
+    this.controller = null
     this.deviceId = null
   }
 
@@ -36,40 +35,30 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
     const adbPath = getAdbPath()
 
     try {
-      this.process = spawn(adbPath, ['-s', deviceId, 'shell', '-tt'], {
-        shell: false,
-        encoding: 'binary',
-        env: {
-          ...process.env,
+      this.controller = await spawnShell(
+        [adbPath, '-s', deviceId, 'shell', '-tt'],
+        {
+          shell: false,
+          encoding,
+          stdout: (text) => {
+            this._emitData(text)
+          },
+          stderr: (text) => {
+            this._emitData(text)
+          },
+          exit: (code, signal) => {
+            this._emitExit(code, signal)
+          },
+          error: (message) => {
+            this._emitError({
+              message,
+              code: 'SPAWN_ERROR',
+            })
+          },
         },
-      })
+      )
 
       this.isAlive = true
-
-      // 监听标准输出
-      this.process.stdout.on('data', (data) => {
-        const text = data.toString(encoding)
-        this._emitData(text)
-      })
-
-      // 监听标准错误（ADB shell 也会输出到 stderr）
-      this.process.stderr.on('data', (data) => {
-        const text = data.toString(encoding)
-        this._emitData(text)
-      })
-
-      // 监听退出事件
-      this.process.on('exit', (code, signal) => {
-        this._emitExit(code, signal)
-      })
-
-      // 监听错误事件
-      this.process.on('error', (error) => {
-        this._emitError({
-          message: error.message,
-          code: 'SPAWN_ERROR',
-        })
-      })
 
       console.log(`[DeviceTerminal] Spawned ADB shell: ${deviceId} (${this.instanceId})`)
     }
@@ -86,17 +75,12 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    * 写入数据到 ADB stdin
    */
   write(data) {
-    if (!this.process || !this.isAlive) {
+    if (!this.controller || !this.isAlive) {
       console.warn('[DeviceTerminal] Cannot write: process not alive')
       return
     }
 
-    if (!this.process.stdin) {
-      console.warn('[DeviceTerminal] stdin not available')
-      return
-    }
-
-    this.process.stdin.write(data)
+    this.controller.send(data)
   }
 
   /**
@@ -112,22 +96,14 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    * 销毁 ADB Shell
    */
   async destroy() {
-    if (!this.process) {
+    if (!this.controller) {
       return
     }
 
     try {
-      // 使用 tree-kill 确保子进程也被终止
-      await new Promise((resolve, reject) => {
-        treeKill(this.process.pid, 'SIGTERM', (err) => {
-          if (err) {
-            reject(err)
-          }
-          else {
-            resolve()
-          }
-        })
-      })
+      if (!this.controller.isEnded) {
+        this.controller.stop()
+      }
 
       this.isAlive = false
       console.log(`[DeviceTerminal] Destroyed: ${this.deviceId} (${this.instanceId})`)
@@ -136,7 +112,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
       console.error('[DeviceTerminal] Destroy error:', error)
     }
     finally {
-      this.process = null
+      this.controller = null
       this.deviceId = null
     }
   }

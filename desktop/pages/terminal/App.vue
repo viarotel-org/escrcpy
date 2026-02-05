@@ -18,10 +18,10 @@
           </div>
 
           <!-- 终端类型标签 -->
-          <el-tag :type="terminalTypeConfig.tagType" class="">
+          <el-tag v-if="['device'].includes(terminalConfig.type)" type="primary" class="">
             <div class="flex items-center gap-2">
               <div class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-              {{ terminalTypeConfig.label }}
+              {{ currentDeviceLabel }}
             </div>
           </el-tag>
         </div>
@@ -88,28 +88,11 @@ const terminalConfig = computed(() => {
   }
 })
 
-const terminalTypeConfig = computed(() => {
-  const type = terminalConfig.value.type
+const currentDeviceLabel = computed(() => {
+  const device = currentDevice.value
+  const value = device?.id ? deviceStore.getLabel(device, 'name') : 'Device Terminal'
 
-  if (type === 'local') {
-    return {
-      label: 'Debug',
-      tagType: 'primary',
-    }
-  }
-
-  if (type === 'device') {
-    const device = currentDevice.value
-    return {
-      label: device?.id ? deviceStore.getLabel(device, 'name') : 'Device Terminal',
-      tagType: 'primary',
-    }
-  }
-
-  return {
-    label: `${type} Terminal`,
-    tagType: 'primary',
-  }
+  return value
 })
 
 const isDark = computed({
@@ -127,7 +110,7 @@ onMounted(() => {
   connectSession()
 })
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   cleanup()
 })
 
@@ -260,7 +243,6 @@ function cleanup() {
     window.$preload.terminal.destroySession(sessionId.value)
   }
 
-  // 清理 electron-ipcx 的回调监听器
   if (disposeCallbacks.value) {
     disposeCallbacks.value()
     disposeCallbacks.value = null

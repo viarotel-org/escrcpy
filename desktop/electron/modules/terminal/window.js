@@ -1,17 +1,12 @@
 import { createWindowManager } from '@escrcpy/electron-setup/main'
-import { sessionManager } from './session-manager.js'
+import { sessionManager } from './helpers/index.js'
 
 export default {
   name: 'module:terminal:window',
   apply() {
     createWindowManager('pages/terminal', {
       singleton: false,
-      browserWindow: {
-        width: 800,
-        height: 600,
-        minWidth: 400,
-        minHeight: 300,
-      },
+      browserWindow: {},
       hooks: {
         beforeClose(win, context) {
           const type = context.payload.type || 'device'

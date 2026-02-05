@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden pt-2">
     <div
-      class="mr-4 pb-2 flex items-center justify-between flex-none border-b border-gray-200 dark:border-gray-700"
+      class="mr-4 pb-2 flex items-center justify-between flex-none"
     >
       <div class="flex-none">
         <ScopeSelect

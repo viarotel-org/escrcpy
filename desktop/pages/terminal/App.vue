@@ -73,6 +73,7 @@ const terminal = shallowRef(null)
 const fitAddon = shallowRef(null)
 const sessionId = ref(null)
 const connected = ref(false)
+const disposeCallbacks = ref(null) // 用于清理 electron-ipcx 的回调监听器
 
 const terminalConfig = computed(() => {
   const type = window.$preload.payload.type || 'local'
@@ -198,6 +199,7 @@ async function connectSession() {
       instanceId,
       options,
       onData: (data) => {
+        console.log('[Terminal] Received data:', data)
         terminal.value?.write(data)
       },
       onExit: (code, signal) => {
@@ -215,6 +217,7 @@ async function connectSession() {
     }
 
     sessionId.value = result.sessionId
+    disposeCallbacks.value = result.dispose // 保存 dispose 函数
     connected.value = true
 
     console.log(`[Terminal] Connected to session: ${sessionId.value}`)
@@ -255,6 +258,12 @@ function cleanup() {
 
   if (sessionId.value) {
     window.$preload.terminal.destroySession(sessionId.value)
+  }
+
+  // 清理 electron-ipcx 的回调监听器
+  if (disposeCallbacks.value) {
+    disposeCallbacks.value()
+    disposeCallbacks.value = null
   }
 
   terminal.value?.dispose()

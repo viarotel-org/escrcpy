@@ -1,5 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
+import { ipcxRenderer } from '@escrcpy/electron-ipcx/renderer'
 import electronStore from '$electron/helpers/store/index.js'
 import { getAdbPath, getGnirehtetPath, getScrcpyPath } from '$electron/configs/index.js'
 
@@ -209,11 +210,14 @@ async function openWithGnirehtetCommand(command = '', options = {}) {
  * @param {Function} config.onData - Data output callback
  * @param {Function} config.onExit - Exit callback
  * @param {Function} config.onError - Error callback
- * @returns {Promise<{success: boolean, sessionId?: string, error?: string}>}
+ * @returns {Promise<{success: boolean, sessionId?: string, error?: string, dispose?: Function}>}
  */
-async function createSession(config) {
-  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
-  return ipcxRenderer.invoke('terminal:create-session', config)
+function createSession(config) {
+  // 使用 invokeRetained 模式保持回调监听器活跃
+  const { promise, dispose } = ipcxRenderer.invokeRetained('terminal:create-session', config)
+
+  // 将 dispose 函数附加到结果中，由调用方在会话结束时清理
+  return promise.then(result => ({ ...result, dispose }))
 }
 
 /**
@@ -222,8 +226,7 @@ async function createSession(config) {
  * @param {string} data - Data to write
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-async function writeSession(sessionId, data) {
-  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+function writeSession(sessionId, data) {
   return ipcxRenderer.invoke('terminal:write-session', { sessionId, data })
 }
 
@@ -234,8 +237,7 @@ async function writeSession(sessionId, data) {
  * @param {number} rows - Rows
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-async function resizeSession(sessionId, cols, rows) {
-  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+function resizeSession(sessionId, cols, rows) {
   return ipcxRenderer.invoke('terminal:resize-session', { sessionId, cols, rows })
 }
 
@@ -244,8 +246,7 @@ async function resizeSession(sessionId, cols, rows) {
  * @param {string} sessionId - Session ID
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-async function destroySession(sessionId) {
-  const { ipcxRenderer } = await import('@escrcpy/electron-ipcx/renderer')
+function destroySession(sessionId) {
   return ipcxRenderer.invoke('terminal:destroy-session', { sessionId })
 }
 

@@ -35,7 +35,7 @@ class TerminalSessionManager {
 
     // 检查会话是否已存在
     if (this.sessions.has(sessionId)) {
-      throw new Error(`[SessionManager] Session already exists: ${sessionId}`)
+      return { sessionId }
     }
 
     // 获取对应的 Provider 类

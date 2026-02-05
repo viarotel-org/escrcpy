@@ -4,7 +4,7 @@ import { shellManager } from './helpers/index.js'
 export default {
   name: 'module:terminal:window',
   apply(mainApp) {
-    createWindowManager('entries/terminal', {
+    createWindowManager('pages/terminal', {
       singleton: false,
       browserWindow: {},
       hooks: {

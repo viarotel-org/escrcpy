@@ -4,7 +4,7 @@ import { trySend } from '$electron/helpers/index.js'
 export default {
   name: 'module:control:window',
   apply(mainApp) {
-    createWindowManager('entries/control', {
+    createWindowManager('pages/control', {
       singleton: true,
       browserWindow: {
         frame: false,

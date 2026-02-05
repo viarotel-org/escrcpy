@@ -128,7 +128,7 @@ export function openFloatControl(device) {
     return false
   }
 
-  window.$preload.win.open('entries/control', { query: { ...device } })
+  window.$preload.win.open('pages/control', { query: { ...device } })
   return true
 }
 

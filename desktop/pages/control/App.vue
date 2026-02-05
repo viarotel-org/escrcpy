@@ -73,7 +73,7 @@ const { currentDevice, queryParams, locale } = useWindowStateSync({
 const deviceName = computed(() => deviceStore.getLabel(currentDevice.value, ({ deviceName }) => deviceName))
 
 function handleClose() {
-  window.$preload.win.close('entries/control')
+  window.$preload.win.close('pages/control')
 }
 
 async function switchDevice(e) {

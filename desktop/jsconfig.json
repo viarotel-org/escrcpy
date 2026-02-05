@@ -7,10 +7,10 @@
       "$docs/*": ["docs/*"],
       "$electron/*": ["electron/*"],
       "$renderer/*": ["src/*"],
-      "$control/*": ["entries/control/*"],
-      "$explorer/*": ["entries/explorer/*"],
-      "$copilot/*": ["entries/copilot/*"],
-      "$terminal/*": ["entries/terminal/*"]
+      "$control/*": ["pages/control/*"],
+      "$explorer/*": ["pages/explorer/*"],
+      "$copilot/*": ["pages/copilot/*"],
+      "$terminal/*": ["pages/terminal/*"]
     }
   },
   "vueCompilerOptions": {

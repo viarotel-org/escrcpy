@@ -19,7 +19,7 @@ const props = defineProps({
 function onTriggerClick() {
   const device = props.device
 
-  window.$preload.win.open('entries/copilot', {
+  window.$preload.win.open('pages/copilot', {
     query: {
       id: device.id,
       name: device.name,

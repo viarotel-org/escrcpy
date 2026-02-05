@@ -46,7 +46,7 @@ const mainApp = createElectronApp({
 
 **State Management**: Pinia stores in `desktop/src/store/`. Example: `useDeviceStore()` manages device list/config with electron-store persistence.
 
-**File-based Routing**: Pages in `desktop/src/pages/` auto-generate routes via `unplugin-vue-router`. Use `definePage()` macro for metadata.
+**File-based Routing**: Pages in `desktop/src/views/` auto-generate routes via `unplugin-vue-router`. Use `definePage()` macro for metadata.
 
 **Styling**: UnoCSS (Tailwind-compatible) with custom shades preset. Use utility classes. PostCSS with nested syntax support.
 

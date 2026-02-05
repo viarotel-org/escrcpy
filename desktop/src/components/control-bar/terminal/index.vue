@@ -26,7 +26,7 @@ const props = defineProps({
 const { loading, invoke: handleScript } = useShellAction()
 
 async function handleCommand(device) {
-  window.$preload.win.open('entries/terminal', {
+  window.$preload.win.open('pages/terminal', {
     query: {
       ...toRaw(device),
     },

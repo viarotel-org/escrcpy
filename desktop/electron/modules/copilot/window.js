@@ -5,7 +5,7 @@ import { copilotService } from './helpers/index.js'
 export default {
   name: 'module:copilot:window',
   apply(mainApp) {
-    createWindowManager('entries/copilot', {
+    createWindowManager('pages/copilot', {
       singleton: false,
       browserWindow: {
         persistenceBounds: true,

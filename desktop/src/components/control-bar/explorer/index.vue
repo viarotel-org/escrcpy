@@ -16,7 +16,7 @@ function handleFile(device) {
     return
   }
 
-  window.$preload.win.open('entries/explorer', {
+  window.$preload.win.open('pages/explorer', {
     query: {
       ...toRaw(device),
     },

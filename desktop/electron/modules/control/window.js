@@ -11,7 +11,6 @@ export default {
         titleBarStyle: 'default',
         transparent: true,
         backgroundColor: '#00000000',
-        width: 420,
         minWidth: 420,
         height: 28,
         maxHeight: 28,

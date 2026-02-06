@@ -35,16 +35,56 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       rows = 24,
     } = options
 
+    const isWindows = process.platform === 'win32'
+    const isPowerShell = isWindows && (shell.toLowerCase().includes('powershell') || shell.toLowerCase().includes('pwsh'))
+
+    // Windows PowerShell: 禁用 PSReadLine 颜色以避免输入文本显示黄色
+    const shellArgs = isPowerShell
+      ? [
+          '-NoLogo',
+          '-NoProfile',
+          '-Command',
+          `& { 
+            if (Get-Module -ListAvailable -Name PSReadLine) { 
+              Set-PSReadLineOption -Colors @{ Command='White'; Parameter='White'; String='White'; Operator='White'; Variable='White' } 
+            }; 
+            $host.UI.RawUI.ForegroundColor='White'; 
+            powershell.exe -NoExit -NoLogo 
+          }`,
+        ]
+      : []
+
+    // 增强环境变量以支持 UTF-8 和真彩色
+    const enhancedEnv = {
+      ...env,
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      PYTHONIOENCODING: 'utf-8',
+      LANG: 'en_US.UTF-8',
+    }
+
     try {
-      // 使用 node-pty 创建 PTY
-      this.pty = ptySpawn(shell, [], {
+      // 构建 PTY 配置
+      const ptyOptions = {
         name: 'xterm-256color',
         cols,
         rows,
         cwd,
-        env,
-        encoding: 'utf8',
-      })
+        env: enhancedEnv,
+      }
+
+      // Windows ConPTY 特定配置
+      if (isWindows) {
+        ptyOptions.useConpty = true
+        ptyOptions.conptyInheritCursor = false
+        // 移除 encoding 参数以避免 "Setting encoding on Windows is not supported" 警告
+      }
+      else {
+        ptyOptions.encoding = 'utf8'
+      }
+
+      // 使用 node-pty 创建 PTY
+      this.pty = ptySpawn(shell, shellArgs, ptyOptions)
 
       this.isAlive = true
 

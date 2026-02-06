@@ -10,6 +10,21 @@ class TerminalSessionManager {
      * @type {Map<string, {provider: import('./providers/base.js').BaseTerminalProvider, type: string, instanceId: string, createdAt: number}>}
      */
     this.sessions = new Map()
+
+    /**
+     * 会话创建锁，防止并发创建同一 sessionId
+     * @type {Map<string, Promise>}
+     */
+    this.creatingLocks = new Map()
+
+    /**
+     * 自动清理定时器
+     * @type {NodeJS.Timeout|null}
+     */
+    this.cleanupTimer = null
+
+    // 启动自动清理（60秒检查一次，清理超过 60 秒无活动的会话）
+    this.startAutoCleanup()
   }
 
   /**
@@ -33,35 +48,70 @@ class TerminalSessionManager {
 
     const sessionId = `${type}:${instanceId}`
 
-    // 检查会话是否已存在，如果存在则先销毁（页面刷新场景）
-    if (this.sessions.has(sessionId)) {
-      console.warn(`[SessionManager] Session already exists, destroying old session: ${sessionId}`)
-      await this.destroy(sessionId)
+    // 检查是否正在创建中（单例锁）
+    if (this.creatingLocks.has(sessionId)) {
+      console.warn(`[SessionManager] Session is being created, waiting: ${sessionId}`)
+      return this.creatingLocks.get(sessionId)
     }
 
-    // 获取对应的 Provider 类
-    const ProviderClass = registry.get(type)
+    // 创建会话的 Promise
+    const createPromise = (async () => {
+      try {
+        // 检查会话是否已存在
+        const existingSession = this.sessions.get(sessionId)
+        if (existingSession) {
+          console.warn(`[SessionManager] Session already exists, destroying old session: ${sessionId}`)
 
-    // 创建 Provider 实例
-    const provider = new ProviderClass({
-      instanceId,
-      callbacks,
-    })
+          // 验证旧会话状态
+          if (existingSession.provider?.isAlive) {
+            await this.destroy(sessionId)
 
-    // 启动终端进程
-    await provider.spawn(options)
+            // Windows ConPTY: 延迟 500ms 确保进程完全释放，避免 AttachConsole 失败
+            if (process.platform === 'win32' && type === 'local') {
+              await new Promise(resolve => setTimeout(resolve, 500))
+            }
+          }
+          else {
+            // 死会话直接移除
+            this.sessions.delete(sessionId)
+          }
+        }
 
-    // 保存会话信息
-    this.sessions.set(sessionId, {
-      provider,
-      type,
-      instanceId,
-      createdAt: Date.now(),
-    })
+        // 获取对应的 Provider 类
+        const ProviderClass = registry.get(type)
 
-    console.log(`[SessionManager] Created session: ${sessionId}`)
+        // 创建 Provider 实例
+        const provider = new ProviderClass({
+          instanceId,
+          callbacks,
+        })
 
-    return { sessionId }
+        // 启动终端进程
+        await provider.spawn(options)
+
+        // 保存会话信息
+        this.sessions.set(sessionId, {
+          provider,
+          type,
+          instanceId,
+          createdAt: Date.now(),
+          lastActivity: Date.now(),
+        })
+
+        console.log(`[SessionManager] Created session: ${sessionId}`)
+
+        return { sessionId }
+      }
+      finally {
+        // 移除创建锁
+        this.creatingLocks.delete(sessionId)
+      }
+    })()
+
+    // 保存创建锁
+    this.creatingLocks.set(sessionId, createPromise)
+
+    return createPromise
   }
 
   /**
@@ -85,6 +135,8 @@ class TerminalSessionManager {
       return
     }
 
+    // 更新活动时间
+    session.lastActivity = Date.now()
     session.provider.write(data)
   }
 
@@ -101,6 +153,8 @@ class TerminalSessionManager {
       return
     }
 
+    // 更新活动时间
+    session.lastActivity = Date.now()
     session.provider.resize(cols, rows)
   }
 
@@ -186,6 +240,48 @@ class TerminalSessionManager {
       }
     }
     return sessionIds
+  }
+
+  /**
+   * 启动自动清理机制
+   * 每 60 秒检查一次，清理超过 60 秒无活动的会话
+   */
+  startAutoCleanup() {
+    if (this.cleanupTimer) {
+      return
+    }
+
+    const CLEANUP_INTERVAL = 60 * 1000 // 60 秒
+    const SESSION_TIMEOUT = 60 * 1000 // 60 秒
+
+    this.cleanupTimer = setInterval(() => {
+      const now = Date.now()
+      const toDestroy = []
+
+      for (const [sessionId, session] of this.sessions) {
+        // 检查会话是否超时且进程已死亡
+        if (session.lastActivity && now - session.lastActivity > SESSION_TIMEOUT) {
+          if (!session.provider?.isAlive) {
+            toDestroy.push(sessionId)
+          }
+        }
+      }
+
+      if (toDestroy.length > 0) {
+        console.log(`[SessionManager] Auto cleanup ${toDestroy.length} inactive sessions`)
+        toDestroy.forEach(id => this.destroy(id))
+      }
+    }, CLEANUP_INTERVAL)
+  }
+
+  /**
+   * 停止自动清理机制
+   */
+  stopAutoCleanup() {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer)
+      this.cleanupTimer = null
+    }
   }
 }
 

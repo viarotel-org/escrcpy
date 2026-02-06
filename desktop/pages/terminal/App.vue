@@ -108,10 +108,14 @@ const isDark = computed({
 onMounted(async () => {
   await initTerminal()
   connectSession()
+
+  // HMR 和页面刷新时提前清理，避免 ConPTY AttachConsole 失败
+  window.addEventListener('beforeunload', cleanup)
 })
 
 onBeforeUnmount(() => {
   cleanup()
+  window.removeEventListener('beforeunload', cleanup)
 })
 
 async function initTerminal() {
@@ -122,7 +126,8 @@ async function initTerminal() {
     cursorStyle: 'underline',
     cols: 80,
     rows: 24,
-    convertEol: true,
+    convertEol: false, // 禁用自动转换，手动控制换行符以避免光标错位
+    disableStdin: false,
     fontFamily: 'Menlo, Monaco, "Courier New", monospace',
   })
 
@@ -175,12 +180,17 @@ function getCurrentTheme() {
 async function connectSession() {
   try {
     const { type, instanceId, options } = terminalConfig.value
+    const isWindows = window.$platform.is('windows')
 
     const result = await window.$preload.terminal.createSession({
       type,
       instanceId,
       options,
       onData: (data) => {
+        // Windows: 规范化换行符以避免光标错位
+        if (isWindows && terminalConfig.value.type === 'local') {
+          data = data.replace(/\r?\n/g, '\r\n')
+        }
         terminal.value?.write(data)
       },
       onExit: (code, signal) => {
@@ -217,6 +227,11 @@ async function connectSession() {
 function handleInput(data) {
   if (!sessionId.value) {
     return
+  }
+
+  // Windows: 转换退格键 DEL (\x7F) 为 BS (\x08)
+  if (window.$platform.is('windows') && terminalConfig.value.type === 'local') {
+    data = data.replace(/\x7F/g, '\x08')
   }
 
   window.$preload.terminal.writeSession(sessionId.value, data)

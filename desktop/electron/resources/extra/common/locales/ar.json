@@ -823,7 +823,7 @@
   "subscribe.userCenter": "مركز المستخدم",
   "subscribe.waitingPayment": "بانتظار الدفع، يرجى عدم إغلاق هذه النافذة",
   "subscribe.wepay": "WeChat",
-  "terminal.command.name": "تنفيذ أمر",
+  "terminal.command.name": "طرفية الجهاز",
   "terminal.executing": "جارٍ التنفيذ...",
   "terminal.script.enter": "يرجى الضغط على مفتاح Enter لتأكيد إجراء تنفيذ النص البرمجي",
   "terminal.script.name": "تنفيذ نص برمجي",

@@ -3,7 +3,7 @@ import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import * as themes from './theme.js'
 
-export function useTerminal({ theme = 'github', preload }) {
+export function useTerminal({ theme = 'github' }) {
   const themeStore = useThemeStore()
   const terminalRef = ref(null)
   const terminal = shallowRef(null)
@@ -15,9 +15,10 @@ export function useTerminal({ theme = 'github', preload }) {
   let resizeTimer = null
 
   const terminalConfig = computed(() => {
-    const type = window.$preload.payload.type || 'local'
-    const instanceId = window.$preload.payload.instanceId
-    return { type, instanceId: String(instanceId), options: {} }
+    const payload = window.$preload.payload || {}
+    const type = payload.type || 'local'
+    const instanceId = payload.instanceId
+    return { type, instanceId: String(instanceId), options: { deviceId: payload.device?.id } }
   })
 
   function getCurrentTheme() {
@@ -28,7 +29,7 @@ export function useTerminal({ theme = 'github', preload }) {
   function handleInput(data) {
     if (!sessionId.value)
       return
-    preload.terminal.writeSession(sessionId.value, data)
+    window.$preload.terminal.writeSession(sessionId.value, data)
   }
 
   function handleResize({ cols, rows }) {
@@ -36,7 +37,7 @@ export function useTerminal({ theme = 'github', preload }) {
       return
     clearTimeout(resizeTimer)
     resizeTimer = setTimeout(() => {
-      preload.terminal.resizeSession(sessionId.value, cols, rows)
+      window.$preload.terminal.resizeSession(sessionId.value, cols, rows)
     }, 16)
   }
 
@@ -102,7 +103,7 @@ export function useTerminal({ theme = 'github', preload }) {
   async function connectSession() {
     try {
       const actualDimensions = { cols: terminal.value.cols, rows: terminal.value.rows }
-      const result = await preload.terminal.createSession({
+      const result = await window.$preload.terminal.createSession({
         type: terminalConfig.value.type,
         instanceId: terminalConfig.value.instanceId,
         options: { ...terminalConfig.value.options, ...actualDimensions },
@@ -141,7 +142,7 @@ export function useTerminal({ theme = 'github', preload }) {
 
   function cleanup() {
     unwatchTheme?.()
-    sessionId.value && preload.terminal.destroySession(sessionId.value)
+    sessionId.value && window.$preload.terminal.destroySession(sessionId.value)
     disposeCallbacks.value?.()
     disposeCallbacks.value = null
     terminal.value?.dispose()

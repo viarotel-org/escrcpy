@@ -823,7 +823,7 @@
   "subscribe.userCenter": "Центр пользователя",
   "subscribe.waitingPayment": "Ожидание оплаты, пожалуйста, не закрывайте это окно",
   "subscribe.wepay": "WeChat",
-  "terminal.command.name": "Выполнить команду",
+  "terminal.command.name": "Терминал устройства",
   "terminal.executing": "Выполнение...",
   "terminal.script.enter": "Пожалуйста, нажмите Enter для подтверждения выполнения скрипта",
   "terminal.script.name": "Выполнить скрипт",

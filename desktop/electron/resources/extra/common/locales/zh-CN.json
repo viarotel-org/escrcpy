@@ -823,7 +823,7 @@
   "subscribe.userCenter": "用户中心",
   "subscribe.waitingPayment": "等待支付中，请勿关闭窗口",
   "subscribe.wepay": "微信",
-  "terminal.command.name": "执行命令",
+  "terminal.command.name": "设备终端",
   "terminal.executing": "执行中...",
   "terminal.script.enter": "请输入回车键确认执行该脚本",
   "terminal.script.name": "执行脚本",

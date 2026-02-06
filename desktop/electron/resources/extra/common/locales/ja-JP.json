@@ -823,7 +823,7 @@
   "subscribe.userCenter": "ユーザーセンター",
   "subscribe.waitingPayment": "支払いを待っています。この画面を閉じないでください",
   "subscribe.wepay": "WeChat",
-  "terminal.command.name": "コマンドを実行",
+  "terminal.command.name": "デバイスターミナル",
   "terminal.executing": "実行中...",
   "terminal.script.enter": "スクリプトの実行を確認するには、Enter キーを入力してください",
   "terminal.script.name": "スクリプトを実行",

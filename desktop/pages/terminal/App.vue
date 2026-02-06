@@ -12,7 +12,7 @@
       >
         <div class="flex items-center gap-4">
           <div class="text-sm font-semibold pl-2 select-none">
-            Escrcpy Terminal
+            {{ terminalTitle }}
           </div>
 
           <el-tag v-if="['device'].includes(terminalConfig.type)" type="primary">
@@ -66,6 +66,8 @@ const currentDeviceLabel = computed(() => {
   return device?.id ? deviceStore.getLabel(device, 'name') : 'Device Terminal'
 })
 
+const terminalTitle = ref(window.$preload.payload.title || 'Escrcpy Terminal')
+
 const isDark = computed({
   get: () => themeStore.isDark,
   set: (v) => {
@@ -76,7 +78,6 @@ const isDark = computed({
 
 const { terminalRef, terminalConfig } = useTerminal({
   theme: 'github',
-  preload: window.$preload,
 })
 
 function onRefreshClick() {

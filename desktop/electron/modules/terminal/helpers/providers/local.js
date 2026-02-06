@@ -1,7 +1,6 @@
 import { spawn as ptySpawn } from '@lydell/node-pty'
 import { homedir } from 'node:os'
 import { BaseTerminalProvider } from './base.js'
-import { execSync } from 'node:child_process'
 
 /**
  * Local Terminal Provider
@@ -37,17 +36,11 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     } = options
 
     const isWindows = process.platform === 'win32'
-    const isPowerShell = isWindows && (shell.toLowerCase().includes('powershell') || shell.toLowerCase().includes('pwsh'))
 
-    const shellArgs = isPowerShell
+    const shellArgs = isWindows
       ? [
           '-NoLogo',
           '-NoProfile',
-          '-Command',
-          '$PSStyle.OutputRendering = \'PlainText\'; '
-          + '[Console]::InputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new(); '
-          + 'Remove-Module PSReadLine -ErrorAction SilentlyContinue; '
-          + '& { while ($true) { $command = [Console]::ReadLine(); if ($command -eq "exit") { break }; Invoke-Expression $command } }',
         ]
       : []
 
@@ -164,13 +157,7 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     const platform = process.platform
 
     if (platform === 'win32') {
-      try {
-        execSync('where pwsh.exe', { stdio: 'ignore' })
-        return 'pwsh.exe'
-      }
-      catch {
-        return process.env.SHELL || 'powershell.exe'
-      }
+      return process.env.SHELL || 'powershell.exe'
     }
 
     // macOS / Linux: 优先环境变量，回退到常见 shell

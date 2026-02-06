@@ -185,6 +185,16 @@ async function connectSession() {
       instanceId,
       options,
       onData: (data) => {
+        // Windows PowerShell: 过滤 PSReadLine 输入高亮的 ANSI 颜色代码
+        if (window.$platform.is('windows') && terminalConfig.value.type === 'local') {
+          // 移除 [93m (亮黄色，PSReadLine 输入高亮) 和相关的重置代码
+          data = data
+            .replace(/\x1B\[93m/g, '') // 移除亮黄色
+            .replace(/\x1B\[9[0-7]m/g, '') // 移除所有亮色前景色 (90-97)
+            .replace(/\x1B\[3[0-7]m/g, '') // 移除所有标准前景色 (30-37)
+            .replace(/\x1B\[m(?=[\x20-\x7E])/g, '') // 移除紧跟可见字符的重置代码
+        }
+
         terminal.value?.write(data)
       },
       onExit: (code, signal) => {

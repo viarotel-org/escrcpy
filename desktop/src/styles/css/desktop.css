@@ -15,38 +15,19 @@ html {
 }
 
 /* Customize the appearance of the scroll bar */
-* {
-  &::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #dddddd;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #cccccc;
-  }
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
 
-.dark {
-  * {
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
+*::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
 
-    &::-webkit-scrollbar-thumb {
-      background: #333333;
-    }
+*::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
 
-    &::-webkit-scrollbar-thumb:hover {
-      background: #888888;
-    }
-  }
+*::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500 dark:bg-gray-300;
 }

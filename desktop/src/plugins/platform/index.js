@@ -2,8 +2,9 @@ import { isPlatform } from '$/utils/index.js'
 
 export default {
   install(app) {
-    app.config.globalProperties.$platform = {
+    window.$platform = {
       is: isPlatform,
     }
+    app.config.globalProperties.$platform = window.$platform
   },
 }

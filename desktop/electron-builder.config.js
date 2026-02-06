@@ -13,6 +13,8 @@ export default {
     'dist-electron',
     '!**/node_modules/@img/sharp-*/**/*',
     '**/node_modules/@img/sharp-*${platform}-${arch}/**/*',
+    '!**/node_modules/@lydell/node-pty-*/**/*',
+    '**/node_modules/@lydell/node-pty-*${platform}-${arch}/**/*',
   ],
 
   asar: true,

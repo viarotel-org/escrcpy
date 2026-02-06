@@ -36,11 +36,20 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     } = options
 
     const isWindows = process.platform === 'win32'
-    const isPowerShell = isWindows && (shell.toLowerCase().includes('powershell') || shell.toLowerCase().includes('pwsh'))
 
-    // Windows PowerShell: 使用 -NoProfile 完全禁用配置文件，阻止 PSReadLine 加载
-    const shellArgs = isPowerShell
-      ? ['-NoLogo', '-NoProfile']
+    const shellArgs = isWindows
+      ? [
+          '-NoLogo',
+          '-NoProfile',
+          '-Command',
+          // 设置纯文本输出，禁用 ANSI 转义序列
+          '$PSStyle.OutputRendering = \'PlainText\'; '
+          + '[Console]::InputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new(); '
+          // 禁用 PSReadLine（完全移除输入高亮）
+          + 'Remove-Module PSReadLine -ErrorAction SilentlyContinue; '
+          // 进入交互模式
+          + '& { while ($true) { $command = [Console]::ReadLine(); if ($command -eq "exit") { break }; Invoke-Expression $command } }',
+        ]
       : []
 
     // 增强环境变量
@@ -50,11 +59,6 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       COLORTERM: 'truecolor',
       PYTHONIOENCODING: 'utf-8',
       LANG: 'en_US.UTF-8',
-    }
-
-    // Windows PowerShell: 通过环境变量禁用模块自动加载，彻底阻止 PSReadLine
-    if (isPowerShell) {
-      enhancedEnv.PSDisableModuleAutoload = '1'
     }
 
     try {
@@ -115,14 +119,21 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
   }
 
   /**
-   * 调整终端大小
+   * 调整终端大小（带 debounce 优化）
    */
   resize(cols, rows) {
     if (!this.pty || !this.isAlive) {
       console.warn('[LocalTerminal] Cannot resize: PTY not alive')
       return
     }
-    this.pty.resize(cols, rows)
+
+    // Debounce resize 调用，避免频繁 resize 导致光标抖动
+    clearTimeout(this._resizeTimer)
+    this._resizeTimer = setTimeout(() => {
+      if (this.pty && this.isAlive) {
+        this.pty.resize(cols, rows)
+      }
+    }, 50)
   }
 
   /**
@@ -154,7 +165,6 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     const platform = process.platform
 
     if (platform === 'win32') {
-      // Windows: 优先 PowerShell，回退到 cmd
       return process.env.SHELL || 'powershell.exe'
     }
 

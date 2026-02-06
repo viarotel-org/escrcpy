@@ -127,13 +127,22 @@ async function initTerminal() {
     cols: 80,
     rows: 24,
     convertEol: true,
-    fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+    // 使用严格的等宽字体，确保字符宽度一致
+    fontFamily: '"Cascadia Mono", Consolas, "Courier New", monospace',
+    // 消除字符间距，避免宽度计算差异
+    letterSpacing: 0,
+    // 精确行高，避免垂直对齐问题
+    lineHeight: 1.0,
   })
 
   fitAddon.value = new FitAddon()
   terminal.value.loadAddon(fitAddon.value)
   terminal.value.open(terminalRef.value)
   terminal.value.clear()
+
+  // 关键：terminal.open() 后立即 fit，确保在首次数据到达前完成尺寸同步
+  await nextTick()
+  fitAddon.value.fit()
 
   window.addEventListener('resize', handleResize)
 
@@ -143,8 +152,6 @@ async function initTerminal() {
 
   watchThemeChange()
 
-  await nextTick()
-  fitAddon.value.fit()
   terminal.value.focus()
 }
 
@@ -167,13 +174,43 @@ function watchThemeChange() {
 }
 
 function getCurrentTheme() {
-  const value = {
-    foreground: isDark.value ? '#ffffff' : '#000000',
-    cursor: isDark.value ? '#ffffff' : '#000000',
-    selectionBackground: isDark.value ? primaryShades[500] : primaryShades[300],
+  if (isDark.value) {
+    // 深色主题
+    return {
+      foreground: '#ffffff',
+      background: '#1e1e1e',
+      cursor: '#ffffff',
+      selectionBackground: primaryShades[500],
+    }
   }
 
-  return value
+  // 浅色主题 - GitHub Light 风格
+  return {
+    foreground: '#24292f',
+    background: '#ffffff',
+    cursor: '#24292f',
+    cursorAccent: '#ffffff',
+    selectionBackground: primaryShades[300],
+    
+    // ANSI 16 色 - GitHub Light Palette
+    black: '#24292f',
+    red: '#cf222e',
+    green: '#116329',
+    yellow: '#4d2d00',
+    blue: '#0969da',
+    magenta: '#8250df',
+    cyan: '#1b7c83',
+    white: '#6e7781',
+    
+    brightBlack: '#57606a',
+    brightRed: '#a40e26',
+    brightGreen: '#1a7f37',
+    brightYellow: '#633c01',
+    brightBlue: '#218bff',
+    brightMagenta: '#a475f9',
+    brightCyan: '#3192aa',
+    brightWhite: '#8c959f',
+  }
 }
 
 async function connectSession() {
@@ -185,16 +222,6 @@ async function connectSession() {
       instanceId,
       options,
       onData: (data) => {
-        // Windows PowerShell: 过滤 PSReadLine 输入高亮的 ANSI 颜色代码
-        if (window.$platform.is('windows') && terminalConfig.value.type === 'local') {
-          // 移除 [93m (亮黄色，PSReadLine 输入高亮) 和相关的重置代码
-          data = data
-            .replace(/\x1B\[93m/g, '') // 移除亮黄色
-            .replace(/\x1B\[9[0-7]m/g, '') // 移除所有亮色前景色 (90-97)
-            .replace(/\x1B\[3[0-7]m/g, '') // 移除所有标准前景色 (30-37)
-            .replace(/\x1B\[m(?=[\x20-\x7E])/g, '') // 移除紧跟可见字符的重置代码
-        }
-
         terminal.value?.write(data)
       },
       onExit: (code, signal) => {
@@ -272,6 +299,12 @@ function onRefreshClick() {
 <style lang="postcss" scoped>
 :deep() {
   .xterm--beautify {
+    /* 确保使用等宽字体，避免字符宽度差异导致光标错位 */
+    font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+    /* 消除额外的字符间距和行高，确保与 xterm.js 配置一致 */
+    letter-spacing: 0;
+    line-height: normal;
+    
     .xterm-scrollable-element,
     .xterm-viewport {
       @apply !bg-transparent;

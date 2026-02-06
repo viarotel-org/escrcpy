@@ -143,7 +143,7 @@ export function useTerminal({ theme = 'github' }) {
       connected.value = true
 
       if (terminalConfig.value.type === 'local') {
-        terminal.value.writeln('\x1B[1;35m[Tip]\x1B[0m Full system commands, enhanced with scrcpy, adb, fastboot, and gnirehtet.\r\n')
+        terminal.value.writeln('\x1B[38;2;15;140;121m[Tip]\x1B[0m Full system commands, enhanced with scrcpy, adb, fastboot, and gnirehtet.\r\n')
       }
 
       if (terminalConfig.value.command) {

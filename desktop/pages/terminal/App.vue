@@ -201,6 +201,10 @@ async function connectSession() {
     disposeCallbacks.value = result.dispose
     connected.value = true
 
+    if (['local'].includes(terminalConfig.value.type)) {
+      terminal.value.writeln('\x1B[1;35m[Tip]\x1B[0m Terminal supports full system commands with scrcpy, adb, fastboot, gnirehtet, etc.\r\n')
+    }
+
     if (window.$preload.payload.command) {
       handleInput(`${window.$preload.payload.command}\n`)
     }

@@ -56,7 +56,7 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     try {
       // 构建 PTY 配置
       const ptyOptions = {
-        name: 'xterm-256color',
+        name: 'xterm-256color', // 关键：与前端 TERM 环境变量匹配
         cols,
         rows,
         cwd,
@@ -66,7 +66,9 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       // Windows ConPTY 特定配置
       if (isWindows) {
         ptyOptions.useConpty = true
-        ptyOptions.conptyInheritCursor = false
+        // 修复：启用光标继承，改善 PowerShell 光标同步
+        // 如果仍有问题，可尝试设为 false 或移除该属性
+        ptyOptions.conptyInheritCursor = true
         // 移除 encoding 参数以避免 "Setting encoding on Windows is not supported" 警告
       }
       else {
@@ -119,13 +121,13 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       return
     }
 
-    // Debounce resize 调用，避免频繁 resize 导致光标抖动
+    // 优化 debounce：减少延迟到 16ms（约 1 帧），快速响应窗口调整
     clearTimeout(this._resizeTimer)
     this._resizeTimer = setTimeout(() => {
       if (this.pty && this.isAlive) {
         this.pty.resize(cols, rows)
       }
-    }, 50)
+    }, 16)
   }
 
   /**

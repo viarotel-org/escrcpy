@@ -1,11 +1,8 @@
 import { spawn as ptySpawn } from '@lydell/node-pty'
 import { homedir } from 'node:os'
+import fs from 'node:fs'
 import { BaseTerminalProvider } from './base.js'
 
-/**
- * Local Terminal Provider
- * 使用 node-pty 实现本地终端能力
- */
 export class LocalTerminalProvider extends BaseTerminalProvider {
   /**
    * @param {Object} config
@@ -15,80 +12,64 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
   constructor(config) {
     super(config)
     this.pty = null
+    this._resizeTimer = null
+    this.isAlive = false
+    this._onData = this._onData.bind(this)
+    this._onExit = this._onExit.bind(this)
   }
 
   /**
-   * 启动本地终端
+   * Spawn local terminal
    * @param {Object} options
-   * @param {string} [options.shell] - Shell 路径（自动检测）
-   * @param {string} [options.cwd] - 工作目录
-   * @param {Object} [options.env] - 环境变量
-   * @param {number} [options.cols] - 列数
-   * @param {number} [options.rows] - 行数
+   * @param {string} [options.shell] - Shell path (auto-detected)
+   * @param {string} [options.cwd] - Working directory
+   * @param {Object} [options.env] - Environment variables
+   * @param {number} [options.cols] - Columns
+   * @param {number} [options.rows] - Rows
    */
   async spawn(options = {}) {
     const {
       shell = this._detectShell(),
       cwd = options.cwd || homedir(),
       env = { ...process.env, ...options.env },
-      cols = 80,
+      cols = 90,
       rows = 24,
     } = options
 
     const isWindows = process.platform === 'win32'
 
-    const shellArgs = isWindows
-      ? [
-          '-NoLogo',
-          '-NoProfile',
-        ]
-      : []
+    const shellArgs = isWindows ? ['-NoLogo'] : []
 
-    // 增强环境变量
     const enhancedEnv = {
       ...env,
-      TERM: 'xterm-256color',
-      COLORTERM: 'truecolor',
-      PYTHONIOENCODING: 'utf-8',
-      LANG: 'en_US.UTF-8',
+      TERM: env.TERM || 'xterm-256color',
+      COLORTERM: env.COLORTERM || 'truecolor',
+      PYTHONIOENCODING: env.PYTHONIOENCODING || 'utf-8',
+      LANG: env.LANG || 'en_US.UTF-8',
     }
 
     try {
-      // 构建 PTY 配置
       const ptyOptions = {
-        name: 'xterm-256color', // 关键：与前端 TERM 环境变量匹配
+        name: 'xterm-256color',
         cols,
         rows,
         cwd,
         env: enhancedEnv,
       }
 
-      // Windows ConPTY 特定配置
       if (isWindows) {
         ptyOptions.useConpty = true
-        // 修复：启用光标继承，改善 PowerShell 光标同步
-        // 如果仍有问题，可尝试设为 false 或移除该属性
         ptyOptions.conptyInheritCursor = true
-        // 移除 encoding 参数以避免 "Setting encoding on Windows is not supported" 警告
       }
       else {
         ptyOptions.encoding = 'utf8'
       }
 
-      // 使用 node-pty 创建 PTY
       this.pty = ptySpawn(shell, shellArgs, ptyOptions)
-
       this.isAlive = true
 
-      // 监听数据输出
-      this.pty.onData((data) => {
-        this._emitData(data)
-      })
-
-      // 监听退出
-      this.pty.onExit(({ exitCode, signal }) => {
-        this._emitExit(exitCode, signal)
-      })
+      this.pty.onData(this._onData)
+      this.pty.onExit(this._onExit)
 
       console.log(`[LocalTerminal] Spawned: ${shell} (${this.instanceId})`)
     }
@@ -101,19 +82,35 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     }
   }
 
+  /** @private */
+  _onData(data) {
+    this._emitData(data)
+  }
+
+  /** @private */
+  _onExit({ exitCode, signal }) {
+    this._emitExit(exitCode, signal)
+    this.isAlive = false
+  }
+
   /**
-   * 写入数据
+   * Write data
+   * @param {string} data
+   * @returns {boolean} Whether the write was successful
    */
   write(data) {
     if (!this.pty || !this.isAlive) {
       console.warn('[LocalTerminal] Cannot write: PTY not alive')
-      return
+      return false
     }
     this.pty.write(data)
+    return true
   }
 
   /**
-   * 调整终端大小（带 debounce 优化）
+   * Resize terminal (with debounce optimization)
+   * @param {number} cols
+   * @param {number} rows
    */
   resize(cols, rows) {
     if (!this.pty || !this.isAlive) {
@@ -121,7 +118,6 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       return
     }
 
-    // 优化 debounce：减少延迟到 16ms（约 1 帧），快速响应窗口调整
     clearTimeout(this._resizeTimer)
     this._resizeTimer = setTimeout(() => {
       if (this.pty && this.isAlive) {
@@ -131,16 +127,18 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
   }
 
   /**
-   * 销毁终端
+   * Destroy terminal
    */
   async destroy() {
-    if (!this.pty) {
+    if (!this.pty)
       return
-    }
 
     try {
-      this.pty.kill()
-      this.isAlive = false
+      this.pty.removeAllListeners()
+      if (this.isAlive) {
+        this.pty.kill()
+        this.isAlive = false
+      }
       console.log(`[LocalTerminal] Destroyed: ${this.instanceId}`)
     }
     catch (error) {
@@ -148,26 +146,34 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     }
     finally {
       this.pty = null
+      clearTimeout(this._resizeTimer)
+      this._resizeTimer = null
     }
   }
 
   /**
-   * 检测默认 Shell
+   * Detect default shell
    * @private
+   * @returns {string} shell path
    */
   _detectShell() {
     const platform = process.platform
-
     if (platform === 'win32') {
-      return process.env.SHELL || 'powershell.exe'
+      return process.env.SHELL || process.env.COMSPEC || 'powershell.exe'
     }
 
-    // macOS / Linux: 优先环境变量，回退到常见 shell
-    return (
-      process.env.SHELL
-      || '/bin/zsh'
-      || '/bin/bash'
-      || '/bin/sh'
-    )
+    const shells = [
+      process.env.SHELL,
+      '/bin/zsh',
+      '/bin/bash',
+      '/bin/sh',
+    ].filter(Boolean)
+
+    for (const sh of shells) {
+      if (fs.existsSync(sh))
+        return sh
+    }
+
+    return '/bin/sh'
   }
 }

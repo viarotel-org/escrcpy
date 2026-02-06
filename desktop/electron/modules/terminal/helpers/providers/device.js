@@ -4,7 +4,6 @@ import { BaseTerminalProvider } from './base.js'
 
 /**
  * Device Terminal Provider
- * 使用 ADB Shell 实现 Android 设备终端能力
  */
 export class DeviceTerminalProvider extends BaseTerminalProvider {
   /**
@@ -19,10 +18,10 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
   }
 
   /**
-   * 启动 ADB Shell
+   * Launch ADB Shell terminal
    * @param {Object} options
-   * @param {string} options.deviceId - 设备 ID
-   * @param {string} [options.encoding] - 编码
+   * @param {string} options.deviceId - Device ID
+   * @param {string} [options.encoding] - Encoding
    */
   async spawn(options = {}) {
     const { deviceId, encoding = 'utf8' } = options
@@ -72,7 +71,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
   }
 
   /**
-   * 写入数据到 ADB stdin
+   * Write data to ADB stdin
    */
   write(data) {
     if (!this.controller || !this.isAlive) {
@@ -84,16 +83,16 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
   }
 
   /**
-   * 调整终端大小（ADB 不支持动态调整）
-   * @note ADB shell 不支持 SIGWINCH，此方法为占位实现
+   * Resize terminal (ADB does not support dynamic resizing)
+   * @note ADB shell does not support SIGWINCH, this method is a placeholder
    */
   resize(cols, rows) {
     console.warn('[DeviceTerminal] ADB shell does not support dynamic resize')
-    // ADB shell 无法调整大小，保留接口以符合抽象
+    // ADB shell cannot resize, interface retained for abstraction compliance
   }
 
   /**
-   * 销毁 ADB Shell
+   * Destroy ADB Shell
    */
   async destroy() {
     if (!this.controller) {

@@ -2,6 +2,7 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import * as themes from './theme.js'
+import { sleep } from '$/utils/index.js'
 
 export function useTerminal({ theme = 'github' }) {
   const themeStore = useThemeStore()
@@ -16,9 +17,16 @@ export function useTerminal({ theme = 'github' }) {
 
   const terminalConfig = computed(() => {
     const payload = window.$preload.payload || {}
+
     const type = payload.type || 'local'
-    const instanceId = payload.instanceId
-    return { type, instanceId: String(instanceId), options: { deviceId: payload.device?.id } }
+    const instanceId = String(payload.instanceId)
+
+    return {
+      type,
+      instanceId,
+      options: { deviceId: payload.device?.id },
+      command: payload.command,
+    }
   })
 
   function getCurrentTheme() {
@@ -27,8 +35,10 @@ export function useTerminal({ theme = 'github' }) {
   }
 
   function handleInput(data) {
-    if (!sessionId.value)
-      return
+    if (!sessionId.value) {
+      return false
+    }
+
     window.$preload.terminal.writeSession(sessionId.value, data)
   }
 
@@ -121,6 +131,7 @@ export function useTerminal({ theme = 'github' }) {
       }
 
       sessionId.value = result.sessionId
+
       if (result.dispose) {
         const prevDispose = disposeCallbacks.value
         disposeCallbacks.value = () => {
@@ -133,6 +144,12 @@ export function useTerminal({ theme = 'github' }) {
 
       if (terminalConfig.value.type === 'local') {
         terminal.value.writeln('\x1B[1;35m[Tip]\x1B[0m Full system commands, enhanced with scrcpy, adb, fastboot, and gnirehtet.\r\n')
+      }
+
+      if (terminalConfig.value.command) {
+        // TODO: Delay to ensure terminal is ready
+        await sleep(500)
+        handleInput(`${terminalConfig.value.command}\r`)
       }
     }
     catch (error) {

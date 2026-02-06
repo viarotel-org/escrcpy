@@ -1,95 +1,73 @@
 import { registry } from './providers/index.js'
 
-/**
- * Terminal Session Manager
- */
 class TerminalSessionManager {
   constructor() {
     /**
-     * 会话存储
-     * @type {Map<string, {provider: import('./providers/base.js').BaseTerminalProvider, type: string, instanceId: string, createdAt: number}>}
+     * Stores all active sessions
+     * @type {Map<string, {provider: import('./providers/base.js').BaseTerminalProvider, type: string, instanceId: string, createdAt: number, lastActivity: number, destroying?: boolean}>}
      */
     this.sessions = new Map()
 
     /**
-     * 会话创建锁，防止并发创建同一 sessionId
+     * Tracks sessions currently being created to prevent duplicates
      * @type {Map<string, Promise>}
      */
     this.creatingLocks = new Map()
-
-    /**
-     * 自动清理定时器
-     * @type {NodeJS.Timeout|null}
-     */
-    this.cleanupTimer = null
-
-    // 启动自动清理（60秒检查一次，清理超过 60 秒无活动的会话）
-    this.startAutoCleanup()
   }
 
   /**
-   * 创建终端会话
+   * Create a terminal session
    * @param {Object} config
-   * @param {string} config.type - 终端类型 ('device' | 'local')
-   * @param {string} config.instanceId - 实例 ID
-   * @param {Object} config.callbacks - 回调函数
-   * @param {Function} config.callbacks.onData - 数据输出回调
-   * @param {Function} config.callbacks.onExit - 退出回调
-   * @param {Function} config.callbacks.onError - 错误回调
-   * @param {Object} config.options - Provider 特定选项
+   * @param {string} config.type - Terminal type ('device' | 'local')
+   * @param {string} config.instanceId - Unique instance ID
+   * @param {Object} config.callbacks - Callbacks for session events
+   * @param {Function} config.callbacks.onData - Called when session outputs data
+   * @param {Function} config.callbacks.onExit - Called when session exits
+   * @param {Function} config.callbacks.onError - Called on session error
+   * @param {Object} config.options - Provider-specific options
    * @returns {Promise<{sessionId: string}>}
    */
   async create(config) {
     const { type, instanceId, callbacks, options } = config
-
     if (!type || !instanceId) {
       throw new Error('[SessionManager] type and instanceId are required')
     }
 
     const sessionId = `${type}:${instanceId}`
 
-    // 检查是否正在创建中（单例锁）
+    // Wait if the session is already being created
     if (this.creatingLocks.has(sessionId)) {
       console.warn(`[SessionManager] Session is being created, waiting: ${sessionId}`)
-      return this.creatingLocks.get(sessionId)
+      return this.creatingLocks.get(sessionId).catch((err) => {
+        this.creatingLocks.delete(sessionId)
+        throw err
+      })
     }
 
-    // 创建会话的 Promise
     const createPromise = (async () => {
       try {
-        // 检查会话是否已存在
+        // Destroy existing session if any
         const existingSession = this.sessions.get(sessionId)
         if (existingSession) {
           console.warn(`[SessionManager] Session already exists, destroying old session: ${sessionId}`)
-
-          // 验证旧会话状态
           if (existingSession.provider?.isAlive) {
             await this.destroy(sessionId)
-
-            // Windows ConPTY: 延迟 500ms 确保进程完全释放，避免 AttachConsole 失败
-            if (process.platform === 'win32' && type === 'local') {
-              await new Promise(resolve => setTimeout(resolve, 500))
-            }
           }
           else {
-            // 死会话直接移除
             this.sessions.delete(sessionId)
           }
         }
 
-        // 获取对应的 Provider 类
+        // Create provider instance
         const ProviderClass = registry.get(type)
+        if (!ProviderClass) {
+          throw new Error(`[SessionManager] No provider registered for type: ${type}`)
+        }
 
-        // 创建 Provider 实例
-        const provider = new ProviderClass({
-          instanceId,
-          callbacks,
-        })
-
-        // 启动终端进程
+        const provider = new ProviderClass({ instanceId, callbacks })
         await provider.spawn(options)
 
-        // 保存会话信息
+        // Save the session
         this.sessions.set(sessionId, {
           provider,
           type,
@@ -98,192 +76,111 @@ class TerminalSessionManager {
           lastActivity: Date.now(),
         })
 
-        console.log(`[SessionManager] Created session: ${sessionId}`)
-
         return { sessionId }
       }
       finally {
-        // 移除创建锁
         this.creatingLocks.delete(sessionId)
       }
     })()
 
-    // 保存创建锁
     this.creatingLocks.set(sessionId, createPromise)
-
     return createPromise
   }
 
-  /**
-   * 获取会话
-   * @param {string} sessionId - 会话 ID
-   * @returns {Object|null} 会话信息
-   */
+  /** Get session info by sessionId */
   get(sessionId) {
     return this.sessions.get(sessionId) || null
   }
 
-  /**
-   * 写入数据到会话
-   * @param {string} sessionId - 会话 ID
-   * @param {string} data - 要写入的数据
-   */
+  /** Write data to a session, returns true if successful */
   write(sessionId, data) {
     const session = this.sessions.get(sessionId)
     if (!session) {
       console.warn(`[SessionManager] Session not found: ${sessionId}`)
-      return
+      return false
     }
-
-    // 更新活动时间
     session.lastActivity = Date.now()
     session.provider.write(data)
+    return true
   }
 
-  /**
-   * 调整会话终端大小
-   * @param {string} sessionId - 会话 ID
-   * @param {number} cols - 列数
-   * @param {number} rows - 行数
-   */
+  /** Resize the terminal for a session, returns true if successful */
   resize(sessionId, cols, rows) {
     const session = this.sessions.get(sessionId)
     if (!session) {
       console.warn(`[SessionManager] Session not found: ${sessionId}`)
-      return
+      return false
     }
-
-    // 更新活动时间
     session.lastActivity = Date.now()
     session.provider.resize(cols, rows)
+    return true
   }
 
-  /**
-   * 销毁会话
-   * @param {string} sessionId - 会话 ID
-   * @returns {Promise<void>}
-   */
+  /** Destroy a session by sessionId */
   async destroy(sessionId) {
     const session = this.sessions.get(sessionId)
     if (!session) {
-      console.warn(`[SessionManager] Session not found: ${sessionId}`)
       return
     }
 
+    // Prevent duplicate destruction
+    if (session.destroying) {
+      return
+    }
+    session.destroying = true
+
     try {
       await session.provider.destroy()
-      this.sessions.delete(sessionId)
-      console.log(`[SessionManager] Destroyed session: ${sessionId}`)
     }
     catch (error) {
       console.error(`[SessionManager] Failed to destroy session ${sessionId}:`, error)
-      // 即使销毁失败，也移除记录
+    }
+    finally {
       this.sessions.delete(sessionId)
     }
   }
 
-  /**
-   * 按类型和实例 ID 销毁会话
-   * @param {string} type - 终端类型
-   * @param {string} instanceId - 实例 ID
-   */
+  /** Destroy a session by type and instanceId */
   async destroyByTypeAndInstance(type, instanceId) {
     const sessionId = `${type}:${instanceId}`
     await this.destroy(sessionId)
   }
 
-  /**
-   * 销毁指定类型的所有会话
-   * @param {string} type - 终端类型
-   */
+  /** Destroy all sessions of a specific type */
   async destroyByType(type) {
-    const sessionIds = []
-    for (const [sessionId, session] of this.sessions) {
-      if (session.type === type) {
-        sessionIds.push(sessionId)
-      }
-    }
-
+    const sessionIds = this.getSessionIds(session => session.type === type)
     await Promise.all(sessionIds.map(id => this.destroy(id)))
   }
 
-  /**
-   * 销毁所有会话
-   */
+  /** Destroy all active sessions */
   async destroyAll() {
     const sessionIds = Array.from(this.sessions.keys())
     await Promise.all(sessionIds.map(id => this.destroy(id)))
   }
 
-  /**
-   * 获取会话数量
-   */
+  /** Get the number of active sessions */
   get size() {
     return this.sessions.size
   }
 
   /**
-   * 获取所有会话 ID
+   * Get session IDs, optionally filtered by a predicate
+   * @param {function(session: any): boolean} [filterFn] - Optional filter function
    */
-  getSessionIds() {
-    return Array.from(this.sessions.keys())
+  getSessionIds(filterFn) {
+    if (!filterFn) {
+      return Array.from(this.sessions.keys())
+    }
+
+    return Array.from(this.sessions.entries())
+      .filter(([_, session]) => filterFn(session))
+      .map(([sessionId]) => sessionId)
   }
 
-  /**
-   * 获取指定类型的会话 ID
-   */
+  /** Get session IDs filtered by type */
   getSessionIdsByType(type) {
-    const sessionIds = []
-    for (const [sessionId, session] of this.sessions) {
-      if (session.type === type) {
-        sessionIds.push(sessionId)
-      }
-    }
-    return sessionIds
-  }
-
-  /**
-   * 启动自动清理机制
-   * 每 60 秒检查一次，清理超过 60 秒无活动的会话
-   */
-  startAutoCleanup() {
-    if (this.cleanupTimer) {
-      return
-    }
-
-    const CLEANUP_INTERVAL = 60 * 1000 // 60 秒
-    const SESSION_TIMEOUT = 60 * 1000 // 60 秒
-
-    this.cleanupTimer = setInterval(() => {
-      const now = Date.now()
-      const toDestroy = []
-
-      for (const [sessionId, session] of this.sessions) {
-        // 检查会话是否超时且进程已死亡
-        if (session.lastActivity && now - session.lastActivity > SESSION_TIMEOUT) {
-          if (!session.provider?.isAlive) {
-            toDestroy.push(sessionId)
-          }
-        }
-      }
-
-      if (toDestroy.length > 0) {
-        console.log(`[SessionManager] Auto cleanup ${toDestroy.length} inactive sessions`)
-        toDestroy.forEach(id => this.destroy(id))
-      }
-    }, CLEANUP_INTERVAL)
-  }
-
-  /**
-   * 停止自动清理机制
-   */
-  stopAutoCleanup() {
-    if (this.cleanupTimer) {
-      clearInterval(this.cleanupTimer)
-      this.cleanupTimer = null
-    }
+    return this.getSessionIds(session => session.type === type)
   }
 }
 
-// 导出全局单例
 export const sessionManager = new TerminalSessionManager()

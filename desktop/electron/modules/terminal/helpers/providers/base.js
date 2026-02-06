@@ -1,15 +1,14 @@
 /**
  * Base Terminal Provider
- * 所有终端类型的抽象基类，定义统一接口
  */
 export class BaseTerminalProvider {
   /**
-   * @param {Object} config - 终端配置
-   * @param {string} config.instanceId - 实例ID
-   * @param {Object} config.callbacks - 回调函数
-   * @param {Function} config.callbacks.onData - 数据输出回调
-   * @param {Function} config.callbacks.onExit - 退出回调
-   * @param {Function} config.callbacks.onError - 错误回调
+   * @param {Object} config - Terminal configuration
+   * @param {string} config.instanceId - Instance ID
+   * @param {Object} config.callbacks - Callback functions
+   * @param {Function} config.callbacks.onData - Data output callback
+   * @param {Function} config.callbacks.onExit - Exit callback
+   * @param {Function} config.callbacks.onError - Error callback
    */
   constructor(config) {
     this.instanceId = config.instanceId
@@ -19,8 +18,8 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 启动终端进程
-   * @param {Object} options - 启动选项（由子类定义）
+   * Launch the terminal process
+   * @param {Object} options - Launch options (defined by subclasses)
    * @returns {Promise<void>}
    */
   async spawn(options) {
@@ -28,8 +27,8 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 写入数据到终端 stdin
-   * @param {string|Buffer} data - 要写入的数据
+   * Write data to the terminal's stdin
+   * @param {string|Buffer} data - Data to write
    * @returns {void}
    */
   write(data) {
@@ -37,9 +36,9 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 调整终端大小（发送 SIGWINCH）
-   * @param {number} cols - 列数
-   * @param {number} rows - 行数
+   * Resize the terminal (send SIGWINCH)
+   * @param {number} cols - Number of columns
+   * @param {number} rows - Number of rows
    * @returns {void}
    */
   resize(cols, rows) {
@@ -47,7 +46,7 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 销毁终端进程并释放资源
+   * Destroy the terminal process and release resources
    * @returns {Promise<void>}
    */
   async destroy() {
@@ -55,7 +54,7 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 触发数据回调
+   * Trigger data callback
    * @protected
    */
   _emitData(data) {
@@ -65,7 +64,7 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 触发退出回调
+   * Trigger exit callback
    * @protected
    */
   _emitExit(code, signal) {
@@ -76,7 +75,7 @@ export class BaseTerminalProvider {
   }
 
   /**
-   * 触发错误回调
+   * Trigger error callback
    * @protected
    */
   _emitError(error) {

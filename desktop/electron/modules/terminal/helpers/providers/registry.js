@@ -1,6 +1,6 @@
 /**
  * Terminal Provider Registry
- * 管理所有终端类型的 Provider 注册和查找
+ * Manages registration and lookup of all terminal provider types
  */
 
 export class ProviderRegistry {
@@ -10,9 +10,9 @@ export class ProviderRegistry {
   }
 
   /**
-   * 注册 Provider
-   * @param {string} type - 终端类型（如 'device', 'local'）
-   * @param {typeof import('./base.js').BaseTerminalProvider} ProviderClass - Provider 类
+   * Register a provider
+   * @param {string} type - Terminal type (e.g., 'device', 'local')
+   * @param {typeof import('./base.js').BaseTerminalProvider} ProviderClass - Provider class
    */
   register(type, ProviderClass) {
     if (this.providers.has(type)) {
@@ -22,8 +22,8 @@ export class ProviderRegistry {
   }
 
   /**
-   * 获取 Provider 类
-   * @param {string} type - 终端类型
+   * Get a provider class
+   * @param {string} type - Terminal type
    * @returns {typeof import('./base.js').BaseTerminalProvider}
    */
   get(type) {
@@ -35,8 +35,8 @@ export class ProviderRegistry {
   }
 
   /**
-   * 检查类型是否已注册
-   * @param {string} type - 终端类型
+   * Check if a type is registered
+   * @param {string} type - Terminal type
    * @returns {boolean}
    */
   has(type) {
@@ -44,7 +44,7 @@ export class ProviderRegistry {
   }
 
   /**
-   * 获取所有已注册的类型
+   * Get all registered types
    * @returns {string[]}
    */
   getTypes() {
@@ -52,5 +52,5 @@ export class ProviderRegistry {
   }
 }
 
-// 全局单例
+// Global singleton
 export const registry = new ProviderRegistry()

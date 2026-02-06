@@ -1,8 +1,6 @@
 <template>
   <el-config-provider :locale="locale" :size="size">
-    <div
-      class="flex flex-col h-screen"
-    >
+    <div class="flex flex-col h-screen">
       <div
         :class="[
           {
@@ -13,12 +11,11 @@
         class="app-region-drag flex-none flex items-center justify-between px-2 py-2"
       >
         <div class="flex items-center gap-4">
-          <div class="text-sm font-semibold pl-2">
+          <div class="text-sm font-semibold pl-2 select-none">
             Escrcpy Terminal
           </div>
 
-          <!-- 终端类型标签 -->
-          <el-tag v-if="['device'].includes(terminalConfig.type)" type="primary" class="">
+          <el-tag v-if="['device'].includes(terminalConfig.type)" type="primary">
             <div class="flex items-center gap-2">
               <div class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
               {{ currentDeviceLabel }}
@@ -33,9 +30,7 @@
             icon="Refresh"
             :title="$t('device.refresh.name')"
             @click="onRefreshClick"
-          >
-          </el-button>
-
+          />
           <el-switch v-model="isDark" class="el-switch--theme">
             <template #active-action>
               <i class="i-solar-moon-bold"></i>
@@ -47,13 +42,14 @@
         </div>
       </div>
 
-      <div class="flex-1 min-h-0 overflow-hidden p-4">
+      <div class="flex-1 min-h-0 overflow-hidden relative group pl-4 pr-2 py-2">
         <div
           ref="terminalRef"
-          class="xterm--beautify size-full"
+          class="xterm-wrapper size-full"
         ></div>
       </div>
     </div>
+
     <WindowControls v-if="$platform.is('windows') || $platform.is('linux')" />
   </el-config-provider>
 </template>
@@ -63,7 +59,6 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import WindowControls from '$/components/window-controls/index.vue'
-import { primaryShades } from '$/configs/index.js'
 
 const deviceStore = useDeviceStore()
 const { currentDevice, locale, size, themeStore } = useWindowStateSync()
@@ -73,7 +68,7 @@ const terminal = shallowRef(null)
 const fitAddon = shallowRef(null)
 const sessionId = ref(null)
 const connected = ref(false)
-const disposeCallbacks = ref(null) // 用于清理 electron-ipcx 的回调监听器
+const disposeCallbacks = ref(null)
 
 const terminalConfig = computed(() => {
   const type = window.$preload.payload.type || 'local'
@@ -91,7 +86,6 @@ const terminalConfig = computed(() => {
 const currentDeviceLabel = computed(() => {
   const device = currentDevice.value
   const value = device?.id ? deviceStore.getLabel(device, 'name') : 'Device Terminal'
-
   return value
 })
 
@@ -107,9 +101,7 @@ const isDark = computed({
 
 onMounted(async () => {
   await initTerminal()
-  connectSession()
-
-  // HMR 和页面刷新时提前清理，避免 ConPTY AttachConsole 失败
+  await connectSession()
   window.addEventListener('beforeunload', cleanup)
 })
 
@@ -119,39 +111,52 @@ onBeforeUnmount(() => {
 })
 
 async function initTerminal() {
+  const fontFamily = window.$platform.is('windows')
+    ? '"Cascadia Mono", "Consolas", "Courier New", monospace'
+    : '"Menlo", "Monaco", "Courier New", monospace'
+
   terminal.value = new Terminal({
     theme: getCurrentTheme(),
+    fontFamily,
     fontSize: 14,
+    lineHeight: 1.2,
     cursorBlink: true,
-    cursorStyle: 'underline',
-    cols: 80,
-    rows: 24,
+    cursorStyle: 'bar',
+    cursorWidth: 2,
     convertEol: true,
-    // 使用严格的等宽字体，确保字符宽度一致
-    fontFamily: '"Cascadia Mono", Consolas, "Courier New", monospace',
-    // 消除字符间距，避免宽度计算差异
-    letterSpacing: 0,
-    // 精确行高，避免垂直对齐问题
-    lineHeight: 1.0,
+    allowTransparency: true,
+    scrollback: 5000,
+    smoothScrollDuration: 150,
+    macOptionIsMeta: true,
   })
 
   fitAddon.value = new FitAddon()
   terminal.value.loadAddon(fitAddon.value)
+
   terminal.value.open(terminalRef.value)
   terminal.value.clear()
+  terminal.value.element.addEventListener('focus', () => {
+    terminal.value.textarea?.focus()
+  })
 
-  // 关键：terminal.open() 后立即 fit，确保在首次数据到达前完成尺寸同步
   await nextTick()
   fitAddon.value.fit()
 
-  window.addEventListener('resize', handleResize)
+  const resizeObserver = new ResizeObserver(() => {
+    fitAddon.value?.fit()
+    if (terminal.value) {
+      handleTerminalResize({ cols: terminal.value.cols, rows: terminal.value.rows })
+    }
+  })
+
+  resizeObserver.observe(terminalRef.value)
+  disposeCallbacks.value = () => {
+    resizeObserver.disconnect()
+  }
 
   terminal.value.onData(handleInput)
-
   terminal.value.onResize(handleTerminalResize)
-
   watchThemeChange()
-
   terminal.value.focus()
 }
 
@@ -159,40 +164,47 @@ let unwatchTheme = null
 
 function watchThemeChange() {
   unwatchTheme?.()
-
   unwatchTheme = watch(() => isDark.value, () => {
-    if (!terminal.value) {
-      return false
-    }
-
-    terminal.value.options.theme = {
-      ...getCurrentTheme(),
-    }
-  }, {
-    immediate: true,
-  })
+    if (!terminal.value)
+      return
+    terminal.value.options.theme = { ...getCurrentTheme() }
+  }, { immediate: true })
 }
 
 function getCurrentTheme() {
+  const selectionColor = isDark.value ? '#264f78' : '#add6ff'
   if (isDark.value) {
-    // 深色主题
     return {
-      foreground: '#ffffff',
-      background: '#1e1e1e',
+      foreground: '#cccccc',
+      background: 'transparent',
       cursor: '#ffffff',
-      selectionBackground: primaryShades[500],
+      cursorAccent: '#1e1e1e',
+      selectionBackground: selectionColor,
+      selectionInactiveBackground: '#3a3d41',
+      black: '#000000',
+      red: '#cd3131',
+      green: '#0dbc79',
+      yellow: '#e5e510',
+      blue: '#2472c8',
+      magenta: '#bc3fbc',
+      cyan: '#11a8cd',
+      white: '#e5e5e5',
+      brightBlack: '#666666',
+      brightRed: '#f14c4c',
+      brightGreen: '#23d18b',
+      brightYellow: '#f5f543',
+      brightBlue: '#3b8eea',
+      brightMagenta: '#d670d6',
+      brightCyan: '#29b8db',
+      brightWhite: '#e5e5e5',
     }
   }
-
-  // 浅色主题 - GitHub Light 风格
   return {
     foreground: '#24292f',
-    background: '#ffffff',
+    background: 'transparent',
     cursor: '#24292f',
     cursorAccent: '#ffffff',
-    selectionBackground: primaryShades[300],
-    
-    // ANSI 16 色 - GitHub Light Palette
+    selectionBackground: selectionColor,
     black: '#24292f',
     red: '#cf222e',
     green: '#116329',
@@ -201,7 +213,6 @@ function getCurrentTheme() {
     magenta: '#8250df',
     cyan: '#1b7c83',
     white: '#6e7781',
-    
     brightBlack: '#57606a',
     brightRed: '#a40e26',
     brightGreen: '#1a7f37',
@@ -216,21 +227,18 @@ function getCurrentTheme() {
 async function connectSession() {
   try {
     const { type, instanceId, options } = terminalConfig.value
+    const actualDimensions = { cols: terminal.value.cols, rows: terminal.value.rows }
 
     const result = await window.$preload.terminal.createSession({
       type,
       instanceId,
-      options,
-      onData: (data) => {
-        terminal.value?.write(data)
-      },
-      onExit: (code, signal) => {
+      options: { ...options, ...actualDimensions },
+      onData: (data) => { terminal.value?.write(data) },
+      onExit: (code) => {
         connected.value = false
         terminal.value?.writeln(`\r\n\x1B[33mProcess exited with code ${code}\x1B[0m`)
       },
-      onError: (error) => {
-        terminal.value?.writeln(`\r\n\x1B[31mError: ${error.message || error}\x1B[0m`)
-      },
+      onError: (error) => { terminal.value?.writeln(`\r\n\x1B[31mError: ${error.message || error}\x1B[0m`) },
     })
 
     if (!result.success) {
@@ -239,11 +247,19 @@ async function connectSession() {
     }
 
     sessionId.value = result.sessionId
-    disposeCallbacks.value = result.dispose
+    if (result.dispose) {
+      const prevDispose = disposeCallbacks.value
+      disposeCallbacks.value = () => {
+        if (prevDispose)
+          prevDispose()
+        result.dispose()
+      }
+    }
+
     connected.value = true
 
     if (['local'].includes(terminalConfig.value.type)) {
-      terminal.value.writeln('\x1B[1;35m[Tip]\x1B[0m Terminal supports full system commands with scrcpy, adb, fastboot, gnirehtet, etc.\r\n')
+      terminal.value.writeln('\x1B[1;35m[Tip]\x1B[0m Terminal supports full system commands with scrcpy, adb, fastboot, etc.\r\n')
     }
 
     if (window.$preload.payload.command) {
@@ -256,27 +272,18 @@ async function connectSession() {
 }
 
 function handleInput(data) {
-  if (!sessionId.value) {
+  if (!sessionId.value)
     return
-  }
-
   window.$preload.terminal.writeSession(sessionId.value, data)
 }
 
-function handleResize() {
-  fitAddon.value?.fit()
-}
-
 function handleTerminalResize({ cols, rows }) {
-  if (!sessionId.value) {
+  if (!sessionId.value)
     return
-  }
-
   window.$preload.terminal.resizeSession(sessionId.value, cols, rows)
 }
 
 function cleanup() {
-  window.removeEventListener('resize', handleResize)
   unwatchTheme?.()
 
   if (sessionId.value) {
@@ -297,17 +304,52 @@ function onRefreshClick() {
 </script>
 
 <style lang="postcss" scoped>
+.xterm-wrapper {
+  --scrollbar-width: 5px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
+}
+
+:deep(.dark .xterm-wrapper) {
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+}
+
 :deep() {
-  .xterm--beautify {
-    /* 确保使用等宽字体，避免字符宽度差异导致光标错位 */
-    font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
-    /* 消除额外的字符间距和行高，确保与 xterm.js 配置一致 */
-    letter-spacing: 0;
-    line-height: normal;
-    
-    .xterm-scrollable-element,
-    .xterm-viewport {
-      @apply !bg-transparent;
+  .xterm {
+    font-feature-settings: 'liga' 0;
+    padding: 0;
+  }
+
+  .xterm-viewport,
+  .xterm-scrollable-element {
+    background-color: transparent !important;
+  }
+
+  .xterm-viewport {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+
+    &::-webkit-scrollbar {
+      width: var(--scrollbar-width);
+      background-color: var(--scrollbar-track);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: 6px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+      transition: background-color 0.2s;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: transparent;
     }
   }
 }

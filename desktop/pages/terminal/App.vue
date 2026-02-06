@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <div class="flex-1 min-h-0 overflow-hidden relative group pl-4 pr-2 py-2">
+      <div class="flex-1 min-h-0 overflow-hidden relative group pl-3 pr-2 py-2">
         <div
           ref="terminalRef"
           class="xterm-wrapper size-full"
@@ -88,13 +88,24 @@ function onRefreshClick() {
 <style lang="postcss" scoped>
 :deep() {
   .xterm {
-    font-feature-settings: 'liga' 0;
-    padding: 0;
-  }
+    .xterm-viewport,
+    .xterm-scrollable-element {
+      @apply !bg-transparent;
+    }
 
-  .xterm-viewport,
-  .xterm-scrollable-element {
-    background-color: transparent !important;
+    .xterm-scrollable-element .scrollbar.vertical {
+      &,
+      & .slider {
+        @apply !w-[7px] !rounded-full;
+      }
+    }
+
+    .xterm-scrollable-element .scrollbar.horizontal {
+      &,
+      & .slider {
+        @apply !h-[7px] !rounded-full;
+      }
+    }
   }
 }
 </style>

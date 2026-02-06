@@ -2,6 +2,7 @@ import { spawn as ptySpawn } from '@lydell/node-pty'
 import { homedir } from 'node:os'
 import fs from 'node:fs'
 import { BaseTerminalProvider } from './base.js'
+import { platform } from '@electron-toolkit/utils'
 
 export class LocalTerminalProvider extends BaseTerminalProvider {
   /**
@@ -36,9 +37,7 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
       rows = 24,
     } = options
 
-    const isWindows = process.platform === 'win32'
-
-    const shellArgs = isWindows ? ['-NoLogo'] : []
+    const shellArgs = platform.isWindows ? ['-NoLogo'] : []
 
     const enhancedEnv = {
       ...env,
@@ -57,7 +56,7 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
         env: enhancedEnv,
       }
 
-      if (isWindows) {
+      if (platform.isWindows) {
         ptyOptions.useConpty = true
         ptyOptions.conptyInheritCursor = true
       }
@@ -70,8 +69,6 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
 
       this.pty.onData(this._onData)
       this.pty.onExit(this._onExit)
-
-      console.log(`[LocalTerminal] Spawned: ${shell} (${this.instanceId})`)
     }
     catch (error) {
       this._emitError({
@@ -139,7 +136,6 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
         this.pty.kill()
         this.isAlive = false
       }
-      console.log(`[LocalTerminal] Destroyed: ${this.instanceId}`)
     }
     catch (error) {
       console.error('[LocalTerminal] Destroy error:', error)
@@ -157,9 +153,8 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
    * @returns {string} shell path
    */
   _detectShell() {
-    const platform = process.platform
-    if (platform === 'win32') {
-      return process.env.SHELL || process.env.COMSPEC || 'powershell.exe'
+    if (platform.isWindows) {
+      return process.env.SHELL || 'powershell.exe'
     }
 
     const shells = [

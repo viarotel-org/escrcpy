@@ -38,29 +38,23 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     const isWindows = process.platform === 'win32'
     const isPowerShell = isWindows && (shell.toLowerCase().includes('powershell') || shell.toLowerCase().includes('pwsh'))
 
-    // Windows PowerShell: 禁用 PSReadLine 颜色以避免输入文本显示黄色
+    // Windows PowerShell: 使用 -NoProfile 完全禁用配置文件，阻止 PSReadLine 加载
     const shellArgs = isPowerShell
-      ? [
-          '-NoLogo',
-          '-NoProfile',
-          '-Command',
-          `& { 
-            if (Get-Module -ListAvailable -Name PSReadLine) { 
-              Set-PSReadLineOption -Colors @{ Command='White'; Parameter='White'; String='White'; Operator='White'; Variable='White' } 
-            }; 
-            $host.UI.RawUI.ForegroundColor='White'; 
-            powershell.exe -NoExit -NoLogo 
-          }`,
-        ]
+      ? ['-NoLogo', '-NoProfile']
       : []
 
-    // 增强环境变量以支持 UTF-8 和真彩色
+    // 增强环境变量
     const enhancedEnv = {
       ...env,
       TERM: 'xterm-256color',
       COLORTERM: 'truecolor',
       PYTHONIOENCODING: 'utf-8',
       LANG: 'en_US.UTF-8',
+    }
+
+    // Windows PowerShell: 通过环境变量禁用模块自动加载，彻底阻止 PSReadLine
+    if (isPowerShell) {
+      enhancedEnv.PSDisableModuleAutoload = '1'
     }
 
     try {

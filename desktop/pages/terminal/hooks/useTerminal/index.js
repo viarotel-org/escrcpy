@@ -11,6 +11,7 @@ export function useTerminal({ theme = 'github' }) {
   const fitAddon = shallowRef(null)
   const sessionId = ref(null)
   const connected = ref(false)
+  const newline = window.$platform.is('windows') ? '\r\n' : '\n'
   const disposeCallbacks = ref(null)
   let unwatchTheme = null
   let resizeTimer = null
@@ -46,7 +47,7 @@ export function useTerminal({ theme = 'github' }) {
       && ['device'].includes(terminalConfig.value.type)
       && val === '\r'
     ) {
-      command = '\r\n'
+      command = newline
     }
 
     window.$preload.terminal.writeSession(sessionId.value, command)
@@ -130,13 +131,13 @@ export function useTerminal({ theme = 'github' }) {
         onData: data => terminal.value?.write(data),
         onExit: (code) => {
           connected.value = false
-          terminal.value?.writeln(`\r\n\x1B[33mProcess exited with code ${code}\x1B[0m`)
+          terminal.value?.writeln(`${newline}\x1B[33mProcess exited with code ${code}\x1B[0m`)
         },
-        onError: err => terminal.value?.writeln(`\r\n\x1B[31mError: ${err.message || err}\x1B[0m`),
+        onError: err => terminal.value?.writeln(`${newline}\x1B[31mError: ${err.message || err}\x1B[0m`),
       })
 
       if (!result.success) {
-        terminal.value.writeln(`\r\n\x1B[31mError: ${result.error}\x1B[0m`)
+        terminal.value.writeln(`${newline}\x1B[31mError: ${result.error}\x1B[0m`)
         return
       }
 
@@ -153,17 +154,17 @@ export function useTerminal({ theme = 'github' }) {
       connected.value = true
 
       if (terminalConfig.value.type === 'local') {
-        terminal.value.writeln('\x1B[38;2;15;140;121m[Tip]\x1B[0m Full system commands, enhanced with scrcpy, adb, fastboot, and gnirehtet.\r\n')
+        terminal.value.writeln(`\x1B[38;2;15;140;121m[Tip]\x1B[0m Full system commands, enhanced with scrcpy, adb, fastboot, and gnirehtet.${newline}`)
       }
 
       if (terminalConfig.value.command) {
         // TODO: Delay to ensure terminal is ready
         await sleep(500)
-        handleInput(`${terminalConfig.value.command}\r`)
+        handleInput(`${terminalConfig.value.command}${newline}`)
       }
     }
     catch (error) {
-      terminal.value.writeln(`\r\n\x1B[31mFailed to connect: ${error.message}\x1B[0m`)
+      terminal.value.writeln(`${newline}\x1B[31mFailed to connect: ${error.message}\x1B[0m`)
     }
   }
 

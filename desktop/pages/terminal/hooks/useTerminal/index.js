@@ -34,12 +34,22 @@ export function useTerminal({ theme = 'github' }) {
     return themes[theme][isDark ? 'dark' : 'light']
   }
 
-  function handleInput(data) {
+  function handleInput(val) {
     if (!sessionId.value) {
       return false
     }
 
-    window.$preload.terminal.writeSession(sessionId.value, data)
+    let command = val
+
+    if (
+      window.$platform.is('windows')
+      && ['device'].includes(terminalConfig.value.type)
+      && val === '\r'
+    ) {
+      command = '\r\n'
+    }
+
+    window.$preload.terminal.writeSession(sessionId.value, command)
   }
 
   function handleResize({ cols, rows }) {

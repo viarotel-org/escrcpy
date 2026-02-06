@@ -94,7 +94,6 @@
     "vite-plugin-electron-renderer": "0.14.6",
     "vite-plugin-native": "2.2.2",
     "vue": "3.5.26",
-    "vue-command": "35.2.1",
     "vue-draggable-resizable": "3.0.0",
     "vue-router": "4.5.0",
     "vue-screen": "2.4.2",

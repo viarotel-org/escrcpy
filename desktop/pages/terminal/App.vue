@@ -105,8 +105,8 @@ const isDark = computed({
   },
 })
 
-onMounted(() => {
-  initTerminal()
+onMounted(async () => {
+  await initTerminal()
   connectSession()
 })
 
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
   cleanup()
 })
 
-function initTerminal() {
+async function initTerminal() {
   terminal.value = new Terminal({
     theme: getCurrentTheme(),
     fontSize: 14,
@@ -131,11 +131,6 @@ function initTerminal() {
   terminal.value.open(terminalRef.value)
   terminal.value.clear()
 
-  nextTick(() => {
-    fitAddon.value.fit()
-    terminal.value.focus()
-  })
-
   window.addEventListener('resize', handleResize)
 
   terminal.value.onData(handleInput)
@@ -143,6 +138,10 @@ function initTerminal() {
   terminal.value.onResize(handleTerminalResize)
 
   watchThemeChange()
+
+  await nextTick()
+  fitAddon.value.fit()
+  terminal.value.focus()
 }
 
 let unwatchTheme = null
@@ -182,7 +181,6 @@ async function connectSession() {
       instanceId,
       options,
       onData: (data) => {
-        console.log('[Terminal] Received data:', data)
         terminal.value?.write(data)
       },
       onExit: (code, signal) => {
@@ -200,10 +198,12 @@ async function connectSession() {
     }
 
     sessionId.value = result.sessionId
-    disposeCallbacks.value = result.dispose // 保存 dispose 函数
+    disposeCallbacks.value = result.dispose
     connected.value = true
 
-    console.log(`[Terminal] Connected to session: ${sessionId.value}`)
+    if (window.$preload.payload.command) {
+      handleInput(`${window.$preload.payload.command}\n`)
+    }
   }
   catch (error) {
     terminal.value.writeln(`\r\n\x1B[31mFailed to connect: ${error.message}\x1B[0m`)
@@ -215,12 +215,7 @@ function handleInput(data) {
     return
   }
 
-  if (data === '\r') {
-    window.$preload.terminal.writeSession(sessionId.value, '\r\n')
-  }
-  else {
-    window.$preload.terminal.writeSession(sessionId.value, data)
-  }
+  window.$preload.terminal.writeSession(sessionId.value, data)
 }
 
 function handleResize() {

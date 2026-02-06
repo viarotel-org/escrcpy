@@ -200,7 +200,6 @@ export default {
           label: 'device.terminal.name',
           fontIcon: 'i-bi-terminal',
           component: 'Terminal',
-          hiddenKeys: ['floating'],
         },
         'task': {
           label: 'device.task.name',

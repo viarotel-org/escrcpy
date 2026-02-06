@@ -2,8 +2,6 @@ import { selectAndSendFileToDevice } from '$/utils/device/index.js'
 import { allSettledWrapper } from '$/utils/index.js'
 
 export function useShellAction() {
-  const taskStore = useTaskStore()
-
   const loading = ref(false)
 
   async function invoke(...args) {
@@ -22,6 +20,7 @@ export function useShellAction() {
     if (!files) {
       try {
         files = await selectAndSendFileToDevice(device.id, {
+          silent: true,
           extensions: ['sh'],
           selectText: window.t('terminal.script.select'),
           loadingText: window.t('terminal.script.push.loading'),
@@ -37,9 +36,14 @@ export function useShellAction() {
 
     const filePath = files[0]
 
-    const command = `adb -s ${device.id} shell sh ${filePath}`
+    const command = `sh ${filePath}`
 
-    taskStore.emit('terminal', { command, message: window.t('terminal.script.enter') })
+    window.$preload.win.open('pages/terminal', {
+      type: 'device',
+      device: toRaw(device),
+      instanceId: device.id,
+      command,
+    })
 
     loading.value = false
   }

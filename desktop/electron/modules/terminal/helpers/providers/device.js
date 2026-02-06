@@ -1,5 +1,6 @@
 import { spawnShell } from '$electron/helpers/shell/index.js'
 import { getAdbPath } from '$electron/configs/index.js'
+import { platform } from '@electron-toolkit/utils'
 import { BaseTerminalProvider } from './base.js'
 
 /**
@@ -24,7 +25,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    * @param {string} [options.encoding] - Encoding
    */
   async spawn(options = {}) {
-    const { deviceId, encoding = 'utf8' } = options
+    const { deviceId, encoding = platform.isWindows ? 'cp936' : 'utf8' } = options
 
     if (!deviceId) {
       throw new Error('[DeviceTerminal] deviceId is required')
@@ -40,9 +41,17 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
           shell: false,
           encoding,
           stdout: (text) => {
+            // Clean up duplicate carriage returns on Windows
+            if (platform.isWindows) {
+              text = text.replace(/\r\r\n/g, '\r\n')
+            }
             this._emitData(text)
           },
           stderr: (text) => {
+            // Clean up duplicate carriage returns on Windows
+            if (platform.isWindows) {
+              text = text.replace(/\r\r\n/g, '\r\n')
+            }
             this._emitData(text)
           },
           exit: (code, signal) => {
@@ -58,8 +67,6 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
       )
 
       this.isAlive = true
-
-      console.log(`[DeviceTerminal] Spawned ADB shell: ${deviceId} (${this.instanceId})`)
     }
     catch (error) {
       this._emitError({

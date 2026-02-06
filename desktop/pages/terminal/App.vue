@@ -86,18 +86,6 @@ function onRefreshClick() {
 </script>
 
 <style lang="postcss" scoped>
-.xterm-wrapper {
-  --scrollbar-width: 5px;
-  --scrollbar-track: transparent;
-  --scrollbar-thumb: rgba(0, 0, 0, 0.2);
-  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
-}
-
-:deep(.dark .xterm-wrapper) {
-  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
-  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
-}
-
 :deep() {
   .xterm {
     font-feature-settings: 'liga' 0;
@@ -107,28 +95,6 @@ function onRefreshClick() {
   .xterm-viewport,
   .xterm-scrollable-element {
     background-color: transparent !important;
-  }
-
-  .xterm-viewport {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    &::-webkit-scrollbar {
-      width: var(--scrollbar-width);
-      background-color: var(--scrollbar-track);
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: var(--scrollbar-thumb);
-      border-radius: 6px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-      transition: background-color 0.2s;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-      background-color: var(--scrollbar-thumb-hover);
-    }
-    &::-webkit-scrollbar-corner {
-      background: transparent;
-    }
   }
 }
 </style>

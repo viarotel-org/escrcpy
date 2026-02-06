@@ -15,7 +15,7 @@ export function useTerminal({ theme = 'github' }) {
   const disposeCallbacks = ref(null)
   let unwatchTheme = null
   let resizeTimer = null
-  const currentStatusType = ref('')
+  const sessionStatus = ref('')
 
   const terminalConfig = computed(() => {
     const payload = window.$preload.payload || {}
@@ -43,7 +43,7 @@ export function useTerminal({ theme = 'github' }) {
 
     let command = val
 
-    if (['exit', 'error'].includes(currentStatusType.value)) {
+    if (['exit', 'error'].includes(sessionStatus.value)) {
       window.location.reload()
       return false
     }
@@ -135,16 +135,16 @@ export function useTerminal({ theme = 'github' }) {
         instanceId: terminalConfig.value.instanceId,
         options: { ...terminalConfig.value.options, ...actualDimensions },
         onData: (data) => {
-          currentStatusType.value = 'data'
+          sessionStatus.value = 'data'
           terminal.value?.write(data)
         },
         onExit: (code) => {
-          currentStatusType.value = 'exit'
+          sessionStatus.value = 'exit'
           connected.value = false
           terminal.value?.writeln(`${newline}\x1B[33mProcess exited with code ${code}\x1B[0m`)
         },
         onError: (err) => {
-          currentStatusType.value = 'error'
+          sessionStatus.value = 'error'
           terminal.value?.writeln(`${newline}\x1B[31mError: ${err.message || err}\x1B[0m`)
         },
       })

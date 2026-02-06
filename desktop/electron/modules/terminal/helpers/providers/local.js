@@ -1,6 +1,7 @@
 import { spawn as ptySpawn } from '@lydell/node-pty'
 import { homedir } from 'node:os'
 import { BaseTerminalProvider } from './base.js'
+import { execSync } from 'node:child_process'
 
 /**
  * Local Terminal Provider
@@ -36,18 +37,16 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     } = options
 
     const isWindows = process.platform === 'win32'
+    const isPowerShell = isWindows && (shell.toLowerCase().includes('powershell') || shell.toLowerCase().includes('pwsh'))
 
-    const shellArgs = isWindows
+    const shellArgs = isPowerShell
       ? [
           '-NoLogo',
           '-NoProfile',
           '-Command',
-          // 设置纯文本输出，禁用 ANSI 转义序列
           '$PSStyle.OutputRendering = \'PlainText\'; '
           + '[Console]::InputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new(); '
-          // 禁用 PSReadLine（完全移除输入高亮）
           + 'Remove-Module PSReadLine -ErrorAction SilentlyContinue; '
-          // 进入交互模式
           + '& { while ($true) { $command = [Console]::ReadLine(); if ($command -eq "exit") { break }; Invoke-Expression $command } }',
         ]
       : []
@@ -165,7 +164,13 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
     const platform = process.platform
 
     if (platform === 'win32') {
-      return process.env.SHELL || 'powershell.exe'
+      try {
+        execSync('where pwsh.exe', { stdio: 'ignore' })
+        return 'pwsh.exe'
+      }
+      catch {
+        return process.env.SHELL || 'powershell.exe'
+      }
     }
 
     // macOS / Linux: 优先环境变量，回退到常见 shell

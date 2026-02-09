@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center flex-none space-x-2">
-    <div class="w-96 flex-none">
+    <div class="w-72 flex-none">
       <el-autocomplete
         :key="autocompleteKey"
         ref="elAutocompleteRef"
@@ -8,14 +8,14 @@
         placeholder="192.168.0.1:5555"
         clearable
         :fetch-suggestions="fetchSuggestions"
-        class="!w-full"
+        class="!w-full el-autocomplete--wireless"
         value-key="host"
         @select="onSelect"
         @keydown.enter.prevent="handleConnect()"
         @keydown.escape="handleUnConnect()"
       >
         <template #prepend>
-          {{ $t('device.wireless.name') }}
+          <i class="i-bi-wifi" :title="$t('device.wireless.name')"></i>
         </template>
 
         <template #default="{ item }">
@@ -44,12 +44,16 @@
       </el-autocomplete>
     </div>
 
-    <el-button-group>
+    <div class="flex-none w-26">
+      <el-input v-model="pairCode" class="!w-full" :placeholder="$t('device.wireless.pair.code')" :title="$t('device.wireless.pair.code')"></el-input>
+    </div>
+
+    <el-button-group class="flex-none">
       <el-button
-        type="primary"
+        type="default"
         :icon="loading ? '' : 'Connection'"
         :loading="loading"
-        class="flex-none !border-none"
+        class="flex-none"
         @click="handleConnect()"
       >
         {{ $t('device.wireless.connect.name') }}
@@ -58,7 +62,6 @@
       <el-button
         v-if="loading"
         type="default"
-        plain
         class="flex-none"
         @click="handleUnConnect()"
       >
@@ -67,230 +70,181 @@
     </el-button-group>
 
     <QrAction v-bind="{ handleRefresh }" />
-
-    <PairDialog ref="pairDialog" @success="onPairSuccess" />
   </div>
 </template>
 
-<script>
+<script setup>
 import { sleep } from '$/utils'
-import { parseDeviceId } from '$/utils/device/index.js'
-import PairDialog from './pair-dialog/index.vue'
+import { parseDeviceId } from '$/utils/device'
 import QrAction from './qr-action/index.vue'
 
-export default {
-  components: {
-    PairDialog,
-    QrAction,
+const props = defineProps({
+  handleRefresh: {
+    type: Function,
+    default: () => () => false,
   },
-  props: {
-    handleRefresh: {
-      type: Function,
-      default: () => () => false,
-    },
-  },
-  emits: ['auto-connected'],
-  setup() {
-    const preferenceStore = usePreferenceStore()
-    const deviceStore = useDeviceStore()
-    return {
-      preferenceStore,
-      deviceStore,
-    }
-  },
-  data() {
-    return {
-      loading: false,
+})
 
-      address: '',
+const emit = defineEmits(['auto-connected'])
 
-      autocompleteKey: 0,
-    }
+const handleRefresh = props.handleRefresh
+
+const preferenceStore = usePreferenceStore()
+const deviceStore = useDeviceStore()
+
+const loading = ref(false)
+const address = ref('')
+const pairCode = ref('')
+const autocompleteKey = ref(0)
+
+const elAutocompleteRef = ref()
+
+const wirelessList = computed(() =>
+  deviceStore.list.filter(item => item.wifi),
+)
+
+watch(
+  () => wirelessList.value.length,
+  (val) => {
+    if (val)
+      getAddress()
   },
-  computed: {
-    wirelessList() {
-      const value = this.deviceStore.list.filter(item => item.wifi)
-      return value
-    },
-  },
-  watch: {
-    'wirelessList.length': {
-      handler(val) {
-        if (val) {
-          this.getAddress()
-        }
-      },
-      immediate: true,
-    },
-  },
-  async created() {
-    const unwatch = this.$watch('wirelessList', async (val) => {
+  { immediate: true },
+)
+
+onMounted(() => {
+  const unwatch = watch(
+    wirelessList,
+    async (val) => {
       unwatch()
-
-      if (!val) {
-        return false
-      }
-
-      this.handleConnectAuto()
-    })
-  },
-  methods: {
-    async handleConnectAuto() {
-      const autoConnect = this.preferenceStore.data.autoConnect
-
-      if (autoConnect) {
-        await this.handleBatch()
-        this.handleRefresh()
-        this.$emit('auto-connected')
-      }
+      if (!val)
+        return
+      handleConnectAuto()
     },
-    getAddress() {
-      const lastIndex = this.wirelessList.length - 1
-      const lastWireless = this.wirelessList[lastIndex]
+  )
+})
 
-      if (lastWireless) {
-        this.address = lastWireless.id
-      }
-    },
-    connect(...args) {
-      return this.handleConnect(...args)
-    },
-    fetchSuggestions(value, callback) {
-      let results = []
+async function handleConnectAuto() {
+  if (!preferenceStore.data.autoConnect)
+    return
 
-      if (value) {
-        results = this.wirelessList.filter(
-          item => item.id.toLowerCase().indexOf(value.toLowerCase()) === 0,
-        )
-      }
-      else {
-        results = [...this.wirelessList]
-      }
-
-      results.push({
-        batch: this.$t('device.wireless.connect.batch.name'),
-      })
-
-      callback(results)
-    },
-    onSelect(device) {
-      this.address = device.id
-    },
-    onPairSuccess() {
-      this.handleConnect()
-    },
-    handleRemove(info) {
-      const index = this.wirelessList.findIndex(
-        item => info.id === item.id,
-      )
-
-      if (index === -1) {
-        return false
-      }
-
-      this.wirelessList.splice(index, 1)
-
-      ++this.autocompleteKey
-    },
-
-    async handleBatch() {
-      if (this.loading) {
-        return false
-      }
-
-      const totalCount = this.wirelessList.length
-
-      if (!totalCount) {
-        return false
-      }
-
-      let failCount = 0
-
-      const promises = []
-
-      for (let index = 0; index < totalCount; index++) {
-        const { id } = this.wirelessList[index]
-
-        promises.push(
-          this.$adb.connect(id).catch(() => {
-            ++failCount
-          }),
-        )
-      }
-
-      this.loading = true
-      await Promise.allSettled(promises)
-      this.loading = false
-    },
-
-    handleUnConnect() {
-      this.loading = false
-    },
-
-    async handleConnect(address = this.address) {
-      if (!address) {
-        this.$message.warning(
-          this.$t('device.wireless.connect.error.no-address'),
-        )
-        return false
-      }
-
-      this.loading = true
-
-      try {
-        await this.$adb.connect(address)
-        await sleep()
-
-        this.$message.success(this.$t('device.wireless.connect.success'))
-      }
-      catch (error) {
-        if (this.loading) {
-          this.handleError(error?.message || error?.cause?.message || error)
-        }
-      }
-
-      this.handleRefresh()
-
-      this.loading = false
-    },
-    async handleError(message) {
-      try {
-        await this.$confirm(
-          `<div class="pt-4 pl-4">
-            <div class="text-sm text-red-500 pb-4">${this.$t(
-              'device.wireless.connect.error.detail',
-            )}: ${message}</div>
-            <div>${this.$t('device.wireless.connect.error.reasons[0]')}:</div>
-            <div>1. ${this.$t(
-              'device.wireless.connect.error.reasons[1]',
-            )} </div>
-            <div>2. ${this.$t(
-              'device.wireless.connect.error.reasons[2]',
-            )} </div>
-            <div>3. ${this.$t(
-              'device.wireless.connect.error.reasons[3]',
-            )} </div>
-            <div>4. ${this.$t(
-              'device.wireless.connect.error.reasons[4]',
-            )} </div>
-          </div>`,
-          this.$t('device.wireless.connect.error.title'),
-          {
-            dangerouslyUseHTMLString: true,
-            closeOnClickModal: false,
-            confirmButtonText: this.$t('device.wireless.pair'),
-            cancelButtonText: this.$t('common.cancel'),
-            type: 'warning',
-          },
-        )
-        this.$refs.pairDialog.show({ params: { ...parseDeviceId(this.address) } })
-      }
-      catch (error) {
-        console.warn(error.message)
-      }
-    },
-  },
+  await handleBatch()
+  handleRefresh()
+  emit('auto-connected')
 }
+
+function getAddress() {
+  const last = wirelessList.value.at(-1)
+  if (last)
+    address.value = last.id
+}
+
+function fetchSuggestions(value, callback) {
+  let results = []
+
+  if (value) {
+    results = wirelessList.value.filter(item =>
+      item.id.toLowerCase().startsWith(value.toLowerCase()),
+    )
+  }
+  else {
+    results = [...wirelessList.value]
+  }
+
+  results.push({
+    batch: window.t('device.wireless.connect.batch.name'),
+  })
+
+  callback(results)
+}
+
+function onSelect(device) {
+  address.value = device.id
+}
+
+function handleRemove(info) {
+  const index = wirelessList.value.findIndex(
+    item => item.id === info.id,
+  )
+
+  if (index === -1)
+    return
+
+  wirelessList.value.splice(index, 1)
+  autocompleteKey.value++
+}
+
+async function handleBatch() {
+  if (loading.value)
+    return
+
+  const list = wirelessList.value
+  if (!list.length)
+    return
+
+  loading.value = true
+
+  const promises = list.map(({ id }) =>
+    window.$preload.adb.connect(id).catch(() => {}),
+  )
+
+  await Promise.allSettled(promises)
+  loading.value = false
+}
+
+function handleUnConnect() {
+  loading.value = false
+}
+
+async function handleConnect(addr = address.value) {
+  if (!addr) {
+    ElMessage.warning(
+      window.t('device.wireless.connect.error.no-address'),
+    )
+    return
+  }
+
+  if (pairCode.value) {
+    try {
+      const { host, port } = parseDeviceId(address.value)
+      await window.$preload.adb.pair(host, port, pairCode.value)
+    }
+    catch (error) {
+      console.warn(error.message)
+      ElMessage.warning(window.t('device.wireless.pair.error'))
+      return
+    }
+  }
+
+  loading.value = true
+
+  try {
+    await window.$preload.adb.connect(addr)
+    await sleep()
+    ElMessage.success(window.t('device.wireless.connect.success'))
+  }
+  catch (error) {
+    ElMessage.warning(error?.message || error?.cause?.message || error)
+  }
+  finally {
+    loading.value = false
+  }
+
+  handleRefresh()
+  loading.value = false
+}
+
+defineExpose({
+  connect: handleConnect,
+})
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+:deep() {
+  .el-autocomplete--wireless {
+    .el-input-group__prepend {
+      @apply !px-3;
+    }
+  }
+}
+</style>

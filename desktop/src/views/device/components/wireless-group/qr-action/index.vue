@@ -9,9 +9,9 @@
   >
     <template #reference>
       <el-button
-        type="primary"
+        type="default"
         :loading="loading"
-        class="flex-none !border-none"
+        class="flex-none"
         @click="handleClick"
       >
         <template v-if="!loading" #icon>

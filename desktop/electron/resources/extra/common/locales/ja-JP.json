@@ -89,7 +89,7 @@
   "copilot.check.adb.checkError": "ADBキーボードの状態を確認できません: {error}",
   "copilot.check.adb.installed": "ADBキーボードがインストールされています",
   "copilot.check.adb.name": "ADBキーボードチェック",
-  "copilot.check.adb.notInstalled": "ADBキーボードがインストールされていません。AIはデバイス入力を制御できません。デバイスにインストールして有効化後、再試行してください。",
+  "copilot.check.adb.notInstalled": "ADB キーボードが検出されていないため、AI による入力制御を行えません。デバイスにこのキーボードをインストールしてください。一部のデバイスでは、開発者モードで USB インストールを有効にする必要があります。",
   "copilot.check.api.checkError": "APIサービスを確認できません: {error}",
   "copilot.check.api.configIncomplete": "API設定が不完全です。Base URLとAPI Keyを先に設定してください。",
   "copilot.check.api.failure": "APIサービス接続失敗: {message}",

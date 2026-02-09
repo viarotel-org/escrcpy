@@ -89,7 +89,7 @@
   "copilot.check.adb.checkError": "Не удалось проверить состояние ADB клавиатуры: {error}",
   "copilot.check.adb.installed": "ADB клавиатура установлена",
   "copilot.check.adb.name": "Проверка ADB клавиатуры",
-  "copilot.check.adb.notInstalled": "ADB клавиатура не установлена, AI не может управлять вводом на устройстве. Установите и активируйте на устройстве, затем повторите попытку.",
+  "copilot.check.adb.notInstalled": "Клавиатура ADB не обнаружена, поэтому управление вводом с помощью AI недоступно. Установите эту клавиатуру на устройство; на некоторых устройствах для автоматической установки необходимо включить установку через USB в режиме разработчика.",
   "copilot.check.api.checkError": "Не удалось проверить сервис API: {error}",
   "copilot.check.api.configIncomplete": "Конфигурация API неполная, сначала настройте Base URL и API Key",
   "copilot.check.api.failure": "Ошибка подключения к API сервису: {message}",

@@ -2,7 +2,7 @@ import { exec as _exec, spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import util from 'node:util'
-import { getAdbPath } from '$electron/configs/index.js'
+import { adbKeyboardApkPath, getAdbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
@@ -419,6 +419,44 @@ function killProcesses() {
   processManager.kill()
 }
 
+export async function isInstalledAdbKeyboard(deviceId) {
+  try {
+    const pkg = 'com.android.adbkeyboard'
+    const installed = await isInstalled(deviceId, pkg)
+    return installed
+  }
+  catch (error) {
+    console.warn(
+      `Failed to check AdbKeyboard on device ${deviceId}:`,
+      error?.message || error,
+    )
+    return false
+  }
+}
+
+export async function installAdbKeyboard(deviceId) {
+  try {
+    const installed = await isInstalledAdbKeyboard(deviceId)
+
+    if (installed) {
+      return true
+    }
+
+    await install(deviceId, adbKeyboardApkPath)
+
+    const installedAfter = await isInstalledAdbKeyboard(deviceId)
+
+    return installedAfter
+  }
+  catch (error) {
+    console.warn(
+      `Failed to install AdbKeyboard on device ${deviceId}:`,
+      error?.message || error,
+    )
+    return false
+  }
+}
+
 export default {
   init,
   shell,
@@ -446,4 +484,6 @@ export default {
   waitForDevice,
   getSerialNo,
   killProcesses,
+  installAdbKeyboard,
+  isInstalledAdbKeyboard,
 }

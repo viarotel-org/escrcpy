@@ -235,26 +235,6 @@ class CopilotClient {
   }
 
   /**
-   * Check whether the ADB keyboard is installed
-   *
-   * @param {string} deviceId - Device ID
-   * @returns {Promise<boolean>} Whether it is installed
-   */
-  checkKeyboard(deviceId) {
-    return this._invoke('checkKeyboard', deviceId)
-  }
-
-  /**
-   * Install the ADB keyboard on the device
-   *
-   * @param {string} deviceId - Device ID
-   * @returns {Promise<{success: boolean, message: string}>} Installation result
-   */
-  installKeyboard(deviceId) {
-    return this._invoke('installKeyboard', deviceId)
-  }
-
-  /**
    * Check API service availability
    *
    * @param {object} config - API configuration

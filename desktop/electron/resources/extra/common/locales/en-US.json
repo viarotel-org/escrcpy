@@ -89,7 +89,7 @@
   "copilot.check.adb.checkError": "Failed to check ADB keyboard status: {error}",
   "copilot.check.adb.installed": "ADB keyboard installed",
   "copilot.check.adb.name": "ADB Keyboard Check",
-  "copilot.check.adb.notInstalled": "ADB keyboard not installed. AI cannot control device input. Please install and enable it on your device and try again.",
+  "copilot.check.adb.notInstalled": "ADB Keyboard was not detected, so AI input control is unavailable. Please install the keyboard on the device; on some devices, USB installation must be enabled in Developer Options to complete the installation automatically.",
   "copilot.check.api.checkError": "Failed to check API service: {error}",
   "copilot.check.api.configIncomplete": "API configuration incomplete. Please configure Base URL and API Key first.",
   "copilot.check.api.failure": "API service connection failed: {message}",

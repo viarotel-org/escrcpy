@@ -24,6 +24,7 @@
         v-model="inputText"
         class="px-2 pb-2"
         :is-executing="isExecuting"
+        :current-devices="[currentDevice]"
         @submit="handleSubmit"
         @stop="handleStop"
       />

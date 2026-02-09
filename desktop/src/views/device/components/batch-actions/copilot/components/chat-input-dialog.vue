@@ -25,6 +25,7 @@
       class="px-2 pb-2"
       :is-executing="isExecuting"
       :placeholder="$t('copilot.inputPlaceholder')"
+      :current-devices="devices"
       show-prompt-manager
       @submit="handleSubmit"
       @stop="handleStop"

@@ -89,7 +89,7 @@
   "copilot.check.adb.checkError": "无法检查 ADB 键盘状态: {error}",
   "copilot.check.adb.installed": "ADB 键盘已安装",
   "copilot.check.adb.name": "ADB 键盘检查",
-  "copilot.check.adb.notInstalled": "ADB 键盘未安装，AI 无法控制设备输入。请在设备上安装并启用后重试。",
+  "copilot.check.adb.notInstalled": "未检测到 ADB 键盘，AI 无法进行输入控制。请在设备上安装该键盘；部分设备需在开发者模式中启用 USB 安装才能自动完成安装。",
   "copilot.check.api.checkError": "无法检查 API 服务: {error}",
   "copilot.check.api.configIncomplete": "API 配置不完整，请先配置 Base URL 和 API Key",
   "copilot.check.api.failure": "API 服务连接失败: {message}",

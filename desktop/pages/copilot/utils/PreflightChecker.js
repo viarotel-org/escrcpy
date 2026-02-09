@@ -1,18 +1,4 @@
 /**
- * Preflight Checker - preflight check system
- *
- * Responsibilities:
- * 1. Perform three-layer checks before running AI tasks:
- *    - Layer 1: ADB keyboard check (with guided auto-install)
- *    - Layer 2: API service validity check
- *    - Layer 3: Subscription status check
- * 2. Provide user-friendly messages and suggested actions
- * 3. Support asynchronous checks and result caching
- *
- * @module PreflightChecker
- */
-
-/**
  * Check result status enumeration
  */
 export const CheckStatus = {
@@ -134,11 +120,7 @@ export class PreflightChecker {
     }
 
     try {
-      // Check keyboard status via IPC call to main process
-      const isInstalled = await window.$preload.ipcRenderer.invoke(
-        'copilot:checkKeyboard',
-        deviceId,
-      )
+      const isInstalled = await window.$preload.adb.isInstalledAdbKeyboard(deviceId)
 
       const result = {
         name: window.t('copilot.check.adb.name'),
@@ -150,7 +132,6 @@ export class PreflightChecker {
         details: { deviceId, installed: isInstalled },
       }
 
-      // Cache result
       this._cacheResult(cacheKey, result)
 
       return result

@@ -93,17 +93,3 @@ export async function createOrGetAgent(customConfig = {}) {
 export function createChannel(method) {
   return `${SERVICE_PREFIX}:${method}`
 }
-
-export function handleError(operation, error) {
-  console.error(`${LOG_PREFIX} ${operation} failed:`, error)
-  throw error
-}
-
-export async function safeExecute(operation, fn) {
-  try {
-    return await fn()
-  }
-  catch (error) {
-    handleError(operation, error)
-  }
-}

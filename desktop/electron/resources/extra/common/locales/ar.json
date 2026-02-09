@@ -89,7 +89,7 @@
   "copilot.check.adb.checkError": "فشل التحقق من حالة لوحة مفاتيح ADB: {error}",
   "copilot.check.adb.installed": "تم تثبيت لوحة مفاتيح ADB",
   "copilot.check.adb.name": "فحص لوحة مفاتيح ADB",
-  "copilot.check.adb.notInstalled": "لوحة مفاتيح ADB غير مثبتة، لا يمكن للذكاء الاصطناعي التحكم بإدخال الجهاز. يرجى التثبيت والتفعيل على الجهاز ثم حاول مرة أخرى.",
+  "copilot.check.adb.notInstalled": "لم يتم اكتشاف لوحة مفاتيح ADB، ولا يمكن للذكاء الاصطناعي التحكم في الإدخال. يرجى تثبيت لوحة المفاتيح هذه على الجهاز؛ في بعض الأجهزة، يجب تمكين التثبيت عبر USB من وضع المطوّر لإكمال التثبيت تلقائيًا.",
   "copilot.check.api.checkError": "فشل التحقق من خدمة API: {error}",
   "copilot.check.api.configIncomplete": "تكوين API غير مكتمل، يرجى إعداد Base URL و API Key أولاً",
   "copilot.check.api.failure": "فشل اتصال خدمة API: {message}",

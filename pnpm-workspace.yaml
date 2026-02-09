@@ -24,3 +24,4 @@ ignoredBuiltDependencies:
   - esbuild
   - electron
   - sharp
+  - vue-demi

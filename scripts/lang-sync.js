@@ -7,4 +7,5 @@ sync.default({
   primary: 'zh-CN',
   lineEndings: 'LF',
   space: 2,
+  finalNewline: true,
 })

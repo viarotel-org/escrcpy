@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: gitee-mirror-action
-        uses: Yikun/hub-mirror-action@v1.4
+        uses: Yikun/hub-mirror-action@v1.5
         with:
           src: github/viarotel-org
           dst: gitee/viarotel-org

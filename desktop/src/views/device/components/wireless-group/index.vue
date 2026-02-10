@@ -15,7 +15,8 @@
         @keydown.escape="handleUnConnect()"
       >
         <template #prepend>
-          <i class="i-bi-wifi" :title="$t('device.wireless.name')"></i>
+          <el-button icon="Switch" :title="$t('device.wireless.switch')" @click="onPairToggle">
+          </el-button>
         </template>
 
         <template #default="{ item }">
@@ -44,7 +45,7 @@
       </el-autocomplete>
     </div>
 
-    <div class="flex-none w-26">
+    <div class="flex-none overflow-hidden transition-all duration-300" :class="pairVisible ? 'w-26' : 'w-0 !mx-0'">
       <el-input v-model="pairCode" class="!w-full" :placeholder="$t('device.wireless.pair.code')" :title="$t('device.wireless.pair.code')"></el-input>
     </div>
 
@@ -68,6 +69,8 @@
         {{ $t('common.cancel') }}
       </el-button>
     </el-button-group>
+
+    <div class="flex-none h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
 
     <QrAction v-bind="{ handleRefresh }" />
   </div>
@@ -94,8 +97,9 @@ const deviceStore = useDeviceStore()
 
 const loading = ref(false)
 const address = ref('')
-const pairCode = ref('')
 const autocompleteKey = ref(0)
+const pairCode = ref('')
+const pairVisible = ref(false)
 
 const elAutocompleteRef = ref()
 
@@ -123,6 +127,10 @@ onMounted(() => {
     },
   )
 })
+
+function onPairToggle() {
+  pairVisible.value = !pairVisible.value
+}
 
 async function handleConnectAuto() {
   if (!preferenceStore.data.autoConnect)
@@ -242,9 +250,6 @@ defineExpose({
 <style lang="postcss" scoped>
 :deep() {
   .el-autocomplete--wireless {
-    .el-input-group__prepend {
-      @apply !px-3;
-    }
   }
 }
 </style>

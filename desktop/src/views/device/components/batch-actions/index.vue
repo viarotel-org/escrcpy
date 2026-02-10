@@ -88,14 +88,14 @@ const actionModel = [
     component: Script,
   },
   {
-    label: 'device.control.copilot',
-    fontIcon: 'i-carbon-chat-bot',
-    component: Copilot,
-  },
-  {
     label: 'device.task.name',
     fontIcon: 'i-bi-clock',
     component: Tasks,
+  },
+  {
+    label: 'device.control.copilot',
+    fontIcon: 'i-carbon-chat-bot',
+    component: Copilot,
   },
 ]
 </script>

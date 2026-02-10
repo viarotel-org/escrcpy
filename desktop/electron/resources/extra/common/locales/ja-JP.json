@@ -87,6 +87,7 @@
   "copilot.chat.deleteMessageConfirm": "このメッセージを削除しますか？",
   "copilot.chat.deleteSuccess": "メッセージを削除しました",
   "copilot.check.adb.checkError": "ADBキーボードの状態を確認できません: {error}",
+  "copilot.check.adb.installFailed": "ADB キーボードの自動インストールに失敗しました。インストールパッケージはデバイスに転送されていますので、手動でインストールを完了してください。",
   "copilot.check.adb.installed": "ADBキーボードがインストールされています",
   "copilot.check.adb.name": "ADBキーボードチェック",
   "copilot.check.adb.notInstalled": "ADB キーボードが検出されていないため、AI による入力制御を行えません。デバイスにこのキーボードをインストールしてください。一部のデバイスでは、開発者モードで USB インストールを有効にする必要があります。",

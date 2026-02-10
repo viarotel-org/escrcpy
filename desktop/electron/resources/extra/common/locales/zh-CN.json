@@ -87,6 +87,7 @@
   "copilot.chat.deleteMessageConfirm": "删除此消息？",
   "copilot.chat.deleteSuccess": "消息已删除",
   "copilot.check.adb.checkError": "无法检查 ADB 键盘状态: {error}",
+  "copilot.check.adb.installFailed": "ADB 键盘自动安装失败，安装包已推送至设备，请手动完成安装。",
   "copilot.check.adb.installed": "ADB 键盘已安装",
   "copilot.check.adb.name": "ADB 键盘检查",
   "copilot.check.adb.notInstalled": "未检测到 ADB 键盘，AI 无法进行输入控制。请在设备上安装该键盘；部分设备需在开发者模式中启用 USB 安装才能自动完成安装。",

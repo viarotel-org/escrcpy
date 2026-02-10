@@ -449,11 +449,11 @@ export async function installAdbKeyboard(deviceId) {
     return installedAfter
   }
   catch (error) {
-    console.warn(
-      `Failed to install AdbKeyboard on device ${deviceId}:`,
-      error?.message || error,
-    )
-    return false
+    const message = `Failed to install AdbKeyboard on device ${deviceId}: ${error?.message || error}`
+
+    console.warn(message)
+
+    throw new Error(message)
   }
 }
 

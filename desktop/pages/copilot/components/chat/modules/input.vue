@@ -23,6 +23,7 @@
           plain
           round
           icon="Download"
+          size="small"
           :title="$t('copilot.check.adb.notInstalled')"
           @click="onInstallKeyboard"
         >
@@ -77,7 +78,7 @@ const localValue = computed({
 })
 
 const resolvedPlaceholder = computed(() => {
-  return props.placeholder || t('copilot.inputPlaceholder')
+  return props.placeholder || window.t('copilot.inputPlaceholder')
 })
 
 const selectedDevices = computed(() => {
@@ -121,12 +122,29 @@ async function onInstallKeyboard() {
   const limit = pLimit(concurrencyLimit)
 
   const tasks = selectedDevices.value.map(device =>
-    limit(() => window.$preload.adb.installAdbKeyboard(device.id)),
+    limit(async () => {
+      try {
+        await window.$preload.adb.installAdbKeyboard(device.id)
+        return true
+      }
+      catch (error) {
+        const uploader = window.$preload.adb.uploader({ deviceId: device.id, localPaths: [window.$preload.configs.adbKeyboardApkPath] })
+        uploader.start()
+        return false
+      }
+    }),
   )
 
   const results = await Promise.all(tasks)
 
   isKeyboardInstalled.value = results.every(res => res === true)
+
+  if (!isKeyboardInstalled.value) {
+    ElMessage.warning({
+      message: window.t('copilot.check.adb.installFailed'),
+      duration: 3000,
+    })
+  }
 }
 
 function onSelectPrompt(prompt) {

@@ -87,6 +87,7 @@
   "copilot.chat.deleteMessageConfirm": "هل تريد حذف هذه الرسالة؟",
   "copilot.chat.deleteSuccess": "تم حذف الرسالة",
   "copilot.check.adb.checkError": "فشل التحقق من حالة لوحة مفاتيح ADB: {error}",
+  "copilot.check.adb.installFailed": "فشلت عملية التثبيت التلقائي للوحة مفاتيح ADB. تم إرسال حزمة التثبيت إلى الجهاز، يرجى إكمال التثبيت يدويًا.",
   "copilot.check.adb.installed": "تم تثبيت لوحة مفاتيح ADB",
   "copilot.check.adb.name": "فحص لوحة مفاتيح ADB",
   "copilot.check.adb.notInstalled": "لم يتم اكتشاف لوحة مفاتيح ADB، ولا يمكن للذكاء الاصطناعي التحكم في الإدخال. يرجى تثبيت لوحة المفاتيح هذه على الجهاز؛ في بعض الأجهزة، يجب تمكين التثبيت عبر USB من وضع المطوّر لإكمال التثبيت تلقائيًا.",

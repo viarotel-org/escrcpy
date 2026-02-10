@@ -87,6 +87,7 @@
   "copilot.chat.deleteMessageConfirm": "Delete this message?",
   "copilot.chat.deleteSuccess": "Message deleted",
   "copilot.check.adb.checkError": "Failed to check ADB keyboard status: {error}",
+  "copilot.check.adb.installFailed": "Automatic installation of the ADB Keyboard failed. The installation package has been pushed to the device; please complete the installation manually.",
   "copilot.check.adb.installed": "ADB keyboard installed",
   "copilot.check.adb.name": "ADB Keyboard Check",
   "copilot.check.adb.notInstalled": "ADB Keyboard was not detected, so AI input control is unavailable. Please install the keyboard on the device; on some devices, USB installation must be enabled in Developer Options to complete the installation automatically.",

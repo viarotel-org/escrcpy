@@ -87,6 +87,7 @@
   "copilot.chat.deleteMessageConfirm": "確定要刪除此訊息？",
   "copilot.chat.deleteSuccess": "訊息已刪除",
   "copilot.check.adb.checkError": "無法檢查 ADB 鍵盤狀態: {error}",
+  "copilot.check.adb.installFailed": "ADB 鍵盤自動安裝失敗，安裝套件已推送至裝置，請手動完成安裝。",
   "copilot.check.adb.installed": "ADB 鍵盤已安裝",
   "copilot.check.adb.name": "ADB 鍵盤檢查",
   "copilot.check.adb.notInstalled": "未偵測到 ADB 鍵盤，AI 無法進行輸入控制。請在裝置上安裝該鍵盤；部分裝置需在開發者模式中啟用 USB 安裝才能自動完成安裝。",

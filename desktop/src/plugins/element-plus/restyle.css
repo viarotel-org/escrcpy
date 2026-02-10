@@ -137,3 +137,8 @@
     }
   }
 }
+
+/* Adapt to custom title bars  */
+.el-message {
+  @apply !mt-8;
+}

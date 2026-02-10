@@ -15,7 +15,7 @@
         @keydown.escape="handleUnConnect()"
       >
         <template #prepend>
-          <el-button icon="Switch" :title="$t('device.wireless.switch')" @click="onPairToggle">
+          <el-button icon="Switch" :title="$t('device.wireless.switch')" @click="onPairToggle()">
           </el-button>
         </template>
 
@@ -99,7 +99,7 @@ const loading = ref(false)
 const address = ref('')
 const autocompleteKey = ref(0)
 const pairCode = ref('')
-const pairVisible = ref(false)
+const pairVisible = useStorage('device-wireless-pair-visible', false)
 
 const elAutocompleteRef = ref()
 
@@ -128,8 +128,12 @@ onMounted(() => {
   )
 })
 
-function onPairToggle() {
-  pairVisible.value = !pairVisible.value
+function onPairToggle(val) {
+  pairVisible.value = val ?? !pairVisible.value
+
+  if (!pairVisible.value) {
+    pairCode.value = ''
+  }
 }
 
 async function handleConnectAuto() {
@@ -216,12 +220,17 @@ async function handleConnect(addr = address.value) {
     try {
       const { host, port } = parseDeviceId(address.value)
       await window.$preload.adb.pair(host, port, pairCode.value)
+      pairCode.value = ''
+
+      await sleep()
+      ElMessage.success(window.t('device.wireless.pair.success'))
     }
     catch (error) {
       console.warn(error.message)
       ElMessage.warning(window.t('device.wireless.pair.error'))
-      return
     }
+
+    return
   }
 
   loading.value = true
@@ -248,8 +257,4 @@ defineExpose({
 </script>
 
 <style lang="postcss" scoped>
-:deep() {
-  .el-autocomplete--wireless {
-  }
-}
 </style>

@@ -455,6 +455,7 @@
   "device.wireless.mode.error": "ローカルエリアネットワーク接続アドレスを取得できない場合は、ネットワークを確認してください",
   "device.wireless.pair.code": "ペアコード",
   "device.wireless.pair.error": "接続に失敗しました。ペアリングコード、サーバーアドレス、およびポート番号が正しいことを確認してください。",
+  "device.wireless.pair.success": "デバイスのペアリングに成功しました。自動接続を試行しましたが、対象のデバイスに接続されていない場合は、ポート番号を更新して手動で再接続してください。",
   "device.wireless.switch": "ワイヤレス接続方式を切り替え：直接接続／ペアリング",
   "preferences.audio.audio-bit-rate.name": "オーディオビットレート",
   "preferences.audio.audio-bit-rate.placeholder": "128000、形式: 128K、128000",

@@ -455,6 +455,7 @@
   "device.wireless.mode.error": "تعذر الحصول على عنوان اتصال الشبكة المحلية، يرجى التحقق من الشبكة",
   "device.wireless.pair.code": "رمز الاقتران",
   "device.wireless.pair.error": "فشل الاتصال. يرجى التأكد من صحة رمز الاقتران وعنوان الخادم ورقم المنفذ.",
+  "device.wireless.pair.success": "تم إقران الجهاز بنجاح. تمت محاولة الاتصال تلقائيًا؛ إذا لم يتم الاتصال بالجهاز الهدف، يرجى تحديث رقم المنفذ وإعادة الاتصال يدويًا.",
   "device.wireless.switch": "تبديل وضع الاتصال اللاسلكي: اتصال مباشر / وضع الاقتران",
   "preferences.audio.audio-bit-rate.name": "معدل البت للصوت",
   "preferences.audio.audio-bit-rate.placeholder": "قيمة 128000 يمكن تمثيلها أما بـ 128K أو 128000",

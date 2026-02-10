@@ -455,6 +455,7 @@
   "device.wireless.mode.error": "Do not get the local area network connection address, please check the network",
   "device.wireless.pair.code": "Pair Code",
   "device.wireless.pair.error": "Connection failed. Please make sure the pairing code, server address, and port are correct.",
+  "device.wireless.pair.success": "Device paired successfully. An automatic connection attempt has been made; if the target device is not connected, please update the port number and reconnect manually.",
   "device.wireless.switch": "Switch wireless connection mode: Direct / Pairing",
   "preferences.audio.audio-bit-rate.name": "Audio Bit Rate",
   "preferences.audio.audio-bit-rate.placeholder": "128000, format: 128K，128000",

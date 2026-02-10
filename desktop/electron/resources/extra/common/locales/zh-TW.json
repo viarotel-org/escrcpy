@@ -455,6 +455,7 @@
   "device.wireless.mode.error": "未取得區域網路連線位址，請檢查網路",
   "device.wireless.pair.code": "配對碼",
   "device.wireless.pair.error": "連線失敗，請確認配對碼以及伺服器位址與連接埠號填寫正確。",
+  "device.wireless.pair.success": "裝置配對成功。已嘗試自動連線裝置；若未連線至目標裝置，請更新連接埠號後手動重新連線。",
   "device.wireless.switch": "切換無線連線方式：直連模式／配對模式",
   "preferences.audio.audio-bit-rate.name": "音訊位元率",
   "preferences.audio.audio-bit-rate.placeholder": "128000，格式：128K，128000",

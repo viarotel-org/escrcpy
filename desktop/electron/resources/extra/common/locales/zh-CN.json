@@ -455,6 +455,7 @@
   "device.wireless.mode.error": "没有获取到局域网连接地址，请检查网络",
   "device.wireless.pair.code": "配对码",
   "device.wireless.pair.error": "连接失败，请确认配对码及服务器地址和端口号填写正确。",
+  "device.wireless.pair.success": "设备配对成功。已尝试自动连接设备；若未连接到目标设备，请更新端口号后手动重新连接。",
   "device.wireless.switch": "切换无线连接方式：直连模式 / 配对模式",
   "preferences.audio.audio-bit-rate.name": "音频比特率",
   "preferences.audio.audio-bit-rate.placeholder": "128000，格式：128K，128000",

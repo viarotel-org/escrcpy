@@ -11,7 +11,7 @@
         class="!w-full el-autocomplete--wireless"
         value-key="host"
         @select="onSelect"
-        @keydown.enter.prevent="handleConnect()"
+        @keydown.enter.prevent="keydownConnect()"
         @keydown.escape="handleUnConnect()"
       >
         <template #prepend>
@@ -29,7 +29,7 @@
           </div>
 
           <div v-else class="flex items-center">
-            <div class="flex-1 w-0">
+            <div class="flex-1 w-0 truncate">
               {{ item.id }}
             </div>
             <div
@@ -46,7 +46,14 @@
     </div>
 
     <div class="flex-none overflow-hidden transition-all duration-300" :class="pairVisible ? 'w-26' : 'w-0 !mx-0'">
-      <el-input v-model="pairCode" class="!w-full" :placeholder="$t('device.wireless.pair.code')" :title="$t('device.wireless.pair.code')"></el-input>
+      <el-input
+        v-model="pairCode"
+        class="!w-full"
+        :placeholder="$t('device.wireless.pair.code')"
+        :title="$t('device.wireless.pair.code')"
+        @keydown.enter.prevent="keydownConnect('pair')"
+        @keydown.escape="handleUnConnect()"
+      ></el-input>
     </div>
 
     <el-button-group class="flex-none">
@@ -69,8 +76,6 @@
         {{ $t('common.cancel') }}
       </el-button>
     </el-button-group>
-
-    <div class="flex-none h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
 
     <QrAction v-bind="{ handleRefresh }" />
   </div>
@@ -107,15 +112,6 @@ const wirelessList = computed(() =>
   deviceStore.list.filter(item => item.wifi),
 )
 
-watch(
-  () => wirelessList.value.length,
-  (val) => {
-    if (val)
-      getAddress()
-  },
-  { immediate: true },
-)
-
 onMounted(() => {
   const unwatch = watch(
     wirelessList,
@@ -126,7 +122,14 @@ onMounted(() => {
       handleConnectAuto()
     },
   )
+  getAddress()
 })
+
+function keydownConnect(source) {
+  if (source === 'pair' || !pairVisible.value) {
+    handleConnect()
+  }
+}
 
 function onPairToggle(val) {
   pairVisible.value = val ?? !pairVisible.value
@@ -220,10 +223,13 @@ async function handleConnect(addr = address.value) {
     try {
       const { host, port } = parseDeviceId(address.value)
       await window.$preload.adb.pair(host, port, pairCode.value)
-      pairCode.value = ''
+      onPairToggle(false)
 
       await sleep()
-      ElMessage.success(window.t('device.wireless.pair.success'))
+      ElMessage.success({
+        message: window.t('device.wireless.pair.success'),
+        duration: 3000,
+      })
     }
     catch (error) {
       console.warn(error.message)

@@ -25,7 +25,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    * @param {string} [options.encoding] - Encoding
    */
   async spawn(options = {}) {
-    const { deviceId, encoding = platform.isWindows ? 'cp936' : 'utf8' } = options
+    const { deviceId, encoding = 'utf8' } = options
 
     if (!deviceId) {
       throw new Error('[DeviceTerminal] deviceId is required')

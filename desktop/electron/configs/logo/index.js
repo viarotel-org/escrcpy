@@ -1,4 +1,4 @@
-import { buildResolve } from '$electron/helpers/process/resources.js'
+import { buildResolve } from '$electron/process/resources.js'
 
 export const logoPath = buildResolve('logo.png')
 export const icoLogoPath = buildResolve('logo.ico')

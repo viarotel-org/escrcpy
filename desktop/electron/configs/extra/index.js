@@ -1,4 +1,4 @@
-import { extraResolve } from '$electron/helpers/process/resources.js'
+import { extraResolve } from '$electron/process/resources.js'
 
 export function getTrayPath() {
   switch (process.platform) {

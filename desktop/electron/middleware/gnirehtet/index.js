@@ -10,7 +10,7 @@ import electronStore from '$electron/helpers/store/index.js'
 
 import adb from '$electron/middleware/adb/index.js'
 
-import { ProcessManager } from '$electron/helpers/process/manager.js'
+import { ProcessManager } from '$electron/process/manager.js'
 
 const appDebug = electronStore.get('common.debug') || false
 

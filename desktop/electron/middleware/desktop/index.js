@@ -1,5 +1,5 @@
 import createDesktopShortcuts from 'create-desktop-shortcuts'
-import { extraResolve } from '$root/electron/helpers/process/resources.js'
+import { extraResolve } from '$root/electron/process/resources.js'
 
 export default {
   createShortcuts(options = {}) {

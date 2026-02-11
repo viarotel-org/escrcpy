@@ -5,7 +5,7 @@ import { getAdbPath, getScrcpyPath } from '$electron/configs/which/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
-import { ProcessManager } from '$electron/helpers/process/manager.js'
+import { ProcessManager } from '$electron/process/manager.js'
 
 import { getDisplayOverlay, parseDisplayIds, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
 

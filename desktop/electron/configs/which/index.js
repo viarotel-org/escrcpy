@@ -1,4 +1,4 @@
-import { whichResolve } from '$electron/helpers/process/resources.js'
+import { whichResolve } from '$electron/process/resources.js'
 import electronStore from '$electron/helpers/store/index.js'
 
 export function getScrcpyPath({ store = electronStore } = {}) {

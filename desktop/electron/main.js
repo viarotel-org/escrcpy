@@ -1,5 +1,5 @@
 // Process configuration must be imported first
-import './helpers/process/index.js'
+import './process/index.js'
 
 //  Node.js path utilities
 import path from 'node:path'

@@ -1,10 +1,13 @@
 <template>
   <div
-    class="bg-primary-100 dark:bg-gray-800 flex items-center group h-7 lg:h-9 overflow-hidden"
+    class="bg-primary-100 dark:bg-gray-800 flex group overflow-hidden"
   >
     <el-button
       type="primary"
       class="el-button-nav"
+      :style="{
+        ...buttonHeightStyle,
+      }"
       title="Prev"
       @click="handlePrev"
     >
@@ -13,17 +16,20 @@
       </el-icon>
     </el-button>
 
-    <Scrollable ref="scrollableRef" class="flex-1 w-0" disabled-drag>
+    <Scrollable ref="scrollableRef" class="flex-1 min-w-0" disabled-drag>
       <Swapy
         :key="controlStore.swapyKey"
         :enabled="swapyEnabled"
-        class="flex items-center" :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: false }"
+        class="flex items-center"
+        :class="floating ? '!h-full' : ''"
+        :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: false }"
         @swap-end="onSwapEnd"
       >
         <SwapyItem
           v-for="item of controlModel"
           :key="item.id"
-          class="flex-none overflow-hidden"
+          class="flex-none"
+          :class="[buttonClass]"
           v-bind="{
             slotId: item.id,
             itemId: item.id,
@@ -40,8 +46,14 @@
               <el-button
                 type="primary"
                 plain
-                class="!border-none !mx-0 bg-transparent !rounded-0"
-                :class="['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : ''"
+                class="!border-none !mx-0 !py-0 bg-transparent !rounded-0"
+                :class="[
+                  ['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : '',
+                  buttonClass,
+                ]"
+                :style="{
+                  ...buttonHeightStyle,
+                }"
                 :disabled="['unauthorized', 'offline'].includes(device.status)"
                 :title="$t(item.tips || item.label)"
                 :loading="loading"
@@ -64,6 +76,9 @@
     <el-button
       type="primary"
       class="el-button-nav"
+      :style="{
+        ...buttonHeightStyle,
+      }"
       title="Next"
       @click="handleNext"
     >
@@ -111,6 +126,14 @@ export default {
     swapyEnabled: {
       type: Boolean,
       default: false,
+    },
+    buttonHeight: {
+      type: Number,
+      default: 28,
+    },
+    buttonClass: {
+      type: String,
+      default: '',
     },
   },
   setup() {
@@ -241,6 +264,15 @@ export default {
 
       return value
     },
+    buttonHeightStyle() {
+      if (!this.buttonHeight) {
+        return {}
+      }
+
+      return {
+        height: `${this.buttonHeight}px !important`,
+      }
+    },
   },
   methods: {
     handlePrev() {
@@ -277,6 +309,12 @@ export default {
 }
 
 .el-button.el-button-nav {
-  @apply flex-none p-0 rounded-none border-0 h-full flex items-center justify-center opacity-0 bg-primary-100 dark:bg-gray-800 !hover:bg-primary-300 active:bg-primary-500 text-primary-600 hover:text-white w-4 group-hover:opacity-100 transition-opacity;
+  @apply !flex-none !flex !items-center !justify-center;
+  @apply !w-4 !p-0;
+  @apply !border-0 !rounded-none;
+  @apply !opacity-0 !group-hover:opacity-100 !transition-opacity;
+  @apply !bg-primary-100 !dark:bg-gray-800;
+  @apply !hover:bg-primary-300 !active:bg-primary-500;
+  @apply !text-primary-600 !hover:text-white;
 }
 </style>

@@ -20,7 +20,7 @@ export default {
       },
       hooks: {
         shown(win, { payload }) {
-          trySend(win, 'device-change', payload.query)
+          trySend(win, 'device-change', payload.device)
         },
         focus(win) {
           trySend(win, 'window-focus', true)

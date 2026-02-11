@@ -38,7 +38,7 @@
       ></div>
 
       <div class="flex-1 w-0 overflow-hidden h-full">
-        <ControlBar class="!h-full" :device="currentDevice" floating />
+        <ControlBar :device="currentDevice" floating />
       </div>
 
       <div
@@ -58,6 +58,8 @@
 
 <script setup>
 import ControlBar from '$/components/control-bar/index.vue'
+
+const browserWindowHeight = window.$preload.payload.browserWindowHeight
 
 const deviceStore = useDeviceStore()
 

@@ -134,7 +134,7 @@
           </template>
 
           <template #default="{ row }">
-            <ControlBar :device="row" swapy-enabled class="-my-[4px] lg:-my-[8px]" />
+            <ControlBar :device="row" :swapy-enabled="true" button-class="!min-w-10 !w-4vw !max-w-12" :button-height="browserWindowHeight" />
           </template>
         </el-table-column>
       </el-table>
@@ -327,10 +327,15 @@ onActivated(() => {
 
 <style lang="postcss" scoped>
 :deep() {
-  .el-table .el-table__row .cell {
-    @apply py-1;
-  }
+  .el-table {
+    --el-empty-image-width: 24vh;
+    .el-table__row .cell {
+      @apply !py-1;
+    }
 
-  --el-empty-image-width: 24vh;
+    .el-table__expanded-cell {
+      @apply !py-0;
+    }
+  }
 }
 </style>

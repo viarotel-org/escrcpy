@@ -1,4 +1,4 @@
-import { exec as _exec, spawn } from 'node:child_process'
+import { exec as _exec } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import util from 'node:util'
@@ -46,7 +46,7 @@ electronStore.onDidChange('common.adbPath', async (value, oldValue) => {
   client = Adb.createClient({ bin: value ?? getAdbPath() })
 })
 
-const shell = async (command) => {
+async function shell(command) {
   const execPath = getAdbPath()
 
   const adbProcess = exec(`"${execPath}" ${command}`, {
@@ -59,65 +59,16 @@ const shell = async (command) => {
   return adbProcess
 }
 
-const spawnShell = async (command, { stdout, stderr } = {}) => {
-  const spawnPath = getAdbPath()
-  const args = command.split(' ')
-
-  const spawnProcess = spawn(`"${spawnPath}"`, args, {
-    env: { ...process.env },
-    shell: true,
-    encoding: 'utf8',
-  })
-
-  processManager.add(spawnProcess)
-
-  spawnProcess.stdout.on('data', (data) => {
-    const stringData = data.toString()
-
-    if (stdout) {
-      stdout(stringData, spawnProcess)
-    }
-  })
-
-  const stderrList = []
-  spawnProcess.stderr.on('data', (data) => {
-    const stringData = data.toString()
-
-    stderrList.push(stringData)
-
-    console.error('spawnProcess.stderr.data:', stringData)
-
-    if (stderr) {
-      stderr(stringData, spawnProcess)
-    }
-  })
-
-  return new Promise((resolve, reject) => {
-    spawnProcess.on('close', (code) => {
-      if (code === 0) {
-        resolve()
-      }
-      else {
-        reject(
-          new Error(stderrList.join(',') || `Command failed with code ${code}`),
-        )
-      }
-    })
-
-    spawnProcess.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
-const deviceShell = async (id, command) => {
+async function deviceShell(id, command) {
   const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
   return res.toString()
 }
 
-const kill = async (...params) => client.kill(...params)
+async function kill(...params) {
+  return client.kill(...params)
+}
 
-const getDeviceIP = async (id) => {
+async function getDeviceIP(id) {
   try {
     const { stdout } = await shell(`-s ${id} shell ip -f inet addr show wlan0`)
     const reg = /inet ([0-9.]+)\/\d+/
@@ -131,9 +82,11 @@ const getDeviceIP = async (id) => {
   }
 }
 
-const tcpip = async (id, port = 5555) => client.getDevice(id).tcpip(port)
+async function tcpip(id, port = 5555) {
+  return client.getDevice(id).tcpip(port)
+}
 
-const screencap = async (deviceId, options = {}) => {
+async function screencap(deviceId, options = {}) {
   const { returnBase64 = false } = options
 
   const device = client.getDevice(deviceId)
@@ -165,13 +118,19 @@ const screencap = async (deviceId, options = {}) => {
   })
 }
 
-const install = async (id, path) => client.getDevice(id).install(path)
+async function install(id, path) {
+  return client.getDevice(id).install(path)
+}
 
-const isInstalled = async (id, pkg) => client.getDevice(id).isInstalled(pkg)
+async function isInstalled(id, pkg) {
+  return client.getDevice(id).isInstalled(pkg)
+}
 
-const version = async () => client.version()
+async function version() {
+  return client.version()
+}
 
-const watch = async (callback) => {
+async function watch(callback) {
   const tracker = await client.trackDevices()
   tracker.on('add', async (ret) => {
     callback('add', ret)
@@ -336,20 +295,6 @@ function uploader(options = {}) {
   }
 }
 
-/**
- * Creates a downloader instance for files/directories
- * @param {Object} options - Configuration options
- * @param {string} options.deviceId - Device ID
- * @param {Array} options.items - Items to download [{id, type, name}]
- * @param {string} options.localPath - Local save path
- * @param {Function} options.onProgress - Progress callback
- * @param {Function} options.onItemStart - Callback when an item starts
- * @param {Function} options.onItemComplete - Callback when an item completes
- * @param {Function} options.onError - Error callback
- * @param {Function} options.onCancel - Cancel callback
- * @param {Function} options.onScanProgress - Scan progress callback
- * @returns {Object} Downloader control object
- */
 function downloader(options = {}) {
   const { deviceId, items, localPath, ...initialOptions } = options
 
@@ -459,8 +404,6 @@ export async function installAdbKeyboard(deviceId) {
 
 export default {
   init,
-  shell,
-  spawnShell,
   getDeviceList,
   deviceShell,
   kill,

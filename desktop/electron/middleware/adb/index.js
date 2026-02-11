@@ -1,21 +1,18 @@
-import { exec as _exec } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import util from 'node:util'
 import { adbKeyboardApkPath, getAdbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
 import { ProcessManager } from '$electron/process/manager.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
+import { sheller } from '$electron/helpers/shell/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ADBDownloader } from './helpers/downloader/index.js'
 import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
 import { readDirWithStat } from './helpers/explorer/index.js'
-
-const exec = util.promisify(_exec)
 
 const processManager = new ProcessManager()
 
@@ -49,12 +46,13 @@ electronStore.onDidChange('common.adbPath', async (value, oldValue) => {
 async function shell(command) {
   const execPath = getAdbPath()
 
-  const adbProcess = exec(`"${execPath}" ${command}`, {
+  const adbProcess = sheller(`"${execPath}" ${command}`, {
     env: { ...process.env },
     shell: true,
+    encoding: 'utf8',
   })
 
-  processManager.add(adbProcess.child)
+  processManager.add(adbProcess)
 
   return adbProcess
 }
@@ -403,6 +401,7 @@ export async function installAdbKeyboard(deviceId) {
 }
 
 export default {
+  shell,
   init,
   getDeviceList,
   deviceShell,

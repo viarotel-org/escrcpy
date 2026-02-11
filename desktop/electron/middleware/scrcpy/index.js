@@ -1,15 +1,12 @@
-import { exec as _exec, spawn } from 'node:child_process'
-import util from 'node:util'
 import { electronAPI } from '@electron-toolkit/preload'
 import { getAdbPath, getScrcpyPath } from '$electron/configs/which/index.js'
 import electronStore from '$electron/helpers/store/index.js'
+import { sheller } from '$electron/helpers/shell/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
 import { ProcessManager } from '$electron/process/manager.js'
 
 import { getDisplayOverlay, parseDisplayIds, parseScrcpyAppList, parseScrcpyCodecList } from './helper.js'
-
-const exec = util.promisify(_exec)
 
 const processManager = new ProcessManager()
 
@@ -17,83 +14,59 @@ electronAPI.ipcRenderer.on('quit-before', () => {
   processManager.kill()
 })
 
-async function shell(command, { stdout, stderr, signal, ...options } = {}) {
+async function shell(command, { stdout, stderr, signalText, ...options } = {}) {
   const spawnPath = getScrcpyPath()
   const ADB = getAdbPath()
-  const args = command.split(' ')
-
-  const scrcpyProcess = spawn(`"${spawnPath}"`, args, {
-    env: { ...process.env, ADB },
-    shell: true,
-    encoding: 'utf8',
-    ...options,
-  })
-
-  processManager.add(scrcpyProcess)
-
   const stderrList = []
 
   return new Promise((resolve, reject) => {
-    scrcpyProcess.stdout.on('data', (data) => {
-      const stringData = data.toString()
+    let settled = false
 
-      if (stdout) {
-        stdout(stringData, scrcpyProcess)
-      }
+    const finalize = (action, ...args) => {
+      if (settled)
+        return
+      settled = true
+      action(...args)
+    }
 
-      const matchList = stringData.match(signal)
+    const scrcpyProcess = sheller(`"${spawnPath}" ${command}`, {
+      env: { ...process.env, ADB },
+      shell: true,
+      encoding: 'utf8',
+      ...options,
+      stdout: (data) => {
+        if (stdout)
+          stdout(data, scrcpyProcess)
 
-      if (matchList) {
-        resolve(matchList, stringData, scrcpyProcess)
-      }
+        if (signalText) {
+          const matchList = data.match(signalText)
+          if (matchList) {
+            finalize(resolve, matchList, data, scrcpyProcess)
+          }
+        }
+      },
+      stderr: (data) => {
+        if (stderr)
+          stderr(data, scrcpyProcess)
+        stderrList.push(data)
+        console.error('scrcpyProcess.stderr.data:', data)
+      },
     })
 
-    scrcpyProcess.stderr.on('data', (data) => {
-      const stringData = data.toString()
+    processManager.add(scrcpyProcess)
 
-      stderrList.push(stringData)
-
-      console.error('scrcpyProcess.stderr.data:', stringData)
-
-      if (stderr) {
-        stderr(stringData, scrcpyProcess)
-      }
-    })
-
-    scrcpyProcess.on('close', (code) => {
-      if (code === 0) {
-        resolve()
-      }
-      else {
-        reject(
-          new Error(stderrList.join(',') || `Command failed with code ${code}`),
-        )
-      }
-    })
-
-    scrcpyProcess.on('error', (err) => {
-      reject(err)
-    })
+    scrcpyProcess
+      .then(() => finalize(resolve))
+      .catch((error) => {
+        const fallbackMessage = `Command failed with code ${error?.exitCode ?? 'unknown'}`
+        const message = stderrList.join(',') || error?.stderr || error?.message || fallbackMessage
+        finalize(reject, new Error(message))
+      })
   })
-}
-
-async function execShell(command) {
-  const spawnPath = getScrcpyPath()
-  const ADB = getAdbPath()
-
-  const scrcpyProcess = exec(`"${spawnPath}" ${command}`, {
-    env: { ...process.env, ADB },
-    shell: true,
-    encoding: 'utf8',
-  })
-
-  processManager.add(scrcpyProcess.child)
-
-  return scrcpyProcess
 }
 
 async function getEncoders(serial) {
-  const res = await execShell(`--serial="${serial}" --list-encoders`)
+  const res = await shell(`--serial="${serial}" --list-encoders`)
 
   const stdout = res.stdout
 
@@ -104,20 +77,16 @@ async function getEncoders(serial) {
 
 async function mirror(
   serial,
-  { title, args = '', exec = false, ...options } = {},
+  { title, args = '', ...options } = {},
 ) {
-  const currentShell = exec ? execShell : shell
-
-  return currentShell(
+  return shell(
     `--serial="${serial}" --window-title="${title}" ${args}`,
     options,
   )
 }
 
-async function record(serial, { title, args = '', exec = false, savePath, ...options } = {}) {
-  const currentShell = exec ? execShell : shell
-
-  return currentShell(
+async function record(serial, { title, args = '', savePath, ...options } = {}) {
+  return shell(
     `--serial="${serial}" --window-title="${title}" --record="${savePath}" ${args}`,
     options,
   )
@@ -130,14 +99,14 @@ async function helper(
 ) {
   const stringCommand = commandHelper.stringify(command)
 
-  return execShell(
+  return shell(
     `--serial="${serial}" --no-window --no-video --no-audio ${stringCommand}`,
     options,
   )
 }
 
 async function getAppList(serial) {
-  const res = await execShell(`--serial="${serial}" --list-apps`)
+  const res = await shell(`--serial="${serial}" --list-apps`)
 
   const stdout = res.stdout
   const value = parseScrcpyAppList(stdout)
@@ -146,7 +115,7 @@ async function getAppList(serial) {
 }
 
 async function getDisplayIds(serial) {
-  const res = await execShell(`--serial="${serial}" --list-displays`)
+  const res = await shell(`--serial="${serial}" --list-displays`)
 
   const stdout = res.stdout
   const value = parseDisplayIds(stdout)
@@ -177,7 +146,7 @@ async function startApp(serial, args = {}) {
     commands += ` --start-app=${packageName}`
   }
 
-  const res = await mirror(serial, { ...options, args: commands, signal: /New display:.+?\(id=(\d+)\)/i })
+  const res = await mirror(serial, { ...options, args: commands, signalText: /New display:.+?\(id=(\d+)\)/i })
 
   const displayId = res?.[1]
 
@@ -194,7 +163,6 @@ function killProcesses() {
 
 export default {
   shell,
-  execShell,
   getEncoders,
   mirror,
   record,

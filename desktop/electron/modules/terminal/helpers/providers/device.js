@@ -1,6 +1,5 @@
-import { spawnShell } from '$electron/helpers/shell/index.js'
+import { sheller } from '$electron/helpers/shell/index.js'
 import { getAdbPath } from '$electron/configs/index.js'
-import { platform } from '@electron-toolkit/utils'
 import { BaseTerminalProvider } from './base.js'
 
 /**
@@ -35,36 +34,62 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
     const adbPath = getAdbPath()
 
     try {
-      this.controller = await spawnShell(
+      let isEnded = false
+
+      const adbProcess = sheller(
         [adbPath, '-s', deviceId, 'shell', '-tt'],
         {
           shell: false,
           encoding,
+          stdio: ['pipe', 'pipe', 'pipe'],
           stdout: (text) => {
-            // Clean up duplicate carriage returns on Windows
-            if (platform.isWindows) {
-              text = text.replace(/\r\r\n/g, '\r\n')
-            }
             this._emitData(text)
           },
           stderr: (text) => {
-            // Clean up duplicate carriage returns on Windows
-            if (platform.isWindows) {
-              text = text.replace(/\r\r\n/g, '\r\n')
-            }
             this._emitData(text)
-          },
-          exit: (code, signal) => {
-            this._emitExit(code, signal)
-          },
-          error: (message) => {
-            this._emitError({
-              message,
-              code: 'SPAWN_ERROR',
-            })
           },
         },
       )
+
+      adbProcess.on('close', (code, signal) => {
+        isEnded = true
+        this._emitExit(code, signal)
+      })
+
+      adbProcess.on('error', (error) => {
+        this._emitError({
+          message: error.message,
+          code: 'SPAWN_ERROR',
+        })
+      })
+
+      adbProcess.catch((error) => {
+        if (isEnded) {
+          return
+        }
+
+        this._emitError({
+          message: error.message,
+          code: 'SPAWN_ERROR',
+        })
+      })
+
+      this.controller = {
+        send: (data) => {
+          if (!adbProcess.stdin?.writable)
+            return
+          adbProcess.stdin.write(data)
+        },
+        stop: () => {
+          adbProcess.kill?.('SIGTERM')
+        },
+        get isEnded() {
+          return isEnded
+        },
+        get raw() {
+          return adbProcess
+        },
+      }
 
       this.isAlive = true
     }
@@ -95,7 +120,6 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
    */
   resize(cols, rows) {
     console.warn('[DeviceTerminal] ADB shell does not support dynamic resize')
-    // ADB shell cannot resize, interface retained for abstraction compliance
   }
 
   /**

@@ -95,7 +95,6 @@ export default {
           title: this.deviceStore.getLabel(row, ({ appName, deviceName }) => `${appName}${this.activeModel.label}-${deviceName}`),
           savePath,
           args,
-          exec: true,
         })
 
         await sleep(1 * 1000)

@@ -1,4 +1,3 @@
-import { spawn } from 'node:child_process'
 import { electronAPI } from '@electron-toolkit/preload'
 
 import {
@@ -11,6 +10,7 @@ import electronStore from '$electron/helpers/store/index.js'
 import adb from '$electron/middleware/adb/index.js'
 
 import { ProcessManager } from '$electron/process/manager.js'
+import { sheller } from '$electron/helpers/shell/index.js'
 
 const appDebug = electronStore.get('common.debug') || false
 
@@ -26,60 +26,34 @@ async function shell(command, { debug = false, stdout, stderr } = {}) {
 
   if (!spawnPath) {
     throw new Error(
-      'Failed to retrieve Gnirehtet dependency path. If you\'re using macOS, please ensure that the dependency is installed correctly.',
+      'Failed to retrieve Gnirehtet dependency path. If you\'re using macOS, please ensure the dependency is installed correctly.',
     )
   }
 
   const GNIREHTET_APK = gnirehtetApkPath
+  const stderrList = []
 
-  const args = command.split(' ')
-
-  const gnirehtetProcess = spawn(`"${spawnPath}"`, args, {
+  const gnirehtetProcess = sheller(`"${spawnPath}" ${command}`, {
     env: { ...process.env, ADB, GNIREHTET_APK },
     shell: true,
     encoding: 'utf8',
+    stdout: data => stdout?.(data, gnirehtetProcess),
+    stderr: (data) => {
+      stderr?.(data, gnirehtetProcess)
+
+      if (debug) {
+        console.error(`${command} stderr:`, data)
+      }
+
+      stderrList.push(data)
+    },
   })
 
   processManager.add(gnirehtetProcess)
 
-  gnirehtetProcess.stdout.on('data', (data) => {
-    const stringData = data.toString()
-
-    if (stdout) {
-      stdout(stringData, gnirehtetProcess)
-    }
-  })
-
-  const stderrList = []
-  gnirehtetProcess.stderr.on('data', (data) => {
-    const stringData = data.toString()
-
-    stderrList.push(stringData)
-
-    if (debug) {
-      console.error(`${command}.gnirehtet.process.stderr.data:`, stringData)
-    }
-
-    if (stderr) {
-      stderr(stringData, gnirehtetProcess)
-    }
-  })
-
-  return new Promise((resolve, reject) => {
-    gnirehtetProcess.on('close', (code) => {
-      if (code === 0) {
-        resolve()
-      }
-      else {
-        reject(
-          new Error(stderrList.join(',') || `Command failed with code ${code}`),
-        )
-      }
-    })
-
-    gnirehtetProcess.on('error', (err) => {
-      reject(err)
-    })
+  return gnirehtetProcess.catch((error) => {
+    const message = stderrList.join(',') || error?.stderr || error?.message || `Command failed with code ${error?.exitCode ?? 'unknown'}`
+    throw new Error(message)
   })
 }
 

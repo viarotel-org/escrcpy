@@ -1,255 +1,122 @@
 import { spawn } from 'node:child_process'
+import { tokenizeArgs } from 'args-tokenizer'
 import fkill from 'fkill'
-import { platform } from '@electron-toolkit/utils'
 
 /**
- * Create process controller
- * @param {object} options - Options
- * @param {ChildProcess} options.process - Child process instance
- * @param {string} options.encoding - Output encoding
- * @param {Function} options.onStdout - stdout callback
- * @param {Function} options.onStderr - stderr callback
- * @param {Function} options.onSuccess - Success callback
- * @param {Function} options.onError - Error callback
- * @param {Function} options.onExit - Exit callback
- * @returns {object} Process controller
+ * Executes a shell command or array of arguments as a child process, with
+ * optional streaming of stdout and stderr, and returns a promise-like object
+ * that resolves with the command result.
+ *
+ * @param {string|string[]} command - The command to run. Can be a string
+ * @param {Object} [options] - Options to customize command execution.
+ * @param {string} [options.cwd] - Current working directory for the child process.
+ * @param {Object} [options.env] - Environment variables to merge with process.env.
+ * @param {boolean} [options.shell] - Whether to execute the command inside a shell.
+ * @param {(chunk: string|Buffer, child: import('child_process').ChildProcess) => void} [options.stdout] - Callback for stdout data chunks.
+ * @param {(chunk: string|Buffer, child: import('child_process').ChildProcess) => void} [options.stderr] - Callback for stderr data chunks.
+ * @param {string|null} [options.encoding] - Encoding to apply to stdout and stderr (e.g., 'utf8'). If null, returns Buffers.
+ * @param {Object} [options.restOptions] - Additional options passed to Node's `spawn` function.
+ *
+ * @returns {ChildProcess & Promise<{ stdout: string|Buffer, stderr: string|Buffer, exitCode: number|null, signal: string|null, failed: boolean, command: string|string[] }>}
+ *   Returns the spawned child process object augmented with `then`, `catch`, `finally` (promise methods)
+ *   and a `kill()` method to terminate the process.
+ *
+ * @throws {Error} If the process exits with a non-zero code (except exit code 1 on Windows), the returned promise rejects with an error containing `stdout`, `stderr`, `exitCode`, `signal`, and `command`.
+ *
  */
-function createProcessController({
-  process,
-  encoding = 'utf8',
-  onStdout,
-  onStderr,
-  onSuccess,
-  onError,
-  onExit,
-}) {
-  let isEnded = false
-  let isSuccess = false
-  let exitCode = -1
-  const stdoutList = []
-  const stderrList = []
-
-  // Handle standard output
-  if (process.stdout) {
-    process.stdout.on('data', (data) => {
-      const text = data.toString('utf8')
-      stdoutList.push(text)
-      onStdout?.(text, process)
-    })
-  }
-
-  // Handle standard error
-  if (process.stderr) {
-    process.stderr.on('data', (data) => {
-      const text = data.toString('utf8')
-      stderrList.push(text)
-      onStderr?.(text, process)
-    })
-  }
-
-  // Handle exit event
-  process.on('exit', (code, signal) => {
-    exitCode = code ?? -1
-    isEnded = true
-
-    // Windows: 0 or 1 indicates success
-    // Unix: null or 0 indicates success
-    if (platform.isWindows) {
-      isSuccess = code === 0 || code === 1
-    }
-    else {
-      isSuccess = code === null || code === 0
-    }
-
-    onExit?.(code, signal, process)
-
-    if (isSuccess) {
-      onSuccess?.(process)
-    }
-    else {
-      onError?.(`Process exited with code ${code}`, exitCode, process)
-    }
-  })
-
-  // Handle error event
-  process.on('error', (err) => {
-    isEnded = true
-    onError?.(err.message, -1, process)
-  })
-
-  return {
-    /**
-     * Stop the process
-     */
-    stop() {
-      fkill(process.pid, { tree: true })
-    },
-
-    /**
-     * Send data to process stdin
-     * @param {string} data - Data
-     */
-    send(data) {
-      if (!process.stdin) {
-        console.warn('[Terminal] Process stdin is not available')
-        return
-      }
-      process.stdin.write(data)
-    },
-
-    /**
-     * Get complete output (asynchronously wait for process to end)
-     * @returns {Promise<string>} Complete output
-     */
-    async result() {
-      if (isEnded) {
-        return stdoutList.join('') + stderrList.join('')
-      }
-
-      return new Promise((resolve, reject) => {
-        const checkEnd = () => {
-          if (!isEnded) {
-            setTimeout(checkEnd, 10)
-            return
-          }
-
-          if (isSuccess) {
-            resolve(stdoutList.join('') + stderrList.join(''))
-          }
-          else {
-            reject(new Error(`Process failed with code ${exitCode}`))
-          }
-        }
-        checkEnd()
-      })
-    },
-
-    /**
-     *  Get raw process instance
-     */
-    get raw() {
-      return process
-    },
-
-    /**
-     * Check if the process has ended
-     */
-    get isEnded() {
-      return isEnded
-    },
-
-    /**
-     * Check if the process was successful
-     */
-    get isSuccess() {
-      return isSuccess
-    },
-  }
-}
-
-/**
- * Execute shell command and wait for completion
- * @param {string|string[]} command - Command or command array
- * @param {object} options - Options
- * @param {string} options.cwd - Working directory
- * @param {string} options.encoding - Output encoding (utf8|cp936)
- * @param {object} options.env - Environment variables
- * @param {boolean} options.shell - Whether to use shell
- * @returns {Promise<{stdout: string, stderr: string}>} Execution result
- */
-export async function executeShell(command, options = {}) {
+export function sheller(command, options = {}) {
   const {
     cwd = process.cwd(),
-    encoding = 'utf8',
     env = {},
-    shell = true,
-  } = options
-
-  const [cmd, ...args] = Array.isArray(command) ? command : command.split(' ')
-
-  return new Promise((resolve, reject) => {
-    const spawnProcess = spawn(cmd, args, {
-      cwd,
-      env: { ...process.env, ...env },
-      shell,
-      encoding: 'binary',
-    })
-
-    const stdoutList = []
-    const stderrList = []
-
-    spawnProcess.stdout?.on('data', (data) => {
-      stdoutList.push(data.toString('utf8'))
-    })
-
-    spawnProcess.stderr?.on('data', (data) => {
-      stderrList.push(data.toString('utf8'))
-    })
-
-    spawnProcess.on('exit', (code) => {
-      const result = {
-        stdout: stdoutList.join(''),
-        stderr: stderrList.join(''),
-      }
-
-      if (code === 0 || (platform.isWindows && code === 1)) {
-        resolve(result)
-      }
-      else {
-        reject(new Error(`Command failed with code ${code}`))
-      }
-    })
-
-    spawnProcess.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
-/**
- * Execute streaming shell command
- * @param {string|string[]} command - Command or command array
- * @param {object} options - Options
- * @param {Function} options.stdout - stdout callback
- * @param {Function} options.stderr - stderr callback
- * @param {Function} options.success - success callback
- * @param {Function} options.error - error callback
- * @param {Function} options.exit - exit callback
- * @param {string} options.cwd - Working directory
- * @param {string} options.encoding - Output encoding
- * @param {object} options.env - Environment variables
- * @param {boolean} options.shell - Whether to use shell
- * @returns {Promise<object>} Process controller
- */
-export async function spawnShell(command, options = {}) {
-  const {
+    shell = false,
     stdout: onStdout,
     stderr: onStderr,
-    success: onSuccess,
-    error: onError,
-    exit: onExit,
-    cwd = process.cwd(),
-    encoding = platform.isWindows ? 'cp936' : 'utf8',
-    env = {},
-    shell = true,
+    encoding = null,
+    ...restOptions
   } = options
 
-  const [cmd, ...args] = Array.isArray(command) ? command : command.split(' ')
+  const args = Array.isArray(command) ? command : tokenizeArgs(command)
+  const [cmd, ...cmdArgs] = args
 
-  const spawnProcess = spawn(cmd, args, {
+  const child = spawn(cmd, cmdArgs, {
     cwd,
     env: { ...process.env, ...env },
     shell,
-    encoding: 'binary',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    ...restOptions,
   })
 
-  return createProcessController({
-    process: spawnProcess,
-    encoding,
-    onStdout,
-    onStderr,
-    onSuccess,
-    onError,
-    onExit,
+  const stdoutChunks = []
+  const stderrChunks = []
+
+  if (encoding) {
+    child.stdout?.setEncoding?.(encoding)
+    child.stderr?.setEncoding?.(encoding)
+  }
+
+  child.stdout?.on('data', (chunk) => {
+    stdoutChunks.push(chunk)
+    onStdout?.(chunk, child)
   })
+
+  child.stderr?.on('data', (chunk) => {
+    stderrChunks.push(chunk)
+    onStderr?.(chunk, child)
+  })
+
+  const promise = new Promise((resolve, reject) => {
+    let spawnError = null
+
+    child.once('error', (err) => {
+      spawnError = err
+    })
+
+    child.once('close', (code, signal) => {
+      if (spawnError) {
+        return reject(spawnError)
+      }
+
+      const concatChunks = val => encoding ? val.join('') : Buffer.concat(val)
+      const stdout = concatChunks(stdoutChunks)
+      const stderr = concatChunks(stderrChunks)
+
+      const exitCode = code
+      const isSuccess = exitCode === 0
+
+      const result = { stdout, stderr, exitCode, signal, failed: !isSuccess, command }
+
+      if (isSuccess) {
+        resolve(result)
+      }
+      else {
+        const error = new Error(
+          `Command failed with exit code ${exitCode}${signal ? ` (signal: ${signal})` : ''}`,
+        )
+        Object.assign(error, result)
+        reject(error)
+      }
+    })
+  })
+
+  const kill = async () => {
+    if (!child.pid) {
+      return false
+    }
+
+    try {
+      await fkill(child.pid, { force: true, tree: true })
+    }
+    catch (err) {
+      console.warn(`Failed to kill process ${child.pid}:`, err)
+    }
+  }
+
+  const assignedChild = Object.assign(child, {
+    then: promise.then.bind(promise),
+    catch: promise.catch.bind(promise),
+    finally: promise.finally.bind(promise),
+    kill,
+  })
+
+  return assignedChild
 }

@@ -36,7 +36,7 @@ export function sheller(command, options = {}) {
   } = options
 
   const args = Array.isArray(command) ? command : quote.parse(command)
-  console.log('args', args)
+
   const [cmd, ...cmdArgs] = args
 
   const child = spawn(cmd, cmdArgs, {

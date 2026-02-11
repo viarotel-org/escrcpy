@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process'
-import { tokenizeArgs } from 'args-tokenizer'
+import quote from 'shell-quote'
 import fkill from 'fkill'
 
 /**
@@ -35,7 +35,8 @@ export function sheller(command, options = {}) {
     ...restOptions
   } = options
 
-  const args = Array.isArray(command) ? command : tokenizeArgs(command)
+  const args = Array.isArray(command) ? command : quote.parse(command)
+  console.log('args', args)
   const [cmd, ...cmdArgs] = args
 
   const child = spawn(cmd, cmdArgs, {

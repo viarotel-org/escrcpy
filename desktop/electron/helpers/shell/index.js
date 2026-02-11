@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process'
-import treeKill from 'tree-kill'
+import fkill from 'fkill'
 import { platform } from '@electron-toolkit/utils'
 
 /**
@@ -82,7 +82,7 @@ function createProcessController({
      * Stop the process
      */
     stop() {
-      treeKill(process.pid)
+      fkill(process.pid, { tree: true })
     },
 
     /**

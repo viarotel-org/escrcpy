@@ -1,4 +1,4 @@
-import treeKill from 'tree-kill'
+import fkill from 'fkill'
 
 /**
  * Process Manager
@@ -16,13 +16,13 @@ export class ProcessManager {
 
   kill(process) {
     if (!process) {
-      this.processList.forEach(item => treeKill(item.pid))
+      this.processList.forEach(item => fkill(item.pid, { tree: true }))
       this.processList = []
       return this
     }
 
     const pid = process?.pid || process
-    treeKill(pid)
+    fkill(pid, { tree: true })
     this.processList = this.processList.filter(item => item.pid !== pid)
     return this
   }

@@ -83,7 +83,7 @@ export function useTerminal({ theme = 'github' }) {
     terminal.value = new Terminal({
       fontFamily,
       fontSize: 14,
-      lineHeight: 1.2,
+      lineHeight: 1.4,
       cursorBlink: true,
       cursorStyle: 'bar',
       cursorWidth: 2,

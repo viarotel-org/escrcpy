@@ -1,33 +1,6 @@
 import { spawn } from 'node:child_process'
 import treeKill from 'tree-kill'
-import iconv from 'iconv-lite'
 import { platform } from '@electron-toolkit/utils'
-
-/**
- * Output encoding conversion
- * @param {string} encoding - Target encoding
- * @param {Buffer|string} data - Data
- * @returns {string} Converted string
- */
-function convertOutputEncoding(encoding, data) {
-  if (!data) {
-    return ''
-  }
-
-  if (encoding === 'utf8') {
-    return data.toString()
-  }
-
-  try {
-    // 检测编码
-    const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data)
-    return iconv.decode(buffer, encoding)
-  }
-  catch (error) {
-    console.warn('[Terminal] Encoding conversion failed:', error.message)
-    return data.toString()
-  }
-}
 
 /**
  * Create process controller
@@ -59,7 +32,7 @@ function createProcessController({
   // Handle standard output
   if (process.stdout) {
     process.stdout.on('data', (data) => {
-      const text = convertOutputEncoding(encoding, data)
+      const text = data.toString('utf8')
       stdoutList.push(text)
       onStdout?.(text, process)
     })
@@ -68,7 +41,7 @@ function createProcessController({
   // Handle standard error
   if (process.stderr) {
     process.stderr.on('data', (data) => {
-      const text = convertOutputEncoding(encoding, data)
+      const text = data.toString('utf8')
       stderrList.push(text)
       onStderr?.(text, process)
     })
@@ -187,7 +160,7 @@ function createProcessController({
 export async function executeShell(command, options = {}) {
   const {
     cwd = process.cwd(),
-    encoding = platform.isWindows ? 'cp936' : 'utf8',
+    encoding = 'utf8',
     env = {},
     shell = true,
   } = options
@@ -206,11 +179,11 @@ export async function executeShell(command, options = {}) {
     const stderrList = []
 
     spawnProcess.stdout?.on('data', (data) => {
-      stdoutList.push(convertOutputEncoding(encoding, data))
+      stdoutList.push(data.toString('utf8'))
     })
 
     spawnProcess.stderr?.on('data', (data) => {
-      stderrList.push(convertOutputEncoding(encoding, data))
+      stderrList.push(data.toString('utf8'))
     })
 
     spawnProcess.on('exit', (code) => {

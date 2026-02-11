@@ -60,6 +60,7 @@
     "electron-updater": "6.3.9",
     "element-plus": "2.13.1",
     "enum-plus": "3.1.6",
+    "execa": "9.6.1",
     "fix-path": "5.0.0",
     "fs-extra": "11.2.0",
     "ga-gtag": "1.2.0",

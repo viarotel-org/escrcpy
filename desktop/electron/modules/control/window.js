@@ -1,9 +1,12 @@
 import { createWindowManager } from '@escrcpy/electron-setup/main'
 import { trySend } from '$electron/helpers/index.js'
+import { controlBarHeight } from '$control/configs/index.js'
 
 export default {
   name: 'module:control:window',
   apply(mainApp) {
+    const browserWindowHeight = controlBarHeight
+
     createWindowManager('pages/control', {
       singleton: true,
       browserWindow: {
@@ -12,9 +15,9 @@ export default {
         transparent: true,
         backgroundColor: '#00000000',
         minWidth: 420,
-        height: 28,
-        maxHeight: 28,
-        minHeight: 28,
+        height: browserWindowHeight,
+        maxHeight: browserWindowHeight,
+        minHeight: browserWindowHeight,
         alwaysOnTop: true,
         skipTaskbar: true,
       },

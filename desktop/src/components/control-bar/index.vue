@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { controlBarHeight } from '$control/configs/index.js'
 import Application from './application/index.vue'
 import ApplicationStart from './application-start/index.vue'
 import Copilot from './copilot/index.vue'
@@ -129,7 +130,7 @@ export default {
     },
     buttonHeight: {
       type: Number,
-      default: 28,
+      default: controlBarHeight,
     },
     buttonClass: {
       type: String,

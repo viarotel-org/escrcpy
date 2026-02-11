@@ -1,23 +1,19 @@
-import { createWindowManager, encodePayload } from '@escrcpy/electron-setup/main'
-import { browserWindowWidth } from '$electron/configs/index.js'
+import { createWindowManager } from '@escrcpy/electron-setup/main'
+import { browserWindowHeight, browserWindowWidth } from '$electron/configs/index.js'
 import { copilotService } from './helpers/index.js'
 
 export default {
   name: 'module:copilot:window',
   apply(mainApp) {
-    const browserWindowHeight = browserWindowWidth * 0.7
+    const windowHeight = browserWindowHeight + 90
 
     createWindowManager('pages/copilot', {
       singleton: false,
       browserWindow: {
-        persistenceBounds: true,
         width: browserWindowWidth,
         minWidth: browserWindowWidth,
-        height: browserWindowHeight,
-        minHeight: browserWindowHeight,
-        webPreferences: {
-          additionalArguments: [`--payload=${encodePayload({ browserWindowHeight })}`],
-        },
+        height: windowHeight,
+        minHeight: windowHeight,
       },
       hooks: {
         beforeClose(win, context) {

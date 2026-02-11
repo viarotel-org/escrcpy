@@ -59,8 +59,6 @@
 <script setup>
 import ControlBar from '$/components/control-bar/index.vue'
 
-const browserWindowHeight = window.$preload.payload.browserWindowHeight
-
 const deviceStore = useDeviceStore()
 
 const { currentDevice, locale } = useWindowStateSync({

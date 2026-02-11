@@ -134,7 +134,7 @@
           </template>
 
           <template #default="{ row }">
-            <ControlBar :device="row" :swapy-enabled="true" button-class="!min-w-10 !w-4vw !max-w-12" :button-height="browserWindowHeight" />
+            <ControlBar :device="row" :swapy-enabled="true" button-class="!min-w-10 !w-4vw !max-w-12" />
           </template>
         </el-table-column>
       </el-table>

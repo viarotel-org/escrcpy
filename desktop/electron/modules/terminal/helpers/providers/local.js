@@ -3,6 +3,7 @@ import { homedir } from 'node:os'
 import fs from 'node:fs'
 import { BaseTerminalProvider } from './base.js'
 import { platform } from '@electron-toolkit/utils'
+import { setupEnvPath } from '$electron/process/helper.js'
 
 export class LocalTerminalProvider extends BaseTerminalProvider {
   /**
@@ -29,6 +30,9 @@ export class LocalTerminalProvider extends BaseTerminalProvider {
    * @param {number} [options.rows] - Rows
    */
   async spawn(options = {}) {
+    // Ensure PATH is properly set up
+    setupEnvPath()
+
     const {
       shell = this._detectShell(),
       cwd = options.cwd || homedir(),

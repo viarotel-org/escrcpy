@@ -1,5 +1,4 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { getAdbPath, getScrcpyPath } from '$electron/configs/which/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { sheller } from '$electron/helpers/shell/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
@@ -15,11 +14,7 @@ electronAPI.ipcRenderer.on('quit-before', () => {
 })
 
 async function shell(command, options = {}) {
-  const spawnPath = getScrcpyPath()
-  const ADB = getAdbPath()
-
-  const scrcpyProcess = sheller(`"${spawnPath}" ${command}`, {
-    env: { ...process.env, ADB },
+  const scrcpyProcess = sheller(`scrcpy ${command}`, {
     shell: true,
     encoding: 'utf8',
     ...options,

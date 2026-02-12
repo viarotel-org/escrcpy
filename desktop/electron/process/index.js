@@ -9,11 +9,8 @@
 import { app } from 'electron'
 import fixPath from 'fix-path'
 import { setupPortableMode } from './portable.js'
+import { setupEnvPath } from './helper.js'
 
-import { resolveEnvPath } from './helper.js'
-import { extraResolve } from './resources.js'
-
-// Setup portable mode if applicable
 setupPortableMode()
 
 if (process.platform === 'darwin') {
@@ -26,23 +23,7 @@ process.env.DESKTOP_PATH = app.getPath('desktop')
 
 process.env.CWD = process.cwd()
 
-process.env.PATH = resolveEnvPath({
-  win: [
-    extraResolve(`win-${process.arch}`),
-    extraResolve('win'),
-    extraResolve('win/scrcpy'),
-    extraResolve('win/gnirehtet'),
-  ],
-  mac: [
-    extraResolve(`mac-${process.arch}`),
-    extraResolve(`mac-${process.arch}/scrcpy`),
-  ],
-  linux: [
-    extraResolve(`linux-${process.arch}`),
-    extraResolve(`linux-${process.arch}/scrcpy`),
-    extraResolve(`linux-${process.arch}/gnirehtet`),
-  ],
-})
+setupEnvPath()
 
 const isPackaged = process.env.IS_PACKAGED === 'true'
 

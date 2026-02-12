@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
 import quote from 'shell-quote'
 import fkill from 'fkill'
+import { setupEnvPath } from '$electron/process/helper.js'
 
 /**
  * Executes a shell command or array of arguments as a child process, with
@@ -38,6 +39,9 @@ export function sheller(command, options = {}) {
   const args = Array.isArray(command) ? command : quote.parse(command)
 
   const [cmd, ...cmdArgs] = args
+
+  // Ensure PATH is properly set up
+  setupEnvPath()
 
   const child = spawn(cmd, cmdArgs, {
     cwd,

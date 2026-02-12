@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { adbKeyboardApkPath, getAdbPath } from '$electron/configs/index.js'
+import { adbKeyboardApkPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
@@ -13,6 +13,7 @@ import adbScanner from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
 import { readDirWithStat } from './helpers/explorer/index.js'
+import { setupEnvPath } from '$electron/process/helper.js'
 
 const processManager = new ProcessManager()
 
@@ -40,14 +41,11 @@ electronStore.onDidChange('common.adbPath', async (value, oldValue) => {
     console.warn(error.message)
   }
 
-  client = Adb.createClient({ bin: value ?? getAdbPath() })
+  init()
 })
 
 async function shell(command) {
-  const execPath = getAdbPath()
-
-  const adbProcess = sheller(`"${execPath}" ${command}`, {
-    env: { ...process.env },
+  const adbProcess = sheller(`adb ${command}`, {
     shell: true,
     encoding: 'utf8',
   })
@@ -354,11 +352,9 @@ async function getDeviceList() {
 }
 
 function init() {
-  const bin = getAdbPath()
-
-  client = Adb.createClient({
-    bin,
-  })
+  // Setup the PATH environment variable by injecting necessary tool paths
+  setupEnvPath()
+  client = Adb.createClient()
 }
 
 function killProcesses() {

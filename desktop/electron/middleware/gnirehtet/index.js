@@ -1,10 +1,4 @@
 import { electronAPI } from '@electron-toolkit/preload'
-
-import {
-  getAdbPath,
-  getGnirehtetPath,
-  gnirehtetApkPath,
-} from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 
 import adb from '$electron/middleware/adb/index.js'
@@ -21,13 +15,7 @@ electronAPI.ipcRenderer.on('quit-before', async () => {
 })
 
 async function shell(command, options = {}) {
-  const spawnPath = getGnirehtetPath()
-  const ADB = getAdbPath()
-
-  const GNIREHTET_APK = gnirehtetApkPath
-
-  const gnirehtetProcess = sheller(`"${spawnPath}" ${command}`, {
-    env: { ...process.env, ADB, GNIREHTET_APK },
+  const gnirehtetProcess = sheller(`gnirehtet ${command}`, {
     shell: true,
     encoding: 'utf8',
     ...options,

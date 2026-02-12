@@ -1,12 +1,11 @@
+// process depends on the store, so the store must be imported first
+import './helpers/store/index.js'
+
 // Process configuration must be imported first
 import './process/index.js'
 
-//  Node.js path utilities
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-
-// Initialize electron-store
-import './helpers/store/index.js'
 
 // Initialize debugger
 import './helpers/debugger/index.js'

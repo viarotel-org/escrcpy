@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="visible"
+    v-model="dialog.visible"
     :title="$t('device.arrange.dialog.title')"
     center
     :close-on-click-modal="false"
@@ -145,7 +145,7 @@ import {
 
 import WidgetRect from './modules/widget-rect/index.vue'
 
-const visible = ref(false)
+const dialog = useDialog()
 const arrangementAreaRef = ref(null)
 const screenContainerRef = ref(null)
 
@@ -212,7 +212,7 @@ const {
   onWidgetResizeStop,
 } = useWidgetEvents(scaleConverter, arrangedWidgets)
 
-const { open, close, onClosed } = useDialogManagement(visible, arrangedWidgets, loadDevices, loadLayout)
+const { open, close, onClosed } = useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout)
 
 const { saveLayout } = useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets)
 

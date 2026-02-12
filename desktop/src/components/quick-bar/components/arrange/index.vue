@@ -1,7 +1,7 @@
 <template>
   <slot :trigger="handleClick" />
 
-  <ArrangeDialog ref="arrangeDialogRef" />
+  <ArrangeDialog v-if="arrangeLazy.visible" ref="arrangeDialogRef" />
 </template>
 
 <script setup>
@@ -12,9 +12,16 @@ defineOptions({
 })
 
 const arrangeDialogRef = ref(null)
+const arrangeLazy = useLazy()
 
-function handleClick() {
-  arrangeDialogRef.value.open()
+async function handleClick() {
+  await arrangeLazy.mount()
+
+  arrangeDialogRef.value.open({
+    onClosed() {
+      arrangeLazy.unmount()
+    },
+  })
 }
 </script>
 

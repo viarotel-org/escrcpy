@@ -2,27 +2,22 @@
  * Dialog management composable
  * Handles dialog opening, closing, and initialization
  */
-export function useDialogManagement(visible, arrangedWidgets, loadDevices, loadLayout) {
-  const close = () => {
-    visible.value = false
+export function useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout) {
+  function close() {
+    dialog.close()
   }
 
-  const open = async () => {
-    try {
-      visible.value = true
-      await nextTick()
+  async function open(options) {
+    dialog.open(options)
+    await nextTick()
 
-      loadDevices()
-      loadLayout()
-    }
-    catch (error) {
-      console.error('Failed to open arrange dialog:', error)
-      ElMessage.error('Failed to initialize dialog')
-    }
+    loadDevices()
+    loadLayout()
   }
 
-  const onClosed = () => {
+  function onClosed() {
     arrangedWidgets.value = []
+    dialog.options?.onClosed?.()
   }
 
   return {

@@ -353,6 +353,7 @@
     "usePreferredReducedTransparency": true,
     "useSSRWidth": true,
     "useTimeAgoIntl": true,
-    "useI18n": true
+    "useI18n": true,
+    "useLazy": true
   }
 }

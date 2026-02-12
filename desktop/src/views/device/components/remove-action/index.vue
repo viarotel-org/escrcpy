@@ -10,10 +10,8 @@
   </el-button>
 
   <ConfigMigrationDialog
+    v-if="migrationLazy.visible"
     ref="configMigrationDialog"
-    @success="onMigrationSuccess"
-    @skip="onMigrationSkip"
-    @cancel="onMigrationCancel"
   />
 </template>
 
@@ -22,7 +20,6 @@ import { findTargetDevices, removeDevices, ScrcpyConfigMigrator } from '$/utils/
 import { sleep } from '$/utils'
 import ConfigMigrationDialog from './components/config-migration-dialog/index.vue'
 
-// Props
 const props = defineProps({
   device: {
     type: Object,
@@ -34,18 +31,15 @@ const props = defineProps({
   },
 })
 
-// Store
 const deviceStore = useDeviceStore()
 
-// Refs
+const migrationLazy = useLazy()
+
 const loading = ref(false)
 const configMigrationDialog = ref(null)
 
 const migrator = new ScrcpyConfigMigrator()
 
-/**
- * Check device configuration
- */
 function checkDeviceConfig(device) {
   const scrcpyConfig = migrator.getScrcpyConfig()
   const hasConfig = migrator.hasConfig(scrcpyConfig, device.id)
@@ -61,48 +55,49 @@ function checkDeviceConfig(device) {
   }
 }
 
-/**
- * Handle configuration migration
- */
-function handleConfigMigration(device) {
+async function handleConfigMigration(device) {
   loading.value = false
-  configMigrationDialog.value.open(device)
+
+  await migrationLazy.mount()
+
+  configMigrationDialog.value.open({
+    device,
+    onSuccess: () => {
+      handleRemove(props.device)
+    },
+    onSkip: () => {
+      handleRemove(props.device)
+    },
+    onClosed: () => {
+      migrationLazy.unmount()
+    },
+  })
 }
 
-/**
- * Handle delete button click
- */
 async function handleClick(device = props.device) {
   loading.value = true
 
   try {
     const configInfo = checkDeviceConfig(device)
 
-    // No configuration, remove directly
     if (!configInfo.hasConfig) {
       await handleRemove(device)
       return
     }
 
-    // Has configuration but no target devices to migrate, remove directly
     if (!configInfo.hasTargetDevices) {
       await handleRemove(device)
       return
     }
 
-    // Has config and target devices exist, show migration dialog
     handleConfigMigration(device)
   }
   catch (error) {
     console.error('Error checking device config:', error)
-    // On error, remove device directly
     await handleRemove(device)
   }
 }
 
-/**
- * Remove device
- */
 async function handleRemove(device) {
   await removeDevices(device)
 
@@ -111,27 +106,6 @@ async function handleRemove(device) {
 
   props.handleRefresh()
   await sleep()
-  loading.value = false
-}
-
-/**
- * Configuration migration success callback
- */
-async function onMigrationSuccess() {
-  await handleRemove(props.device)
-}
-
-/**
- * Skip migration callback
- */
-async function onMigrationSkip() {
-  await handleRemove(props.device)
-}
-
-/**
- * Cancel migration callback
- */
-function onMigrationCancel() {
   loading.value = false
 }
 </script>

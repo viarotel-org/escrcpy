@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="visible"
+    v-model="dialog.visible"
     :title="$t('device.actions.more.custom.name')"
     class="el-dialog--flex el-dialog--beautify el-dialog--fullscreen"
     center
@@ -23,10 +23,10 @@
     </div>
 
     <template #footer>
-      <el-button @click="close">
+      <el-button @click="close()">
         {{ $t('common.cancel') }}
       </el-button>
-      <el-button type="primary" :loading @click="submit">
+      <el-button type="primary" :loading="dialog.loading" @click="submit">
         {{ $t('common.confirm') }}
       </el-button>
     </template>
@@ -42,9 +42,7 @@ const emit = defineEmits(['success'])
 
 const preferenceStore = usePreferenceStore()
 
-const visible = ref(false)
-
-const loading = ref(false)
+const dialog = useDialog()
 
 const preferenceFormRef = ref(null)
 
@@ -57,15 +55,15 @@ const device = ref(null)
 async function open(args = {}) {
   device.value = args.row
 
-  visible.value = true
+  dialog.open(args)
 }
 
 async function close() {
-  visible.value = false
+  dialog.close()
 }
 
 async function submit() {
-  loading.value = true
+  dialog.loading = true
 
   const command = await preferenceFormRef.value.generateCommand()
 
@@ -73,13 +71,15 @@ async function submit() {
 
   await sleep()
 
-  loading.value = false
+  dialog.loading = false
 
-  visible.value = false
+  dialog.close()
 }
 
 function onClosed() {
   preferenceData.value = { ...getDefaultData() }
+
+  dialog.options?.onClosed()
 }
 
 function getDefaultData() {

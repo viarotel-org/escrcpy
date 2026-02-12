@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="visible"
+    v-model="dialog.visible"
     :title="$t('device.task.list')"
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen el-dialog--tasks"
     append-to-body
@@ -18,7 +18,7 @@
       </el-radio-group>
     </div>
 
-    <div v-loading="loading" class="h-full">
+    <div v-loading="dialog.loading" class="h-full">
       <el-table :data="tableData" stripe height="100%">
         <template #empty>
           <el-empty></el-empty>
@@ -180,9 +180,7 @@ const taskStore = useTaskStore()
 
 const deviceStore = useDeviceStore()
 
-const visible = ref(false)
-
-const loading = ref(false)
+const dialog = useDialog()
 
 const taskModel = computed(() => taskStore.model)
 
@@ -197,23 +195,24 @@ const tableData = computed(() => {
 })
 
 async function open(args) {
-  visible.value = true
+  dialog.open(args)
 }
 
 function close() {
-  visible.value = false
+  dialog.close()
 }
 
 async function onClosed() {
   taskStatus.value = 'progress'
+  dialog.options?.onClosed?.()
 }
 
 async function onTaskStatusChange() {
-  loading.value = true
+  dialog.loading = true
 
   await sleep()
 
-  loading.value = false
+  dialog.loading = false
 }
 
 function handleStop(row) {

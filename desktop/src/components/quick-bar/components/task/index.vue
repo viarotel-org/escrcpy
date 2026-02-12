@@ -1,7 +1,7 @@
 <template>
   <slot :trigger="handleClick" />
 
-  <TaskListDialog ref="taskListDialogRef" />
+  <TaskListDialog v-if="taskLazy.visible" ref="taskListDialogRef" />
 </template>
 
 <script setup>
@@ -12,9 +12,16 @@ defineOptions({
 })
 
 const taskListDialogRef = ref(null)
+const taskLazy = useLazy()
 
-function handleClick() {
-  taskListDialogRef.value.open()
+async function handleClick() {
+  await taskLazy.mount()
+
+  taskListDialogRef.value.open({
+    onClosed() {
+      taskLazy.unmount()
+    },
+  })
 }
 </script>
 

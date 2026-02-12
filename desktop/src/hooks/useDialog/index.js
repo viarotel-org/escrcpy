@@ -24,6 +24,7 @@ export function useDialog() {
   }
 
   function close() {
+    params.value = {}
     visible.value = false
   }
 
@@ -31,6 +32,7 @@ export function useDialog() {
     visible.value = false
     loading.value = false
     params.value = {}
+    options.value = {}
   }
 
   return reactive({

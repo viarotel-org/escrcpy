@@ -1,7 +1,7 @@
 <template>
   <slot v-bind="{ loading }" :trigger="() => handleClick(device)" />
 
-  <TaskDialog ref="taskDialogRef" />
+  <TaskDialog v-if="taskLazy.visible" ref="taskDialogRef" />
 </template>
 
 <script setup>
@@ -19,9 +19,17 @@ const props = defineProps({
 const loading = ref(false)
 
 const taskDialogRef = ref(null)
+const taskLazy = useLazy()
 
-function handleClick(device) {
-  taskDialogRef.value.open({ devices: [device] })
+async function handleClick(device) {
+  await taskLazy.mount()
+
+  taskDialogRef.value.open({
+    devices: [device],
+    onClosed() {
+      taskLazy.unmount()
+    },
+  })
 }
 </script>
 

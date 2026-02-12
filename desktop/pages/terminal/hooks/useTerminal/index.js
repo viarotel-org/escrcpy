@@ -56,7 +56,7 @@ export function useTerminal({ theme = 'github' }) {
       command = newline
     }
 
-    window.$preload.terminal.writeSession(sessionId.value, command)
+    window.$preload.terminal.write(sessionId.value, command)
   }
 
   function handleResize({ cols, rows }) {
@@ -64,7 +64,7 @@ export function useTerminal({ theme = 'github' }) {
       return
     clearTimeout(resizeTimer)
     resizeTimer = setTimeout(() => {
-      window.$preload.terminal.resizeSession(sessionId.value, cols, rows)
+      window.$preload.terminal.resize(sessionId.value, cols, rows)
     }, 16)
   }
 
@@ -130,7 +130,7 @@ export function useTerminal({ theme = 'github' }) {
   async function connectSession() {
     try {
       const actualDimensions = { cols: terminal.value.cols, rows: terminal.value.rows }
-      const result = await window.$preload.terminal.createSession({
+      const result = await window.$preload.terminal.create({
         type: terminalConfig.value.type,
         instanceId: terminalConfig.value.instanceId,
         options: { ...terminalConfig.value.options, ...actualDimensions },
@@ -183,7 +183,7 @@ export function useTerminal({ theme = 'github' }) {
 
   function cleanup() {
     unwatchTheme?.()
-    sessionId.value && window.$preload.terminal.destroySession(sessionId.value)
+    sessionId.value && window.$preload.terminal.destroy(sessionId.value)
     disposeCallbacks.value?.()
     disposeCallbacks.value = null
     terminal.value?.dispose()

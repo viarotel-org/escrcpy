@@ -1,7 +1,7 @@
 <template>
   <slot v-bind="{ loading, trigger: onTrigger }" />
 
-  <TaskDialog ref="taskDialogRef"></TaskDialog>
+  <TaskDialog v-if="taskLazy.visible" ref="taskDialogRef"></TaskDialog>
 </template>
 
 <script setup>
@@ -20,10 +20,19 @@ const props = defineProps({
 const loading = ref(false)
 
 const taskDialogRef = ref(null)
+const taskLazy = useLazy()
 
-function onTrigger(devices) {
+async function onTrigger(devices) {
   const selectedDevices = deviceSelectionHelper.filter(devices, 'onlineAndUnique')
-  taskDialogRef.value.open({ devices: selectedDevices })
+
+  await taskLazy.mount()
+
+  taskDialogRef.value.open({
+    devices: selectedDevices,
+    onClosed() {
+      taskLazy.unmount()
+    },
+  })
 }
 </script>
 

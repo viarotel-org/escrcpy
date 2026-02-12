@@ -54,7 +54,10 @@ async function shell(command) {
 
   processManager.add(adbProcess)
 
-  return adbProcess
+  return adbProcess.catch((error) => {
+    const message = error?.stderr || error?.message
+    throw new Error(message)
+  })
 }
 
 async function deviceShell(id, command) {

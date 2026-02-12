@@ -20,39 +20,23 @@ electronAPI.ipcRenderer.on('quit-before', async () => {
   processManager.kill()
 })
 
-async function shell(command, { debug = false, stdout, stderr } = {}) {
+async function shell(command, options = {}) {
   const spawnPath = getGnirehtetPath()
   const ADB = getAdbPath()
 
-  if (!spawnPath) {
-    throw new Error(
-      'Failed to retrieve Gnirehtet dependency path. If you\'re using macOS, please ensure the dependency is installed correctly.',
-    )
-  }
-
   const GNIREHTET_APK = gnirehtetApkPath
-  const stderrList = []
 
   const gnirehtetProcess = sheller(`"${spawnPath}" ${command}`, {
     env: { ...process.env, ADB, GNIREHTET_APK },
     shell: true,
     encoding: 'utf8',
-    stdout: data => stdout?.(data, gnirehtetProcess),
-    stderr: (data) => {
-      stderr?.(data, gnirehtetProcess)
-
-      if (debug) {
-        console.error(`${command} stderr:`, data)
-      }
-
-      stderrList.push(data)
-    },
+    ...options,
   })
 
   processManager.add(gnirehtetProcess)
 
   return gnirehtetProcess.catch((error) => {
-    const message = stderrList.join(',') || error?.stderr || error?.message || `Command failed with code ${error?.exitCode ?? 'unknown'}`
+    const message = error?.stderr || error?.message
     throw new Error(message)
   })
 }

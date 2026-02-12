@@ -202,6 +202,14 @@ export default {
       placeholder: 'preferences.common.imeFix.placeholder',
       tips: 'preferences.common.imeFix.tips',
     },
+    noVdDestroyContent: {
+      label: 'preferences.common.noVdDestroyContent.name',
+      field: 'noVdDestroyContent',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.noVdDestroyContent.placeholder',
+      tips: 'preferences.common.noVdDestroyContent.tips',
+    },
     debug: {
       label: 'preferences.common.debug.name',
       field: 'debug',

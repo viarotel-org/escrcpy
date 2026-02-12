@@ -14,54 +14,26 @@ electronAPI.ipcRenderer.on('quit-before', () => {
   processManager.kill()
 })
 
-async function shell(command, { stdout, stderr, signalText, ...options } = {}) {
+async function shell(command, options = {}) {
   const spawnPath = getScrcpyPath()
   const ADB = getAdbPath()
-  const stderrList = []
 
-  return new Promise((resolve, reject) => {
-    let settled = false
+  const scrcpyProcess = sheller(`"${spawnPath}" ${command}`, {
+    env: { ...process.env, ADB },
+    shell: true,
+    encoding: 'utf8',
+    ...options,
+    stderr: (data) => {
+      options?.stderr?.(data, scrcpyProcess)
+      console.error('scrcpyProcess.stderr.data:', data)
+    },
+  })
 
-    const finalize = (action, ...args) => {
-      if (settled)
-        return
-      settled = true
-      action(...args)
-    }
+  processManager.add(scrcpyProcess)
 
-    const scrcpyProcess = sheller(`"${spawnPath}" ${command}`, {
-      env: { ...process.env, ADB },
-      shell: true,
-      encoding: 'utf8',
-      ...options,
-      stdout: (data) => {
-        if (stdout)
-          stdout(data, scrcpyProcess)
-
-        if (signalText) {
-          const matchList = data.match(signalText)
-          if (matchList) {
-            finalize(resolve, matchList, data, scrcpyProcess)
-          }
-        }
-      },
-      stderr: (data) => {
-        if (stderr)
-          stderr(data, scrcpyProcess)
-        stderrList.push(data)
-        console.error('scrcpyProcess.stderr.data:', data)
-      },
-    })
-
-    processManager.add(scrcpyProcess)
-
-    scrcpyProcess
-      .then(() => finalize(resolve))
-      .catch((error) => {
-        const fallbackMessage = `Command failed with code ${error?.exitCode ?? 'unknown'}`
-        const message = stderrList.join(',') || error?.stderr || error?.message || fallbackMessage
-        finalize(reject, new Error(message))
-      })
+  return scrcpyProcess.catch((error) => {
+    const message = error?.stderr || error?.message
+    throw new Error(message)
   })
 }
 
@@ -109,6 +81,7 @@ async function getAppList(serial) {
   const res = await shell(`--serial="${serial}" --list-apps`)
 
   const stdout = res.stdout
+
   const value = parseScrcpyAppList(stdout)
 
   return value
@@ -118,6 +91,7 @@ async function getDisplayIds(serial) {
   const res = await shell(`--serial="${serial}" --list-displays`)
 
   const stdout = res.stdout
+
   const value = parseDisplayIds(stdout)
 
   return value
@@ -140,21 +114,48 @@ async function startApp(serial, args = {}) {
     if (imeFix) {
       commands += ` --display-ime-policy=local`
     }
+
+    const noVdDestroyContent = electronStore.get('common.noVdDestroyContent')
+
+    if (noVdDestroyContent) {
+      commands += ` --no-vd-destroy-content`
+    }
   }
 
   if (packageName) {
     commands += ` --start-app=${packageName}`
   }
 
-  const res = await mirror(serial, { ...options, args: commands, signalText: /New display:.+?\(id=(\d+)\)/i })
-
-  const displayId = res?.[1]
-
-  if (!displayId && useNewDisplay) {
-    throw new Error('The display ID was not obtained.')
+  const promise = {
+    resolve: null,
   }
 
-  return displayId
+  const signalText = /New display:.+?\(id=(\d+)\)/i
+
+  const child = mirror(serial, {
+    ...options,
+    args: commands,
+    stdout: (data) => {
+      const matchList = data.match(signalText)
+
+      if (!matchList?.length) {
+        return false
+      }
+
+      const displayId = matchList[1]
+
+      if (!displayId && useNewDisplay) {
+        throw new Error('The display ID was not obtained.')
+      }
+
+      promise?.resolve?.(displayId)
+    },
+  })
+
+  return new Promise((resolve, reject) => {
+    promise.resolve = resolve
+    child.then(resolve).catch(reject)
+  })
 }
 
 function killProcesses() {

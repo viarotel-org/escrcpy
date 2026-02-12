@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="visible"
+    v-model="dialog.visible"
     :title="$t('device.config.migration.title')"
     width="80%"
     append-to-body
@@ -9,7 +9,6 @@
     @closed="onClosed"
   >
     <div class="space-y-4">
-      <!-- Alert message -->
       <el-alert
         :title="$t('device.config.migration.description.title')"
         type="primary"
@@ -18,7 +17,6 @@
         :closable="false"
       />
 
-      <!-- Device selection -->
       <div class="space-y-3">
         <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
           {{ $t('device.config.migration.select.title') }}
@@ -73,61 +71,40 @@
 <script setup>
 import { findTargetDevices, ScrcpyConfigMigrator } from '$/utils/device/index.js'
 
-// Emits
-const emit = defineEmits(['success', 'skip', 'cancel'])
-
-// Store
 const deviceStore = useDeviceStore()
 
-// Reactive data
-const visible = ref(false)
+const dialog = useDialog()
+
 const migrating = ref(false)
 const sourceDevice = ref(null)
 const targetDevices = ref([])
 const selectedDeviceIds = ref([])
 
-/**
- * Open the dialog
- * @param {Object} device - Device object to be removed
- */
-function open(device) {
-  sourceDevice.value = device
+function open(options = {}) {
+  sourceDevice.value = options.device
   updateTargetDevices()
-  visible.value = true
+  dialog.open(options)
 }
 
-/**
- * Update target device list (matched by serialNo)
- */
 function updateTargetDevices() {
   if (!sourceDevice.value?.serialNo) {
     targetDevices.value = []
     return
   }
 
-  // Use shared utility to find target devices
   targetDevices.value = findTargetDevices(sourceDevice.value, deviceStore.list)
 }
 
-/**
- * Handle cancel action
- */
 function handleCancel() {
-  visible.value = false
-  emit('cancel')
+  dialog.close()
+  dialog.options?.onCancel?.()
 }
 
-/**
- * Handle skip action
- */
 function handleSkip() {
-  visible.value = false
-  emit('skip')
+  dialog.close()
+  dialog.options?.onSkip?.()
 }
 
-/**
- * Handle configuration migration
- */
 async function handleMigrate() {
   if (selectedDeviceIds.value.length === 0) {
     return
@@ -139,7 +116,6 @@ async function handleMigrate() {
     const migrator = new ScrcpyConfigMigrator()
     let successCount = 0
 
-    // Perform config migration for each selected device
     for (const targetDeviceId of selectedDeviceIds.value) {
       const success = migrator.migrateConfigFromOldToNew(
         sourceDevice.value.id,
@@ -159,8 +135,8 @@ async function handleMigrate() {
       ElMessage.warning(window.t('device.config.migration.no.migration'))
     }
 
-    visible.value = false
-    emit('success', { successCount, totalCount: selectedDeviceIds.value.length })
+    dialog.close()
+    dialog.options?.onSuccess?.({ successCount, totalCount: selectedDeviceIds.value.length })
   }
   catch (error) {
     console.error('Config migration failed:', error)
@@ -171,17 +147,14 @@ async function handleMigrate() {
   }
 }
 
-/**
- * Cleanup when dialog is closed
- */
 function onClosed() {
   sourceDevice.value = null
   targetDevices.value = []
   selectedDeviceIds.value = []
   migrating.value = false
+  dialog.options?.onClosed()
 }
 
-// Expose methods for parent component
 defineExpose({
   open,
 })

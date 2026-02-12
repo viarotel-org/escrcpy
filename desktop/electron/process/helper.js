@@ -39,7 +39,7 @@ export function resolveEnvPath(options = {}) {
     return rawEnvPath
   }
 
-  console.log('resolveEnvPath.platformPaths', platformPaths)
+  // console.log('resolveEnvPath.platformPaths', platformPaths)
 
   return `${platformPaths.join(delimiter)}${delimiter}${rawEnvPath}`
 }

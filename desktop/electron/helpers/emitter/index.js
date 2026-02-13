@@ -4,7 +4,7 @@ import { eventLimiter } from './helper'
 /**
  * Auto install event limiter in development mode
  */
-if (process.env.IS_PACKAGED !== 'true') {
+if (import.meta.env.MODE === 'development') {
   eventLimiter.install(EventEmitter)
 }
 

@@ -23,10 +23,6 @@ process.env.DESKTOP_PATH = app.getPath('desktop')
 
 process.env.CWD = process.cwd()
 
+process.env.APP_LOCALE = app.getLocale()
+
 setupEnvPath()
-
-const isPackaged = process.env.IS_PACKAGED === 'true'
-
-export {
-  isPackaged,
-}

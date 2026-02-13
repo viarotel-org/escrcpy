@@ -1,5 +1,4 @@
 import contextMenu from 'electron-context-menu'
-import { isPackaged } from '$electron/helpers/index.js'
 
 export default {
   name: 'service:context-menu',
@@ -19,7 +18,7 @@ export default {
         showSaveImageAs: true,
 
         // Show inspect element in dev mode only
-        showInspectElement: !isPackaged(),
+        showInspectElement: import.meta.env.MODE === 'development',
       })
 
       return { initialized: true }

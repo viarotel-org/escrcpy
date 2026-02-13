@@ -2,9 +2,9 @@ import { resolve } from 'node:path'
 import which from 'which'
 
 export function extraResolve(filePath) {
-  const isPackaged = ['true'].includes(process.env.IS_PACKAGED)
+  const isProduction = import.meta.env.MODE === 'production'
 
-  const basePath = isPackaged ? process.resourcesPath : 'electron/resources'
+  const basePath = isProduction ? process.resourcesPath : 'electron/resources'
 
   const value = resolve(basePath, 'extra', filePath)
 

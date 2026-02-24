@@ -2,16 +2,10 @@
   <div
     class="absolute inset-0 h-full flex flex-col px-2 space-y-2 overflow-hidden"
   >
-    <div
-      class="app-region-drag flex items-center flex-none pt-2"
-      :class="[
-        {
-          'pl-20': isPlatform('macos'),
-          'pr-[calc(100px+3.6vw)]': isPlatform('windows') || isPlatform('linux'),
-        },
-      ]"
+    <AppHeader
+      class="flex-none"
     >
-      <div class="flex-none">
+      <template #default>
         <el-segmented
           v-slot="{ item }"
           v-model="activeTab"
@@ -22,12 +16,12 @@
             {{ $t(item.label) }}
           </div>
         </el-segmented>
-      </div>
+      </template>
 
-      <div class="flex-1 min-w-0 flex items-center justify-end">
+      <template #right>
         <QuickBar class="" />
-      </div>
-    </div>
+      </template>
+    </AppHeader>
 
     <div class="flex-1 h-0 overflow-auto">
       <RouterView v-slot="{ Component }">
@@ -40,8 +34,8 @@
 </template>
 
 <script setup>
+import AppHeader from '$/components/app-header/index.vue'
 import QuickBar from '$/components/quick-bar/index.vue'
-import { isPlatform } from '$/utils/index.js'
 
 const router = useRouter()
 const route = useRoute()

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col overflow-hidden pt-1">
+  <div class="h-full flex flex-col overflow-hidden">
     <div class="flex-none flex items-center">
       <div class="flex-1 min-w-0">
         <el-segmented v-model="activeTab" class="el-segmented--child" :options="tabsModel">

@@ -6,17 +6,16 @@
       :devices="selectionRows"
     />
 
-    <div class="flex-1 h-0 overflow-hidden !rounded-xl">
+    <div class="flex-1 min-h-0 overflow-hidden">
       <el-table
         ref="tableRef"
         v-loading="loading && !deviceList.length"
         :element-loading-text="$t('common.loading')"
         :data="deviceList"
         style="width: 100%"
-        border
         height="100%"
         row-key="id"
-        class="!scale-[1.004] !bg-[--el-table-tr-bg-color]"
+        class="el-table--beautify"
         @selection-change="onSelectionChange"
       >
         <template #empty>

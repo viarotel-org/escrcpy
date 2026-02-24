@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col overflow-hidden pt-2">
+  <div class="h-full flex flex-col overflow-hidden">
     <div
       class="mr-4 pb-2 flex items-center justify-between flex-none"
     >

@@ -15,7 +15,6 @@ export default {
           if (instanceId) {
             const sessionId = `${type}:${instanceId}`
             sessionManager.destroy(sessionId)
-            console.log(`[Terminal Window] Cleaned up session: ${sessionId}`)
           }
         },
       },

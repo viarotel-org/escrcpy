@@ -6,8 +6,8 @@ export default {
     createWindowManager('pages/explorer', {
       singleton: false,
       browserWindow: {
-        frame: true,
-        titleBarStyle: 'default',
+        // frame: true,
+        // titleBarStyle: 'default',
       },
     })
   },

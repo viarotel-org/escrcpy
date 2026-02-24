@@ -142,3 +142,19 @@
 .el-message {
   @apply !mt-8;
 }
+
+.el-table.el-table--beautify {
+  --el-table-header-bg-color: theme('colors.white') !important;
+  --el-table-tr-bg-color: theme('colors.white') !important;
+
+  @apply !scale-[1.004] !bg-[--el-table-tr-bg-color] !rounded-xl !overflow-hidden;
+
+  .dark & {
+    --el-table-header-bg-color: theme('colors.gray.900') !important;
+    --el-table-tr-bg-color: theme('colors.gray.900') !important;
+  }
+
+  .el-table__inner-wrapper::before {
+    @apply !bg-transparent;
+  }
+}

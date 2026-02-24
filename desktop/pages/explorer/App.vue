@@ -5,59 +5,61 @@
       class="!h-screen"
       @files-dropped="handleDragUpload"
     >
-      <div class="flex flex-col h-full bg-white dark:bg-gray-900 p-2 relative">
-        <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-          <div class="flex-none flex items-center">
-            <el-button
-              text
-              icon="Back"
-              circle
-              :disabled="!explorer.canGoBack.value"
-              @click="explorer.goBack()"
-            ></el-button>
-            <el-button
-              text
-              icon="Right"
-              circle
-              :disabled="!explorer.canGoForward.value"
-              @click="explorer.goForward()"
-            ></el-button>
-            <el-button
-              text
-              icon="Top"
-              circle
-              :disabled="explorer.isRoot.value"
-              @click="explorer.goUp()"
-            ></el-button>
+      <div class="flex flex-col h-full relative">
+        <AppHeader title="Escrcpy Explorer" class="px-2 gap-4">
+          <div class="flex items-center bg-white dark:bg-gray-800 rounded-full w-full p-px w-full">
+            <div class="flex-none flex items-center *:app-region-no-drag">
+              <el-button
+                text
+                icon="Back"
+                circle
+                :disabled="!explorer.canGoBack.value"
+                @click="explorer.goBack()"
+              ></el-button>
+              <el-button
+                text
+                icon="Right"
+                circle
+                :disabled="!explorer.canGoForward.value"
+                @click="explorer.goForward()"
+              ></el-button>
+              <el-button
+                text
+                icon="Top"
+                circle
+                :disabled="explorer.isRoot.value"
+                @click="explorer.goUp()"
+              ></el-button>
+            </div>
+
+            <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
+              <el-breadcrumb separator-icon="ArrowRight" class="!flex *:app-region-no-drag">
+                <el-breadcrumb-item
+                  v-for="item of explorer.breadcrumbs.value"
+                  :key="item.value"
+                  class="!flex-none"
+                  @click="explorer.navigateByBreadcrumb(item)"
+                >
+                  <el-button text class="!px-2" :icon="item.icon" :title="$t(item.label)">
+                    {{ $t(item.label) }}
+                  </el-button>
+                </el-breadcrumb-item>
+              </el-breadcrumb>
+            </Scrollable>
+
+            <div class="flex-none *:app-region-no-drag">
+              <el-button
+                text
+                icon="Refresh"
+                circle
+                :loading="explorer.loading.value"
+                @click="explorer.refresh()"
+              ></el-button>
+            </div>
           </div>
+        </AppHeader>
 
-          <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
-            <el-breadcrumb separator-icon="ArrowRight" class="!flex">
-              <el-breadcrumb-item
-                v-for="item of explorer.breadcrumbs.value"
-                :key="item.value"
-                class="!flex-none"
-                @click="explorer.navigateByBreadcrumb(item)"
-              >
-                <el-button text class="!px-2" :icon="item.icon" :title="item.label">
-                  {{ $t(item.label) || item.label }}
-                </el-button>
-              </el-breadcrumb-item>
-            </el-breadcrumb>
-          </Scrollable>
-
-          <div class="flex-none">
-            <el-button
-              text
-              icon="Refresh"
-              circle
-              :loading="explorer.loading.value"
-              @click="explorer.refresh()"
-            ></el-button>
-          </div>
-        </div>
-
-        <div class="flex items-center mb-4">
+        <div class="flex items-center px-2 pt-4">
           <div class="-ml-px space-x-2 mr-auto">
             <AddPopover @success="handleAdd">
               <template #reference>
@@ -138,15 +140,14 @@
           </el-button-group>
         </div>
 
-        <div class="flex-1 overflow-hidden">
+        <div class="flex-1 min-h-0 overflow-hidden mt-2 px-2">
           <el-table
             ref="tableRef"
             v-loading="explorer.loading.value"
             :data="explorer.files.value"
-            stripe
-            size="small"
             row-key="id"
             height="100%"
+            class="el-table--beautify"
             @selection-change="handleSelectionChange"
             @row-click="handleRowClick"
             @row-contextmenu="handleContextMenu"
@@ -222,23 +223,30 @@
           </el-table>
         </div>
 
-        <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
-          <div>
+        <div class="flex items-center text-sm text-gray-500 h-10 px-2 app-region-drag">
+          <div class="flex-1 min-w-0">
             {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
             <span v-if="explorer.selection.hasSelection.value">
               , {{ explorer.selection.selectionCount.value }} {{ $t('common.selected') || 'selected' }}
             </span>
           </div>
-          <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center gap-1">
-            <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
-              {{ explorer.clipboard.isCutOperation.value
-                ? $t('device.control.file.manager.cut')
-                : $t('device.control.file.manager.copy') }}
-              : {{ explorer.clipboard.clipboardState.value.count }}
-            </el-tag>
-            <el-button text size="small" @click="explorer.clipboard.clear()">
-              {{ $t('common.cancel') }}
-            </el-button>
+
+          <div class="flex-1 min-w-0 text-center">
+            {{ deviceName }}
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center justify-end gap-1 *:app-region-no-drag">
+              <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
+                {{ explorer.clipboard.isCutOperation.value
+                  ? $t('device.control.file.manager.cut')
+                  : $t('device.control.file.manager.copy') }}
+                : {{ explorer.clipboard.clipboardState.value.count }}
+              </el-tag>
+              <el-button text size="small" @click="explorer.clipboard.clear()">
+                {{ $t('common.cancel') }}
+              </el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -256,6 +264,7 @@
 </template>
 
 <script setup>
+import AppHeader from '$/components/app-header/index.vue'
 import useExplorer from '$/hooks/useExplorer'
 import AddPopover from './components/add/index.vue'
 import DragUpload from './components/upload/drag.vue'
@@ -277,9 +286,11 @@ const explorer = useExplorer()
 const { currentDevice, locale, size } = useWindowStateSync({
   onQueryMounted() {
     explorer.init(currentDevice.value, '/sdcard')
-    const deviceName = deviceStore.getLabel(currentDevice.value, 'name')
-    document.title = `${deviceName} - Escrcpy Explorer`
   },
+})
+
+const deviceName = computed(() => {
+  return currentDevice.value?.id ? deviceStore.getLabel(currentDevice.value, 'name') : ''
 })
 
 watch(() => explorer.breadcrumbs.value.length, async () => {

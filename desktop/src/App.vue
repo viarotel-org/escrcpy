@@ -1,14 +1,11 @@
 <template>
   <el-config-provider :locale="locale" :size="size">
     <Layouts />
-    <WindowControls v-if="isPlatform('windows') || isPlatform('linux')" />
   </el-config-provider>
 </template>
 
 <script setup>
 import Layouts from './layouts/index.vue'
-import WindowControls from '$/components/window-controls/index.vue'
-import { isPlatform } from '$/utils/index.js'
 
 const router = useRouter()
 

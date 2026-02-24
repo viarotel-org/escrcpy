@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'node:path'
+import { throttle } from 'lodash-es'
 import { getFileSize } from '../index.js'
 
 /**
@@ -20,7 +21,11 @@ export class ADBDownloader {
       concurrency: 1, // Number of concurrent downloads (reserved for future use)
       ...options,
     }
+
     this.isCancelled = false
+
+    this.options.onProgress = throttle(this.options.onProgress, 500)
+    this.options.onScanProgress = throttle(this.options.onScanProgress, 500)
 
     // Download statistics
     this.stats = {

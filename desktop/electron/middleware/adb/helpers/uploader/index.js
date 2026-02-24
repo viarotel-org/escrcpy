@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'node:path'
+import { throttle } from 'lodash-es'
 
 export class ADBUploader {
   constructor(options = {}) {
@@ -18,7 +19,11 @@ export class ADBUploader {
       validateFile: null, // File validation function
       ...options,
     }
+
     this.isCancelled = false
+
+    this.options.onScanProgress = throttle(this.options.onScanProgress, 500)
+    this.options.onProgress = throttle(this.options.onProgress, 500)
 
     this.stats = {
       totalFiles: 0,

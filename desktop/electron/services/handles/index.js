@@ -6,7 +6,7 @@ import { isWindowDestroyed } from '$electron/helpers/index.js'
 
 export default {
   name: 'service:handles',
-  apply() {
+  apply(mainApp) {
     ipcMain.handle(
       'show-open-dialog',
       async (_, { preset = '', ...options } = {}) => {
@@ -121,7 +121,7 @@ export default {
 
     // Navigate to route
     ipcMain.handle('navigate-to-route', async (event, route) => {
-      const win = BrowserWindow.fromWebContents(event.sender)
+      const win = mainApp.getMainWindow()
 
       if (isWindowDestroyed(win)) {
         return false

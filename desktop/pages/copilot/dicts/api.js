@@ -10,7 +10,7 @@ export const ApiModelEnum = Enum({
     label: 'ZhipuAI/AutoGLM-Phone-9B',
   },
   Gitee: {
-    value: 'https://ai.gitee.com/v1',
+    value: 'https://api.moark.com/v1',
     label: 'AutoGLM-Phone-9B-Multilingual',
   },
   Custom: {

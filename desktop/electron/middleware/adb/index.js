@@ -388,6 +388,10 @@ export async function installAdbKeyboard(deviceId) {
 
     const installedAfter = await isInstalledAdbKeyboard(deviceId)
 
+    if (installedAfter) {
+      await deviceShell(deviceId, 'ime enable com.android.adbkeyboard/.AdbIME')
+    }
+
     return installedAfter
   }
   catch (error) {

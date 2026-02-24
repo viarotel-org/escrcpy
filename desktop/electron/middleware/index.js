@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge, webUtils } from 'electron'
 import '$electron/helpers/debugger/renderer.js'
 
 import { electronAPI } from '@electron-toolkit/preload'
@@ -37,6 +37,7 @@ export function createMiddleware() {
     terminal,
     win,
     configs,
+    getPathForFile: file => webUtils.getPathForFile(file),
     ...electronAPI,
     ipcxRenderer,
   })

@@ -1,242 +1,248 @@
 <template>
   <el-config-provider :locale="locale" :size="size">
-    <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-4">
-      <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-        <div class="flex-none flex items-center">
-          <el-button
-            text
-            icon="Back"
-            circle
-            :disabled="!explorer.canGoBack.value"
-            @click="explorer.goBack()"
-          ></el-button>
-          <el-button
-            text
-            icon="Right"
-            circle
-            :disabled="!explorer.canGoForward.value"
-            @click="explorer.goForward()"
-          ></el-button>
-          <el-button
-            text
-            icon="Top"
-            circle
-            :disabled="explorer.isRoot.value"
-            @click="explorer.goUp()"
-          ></el-button>
+    <DragUpload
+      :disabled="explorer.uploader.uploading.value"
+      class="!h-screen"
+      @files-dropped="handleDragUpload"
+    >
+      <div class="flex flex-col h-full bg-white dark:bg-gray-900 p-2 relative">
+        <div class="flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+          <div class="flex-none flex items-center">
+            <el-button
+              text
+              icon="Back"
+              circle
+              :disabled="!explorer.canGoBack.value"
+              @click="explorer.goBack()"
+            ></el-button>
+            <el-button
+              text
+              icon="Right"
+              circle
+              :disabled="!explorer.canGoForward.value"
+              @click="explorer.goForward()"
+            ></el-button>
+            <el-button
+              text
+              icon="Top"
+              circle
+              :disabled="explorer.isRoot.value"
+              @click="explorer.goUp()"
+            ></el-button>
+          </div>
+
+          <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
+            <el-breadcrumb separator-icon="ArrowRight" class="!flex">
+              <el-breadcrumb-item
+                v-for="item of explorer.breadcrumbs.value"
+                :key="item.value"
+                class="!flex-none"
+                @click="explorer.navigateByBreadcrumb(item)"
+              >
+                <el-button text class="!px-2" :icon="item.icon" :title="item.label">
+                  {{ $t(item.label) || item.label }}
+                </el-button>
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </Scrollable>
+
+          <div class="flex-none">
+            <el-button
+              text
+              icon="Refresh"
+              circle
+              :loading="explorer.loading.value"
+              @click="explorer.refresh()"
+            ></el-button>
+          </div>
         </div>
 
-        <Scrollable ref="scrollableRef" class="flex-1 w-0 flex items-center mx-2">
-          <el-breadcrumb separator-icon="ArrowRight" class="!flex">
-            <el-breadcrumb-item
-              v-for="item of explorer.breadcrumbs.value"
-              :key="item.value"
-              class="!flex-none"
-              @click="explorer.navigateByBreadcrumb(item)"
-            >
-              <el-button text class="!px-2" :icon="item.icon" :title="item.label">
-                {{ $t(item.label) || item.label }}
-              </el-button>
-            </el-breadcrumb-item>
-          </el-breadcrumb>
-        </Scrollable>
+        <div class="flex items-center mb-4">
+          <div class="-ml-px space-x-2 mr-auto">
+            <AddPopover @success="handleAdd">
+              <template #reference>
+                <el-button type="default" icon="Plus">
+                  {{ $t('device.control.file.manager.add') }}
+                </el-button>
+              </template>
+            </AddPopover>
 
-        <div class="flex-none">
+            <el-dropdown ref="uploadDropdownRef" :trigger="uploadDropdownTrigger" @command="handleUpload">
+              <el-button
+                type="default"
+                icon="Upload"
+                :loading="explorer.uploader.uploading.value"
+                @click="handleUpload()"
+              >
+                {{ $t('device.control.file.manager.upload') }}
+              </el-button>
+
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="openFile">
+                    {{ $t('common.file') }}
+                  </el-dropdown-item>
+                  <el-dropdown-item command="openDirectory">
+                    {{ $t('common.directory') }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+
           <el-button
-            text
-            icon="Refresh"
-            circle
-            :loading="explorer.loading.value"
-            @click="explorer.refresh()"
-          ></el-button>
-        </div>
-      </div>
+            v-if="explorer.clipboard.hasClipboard.value"
+            type="primary"
+            icon="DocumentCopy"
+            class="mr-2"
+            @click="handlePaste"
+          >
+            {{ $t('device.control.file.manager.paste') }}
+            ({{ explorer.clipboard.clipboardState.value.count }})
+          </el-button>
 
-      <div class="flex items-center mb-4">
-        <div class="-ml-px space-x-2 mr-auto">
-          <AddPopover @success="handleAdd">
-            <template #reference>
-              <el-button type="default" icon="Plus">
-                {{ $t('device.control.file.manager.add') }}
-              </el-button>
-            </template>
-          </AddPopover>
-
-          <el-dropdown ref="uploadDropdownRef" :trigger="uploadDropdownTrigger" @command="handleUpload">
+          <el-button-group>
             <el-button
               type="default"
-              icon="Upload"
-              :loading="explorer.uploader.uploading.value"
-              @click="handleUpload()"
+              icon="Download"
+              :disabled="!explorer.selection.hasSelection.value"
+              :loading="explorer.downloader.downloading.value"
+              @click="handleDownload()"
             >
-              {{ $t('device.control.file.manager.upload') }}
+              {{ $t('device.control.file.manager.download') }}
+            </el-button>
+            <el-button
+              type="default"
+              icon="CopyDocument"
+              :disabled="!explorer.selection.hasSelection.value"
+              @click="handleCopy"
+            >
+              {{ $t('device.control.file.manager.copy') }}
+            </el-button>
+            <el-button
+              type="default"
+              icon="Scissor"
+              :disabled="!explorer.selection.hasSelection.value"
+              @click="handleCut"
+            >
+              {{ $t('device.control.file.manager.cut') }}
             </el-button>
 
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="openFile">
-                  {{ $t('common.file') }}
-                </el-dropdown-item>
-                <el-dropdown-item command="openDirectory">
-                  {{ $t('common.directory') }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+            <el-button
+              type="default" icon="Delete"
+              :disabled="!explorer.selection.hasSelection.value"
+              @click="handleRemove()"
+            >
+              {{ $t('common.delete') }}
+            </el-button>
+          </el-button-group>
         </div>
 
-        <el-button
-          v-if="explorer.clipboard.hasClipboard.value"
-          type="primary"
-          icon="DocumentCopy"
-          class="mr-2"
-          @click="handlePaste"
-        >
-          {{ $t('device.control.file.manager.paste') }}
-          ({{ explorer.clipboard.clipboardState.value.count }})
-        </el-button>
-
-        <el-button-group>
-          <el-button
-            type="default"
-            icon="Download"
-            :disabled="!explorer.selection.hasSelection.value"
-            :loading="explorer.downloader.downloading.value"
-            @click="handleDownload()"
+        <div class="flex-1 overflow-hidden">
+          <el-table
+            ref="tableRef"
+            v-loading="explorer.loading.value"
+            :data="explorer.files.value"
+            stripe
+            size="small"
+            row-key="id"
+            height="100%"
+            @selection-change="handleSelectionChange"
+            @row-click="handleRowClick"
+            @row-contextmenu="handleContextMenu"
           >
-            {{ $t('device.control.file.manager.download') }}
-          </el-button>
-          <el-button
-            type="default"
-            icon="CopyDocument"
-            :disabled="!explorer.selection.hasSelection.value"
-            @click="handleCopy"
-          >
-            {{ $t('device.control.file.manager.copy') }}
-          </el-button>
-          <el-button
-            type="default"
-            icon="Scissor"
-            :disabled="!explorer.selection.hasSelection.value"
-            @click="handleCut"
-          >
-            {{ $t('device.control.file.manager.cut') }}
-          </el-button>
+            <el-table-column type="selection" reserve-selection width="50" align="left" />
 
-          <el-button
-            type="default" icon="Delete"
-            :disabled="!explorer.selection.hasSelection.value"
-            @click="handleRemove()"
-          >
-            {{ $t('common.delete') }}
-          </el-button>
-        </el-button-group>
-      </div>
+            <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip min-width="200">
+              <template #default="{ row }">
+                <div
+                  class="flex items-center cursor-pointer hover:text-primary-500 hover:underline"
+                  :class="{ 'opacity-50': explorer.clipboard.isCut(row) }"
+                  @click.stop="handleNameClick(row)"
+                >
+                  <FileIcon :file="row" size="lg" class="mr-2" />
+                  <span class="truncate">{{ row.name }}</span>
+                </div>
+              </template>
+            </el-table-column>
 
-      <div class="flex-1 overflow-hidden">
-        <el-table
-          ref="tableRef"
-          v-loading="explorer.loading.value"
-          :data="explorer.files.value"
-          stripe
-          size="small"
-          row-key="id"
-          height="100%"
-          @selection-change="handleSelectionChange"
-          @row-click="handleRowClick"
-          @row-contextmenu="handleContextMenu"
-        >
-          <el-table-column type="selection" reserve-selection width="50" align="left" />
+            <el-table-column prop="size" :label="$t('common.size')" sortable align="left" min-width="100" />
 
-          <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip min-width="200">
-            <template #default="{ row }">
-              <div
-                class="flex items-center cursor-pointer hover:text-primary-500 hover:underline"
-                :class="{ 'opacity-50': explorer.clipboard.isCut(row) }"
-                @click.stop="handleNameClick(row)"
-              >
-                <FileIcon :file="row" size="lg" class="mr-2" />
-                <span class="truncate">{{ row.name }}</span>
-              </div>
-            </template>
-          </el-table-column>
+            <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="left" min-width="150" />
 
-          <el-table-column prop="size" :label="$t('common.size')" sortable align="left" min-width="100" />
+            <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
+              <template #default="{ row }">
+                <el-button
+                  :title="$t('device.control.file.manager.preview')"
+                  text
+                  type="success"
+                  icon="View"
+                  circle
+                  :button-class="['file'].includes(row.type) ? '!visible' : '!invisible'"
+                  @click.stop="handlePreview(row)"
+                />
 
-          <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="left" min-width="150" />
+                <el-button
+                  :title="$t('common.download')"
+                  text
+                  type="primary"
+                  icon="Download"
+                  circle
+                  @click.stop="handleDownload(row)"
+                />
 
-          <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
-            <template #default="{ row }">
-              <el-button
-                :title="$t('device.control.file.manager.preview')"
-                text
-                type="success"
-                icon="View"
-                circle
-                :button-class="['file'].includes(row.type) ? '!visible' : '!invisible'"
-                @click.stop="handlePreview(row)"
-              />
+                <el-button
+                  :title="$t('device.control.file.manager.edit')"
+                  text
+                  type="success"
+                  icon="Edit"
+                  circle
+                  @click.stop="handleEdit(row)"
+                />
 
-              <el-button
-                :title="$t('common.download')"
-                text
-                type="primary"
-                icon="Download"
-                circle
-                @click.stop="handleDownload(row)"
-              />
+                <el-button
+                  :title="$t('device.control.file.manager.move')"
+                  text
+                  type="info"
+                  icon="Rank"
+                  circle
+                  @click.stop="handleMoveItem(row)"
+                />
 
-              <el-button
-                :title="$t('device.control.file.manager.edit')"
-                text
-                type="success"
-                icon="Edit"
-                circle
-                @click.stop="handleEdit(row)"
-              />
-
-              <el-button
-                :title="$t('device.control.file.manager.move')"
-                text
-                type="info"
-                icon="Rank"
-                circle
-                @click.stop="handleMoveItem(row)"
-              />
-
-              <el-button
-                :title="$t('common.delete')"
-                text
-                type="danger"
-                icon="Delete"
-                circle
-                @click.stop="handleRemove(row)"
-              />
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-
-      <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
-        <div>
-          {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
-          <span v-if="explorer.selection.hasSelection.value">
-            , {{ explorer.selection.selectionCount.value }} {{ $t('common.selected') || 'selected' }}
-          </span>
+                <el-button
+                  :title="$t('common.delete')"
+                  text
+                  type="danger"
+                  icon="Delete"
+                  circle
+                  @click.stop="handleRemove(row)"
+                />
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-        <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center gap-1">
-          <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
-            {{ explorer.clipboard.isCutOperation.value
-              ? $t('device.control.file.manager.cut')
-              : $t('device.control.file.manager.copy') }}
-            : {{ explorer.clipboard.clipboardState.value.count }}
-          </el-tag>
-          <el-button text size="small" @click="explorer.clipboard.clear()">
-            {{ $t('common.cancel') }}
-          </el-button>
+
+        <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
+          <div>
+            {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
+            <span v-if="explorer.selection.hasSelection.value">
+              , {{ explorer.selection.selectionCount.value }} {{ $t('common.selected') || 'selected' }}
+            </span>
+          </div>
+          <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center gap-1">
+            <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
+              {{ explorer.clipboard.isCutOperation.value
+                ? $t('device.control.file.manager.cut')
+                : $t('device.control.file.manager.copy') }}
+              : {{ explorer.clipboard.clipboardState.value.count }}
+            </el-tag>
+            <el-button text size="small" @click="explorer.clipboard.clear()">
+              {{ $t('common.cancel') }}
+            </el-button>
+          </div>
         </div>
       </div>
-    </div>
+    </DragUpload>
 
     <MoveDialog
       ref="moveDialogRef"
@@ -252,6 +258,7 @@
 <script setup>
 import useExplorer from '$/hooks/useExplorer'
 import AddPopover from './components/add/index.vue'
+import DragUpload from './components/upload/drag.vue'
 import EditDialog from './components/edit/index.vue'
 import MoveDialog from './components/move/index.vue'
 
@@ -330,24 +337,8 @@ function handleEdit(row) {
   editDialogRef.value?.open(row)
 }
 
-async function handleUpload(command) {
-  const properties = ['multiSelections']
-
-  const positiveDropdown = ['hover', 'click'].includes(uploadDropdownTrigger)
-
-  if (!command && positiveDropdown) {
-    return false
-  }
-
-  const openTypes = command ? [command] : ['openFile', 'openDirectory']
-
-  properties.unshift(...openTypes)
-
-  const files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
-    properties,
-  })
-
-  if (!files || files.length === 0)
+async function executeUpload(filePaths) {
+  if (!filePaths || filePaths.length === 0)
     return
 
   const messageLoading = useMessageLoading(
@@ -359,13 +350,13 @@ async function handleUpload(command) {
   )
 
   try {
-    const result = await explorer.uploader.upload(files, {
+    const result = await explorer.uploader.upload(filePaths, {
       onScanProgress: ({ filesFound }) => {
         messageLoading.update(
           window.t('device.control.file.manager.upload.scanning.files', { count: filesFound }),
         )
       },
-      onProgress: ({ total, file }) => {
+      onProgress: ({ total }) => {
         messageLoading.update(
           window.t('device.control.file.manager.upload.progress', {
             percent: Math.round(total.percent || 0),
@@ -397,6 +388,33 @@ async function handleUpload(command) {
     console.error('Upload error:', error)
     ElMessage.error(window.t('device.control.file.manager.upload.error', { error: error.message }))
   }
+}
+
+async function handleUpload(command) {
+  const properties = ['multiSelections']
+
+  const positiveDropdown = ['hover', 'click'].includes(uploadDropdownTrigger)
+
+  if (!command && positiveDropdown) {
+    return false
+  }
+
+  const openTypes = command ? [command] : ['openFile', 'openDirectory']
+
+  properties.unshift(...openTypes)
+
+  const files = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
+    properties,
+  })
+
+  if (!files || files.length === 0)
+    return
+
+  await executeUpload(files)
+}
+
+async function handleDragUpload({ files }) {
+  await executeUpload(files)
 }
 
 async function handlePreview(row) {

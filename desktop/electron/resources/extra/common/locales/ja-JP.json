@@ -320,6 +320,8 @@
   "device.control.file.manager.upload.scanning": "ローカルファイルをスキャン中...",
   "device.control.file.manager.upload.scanning.files": "{count} ファイルをスキャンしました",
   "device.control.file.manager.upload.success": "アップロード成功",
+  "device.control.file.manager.upload.drag.title": "ファイルをドロップしてアップロード",
+  "device.control.file.manager.upload.drag.subtitle": "離すと現在のディレクトリにアップロードされます",
   "device.control.file.name": "ファイルマネージャー",
   "device.control.file.push": "ファイルを転送",
   "device.control.file.push.error": "ファイルの転送に失敗しました。ファイルを確認して再度お試しください。",

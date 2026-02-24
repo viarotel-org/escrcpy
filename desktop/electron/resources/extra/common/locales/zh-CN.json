@@ -320,6 +320,8 @@
   "device.control.file.manager.upload.scanning": "正在扫描本地文件...",
   "device.control.file.manager.upload.scanning.files": "已扫描 {count} 个文件",
   "device.control.file.manager.upload.success": "上传成功",
+  "device.control.file.manager.upload.drag.title": "拖入文件即可上传",
+  "device.control.file.manager.upload.drag.subtitle": "松开鼠标，文件将上传至当前目录",
   "device.control.file.name": "文件管理",
   "device.control.file.push": "推送文件",
   "device.control.file.push.error": "推送文件失败，请检查文件后重试",

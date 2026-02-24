@@ -320,6 +320,8 @@
   "device.control.file.manager.upload.scanning": "Scanning local files...",
   "device.control.file.manager.upload.scanning.files": "Scanned {count} files",
   "device.control.file.manager.upload.success": "Upload successful",
+  "device.control.file.manager.upload.drag.title": "Drop files to upload",
+  "device.control.file.manager.upload.drag.subtitle": "Release to upload to the current directory",
   "device.control.file.name": "File Manager",
   "device.control.file.push": "Push File",
   "device.control.file.push.error": "Failed to push the file, please check the file and try again",

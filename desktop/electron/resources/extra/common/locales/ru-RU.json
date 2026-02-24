@@ -320,6 +320,8 @@
   "device.control.file.manager.upload.scanning": "Сканирование локальных файлов...",
   "device.control.file.manager.upload.scanning.files": "Отсканировано {count} файлов",
   "device.control.file.manager.upload.success": "Загружено успешно",
+  "device.control.file.manager.upload.drag.title": "Перетащите файлы для загрузки",
+  "device.control.file.manager.upload.drag.subtitle": "Отпустите, чтобы загрузить в текущую папку",
   "device.control.file.name": "Файловый менеджер",
   "device.control.file.push": "Отправить файл",
   "device.control.file.push.error": "Не удалось отправить файл, пожалуйста, проверьте файл и попробуйте снова",

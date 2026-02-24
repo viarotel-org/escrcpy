@@ -320,6 +320,8 @@
   "device.control.file.manager.upload.scanning": "جارٍ فحص الملفات المحلية...",
   "device.control.file.manager.upload.scanning.files": "تم فحص {count} ملف",
   "device.control.file.manager.upload.success": "تم الرفع بنجاح",
+  "device.control.file.manager.upload.drag.title": "أسقط الملفات للرفع",
+  "device.control.file.manager.upload.drag.subtitle": "أطلق الملفات للرفع إلى المجلد الحالي",
   "device.control.file.name": "مدير الملفات",
   "device.control.file.push": "إرسال ملف",
   "device.control.file.push.error": "فشل إرسال الملف، يرجى التحقق من الملف والمحاولة مرة أخرى",

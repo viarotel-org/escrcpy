@@ -83,12 +83,9 @@ function handleDrop(event) {
     return
   }
 
-  const fileList = Array.from(dataTransfer.items || [])
-    .filter(item => item.kind === 'file')
-    .map(item => item.getAsFile())
-    .filter(Boolean)
+  const fileList = Array.from(dataTransfer.files)
 
-  if (fileList.length === 0) {
+  if (fileList?.length === 0) {
     return
   }
 

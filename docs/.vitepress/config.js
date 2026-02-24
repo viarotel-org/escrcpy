@@ -67,7 +67,7 @@ const vitePressConfig = {
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/viarotel/viarotel.github.io',
+        link: 'https://github.com/viarotel/',
       },
       {
         icon: {

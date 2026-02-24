@@ -1,12 +1,12 @@
 <template>
   <t-chat
     ref="chatRef"
-    class="t-chat--copilot !h-full scroll-smooth"
+    class="t-chat--copilot !h-full scroll-smooth "
     layout="both"
     :clear-history="displayMessages.length > 0 && !isExecuting"
     @clear="handleClearAll"
+    @scroll="onScroll"
   >
-    <!-- Welcome panel -->
     <WelcomePanel
       v-if="displayMessages.length === 0 && !loading"
       class="mt-4"
@@ -18,7 +18,6 @@
       </template>
     </div>
 
-    <!-- Input area -->
     <template #footer>
       <ChatInput
         v-model="inputText"
@@ -28,6 +27,10 @@
         @submit="handleSubmit"
         @stop="handleStop"
       />
+
+      <div v-if="scrollTop < 0" class="absolute left-center -top-28" @click="scrollToBottom">
+        <el-button type="default" circle icon="Bottom" class="!shadow-el"></el-button>
+      </div>
     </template>
   </t-chat>
 </template>
@@ -43,6 +46,10 @@ import { useChatMessages } from '$/database/index.js'
 
 import { adaptMessagesForTDesign, createTemporaryAssistantMessage } from '$copilot/utils/messageAdapter.js'
 import { MessageRoleEnum, MessageStatusEnum, TaskStatusEnum } from '$copilot/dicts/index.js'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   currentDevice: {
@@ -76,6 +83,8 @@ const temporaryMessage = ref(null)
 
 const displayMessages = ref([])
 
+const scrollTop = ref(0)
+
 watchEffect(() => {
   if (!messages.value.length) {
     displayMessages.value = []
@@ -98,6 +107,10 @@ watchEffect(() => {
 const reverseMessages = computed(() => {
   return [...displayMessages.value].reverse()
 })
+
+function onScroll({ e }) {
+  scrollTop.value = e.target.scrollTop
+}
 
 async function handleSubmit(text) {
   const trimmedText = text?.trim() || inputText.value.trim()

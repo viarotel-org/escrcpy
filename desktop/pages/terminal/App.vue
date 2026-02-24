@@ -59,7 +59,7 @@ const isDark = computed({
   },
 })
 
-const { terminalRef, terminalConfig } = useTerminal({
+const { terminalRef } = useTerminal({
   theme: 'github',
 })
 

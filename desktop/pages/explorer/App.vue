@@ -237,7 +237,7 @@
 
           <div class="flex-1 min-w-0">
             <div v-if="explorer.clipboard.hasClipboard.value" class="flex items-center justify-end gap-1 *:app-region-no-drag">
-              <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'info'">
+              <el-tag size="small" :type="explorer.clipboard.isCutOperation.value ? 'warning' : 'primary'">
                 {{ explorer.clipboard.isCutOperation.value
                   ? $t('device.control.file.manager.cut')
                   : $t('device.control.file.manager.copy') }}

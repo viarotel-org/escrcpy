@@ -32,6 +32,8 @@ export function useWindowStateSync(options = {}) {
   if (options.onLanguageChange) {
     watch(() => language.value, (val) => {
       options.onLanguageChange?.(val)
+    }, {
+      immediate: true,
     })
   }
 

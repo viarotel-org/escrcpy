@@ -125,7 +125,7 @@ const vitePressI18nConfig = {
   searchProvider: 'local',
   description: {
     en: 'Control your Android device with graphical scrcpy.',
-    zhHans: 'Graphical frontend for scrcpy to control your Android devices.',
+    zhHans: '使用图形化的 scrcpy 显示和控制你的安卓设备',
   },
   themeConfig: {
     en: {
@@ -141,13 +141,13 @@ const vitePressI18nConfig = {
     },
     zhHans: {
       nav: [
-        { text: 'Guide', link: '/zhHans/guide' },
-        { text: 'Reference', link: '/zhHans/reference' },
-        { text: 'Help', link: '/zhHans/help' },
-        { text: 'Changelog', link: '/zhHans/changelog' },
-        { text: 'Donate', link: '/zhHans/donate' },
-        { text: 'Contact', link: '/zhHans/contact' },
-        { text: 'Blog', link: 'https://blog.viarotel.eu.org/' },
+        { text: '指南', link: '/zhHans/guide' },
+        { text: '参考', link: '/zhHans/reference' },
+        { text: '帮助', link: '/zhHans/help' },
+        { text: '更新日志', link: '/zhHans/changelog' },
+        { text: '捐赠', link: '/zhHans/donate' },
+        { text: '联系', link: '/zhHans/contact' },
+        { text: '博客', link: 'https://blog.viarotel.eu.org/' },
       ],
     },
   },

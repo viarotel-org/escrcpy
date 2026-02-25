@@ -1,17 +1,21 @@
 <template>
-  <el-dropdown :disabled="floating">
+  <el-dropdown :disabled="floating" @command="handleCommand">
     <div
-      class=""
       :title="device.$gnirehtetLoadingText"
-      @mouseenter="onMouseenter"
+      @mouseenter="onTrigger('mouseenter')"
     >
-      <slot :loading="device.$gnirehtetLoading" :trigger="handleStart" />
+      <slot :loading="device.$gnirehtetLoading" :trigger="onTrigger" />
     </div>
 
-    <template v-if="device.$gnirehtetLoading" #dropdown>
+    <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item @click="handleStop">
-          {{ $t('device.control.gnirehtet.stop') }}
+        <el-dropdown-item
+          v-for="item of options"
+          :key="item.value"
+          :disabled="item.disabled"
+          :command="item.value"
+        >
+          {{ $t(item.label) }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -42,6 +46,22 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    options() {
+      const value = [
+        {
+          label: this.$t('device.control.gnirehtet.start'),
+          value: 'handleStart',
+          disabled: this.device.$gnirehtetLoading,
+        },
+        {
+          label: this.$t('device.control.gnirehtet.stop'),
+          value: 'handleStop',
+        },
+      ]
+      return value
+    },
+  },
   created() {
     if (!Object.hasOwnProperty.call(this.device, '$gnirehtetLoading')) {
       Object.assign(this.device, {
@@ -51,12 +71,15 @@ export default {
     }
   },
   methods: {
-    onMouseenter() {
+    handleCommand(val) {
+      this[val]()
+    },
+    onTrigger(type) {
       if (!this.floating) {
         return false
       }
 
-      if (!this.device.$gnirehtetLoading) {
+      if (!this.device.$gnirehtetLoadingText && ['mouseenter'].includes(type)) {
         return false
       }
 
@@ -64,20 +87,14 @@ export default {
 
       window.$preload.ipcRenderer.once(
         channel,
-        (event, data) => {
-          this.handleStop()
+        (event, method) => {
+          this[method]()
         },
       )
 
-      const options = [
-        {
-          label: window.t('device.control.gnirehtet.stop'),
-        },
-      ]
-
       window.$preload.ipcRenderer.invoke('open-system-menu', {
         channel,
-        options,
+        options: this.options,
       })
     },
     preferenceData(...args) {

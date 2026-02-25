@@ -181,6 +181,7 @@ export default {
       const template = options.map((item) => {
         return {
           label: item.label,
+          enabled: item.enabled ?? !item.disabled,
           click() {
             if (isWindowDestroyed(win)) {
               return false

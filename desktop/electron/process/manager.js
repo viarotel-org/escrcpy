@@ -14,15 +14,18 @@ export class ProcessManager {
     this.processList.push(process)
   }
 
-  kill(process) {
+  async kill(process) {
     if (!process) {
-      this.processList.forEach(item => fkill(item.pid, { tree: true }))
+      for (const item of this.processList) {
+        await fkill(item.pid, { force: true, tree: true, silent: true })
+      }
+
       this.processList = []
       return this
     }
 
     const pid = process?.pid || process
-    fkill(pid, { tree: true })
+    await fkill(pid, { force: true, tree: true, silent: true })
     this.processList = this.processList.filter(item => item.pid !== pid)
     return this
   }

@@ -153,8 +153,8 @@ async function startApp(serial, args = {}) {
   })
 }
 
-function killProcesses() {
-  processManager.kill()
+async function killProcesses() {
+  return processManager.kill()
 }
 
 export default {

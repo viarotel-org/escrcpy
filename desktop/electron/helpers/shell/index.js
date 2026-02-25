@@ -107,13 +107,7 @@ export function sheller(command, options = {}) {
     if (!child.pid) {
       return false
     }
-
-    try {
-      await fkill(child.pid, { force: true, tree: true })
-    }
-    catch (err) {
-      console.warn(`Failed to kill process ${child.pid}:`, err)
-    }
+    await fkill(child.pid, { force: true, tree: true, silent: true })
   }
 
   const assignedChild = Object.assign(child, {

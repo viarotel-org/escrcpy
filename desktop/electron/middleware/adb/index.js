@@ -357,8 +357,8 @@ function init() {
   client = Adb.createClient()
 }
 
-function killProcesses() {
-  processManager.kill()
+async function killProcesses() {
+  return processManager.kill()
 }
 
 export async function isInstalledAdbKeyboard(deviceId) {

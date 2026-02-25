@@ -6,12 +6,12 @@ import adb from '$electron/middleware/adb/index.js'
 import { ProcessManager } from '$electron/process/manager.js'
 import { sheller } from '$electron/helpers/shell/index.js'
 
-const appDebug = electronStore.get('common.debug') || false
-
 const processManager = new ProcessManager()
 
 electronAPI.ipcRenderer.on('quit-before', async () => {
-  processManager.kill()
+  stop().catch((error) => {
+    console.warn(error.message || 'Stop service failure')
+  })
 })
 
 async function shell(command, options = {}) {
@@ -39,9 +39,10 @@ function start(deviceId, options = {}) {
   return shell(`start "${deviceId}"${append}`)
 }
 
-function stop(deviceId) {
-  processManager.kill()
-  return shell(`stop "${deviceId}"`)
+async function stop(deviceId) {
+  await processManager.kill()
+  const command = deviceId ? ` "${deviceId}"` : ''
+  return shell(`stop${command}`)
 }
 
 function tunnel(deviceId) {
@@ -59,25 +60,25 @@ async function isInstalled(deviceId) {
   }
 }
 
-async function relay(args) {
+function relay() {
   return new Promise((resolve, reject) => {
     shell('relay', {
-      ...args,
-      debug: appDebug,
-      stdout: (_, process) => {
-        resolve(process)
+      stdout: (data) => {
+        if (data.includes('Relay server started')) {
+          resolve(data)
+        }
       },
       stderr: (error) => {
         reject(error)
       },
-    }).catch((error) => {
-      reject(error)
     })
   })
 }
 
 async function run(deviceId) {
-  processManager.kill()
+  await stop(deviceId).catch((error) => {
+    console.warn(error.message || 'Stop service failure')
+  })
 
   await relay().catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Relay fail')
@@ -104,8 +105,8 @@ async function run(deviceId) {
   })
 }
 
-function killProcesses() {
-  processManager.kill()
+async function killProcesses() {
+  await processManager.kill()
 }
 
 export default {

@@ -124,10 +124,7 @@ export default {
         })
       }
       catch (error) {
-        adaptiveMessage(error.message || 'Stop service failure', {
-          system: this.floating,
-          type: 'warning',
-        })
+        console.warn(error.message || 'Stop service failure')
       }
 
       this.device.$gnirehtetLoading = false

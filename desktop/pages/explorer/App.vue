@@ -179,7 +179,7 @@
                   type="success"
                   icon="View"
                   circle
-                  :button-class="['file'].includes(row.type) ? '!visible' : '!invisible'"
+                  :class="['file'].includes(row.type) ? '!visible' : '!invisible'"
                   @click.stop="handlePreview(row)"
                 />
 

@@ -2,9 +2,9 @@
   <el-dropdown :disabled="floating" @command="handleCommand">
     <div
       :title="device.$gnirehtetLoadingText"
-      @mouseenter="onTrigger('mouseenter')"
+      @click="onTrigger"
     >
-      <slot :loading="device.$gnirehtetLoading" :trigger="onTrigger" />
+      <slot :loading="device.$gnirehtetLoading" />
     </div>
 
     <template #dropdown>
@@ -71,15 +71,11 @@ export default {
     }
   },
   methods: {
-    handleCommand(val) {
-      this[val]()
+    handleCommand(method) {
+      this[method]?.()
     },
-    onTrigger(type) {
+    onTrigger() {
       if (!this.floating) {
-        return false
-      }
-
-      if (!this.device.$gnirehtetLoadingText && ['mouseenter'].includes(type)) {
         return false
       }
 
@@ -88,7 +84,7 @@ export default {
       window.$preload.ipcRenderer.once(
         channel,
         (event, method) => {
-          this[method]()
+          this.handleCommand(method)
         },
       )
 

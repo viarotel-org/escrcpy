@@ -71,6 +71,7 @@ export function setupEnvPath() {
     mac: [
       extraResolve(`mac-${process.arch}`),
       extraResolve(`mac-${process.arch}/scrcpy`),
+      extraResolve(`mac-${process.arch}/gnirehtet`),
     ],
     linux: [
       extraResolve(`linux-${process.arch}`),

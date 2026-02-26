@@ -9,7 +9,6 @@
 import { app } from 'electron'
 import fixPath from 'fix-path'
 import { setupPortableMode } from './portable.js'
-import { setupEnvPath } from './helper.js'
 
 setupPortableMode()
 
@@ -24,5 +23,3 @@ process.env.DESKTOP_PATH = app.getPath('desktop')
 process.env.CWD = process.cwd()
 
 process.env.APP_LOCALE = app.getLocale()
-
-setupEnvPath()

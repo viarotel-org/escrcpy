@@ -1,13 +1,14 @@
-// process depends on the store, so the store must be imported first
-import './helpers/store/index.js'
-
 // Process configuration must be imported first
 import './process/index.js'
+
+import './helpers/store/index.js'
+
+// Post configuration must be imported after store configuration
+import './process/index.post.js'
 
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// Initialize debugger
 import './helpers/debugger/index.js'
 import './helpers/debugger/main.js'
 

@@ -1,4 +1,4 @@
-import fkill from 'fkill'
+import treeKill from '@magda/tree-kill'
 
 /**
  * Process Manager
@@ -17,7 +17,7 @@ export class ProcessManager {
   async kill(process) {
     if (!process) {
       for (const item of this.processList) {
-        await fkill(item.pid, { force: true, tree: true, silent: true })
+        await treeKill(item.pid)
       }
 
       this.processList = []
@@ -25,7 +25,7 @@ export class ProcessManager {
     }
 
     const pid = process?.pid || process
-    await fkill(pid, { force: true, tree: true, silent: true })
+    await treeKill(pid)
     this.processList = this.processList.filter(item => item.pid !== pid)
     return this
   }

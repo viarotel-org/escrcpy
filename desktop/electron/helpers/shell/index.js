@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process'
 import quote from 'shell-quote'
-import fkill from 'fkill'
+import treeKill from '@magda/tree-kill'
 import { setupEnvPath } from '$electron/process/helper.js'
 
 /**
@@ -107,7 +107,7 @@ export function sheller(command, options = {}) {
     if (!child.pid) {
       return false
     }
-    await fkill(child.pid, { force: true, tree: true, silent: true })
+    await treeKill(child.pid)
   }
 
   const assignedChild = Object.assign(child, {

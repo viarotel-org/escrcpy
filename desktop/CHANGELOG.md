@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.2](https://github.com/viarotel-org/escrcpy/compare/v2.4.1...v2.4.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* Fix the problem of abnormal disconnection of adb after changing some configurations ([ffbfc40](https://github.com/viarotel-org/escrcpy/commit/ffbfc40c0d1938cb5d2c71e7f6500dc5b47e5b76))
+
 ## [2.4.1](https://github.com/viarotel-org/escrcpy/compare/v2.4.0...v2.4.1) (2026-02-26)
 
 

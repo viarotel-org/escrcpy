@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.1](https://github.com/viarotel-org/escrcpy/compare/v2.4.0...v2.4.1) (2026-02-26)
+
+
+### Bug Fixes
+
+* Fix the language detection issue of portable software ([9985067](https://github.com/viarotel-org/escrcpy/commit/9985067b7688becdaf9311734d2ea2ab6519afd8))
+
+
+### Code Refactoring
+
+* Reorganize initialization order to load store before process configuration ([9283a45](https://github.com/viarotel-org/escrcpy/commit/9283a4568a6d9065a0ebc3ca715f87a6b8c9483f))
+
 ## [2.4.0](https://github.com/viarotel-org/escrcpy/compare/v2.3.1...v2.4.0) (2026-02-26)
 
 

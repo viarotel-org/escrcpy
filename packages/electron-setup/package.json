@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/electron-setup",
   "type": "module",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "private": true,
   "description": "A modular setup and runtime framework for Electron with plugins, window management, and contextual dependency injection.",
   "author": "viarotel",

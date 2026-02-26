@@ -71,6 +71,7 @@
     "lodash-es": "4.17.21",
     "minimist": "1.2.8",
     "nanoid": "5.0.7",
+    "os-locale": "8.0.0",
     "p-limit": "7.2.0",
     "pinia": "2.1.7",
     "pinia-plugin-persistedstate": "3.2.1",

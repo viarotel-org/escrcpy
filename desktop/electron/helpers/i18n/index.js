@@ -1,10 +1,11 @@
 import i18n from 'i18next'
 import Backend from 'i18next-fs-backend'
 import path from 'node:path'
+import osLocale from 'os-locale'
 import electronStore from '$electron/helpers/store/index.js'
 import { localesDir } from '$electron/configs/extra/index.js'
 
-const lng = electronStore.get('common.language') ?? process.env.APP_LOCALE ?? 'en-US'
+const lng = electronStore.get('common.language') ?? osLocale() ?? 'en-US'
 const loadPath = path.join(localesDir, '{lng}.json')
 
 i18n

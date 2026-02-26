@@ -12,6 +12,7 @@ i18n
   .init({
     lng,
     fallbackLng: 'en-US',
+    initAsync: false,
     backend: {
       loadPath,
     },

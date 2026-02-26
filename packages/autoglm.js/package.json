@@ -1,7 +1,7 @@
 {
   "name": "autoglm.js",
   "type": "module",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "private": false,
   "packageManager": "pnpm@10.25.0",
   "description": "AutoGLM.js is a JavaScript library for Open-AutoGLM",

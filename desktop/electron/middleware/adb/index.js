@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { adbKeyboardApkPath } from '$electron/configs/index.js'
+import { adbKeyboardApkPath, getDefaultAdbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import dayjs from 'dayjs'
@@ -24,7 +24,9 @@ electronAPI.ipcRenderer.on('quit-before', () => {
   processManager.kill()
 })
 
-electronStore.onDidChange('common.adbPath', async (value, oldValue) => {
+electronStore.onDidChange('common.adbPath', async (...args) => {
+  const [value, oldValue = getDefaultAdbPath()] = args
+
   if (value === oldValue) {
     return false
   }

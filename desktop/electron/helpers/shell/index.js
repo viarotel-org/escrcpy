@@ -107,7 +107,7 @@ export function sheller(command, options = {}) {
     if (!child.pid) {
       return false
     }
-    await treeKill(child.pid)
+    await treeKill(child.pid, 'SIGTERM')
   }
 
   const assignedChild = Object.assign(child, {

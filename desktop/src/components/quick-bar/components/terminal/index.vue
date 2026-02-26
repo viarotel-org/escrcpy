@@ -11,7 +11,7 @@ defineOptions({
 
 function handleClick() {
   window.$preload.win.open('pages/terminal', {
-    title: window.t('device.terminal.name'),
+    title: 'device.terminal.name',
     type: 'local',
     instanceId: `local_terminal_${nanoid(8)}`,
   })

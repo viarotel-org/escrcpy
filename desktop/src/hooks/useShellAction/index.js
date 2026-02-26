@@ -39,7 +39,7 @@ export function useShellAction() {
     const command = `sh ${filePath}`
 
     window.$preload.win.open('pages/terminal', {
-      title: window.t('terminal.script.name'),
+      title: 'terminal.script.name',
       type: 'device',
       device: toRaw(device),
       instanceId: device.id,

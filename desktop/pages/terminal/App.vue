@@ -49,7 +49,15 @@ const currentDeviceLabel = computed(() => {
   return device?.id ? deviceStore.getLabel(device, 'name') : ''
 })
 
-const terminalTitle = ref(window.$preload.payload.title || 'Escrcpy Terminal')
+const terminalTitle = computed(() => {
+  const title = window.$preload.payload.title
+
+  if (!title) {
+    return 'Escrcpy Terminal'
+  }
+
+  return window.t(title)
+})
 
 const isDark = computed({
   get: () => themeStore.isDark,

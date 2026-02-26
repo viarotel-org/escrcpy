@@ -51,7 +51,7 @@ function handleCommand(val) {
   switch (val) {
     case 'command':
       window.$preload.win.open('pages/terminal', {
-        title: window.t('terminal.command.name'),
+        title: 'terminal.command.name',
         type: 'device',
         device,
         instanceId: device.id,

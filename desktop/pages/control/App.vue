@@ -97,10 +97,6 @@ window.$preload.ipcRenderer.on('window-focus', (event, value) => {
 </script>
 
 <style lang="postcss">
-.app-region-drag {
-  -webkit-app-region: drag;
-}
-
 html,
 body {
   background-color: transparent;

@@ -36,8 +36,8 @@ export function sheller(command, options = {}) {
     ...restOptions
   } = options
 
-  let cmd
-  let cmdArgs
+  let cmd = ''
+  let cmdArgs = []
 
   if (shell) {
     cmd = command

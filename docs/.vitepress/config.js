@@ -51,8 +51,9 @@ const vitePressConfig = {
     [
       'script',
       {
-        src: 'https://hm.baidu.com/hm.js?4984552ac1c9b6041c7f9edffff4089f',
+        src: 'https://cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js',
         async: '',
+        defer: true,
       },
     ],
   ],
@@ -100,9 +101,14 @@ const vitePressConfig = {
     ],
     footer: {
       message: `
-        Released under the MIT License. 
+        <span>Views <span id="busuanzi_site_pv">0</span>, </span>
+        <span>Visitors <span id="busuanzi_site_uv">0</span></span>
+        <br />
+        <span>TodayViews <span id="busuanzi_today_pv">0</span>, </span>
+        <span>TodayVisitors <span id="busuanzi_today_uv">0</span></span>
+        <br />
       `,
-      copyright: `Copyright © 2025-${new Date().getFullYear()} viarotel`,
+      copyright: `Copyright © 2023-${new Date().getFullYear()} Powered by viarotel`,
     },
   },
 
@@ -122,7 +128,12 @@ const vitePressConfig = {
 const vitePressI18nConfig = {
   locales,
   rootLocale: defaultLocale,
-  searchProvider: 'local',
+  searchProvider: 'algolia',
+  searchOptions: {
+    appId: 'XY26T0U1UR',
+    apiKey: 'd92446a9ce99be7089c291a2dae47778',
+    indexName: 'viarotelio',
+  },
   description: {
     en: 'Control your Android device with graphical scrcpy.',
     zhHans: '使用图形化的 scrcpy 显示和控制你的安卓设备',

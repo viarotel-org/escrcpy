@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/viarotel-org/escrcpy/compare/v2.5.0...v2.5.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* Fixed the issue of missing title bar information when launching through the app ([e6bcd1e](https://github.com/viarotel-org/escrcpy/commit/e6bcd1e33db18d4bac0e0f3a996503f0c0cfe8a6))
+
 ## [2.5.0](https://github.com/viarotel-org/escrcpy/compare/v2.4.2...v2.5.0) (2026-02-27)
 
 

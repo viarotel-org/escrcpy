@@ -82,6 +82,7 @@
 </template>
 
 <script setup>
+import pLimit from 'p-limit'
 import { sleep } from '$/utils'
 import { parseDeviceId } from '$/utils/device'
 import QrAction from './qr-action/index.vue'
@@ -190,21 +191,37 @@ function handleRemove(info) {
 }
 
 async function handleBatch() {
-  if (loading.value)
+  if (loading.value) {
     return
+  }
 
   const list = wirelessList.value
-  if (!list.length)
+
+  if (!list.length) {
     return
+  }
 
   loading.value = true
 
-  const promises = list.map(({ id }) =>
-    window.$preload.adb.connect(id).catch(() => {}),
-  )
+  const concurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
+  const limit = pLimit(concurrencyLimit)
 
-  await Promise.allSettled(promises)
-  loading.value = false
+  try {
+    const tasks = list.map(({ id }) =>
+      limit(() =>
+        window.$preload.adb
+          .connect(id)
+          .catch((e) => {
+            // console.warn(`Failed to connect ${id}: ${e.message}`)
+          }),
+      ),
+    )
+
+    await Promise.allSettled(tasks)
+  }
+  finally {
+    loading.value = false
+  }
 }
 
 function handleUnConnect() {

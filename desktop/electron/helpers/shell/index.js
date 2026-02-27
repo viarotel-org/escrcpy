@@ -36,9 +36,18 @@ export function sheller(command, options = {}) {
     ...restOptions
   } = options
 
-  const args = Array.isArray(command) ? command : quote.parse(command)
+  let cmd
+  let cmdArgs
 
-  const [cmd, ...cmdArgs] = args
+  if (shell) {
+    cmd = command
+    cmdArgs = []
+  }
+  else {
+    const parsed = Array.isArray(command) ? command : quote.parse(command)
+    cmd = parsed[0]
+    cmdArgs = parsed.slice(1)
+  }
 
   // Ensure PATH is properly set up
   setupEnvPath()

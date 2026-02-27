@@ -12,7 +12,7 @@
 📱 使用图形化的 Scrcpy 显示和控制您的 Android 设备[English Document](https://github.com/viarotel-org/escrcpy/blob/main/README.md)
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/zh-CN/overview.png?version=2.1.7" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/zh-CN/overview.png?version=2.5.1" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## 特点

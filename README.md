@@ -13,7 +13,7 @@
 📱 Display and control your Android device graphically with scrcpy. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/en-US/overview.png?version=2.1.7" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/en-US/overview.png?version=2.5.1" alt="viarotel-escrcpy" width="100%">
 </div>
 
 ## Features

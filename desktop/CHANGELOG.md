@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://github.com/viarotel-org/escrcpy/compare/v2.4.2...v2.5.0) (2026-02-27)
+
+
+### Features
+
+* Add concurrency limit for batch wireless device connections ([f048956](https://github.com/viarotel-org/escrcpy/commit/f048956ac9b8030c5cba6a7da6afd635882223a4))
+
+
+### Bug Fixes
+
+* Fix shell space command parsing problem ([e1ab66c](https://github.com/viarotel-org/escrcpy/commit/e1ab66c4310f4e34b3eb7365927230db5e4b8090))
+* Initialize shell command variables to prevent undefined values ([e776c11](https://github.com/viarotel-org/escrcpy/commit/e776c1136b9758642b83c9d8a848fa2cc04d3b55))
+
 ## [2.4.2](https://github.com/viarotel-org/escrcpy/compare/v2.4.1...v2.4.2) (2026-02-26)
 
 

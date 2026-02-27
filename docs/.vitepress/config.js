@@ -51,8 +51,9 @@ const vitePressConfig = {
     [
       'script',
       {
-        src: 'https://hm.baidu.com/hm.js?4984552ac1c9b6041c7f9edffff4089f',
+        src: 'https://cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js',
         async: '',
+        defer: true,
       },
     ],
   ],
@@ -100,9 +101,16 @@ const vitePressConfig = {
     ],
     footer: {
       message: `
-        Released under the MIT License. 
+        <span>Views <span id="busuanzi_site_pv">0</span>, </span>
+        <span>Visitors <span id="busuanzi_site_uv">0</span></span>
+        <br />
+        <span>TodayViews <span id="busuanzi_today_pv">0</span>, </span>
+        <span>TodayVisitors <span id="busuanzi_today_uv">0</span>, </span>
+        <span>PageViews <span id="busuanzi_page_pv">0</span>, </span>
+        <span>PageVisitors <span id="busuanzi_page_uv">0</span></span>
+        <br />
       `,
-      copyright: `Copyright © 2025-${new Date().getFullYear()} viarotel`,
+      copyright: `Copyright © 2023-${new Date().getFullYear()} Powered by viarotel`,
     },
   },
 

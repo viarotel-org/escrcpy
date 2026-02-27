@@ -21,6 +21,8 @@ export function useStartApp() {
 
     await window.$preload.adb.waitForDevice(deviceId)
 
+    await deviceStore.getList()
+
     const title = `${appName}-${deviceStore.getLabel(deviceId, 'synergy')}`
 
     const commands = preferenceStore.scrcpyParameter(deviceId, {

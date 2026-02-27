@@ -122,7 +122,12 @@ const vitePressConfig = {
 const vitePressI18nConfig = {
   locales,
   rootLocale: defaultLocale,
-  searchProvider: 'local',
+  searchProvider: 'algolia',
+  searchOptions: {
+    appId: 'XY26T0U1UR',
+    apiKey: 'd92446a9ce99be7089c291a2dae47778',
+    indexName: 'viarotelio',
+  },
   description: {
     en: 'Control your Android device with graphical scrcpy.',
     zhHans: '使用图形化的 scrcpy 显示和控制你的安卓设备',

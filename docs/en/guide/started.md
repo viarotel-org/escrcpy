@@ -9,8 +9,8 @@ title: Quick Start
 ### Manual installation via released packages
 
 - [Github](https://github.com/viarotel-org/escrcpy/releases)
-- [Gitee](https://gitee.com/viarotel-org/escrcpy/releases)
-- [Gitcode](https://gitcode.com/viarotel-org/escrcpy/releases)
+- [Gitee(China mirror)](https://gitee.com/viarotel-org/escrcpy/releases)
+- [Gitcode(China mirror)](https://gitcode.com/viarotel-org/escrcpy/releases)
 
 ### macOS can be installed via Homebrew
 

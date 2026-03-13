@@ -9,8 +9,8 @@ title: 快速上手
 ### 手动安装（通过发行包）
 
 - [Github发布页](https://github.com/viarotel-org/escrcpy/releases)
-- [Gitee发布页](https://gitee.com/viarotel-org/escrcpy/releases)
-- [Gitcode发布页](https://gitcode.com/viarotel-org/escrcpy/releases)
+- [Gitee发布页（国内镜像源）](https://gitee.com/viarotel-org/escrcpy/releases)
+- [Gitcode发布页（国内镜像源）](https://gitcode.com/viarotel-org/escrcpy/releases)
 
 ### macOS用户可通过Homebrew安装
 

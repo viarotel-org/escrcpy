@@ -42,4 +42,5 @@ Priority from high to low:
 - Enhanced device file manager ✅
 - Integrate AutoGLM to control your Android device using natural language without scripting ✅
 - Refactor main process architecture to improve performance and stability ✅
-- Support script automation through visual orchestration tools 🚧
+- Support script automation through visual orchestration tools ✅
+- Device group control feature 🚧

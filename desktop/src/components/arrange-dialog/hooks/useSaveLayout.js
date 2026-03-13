@@ -7,7 +7,7 @@ import { usePreferenceStore } from '$/store/preference/index.js'
 export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets) {
   const preferenceStore = usePreferenceStore()
 
-  const saveLayout = () => {
+  function saveLayout() {
     // First, handle removed widgets - clean up their configurations
     const scrcpy = window.$preload.store.get('scrcpy') || {}
 
@@ -28,10 +28,10 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
     // Then, save current widgets' configurations
     arrangedWidgets.value.forEach((widget) => {
       const rectConfig = {
-        '--window-width': Math.round(widget.realWidth).toString(),
-        '--window-height': Math.round(widget.realHeight).toString(),
-        '--window-x': Math.round(widget.realX).toString(),
-        '--window-y': Math.round(widget.realY).toString(),
+        '--window-width': Math.round(widget.realWidth),
+        '--window-height': Math.round(widget.realHeight),
+        '--window-x': Math.round(widget.realX),
+        '--window-y': Math.round(widget.realY),
       }
 
       const scope = widget.type === 'global' ? 'global' : widget.deviceId

@@ -57,6 +57,10 @@ const options = computed(() => {
   return value
 })
 
+onMounted(() => {
+  deviceStore.getList()
+})
+
 watch(
   () => deviceStore.list.length,
   () => {

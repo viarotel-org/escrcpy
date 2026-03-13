@@ -54,6 +54,7 @@
 }
 
 .el-dialog--beautify {
+  @apply !px-[8px] !pb-[8px] !border-none !bg-gray-100 !dark:bg-gray-900;
   .el-dialog__title {
     @apply relative;
 
@@ -71,6 +72,10 @@
 .el-dialog.is-fullscreen {
   .el-dialog__header {
     @apply !-mt-2;
+  }
+
+  .el-dialog__close {
+    -webkit-app-region: no-drag !important;
   }
 }
 
@@ -144,17 +149,18 @@
 }
 
 .el-table.el-table--beautify {
-  --el-table-header-bg-color: theme('colors.white') !important;
-  --el-table-tr-bg-color: theme('colors.white') !important;
+  --el-table-header-bg-color: var(--el-bg-color-overlay) !important;
+  --el-table-tr-bg-color: var(--el-bg-color-overlay) !important;
 
-  @apply !scale-[1.004] !bg-[--el-table-tr-bg-color] !rounded-xl !overflow-hidden;
-
-  .dark & {
-    --el-table-header-bg-color: theme('colors.gray.900') !important;
-    --el-table-tr-bg-color: theme('colors.gray.900') !important;
-  }
+  @apply !scale-[1.004] bg-[var(--el-bg-color-overlay)] !rounded-xl !overflow-hidden;
 
   .el-table__inner-wrapper::before {
     @apply !bg-transparent;
+  }
+}
+
+.el-input--center.el-input {
+  & .el-input__inner {
+    @apply !text-center;
   }
 }

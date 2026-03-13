@@ -1,15 +1,42 @@
+import { isPlatform } from '$/utils/index.js'
+
 export function useScaleScreen(options = {}) {
   const display = ref(null)
   const zoomScale = ref(0)
   const aspectScale = ref(0)
-
-  const screenWidth = computed(() => display.value?.bounds?.width || 0)
-  const screenHeight = computed(() => display.value?.bounds?.height || 0)
-
-  const containerRef = computed(() => options.containerRef?.value)
   const containerWidth = ref(0)
   const containerHeight = ref(0)
   const resizeObserver = ref(null)
+
+  const containerRef = computed(() => options.containerRef?.value)
+
+  const screenWidth = computed(() => {
+    const { workArea, scaleFactor } = display.value || {}
+
+    if (!workArea?.width || !scaleFactor) {
+      return 0
+    }
+
+    if (isPlatform('macos')) {
+      return workArea.width
+    }
+
+    return workArea.width * scaleFactor
+  })
+
+  const screenHeight = computed(() => {
+    const { workArea, scaleFactor } = display.value || {}
+
+    if (!workArea?.height || !scaleFactor) {
+      return 0
+    }
+
+    if (isPlatform('macos')) {
+      return workArea.height
+    }
+
+    return workArea.height * scaleFactor
+  })
 
   getPrimaryDisplay()
 
@@ -73,7 +100,7 @@ export function useScaleScreen(options = {}) {
       value = val * zoomScale.value
     }
 
-    return value
+    return Number(value.toFixed(2))
   }
 
   function scaleConverter(val, real) {

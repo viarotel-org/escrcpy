@@ -93,7 +93,7 @@
 
         <el-table-column
           v-slot="{ row }"
-          :label="$t('device.control.name')"
+          :label="$t('common.actions')"
           align="left"
           min-width="150"
         >

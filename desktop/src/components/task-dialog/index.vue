@@ -9,7 +9,16 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <div class="h-full overflow-auto pr-2">
+    <div class="h-full overflow-auto pr-2 -mr-2">
+      <el-alert
+        :title="$t('device.task.tips')"
+        type="primary"
+        show-icon
+        class="!mb-4"
+        :closable="isShowTaskTips"
+        @close="isShowTaskTips = false"
+      />
+
       <el-form
         :key="model.taskType"
         ref="formRef"
@@ -60,26 +69,6 @@
                     {
                       name: $t('device.control.install.placeholder'),
                       extensions: ['apk'],
-                    },
-                  ],
-                }"
-              />
-            </el-form-item>
-
-            <el-form-item
-              v-if="['shell'].includes(model.taskType)"
-              :label="$t('device.task.extra.shell')"
-              prop="extra"
-            >
-              <InputPath
-                v-model="model.extra"
-                :placeholder="$t('terminal.script.select')"
-                :data="{
-                  properties: ['openFile'],
-                  filters: [
-                    {
-                      name: $t('terminal.script.select'),
-                      extensions: ['sh'],
                     },
                   ],
                 }"
@@ -205,33 +194,42 @@
               </div>
             </div>
           </el-card>
-
-          <el-alert
-            :title="$t('device.task.tips')"
-            type="warning"
-            :closable="false"
-            show-icon
-            class="!mb-0"
-          />
         </div>
       </el-form>
     </div>
 
     <template #footer>
-      <div class="dialog-footer flex items-center justify-end gap-3">
-        <el-button @click="close">
-          {{ $t('common.cancel') }}
-        </el-button>
-        <el-button
-          type="primary"
-          :loading="dialog.loading"
-          @click="submit"
-        >
-          <el-icon class="mr-1">
-            <Check />
-          </el-icon>
-          {{ $t('common.confirm') }}
-        </el-button>
+      <div class="flex items-center">
+        <div class="flex-none">
+          <el-button
+            v-if="!adbKeyboard.isInstalled"
+            type="warning"
+            plain
+            round
+            icon="Download"
+            size="small"
+            :title="$t('copilot.check.adb.notInstalled')"
+            @click="adbKeyboard.install"
+          >
+            AdbKeyboard
+          </el-button>
+        </div>
+
+        <div class="flex-none ml-auto">
+          <el-button @click="close">
+            {{ $t('common.cancel') }}
+          </el-button>
+          <el-button
+            type="primary"
+            :loading="dialog.loading"
+            @click="submit"
+          >
+            <el-icon class="mr-1">
+              <Check />
+            </el-icon>
+            {{ $t('common.confirm') }}
+          </el-button>
+        </div>
       </div>
     </template>
   </el-dialog>
@@ -253,6 +251,7 @@ import { sleep } from '$/utils'
 
 const taskStore = useTaskStore()
 const deviceStore = useDeviceStore()
+const isShowTaskTips = useStorage('task.dialog.isShowTaskTips', true)
 
 const dialog = useDialog()
 
@@ -264,6 +263,8 @@ const devices = ref(null)
 const defaultTime = ref(null)
 
 const cronValid = ref(true)
+
+const adbKeyboard = useAdbKeyboard({ devices })
 
 const taskModel = computed(() => taskStore.model)
 
@@ -339,7 +340,7 @@ const rules = computed(() => {
     ]
   }
 
-  if (['install', 'shell', 'copilot'].includes(model.value.taskType)) {
+  if (['install', 'copilot'].includes(model.value.taskType)) {
     baseRules.extra = [
       { required: true, message: window.t('common.required'), trigger: 'blur' },
     ]
@@ -456,7 +457,7 @@ function disabledDate(time) {
   return time.getTime() < Date.now() - 24 * 60 * 60 * 1000
 }
 
-async function onTaskChange() {
+async function onTaskChange(val) {
   model.value.extra = void 0
 }
 

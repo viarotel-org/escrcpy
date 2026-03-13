@@ -5,10 +5,6 @@ export default {
   apply(mainApp) {
     createWindowManager('pages/explorer', {
       singleton: false,
-      browserWindow: {
-        // frame: true,
-        // titleBarStyle: 'default',
-      },
     })
   },
 }

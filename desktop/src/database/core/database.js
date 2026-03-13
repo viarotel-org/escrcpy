@@ -15,7 +15,7 @@ import Dexie from 'dexie'
 const DB_NAME = 'escrcpy_local_db'
 
 // Current database version
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 /**
  * Module schema configuration

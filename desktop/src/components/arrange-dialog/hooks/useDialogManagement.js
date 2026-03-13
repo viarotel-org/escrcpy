@@ -3,16 +3,22 @@
  * Handles dialog opening, closing, and initialization
  */
 export function useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout) {
-  function close() {
-    dialog.close()
-  }
-
   async function open(options) {
     dialog.open(options)
+
     await nextTick()
 
-    loadDevices()
-    loadLayout()
+    await loadDevices()
+  }
+
+  async function onOpened() {
+    await nextTick()
+
+    await loadLayout()
+  }
+
+  function close() {
+    dialog.close()
   }
 
   function onClosed() {
@@ -22,6 +28,7 @@ export function useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLa
 
   return {
     open,
+    onOpened,
     close,
     onClosed,
   }

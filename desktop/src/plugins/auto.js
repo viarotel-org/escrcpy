@@ -16,7 +16,7 @@ export default () => {
       },
       dirs: [
         'src/hooks/*/index.js',
-        'src/store/*/index.js',
+        'src/store/*/*.js',
       ],
     }),
     useAutoComponents({

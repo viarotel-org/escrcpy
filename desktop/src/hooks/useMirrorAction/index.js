@@ -25,15 +25,12 @@ export function useMirrorAction() {
         ...options,
       })
 
-      await sleep(1 * 1000)
+      mirroring?.catch?.((error) => {
+        console.error('useMirrorAction.mirror.args', args)
+        console.error('useMirrorAction.mirror.error', error)
+      })
 
-      try {
-        await mirroring
-      }
-      catch (error) {
-        console.error('mirror.args', args)
-        console.error('mirror.error', error)
-      }
+      await sleep(500)
     }
 
     loading.value = false

@@ -14,7 +14,7 @@
 <script setup>
 import { sleep } from '$/utils'
 import { openFloatControl } from '$/utils/device/index.js'
-import DeployDialog from './components/deploy-dialog/index.vue'
+import DeployDialog from '$/components/preference-form/dialog.vue'
 
 defineOptions({
   inheritAttrs: false,

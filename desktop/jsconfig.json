@@ -10,7 +10,7 @@
       "$control/*": ["pages/control/*"],
       "$explorer/*": ["pages/explorer/*"],
       "$copilot/*": ["pages/copilot/*"],
-      "$terminal/*": ["pages/terminal/*"]
+      "$terminal/*": ["pages/terminal/*"],
     }
   },
   "vueCompilerOptions": {

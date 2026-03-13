@@ -8,7 +8,7 @@
     destroy-on-close
     @closed="onClosed"
   >
-    <div class="flex items-center justify-center absolute top-4 left-center">
+    <div class="flex items-center justify-center absolute top-4 left-center app-region-no-drag">
       <el-radio-group
         v-model="taskStatus"
         @change="onTaskStatusChange"
@@ -19,7 +19,7 @@
     </div>
 
     <div v-loading="dialog.loading" class="h-full">
-      <el-table :data="tableData" stripe height="100%">
+      <el-table :data="tableData" class="el-table--beautify" stripe height="100%">
         <template #empty>
           <el-empty></el-empty>
         </template>
@@ -31,28 +31,24 @@
           align="center"
         >
           <div class="h-full flex items-center justify-center">
-            <el-dropdown :key="row.id" trigger="hover" :disabled="!row.extra">
-              <span
-                :class="
-                  row.extra
-                    ? 'text-primary hover:underline'
-                    : 'text-[var(--el-table-text-color)]'
-                "
-              >
-                {{ $t(getDictLabel(taskModel, row.taskType)) }}
-              </span>
-
-              <template v-if="row.extra" #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item
-                    v-for="(item, index) of row.extra.split(',')"
-                    :key="index"
-                  >
-                    {{ item }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
+            <el-popover v-if="row.extra" :key="row.id" width="50%" trigger="click" :disabled="!row.extra">
+              <template #reference>
+                <el-button
+                  type="primary"
+                  link
+                >
+                  {{ $t(getDictLabel(taskModel, row.taskType)) }}
+                </el-button>
               </template>
-            </el-dropdown>
+
+              <div class="max-h-64 overflow-auto">
+                <el-text>{{ row.extra }}</el-text>
+              </div>
+            </el-popover>
+
+            <span v-else>
+              {{ $t(getDictLabel(taskModel, row.taskType)) }}
+            </span>
           </div>
         </el-table-column>
 
@@ -118,7 +114,7 @@
 
         <el-table-column
           v-slot="{ row }"
-          :label="$t('device.control.name')"
+          :label="$t('common.actions')"
           align="center"
         >
           <ExTooltipButton

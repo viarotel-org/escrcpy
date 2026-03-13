@@ -3,7 +3,7 @@
     <div class="flex flex-col h-screen">
       <AppHeader
         :title="terminalTitle"
-        :device-name="currentDeviceLabel"
+        :device-name="deviceName"
         class="px-2"
       >
         <template #right>
@@ -44,19 +44,22 @@ import { useTerminal } from './hooks/useTerminal/index'
 const deviceStore = useDeviceStore()
 const { currentDevice, locale, size, themeStore } = useWindowStateSync()
 
-const currentDeviceLabel = computed(() => {
-  const device = currentDevice.value
-  return device?.id ? deviceStore.getLabel(device, 'name') : ''
-})
-
 const terminalTitle = computed(() => {
   const title = window.$preload.payload.title
 
-  if (!title) {
-    return 'Escrcpy Terminal'
+  if (title) {
+    return window.t(title)
   }
 
-  return window.t(title)
+  return 'Escrcpy Terminal'
+})
+
+const deviceName = computed(() => {
+  if (currentDevice.value?.id) {
+    return deviceStore.getLabel(currentDevice.value, 'model') || currentDevice.value.id
+  }
+
+  return ''
 })
 
 const isDark = computed({

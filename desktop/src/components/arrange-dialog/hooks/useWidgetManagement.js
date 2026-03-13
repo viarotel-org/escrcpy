@@ -3,18 +3,21 @@
  * Handles adding, removing, and managing widgets
  */
 export function useWidgetManagement(
-  arrangedWidgets,
-  allDevices,
-  hasGlobalWidget,
-  createWidgetFromConfig,
-  screenWidth,
-  screenHeight,
+  options,
 ) {
+  const {
+    arrangedWidgets,
+    allDevices,
+    hasGlobalWidget,
+    createWidgetFromConfig,
+    screenWidth,
+    screenHeight,
+  } = options || {}
   // Track removed widgets for later cleanup in saveLayout
   const removedWidgets = ref([])
 
   // Helper function to add widget to removed list
-  const markWidgetAsRemoved = (widget) => {
+  function markWidgetAsRemoved(widget) {
     // Avoid duplicates
     const exists = removedWidgets.value.some(w =>
       w.type === widget.type
@@ -30,7 +33,7 @@ export function useWidgetManagement(
   }
 
   // Helper function to remove widget from removed list (if re-added)
-  const unmarkWidgetAsRemoved = (widget) => {
+  function unmarkWidgetAsRemoved(widget) {
     const index = removedWidgets.value.findIndex(w =>
       w.type === widget.type
       && (widget.type === 'global' || w.deviceId === widget.deviceId),
@@ -39,24 +42,19 @@ export function useWidgetManagement(
       removedWidgets.value.splice(index, 1)
     }
   }
-  const addWidget = (command) => {
+
+  function addWidget(command) {
     const scrcpy = window.$preload.store.get('scrcpy') || {}
-    const globalConfig = scrcpy.global || {}
 
     if (command === 'global') {
       if (hasGlobalWidget.value) {
         ElMessage.warning(window.t('device.arrange.widget.global.exists'))
-        return
+        return false
       }
 
-      const config = {
-        '--window-width': globalConfig['--window-width'] || screenWidth.value / 6,
-        '--window-height': globalConfig['--window-height'] || screenHeight.value / 2,
-        '--window-x': globalConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
-        '--window-y': globalConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
-      }
+      const globalConfig = scrcpy.global || {}
 
-      const widget = createWidgetFromConfig(config, {
+      const widget = createWidgetFromConfig(globalConfig, {
         id: 'global',
         type: 'global',
         name: window.t('device.arrange.widget.global.name'),
@@ -70,26 +68,24 @@ export function useWidgetManagement(
     }
 
     const device = allDevices.value.find(d => d.id === command)
+
     if (!device) {
       ElMessage.error(window.t('device.arrange.device.notFound'))
-      return
+      return false
     }
 
     const deviceConfig = scrcpy[command] || {}
 
-    const config = {
-      ...deviceConfig,
-      '--window-width': deviceConfig['--window-width'] || screenWidth.value / 6,
-      '--window-height': deviceConfig['--window-height'] || screenHeight.value / 2,
-      '--window-x': deviceConfig['--window-x'] || (arrangedWidgets.value.length * 50).toString(),
-      '--window-y': deviceConfig['--window-y'] || (arrangedWidgets.value.length * 50).toString(),
-    }
+    const deviceScreen = scaleDeviceScreenSize(device)
 
-    const widget = createWidgetFromConfig(config, {
+    const widget = createWidgetFromConfig(deviceConfig, {
       id: device.id,
       type: 'device',
       deviceId: device.id,
       name: device.name || device.model?.split(':')[1] || device.id,
+      deviceScreenWidth: deviceScreen.width ?? null,
+      deviceScreenHeight: deviceScreen.height ?? null,
+      lockAspectRatio: !!(device.screenWidth && device.screenHeight),
     })
 
     arrangedWidgets.value.push(widget)
@@ -97,7 +93,7 @@ export function useWidgetManagement(
     unmarkWidgetAsRemoved(widget)
   }
 
-  const removeWidget = (widgetId) => {
+  function removeWidget(widgetId) {
     const index = arrangedWidgets.value.findIndex(w => w.id === widgetId)
     if (index > -1) {
       const widget = arrangedWidgets.value[index]
@@ -107,7 +103,7 @@ export function useWidgetManagement(
     }
   }
 
-  const clearAllWidgets = () => {
+  function clearAllWidgets() {
     ElMessageBox.confirm(
       window.t('device.arrange.clear.confirm'),
       window.t('common.tips'),
@@ -122,9 +118,30 @@ export function useWidgetManagement(
   }
 
   // Methods to manage removed widgets for saveLayout
-  const getRemovedWidgets = () => removedWidgets.value
-  const clearRemovedWidgets = () => {
+  function getRemovedWidgets() {
+    return removedWidgets.value
+  }
+
+  function clearRemovedWidgets() {
     removedWidgets.value = []
+  }
+
+  function scaleDeviceScreenSize(device) {
+    const sw = screenWidth?.value || 0
+    const sh = screenHeight?.value || 0
+    const dw = device.screenWidth ?? 0
+    const dh = device.screenHeight ?? 0
+
+    if (!sw || !sh) {
+      return { width: dw, height: dh }
+    }
+
+    const scale = Math.min(sh / 2 / dh, sw / dw, 1)
+
+    return {
+      width: Math.round(dw * scale),
+      height: Math.round(dh * scale),
+    }
   }
 
   return {
@@ -133,5 +150,6 @@ export function useWidgetManagement(
     clearAllWidgets,
     getRemovedWidgets,
     clearRemovedWidgets,
+    scaleDeviceScreenSize,
   }
 }

@@ -123,11 +123,21 @@ export function clearTimer(type, ...args) {
 }
 
 /**
- * Determine whether running on a specific platform
- * @param {*} name - Platform name
- * @returns {boolean} True if the current platform matches the specified name
+ * Check if the current platform matches any of the specified platform names.
+ *
+ * Supports passing multiple platforms or an array of platforms. Returns true if any match.
+ *
+ * @example
+ * isPlatform('macos')
+ * isPlatform('macos', 'linux')
+ * isPlatform(['windows', 'linux'])
+ *
+ * @typedef {'macos'|'windows'|'linux'|'freebsd'|'openbsd'|'android'|'ios'} PlatformName
+ *
+ * @param {...(PlatformName|string|string[])} names Platform names, can pass multiple or an array
+ * @returns {boolean} Whether the current platform matches
  */
-export function isPlatform(name) {
+export function isPlatform(...names) {
   const model = {
     macos: 'darwin',
     windows: 'win32',
@@ -138,9 +148,19 @@ export function isPlatform(name) {
     ios: 'ios',
   }
 
-  const matchPlatform = model[name] || name
+  const list = names.flat()
 
-  const currentPlatform = import.meta.env.VITE_SIMULATION_PLATFORM ?? window.$preload.process.platform
+  const currentPlatform
+    = import.meta.env.VITE_SIMULATION_PLATFORM
+      ?? window.$preload.process.platform
 
-  return currentPlatform === matchPlatform
+  return list.some(name => currentPlatform === (model[name] || name))
+}
+
+export function deepToRaw(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+export function preciseAdd(a, b) {
+  return (Math.round(a * 100) + Math.round(b * 100)) / 100
 }

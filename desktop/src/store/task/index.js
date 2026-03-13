@@ -56,10 +56,6 @@ export const useTaskStore = defineStore(
         value: 'screenshot',
       },
       {
-        label: 'terminal.script.name',
-        value: 'shell',
-      },
-      {
         label: 'device.mirror.start',
         value: 'mirror',
       },

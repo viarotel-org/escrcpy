@@ -7,7 +7,15 @@ export function useDeviceManagement() {
   const deviceStore = useDeviceStore()
   const allDevices = ref([])
 
-  const loadDevices = () => {
+  async function loadDevices() {
+    try {
+      await deviceStore.getList()
+    }
+    catch (error) {
+      console.error('Failed to load devices:', error)
+      return false
+    }
+
     const devices = deviceStore.list
     allDevices.value = devices.map(item => ({
       ...item,

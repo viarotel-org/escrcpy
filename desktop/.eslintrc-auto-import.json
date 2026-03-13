@@ -354,6 +354,12 @@
     "useSSRWidth": true,
     "useTimeAgoIntl": true,
     "useI18n": true,
-    "useLazy": true
+    "useLazy": true,
+    "ExecutionState": true,
+    "KEY_CODES": true,
+    "SCRIPT_TEMPLATES": true,
+    "STEP_TYPES": true,
+    "StepStatus": true,
+    "useAdbKeyboard": true
   }
 }

@@ -23,11 +23,11 @@
           }}
         </el-button>
 
-        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onClickDocs">
+        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onDocsClick">
           <span class="pl-1">{{ $t('about.docs.name') }}</span>
         </el-button>
 
-        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onClickDonate">
+        <el-button :size="$grid.lg ? 'large' : 'default'" class="group" @click="onDonateClick">
           <span class="group-hover:animate-rubber-band text-red-500">♥</span>
           <span class="pl-1">{{ $t('about.donate.title') }}</span>
         </el-button>
@@ -59,17 +59,21 @@ const percent = ref(0)
 const escrcpyURL = homepage
 const { language: locale } = useI18n()
 
+const docsUrl = computed(() => {
+  const localePath = {
+    'zh-CN': 'zhHans/',
+  }[locale.value] || ''
+
+  return `https://viarotel.eu.org/${localePath}`
+})
+
 const sponsorDialogRef = ref()
-function onClickDonate() {
+function onDonateClick() {
   sponsorDialogRef.value.open()
 }
 
-function onClickDocs() {
-  const localePath = {
-    'zh-CN': 'zhHans',
-  }[locale.value] || ''
-
-  window.open(`https://viarotel.eu.org/${localePath}`)
+function onDocsClick() {
+  window.open(docsUrl.value)
 }
 
 function handleUpdate() {
@@ -123,7 +127,7 @@ function onUpdateError() {
           type: 'error',
         },
       )
-      window.open(`${escrcpyURL}/releases`)
+      window.open(`${docsUrl.value}/guide/started`)
     }
     catch (error) {
       console.warn(error.message)

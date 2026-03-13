@@ -44,7 +44,6 @@ import Mirror from './mirror/index.vue'
 import Application from './application/index.vue'
 import FilePush from './file-push/index.vue'
 import Screenshot from './screenshot/index.vue'
-import Script from './script/index.vue'
 import Tasks from './tasks/index.vue'
 import Copilot from './copilot/index.vue'
 import Delete from './delete/index.vue'
@@ -81,11 +80,6 @@ const actionModel = [
     label: 'device.control.file.push',
     fontIcon: 'i-bi-folder',
     component: FilePush,
-  },
-  {
-    label: 'terminal.script.name',
-    fontIcon: 'i-bi-terminal',
-    component: Script,
   },
   {
     label: 'device.task.name',

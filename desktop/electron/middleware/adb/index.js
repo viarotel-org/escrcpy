@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { adbKeyboardApkPath, getDefaultAdbPath } from '$electron/configs/index.js'
+import { adbKeyboardApkPath, desktopPath, getDefaultAdbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
+import pLimit from 'p-limit'
 import dayjs from 'dayjs'
 import { ProcessManager } from '$electron/process/manager.js'
 import { streamToBase64 } from '$electron/helpers/index.js'
@@ -104,7 +105,7 @@ async function screencap(deviceId, options = {}) {
   }
 
   const fileName = `Screencap-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.png`
-  const savePath = options.savePath || path.resolve('../', fileName)
+  const savePath = options.savePath || path.join(electronStore.get('common.savePath') || desktopPath, fileName)
 
   return new Promise((resolve, reject) => {
     fileStream
@@ -121,6 +122,10 @@ async function screencap(deviceId, options = {}) {
 
 async function install(id, path) {
   return client.getDevice(id).install(path)
+}
+
+async function uninstall(id, path) {
+  return client.getDevice(id).uninstall(path)
 }
 
 async function isInstalled(id, pkg) {
@@ -335,20 +340,49 @@ async function getSerialNo(id) {
   return value
 }
 
+async function getScreenSize(id) {
+  try {
+    const ret = await deviceShell(id, 'wm size')
+    // Prefer Override size (user-visible logical resolution), fallback to Physical size
+    const overrideMatch = ret.match(/Override size:\s*(\d+)x(\d+)/)
+    if (overrideMatch) {
+      return { width: Number(overrideMatch[1]), height: Number(overrideMatch[2]) }
+    }
+    const physicalMatch = ret.match(/Physical size:\s*(\d+)x(\d+)/)
+    if (physicalMatch) {
+      return { width: Number(physicalMatch[1]), height: Number(physicalMatch[2]) }
+    }
+  }
+  catch (error) {
+    console.error('getScreenSize.error', error?.message || error)
+  }
+
+  return null
+}
+
 async function getDeviceList() {
   const listDevicesWithPaths = await client.listDevicesWithPaths()
   const devices = listDevicesWithPaths.filter(item => !['offline'].includes(item.type))
 
-  const value = []
+  const concurrencyLimit = Number(electronStore.get('common.concurrencyLimit') ?? 10)
+  const limit = pLimit(concurrencyLimit)
 
-  for (let index = 0; index < devices.length; index++) {
-    const item = devices[index]
-    const serialNo = await getSerialNo(item.id)
-    value.push({
-      ...item,
-      serialNo,
-    })
-  }
+  const value = await Promise.all(
+    devices.map(item =>
+      limit(async () => {
+        const [serialNo, screenSize] = await Promise.all([
+          getSerialNo(item.id),
+          getScreenSize(item.id),
+        ])
+        return {
+          ...item,
+          serialNo,
+          screenWidth: screenSize?.width ?? null,
+          screenHeight: screenSize?.height ?? null,
+        }
+      }),
+    ),
+  )
 
   return value
 }
@@ -418,6 +452,7 @@ export default {
   tcpip,
   screencap,
   install,
+  uninstall,
   isInstalled,
   version,
   push,

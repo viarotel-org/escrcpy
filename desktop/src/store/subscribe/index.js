@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import subscribeClient from '$/services/subscribe/index.js'
+import { preciseAdd } from '$/utils/index.js'
 
 export const useSubscribeStore = defineStore('app-subscribe', () => {
   const userInfo = ref(null)
@@ -128,6 +129,22 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     loading.value = false
   }
 
+  async function getTotalPayAmount() {
+    try {
+      await fetchUserInfo()
+    }
+    catch (error) {
+      return 0
+    }
+
+    const value = (userInfo.value?.subscriptions || []).reduce((total, item) => {
+      total = preciseAdd(total, item.amount || 0)
+      return total
+    }, 0)
+
+    return value
+  }
+
   return {
     accessToken,
     userInfo,
@@ -147,6 +164,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     setAccessToken,
     fetchAppInfo,
     fetchUserInfo,
+    getTotalPayAmount,
     logout,
     $reset,
   }

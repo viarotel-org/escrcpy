@@ -72,6 +72,20 @@ export default {
       },
     )
 
+    // Show save dialog and return the selected path only (no file copy)
+    ipcMain.handle(
+      'show-save-dialog-path',
+      async (_, options = {}) => {
+        const res = await dialog
+          .showSaveDialog(options)
+          .catch(e => console.warn(e))
+        if (res?.canceled || !res?.filePath) {
+          return null
+        }
+        return res.filePath
+      },
+    )
+
     // Get system temporary directory
     ipcMain.handle('get-temp-path', async () => {
       try {
@@ -203,15 +217,26 @@ export default {
       return true
     })
 
+    ipcMain.handle('get-title-bar-height', async () => {
+      const { scaleFactor = 1 } = screen.getPrimaryDisplay()
+      const value = Math.round(30 * scaleFactor)
+      return value
+    })
+
     return () => {
       ipcMain.removeHandler('show-open-dialog')
+      ipcMain.removeHandler('open-path')
+      ipcMain.removeHandler('show-item-in-folder')
+      ipcMain.removeHandler('get-primary-display')
       ipcMain.removeHandler('show-save-dialog')
+      ipcMain.removeHandler('show-save-dialog-path')
       ipcMain.removeHandler('get-temp-path')
       ipcMain.removeHandler('rename-temp-file')
       ipcMain.removeHandler('navigate-to-route')
       ipcMain.removeHandler('open-log-path')
       ipcMain.removeHandler('get-gitee-temporary-token')
       ipcMain.removeHandler('open-system-menu')
+      ipcMain.removeHandler('get-title-bar-height')
     }
   },
 }

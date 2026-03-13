@@ -91,8 +91,8 @@
 
 <script>
 import { controlBarHeight } from '$control/configs/index.js'
-import Application from './application/index.vue'
-import ApplicationStart from './application-start/index.vue'
+import Install from './install/index.vue'
+import Launch from './launch/index.vue'
 import Copilot from './copilot/index.vue'
 import Explorer from './explorer/index.vue'
 import Gnirehtet from './gnirehtet/index.vue'
@@ -105,8 +105,8 @@ import Volume from './volume/index.vue'
 export default {
   components: {
     Screenshot,
-    Application,
-    ApplicationStart,
+    Install,
+    Launch,
     Copilot,
     Gnirehtet,
     Rotation,
@@ -165,10 +165,10 @@ export default {
           fontIcon: 'i-cil-caret-left',
           command: 'input keyevent 4',
         },
-        'app-start': {
-          label: 'device.control.startApp',
+        'launch': {
+          label: 'device.control.launch',
           fontIcon: 'i-famicons-rocket-outline',
-          component: 'ApplicationStart',
+          component: 'Launch',
         },
         'turn-screen-off': {
           label: 'device.control.turnScreenOff',
@@ -210,10 +210,10 @@ export default {
           fontIcon: 'i-iconoir-refresh',
           command: 'reboot',
         },
-        'app-install': {
+        'install': {
           label: 'device.control.install',
           fontIcon: 'i-bi-file-arrow-up',
-          component: 'Application',
+          component: 'Install',
         },
         'explorer': {
           label: 'device.control.file.name',

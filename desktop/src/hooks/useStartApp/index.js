@@ -29,7 +29,7 @@ export function useStartApp() {
       excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
     })
 
-    await window.$preload.scrcpy.startApp(deviceId, { ...options, title, commands, packageName })
+    await window.$preload.scrcpy.launch(deviceId, { ...options, title, commands, packageName })
       .catch((e) => {
         console.error('mirror.commands', commands)
         console.error('mirror.error', e)

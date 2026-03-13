@@ -1,4 +1,372 @@
+
 # Changelog
+
+## [2.6.2](https://github.com/viarotel/escrcpy-x/compare/v2.6.1...v2.6.2) (2026-03-13)
+
+
+### Bug Fixes
+
+* 🐛 Fix the problem of inaccurate vertical coordinate of window arrangement under Windows ([1fa6bd5](https://github.com/viarotel/escrcpy-x/commit/1fa6bd56940d43eff8957d80bb3376a2ee18e7b0))
+* 🐛 Fixed the issue of abnormal scaling of the window arrangement function under Windows ([87f3596](https://github.com/viarotel/escrcpy-x/commit/87f35965dc77aeb820e4b6a408c51806c09186c5))
+* 🐛 Fixed the issue of redundant scroll bars appearing in the window arrangement tool screen area ([ea0b451](https://github.com/viarotel/escrcpy-x/commit/ea0b4518cc2bced15ae662fa6a0020981c776d0f))
+
+
+### Code Refactoring
+
+* 🚀 Refactored version build ([bd3ec90](https://github.com/viarotel/escrcpy-x/commit/bd3ec900b47485c423fa4724a65c24f503a99eff))
+
+## [2.6.1](https://github.com/viarotel/escrcpy-x/compare/v2.6.0...v2.6.1) (2026-03-13)
+
+
+### Performance Improvements
+
+* 🌱 Improve the interactive experience of subscription plans ([f3620fd](https://github.com/viarotel/escrcpy-x/commit/f3620fdaeb483f832e975a29aa69f1422b847a7e))
+
+## [2.6.0](https://github.com/viarotel/escrcpy-x/compare/v2.4.0...v2.6.0) (2026-03-12)
+
+
+### Features
+
+* 🎉 Optimize device window arrangement: By obtaining the actual screen size of the device, canceling fixed ratio scaling, avoiding black border issues, and improving adaptation accuracy and display experience. ([35d2028](https://github.com/viarotel/escrcpy-x/commit/35d2028feac0458a1fde505d9be833e9b6b01f1a))
+* 🚀 Add a subscription plan for batch automation scripts ([efa6e28](https://github.com/viarotel/escrcpy-x/commit/efa6e288c74a4ea869cc409d4276d7ac66923e51))
+* 🚀 Add WeChat script template ([569099c](https://github.com/viarotel/escrcpy-x/commit/569099cb669e2dcc52fdcb60afc1125e6819e313))
+* 🚀 Improve the international translation of automated script modules ([1cb2cb6](https://github.com/viarotel/escrcpy-x/commit/1cb2cb62fa5bb443e0ce4ac8af543366ccfcbd7b))
+* 🚀 Optimize automated script interaction ([1e61d0f](https://github.com/viarotel/escrcpy-x/commit/1e61d0fd9080b6d31cdf7dc47c4f7da2158a8d68))
+* 🚀 Optimize magic variable interaction support for import and export ([b7ba176](https://github.com/viarotel/escrcpy-x/commit/b7ba176f711f8b2ba5a8def62a0bd5040c246b84))
+* 🚀 Preliminary addition of automation script editor support ([bc6fdcc](https://github.com/viarotel/escrcpy-x/commit/bc6fdcca435c6b39f44482700191031631c3a6a1))
+* 🚀 Preliminary support for automated script batch execution and scheduled tasks ([e14c302](https://github.com/viarotel/escrcpy-x/commit/e14c302a78158b43099875116e4adfe98d868955))
+* 🚀 Product and optimization of automation script editor ([b36f6c6](https://github.com/viarotel/escrcpy-x/commit/b36f6c68323dedd43586ba2daca7feb6e24e8bca))
+
+
+### Bug Fixes
+
+* 🐛 Fix custom startup layout and interaction issues ([6311364](https://github.com/viarotel/escrcpy-x/commit/6311364f8cc2050bfd8e3cd17e61a6edc401b98b))
+* 🐛 Fixed an issue where the automation script log directory was ignored ([8777e63](https://github.com/viarotel/escrcpy-x/commit/8777e6398e9fe48af9f8da22aab7e8c5d3e3e496))
+* 🐛 Fixed script template translation issue ([01870f7](https://github.com/viarotel/escrcpy-x/commit/01870f7321ba043b072dd6c972f2e0ac05d8023f))
+* 🐛 Fixed split automation script editor form variable usage compatibility issue ([53da1e9](https://github.com/viarotel/escrcpy-x/commit/53da1e9958e0a60e29bf949dad98499dfdc50363))
+* 🐛 Fixed the issue of abnormal task type penetration display in the scheduled task list ([58ced2b](https://github.com/viarotel/escrcpy-x/commit/58ced2b237d9db297a53a67ee72747fc69fb6447))
+* 🐛 Fixed the issue of batch execution image blocking ([9e3e17b](https://github.com/viarotel/escrcpy-x/commit/9e3e17b74e514f95dc297421032929df43b2827c))
+* 🐛 Fixed the issue where the aspect ratio was not fixed when the window arrangement was adjusted again after being saved. ([8977138](https://github.com/viarotel/escrcpy-x/commit/897713820993aef32b9e51f45833ef5a1dd053ba))
+* 🐛 Fixed the problem of unable to echo after window arrangement ([6907762](https://github.com/viarotel/escrcpy-x/commit/6907762d9566e75480807e279ac3fc8edd1a5087))
+* 🚀 Fixed batch execution automation script variable injection concurrency issue ([3b8dae0](https://github.com/viarotel/escrcpy-x/commit/3b8dae094dabe394ac443fd045c1ba2391d1e7c8))
+* 🚀 Fixed the problem that the automation script during switching execution could not confirm the interruption ([2162203](https://github.com/viarotel/escrcpy-x/commit/216220314ce7b4564226ea5a5e0286465f6f2d08))
+* 🚀 Optimize subscription configuration ([9711e73](https://github.com/viarotel/escrcpy-x/commit/9711e730a13ff3a7ef38551e45e4860f61c612be))
+* Fix automated script editor testing issue ([87c6f93](https://github.com/viarotel/escrcpy-x/commit/87c6f93be678c03f56ca7cc3bda709917bf8ebd6))
+
+
+### Performance Improvements
+
+* 💄 Optimize smart picking interaction ([a66fb7a](https://github.com/viarotel/escrcpy-x/commit/a66fb7a0327eafa573d39dd059b4a62e1fcf9fc1))
+* 🚀 Automate script selectors to support termination logic and interaction optimization ([d0a4bb3](https://github.com/viarotel/escrcpy-x/commit/d0a4bb3b7b3ba5425cd11150f3d103f101a6980f))
+* 🚀 Automation script editor adds execution selection function ([d8f1300](https://github.com/viarotel/escrcpy-x/commit/d8f1300f2470d65c4d1ee85b61bdc49967f2ee8e))
+* 🚀 Detail optimization of the automated script editor ([338ad3e](https://github.com/viarotel/escrcpy-x/commit/338ad3ebd8d3f070325b0c35ef7c96c54a61be64))
+* 🚀 Improve automation script stability ([455c11f](https://github.com/viarotel/escrcpy-x/commit/455c11f3ebc3040c379c53d118843de2c350cb71))
+* 🚀 Integrate the adb keyboard installation universal hook ([aca0427](https://github.com/viarotel/escrcpy-x/commit/aca042742214998b5e80945684948c8384a16c3c))
+* 🚀 Optimize automation script editor details ([fb2e4ad](https://github.com/viarotel/escrcpy-x/commit/fb2e4adf481229445a7193460a317a59840cdfe2))
+* 🚀 Optimize automation script editor interaction details ([e371171](https://github.com/viarotel/escrcpy-x/commit/e371171ffd70fe5e22c20b7d96c1ea4a1d56af53))
+* 🚀 Optimize automation script editor interaction details ([24f0792](https://github.com/viarotel/escrcpy-x/commit/24f0792fe66174124cce3bf947dd0a9f456e1be7))
+* 🚀 Optimize automation script function details ([f084d08](https://github.com/viarotel/escrcpy-x/commit/f084d08947dd239b91a2d60133834f9ee8ebf8d0))
+* 🚀 Optimize execution of automation script interaction details ([568fedf](https://github.com/viarotel/escrcpy-x/commit/568fedf8e07ab73437be86fe632d6be70cef335a))
+* 🚀 Optimize international translation ([3dd15a9](https://github.com/viarotel/escrcpy-x/commit/3dd15a9759dbfca58396118b565042b2996d85c8))
+* 🚀 Optimize product details ([a3abd2c](https://github.com/viarotel/escrcpy-x/commit/a3abd2c9f3ad4cdc25b427b41e529f58079d6f32))
+* 🚀 Optimize the installation of adb keyboard boot ([fd4e752](https://github.com/viarotel/escrcpy-x/commit/fd4e7527deb91378fcd097e90538e50e16577cee))
+* 🚀 Optimize the layout of the execution page for planned tasks ([10da149](https://github.com/viarotel/escrcpy-x/commit/10da1490e4882359a6d7b3b02989f483414ae95d))
+* 🚀 Remove obsolete shell script functionality ([dfc505b](https://github.com/viarotel/escrcpy-x/commit/dfc505b219eda17fe7702d8276deee50d787ab4d))
+* 🚀 Template import supports importing magic variables ([767c1dd](https://github.com/viarotel/escrcpy-x/commit/767c1dd379104f7c6ebfd5b186f2a99fca447fc5))
+* 🚀 When obtaining the device list, synchronously obtain the screen resolution to optimize the screen arrangement experience ([3715e0f](https://github.com/viarotel/escrcpy-x/commit/3715e0fbf96a4a6838fce1d17e540d7ba3cc2d00))
+* Enhance the stability of the automated script editor ([8030668](https://github.com/viarotel/escrcpy-x/commit/80306685ea6c4ae87a83dd44121f855c670d2ab7))
+* Optimize script editor interaction ([7367d15](https://github.com/viarotel/escrcpy-x/commit/7367d15cf7041e47b012630c62e9096cdb449630))
+
+
+### Miscellaneous Chores
+
+* release 2.6.0 ([57fd8dc](https://github.com/viarotel/escrcpy-x/commit/57fd8dc76341285a46fec401fb5b421ed7af3e2b))
+
+
+### Code Refactoring
+
+* ♻️ Restore version of the system ([4a7c653](https://github.com/viarotel/escrcpy-x/commit/4a7c653eceb668dec3bfb5f4d715955bbd11c42d))
+* ➖ Remove redundant printing information ([6bd144d](https://github.com/viarotel/escrcpy-x/commit/6bd144d9feae8ecad8ff4fa9fdb071a149e0c23a))
+* 🔨 Split Automation Script Editor form ([98ac71b](https://github.com/viarotel/escrcpy-x/commit/98ac71bb9245a76bc4e1268c52dcbe754f765b67))
+* 🚀 Extract the common logic of launching the app function into an independent selector and reuse it ([583b93f](https://github.com/viarotel/escrcpy-x/commit/583b93f2a7e4b921ec95185724abbaa734a24ddf))
+* 🚀 Optimize automation script editor details ([06f1ede](https://github.com/viarotel/escrcpy-x/commit/06f1edea1df0961061ff8e96fe1bd8653a653aa4))
+* 🚀 Optimize international translation ([2d07a60](https://github.com/viarotel/escrcpy-x/commit/2d07a6035f1e96baff0c13c09352010e89f65e36))
+* 🚀 Optimize the interaction of script selectors for batch execution ([c3e86fd](https://github.com/viarotel/escrcpy-x/commit/c3e86fddefd2145407fe59ac88b6bb660d693db2))
+* 🚀 Optimize the size of deleted pop-up windows ([a43fc53](https://github.com/viarotel/escrcpy-x/commit/a43fc53ad26bc435f161bd87f3e80251b32b6a2c))
+* 🚀 Project code details optimization ([eda1d5a](https://github.com/viarotel/escrcpy-x/commit/eda1d5a339c0c8bf6ee0fb9852cf5aeef2301c7f))
+* 🚀 Support adjusting subscription price through environment variables ([1867f03](https://github.com/viarotel/escrcpy-x/commit/1867f03879a7e1b8d435d8266ddf757134d40f80))
+* Integrated script editor supports more configuration functions ([b0a30f8](https://github.com/viarotel/escrcpy-x/commit/b0a30f8b6888cf9af178280b90c48ef91e08eaa8))
+* Optimize the overall directory and naming conventions ([aed80ef](https://github.com/viarotel/escrcpy-x/commit/aed80ef5e1500f1c2b3170baf870793b363e8c7a))
+
+## [2.5.1](https://github.com/viarotel-org/escrcpy/compare/v2.5.0...v2.5.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* Fixed the issue of missing title bar information when launching through the app ([e6bcd1e](https://github.com/viarotel-org/escrcpy/commit/e6bcd1e33db18d4bac0e0f3a996503f0c0cfe8a6))
+
+## [2.5.0](https://github.com/viarotel-org/escrcpy/compare/v2.4.2...v2.5.0) (2026-02-27)
+
+
+### Features
+
+* Add concurrency limit for batch wireless device connections ([f048956](https://github.com/viarotel-org/escrcpy/commit/f048956ac9b8030c5cba6a7da6afd635882223a4))
+
+
+### Bug Fixes
+
+* Fix shell space command parsing problem ([e1ab66c](https://github.com/viarotel-org/escrcpy/commit/e1ab66c4310f4e34b3eb7365927230db5e4b8090))
+* Initialize shell command variables to prevent undefined values ([e776c11](https://github.com/viarotel-org/escrcpy/commit/e776c1136b9758642b83c9d8a848fa2cc04d3b55))
+
+## [2.4.2](https://github.com/viarotel-org/escrcpy/compare/v2.4.1...v2.4.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* Fix the problem of abnormal disconnection of adb after changing some configurations ([ffbfc40](https://github.com/viarotel-org/escrcpy/commit/ffbfc40c0d1938cb5d2c71e7f6500dc5b47e5b76))
+
+## [2.4.1](https://github.com/viarotel-org/escrcpy/compare/v2.4.0...v2.4.1) (2026-02-26)
+
+
+### Bug Fixes
+
+* Fix the language detection issue of portable software ([9985067](https://github.com/viarotel-org/escrcpy/commit/9985067b7688becdaf9311734d2ea2ab6519afd8))
+
+
+### Code Refactoring
+
+* Reorganize initialization order to load store before process configuration ([9283a45](https://github.com/viarotel-org/escrcpy/commit/9283a4568a6d9065a0ebc3ca715f87a6b8c9483f))
+
+## [2.4.0](https://github.com/viarotel-org/escrcpy/compare/v2.3.1...v2.4.0) (2026-02-26)
+
+
+### Features
+
+* ✨ Adds fastboot command support and provides experimental integration of scrcpy dependencies for Linux ARM64 platforms. ([70f3243](https://github.com/viarotel-org/escrcpy/commit/70f32430417f001c56354e24c3c4366d831744ad))
+* 🎉 Comprehensive migration to the built-in terminal based on xterm to provide a more controllable user experience ([a2ee25f](https://github.com/viarotel-org/escrcpy/commit/a2ee25ff0e92fdd315968d311b483c438e047559))
+* add drag and drop file upload support ([d5b969c](https://github.com/viarotel-org/escrcpy/commit/d5b969cc1643d3e68f36e2c8458abea1b51ebce6))
+* add gnirehtet path for mac ([8da67c8](https://github.com/viarotel-org/escrcpy/commit/8da67c8d33241de9b4a720bd0ca742e9fb2ffc90))
+* add scroll to bottom button in chat ([e4e8f80](https://github.com/viarotel-org/escrcpy/commit/e4e8f807e7cbca80c03ee7920f171f5b475dbbb0))
+* add terminal shell support with xterm integration ([3c7828c](https://github.com/viarotel-org/escrcpy/commit/3c7828c8206625325032c2ef44e860b8b5668051))
+* add wireless connection mode switch toggle ([161acf4](https://github.com/viarotel-org/escrcpy/commit/161acf463ecfa847116b108b7009fae3d957c5fc))
+* add wireless pair success message and UI improvements ([eccb26e](https://github.com/viarotel-org/escrcpy/commit/eccb26e97e6599d16076b53b0370050cd2f1272a))
+* improve ADB keyboard installation error handling ([71f7635](https://github.com/viarotel-org/escrcpy/commit/71f7635ec9045b276212f8dc14f826c4e26ab321))
+* trigger language change callback immediately on init ([e0e3d22](https://github.com/viarotel-org/escrcpy/commit/e0e3d22fbf0eee2f14f033e8c41ec298f5bf6ddf))
+* update api endpoint and enable adb keyboard ([4010b17](https://github.com/viarotel-org/escrcpy/commit/4010b1708f523c30f0727a16470f504f8d83a53f))
+* Window orchestration component enhancement: Supports manual setting of position and size ([e3aa89a](https://github.com/viarotel-org/escrcpy/commit/e3aa89ab5ec5d130554e5b5ad348fe6e9cf3bd96))
+
+
+### Bug Fixes
+
+* 🐛 Migrate fkill to tree-kill to solve windows binary file execution problems ([6c89b73](https://github.com/viarotel-org/escrcpy/commit/6c89b73cb66f0cb723efb31a59066f2e62dd880a))
+* change clipboard tag type to primary ([edb8840](https://github.com/viarotel-org/escrcpy/commit/edb8840f4a2477710b91f58c0dfb7f5353188ecb))
+* enhance xterm terminal styling and resize handling ([9e031f5](https://github.com/viarotel-org/escrcpy/commit/9e031f5e5f5079c3b420a25d686c3947d31f19fd))
+* filter ANSI color codes for Windows PowerShell terminal ([9c58f25](https://github.com/viarotel-org/escrcpy/commit/9c58f25301a9cb4663aea6c1b899ce40cf9ba3fb))
+* Fix i18n race translation ([7b37f29](https://github.com/viarotel-org/escrcpy/commit/7b37f297851f7d1a8a928ad6725e3f8dee3c48ed))
+* handle terminal exit and error states with reload ([e8d93d5](https://github.com/viarotel-org/escrcpy/commit/e8d93d56aa7c596d32cb5878dee70b3ce0540bc0))
+* handle Windows terminal line ending for all cases ([e06e763](https://github.com/viarotel-org/escrcpy/commit/e06e76346c236b5e2923e05d55904fb930be3b6a))
+* handle Windows terminal line ending for device type ([1be1a5e](https://github.com/viarotel-org/escrcpy/commit/1be1a5ed6e19e6735d3cdc77224e7d265755b023))
+* improve Windows terminal compatibility and session management ([7f37f7d](https://github.com/viarotel-org/escrcpy/commit/7f37f7da1adcee51fb90984dd8fc0be7cc4701df))
+* improve Windows terminal cursor sync and resize responsiveness ([c16a5f9](https://github.com/viarotel-org/escrcpy/commit/c16a5f9250134347987443a1aa76d879a8b17e00))
+* improve Windows terminal encoding and scrollbar styling ([85d5a96](https://github.com/viarotel-org/escrcpy/commit/85d5a9663db1be5e226f9cfcdd279b93cc27c920))
+* improve Windows terminal rendering and resize stability ([7f05996](https://github.com/viarotel-org/escrcpy/commit/7f059968944a6b0d64bca9f8bbcc281a356b3b42))
+* improve Windows terminal shell detection and remove debug logs ([4a5ebbc](https://github.com/viarotel-org/escrcpy/commit/4a5ebbc86c1e8687a7cc3b053f330c7418dadbc5))
+* include node-pty in electron build ([c98d82d](https://github.com/viarotel-org/escrcpy/commit/c98d82d8e2db400d8c3db0a13eb5f2acdfa8b3d1))
+* prioritize pwsh.exe for Windows terminal ([a99d830](https://github.com/viarotel-org/escrcpy/commit/a99d8300570f37b67e9cf600bc42b84f6b643b22))
+* simplify Windows PowerShell terminal initialization ([95c432c](https://github.com/viarotel-org/escrcpy/commit/95c432c539bb941b0ff73ce61567f91d509c5776))
+* simplify Windows terminal shell initialization ([2a3ed6f](https://github.com/viarotel-org/escrcpy/commit/2a3ed6f1ca5f4e98634bfe85c6d41ba928a6809f))
+* Solve the problem that the language of the terminal title cannot be dynamically updated ([6e2c030](https://github.com/viarotel-org/escrcpy/commit/6e2c03019103d432bb83c6f632fd57170a3bc0c0))
+* specify SIGTERM signal for treeKill ([d28eb1a](https://github.com/viarotel-org/escrcpy/commit/d28eb1a9feb0883472558b0d0b93ded18f02b446))
+* update terminal tip color to custom RGB ([156d39b](https://github.com/viarotel-org/escrcpy/commit/156d39beabe98b0306900a8b76c82616a9fe3e35))
+
+
+### Performance Improvements
+
+* 🚀 Optimize ADB keyboard installation and detection ([f312cc2](https://github.com/viarotel-org/escrcpy/commit/f312cc2d71c048a7853467d77cb0657ef7dc77cc))
+
+
+### Code Refactoring
+
+* add cleanup handler for window IPC ([bad6752](https://github.com/viarotel-org/escrcpy/commit/bad6752991e4ca109e40904a3362b6d1e2368ad7))
+* add comment for tray destroy event ([12038df](https://github.com/viarotel-org/escrcpy/commit/12038dfc1c9da3f15215e38f51213093f3b0516e))
+* add electron-modularity dependency ([d0abc0b](https://github.com/viarotel-org/escrcpy/commit/d0abc0bf42287d579aa2d7544f61f330de717c29))
+* add main window API and type system ([778a65f](https://github.com/viarotel-org/escrcpy/commit/778a65f89128766f8d12820ec73b2f8ab6ad89d3))
+* add plugin warnings and fix module loading order ([a5bdbf3](https://github.com/viarotel-org/escrcpy/commit/a5bdbf37f6d8af96e585755c396bd440545617d3))
+* add rendererDir support and update window loading ([fac664d](https://github.com/viarotel-org/escrcpy/commit/fac664d3e291995b5be1d4479479b0d79bbabd13))
+* adjust screenshot message and dialog styles ([7bbab51](https://github.com/viarotel-org/escrcpy/commit/7bbab511f097e3e5d1bde45fbcf110fa60f382c0))
+* adjust terminal line height to 1.4 ([5068f7d](https://github.com/viarotel-org/escrcpy/commit/5068f7d398beac1505d866bbbfa759bd22867a6d))
+* adjust terminal window and device sync settings ([6a4bd61](https://github.com/viarotel-org/escrcpy/commit/6a4bd61eac3ba32f225a62f7bd43071775fc6a31))
+* adjust window width and improve error handling ([5576d2e](https://github.com/viarotel-org/escrcpy/commit/5576d2e9f4a11cb06b997ee23257df3efabbe554))
+* centralize PATH setup and environment configuration ([6a6eb80](https://github.com/viarotel-org/escrcpy/commit/6a6eb80346dbe6dfb5b74ac0a8d860bc1592f2ec))
+* clean up .gitignore file ([3644b3e](https://github.com/viarotel-org/escrcpy/commit/3644b3ef049651031aef00a3b0b0bdd1e4e502a3))
+* clean up main window module ([9d1eee9](https://github.com/viarotel-org/escrcpy/commit/9d1eee9632a1484706559c8264db0a05b383757d))
+* defer app initialization until ready ([9905f41](https://github.com/viarotel-org/escrcpy/commit/9905f41d3deb12d1ca434fd14e1128f126497729))
+* defer plugin registration until app start ([46ac0db](https://github.com/viarotel-org/escrcpy/commit/46ac0db4e7b3a63f712c00efaf3c27bd9fab0906))
+* Electron main process architecture reconstruction ([f810ecb](https://github.com/viarotel-org/escrcpy/commit/f810ecbc9566b5dbc0567caf22fdcadc9bbbec04))
+* emit tray:destroy on window restore ([fab9343](https://github.com/viarotel-org/escrcpy/commit/fab93439a9a47fb5b24590a723b994279253f292))
+* expose $platform to window and global properties ([9a7ee70](https://github.com/viarotel-org/escrcpy/commit/9a7ee70a8453f3dc5994be8482dbcc4b7aed0f20))
+* extract terminal logic into useTerminal hook ([9d725ca](https://github.com/viarotel-org/escrcpy/commit/9d725cafd89faa15b11dc9d2f7aa7d1969ec77fc))
+* fix device payload and adjust control bar height ([e5981ac](https://github.com/viarotel-org/escrcpy/commit/e5981ac21dd7e3359c0643e4f3e247309036d190))
+* fix failed translation key ([fe98a56](https://github.com/viarotel-org/escrcpy/commit/fe98a56b35f0f1959a317c8cf5e5aec73bb2d489))
+* fix payload type and resolve target logic ([5af60c8](https://github.com/viarotel-org/escrcpy/commit/5af60c8869a60d5f0e74ed97d9c73c41a4c2d949))
+* fix preview button visibility class ([5a8c97b](https://github.com/viarotel-org/escrcpy/commit/5a8c97b10d663a870589010e3bcd06657d1a1cc2))
+* implement retained terminal session with cleanup ([532a055](https://github.com/viarotel-org/escrcpy/commit/532a055dc3873498cc5f5dc440905a97846bf877))
+* implement terminal session management with providers ([fa156e1](https://github.com/viarotel-org/escrcpy/commit/fa156e137af0d49db6a7874f2f04524533e00534))
+* improve file download progress tracking ([51101c7](https://github.com/viarotel-org/escrcpy/commit/51101c76efd06a3dd5ac01f2fc38fdc6a4f8f0be))
+* improve gnirehtet menu handling and options ([8d0e85b](https://github.com/viarotel-org/escrcpy/commit/8d0e85b508d535dea6e2fd3660ac46e1c4c3f68f))
+* improve process killing and error handling ([85a080e](https://github.com/viarotel-org/escrcpy/commit/85a080e667d72b67a49d5f9be070abf23d793ba1))
+* improve window bounds persistence logic ([5361e24](https://github.com/viarotel-org/escrcpy/commit/5361e24c392b90ec420d6a5237f9df96d2a65394))
+* improve wireless pair input handling and UI ([3aea5f6](https://github.com/viarotel-org/escrcpy/commit/3aea5f65a8852167ef940a6f7c17ca0e2a2cd2d0))
+* migrate core helpers to electron-modularity package ([630deaa](https://github.com/viarotel-org/escrcpy/commit/630deaaecbea63aea7cab89ff3a566c837d4c499))
+* migrate edger to service ([9c64cd5](https://github.com/viarotel-org/escrcpy/commit/9c64cd592a0d4d3f176f1eaa4a5d45a31650575c))
+* migrate events to service handlers ([c99b1de](https://github.com/viarotel-org/escrcpy/commit/c99b1ded66a31b72c8878bd1a35a869df8ef12a5))
+* migrate plugins to priority-based system ([ae4404a](https://github.com/viarotel-org/escrcpy/commit/ae4404a6b5c31ed7a33337839890caf40794e4b2))
+* migrate services and modules to explicit app.use ([e63de2e](https://github.com/viarotel-org/escrcpy/commit/e63de2eaea8450375880d544cc39767b1574f038))
+* migrate services to plugins ([36e2a0d](https://github.com/viarotel-org/escrcpy/commit/36e2a0dd6ee89a1d30b6fa5d4ee7aa21b64a2338))
+* migrate to ipcx for IPC handling ([1b1fd8d](https://github.com/viarotel-org/escrcpy/commit/1b1fd8dbdf51145b3832dd3263158f62ceaa42ad))
+* migrate to official plugins and update imports ([eb9bead](https://github.com/viarotel-org/escrcpy/commit/eb9beadae7c5b1b4ff4b4d7c71e59ad8ca5b68c1))
+* migrate to window.$preload namespace ([41a2342](https://github.com/viarotel-org/escrcpy/commit/41a234253015d064a9e1cdbaf4531c80fc2467e1))
+* move i18next-fs-backend to dependencies ([f507222](https://github.com/viarotel-org/escrcpy/commit/f5072224b163bb1329f370101dec24353b1957fc))
+* move window-manager to window module ([8af97a5](https://github.com/viarotel-org/escrcpy/commit/8af97a5d4e61f28aa8e3c27ef2cb2c36b4699b83))
+* optimize device query and control window ([4e2736d](https://github.com/viarotel-org/escrcpy/commit/4e2736d04adf08d2044637f86c57f777503c5759))
+* optimize minimized tray and window handling ([3765b73](https://github.com/viarotel-org/escrcpy/commit/3765b736cd5dab7609a32f6d260797f9e5cb4f14))
+* Reconstruct the multi-entry directory structure ([0690f4b](https://github.com/viarotel-org/escrcpy/commit/0690f4b1f7031e274dfd760b928d96c5bfadf394))
+* Refactor i18n related services ([6e882b6](https://github.com/viarotel-org/escrcpy/commit/6e882b6a5f0c52a3f9deaca9b74c5c5269369c8e))
+* remove app parameter from window manager ([f8719f1](https://github.com/viarotel-org/escrcpy/commit/f8719f1e2bcfd6a879d13a1a5a0eea47634d9147))
+* remove appium-adb documentation and update github link ([f532aab](https://github.com/viarotel-org/escrcpy/commit/f532aabd3b927538271915014798a3e42652c587))
+* remove border from preference header ([9c97366](https://github.com/viarotel-org/escrcpy/commit/9c97366e40a84df1700fce43386c958c4e01fcfc))
+* remove debug console log for args ([e4332c1](https://github.com/viarotel-org/escrcpy/commit/e4332c173c144789199db6e690e96d554195995e))
+* remove debug console log for platform paths ([e5590f3](https://github.com/viarotel-org/escrcpy/commit/e5590f37967140e4242c06f05b7497ce55d39d8f))
+* remove electron middleware module ([3bd462c](https://github.com/viarotel-org/escrcpy/commit/3bd462c4d3ee1f324954f963494ae83b8c364791))
+* remove encoding conversion and use utf8 only ([c32cb79](https://github.com/viarotel-org/escrcpy/commit/c32cb7995a1191abefbae11bc78e55b704d7570c))
+* remove fixed width from window configuration ([ef3e86b](https://github.com/viarotel-org/escrcpy/commit/ef3e86bfa5bb1e0339b916ba5ac1f93ba237733e))
+* remove spawnShell and convert arrow functions ([66978f1](https://github.com/viarotel-org/escrcpy/commit/66978f1cf4655a51c965d340b5300ea2e866230d))
+* remove theme plugin README ([85a853b](https://github.com/viarotel-org/escrcpy/commit/85a853bb3d3e48c8717bd385999dfead972ddb29))
+* remove trailing whitespace in adb helpers ([ec7314c](https://github.com/viarotel-org/escrcpy/commit/ec7314cf8c28585740196ca7b1017e0d02743a16))
+* remove ui-ux-pro-max prompt files ([11d41a9](https://github.com/viarotel-org/escrcpy/commit/11d41a9261f236043236a380bfa711ab87cc94d3))
+* remove unused app-region-drag style ([094e0df](https://github.com/viarotel-org/escrcpy/commit/094e0dfdb810e200dc18c57df88e5bb5c469baf2))
+* remove unused terminalConfig from useTerminal ([9db3f24](https://github.com/viarotel-org/escrcpy/commit/9db3f24fca42f9c7457c72d84ea2c063cd7d4311))
+* remove Windows-specific encoding default ([534934b](https://github.com/viarotel-org/escrcpy/commit/534934b2849f435c7c14c818a767c5b4a9e3347c))
+* rename app to ctx and update electron app imports ([4c7ceba](https://github.com/viarotel-org/escrcpy/commit/4c7ceba36d4ca22afd809d99e42f944cdda50aaf))
+* rename app to ctx in electron app ([6707e2d](https://github.com/viarotel-org/escrcpy/commit/6707e2d130d37102bb16a9dd057ee544341dab46))
+* rename currentStatusType to sessionStatus ([8c84464](https://github.com/viarotel-org/escrcpy/commit/8c844646f1832ffab5ca8d581b31d673f35bc2aa))
+* rename electron-modularity to electron-setup ([081a8a5](https://github.com/viarotel-org/escrcpy/commit/081a8a5e51cce3b6e454291aad4a11d51c2776f0))
+* rename entries to pages for routing structure ([863ecd4](https://github.com/viarotel-org/escrcpy/commit/863ecd4d281ce43747961c152fe260c034c6418b))
+* rename windowOptions to browserWindow and add mainWindow flag ([5093577](https://github.com/viarotel-org/escrcpy/commit/50935772770106a31444528263e291db6f6b1ac9))
+* reorder plugin registration in electron main ([b8ee4ef](https://github.com/viarotel-org/escrcpy/commit/b8ee4efd65d5e2cbf3f8272d75e45d884cd0edb0))
+* reorganize process helpers directory structure ([dcdb6d7](https://github.com/viarotel-org/escrcpy/commit/dcdb6d7a0f185cc9d239c4020e227521ebdbd352))
+* replace args-tokenizer with shell-quote ([1196263](https://github.com/viarotel-org/escrcpy/commit/1196263c211478d4874f6cacb14971aa6817c26c))
+* replace getSize with computed size property ([c7edceb](https://github.com/viarotel-org/escrcpy/commit/c7edcebdcbfc4549f7fdde9b79e223949e4cc89d))
+* replace IS_PACKAGED with import.meta.env.MODE ([521e2ba](https://github.com/viarotel-org/escrcpy/commit/521e2ba01ebee012ee455e112affb9698ba405f9))
+* replace spawnShell with unified sheller helper ([0159bb4](https://github.com/viarotel-org/escrcpy/commit/0159bb4771c3c2868823704629a04ddfebff2378))
+* replace tree-kill with fkill for process termination ([c50cea6](https://github.com/viarotel-org/escrcpy/commit/c50cea6a97e29f93442c443bdca7ddac6c774a05))
+* replace window controls with app header ([a5fa218](https://github.com/viarotel-org/escrcpy/commit/a5fa21867f95a00bf95ec3726b13782fef9b42a1))
+* restructure copilot and explorer modules ([74efca1](https://github.com/viarotel-org/escrcpy/commit/74efca10ad75d16c318f259cae9b822f4b9662c7))
+* restructure core helpers and window management ([16fc934](https://github.com/viarotel-org/escrcpy/commit/16fc93475dc75aa740c5e4c50cfc4df781a48508))
+* restructure electron helpers and modules ([f0e4851](https://github.com/viarotel-org/escrcpy/commit/f0e4851bea6b5d6af2741ef87ea3f03e3878a19a))
+* restructure main window and singleton modules ([7b979d6](https://github.com/viarotel-org/escrcpy/commit/7b979d684ca04bf99b43e3d1c3b78449a0ba5239))
+* restructure terminal session management ([19428dd](https://github.com/viarotel-org/escrcpy/commit/19428dd972b101a853f8a9eb60b360ba86f2e506))
+* restructure window management and IPC handlers ([59a315f](https://github.com/viarotel-org/escrcpy/commit/59a315f0d0796f54366ffa15085ee53ad43ebb40))
+* simplify file list extraction in drag upload ([7453a99](https://github.com/viarotel-org/escrcpy/commit/7453a99dd16dd5d663f2db0d065cc8b3047fff7b))
+* simplify gnirehtet trigger handling ([f9185c3](https://github.com/viarotel-org/escrcpy/commit/f9185c3fd182b1e4239d34510a0a8208269a9673))
+* simplify main window resolution and remove legacy code ([c764f91](https://github.com/viarotel-org/escrcpy/commit/c764f910c82952364a8963543e0a3aea0944e491))
+* simplify restoreAndFocusWindow options ([27185f5](https://github.com/viarotel-org/escrcpy/commit/27185f596951acfd6767e91dba7ba4bef0ae12f5))
+* simplify window types and return native BrowserWindow ([184ab7b](https://github.com/viarotel-org/escrcpy/commit/184ab7b6991b656ca7d45be1fb978bb7cbcf2b16))
+* simplify wireless connection UI and remove pair dialog ([30e026c](https://github.com/viarotel-org/escrcpy/commit/30e026c96a46081d9ac4398a49a158164014c0ff))
+* standardize module export structure ([8111f6f](https://github.com/viarotel-org/escrcpy/commit/8111f6ffbdc7c64d75acc425733eab7237352116))
+* throttle download and upload progress callbacks ([8a16d22](https://github.com/viarotel-org/escrcpy/commit/8a16d22fddf85fce173e3da3ac5a240fb28ebfef))
+* translate terminal comments to English and add command execution ([71a2d7a](https://github.com/viarotel-org/escrcpy/commit/71a2d7abf40f9b7fbffac3a9cb9fd0ceba46b7ca))
+* unify control bar height configuration ([7e6abed](https://github.com/viarotel-org/escrcpy/commit/7e6abed1a0ac13d4090102a0966e64319ad77ea8))
+* unify shell error handling and lazy loading ([98dd91b](https://github.com/viarotel-org/escrcpy/commit/98dd91b264f40b7112e65af49e9e3ad0c5fe7f3e))
+* update primaryColor value ([346df64](https://github.com/viarotel-org/escrcpy/commit/346df646a97cb4fafa8f567926a7ba5527e2ed87))
+* update scrollbar styling with Tailwind CSS ([6eaf259](https://github.com/viarotel-org/escrcpy/commit/6eaf259ae0786a5a6a16d7347fa6cb1dc419c4a3))
+* update terminal scrollbar styling with custom width and transparency ([b2c8f87](https://github.com/viarotel-org/escrcpy/commit/b2c8f87f4efac668d60580bc53eab98a422ebdba))
+* update terminal title and locale strings ([f0bdf0b](https://github.com/viarotel-org/escrcpy/commit/f0bdf0b2e186f5791b29fcee5bdfb2b0fdd56cb9))
+
+## [2.3.1](https://github.com/viarotel-org/escrcpy/compare/v2.3.0...v2.3.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the problem of being unable to click to enter the co-pilot entrance under Windows and Linux. ([c563d11](https://github.com/viarotel-org/escrcpy/commit/c563d111f99c2080f729dc44fb8cb4dce53c3c83))
+
+## [2.3.0](https://github.com/viarotel-org/escrcpy/compare/v2.2.0...v2.3.0) (2026-01-22)
+
+
+### Features
+
+* 🚀 Optimize portable package configuration and add linux flatpak package support ([a7982db](https://github.com/viarotel-org/escrcpy/commit/a7982db1d03107143a8ac64e85d3b895f21b4e17))
+* configure electron-log file path in debugger helper ([2242668](https://github.com/viarotel-org/escrcpy/commit/2242668afa139189a3f92efbff2e6460b5c69f90))
+
+
+### Bug Fixes
+
+* 🐛 handle copilot execution failures and adjust config max steps ([3601709](https://github.com/viarotel-org/escrcpy/commit/3601709dde4aeadcf8616d98bf7073c288c6c043))
+* **win:** fully redirect user data to portable folder and fix CI workflow ([fe2fd89](https://github.com/viarotel-org/escrcpy/commit/fe2fd8937ec33a440eb00f45b0d2764132dd530f))
+
+
+### Performance Improvements
+
+* ✨ Optimize windows and linux window layout ([b63b59c](https://github.com/viarotel-org/escrcpy/commit/b63b59ca723b310f854afc6e77cb0fe6501661e7))
+
+
+### Code Refactoring
+
+* add platform simulation support and adjust window controls layout ([9c3a5b1](https://github.com/viarotel-org/escrcpy/commit/9c3a5b1042ff795b5bd3a2f947fc53506eaf4a29))
+* adjust header and chat layout padding ([70fe60d](https://github.com/viarotel-org/escrcpy/commit/70fe60d3b62d34bf36f51094af28e01ebaba91ba))
+* adjust layout padding for windows and linux platforms ([4e153cc](https://github.com/viarotel-org/escrcpy/commit/4e153ccbf3b3524e71463453c0891a2cc62a1b87))
+* adjust widget dimensions and clear dialog messages ([ca6796f](https://github.com/viarotel-org/escrcpy/commit/ca6796f1fa95e8c17fa078084414edf5031e4948))
+* implement immersive title bar and optimize window layout ([1e76d11](https://github.com/viarotel-org/escrcpy/commit/1e76d11668e6c7c39f4b8471c665fe7db62770d6))
+* improve chat retry logic and ADB keyboard detection ([8e0e43c](https://github.com/viarotel-org/escrcpy/commit/8e0e43cd03b6094444cf37b25145ec6425159e78))
+* remove dialog width constraints and improve file creation ([54e5553](https://github.com/viarotel-org/escrcpy/commit/54e55535eff5989b3a57255ce4326a44ecad48fd))
+* remove quiet config option ([76f9d6c](https://github.com/viarotel-org/escrcpy/commit/76f9d6ce677fa645f5c50b981c3cba377feaff23))
+* remove redundant success messages and unify dialog titles ([b1eac32](https://github.com/viarotel-org/escrcpy/commit/b1eac328826bf6263cc29d6cb66f1711e3635ac8))
+* reorganize emitter module and update event emitter references ([4c3cc2d](https://github.com/viarotel-org/escrcpy/commit/4c3cc2d33879eeb74f8a12c23528d14d2fbce331))
+* reorganize preference form layout with tabs and scroll ([7f0f864](https://github.com/viarotel-org/escrcpy/commit/7f0f86449990329df4478e474930157773e5b882))
+* replace ExTooltipButton with native el-button title attribute ([8056977](https://github.com/viarotel-org/escrcpy/commit/80569772c6ff1e0a6d8d36ad7e28d0c8661db77b))
+
+## [2.2.0](https://github.com/viarotel-org/escrcpy/compare/v2.1.7...v2.2.0) (2026-01-17)
+
+
+### Features
+
+* 🎉 Improve the accuracy and coverage of Copilot opening applications by obtaining information about installed applications on the device ([e2f27da](https://github.com/viarotel-org/escrcpy/commit/e2f27da08574d8ae3bcb8ee8c821909968115ce8))
+* add keyboard shortcuts for connect and disconnect ([39293af](https://github.com/viarotel-org/escrcpy/commit/39293af392246bf055862ec4ae9e927b297a085c))
+* auto-focus input when editing prompt ([d58b993](https://github.com/viarotel-org/escrcpy/commit/d58b993c6eff1d4ce227c4d158113aec74abae43))
+
+
+### Bug Fixes
+
+* 🐛 Fixed the issue where autoglm.js conversation request listener was not cleaned up causing memory overflow ([bac2126](https://github.com/viarotel-org/escrcpy/commit/bac21261207f0c97695af937f6e926a1d7e84657))
+
+
+### Code Refactoring
+
+* improve config management and prompt editing ([de2f708](https://github.com/viarotel-org/escrcpy/commit/de2f708142512787d3c8e384e6f4fb1d1d87abf2))
+* improve prompt manager UI and editing experience ([1697558](https://github.com/viarotel-org/escrcpy/commit/169755869a03925c31d1252ced9c756e1dfd8969))
+* optimize subscribe store initialization and token management ([0f00903](https://github.com/viarotel-org/escrcpy/commit/0f00903367e0c457a052e74514a66220ad924091))
+
+## [2.1.7](https://github.com/viarotel-org/escrcpy/compare/v2.1.6...v2.1.7) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* release 2.1.7 ([3b6b16a](https://github.com/viarotel-org/escrcpy/commit/3b6b16a3168eb9ae9c46dff5014cb0ec75a6db8c))
+
+## [2.1.6](https://github.com/viarotel-org/escrcpy/compare/v2.1.5...v2.1.6) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* release 2.1.6 ([39f0f2b](https://github.com/viarotel-org/escrcpy/commit/39f0f2bd0895ddb634f4ac8358a4bd371bb5bee6))
+
+## [2.1.5](https://github.com/viarotel-org/escrcpy/compare/v2.1.4...v2.1.5) (2026-01-14)
+
+
+### Miscellaneous Chores
+
+* remove comments in copilot window handler ([f231998](https://github.com/viarotel-org/escrcpy/commit/f231998dfc8f4ca834dbf8d64b9ba4e038e3a507))
+* update version to 2.1.4 ([9bdf671](https://github.com/viarotel-org/escrcpy/commit/9bdf671d9dfced0811a07935d3bec36a2aca1c45))
 
 ## [2.1.4](https://github.com/viarotel-org/escrcpy/compare/workspace-v2.1.3...workspace-v2.1.4) (2026-01-14)
 

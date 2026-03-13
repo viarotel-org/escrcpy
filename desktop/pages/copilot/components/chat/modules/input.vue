@@ -17,7 +17,7 @@
       <template #suffix="{ renderPresets }">
         <component :is="renderPresets([])" />
       </template>
-      <template v-if="!isKeyboardInstalled" #prefix>
+      <template v-if="!adbKeyboard.isInstalled" #prefix>
         <el-button
           type="warning"
           plain
@@ -25,7 +25,7 @@
           icon="Download"
           size="small"
           :title="$t('copilot.check.adb.notInstalled')"
-          @click="onInstallKeyboard"
+          @click="adbKeyboard.install"
         >
           AdbKeyboard
         </el-button>
@@ -70,8 +70,6 @@ const emit = defineEmits(['update:modelValue', 'submit', 'stop'])
 
 const senderRef = ref(null)
 
-const isKeyboardInstalled = ref(true)
-
 const localValue = computed({
   get: () => props.modelValue,
   set: val => emit('update:modelValue', val),
@@ -85,67 +83,7 @@ const selectedDevices = computed(() => {
   return deviceSelectionHelper.filter(props.currentDevices, 'onlineAndUnique')
 })
 
-onMounted(() => {
-  handleCheckKeyboard()
-})
-
-async function handleCheckKeyboard() {
-  if (!selectedDevices.value.length) {
-    return false
-  }
-
-  const concurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
-  const limit = pLimit(concurrencyLimit)
-
-  try {
-    const tasks = selectedDevices.value.map(device =>
-      limit(() => window.$preload.adb.isInstalledAdbKeyboard(device.id)),
-    )
-
-    const results = await Promise.all(tasks)
-
-    const allInstalled = results.every(installed => installed)
-
-    isKeyboardInstalled.value = allInstalled
-
-    return allInstalled
-  }
-  catch (error) {
-    console.error(error.message)
-    isKeyboardInstalled.value = false
-    return false
-  }
-}
-
-async function onInstallKeyboard() {
-  const concurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
-  const limit = pLimit(concurrencyLimit)
-
-  const tasks = selectedDevices.value.map(device =>
-    limit(async () => {
-      try {
-        await window.$preload.adb.installAdbKeyboard(device.id)
-        return true
-      }
-      catch (error) {
-        const uploader = window.$preload.adb.uploader({ deviceId: device.id, localPaths: [window.$preload.configs.adbKeyboardApkPath] })
-        uploader.start()
-        return false
-      }
-    }),
-  )
-
-  const results = await Promise.all(tasks)
-
-  isKeyboardInstalled.value = results.every(res => res === true)
-
-  if (!isKeyboardInstalled.value) {
-    ElMessage.warning({
-      message: window.t('copilot.check.adb.installFailed'),
-      duration: 3000,
-    })
-  }
-}
+const adbKeyboard = useAdbKeyboard({ devices: selectedDevices })
 
 function onSelectPrompt(prompt) {
   emit('update:modelValue', prompt)

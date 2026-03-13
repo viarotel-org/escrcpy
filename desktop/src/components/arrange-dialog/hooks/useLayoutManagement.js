@@ -2,12 +2,21 @@
  * Layout management composable
  * Handles loading and creating widget layouts
  */
-export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices) {
-  const createWidgetFromConfig = (config, widgetData) => {
-    const realWidth = Number.parseInt(config['--window-width']) || 300
-    const realHeight = Number.parseInt(config['--window-height']) || 600
-    const realX = Number.parseInt(config['--window-x']) || 0
-    const realY = Number.parseInt(config['--window-y']) || 0
+export function useLayoutManagement(options) {
+  const {
+    screenWidth,
+    screenHeight,
+    scaleConverter,
+    arrangedWidgets,
+    allDevices,
+  } = options
+
+  const createWidgetFromConfig = (config = {}, widgetData = {}) => {
+    const realWidth = Number(config['--window-width']) || widgetData.deviceScreenWidth || screenWidth.value / 6
+    const realHeight = Number(config['--window-height']) || widgetData.deviceScreenHeight || screenHeight.value / 2
+    const realX = Number(config['--window-x']) || arrangedWidgets.value.length * 50
+    const realY = Number(config['--window-y']) || arrangedWidgets.value.length * 50
+    const lockAspectRatio = widgetData.lockAspectRatio ?? false
 
     const containerRect = scaleConverter({ width: realWidth, height: realHeight, x: realX, y: realY })
 
@@ -21,6 +30,7 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
       realY,
       realWidth,
       realHeight,
+      lockAspectRatio,
     }
   }
 
@@ -48,6 +58,7 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
           type: 'device',
           deviceId: device.id,
           name: device.name || device.model?.split(':')[1] || device.id,
+          lockAspectRatio: !!(device.screenWidth && device.screenHeight),
         })
         arrangedWidgets.value.push(widget)
       }
@@ -57,11 +68,10 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
   // Recalculate the proportion of all widgets
   function updateLayout() {
     if (!arrangedWidgets.value.length) {
-      return
+      return false
     }
 
     arrangedWidgets.value.forEach((widget) => {
-      // Use realX, realY, realWidth, realHeight as the baseline to recalculate container coordinates
       const containerRect = scaleConverter({
         x: widget.realX,
         y: widget.realY,
@@ -69,7 +79,6 @@ export function useLayoutManagement(scaleConverter, arrangedWidgets, allDevices)
         height: widget.realHeight,
       })
 
-      // Update container coordinates
       widget.x = containerRect.x
       widget.y = containerRect.y
       widget.width = containerRect.width

@@ -26,9 +26,9 @@
     <div v-else class="space-y-8">
       <div v-for="item of planModel" :key="item.label">
         <el-divider content-position="left" class="el-divider--plain">
-          <div class="">
+          <el-text class="">
             {{ $t(item.label) }}
-          </div>
+          </el-text>
         </el-divider>
 
         <div class="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">

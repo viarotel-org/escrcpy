@@ -109,6 +109,8 @@ import { omit } from 'lodash-es'
 
 import { inputModel } from './components/index.js'
 
+import { sleep } from '$/utils/index.js'
+
 const props = defineProps({
   deviceScope: {
     type: String,
@@ -138,12 +140,16 @@ const preferenceStore = usePreferenceStore()
 const activeTab = ref('common')
 
 const tabsModel = computed(() => {
-  const value = Object.entries(preferenceStore.model).map(([key, item]) => {
-    return {
-      label: item.label,
-      value: key,
+  const value = Object.entries(preferenceStore.model).reduce((arr, [key, item]) => {
+    if (!props.excludes.includes(key)) {
+      arr.push({
+        label: item.label,
+        value: key,
+      })
     }
-  })
+
+    return arr
+  }, [])
 
   return value
 })
@@ -156,14 +162,22 @@ const preferenceModel = computed(() =>
 
 const preferenceModelKeys = Object.keys(preferenceModel.value ?? {})
 
+const observerLock = ref(false)
+
 if (preferenceModelKeys.length) {
   collapseValue.value = preferenceModelKeys
 }
 
-function onTabChange(val) {
+async function onTabChange(val) {
+  observerLock.value = true
+
   document.querySelector(`#preference-${val}`).scrollIntoView({
     block: 'start',
   })
+
+  await sleep(500)
+
+  observerLock.value = false
 }
 
 function subModel(item) {
@@ -198,6 +212,10 @@ async function generateCommand() {
 }
 
 function onIntersectionObserver([entry]) {
+  if (observerLock.value) {
+    return false
+  }
+
   if (!entry.isIntersecting) {
     return false
   }

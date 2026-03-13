@@ -6,8 +6,14 @@
       @files-dropped="handleDragUpload"
     >
       <div class="flex flex-col h-full relative">
-        <AppHeader title="Escrcpy Explorer" class="px-2 gap-4">
-          <div class="flex items-center bg-white dark:bg-gray-800 rounded-full w-full p-px w-full">
+        <AppHeader
+          title="Escrcpy Explorer"
+          class="gap-4"
+          :class="{
+            'pl-2': $platform.is('windows', 'linux'),
+          }"
+        >
+          <div class="flex items-center bg-white dark:bg-gray-800 rounded-full p-px mx-2">
             <div class="flex-none flex items-center *:app-region-no-drag">
               <el-button
                 text
@@ -171,7 +177,7 @@
 
             <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="left" min-width="150" />
 
-            <el-table-column :label="$t('device.control.name')" align="left" min-width="200">
+            <el-table-column :label="$t('common.actions')" align="left" min-width="200">
               <template #default="{ row }">
                 <el-button
                   :title="$t('device.control.file.manager.preview')"

@@ -9,71 +9,70 @@
     append-to-body
     fullscreen
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
+    @opened="onOpened"
     @closed="onClosed"
   >
-    <div class="arrange-container overflow-hidden flex flex-col h-full">
-      <div ref="arrangementAreaRef" class="arrangement-area flex-1 h-0 overflow-auto">
-        <div
-          ref="screenContainerRef"
-          class="screen-container border border-primary-300 border border-dashed"
-          :style="screenContainerStyle"
+    <div ref="arrangementAreaRef" class="arrangement-area h-full overflow-hidden">
+      <div
+        ref="screenContainerRef"
+        class="screen-container border border-primary-300 border border-dashed"
+        :style="screenContainerStyle"
+      >
+        <VueDraggableResizable
+          v-for="widget in arrangedWidgets"
+          :key="widget.id"
+          :x="widget.x"
+          :y="widget.y"
+          :w="widget.width"
+          :h="widget.height"
+          :min-width="minWidth"
+          :min-height="minHeight"
+          :parent="true"
+          :lock-aspect-ratio="widget.lockAspectRatio"
+          class="widget-window" :class="[`${widget.type}-widget`]"
+          @dragging="(x, y) => onWidgetDragging(widget.id, { x, y })"
+          @resizing="(x, y, w, h) => onWidgetResizing(widget.id, { x, y, width: w, height: h })"
+          @drag-stop="(x, y) => onWidgetDragStop(widget.id, { x, y })"
+          @resize-stop="(x, y, w, h) => onWidgetResizeStop(widget.id, { x, y, width: w, height: h })"
         >
-          <VueDraggableResizable
-            v-for="widget in arrangedWidgets"
-            :key="widget.id"
-            :x="widget.x"
-            :y="widget.y"
-            :w="widget.width"
-            :h="widget.height"
-            :min-width="minWidth"
-            :min-height="minHeight"
-            :parent="true"
-            class="widget-window" :class="[`${widget.type}-widget`]"
-            @dragging="(x, y) => onWidgetDragging(widget.id, { x, y })"
-            @resizing="(x, y, w, h) => onWidgetResizing(widget.id, { x, y, width: w, height: h })"
-            @drag-stop="(x, y) => onWidgetDragStop(widget.id, { x, y })"
-            @resize-stop="(x, y, w, h) => onWidgetResizeStop(widget.id, { x, y, width: w, height: h })"
-          >
-            <div class="widget-content">
-              <div class="widget-header flex w-full space-x-2 p-1">
-                <div class="widget-name text-white flex-1 w-0 truncate" :title="widget.name">
-                  {{ widget.name }}
-                </div>
-
-                <div class="flex-none flex items-center">
-                  <el-button
-                    type="danger"
-                    circle
-                    class="remove-btn !size-[10px] group"
-                    @click="removeWidget(widget.id)"
-                  >
-                    <template #icon>
-                      <el-icon class="opacity-0 group-hover:opacity-100">
-                        <el-icon-close class=""></el-icon-close>
-                      </el-icon>
-                    </template>
-                  </el-button>
-                </div>
+          <div class="widget-content">
+            <div class="widget-header flex w-full space-x-2 p-1">
+              <div class="widget-name text-white flex-1 w-0 truncate" :title="widget.name">
+                {{ widget.name }}
               </div>
-              <div class="widget-body">
-                <div class="widget-info bg-white/80 dark:bg-black/80 overflow-hidden relative">
-                  <WidgetRect
-                    v-bind="{
-                      widget,
-                      scaleConverter,
-                      minWidth,
-                      minHeight,
-                    }"
-                  />
-                </div>
+
+              <div class="flex-none flex items-center">
+                <el-button
+                  type="danger"
+                  circle
+                  class="remove-btn !size-[10px] group"
+                  @click="removeWidget(widget.id)"
+                >
+                  <template #icon>
+                    <el-icon class="opacity-0 group-hover:opacity-100">
+                      <el-icon-close class=""></el-icon-close>
+                    </el-icon>
+                  </template>
+                </el-button>
               </div>
             </div>
-          </VueDraggableResizable>
-
-          <div v-if="!arrangedWidgets?.length" class="absolute inset-center">
-            {{ $t('common.empty') }}
+            <div class="widget-body">
+              <div class="widget-info bg-white/80 dark:bg-black/80 overflow-hidden relative">
+                <WidgetRect
+                  v-bind="{
+                    widget,
+                    scaleConverter,
+                    minWidth,
+                    minHeight,
+                  }"
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        </VueDraggableResizable>
+
+        <AppEmpty v-if="!arrangedWidgets?.length" class="absolute inset-center">
+        </AppEmpty>
       </div>
     </div>
 
@@ -142,6 +141,7 @@ import {
   useWidgetEvents,
   useWidgetManagement,
 } from './hooks/index.js'
+import AppEmpty from '$/components/app-empty/index.vue'
 
 import WidgetRect from './modules/widget-rect/index.vue'
 
@@ -181,24 +181,26 @@ const availableDevices = computed(() => {
 const screenContainerStyle = computed(() => {
   return {
     width: `${containerWidth.value}px`,
-    height: `${containerHeight.value}px`,
+    height: `${containerHeight.value - 1}px`,
   }
 })
 
-const { loadLayout, updateLayout, createWidgetFromConfig } = useLayoutManagement(
+const { loadLayout, updateLayout, createWidgetFromConfig } = useLayoutManagement({
+  screenWidth,
+  screenHeight,
   scaleConverter,
   arrangedWidgets,
   allDevices,
-)
+})
 
-const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemovedWidgets } = useWidgetManagement(
+const { addWidget, removeWidget, clearAllWidgets, getRemovedWidgets, clearRemovedWidgets } = useWidgetManagement({
   arrangedWidgets,
   allDevices,
   hasGlobalWidget,
   createWidgetFromConfig,
   screenWidth,
   screenHeight,
-)
+})
 
 const resetLayout = () => {
   arrangedWidgets.value = []
@@ -212,7 +214,7 @@ const {
   onWidgetResizeStop,
 } = useWidgetEvents(scaleConverter, arrangedWidgets)
 
-const { open, close, onClosed } = useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout)
+const { open, onOpened, close, onClosed } = useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout)
 
 const { saveLayout } = useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets)
 
@@ -230,6 +232,7 @@ defineExpose({
 .arrangement-area {
   display: flex;
   justify-content: center;
+  items-align: center;
   border-radius: 8px;
 }
 

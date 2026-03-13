@@ -9,6 +9,7 @@ import {
 } from './helpers/index.js'
 import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
+import { isPlatform } from '$/utils/index.js'
 
 export const usePreferenceStore = defineStore('app-preference', () => {
   // Define reactive state
@@ -25,6 +26,11 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   const model = ref(cloneDeep(preferenceModel))
   const data = ref({ ...getDefaultData() })
   const scrcpyExcludeKeys = ref(getScrcpyExcludeKeys())
+  const titleBarHeight = ref(30)
+
+  window.$preload.ipcRenderer.invoke('get-title-bar-height').then((value) => {
+    titleBarHeight.value = value
+  })
 
   function init(scope = deviceScope.value) {
     data.value = getData(scope)
@@ -100,11 +106,19 @@ export const usePreferenceStore = defineStore('app-preference', () => {
           || (!isOtg && otgKeys.value.includes(key))
           || excludes.includes(key)
           || excludes.includes(`${key}=${value}`)
+
       if (!shouldExclude) {
         obj[key] = value
       }
+
+      // Handle special case for window-y on Windows platform
+      if (key === '--window-y' && typeof value !== 'undefined' && isPlatform('windows')) {
+        obj[key] = Number(value) + titleBarHeight.value
+      }
+
       return obj
     }, {})
+
     let value = command.stringify(params)
     if (dataToUse.scrcpyAppend) {
       value += ` ${dataToUse.scrcpyAppend}`

@@ -92,7 +92,7 @@ async function getDisplayIds(serial) {
   return value
 }
 
-async function startApp(serial, args = {}) {
+async function launch(serial, args = {}) {
   let { commands, packageName, useNewDisplay = true, ...options } = args
 
   if (useNewDisplay) {
@@ -162,9 +162,9 @@ export default {
   getEncoders,
   mirror,
   record,
+  launch,
   helper,
   getAppList,
-  startApp,
   getDisplayIds,
   killProcesses,
 }

@@ -94,7 +94,7 @@ export function streamToBase64(stream) {
 }
 
 export function getAppBackgroundColor() {
-  return nativeTheme.shouldUseDarkColors ? '#0A0A0A' : '#F5F5F5'
+  return nativeTheme.shouldUseDarkColors ? '#171717' : '#F5F5F5'
 }
 
 export function isPortable() {

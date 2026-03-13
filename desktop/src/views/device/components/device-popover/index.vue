@@ -5,6 +5,7 @@
     :width="horizontalFlag ? 350 : 500"
     trigger="hover"
     popper-class="!p-0 !overflow-hidden !rounded-xl"
+    :show-after="500"
     :disabled="!connectFlag"
     @before-enter="onBeforeEnter"
     @after-leave="onAfterLeave"

@@ -44,6 +44,10 @@ export default {
 
     ipcMain.handle('get-primary-display', async () => {
       const primaryDisplay = screen.getPrimaryDisplay()
+      const scaleFactor = primaryDisplay.scaleFactor || 1
+
+      primaryDisplay.titleBarHeight = Math.round(30 * scaleFactor)
+
       return primaryDisplay
     })
 
@@ -217,12 +221,6 @@ export default {
       return true
     })
 
-    ipcMain.handle('get-title-bar-height', async () => {
-      const { scaleFactor = 1 } = screen.getPrimaryDisplay()
-      const value = Math.round(30 * scaleFactor)
-      return value
-    })
-
     return () => {
       ipcMain.removeHandler('show-open-dialog')
       ipcMain.removeHandler('open-path')
@@ -236,7 +234,6 @@ export default {
       ipcMain.removeHandler('open-log-path')
       ipcMain.removeHandler('get-gitee-temporary-token')
       ipcMain.removeHandler('open-system-menu')
-      ipcMain.removeHandler('get-title-bar-height')
     }
   },
 }

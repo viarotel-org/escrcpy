@@ -19,11 +19,8 @@
         @selection-change="onSelectionChange"
       >
         <template #empty>
-          <el-empty :description="$t('device.list.empty')">
-            <template #image>
-              <svg class="i-material-symbols-light-mobile-question-outline !h-24vh !max-h-64 !-mb-6"></svg>
-            </template>
-          </el-empty>
+          <AppEmpty :sub-title="$t('device.list.empty')">
+          </AppEmpty>
         </template>
 
         <el-table-column type="selection"></el-table-column>
@@ -163,6 +160,7 @@
 import { sleep } from '$/utils/index.js'
 import { uniqBy } from 'lodash-es'
 
+import AppEmpty from '$/components/app-empty/index.vue'
 import BatchActions from './components/batch-actions/index.vue'
 import ControlBar from '$/components/control-bar/index.vue'
 import MirrorAction from './components/mirror-action/index.vue'

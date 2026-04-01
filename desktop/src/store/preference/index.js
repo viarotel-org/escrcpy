@@ -9,10 +9,8 @@ import {
 } from './helpers/index.js'
 import preferenceModel from '$/models/preference/index.js'
 import command from '$/utils/command/index.js'
-import { isPlatform } from '$/utils/index.js'
 
 export const usePreferenceStore = defineStore('app-preference', () => {
-  // Define reactive state
   const deviceScope = ref(window.$preload.store.get('scrcpy.deviceScope') || 'global')
   const recordKeys = ref(Object.values(preferenceModel?.record?.children || {}).map((item) => {
     return item.field
@@ -26,10 +24,10 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   const model = ref(cloneDeep(preferenceModel))
   const data = ref({ ...getDefaultData() })
   const scrcpyExcludeKeys = ref(getScrcpyExcludeKeys())
-  const titleBarHeight = ref(30)
+  const titleBarHeight = ref(0)
 
-  window.$preload.ipcRenderer.invoke('get-title-bar-height').then((value) => {
-    titleBarHeight.value = value
+  window.$preload.ipcRenderer.invoke('get-primary-display').then((display) => {
+    titleBarHeight.value = display.titleBarHeight
   })
 
   function init(scope = deviceScope.value) {
@@ -111,8 +109,8 @@ export const usePreferenceStore = defineStore('app-preference', () => {
         obj[key] = value
       }
 
-      // Handle special case for window-y on Windows platform
-      if (key === '--window-y' && typeof value !== 'undefined' && isPlatform('windows')) {
+      // Handle special case for window-y
+      if (key === '--window-y' && typeof value !== 'undefined') {
         obj[key] = Number(value) + titleBarHeight.value
       }
 

@@ -38,62 +38,53 @@
   </el-dropdown>
 </template>
 
-<script>
+<script setup>
 import Record from './components/record/index.vue'
 import Camera from './components/camera/index.vue'
 import Otg from './components/otg/index.vue'
 import Custom from './components/custom/index.vue'
 
-export default {
-  components: {
-    Record,
-    Camera,
-    Otg,
-    Custom,
-  },
-  props: {
-    ...Record.props,
-    ...Otg.props,
-    ...Camera.props,
-    ...Custom.props,
-  },
-  data() {
-    return {
-      options: [
-        {
-          label: 'device.actions.more.record.name',
-          component: 'Record',
-        },
-        {
-          label: 'device.actions.more.recordCamera.name',
-          component: 'Record',
-          props: {
-            recordType: 'camera',
-          },
-        },
-        {
-          label: 'device.actions.more.recordAudio.name',
-          component: 'Record',
-          props: {
-            recordType: 'audio',
-          },
-        },
-        {
-          label: 'device.actions.more.camera.name',
-          component: 'Camera',
-        },
-        {
-          label: 'device.actions.more.otg.name',
-          component: 'Otg',
-        },
-        {
-          label: 'device.actions.more.custom.name',
-          component: 'Custom',
-        },
-      ],
-    }
-  },
-}
+const props = defineProps({
+  ...Record.props,
+  ...Otg.props,
+  ...Camera.props,
+  ...Custom.props,
+})
+
+const options = computed(() => {
+  return [
+    {
+      label: 'device.actions.more.record.name',
+      component: Record,
+    },
+    {
+      label: 'device.actions.more.recordCamera.name',
+      component: Record,
+      props: {
+        recordType: 'camera',
+      },
+    },
+    {
+      label: 'device.actions.more.recordAudio.name',
+      component: Record,
+      props: {
+        recordType: 'audio',
+      },
+    },
+    {
+      label: 'device.actions.more.camera.name',
+      component: Camera,
+    },
+    {
+      label: 'device.actions.more.otg.name',
+      component: Otg,
+    },
+    {
+      label: 'device.actions.more.custom.name',
+      component: Custom,
+    },
+  ]
+})
 </script>
 
 <style></style>

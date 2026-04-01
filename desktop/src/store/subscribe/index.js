@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
+import Big from 'big.js'
 import subscribeClient from '$/services/subscribe/index.js'
-import { preciseAdd } from '$/utils/index.js'
 
 export const useSubscribeStore = defineStore('app-subscribe', () => {
   const userInfo = ref(null)
@@ -138,7 +138,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     }
 
     const value = (userInfo.value?.subscriptions || []).reduce((total, item) => {
-      total = preciseAdd(total, item.amount || 0)
+      total = new Big(total).plus(item.amount || 0).toNumber()
       return total
     }, 0)
 

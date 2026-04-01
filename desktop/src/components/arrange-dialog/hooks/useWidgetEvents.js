@@ -2,7 +2,9 @@
  * Widget event handlers composable
  * Handles widget dragging and resizing events
  */
-export function useWidgetEvents(scaleConverter, arrangedWidgets) {
+export function useWidgetEvents(options) {
+  const { scaleConverter, arrangedWidgets } = options || {}
+
   const updateWidgetPosition = (widget, containerPos) => {
     const realPos = scaleConverter(containerPos, true)
     widget.x = containerPos.x

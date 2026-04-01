@@ -21,19 +21,28 @@ hero:
       link: https://github.com/viarotel-org/escrcpy
 
 features:
+  - icon: 🖥️
+    title: Inset Mirror
+    details: 'Dedicated embedded window, auto-fits screen resolution and orientation, with integrated one-tap shortcuts'
+  - icon: 🔄
+    title: Multi-Device Control
+    details: 'Control multiple devices simultaneously in a single window, broadcast input, with batch screenshot and APK install support'
+  - icon: 🎛️
+    title: Integrated Control Bar
+    details: 'Compact, draggable sidebar with reorderable controls: rotation, screenshot, apps, files, terminal, AI assistant, and automation'
   - icon: 🤖
     title: Intelligent Control
     details: 'Natural-language commands powered by AutoGLM for smart control of Android devices'
   - icon: 🏃
-    title: Automation & Efficiency
-    details: 'Automated workflow execution with support for parallel operations across multiple devices'
+    title: Automated Execution
+    details: 'Automation workflows run in parallel, supporting synchronized operations across multiple devices'
   - icon: 🪟
     title: Multi-Device Management
-    details: 'Visual window orchestration for centralized management of multiple devices'
+    details: 'Visual window orchestration for centralized management of all connected devices'
   - icon: 📡
-    title: Connectivity & Networking
-    details: 'Wireless connections with Gnirehtet reverse tethering support'
+    title: Wireless Connection
+    details: 'Wireless ADB connections with Gnirehtet reverse tethering support'
   - icon: ⚡️
     title: Scrcpy Core
-    details: 'High-performance, low-latency screen mirroring based on Scrcpy'
+    details: 'High-performance, low-latency screen mirroring and control'
 ---

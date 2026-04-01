@@ -33,7 +33,8 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "prepublishOnly": "pnpm build",
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run build",
     "release": "bumpp",
     "typecheck": "tsc",
     "test": "vitest"

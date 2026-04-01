@@ -52,6 +52,7 @@ export default {
       append: 'fps',
     },
     videoCode: {
+      hidden: 'global',
       label: 'preferences.video.video-code.name',
       field: '--video-code',
       customized: true,
@@ -125,6 +126,7 @@ export default {
       placeholder: 'preferences.video.screen-cropping.placeholder',
     },
     displayId: {
+      hidden: 'global',
       label: 'preferences.video.display.name',
       field: '--display-id',
       type: 'DisplaySelect',

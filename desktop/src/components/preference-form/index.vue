@@ -186,7 +186,15 @@ function subModel(item) {
   const value = {}
 
   Object.entries(children).forEach(([key, data]) => {
-    if (!data.hidden) {
+    const { hidden } = data
+
+    let isVisible = !hidden
+
+    if (Array.isArray(hidden) || typeof hidden === 'string') {
+      isVisible = !hidden.includes(props.deviceScope)
+    }
+
+    if (isVisible) {
       value[key] = data
     }
   })

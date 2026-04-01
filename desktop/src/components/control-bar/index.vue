@@ -152,7 +152,7 @@ export default {
       const valueMap = {
         'switch': {
           label: 'device.control.switch',
-          fontIcon: 'i-bi-list',
+          fontIcon: 'i-proicons-menu',
           command: 'input keyevent 187',
         },
         'home': {

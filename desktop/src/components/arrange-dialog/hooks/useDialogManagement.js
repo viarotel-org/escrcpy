@@ -1,20 +1,31 @@
-/**
- * Dialog management composable
- * Handles dialog opening, closing, and initialization
- */
-export function useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout) {
+import { sleep } from '$/utils/index.js'
+
+export function useDialogManagement(options) {
+  const {
+    dialog,
+    arrangedWidgets,
+    loadDevices,
+    loadLayout,
+  } = options || {}
+
   async function open(options) {
+    dialog.loading = true
+
+    await loadDevices()
+
     dialog.open(options)
 
     await nextTick()
 
-    await loadDevices()
+    await sleep()
+
+    await loadLayout()
+
+    dialog.loading = false
   }
 
   async function onOpened() {
-    await nextTick()
 
-    await loadLayout()
   }
 
   function close() {
@@ -27,6 +38,7 @@ export function useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLa
   }
 
   return {
+    dialog,
     open,
     onOpened,
     close,

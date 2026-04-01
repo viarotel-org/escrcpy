@@ -1,10 +1,10 @@
 <template>
   <el-dropdown
     :hide-on-click="false"
-    :disabled="loading || floating || ['unauthorized', 'offline'].includes(device.status)"
+    :disabled="disabled"
     @command="handleCommand"
   >
-    <slot :loading :trigger="handleTrigger" />
+    <slot :trigger="handleTrigger" />
 
     <template #dropdown>
       <el-dropdown-menu>
@@ -20,80 +20,24 @@
   </el-dropdown>
 </template>
 
-<script>
-export default {
-  props: {
-    device: {
-      type: Object,
-      default: () => ({}),
-    },
-    floating: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+import { useDeviceVolume } from '$/hooks/useDeviceVolume/index.js'
+
+const props = defineProps({
+  device: {
+    type: Object,
+    default: () => ({}),
   },
-  data() {
-    return {
-      loading: false,
-      commandMap: {
-        'volume-down': 'input keyevent KEYCODE_VOLUME_DOWN',
-        'volume-up': 'input keyevent KEYCODE_VOLUME_UP',
-        'volume-mute': 'input keyevent KEYCODE_VOLUME_MUTE',
-      },
-    }
+  floating: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    options() {
-      const value = [
-        {
-          label: this.$t('device.control.volume-up.name'),
-          value: 'volume-up',
-        },
-        {
-          label: this.$t('device.control.volume-down.name'),
-          value: 'volume-down',
-        },
-        {
-          label: this.$t('device.control.volume-mute.name'),
-          value: 'volume-mute',
-        },
-      ]
-      return value
-    },
-  },
-  methods: {
-    handleTrigger() {
-      if (!this.floating) {
-        return false
-      }
+})
 
-      const channel = 'changeVolume'
-
-      window.$preload.ipcRenderer.once(
-        channel,
-        (event, data) => {
-          this.handleCommand(data)
-        },
-      )
-
-      const options = toRaw(this.options)
-
-      window.$preload.ipcRenderer.invoke('open-system-menu', {
-        channel,
-        options,
-      })
-    },
-    async handleCommand(value) {
-      this.loading = true
-
-      const command = this.commandMap[value]
-
-      this.$adb.deviceShell(this.device.id, command)
-
-      this.loading = false
-    },
-  },
-}
+const { options, disabled, handleTrigger, handleCommand } = useDeviceVolume({
+  devices: computed(() => props.device ? [props.device] : []),
+  native: computed(() => props.floating),
+})
 </script>
 
 <style></style>

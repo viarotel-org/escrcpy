@@ -2,7 +2,7 @@
   <div
     ref="container"
     class="overflow-auto scrollable"
-    :class="{ 'cursor-grab': !isDragging, 'cursor-grabbing': isDragging }"
+    :class="{ 'cursor-grab': !isDragging && !disabledDrag, 'cursor-grabbing': isDragging }"
     @mousedown="startDrag"
     @mousemove="onDrag"
     @mouseup="endDrag"
@@ -12,7 +12,7 @@
     <div
       ref="content"
       class="inline-flex"
-      :class="{ 'flex-col': direction === 'vertical' }"
+      :class="[contentClass, { 'flex-col': direction === 'vertical' }]"
       :style="contentStyle"
     >
       <slot></slot>
@@ -38,6 +38,10 @@ const props = defineProps({
   disabledDrag: {
     type: Boolean,
     default: false,
+  },
+  contentClass: {
+    type: [String, Object, Array],
+    default: '',
   },
 })
 

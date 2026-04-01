@@ -164,3 +164,17 @@ export function deepToRaw(obj) {
 export function preciseAdd(a, b) {
   return (Math.round(a * 100) + Math.round(b * 100)) / 100
 }
+
+export function isEditableTarget(target) {
+  if (!target || typeof target !== 'object') {
+    return false
+  }
+
+  if (target.isContentEditable) {
+    return true
+  }
+
+  const tag = target.tagName?.toLowerCase?.() || ''
+
+  return ['input', 'textarea', 'select'].includes(tag)
+}

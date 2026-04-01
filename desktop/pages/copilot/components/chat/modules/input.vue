@@ -40,7 +40,6 @@ import {
 } from '@tdesign-vue-next/chat'
 import '$/plugins/tdesign-next-chat/styles/theme.css'
 import { PromptBar } from '$copilot/components/prompts/index.js'
-import pLimit from 'p-limit'
 import { deviceSelectionHelper } from '$/utils/device/selection/index.js'
 
 const props = defineProps({

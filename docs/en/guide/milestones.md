@@ -43,4 +43,5 @@ Priority from high to low:
 - Integrate AutoGLM to control your Android device using natural language without scripting ✅
 - Refactor main process architecture to improve performance and stability ✅
 - Support script automation through visual orchestration tools ✅
-- Device group control feature 🚧
+- Device group control feature ✅
+- Keyboard mapping feature 🚧

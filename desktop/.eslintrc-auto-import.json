@@ -360,6 +360,16 @@
     "SCRIPT_TEMPLATES": true,
     "STEP_TYPES": true,
     "StepStatus": true,
-    "useAdbKeyboard": true
+    "useAutomationStore": true,
+    "useAutomationVariableStore": true,
+    "useSubscribePermission": true,
+    "useAdbKeyboard": true,
+    "useDeviceRotation": true,
+    "useDeviceVolume": true,
+    "useInsetMirror": true,
+    "useControlVolume": true,
+    "useLaunchMirror": true,
+    "useSidebarStore": true,
+    "useControlSidebarStore": true
   }
 }

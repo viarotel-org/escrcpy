@@ -34,7 +34,7 @@ export function useLayoutManagement(options) {
     }
   }
 
-  const loadLayout = () => {
+  function loadLayout() {
     arrangedWidgets.value = []
     const scrcpy = window.$preload.store.get('scrcpy')
 

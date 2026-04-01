@@ -18,11 +18,14 @@
 
 ## Features
 
+- 🖥️ **Inset Mirror**: Dedicated embedded window, auto-fits screen resolution and orientation, with integrated one-tap shortcuts
+- 🔄 **Multi-Device Control**: Control multiple devices simultaneously in a single window, broadcast input, with batch screenshot and APK install support
+- 🎛️ **Integrated Control Bar**: Compact, draggable sidebar with reorderable controls: rotation, screenshot, apps, files, terminal, AI assistant, and automation
 - 🤖 **Intelligent Control**: Natural-language commands powered by AutoGLM for smart control of Android devices
-- 🏃 **Automation & Efficiency**: Automated workflow execution with support for parallel operations across multiple devices
-- 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of multiple devices
-- 📡 **Connectivity & Networking**: Wireless connections with Gnirehtet reverse tethering support
-- ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring based on Scrcpy
+- 🏃 **Automated Execution**: Automation workflows run in parallel, supporting synchronized operations across multiple devices
+- 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of all connected devices
+- 📡 **Wireless Connection**: Wireless ADB connections with Gnirehtet reverse tethering support
+- ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring and control
 
 ## Installation
 
@@ -68,6 +71,7 @@ This project owes its existence to the following open-source projects:
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
 - [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
+- [tangoadb](https://tangoadb.dev/)
 
 ## Friendly Links
 

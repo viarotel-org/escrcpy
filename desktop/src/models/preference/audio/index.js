@@ -41,6 +41,7 @@ export default {
       ],
     },
     audioCode: {
+      hidden: 'global',
       label: 'preferences.audio.audio-code.name',
       field: '--audio-code',
       customized: true,

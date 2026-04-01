@@ -291,12 +291,17 @@ const explorer = useExplorer()
 
 const { currentDevice, locale, size } = useWindowStateSync({
   onQueryMounted() {
+    deviceStore.getList()
     explorer.init(currentDevice.value, '/sdcard')
   },
 })
 
 const deviceName = computed(() => {
-  return currentDevice.value?.id ? deviceStore.getLabel(currentDevice.value, 'name') : ''
+  if (!currentDevice.value?.id) {
+    return ''
+  }
+
+  return deviceStore.getLabel(currentDevice.value.id, 'name')
 })
 
 watch(() => explorer.breadcrumbs.value.length, async () => {

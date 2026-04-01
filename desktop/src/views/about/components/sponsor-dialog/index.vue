@@ -5,7 +5,6 @@
     fullscreen
     center
     class="el-dialog--beautify el-dialog--flex el-dialog--fullscreen"
-    width="98%"
     @closed="onClosed"
   >
     <div class="pt-4 pb-8">

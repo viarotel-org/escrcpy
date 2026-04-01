@@ -5,6 +5,7 @@
     v-bind="$attrs"
     @visible-change="onVisibleChange"
     @mouseenter="loadAppList"
+    @keydown.stop
   >
     <slot :current="current" :loading="loading" />
 

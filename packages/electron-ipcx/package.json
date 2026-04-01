@@ -22,7 +22,8 @@
     "dev": "tsdown --watch",
     "typecheck": "tsc",
     "test": "vitest",
-    "prepublishOnly": "pnpm build"
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "es-toolkit": "^1.43.0",

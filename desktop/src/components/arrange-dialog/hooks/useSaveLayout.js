@@ -4,7 +4,9 @@ import { usePreferenceStore } from '$/store/preference/index.js'
  * Save layout composable
  * Handles saving widget layout configurations
  */
-export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets) {
+export function useSaveLayout(options) {
+  const { arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets } = options || {}
+
   const preferenceStore = usePreferenceStore()
 
   function saveLayout() {
@@ -40,18 +42,17 @@ export function useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRe
       window.$preload.store.set(['scrcpy', scope], scopeConfig)
     })
 
-    // Clear the removed widgets list
     clearRemovedWidgets()
 
     preferenceStore.init()
 
     const totalChanges = arrangedWidgets.value.length + removedWidgets.length
     if (totalChanges === 0) {
-      ElMessage.warning(window.t('device.arrange.save.noChanges'))
+      console.log(window.t('device.arrange.save.noChanges'))
     }
     else {
       const removedText = removedWidgets.length > 0 ? window.t('device.arrange.save.removed', { count: removedWidgets.length }) : ''
-      ElMessage.success(window.t('device.arrange.save.success', { count: arrangedWidgets.value.length, removed: removedText }))
+      console.log(window.t('device.arrange.save.success', { count: arrangedWidgets.value.length, removed: removedText }))
     }
 
     close()

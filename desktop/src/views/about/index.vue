@@ -47,12 +47,14 @@
     </div>
 
     <SponsorDialog ref="sponsorDialogRef" />
+    <UpdateDialog ref="updateDialogRef" />
   </div>
 </template>
 
 <script setup>
 import { homepage, version } from '/package.json'
 import SponsorDialog from './components/sponsor-dialog/index.vue'
+import UpdateDialog from './components/update-dialog/index.vue'
 
 const loading = ref(false)
 const percent = ref(0)
@@ -68,6 +70,8 @@ const docsUrl = computed(() => {
 })
 
 const sponsorDialogRef = ref()
+const updateDialogRef = ref()
+
 function onDonateClick() {
   sponsorDialogRef.value.open()
 }
@@ -138,23 +142,14 @@ function onUpdateError() {
 function onUpdateAvailable() {
   window.$preload.ipcRenderer.on('update-available', async (_, ret) => {
     loading.value = false
-    try {
-      await ElMessageBox.confirm(
-        ret.releaseNotes,
-        window.t('about.update-available.title'),
-        {
-          dangerouslyUseHTMLString: true,
-          closeOnClickModal: false,
-          confirmButtonText: window.t('about.update-available.confirm'),
-          cancelButtonText: window.t('common.cancel'),
-        },
-      )
-      window.$preload.ipcRenderer.send('download-update')
-      loading.value = true
-    }
-    catch (error) {
-      console.warn(error.message)
-    }
+
+    updateDialogRef.value.open({
+      releaseNotes: ret.releaseNotes,
+      onConfirm() {
+        window.$preload.ipcRenderer.send('download-update')
+        loading.value = true
+      },
+    })
   })
 }
 

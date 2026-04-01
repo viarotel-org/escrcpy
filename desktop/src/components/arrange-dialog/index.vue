@@ -12,7 +12,7 @@
     @opened="onOpened"
     @closed="onClosed"
   >
-    <div ref="arrangementAreaRef" class="arrangement-area h-full overflow-hidden">
+    <div ref="arrangementAreaRef" v-loading="dialog.loading" :element-loading-text="$t('common.loading')" class="arrangement-area h-full overflow-hidden">
       <div
         ref="screenContainerRef"
         class="screen-container border border-primary-300 border border-dashed"
@@ -71,7 +71,7 @@
           </div>
         </VueDraggableResizable>
 
-        <AppEmpty v-if="!arrangedWidgets?.length" class="absolute inset-center">
+        <AppEmpty v-if="!arrangedWidgets?.length && !dialog.loading" class="absolute inset-center">
         </AppEmpty>
       </div>
     </div>
@@ -212,11 +212,24 @@ const {
   onWidgetResizing,
   onWidgetDragStop,
   onWidgetResizeStop,
-} = useWidgetEvents(scaleConverter, arrangedWidgets)
+} = useWidgetEvents({
+  scaleConverter,
+  arrangedWidgets,
+})
 
-const { open, onOpened, close, onClosed } = useDialogManagement(dialog, arrangedWidgets, loadDevices, loadLayout)
+const { open, onOpened, close, onClosed } = useDialogManagement({
+  dialog,
+  arrangedWidgets,
+  loadDevices,
+  loadLayout,
+})
 
-const { saveLayout } = useSaveLayout(arrangedWidgets, close, getRemovedWidgets, clearRemovedWidgets)
+const { saveLayout } = useSaveLayout({
+  arrangedWidgets,
+  close,
+  getRemovedWidgets,
+  clearRemovedWidgets,
+})
 
 watch(() => `${containerWidth.value}${containerHeight.value}`, () => {
   updateLayout()

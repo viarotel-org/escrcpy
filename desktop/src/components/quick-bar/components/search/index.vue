@@ -23,9 +23,13 @@ function closeSearchModal() {
   window.$preload.search.close()
 }
 
-const { ctrl_f } = useMagicKeys()
+const { ctrl_f, meta_f } = useMagicKeys()
 
 whenever(ctrl_f, () => {
+  openSearchModal()
+})
+
+whenever(meta_f, () => {
   openSearchModal()
 })
 </script>

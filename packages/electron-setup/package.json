@@ -28,7 +28,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "typecheck": "tsc",
-    "prepublishOnly": "pnpm build"
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@escrcpy/electron-ipcx": "workspace:*",

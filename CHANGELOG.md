@@ -1,5 +1,94 @@
+## [2.7.0](https://github.com/viarotel/escrcpy-x/compare/v2.6.2...v2.7.0) (2026-04-01)
 
-# Changelog
+
+### Features
+
+* 🚀 Add wscrcpy cli parameter adapter ([ea64b5e](https://github.com/viarotel/escrcpy-x/commit/ea64b5e9a5fc4d132c616e15af323be0e548e738))
+* 🚀 Complete more parameters of wscrcpy ([c48020b](https://github.com/viarotel/escrcpy-x/commit/c48020bed702209ca018bb6f0c5c31cf2ac7dcd4))
+* 🚀 Extend wscrcpy capabilities ([0717688](https://github.com/viarotel/escrcpy-x/commit/0717688b8ab78a925d7ee4b784f3ddada7bbfbd7))
+* 🚀 Initial implementation of device group control function ([4ea4e7d](https://github.com/viarotel/escrcpy-x/commit/4ea4e7de3a7836ab05ddef98a33ecd1475fba513))
+* 🚀 Optimize group control experience ([853e53d](https://github.com/viarotel/escrcpy-x/commit/853e53d7b5b45f5fd73eccbf23bd8f9beb3066bb))
+* 🚀 Optimize the details of the mask layer module ([c9da58e](https://github.com/viarotel/escrcpy-x/commit/c9da58e5be818549b763c2e2155f2acc717f812d))
+* 🚀 Optimize the interaction details of the mask board module ([b67582a](https://github.com/viarotel/escrcpy-x/commit/b67582a8a297108c08f087751bc16682e49d3ebc))
+* 🚀 Redesign the overlay module guide page ([c522fcb](https://github.com/viarotel/escrcpy-x/commit/c522fcb6b4f5036f23e72921e6e87379f391a022))
+* 🚀 Refactor the embedded image package to the wscrcpy package ([5f8a309](https://github.com/viarotel/escrcpy-x/commit/5f8a30977df3ac830f59d988e6f29c0e57ca0e5a))
+* 🚀 Use tango-adb to directly render the device screen in the mask layer module ([81d93dd](https://github.com/viarotel/escrcpy-x/commit/81d93dd38e6b4daa5cad880a9f4cc78ae19b1920))
+* 🚀 wscrcpy adds support for mouse hover monitoring ([eb78931](https://github.com/viarotel/escrcpy-x/commit/eb78931b678f50adb8324fc11deab8c1b89898a7))
+* 🚀 wscrcpy only enables audio forwarding by default in the macos environment ([5d510dc](https://github.com/viarotel/escrcpy-x/commit/5d510dcc4e95206f1ffca0351fad2bbb7bbf1b82))
+
+
+### Bug Fixes
+
+* 🐛 Fix the issue of resetting the window position of the mirror module ([d4c3a74](https://github.com/viarotel/escrcpy-x/commit/d4c3a7458bdabb93f15b75d6b026f89b0c7984b0))
+* 🐛 Fix the problem of data echo in automation steps ([435c3de](https://github.com/viarotel/escrcpy-x/commit/435c3de603f3d42861eed604e3c440cf8737eabe))
+* 🐛 Fix the problem of Wscrcpy audio forwarding exception ([967a6c2](https://github.com/viarotel/escrcpy-x/commit/967a6c2b78d2c6acc2c230d25b3647e8a97cc25a))
+* 🐛 Fix the problem of wscrcpy group control failure ([ea74182](https://github.com/viarotel/escrcpy-x/commit/ea741826abd0203fc6ab4cdb69013fdc8da4d8a7))
+* 🐛 Fix wscrcpy clipboard synchronization issue ([42fee69](https://github.com/viarotel/escrcpy-x/commit/42fee6930371aa535ed8d3b935830b437757f455))
+* 🐛 Fix wscrcpy reconnection problem ([a6de9b9](https://github.com/viarotel/escrcpy-x/commit/a6de9b9e1f95892468e7b88f6954c0639d0f8ad9))
+* 🐛 Fixed sub-package build conflict and misalignment issue ([99b22ba](https://github.com/viarotel/escrcpy-x/commit/99b22ba60d4cb9bba539b449c63cc9f9e68a3e8a))
+* 🐛 Fixed syntax error in the action bar at the bottom of the overlay ([ef0a301](https://github.com/viarotel/escrcpy-x/commit/ef0a3014166b252bbbc653f0ae11c959f8e70c03))
+* 🐛 Fixed the problem of abnormal calculation of size ratio when switching the main device on the group control page ([5ad014f](https://github.com/viarotel/escrcpy-x/commit/5ad014f830ed8d16cdf72abb103cfda5b90e818c))
+* 🐛 Fixed the problem of abnormal disconnection of wscrcpy video stream when exiting the program ([174a01c](https://github.com/viarotel/escrcpy-x/commit/174a01c6a7a2e3fdfcb012c5f692081ed32602fd))
+* 🐛 Fixed the problem of interactive forwarding conflict when group control is enabled for auxiliary devices ([60ae2a4](https://github.com/viarotel/escrcpy-x/commit/60ae2a48b1c6421e3145893980494f15f490cfe4))
+* 🐛 Fixed the problem of mask layer adaptation button forwarding ([4be239e](https://github.com/viarotel/escrcpy-x/commit/4be239e46b9971a0c79cbd74a5366b25787ee3e6))
+* 🚀 Fix mask layer test issue ([33581df](https://github.com/viarotel/escrcpy-x/commit/33581dfba04b2f0861be3c1366105012e1e73f1b))
+* 🚀 Fixed overlay module screen rotation issue ([ad0af45](https://github.com/viarotel/escrcpy-x/commit/ad0af459381214908a83937843d90d261ce7ca25))
+* 🚀 Fixed wscrcpy audio and clipboard synchronization configuration conflict issue ([5bb65e0](https://github.com/viarotel/escrcpy-x/commit/5bb65e0388bb8a3dae4dc48b058a3c67e409fb9a))
+
+
+### Performance Improvements
+
+* 💄 Optimize the interaction of the embedded image module ([7a21fdb](https://github.com/viarotel/escrcpy-x/commit/7a21fdbad8601ea584f50df21862f6c5915003bf))
+* 🚀 Add internationalization to automation script keylist ([e7b78c1](https://github.com/viarotel/escrcpy-x/commit/e7b78c19a96dc34e805c996d76a96cd208ad585c))
+* 🚀 Device group control expands more operations ([08e46b6](https://github.com/viarotel/escrcpy-x/commit/08e46b6eeb95517a6113ce502be3c08aabb8851c))
+* 🚀 Enhance the interaction experience of built-in images ([e913fee](https://github.com/viarotel/escrcpy-x/commit/e913fee3f9b1288c97984b4ca717013e3b5f4ca3))
+* 🚀 Expand batch opening function for group control function ([a38dbde](https://github.com/viarotel/escrcpy-x/commit/a38dbdef8624d6245908424e8af716d71654e549))
+* 🚀 Explicitly declare wscrcpy external dependencies ([52924c8](https://github.com/viarotel/escrcpy-x/commit/52924c8fdb502a39ae3e319ac26edf01c6ce04b3))
+* 🚀 Improve group control function subscription capabilities ([479b996](https://github.com/viarotel/escrcpy-x/commit/479b9961c9e2179c973ba6b6c9993d4f5fef64da))
+* 🚀 Improve the stability of the overlay adapter ([be0ff8c](https://github.com/viarotel/escrcpy-x/commit/be0ff8c5abd9fc2a3d78e2866387c5d9c002f94f))
+* 🚀 More embedded startup entries have been added to the device list ([24e4fd1](https://github.com/viarotel/escrcpy-x/commit/24e4fd1c42a152f31ffa4010c79023eadd12c8b1))
+* 🚀 Optimize check update pop-up window style ([54eaa51](https://github.com/viarotel/escrcpy-x/commit/54eaa51742e7229150af58e6e226a59a8779d65f))
+* 🚀 Optimize embedded image module error prompts ([e26186b](https://github.com/viarotel/escrcpy-x/commit/e26186bedfad35345a82f726e1f1dbc3fdc8bdc9))
+* 🚀 Optimize overlay click/swipe event interaction ([d7c0500](https://github.com/viarotel/escrcpy-x/commit/d7c0500eeef44fcc169a3c8bb526a83834a62d4a))
+* 🚀 Optimize overlay module details ([8ce5937](https://github.com/viarotel/escrcpy-x/commit/8ce5937bb1641f74f4bda6d8b94dc39ac507b2cc))
+* 🚀 Optimize overlay module details ([2799ab0](https://github.com/viarotel/escrcpy-x/commit/2799ab0498ac15fec9d599638666db3eb2b863a7))
+* 🚀 Optimize preference interaction Disable device-dependent options in global mode ([ea47604](https://github.com/viarotel/escrcpy-x/commit/ea47604e939fb815ec6806d48e27b8eba497686e))
+* 🚀 Optimize the directory structure of the group control module ([f9a9d67](https://github.com/viarotel/escrcpy-x/commit/f9a9d678829017ceb7798ab3e4dc2b16e3283caf))
+* 🚀 Optimize the empty list style of the device list ([95e8e4a](https://github.com/viarotel/escrcpy-x/commit/95e8e4afdee70c8a3518e1e7baa2a834d1ac8bf6))
+* 🚀 Optimize the interaction details of the overlay module ([e297850](https://github.com/viarotel/escrcpy-x/commit/e2978501919e5e1407f8e549bbd5763fbf173273))
+* 🚀 Optimize the interactive experience of group control function ([05c8643](https://github.com/viarotel/escrcpy-x/commit/05c864349c29d76c8ec7bff361468d453de26d8e))
+* 🚀 Optimize the interactive experience of the embedded mirror control bar ([ac6159f](https://github.com/viarotel/escrcpy-x/commit/ac6159ffcc7022f071c04c2083d7ded67f40a71a))
+* 🚀 Optimize the keyboard input experience of the group control module ([32b7fa2](https://github.com/viarotel/escrcpy-x/commit/32b7fa28938fcd65894d4271519394d8c961dfee))
+* 🚀 Optimize the overlay module to organize interaction details ([f358348](https://github.com/viarotel/escrcpy-x/commit/f35834884ab143ca76f06ae264dd283303d7fbee))
+* 🚀 Optimize the video stream freezing problem when wscrcpy starts the same device ([7baa53c](https://github.com/viarotel/escrcpy-x/commit/7baa53c3e578dfe889d565fe8dae7264a0661b16))
+* 🚀 Optimize universal scroll bar interaction ([dd6f3fe](https://github.com/viarotel/escrcpy-x/commit/dd6f3fe111bb423d85aa485f014e02362eeff045))
+* 🚀 Optimize window arrangement function details ([91e1a3a](https://github.com/viarotel/escrcpy-x/commit/91e1a3a7249b489bb9fbcdd2501240e55fc352a2))
+* 🚀 Overlay module input function reconstruction ([ac19fab](https://github.com/viarotel/escrcpy-x/commit/ac19fabd82068527a694291249929c1cad94cd5b))
+* 🚀 The overlay module supports forwarding more key types ([05c6faf](https://github.com/viarotel/escrcpy-x/commit/05c6fafc471a25243abe8a10d4a77f5ab387c25b))
+
+
+### Code Refactoring
+
+* ♻️ Reconstruct the embedded mirror module directory structure ([119a471](https://github.com/viarotel/escrcpy-x/commit/119a47180b7993c5ba36094f37670a4821fa69fb))
+* 📝 Remove redundant wscrcpy judgments ([3d9add8](https://github.com/viarotel/escrcpy-x/commit/3d9add8a072fd4c0c729af19254f440726ecf9f4))
+* 🚀 Adjust the group control module naming ([3c14c99](https://github.com/viarotel/escrcpy-x/commit/3c14c99e0a4d5d404fec2216ec28064ffdb88a02))
+* 🚀 Expand the embedded image switching function ([a49f8b5](https://github.com/viarotel/escrcpy-x/commit/a49f8b541cdb8d3e247246779c0109d4cfdc504f))
+* 🚀 Optimize and extend wscrcpy type ([eec0913](https://github.com/viarotel/escrcpy-x/commit/eec091348858bb8c3436c70b2220ed96e822c3d3))
+* 🚀 Optimize interactive performance of embedded mirroring ([ba8bfea](https://github.com/viarotel/escrcpy-x/commit/ba8bfea4c095987f8ebfa5e1400544b5739d857b))
+* 🚀 Optimize overlay module configuration ([08009bf](https://github.com/viarotel/escrcpy-x/commit/08009bfbdb73a9d944814460407b9035faf51ad5))
+* 🚀 Optimize the details of the overlay layer ([59dc702](https://github.com/viarotel/escrcpy-x/commit/59dc70235764abdec660d8f64fa716f96bfee365))
+* 🚀 Optimize the directory structure of the group control module ([7116264](https://github.com/viarotel/escrcpy-x/commit/7116264efdbd9540a9848c71e125dce15fa6d076))
+* 🚀 Optimize wscrcpy details ([247dc5e](https://github.com/viarotel/escrcpy-x/commit/247dc5e1604f1c1fa6afa0a02f2f308201fcad0f))
+* 🚀 Reconstruct the directory structure of the overlay module ([668ef67](https://github.com/viarotel/escrcpy-x/commit/668ef676675507bd25b632caae00ab9ddbcde5e1))
+* 🚀 Reconstruct the image window ratio to improve reusability ([555e346](https://github.com/viarotel/escrcpy-x/commit/555e346ab7cbb2340415980aeee2a2023b4da334))
+* 🚀 Reconstruct the mask layer keyboard module ([cad077d](https://github.com/viarotel/escrcpy-x/commit/cad077ddb8d1c29bcd6c5bce0a55692e9caf7c85))
+* 🚀 Reconstruct the overlay module architecture ([196cca0](https://github.com/viarotel/escrcpy-x/commit/196cca0ded1b1e8f50a43028e6abfef9e01119e3))
+* 🚀 Reconstruct the overlay module parameter injection method to solve the problem of responsive loss ([3163c60](https://github.com/viarotel/escrcpy-x/commit/3163c60e320a210685a562e9d2a9d88e4ee078d4))
+* 🚀 Reconstructed mirror window ratio algorithm is compatible with all platforms ([b8377f2](https://github.com/viarotel/escrcpy-x/commit/b8377f2f37f70e85dd78f47438a8bcad3cd030f0))
+* 🚀 Refactor and extend wscrcpy library functionality ([4ca2c49](https://github.com/viarotel/escrcpy-x/commit/4ca2c496948e98e66ec7aa1a8e0b37e5aea79f5e))
+* 🚀 Refactor wscrcpy ([b537a96](https://github.com/viarotel/escrcpy-x/commit/b537a969af73f4716fe41be232b2603fd346ba69))
+* 🚀 Remove redundant code from built-in images ([f6bcbf5](https://github.com/viarotel/escrcpy-x/commit/f6bcbf5990c340607fd2c21041e64e75800fdd91))
+* 🚀 Remove redundant code from the mask layer module ([bdb4f49](https://github.com/viarotel/escrcpy-x/commit/bdb4f49cca2b8afc3be70df0e453335e511bcfd6))
 
 ## [2.6.2](https://github.com/viarotel/escrcpy-x/compare/v2.6.1...v2.6.2) (2026-03-13)
 

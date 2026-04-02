@@ -26,6 +26,7 @@
           :command="item.value"
           :divided="item.divided"
           :icon="item.icon"
+          :title="item.packageName"
           @click="onSelect(item)"
         >
           <div :class="showActions ? 'pr-12' : ''">
@@ -68,6 +69,10 @@ const props = defineProps({
     type: String,
     default: '300px',
   },
+  labelFormatter: {
+    type: Function,
+    default: item => `${item.name || item.label}[${item.packageName}]`,
+  },
 })
 
 const emit = defineEmits(['change'])
@@ -85,7 +90,7 @@ const keyword = ref('')
 const options = computed(() => {
   const value = appList.value.map(item => ({
     ...item,
-    label: `${item.name || item.label}[${item.packageName}]`,
+    label: props.labelFormatter(item),
     value: item.packageName,
   }))
 

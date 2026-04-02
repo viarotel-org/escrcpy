@@ -1,3 +1,36 @@
+# Changelog
+
+## [2.7.3](https://github.com/viarotel/escrcpy-x/compare/v2.7.2...v2.7.3) (2026-04-02)
+
+
+### Bug Fixes
+
+* 🐛 Fixed an issue where embedded mirroring could not be input due to external activation elements. ([058b982](https://github.com/viarotel/escrcpy-x/commit/058b9820f48333894e408e86d8580195cb2b57a5))
+
+
+### Performance Improvements
+
+* 🚀 Optimize the embedded image to open the application list display ([7f6b18a](https://github.com/viarotel/escrcpy-x/commit/7f6b18a79fbe35ece6826b823e5c613324d376cd))
+
+
+### Code Refactoring
+
+* 🔊 Optimize the wscrcpy audio cleaning logic ([a29cd85](https://github.com/viarotel/escrcpy-x/commit/a29cd8552aff0e7a7101722d588f386dc12d7745))
+
+## [2.7.2](https://github.com/viarotel/escrcpy-x/compare/v2.7.1...v2.7.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* 🐛 Fix dependency not updated error ([2d8ebfd](https://github.com/viarotel/escrcpy-x/commit/2d8ebfd37b7b371e55a4bfe6be52674499552d57))
+
+## [2.7.1](https://github.com/viarotel/escrcpy-x/compare/v2.7.0...v2.7.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the problem that the global search shortcut key does not take effect ([e7596f9](https://github.com/viarotel/escrcpy-x/commit/e7596f96c23136c1a0131ae3a16c1720e058364d))
+
 ## [2.7.0](https://github.com/viarotel/escrcpy-x/compare/v2.6.2...v2.7.0) (2026-04-01)
 
 

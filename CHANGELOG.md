@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.8.1](https://github.com/viarotel/escrcpy-x/compare/v2.8.0...v2.8.1) (2026-04-07)
+
+
+### Bug Fixes
+
+* 🐛 Fixed the problem of dark theme background not taking effect ([ad19695](https://github.com/viarotel/escrcpy-x/commit/ad19695e969619cd47ab331a62feec4f0519ce46))
+
+
+### Performance Improvements
+
+* 🎉 Increased free limit for batch automation scripts and device group controls to 5 devices. ([11271f2](https://github.com/viarotel/escrcpy-x/commit/11271f264974f764b0246b733d1b3773183bbb03))
+
 ## [2.8.0](https://github.com/viarotel/escrcpy-x/compare/v2.7.3...v2.8.0) (2026-04-06)
 
 

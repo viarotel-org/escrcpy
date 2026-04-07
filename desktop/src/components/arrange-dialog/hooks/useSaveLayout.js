@@ -52,7 +52,6 @@ export function useSaveLayout(options) {
     }
     else {
       const removedText = removedWidgets.length > 0 ? window.t('device.arrange.save.removed', { count: removedWidgets.length }) : ''
-      console.log(window.t('device.arrange.save.success', { count: arrangedWidgets.value.length, removed: removedText }))
     }
 
     close()

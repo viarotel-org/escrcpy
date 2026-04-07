@@ -442,6 +442,7 @@ export async function installAdbKeyboard(deviceId) {
 export default {
   shell,
   init,
+  getScreenSize,
   getDeviceList,
   deviceShell,
   kill,

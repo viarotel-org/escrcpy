@@ -17,7 +17,7 @@ export function useScreenshotAction({ floating } = {}) {
     return singleInvoke(...args)
   }
 
-  async function singleInvoke(device, { silent = false } = {}) {
+  async function singleInvoke(device, { silent = false, skipClipboard = false } = {}) {
     let closeLoading
 
     if (!silent && !floating) {
@@ -38,7 +38,9 @@ export function useScreenshotAction({ floating } = {}) {
 
     try {
       await window.$preload.adb.screencap(device.id, { savePath })
-      window.$preload.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
+      if (!skipClipboard) {
+        window.$preload.ipcRenderer.invoke('copy-file-to-clipboard', savePath)
+      }
     }
     catch (error) {
       if (error.message) {
@@ -48,7 +50,7 @@ export function useScreenshotAction({ floating } = {}) {
     }
 
     if (silent) {
-      return false
+      return savePath
     }
 
     closeLoading?.()
@@ -58,6 +60,8 @@ export function useScreenshotAction({ floating } = {}) {
     )}`
 
     adaptiveMessage(successMessage, { type: 'success', system: floating })
+
+    return savePath
   }
 
   async function multipleInvoke(devices) {
@@ -69,9 +73,17 @@ export function useScreenshotAction({ floating } = {}) {
       }),
     ).close
 
-    await allSettledWrapper(devices, (item) => {
-      return singleInvoke(item, { silent: true })
+    const results = await allSettledWrapper(devices, (item) => {
+      return singleInvoke(item, { silent: true, skipClipboard: true })
     })
+
+    const savedPaths = results
+      .filter(r => r.status === 'fulfilled' && r.value && r.value !== false)
+      .map(r => r.value)
+
+    if (savedPaths.length > 0) {
+      window.$preload.ipcRenderer.invoke('copy-file-to-clipboard', savedPaths)
+    }
 
     closeMessage()
 

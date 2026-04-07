@@ -15,16 +15,19 @@
           <template v-for="(discount, index) in plan.discounts" :key="index">
             <el-tag
               v-if="discount.start_time || discount.end_time"
+              class=""
             >
-              {{ $t('subscribe.discountLimited') }}
-              <el-tooltip
-                class=""
-                effect="light"
-                :content="formatDiscountPeriod(discount)"
-                placement="top"
-              >
-                <el-link icon="InfoFilled" type="primary" class="!-mt-px" underline="never"></el-link>
-              </el-tooltip>
+              <div class="flex items-center gap-1">
+                {{ $t('subscribe.discountLimited') }}
+                <el-tooltip
+                  class=""
+                  effect="light"
+                  :content="formatDiscountPeriod(discount)"
+                  placement="top"
+                >
+                  <el-link type="primary" icon="InfoFilled" underline="never" class=""></el-link>
+                </el-tooltip>
+              </div>
             </el-tag>
 
             <el-tag type="primary">
@@ -39,19 +42,21 @@
             {{ $t('subscribe.subscription') }}
           </el-tag>
           <el-tag v-else type="primary">
-            {{ $t('subscribe.usageBased') }}
+            <div class="flex items-center gap-1">
+              {{ $t('subscribe.usageBased') }}
 
-            <el-tooltip
-              class=""
-              effect="light"
-              :content="$t('subscribe.usageBasedInfo', {
-                tokenPrice: (1.4 * plan.billing_multiplier).toFixed(2),
-                requestPrice: (0.01 * plan.billing_multiplier).toFixed(3),
-              })"
-              placement="top"
-            >
-              <el-link icon="InfoFilled" type="primary" class="!-mt-px" underline="never"></el-link>
-            </el-tooltip>
+              <el-tooltip
+                class=""
+                effect="light"
+                :content="$t('subscribe.usageBasedInfo', {
+                  tokenPrice: (1.4 * plan.billing_multiplier).toFixed(2),
+                  requestPrice: (0.01 * plan.billing_multiplier).toFixed(3),
+                })"
+                placement="top"
+              >
+                <el-link type="primary" icon="InfoFilled" underline="never" class=""></el-link>
+              </el-tooltip>
+            </div>
           </el-tag>
         </div>
       </div>
@@ -157,7 +162,8 @@ const props = defineProps({
 
 const emit = defineEmits(['purchase'])
 
-// State
+const subscribeStore = useSubscribeStore()
+
 const quantity = ref(1)
 const amount = ref(1)
 const paymentType = ref('wepay')
@@ -191,17 +197,23 @@ const hasDiscount = computed(() => {
   return props.plan.discounts?.some(d => d.type === 'AMOUNT')
 })
 
-// Methods
+onMounted(async () => {
+  await nextTick()
+
+  const automationPrice = subscribeStore.getPlanPrice('Automation')
+
+  if (automationPrice) {
+    amount.value = automationPrice
+  }
+})
+
 function formatDiscountTag(discount) {
-  // Amount discount
   if (discount.type === 'AMOUNT') {
-    // For usage-based billing show gift amount; for subscriptions show discount amount
     if (props.plan.billing_type === 'USAGE_BASED') {
       return t('subscribe.giftAmount', { value: discount.value })
     }
     return t('subscribe.discountAmountValue', { value: discount.value })
   }
-  // Free gift
   else if (discount.type === 'FREE') {
     const unitMap = {
       DAY: t('time.unit.day'),

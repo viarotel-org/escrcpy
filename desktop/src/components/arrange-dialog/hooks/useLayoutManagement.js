@@ -12,10 +12,16 @@ export function useLayoutManagement(options) {
   } = options
 
   const createWidgetFromConfig = (config = {}, widgetData = {}) => {
-    const realWidth = Number(config['--window-width']) || widgetData.deviceScreenWidth || screenWidth.value / 6
-    const realHeight = Number(config['--window-height']) || widgetData.deviceScreenHeight || screenHeight.value / 2
-    const realX = Number(config['--window-x']) || arrangedWidgets.value.length * 50
-    const realY = Number(config['--window-y']) || arrangedWidgets.value.length * 50
+    // Use ?? chain so that 0 is treated as a valid explicit value (not falsy fallback)
+    const cfgW = config['--window-width'] != null ? Number(config['--window-width']) : null
+    const cfgH = config['--window-height'] != null ? Number(config['--window-height']) : null
+    const cfgX = config['--window-x'] != null ? Number(config['--window-x']) : null
+    const cfgY = config['--window-y'] != null ? Number(config['--window-y']) : null
+
+    const realWidth = cfgW ?? widgetData.deviceScreenWidth ?? (screenWidth.value / 6)
+    const realHeight = cfgH ?? widgetData.deviceScreenHeight ?? (screenHeight.value / 2)
+    const realX = cfgX ?? (arrangedWidgets.value.length * 50)
+    const realY = cfgY ?? (arrangedWidgets.value.length * 50)
     const lockAspectRatio = widgetData.lockAspectRatio ?? false
 
     const containerRect = scaleConverter({ width: realWidth, height: realHeight, x: realX, y: realY })

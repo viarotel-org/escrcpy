@@ -3,339 +3,29 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { Buffer } from 'node:buffer'
 
+// ---------------------------------------------------------------------------
+// Utilities
+// ---------------------------------------------------------------------------
+
 /**
- * Copy a file to the system clipboard
- * Supports macOS, Windows, and Linux; can copy arbitrary file types
- *
- * @param filePath - Path to the file to copy
- * @returns Whether the operation succeeded
+ * Resolve the real path of a file, falling back to the original path on error.
  */
-export async function copyFileToClipboard(filePath: string): Promise<boolean> {
+function normalizePath(filePath: string): string {
   try {
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`File does not exist: ${filePath}`)
-    }
-
-    // Get file stats
-    const stats = fs.statSync(filePath)
-    if (!stats.isFile()) {
-      throw new Error('Path is not a file')
-    }
-
-    const ext = path.extname(filePath).toLowerCase()
-    const absolutePath = path.resolve(filePath)
-    const platform = process.platform
-
-    // Check if it's an image file
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.ico', '.tiff', '.tif']
-    const isImageFile = imageExtensions.includes(ext)
-
-    // For image files, copy both image content and file path
-    if (isImageFile) {
-      await copyImageFile(absolutePath, platform)
-    }
-    else {
-      // For non-image files, copy just the file path
-      await copyFilePath(absolutePath, platform)
-    }
-
-    console.log(`Successfully copied file to clipboard: ${filePath}`)
-    return true
+    return fs.realpathSync(filePath)
   }
-  catch (error: any) {
-    console.error('Failed to copy file to clipboard:', error.message)
-    return false
+  catch {
+    return filePath
   }
 }
 
 /**
- * Copy an image file to the clipboard (writes both image content and file path)
- * @param absolutePath - Absolute path to the image file
- * @param platform - Operating system platform
- */
-export async function copyImageFile(absolutePath: string, platform: string): Promise<void> {
-  try {
-    // Read file buffer and create a native image object
-    const imageBuffer = fs.readFileSync(absolutePath)
-    const image = nativeImage.createFromBuffer(imageBuffer)
-
-    if (image.isEmpty()) {
-      throw new Error('Failed to create image from file buffer')
-    }
-
-    // Write image content to clipboard
-    clipboard.writeImage(image)
-    console.log('Image content copied to clipboard')
-  }
-  catch (error: any) {
-    console.warn('Failed to copy image content, falling back to file path only:', error.message)
-    // If image copy fails, fall back to copying the file path only
-    await copyFilePath(absolutePath, platform)
-  }
-}
-
-/**
- * Copy file path to clipboard
- * @param absolutePath - Absolute path to the file
- * @param platform - Operating system platform
- */
-export async function copyFilePath(absolutePath: string, platform: string): Promise<void> {
-  switch (platform) {
-    case 'darwin': // macOS
-      await copyFilePathMacOS(absolutePath)
-      break
-
-    case 'win32': // Windows
-      await copyFilePathWindows(absolutePath)
-      break
-
-    case 'linux': // Linux
-      await copyFilePathLinux(absolutePath)
-      break
-
-    default:
-      console.warn(`Platform ${platform} may not be fully supported for file clipboard operations`)
-      // Attempt Linux format as a fallback
-      await copyFilePathLinux(absolutePath)
-      break
-  }
-}
-
-/**
- * macOS file path copy
- * Uses public.file-url and NSFilenamesPboardType (plist) formats with fallbacks
- */
-export async function copyFilePathMacOS(absolutePath: string): Promise<void> {
-  // Validate path format
-  if (!absolutePath) {
-    throw new Error('Invalid macOS path format: null or undefined')
-  }
-
-  // Normalize path (resolve symlinks, etc.)
-  let normalizedPath: string
-  try {
-    normalizedPath = fs.realpathSync(absolutePath)
-  }
-  catch (error) {
-    // If real path can't be resolved, use original path
-    normalizedPath = absolutePath
-    console.warn(`Could not resolve real path for ${absolutePath}, using original path`)
-  }
-
-  // public.file-url (file URL format)
-  const fileUrl = `file://${encodeURI(normalizedPath)}`
-  const urlBuffer = Buffer.from(fileUrl, 'utf8')
-  clipboard.writeBuffer('public.file-url', urlBuffer)
-
-  if (verifyClipboardWrite('public.file-url')) {
-    console.log('File path copied to clipboard (macOS public.file-url format)')
-    return
-  }
-  console.warn('public.file-url format not supported, trying plain text')
-
-  // NSFilenamesPboardType (plist format)
-  const escapedPath = escapeXml(normalizedPath)
-  const plistContent = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<array>
-  <string>${escapedPath}</string>
-</array>
-</plist>`
-
-  const plistBuffer = Buffer.from(plistContent, 'utf8')
-  clipboard.writeBuffer('NSFilenamesPboardType', plistBuffer)
-
-  // Verify whether the format is supported by the system
-  if (verifyClipboardWrite('NSFilenamesPboardType')) {
-    console.log('File path copied to clipboard (macOS NSFilenamesPboardType format)')
-    return
-  }
-  console.warn('NSFilenamesPboardType format not supported, trying alternatives')
-
-  // Plain text format (final fallback)
-  clipboard.writeText(normalizedPath)
-  console.log('File path copied to clipboard (macOS plain text format)')
-}
-
-/**
- * Windows file path copy
- * Uses multiple formats for compatibility: FileNameW, CF_HDROP, etc.
- */
-export async function copyFilePathWindows(absolutePath: string): Promise<void> {
-  // Validate path
-  if (!absolutePath) {
-    throw new Error('Invalid Windows path format: null or undefined')
-  }
-
-  // Normalize path
-  let normalizedPath: string
-  try {
-    normalizedPath = fs.realpathSync(absolutePath)
-  }
-  catch (error) {
-    // If real path can't be resolved, use original path
-    normalizedPath = absolutePath
-    console.warn(`Could not resolve real path for ${absolutePath}, using original path`)
-  }
-
-  // Handle long paths (add \\?\\ prefix)
-  let processedPath = normalizedPath
-  if (normalizedPath.length > 260 && !normalizedPath.startsWith('\\\\?\\')) {
-    if (normalizedPath.startsWith('\\\\')) {
-      // UNC paths: \\server\share -> \\?\\UNC\\server\\share
-      processedPath = `\\\\?\\UNC\\${normalizedPath.slice(2)}`
-    }
-    else {
-      // Normal path: C:\\path -> \\?\\C:\\path
-      processedPath = `\\\\?\\${normalizedPath}`
-    }
-  }
-
-  // FileNameW (UTF-16 encoding)
-  const pathWithNull = `${processedPath}\0`
-  const fileNameWBuffer = Buffer.from(pathWithNull, 'utf16le')
-  clipboard.writeBuffer('FileNameW', fileNameWBuffer)
-
-  if (verifyClipboardWrite('FileNameW')) {
-    console.log('File path copied to clipboard (Windows FileNameW format)')
-    return
-  }
-  console.warn('FileNameW format not supported, trying alternatives')
-
-  // CF_HDROP format (drag-and-drop format)
-  const hdropBuffer = createCFHDROPBuffer(processedPath)
-  clipboard.writeBuffer('CF_HDROP', hdropBuffer)
-
-  if (verifyClipboardWrite('CF_HDROP')) {
-    console.log('File path copied to clipboard (Windows CF_HDROP format)')
-    return
-  }
-  console.warn('CF_HDROP format not supported, trying FileName')
-
-  // FileName (ANSI encoding, for legacy applications)
-  const fileNameBuffer = Buffer.from(pathWithNull, 'latin1')
-  clipboard.writeBuffer('FileName', fileNameBuffer)
-
-  if (verifyClipboardWrite('FileName')) {
-    console.log('File path copied to clipboard (Windows FileName format)')
-    return
-  }
-  console.warn('FileName format not supported, using plain text')
-
-  // Fallback: plain text format (final fallback)
-  clipboard.writeText(processedPath)
-  console.log('File path copied to clipboard (Windows plain text format)')
-}
-
-/**
- * Copy file path to clipboard on Linux
- * Uses multiple formats for compatibility: text/uri-list, application/x-kde-cutselection, etc.
- */
-export async function copyFilePathLinux(absolutePath: string): Promise<void> {
-  // Validate path format
-  if (!absolutePath) {
-    throw new Error('Invalid Linux path format: null or undefined')
-  }
-
-  // Normalize path (resolve symlinks etc.)
-  let normalizedPath: string
-  try {
-    normalizedPath = fs.realpathSync(absolutePath)
-  }
-  catch (error) {
-    // If real path can't be resolved, use original path
-    normalizedPath = absolutePath
-    console.warn(`Could not resolve real path for ${absolutePath}, using original path`)
-  }
-
-  // Try primary format: text/uri-list (standard URI list format)
-  const fileUri = `file://${encodeURI(normalizedPath)}\n`
-  const uriListBuffer = Buffer.from(fileUri, 'utf8')
-  clipboard.writeBuffer('text/uri-list', uriListBuffer)
-
-  if (verifyClipboardWrite('text/uri-list')) {
-    console.log('File path copied to clipboard (Linux text/uri-list format)')
-    return
-  }
-  console.warn('text/uri-list format not supported, trying KDE format')
-
-  // Alternative: application/x-kde-cutselection (KDE desktop support)
-  // KDE format contains operation type and file list
-  const kdeContent = `0\n${normalizedPath}\n`
-  const kdeBuffer = Buffer.from(kdeContent, 'utf8')
-  clipboard.writeBuffer('application/x-kde-cutselection', kdeBuffer)
-
-  if (verifyClipboardWrite('application/x-kde-cutselection')) {
-    console.log('File path copied to clipboard (Linux KDE format)')
-    return
-  }
-  console.warn('application/x-kde-cutselection format not supported, trying GNOME format')
-
-  // Alternative: x-special/gnome-copied-files (GNOME file manager format)
-  const gnomeContent = `copy\n${fileUri.trim()}`
-  const gnomeBuffer = Buffer.from(gnomeContent, 'utf8')
-  clipboard.writeBuffer('x-special/gnome-copied-files', gnomeBuffer)
-
-  if (verifyClipboardWrite('x-special/gnome-copied-files')) {
-    console.log('File path copied to clipboard (Linux GNOME format)')
-    return
-  }
-  console.warn('x-special/gnome-copied-files format not supported, trying alternatives')
-
-  // Alternative: text/x-moz-url (Mozilla URL format)
-  const mozUrlContent = `${fileUri.trim()}\n${path.basename(normalizedPath)}`
-  const mozUrlBuffer = Buffer.from(mozUrlContent, 'utf16le')
-  clipboard.writeBuffer('text/x-moz-url', mozUrlBuffer)
-
-  if (verifyClipboardWrite('text/x-moz-url')) {
-    console.log('File path copied to clipboard (Linux Mozilla URL format)')
-    return
-  }
-  console.warn('text/x-moz-url format not supported, using plain text')
-
-  // Fallback: plain text format (final fallback)
-  clipboard.writeText(normalizedPath)
-  console.log('File path copied to clipboard (Linux plain text format)')
-}
-
-/**
- * Create data for CF_HDROP format
- * @param filePath - File path
- * @returns Buffer in CF_HDROP format
- */
-export function createCFHDROPBuffer(filePath: string): Buffer {
-  // CF_HDROP structure:
-  // DROPFILES structure (20 bytes) + file path list + double null terminator
-
-  const pathWithNull = `${filePath}\0`
-  const pathBuffer = Buffer.from(pathWithNull, 'utf16le')
-
-  // DROPFILES structure
-  const dropFilesHeader = Buffer.alloc(20)
-  dropFilesHeader.writeUInt32LE(20, 0) // pFiles: offset to file list
-  dropFilesHeader.writeUInt32LE(0, 4) // pt.x
-  dropFilesHeader.writeUInt32LE(0, 8) // pt.y
-  dropFilesHeader.writeUInt32LE(0, 12) // fNC (not used)
-  dropFilesHeader.writeUInt32LE(1, 16) // fWide: 1 indicates Unicode (wide chars)
-
-  // Double null terminator
-  const doubleNull = Buffer.from('\0\0', 'utf16le')
-
-  return Buffer.concat([dropFilesHeader, pathBuffer, doubleNull])
-}
-
-/**
- * XML escape function used for handling special characters in plist content
- * @param str - String to escape
- * @returns Escaped string
+ * XML escape function used for special characters in plist content.
  */
 export function escapeXml(str: string): string {
   if (typeof str !== 'string') {
     return String(str)
   }
-
   return str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -345,22 +35,320 @@ export function escapeXml(str: string): string {
 }
 
 /**
- * Check if the clipboard format is actually supported by the system
- * @param format - Clipboard format
- * @returns Whether the format is supported by the system
+ * Verify that a clipboard write actually landed by reading the buffer back.
  */
 export function verifyClipboardWrite(format: string): boolean {
   try {
-    // Try reading the just-written data to verify
-    const readData = clipboard.readBuffer(format)
-
-    if (readData && readData.length > 0) {
-      return true
-    }
+    const data = clipboard.readBuffer(format)
+    return data != null && data.length > 0
   }
-  catch (error) {
+  catch {
+    return false
+  }
+}
+
+type ClipboardWithFileWriter = typeof clipboard & {
+  _writeFilesForTesting?: (filePaths: string[]) => void
+}
+
+function writeFilesWithElectronWriter(filePaths: string[]): boolean {
+  const writer = clipboard as ClipboardWithFileWriter
+
+  if (typeof writer._writeFilesForTesting !== 'function') {
     return false
   }
 
-  return false
+  try {
+    writer._writeFilesForTesting(filePaths)
+    return true
+  }
+  catch (error: any) {
+    console.warn('Electron filenames writer failed:', error.message)
+    return false
+  }
+}
+
+function getLastFilePath(filePaths: string[]): string {
+  return filePaths[filePaths.length - 1]
+}
+
+function formatUriList(fileUris: string[]): string {
+  return fileUris.join('\r\n')
+}
+
+// ---------------------------------------------------------------------------
+// CF_HDROP helpers (Windows)
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a CF_HDROP buffer for one or more file paths.
+ * The DROPFILES header is 20 bytes, followed by null-terminated UTF-16LE
+ * path strings, and a final double-null terminator.
+ */
+export function createCFHDROPBufferMultiple(filePaths: string[]): Buffer {
+  const pathBuffers = filePaths.map(p => Buffer.from(`${p}\0`, 'utf16le'))
+  const header = Buffer.alloc(20)
+  header.writeUInt32LE(20, 0) // pFiles offset
+  header.writeUInt32LE(0, 4) // pt.x
+  header.writeUInt32LE(0, 8) // pt.y
+  header.writeUInt32LE(0, 12) // fNC
+  header.writeUInt32LE(1, 16) // fWide = true (Unicode)
+  const doubleNull = Buffer.from('\0\0', 'utf16le')
+  return Buffer.concat([header, ...pathBuffers, doubleNull])
+}
+
+/** Convenience wrapper for a single file path. */
+export function createCFHDROPBuffer(filePath: string): Buffer {
+  return createCFHDROPBufferMultiple([filePath])
+}
+
+// ---------------------------------------------------------------------------
+// Image-specific clipboard write (single file only)
+// ---------------------------------------------------------------------------
+
+/**
+ * Write the pixel content of a single image file to the clipboard.
+ * Falls through to the macOS file-path write if the image cannot be decoded.
+ */
+export async function copyImageFile(absolutePath: string): Promise<void> {
+  try {
+    const image = nativeImage.createFromBuffer(fs.readFileSync(absolutePath))
+    if (image.isEmpty()) {
+      throw new Error('Failed to create image from buffer')
+    }
+    clipboard.writeImage(image)
+    console.log('Image content copied to clipboard')
+  }
+  catch (error: any) {
+    console.warn('Failed to copy image content, falling back to file path:', error.message)
+    await copyFilesMacOS([absolutePath])
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Unified per-platform clipboard writers (single AND multiple files)
+// ---------------------------------------------------------------------------
+
+/**
+ * macOS: write one or more file paths to the clipboard.
+ *
+ * - Single file  – tries `public.file-url` first (most compatible for one path),
+ *                  then `NSFilenamesPboardType`, then plain text.
+ * - Multiple files – `NSFilenamesPboardType` plist array, then plain text.
+ */
+export async function copyFilesMacOS(absolutePaths: string[]): Promise<void> {
+  const normalized = absolutePaths.map(normalizePath)
+
+  if (normalized.length === 1) {
+    clipboard.writeBuffer('public.file-url', Buffer.from(`file://${encodeURI(normalized[0])}`, 'utf8'))
+    if (verifyClipboardWrite('public.file-url')) {
+      console.log('File path copied to clipboard (macOS public.file-url)')
+      return
+    }
+    console.warn('public.file-url not supported, trying NSFilenamesPboardType')
+  }
+
+  const plist = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+${normalized.map(p => `  <string>${escapeXml(p)}</string>`).join('\n')}
+</array>
+</plist>`
+
+  clipboard.writeBuffer('NSFilenamesPboardType', Buffer.from(plist, 'utf8'))
+  if (verifyClipboardWrite('NSFilenamesPboardType')) {
+    console.log('File(s) copied to clipboard (macOS NSFilenamesPboardType)')
+    return
+  }
+
+  clipboard.writeText(normalized.join('\n'))
+  console.log('File(s) copied to clipboard (macOS plain text fallback)')
+}
+
+/**
+ * Windows: write one or more file paths to the clipboard.
+ *
+ * - Single file  – tries `FileNameW`, then `CF_HDROP`, then `FileName`, then plain text.
+ * - Multiple files – `CF_HDROP` (natively supports multiple entries), then plain text.
+ */
+export async function copyFilesWindows(absolutePaths: string[]): Promise<void> {
+  const normalized = absolutePaths.map((p) => {
+    let n = normalizePath(p)
+    if (n.length > 260 && !n.startsWith('\\\\?\\')) {
+      n = n.startsWith('\\\\') ? `\\\\?\\UNC\\${n.slice(2)}` : `\\\\?\\${n}`
+    }
+    return n
+  })
+
+  if (writeFilesWithElectronWriter(normalized)) {
+    console.log('File(s) copied to clipboard (Windows Chromium filenames writer)')
+    return
+  }
+
+  if (normalized.length === 1) {
+    clipboard.writeBuffer('FileNameW', Buffer.from(`${normalized[0]}\0`, 'utf16le'))
+    if (verifyClipboardWrite('FileNameW')) {
+      console.log('File path copied to clipboard (Windows FileNameW)')
+      return
+    }
+    console.warn('FileNameW not supported, trying CF_HDROP')
+  }
+
+  if (normalized.length > 1) {
+    const fallbackPath = getLastFilePath(normalized)
+    clipboard.writeBuffer('FileNameW', Buffer.from(`${fallbackPath}\0`, 'utf16le'))
+    if (verifyClipboardWrite('FileNameW')) {
+      console.warn('Windows multi-file paste is unavailable, downgraded to the last file via FileNameW')
+      return
+    }
+  }
+
+  clipboard.writeBuffer('CF_HDROP', createCFHDROPBufferMultiple(normalized))
+  if (verifyClipboardWrite('CF_HDROP')) {
+    console.warn('Windows multi-file clipboard fell back to raw CF_HDROP, browser/Electron paste compatibility is not guaranteed')
+    return
+  }
+
+  if (normalized.length === 1) {
+    clipboard.writeBuffer('FileName', Buffer.from(`${normalized[0]}\0`, 'latin1'))
+    if (verifyClipboardWrite('FileName')) {
+      console.log('File path copied to clipboard (Windows FileName)')
+      return
+    }
+    console.warn('FileName not supported, using plain text')
+  }
+  else {
+    const fallbackPath = getLastFilePath(normalized)
+    clipboard.writeText(fallbackPath)
+    console.warn('Windows multi-file paste fell back to plain text of the last file path')
+    return
+  }
+
+  clipboard.writeText(normalized.join('\r\n'))
+  console.log('File(s) copied to clipboard (Windows plain text fallback)')
+}
+
+/**
+ * Linux: write one or more file paths to the clipboard.
+ *
+ * Tries `text/uri-list`, then GNOME, then KDE, then Mozilla URL (single only),
+ * and falls back to plain text.
+ */
+export async function copyFilesLinux(absolutePaths: string[]): Promise<void> {
+  const normalized = absolutePaths.map(normalizePath)
+  const fileUris = normalized.map(p => `file://${encodeURI(p)}`)
+
+  if (writeFilesWithElectronWriter(normalized)) {
+    console.log('File(s) copied to clipboard (Linux Chromium filenames writer)')
+    return
+  }
+
+  clipboard.writeBuffer('text/uri-list', Buffer.from(formatUriList(fileUris), 'utf8'))
+  if (verifyClipboardWrite('text/uri-list')) {
+    console.log('File(s) copied to clipboard (Linux text/uri-list)')
+    return
+  }
+
+  clipboard.writeBuffer('x-special/gnome-copied-files', Buffer.from(`copy\n${fileUris.join('\n')}`, 'utf8'))
+  if (verifyClipboardWrite('x-special/gnome-copied-files')) {
+    console.log('File(s) copied to clipboard (Linux GNOME format)')
+    return
+  }
+
+  clipboard.writeBuffer('application/x-kde-cutselection', Buffer.from(`0\n${normalized.join('\n')}\n`, 'utf8'))
+  if (verifyClipboardWrite('application/x-kde-cutselection')) {
+    console.log('File(s) copied to clipboard (Linux KDE format)')
+    return
+  }
+
+  if (normalized.length === 1) {
+    clipboard.writeBuffer('text/x-moz-url', Buffer.from(`${fileUris[0]}\n${path.basename(normalized[0])}`, 'utf16le'))
+    if (verifyClipboardWrite('text/x-moz-url')) {
+      console.log('File path copied to clipboard (Linux Mozilla URL format)')
+      return
+    }
+  }
+
+  if (normalized.length > 1) {
+    const fallbackPath = getLastFilePath(normalized)
+    const fallbackUri = `file://${encodeURI(fallbackPath)}`
+
+    clipboard.writeBuffer('text/uri-list', Buffer.from(fallbackUri, 'utf8'))
+    if (verifyClipboardWrite('text/uri-list')) {
+      console.warn('Linux multi-file paste is unavailable, downgraded to the last file via text/uri-list')
+      return
+    }
+
+    clipboard.writeText(fallbackPath)
+    console.warn('Linux multi-file paste fell back to plain text of the last file path')
+    return
+  }
+
+  clipboard.writeText(normalized.join('\n'))
+  console.log('File(s) copied to clipboard (Linux plain text fallback)')
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
+const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.ico', '.tiff', '.tif'])
+
+/**
+ * Copy one or more files to the system clipboard.
+ *
+ * A single image file has its pixel content written directly (allowing direct
+ * paste in image editors). Everything else is written as a native file
+ * selection using the appropriate platform format.
+ *
+ * @param filePaths - Absolute paths to the files
+ * @returns Whether the operation succeeded
+ */
+export async function copyFilesToClipboard(filePaths: string[]): Promise<boolean> {
+  try {
+    if (filePaths.length === 0) {
+      throw new Error('No file paths provided')
+    }
+
+    const absolutePaths = filePaths.map((p) => {
+      if (!fs.existsSync(p)) {
+        throw new Error(`File does not exist: ${p}`)
+      }
+      return path.resolve(p)
+    })
+
+    // Single image → write pixel data to clipboard
+    if (absolutePaths.length === 1 && IMAGE_EXTENSIONS.has(path.extname(absolutePaths[0]).toLowerCase())) {
+      await copyImageFile(absolutePaths[0])
+    }
+    else {
+      const platform = process.platform
+      if (platform === 'darwin') {
+        await copyFilesMacOS(absolutePaths)
+      }
+      else if (platform === 'win32') {
+        await copyFilesWindows(absolutePaths)
+      }
+      else {
+        await copyFilesLinux(absolutePaths)
+      }
+    }
+
+    console.log(`Successfully copied ${absolutePaths.length} file(s) to clipboard`)
+    return true
+  }
+  catch (error: any) {
+    console.error('Failed to copy file(s) to clipboard:', error.message)
+    return false
+  }
+}
+
+/**
+ * Convenience wrapper — copy a single file to the system clipboard.
+ *
+ * Delegates to {@link copyFilesToClipboard}.
+ */
+export function copyFileToClipboard(filePath: string): Promise<boolean> {
+  return copyFilesToClipboard([filePath])
 }

@@ -65,5 +65,3 @@ ipcxMain.handle('files:read', async (_event, payload: { path: string, onChunk: (
 ## Build & test
 
 - `pnpm build` — bundle via tsdown (dual entry main/renderer, dts emitted)
-- `pnpm test` — vitest unit tests
-- `pnpm release` — version bump via bumpp (aligned with repository release flow)

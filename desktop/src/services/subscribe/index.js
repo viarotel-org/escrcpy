@@ -16,7 +16,7 @@ class SubscribeClient {
       headers = {},
       useAppToken = false,
       accessToken = null,
-      devMode = false,
+      devMode = options?.devMode ?? import.meta.env.DEV,
     } = options
 
     const url = `${this.baseUrl}${path}`
@@ -75,13 +75,11 @@ class SubscribeClient {
 
   /**
    * Retrieves application information and billing plans
-   * @param {boolean} devMode - Whether dev mode is enabled
    */
-  async getAppInfo(devMode = false) {
+  async getAppInfo() {
     return this.request({
       method: 'GET',
       path: `/app?appid=${this.appId}`,
-      devMode,
     })
   }
 
@@ -141,7 +139,7 @@ class SubscribeClient {
    * @param {object} data - { plan_ident, quantity?, amount?, type }
    * @param {string} accessToken - User access token
    */
-  async createPayOrder(data, accessToken, devMode = false) {
+  async createPayOrder(data, accessToken) {
     const { plan_ident, quantity, type } = data
 
     const amount = Number(import.meta.env.VITE_SUBSCRIBE_PAY_AMOUNT ?? data.amount)
@@ -156,7 +154,6 @@ class SubscribeClient {
         type,
       },
       accessToken,
-      devMode,
     })
   }
 

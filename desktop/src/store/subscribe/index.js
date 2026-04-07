@@ -24,11 +24,15 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
   const isLoggedIn = computed(() => !!accessToken.value)
 
   const subscriptionPlans = computed(() =>
-    paymentPlans.value.filter(p => p.billing_type === 'SUBSCRIPTION'),
+    paymentPlans.value.filter(p => p.billing_type === 'SUBSCRIPTION' && !p.discounts?.[0]?.value),
   )
 
   const usageBasedPlans = computed(() =>
     paymentPlans.value.filter(p => p.billing_type === 'USAGE_BASED'),
+  )
+
+  const rawSubscriptionPlans = computed(() =>
+    paymentPlans.value.filter(p => p.billing_type === 'SUBSCRIPTION'),
   )
 
   const purchaseStatus = computed(() => userInfo.value?.purchase_status || 'NOT_PURCHASED')
@@ -145,6 +149,12 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     return value
   }
 
+  function getPlanPrice(type) {
+    const plans = rawSubscriptionPlans.value || []
+    const plan = plans.find(p => p.ident === type)
+    return plan?.discounts?.[0]?.value
+  }
+
   return {
     accessToken,
     userInfo,
@@ -155,6 +165,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     isLoggedIn,
     subscriptionPlans,
     usageBasedPlans,
+    rawSubscriptionPlans,
     purchaseStatus,
     isActive,
     currentPlanIdent,
@@ -165,6 +176,7 @@ export const useSubscribeStore = defineStore('app-subscribe', () => {
     fetchAppInfo,
     fetchUserInfo,
     getTotalPayAmount,
+    getPlanPrice,
     logout,
     $reset,
   }

@@ -107,6 +107,10 @@
         </el-dropdown>
 
         <el-button-group>
+          <GridPicker
+            @select="({ cols, rows }) => autoArrange(cols, rows)"
+          />
+
           <el-button :icon="Refresh" @click="resetLayout">
             {{ $t('device.arrange.layout.reset') }}
           </el-button>
@@ -134,6 +138,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/style.css'
 import { useScaleScreen } from '$/hooks/useScaleScreen/index.js'
 import {
+  useAutoArrange,
   useDeviceManagement,
   useDialogManagement,
   useLayoutManagement,
@@ -142,7 +147,7 @@ import {
   useWidgetManagement,
 } from './hooks/index.js'
 import AppEmpty from '$/components/app-empty/index.vue'
-
+import GridPicker from './modules/grid-picker/index.vue'
 import WidgetRect from './modules/widget-rect/index.vue'
 
 const dialog = useDialog()
@@ -229,6 +234,15 @@ const { saveLayout } = useSaveLayout({
   close,
   getRemovedWidgets,
   clearRemovedWidgets,
+})
+
+const { autoArrange } = useAutoArrange({
+  arrangedWidgets,
+  allDevices,
+  availableDevices,
+  screenWidth,
+  screenHeight,
+  createWidgetFromConfig,
 })
 
 watch(() => `${containerWidth.value}${containerHeight.value}`, () => {

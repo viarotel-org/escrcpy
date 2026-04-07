@@ -43,7 +43,7 @@
     </div>
 
     <!-- No plans available notice -->
-    <el-empty v-if="!subscriptionPlans.length && !usageBasedPlans.length" :description="$t('subscribe.noPlans')" :image-size="64">
+    <el-empty v-if="!subscriptionPlans.length && !usageBasedPlans.length && !loadError" :description="$t('subscribe.noPlans')" :image-size="64">
       <template #image>
         <ElIconBox class=""></ElIconBox>
       </template>
@@ -71,12 +71,12 @@ const usageBasedPlans = computed(() => subscribeStore.usageBasedPlans)
 const planModel = computed(() => {
   const value = [
     {
-      label: 'subscribe.subscriptionPlans',
-      children: subscriptionPlans.value,
-    },
-    {
       label: 'subscribe.usageBasedPlans',
       children: usageBasedPlans.value,
+    },
+    {
+      label: 'subscribe.subscriptionPlans',
+      children: subscriptionPlans.value,
     },
   ]
 
@@ -105,7 +105,7 @@ async function loadPlans() {
   catch (error) {
     console.error('Failed to load plans:', error)
     loadError.value = true
-    ElMessage.error($t('subscribe.loadFailed'))
+    ElMessage.error(window.t('subscribe.loadFailed'))
   }
   finally {
     loading.value = false

@@ -1,4 +1,4 @@
-// Export all hooks for easy importing
+export { useAutoArrange } from './useAutoArrange.js'
 export { useDeviceManagement } from './useDeviceManagement.js'
 export { useDialogManagement } from './useDialogManagement.js'
 export { useLayoutManagement } from './useLayoutManagement.js'

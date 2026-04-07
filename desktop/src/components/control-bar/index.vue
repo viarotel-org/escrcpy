@@ -150,27 +150,27 @@ export default {
   computed: {
     controlModel() {
       const valueMap = {
-        'switch': {
+        switch: {
           label: 'device.control.switch',
           fontIcon: 'i-proicons-menu',
           command: 'input keyevent 187',
         },
-        'home': {
+        home: {
           label: 'device.control.home',
           fontIcon: 'i-bi-app',
           command: 'input keyevent 3',
         },
-        'back': {
+        back: {
           label: 'device.control.return',
           fontIcon: 'i-cil-caret-left',
           command: 'input keyevent 4',
         },
-        'launch': {
+        launch: {
           label: 'device.control.launch',
           fontIcon: 'i-famicons-rocket-outline',
           component: 'Launch',
         },
-        'turn-screen-off': {
+        turnScreenOff: {
           label: 'device.control.turnScreenOff',
           fontIcon: 'i-bi-file-break',
           tips: 'device.control.turnScreenOff.tips',
@@ -178,66 +178,66 @@ export default {
             window.$preload.scrcpy.helper(this.device.id, '--turn-screen-off')
           },
         },
-        'notification': {
+        notification: {
           label: 'device.control.notification',
           fontIcon: 'i-bi-bell',
           command: 'cmd statusbar expand-notifications',
           tips: 'device.control.notification.tips',
         },
-        'power': {
+        power: {
           label: 'device.control.power',
           fontIcon: 'i-uiw-poweroff',
           command: 'input keyevent 26',
           tips: 'device.control.power.tips',
         },
-        'rotation': {
+        rotation: {
           label: 'device.control.rotation.name',
           fontIcon: 'i-solar-smartphone-rotate-2-outline',
           component: 'Rotation',
         },
-        'volume': {
+        volume: {
           label: 'device.control.volume.name',
           fontIcon: 'i-simple-line-icons-volume-2',
           component: 'Volume',
         },
-        'screenshot': {
+        screenshot: {
           label: 'device.control.capture',
           fontIcon: 'i-simple-line-icons-camera',
           component: 'Screenshot',
         },
-        'reboot': {
+        reboot: {
           label: 'device.control.reboot',
           fontIcon: 'i-iconoir-refresh',
           command: 'reboot',
         },
-        'install': {
+        install: {
           label: 'device.control.install',
           fontIcon: 'i-bi-file-arrow-up',
           component: 'Install',
         },
-        'explorer': {
+        explorer: {
           label: 'device.control.file.name',
           fontIcon: 'i-bi-folder',
           component: 'Explorer',
         },
-        'terminal': {
+        terminal: {
           label: 'device.terminal.name',
           fontIcon: 'i-bi-terminal',
           component: 'Terminal',
         },
-        'task': {
+        task: {
           label: 'device.task.name',
           fontIcon: 'i-bi-clock',
           component: 'Tasks',
           hiddenKeys: ['floating'],
         },
-        'gnirehtet': {
+        gnirehtet: {
           label: 'device.control.gnirehtet',
           fontIcon: 'i-bi-hdd-network',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
         },
-        'copilot': {
+        copilot: {
           label: 'device.control.copilot',
           fontIcon: 'i-carbon-chat-bot',
           component: 'Copilot',

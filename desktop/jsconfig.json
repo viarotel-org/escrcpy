@@ -10,8 +10,9 @@
       "$control/*": ["pages/control/*"],
       "$explorer/*": ["pages/explorer/*"],
       "$copilot/*": ["pages/copilot/*"],
-      "$terminal/*": ["pages/terminal/*"],
-    }
+      "$terminal/*": ["pages/terminal/*"]
+    },
+    "ignoreDeprecations": "6.0"
   },
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]

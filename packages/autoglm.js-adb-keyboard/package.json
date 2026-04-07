@@ -1,7 +1,7 @@
 {
   "name": "@autoglm.js/adb-keyboard",
   "type": "module",
-  "version": "2.7.3",
+  "version": "2.8.0",
   "private": false,
   "description": "Keyboard tools for AutoGLM.js",
   "author": "FliPPeDround <flippedround@qq.com>",
@@ -30,8 +30,7 @@
   "scripts": {
     "dev": "tsdown --watch",
     "build": "tsdown",
-    "prepublishOnly": "pnpm build",
-    "release": "bumpp"
+    "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
     "@autoglm.js/shared": "workspace:*"

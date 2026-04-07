@@ -24,7 +24,7 @@ export function useSubscribePrice(options) {
     if (['SUBSCRIPTION'].includes(billing_type.value)) {
       value = Number.parseFloat(finalPrice.value) * quantity.value
     }
-    else {
+    else if (amount.value) {
       value = amount.value
     }
 

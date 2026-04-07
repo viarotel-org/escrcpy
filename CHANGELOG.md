@@ -1,5 +1,38 @@
 # Changelog
 
+## [2.8.0](https://github.com/viarotel/escrcpy-x/compare/v2.7.3...v2.8.0) (2026-04-06)
+
+
+### Features
+
+* ✨ Window arrangement supports the automatic arrangement function ([696d94b](https://github.com/viarotel/escrcpy-x/commit/696d94b5faa32a35fd4b859f715ba193033453cf))
+
+
+### Bug Fixes
+
+* 🐛 Fix i18n errors ([e4ad3ec](https://github.com/viarotel/escrcpy-x/commit/e4ad3ec4470e35c42d7221008f511e3489b8c745))
+* 🐛 Fix the default value issue of the subscription plan ([a19dd9e](https://github.com/viarotel/escrcpy-x/commit/a19dd9eba02a7333ca04350119e296331de7e896))
+* 🐛 Fixed the issue where multiple files cannot be pasted when copied to the clipboard under Windows ([dcc7a94](https://github.com/viarotel/escrcpy-x/commit/dcc7a943353b3f234075a1967370e13d5162cc5a))
+
+
+### Performance Improvements
+
+* ♻️ Optimize subscription plan ([c12ef9d](https://github.com/viarotel/escrcpy-x/commit/c12ef9db32a97817929141135c7e79a95e4bdde1))
+* ♻️ Optimize the pricing strategy for advanced features to prevent misjudgments by users ([4d722b7](https://github.com/viarotel/escrcpy-x/commit/4d722b74328e5eb3e7aedd64f15ce9ba69fc3408))
+* 💄 Optimize the display details of the embedded mirror window ([6cf4c69](https://github.com/viarotel/escrcpy-x/commit/6cf4c699d84679745cf6cce6ebafc400d6240562))
+* 🚀 Automation script adds random range option ([4d73e1a](https://github.com/viarotel/escrcpy-x/commit/4d73e1a3465cc4827f761a2f6b521c8d2d3d6e3e))
+* 🚀 Extended embedded mirroring operable shortcut buttons ([19c0de2](https://github.com/viarotel/escrcpy-x/commit/19c0de205aaf8a82440246d6034737f8433b8dd1))
+* 🚀 Optimize subscription configuration ([d053bfa](https://github.com/viarotel/escrcpy-x/commit/d053bfa42a8dba13d774be66a577402a811483a9))
+* 🚀 Optimize the automation script editor to avoid screen border issues ([ffd56a6](https://github.com/viarotel/escrcpy-x/commit/ffd56a66135a66f6dcc95c48581ec3d832e116e6))
+* 🚀 Refactored file copy function supports batch copying to the clipboard ([ccca99a](https://github.com/viarotel/escrcpy-x/commit/ccca99a2b3045d7318c56168292b7c2ef5f6c0cf))
+
+
+### Code Refactoring
+
+* ♻️ Optimize subscription plan default value acquisition ([7b9c47f](https://github.com/viarotel/escrcpy-x/commit/7b9c47f5981dde47547bcd2a021639389a71c899))
+* 🚀 Dynamically configure subscriptions by detecting the environment ([d02e1b3](https://github.com/viarotel/escrcpy-x/commit/d02e1b3a1a78d85979c8ae0fee14001fa5bafbdd))
+* 🚀 Fix typescript configuration ([cbc8631](https://github.com/viarotel/escrcpy-x/commit/cbc863165d53cf512aeed9262c8acf7c3a5ac578))
+
 ## [2.7.3](https://github.com/viarotel/escrcpy-x/compare/v2.7.2...v2.7.3) (2026-04-02)
 
 

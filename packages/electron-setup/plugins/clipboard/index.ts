@@ -1,6 +1,6 @@
-import { clipboard, ipcMain } from 'electron'
 import type { ElectronApp, Plugin } from '../../main/types'
-import { copyFileToClipboard } from './helper'
+import { clipboard, ipcMain } from 'electron'
+import { copyFilesToClipboard } from './helper'
 
 /**
  * Clipboard plugin options
@@ -24,11 +24,18 @@ export interface ClipboardPluginOptions {
  */
 export interface ClipboardPluginAPI {
   /**
-   * Copy file to system clipboard
+   * Copy a single file to system clipboard
    * @param filePath - Absolute path to the file
    * @returns Promise with success status and message
    */
   copyFile(filePath: string): Promise<{ success: boolean, message: string }>
+
+  /**
+   * Copy one or more files to system clipboard at once
+   * @param filePaths - Absolute paths to the files
+   * @returns Promise with success status and message
+   */
+  copyFiles(filePaths: string[]): Promise<{ success: boolean, message: string }>
 
   /**
    * Copy text to system clipboard
@@ -79,20 +86,24 @@ export const clipboardPlugin: Plugin<ClipboardPluginAPI, ClipboardPluginOptions>
 
     const api: ClipboardPluginAPI = {
       async copyFile(filePath: string) {
+        return api.copyFiles([filePath])
+      },
+
+      async copyFiles(filePaths: string[]) {
         try {
-          if (!filePath) {
-            throw new Error('File path is required')
+          if (!filePaths || filePaths.length === 0) {
+            throw new Error('File paths are required')
           }
 
-          const success = await copyFileToClipboard(filePath)
+          const success = await copyFilesToClipboard(filePaths)
 
           return {
             success,
-            message: success ? 'File copied to clipboard successfully' : 'Failed to copy file to clipboard',
+            message: success ? 'Files copied to clipboard successfully' : 'Failed to copy files to clipboard',
           }
         }
         catch (error: any) {
-          console.error('Clipboard copyFile error:', error.message)
+          console.error('Clipboard copyFiles error:', error.message)
           return {
             success: false,
             message: error.message,
@@ -127,7 +138,8 @@ export const clipboardPlugin: Plugin<ClipboardPluginAPI, ClipboardPluginOptions>
     const handlers: Array<{ channel: string, handler: (event: any, ...args: any[]) => Promise<any> }> = [
       {
         channel: `${ipcPrefix}copy-file-to-clipboard`,
-        handler: async (_, filePath: string) => api.copyFile(filePath),
+        handler: async (_, filePath: string | string[]) =>
+          api.copyFiles(Array.isArray(filePath) ? filePath : [filePath]),
       },
       {
         channel: `${ipcPrefix}copy-text-to-clipboard`,

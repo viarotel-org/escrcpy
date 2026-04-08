@@ -91,6 +91,10 @@ If this project has helped you, consider buying me a coffee to keep me motivated
   </a>
 </div>
 
+You can also support me through the AiFaDian platform.
+
+<div style="display:flex; justify-content:center;"> <a href="https://afdian.com/a/viarotel"><img width="200" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png" alt=""></a> </div>
+
 ## Contributors
 
 Thanks to all who contributed!

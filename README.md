@@ -16,6 +16,8 @@
   <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/en-US/overview.png?version=2.5.1" alt="viarotel-escrcpy" width="100%">
 </div>
 
+<sub>Escrcpy focuses on a stable integration foundation; some advanced features come from the private extension repository EscrcpyX and are offered on a paid basis.</sub>
+
 ## Features
 
 - 🖥️ **Inset Mirror**: Dedicated embedded window, auto-fits screen resolution and orientation, with integrated one-tap shortcuts

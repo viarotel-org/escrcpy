@@ -15,6 +15,8 @@
   <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/zh-CN/overview.png?version=2.5.1" alt="viarotel-escrcpy" width="100%">
 </div>
 
+<sub>Escrcpy 专注于稳定的集成底座能力；部分高级特性源自私有扩展仓库 EscrcpyX，以付费形式提供。</sub>
+
 ## 特点
 
 - 🖥️ **内嵌镜像**：独立内嵌窗口，自动适配分辨率与屏幕方向，内置一体化快捷操作

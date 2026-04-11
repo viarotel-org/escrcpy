@@ -93,15 +93,19 @@ async function getDisplayIds(serial) {
 }
 
 async function launch(serial, args = {}) {
-  let { commands, packageName, useNewDisplay = true, ...options } = args
+  let { commands = '', packageName, useNewDisplay = true, newDisplay = '', ...options } = args
 
   if (useNewDisplay) {
-    commands += ` --new-display`
+    commands += newDisplay
+      ? ` --new-display=${newDisplay}`
+      : ` --new-display`
 
-    const displayOverlay = getDisplayOverlay(serial)
+    if (!newDisplay) {
+      const displayOverlay = getDisplayOverlay(serial)
 
-    if (displayOverlay) {
-      commands += `=${displayOverlay}`
+      if (displayOverlay) {
+        commands += `=${displayOverlay}`
+      }
     }
 
     const imeFix = electronStore.get('common.imeFix')

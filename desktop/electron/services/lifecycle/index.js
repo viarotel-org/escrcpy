@@ -100,6 +100,9 @@ export default {
             deviceId: args['device-id'],
             appName: args['app-name'],
             packageName: args['package-name'],
+            userId: args['user-id'],
+            activity: args.activity,
+            landscape: args.landscape,
           })
         }
 

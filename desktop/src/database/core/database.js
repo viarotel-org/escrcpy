@@ -15,7 +15,7 @@ import Dexie from 'dexie'
 const DB_NAME = 'escrcpy_local_db'
 
 // Current database version
-const DB_VERSION = 2
+const DB_VERSION = 5
 
 /**
  * Module schema configuration
@@ -24,25 +24,17 @@ const DB_VERSION = 2
  */
 const MODULE_SCHEMAS = {
   /**
-   * Chat messages module
-   * - id: Unique message identifier (auto-increment)
-   * - sessionId: Session ID to separate chats by device/session
-   * - timestamp: Message timestamp (supports range queries)
-   * - role: Message role (user/assistant/system)
+   * Schedule module
+   * - id: Unique schedule identifier
+   * - deviceIds: Device IDs used by multi-device schedules
+   * - status: Schedule status
+   * - enabled: Whether the schedule is allowed to be scheduled
+   * - scheduledAt: Planned execution time for timeout schedules
+   * - nextRunAt: Next calculated execution time
+   * - updatedAt: Last update time
    */
-  chat: {
-    messages: '++id, sessionId, timestamp, role, [sessionId+timestamp]',
-  },
-
-  /**
-   * Task module (reserved)
-   * - id: Unique task identifier
-   * - deviceId: Device ID
-   * - status: Task status
-   * - createdAt: Creation time
-   */
-  task: {
-    tasks: '++id, deviceId, status, createdAt, [deviceId+status]',
+  schedule: {
+    schedules: 'id, scheduleType, timerType, status, enabled, scheduledAt, nextRunAt, updatedAt, *deviceIds, [status+enabled], [enabled+scheduledAt]',
   },
 }
 
@@ -65,12 +57,8 @@ class AppDatabase extends Dexie {
 
     // Configure database version and schema
     this.version(DB_VERSION).stores(mergeSchemas())
-
-    // Dynamically attach table references for easier access and type hints
-    // Chat module
-    this.messages = this.table('messages')
-    // Task module
-    this.tasks = this.table('tasks')
+    // Schedule module
+    this.schedules = this.table('schedules')
   }
 
   /**

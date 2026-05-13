@@ -39,9 +39,9 @@ import {
 
 import {
   controlModule,
-  copilotModule,
   explorerModule,
   mainModule,
+  scheduleModule,
   terminalModule,
 } from './modules/index.js'
 
@@ -75,9 +75,9 @@ mainApp.use(launchService)
 mainApp.use(shortcutsService)
 
 mainApp.use(controlModule)
-mainApp.use(copilotModule)
 mainApp.use(explorerModule)
 mainApp.use(terminalModule)
+mainApp.use(scheduleModule)
 
 app.whenReady().then(() => {
   mainApp.start()

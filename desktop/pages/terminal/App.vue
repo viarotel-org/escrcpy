@@ -41,8 +41,20 @@
 import AppHeader from '$/components/app-header/index.vue'
 import { useTerminal } from './hooks/useTerminal/index'
 
+const deviceName = ref('')
+
 const deviceStore = useDeviceStore()
-const { currentDevice, locale, size, themeStore } = useWindowStateSync()
+const { currentDevice, locale, size, themeStore } = useWindowStateSync({
+  async onQueryMounted() {
+    const currentDeviceId = currentDevice.value?.id
+
+    if (currentDeviceId) {
+      await deviceStore.getList()
+      deviceName.value = deviceStore.getLabel(currentDeviceId, 'name')
+      document.title = deviceStore.getLabel(currentDeviceId, 'terminal')
+    }
+  },
+})
 
 const terminalTitle = computed(() => {
   const title = window.$preload.payload.title
@@ -51,15 +63,7 @@ const terminalTitle = computed(() => {
     return window.t(title)
   }
 
-  return 'Escrcpy Terminal'
-})
-
-const deviceName = computed(() => {
-  if (currentDevice.value?.id) {
-    return deviceStore.getLabel(currentDevice.value, 'model') || currentDevice.value.id
-  }
-
-  return ''
+  return 'Terminal Escrcpy'
 })
 
 const isDark = computed({

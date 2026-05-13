@@ -19,6 +19,7 @@ export default antfu(
       'dist',
       'dist-electron',
       'dist-release',
+      'context',
     ],
   },
   {

@@ -6,7 +6,7 @@
         'pr-[calc(70px+3.6vw)]': $platform.is('windows', 'linux') || controlProps.custom,
       },
     ]"
-    class="app-region-drag flex items-center pt-2"
+    class="app-header app-region-drag flex items-center pt-2"
   >
     <div v-if="title || deviceName || $slots['device-name']" class="flex-none  flex items-center gap-4 overflow-hidden">
       <div v-if="title" class="text-sm font-semibold select-none pl-1 -mt-px max-w-96 truncate" :title="title">

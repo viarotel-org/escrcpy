@@ -121,7 +121,7 @@ async function launch(serial, args = {}) {
     }
   }
 
-  if (packageName) {
+  if (packageName && !['unknown'].includes(packageName)) {
     commands += ` --start-app=${packageName}`
   }
 
@@ -152,8 +152,35 @@ async function launch(serial, args = {}) {
   })
 
   return new Promise((resolve, reject) => {
-    promise.resolve = resolve
-    child.then(resolve).catch(reject)
+    let settled = false
+
+    function resolveOnce(value) {
+      if (settled) {
+        return
+      }
+
+      settled = true
+      resolve(value)
+    }
+
+    function rejectOnce(error) {
+      if (settled) {
+        return
+      }
+
+      settled = true
+      reject(error)
+    }
+
+    promise.resolve = resolveOnce
+
+    if (!useNewDisplay) {
+      child.once('spawn', () => {
+        resolveOnce()
+      })
+    }
+
+    child.then(resolveOnce).catch(rejectOnce)
   })
 }
 

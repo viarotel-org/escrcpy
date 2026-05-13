@@ -19,11 +19,11 @@
         @selection-change="onSelectionChange"
       >
         <template #empty>
-          <AppEmpty :sub-title="$t('device.list.empty')">
+          <AppEmpty v-show="!loading" :sub-title="$t('device.list.empty')">
           </AppEmpty>
         </template>
 
-        <el-table-column type="selection"></el-table-column>
+        <el-table-column type="selection" width="30"></el-table-column>
 
         <el-table-column
           :label="$t('device.serial')"
@@ -157,6 +157,7 @@
 </template>
 
 <script setup>
+import pLimit from 'p-limit'
 import { sleep } from '$/utils/index.js'
 import { uniqBy } from 'lodash-es'
 
@@ -175,10 +176,14 @@ import DevicePopover from './components/device-popover/index.vue'
 import { getDictLabel } from '$/dicts/helper'
 import { deviceStatus } from '$/dicts/index.js'
 
+const MIRROR_START_INTERVAL = 1000
+
 const deviceStore = useDeviceStore()
 const preferenceStore = usePreferenceStore()
 
 const loading = ref(false)
+const autoMirrorConcurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
+const autoMirrorLimit = pLimit(autoMirrorConcurrencyLimit)
 
 const mirrorActionRefs = ref([])
 const selectionRows = ref([])
@@ -272,21 +277,27 @@ async function onAdbWatch(type, ret) {
 async function getMirrorActionRefs(ref) {
   await nextTick()
 
-  if (!ref?.row?.id)
+  if (!ref?.row?.id) {
     return false
+  }
+
+  if (['unauthorized', 'offline'].includes(ref.row.status)) {
+    return false
+  }
 
   const exists = mirrorActionRefs.value.some(item => item.row.id === ref.row.id)
-  if (exists)
+  if (exists) {
     return false
+  }
 
-  const length = mirrorActionRefs.value.length
   mirrorActionRefs.value.push(ref)
-
-  await sleep(length * 1000)
 
   const autoMirror = preferenceStore.data.autoMirror
   if (autoMirror) {
-    ref.handleClick(ref.row)
+    await autoMirrorLimit(async () => {
+      ref.handleClick(ref.row)
+      await sleep(MIRROR_START_INTERVAL)
+    })
   }
 }
 

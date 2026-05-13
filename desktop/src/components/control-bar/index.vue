@@ -93,13 +93,12 @@
 import { controlBarHeight } from '$control/configs/index.js'
 import Install from './install/index.vue'
 import Launch from './launch/index.vue'
-import Copilot from './copilot/index.vue'
 import Explorer from './explorer/index.vue'
 import Gnirehtet from './gnirehtet/index.vue'
 import Rotation from './rotation/index.vue'
 import Screenshot from './screenshot/index.vue'
 import Terminal from './terminal/index.vue'
-import Tasks from './tasks/index.vue'
+import Schedule from './schedule/index.vue'
 import Volume from './volume/index.vue'
 
 export default {
@@ -107,13 +106,12 @@ export default {
     Screenshot,
     Install,
     Launch,
-    Copilot,
     Gnirehtet,
     Rotation,
     Volume,
     Explorer,
     Terminal,
-    Tasks,
+    Schedule,
   },
   props: {
     device: {
@@ -225,10 +223,10 @@ export default {
           fontIcon: 'i-bi-terminal',
           component: 'Terminal',
         },
-        task: {
-          label: 'device.task.name',
+        schedule: {
+          label: 'device.schedule.name',
           fontIcon: 'i-bi-clock',
-          component: 'Tasks',
+          component: 'Schedule',
           hiddenKeys: ['floating'],
         },
         gnirehtet: {
@@ -236,12 +234,6 @@ export default {
           fontIcon: 'i-bi-hdd-network',
           component: 'Gnirehtet',
           tips: 'device.control.gnirehtet.tips',
-        },
-        copilot: {
-          label: 'device.control.copilot',
-          fontIcon: 'i-carbon-chat-bot',
-          component: 'Copilot',
-          tips: 'copilot.welcome.description',
         },
       }
 

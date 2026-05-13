@@ -109,3 +109,11 @@ sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
 ### Black edges appear after resizing the casting window
 
 If black edges appear after resizing the casting window, simply **double-click the black edge area** and it will automatically hide.
+
+### Device Configuration Is Correct on Windows but Unable to Connect
+
+Please try the following solutions:
+
+- Check whether Windows Firewall is enabled. If so, add the binary files required by Escrcpy (such as `adb`, `scrcpy`, `gnirehtet`, etc.) to the firewall allowlist, or temporarily disable the firewall and try again.
+- Reset the configuration profile in Preferences to rule out issues caused by corrupted settings.
+- Make sure the installation path does not contain Chinese characters, spaces, or special characters. It is recommended to use a path with English characters only.

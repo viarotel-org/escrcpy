@@ -41,7 +41,7 @@ import Arrange from './components/arrange/index.vue'
 import Log from './components/log/index.vue'
 import Restart from './components/restart/index.vue'
 import Search from './components/search/index.vue'
-import Task from './components/task/index.vue'
+import Schedule from './components/schedule/index.vue'
 import Terminal from './components/terminal/index.vue'
 
 const props = defineProps({})
@@ -58,9 +58,9 @@ const actionModel = [
     component: Terminal,
   },
   {
-    label: 'device.task.list',
+    label: 'device.schedule.list',
     fontIcon: 'i-bi-clock',
-    component: Task,
+    component: Schedule,
   },
   {
     label: 'device.log.name',

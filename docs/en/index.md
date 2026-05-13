@@ -24,6 +24,9 @@ features:
   - icon: 🖥️
     title: Inset Mirror
     details: 'Dedicated embedded window, auto-fits screen resolution and orientation, with integrated one-tap shortcuts'
+  - icon: ⌨️
+    title: Keyboard Mapping
+    details: 'Configure touch, joystick, swipe, scroll, and automation mappings directly on the embedded mirror'
   - icon: 🔄
     title: Multi-Device Control
     details: 'Control multiple devices simultaneously in a single window, broadcast input, with batch screenshot and APK install support'
@@ -41,7 +44,7 @@ features:
     details: 'Visual window orchestration for centralized management of all connected devices'
   - icon: 📡
     title: Wireless Connection
-    details: 'Wireless ADB connections with Gnirehtet reverse tethering support'
+    details: 'Wireless ADB connections with LAN auto-discovery and Gnirehtet reverse tethering support'
   - icon: ⚡️
     title: Scrcpy Core
     details: 'High-performance, low-latency screen mirroring and control'

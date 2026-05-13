@@ -11,9 +11,9 @@
         />
       </div>
       <el-button-group class="flex-none">
-        <el-button :title="$t('preferences.config.import.name')" icon="Upload" plain @click="handleImport">
+        <el-button :title="$t('common.import')" icon="Upload" plain @click="handleImport">
         </el-button>
-        <el-button :title="$t('preferences.config.export.name')" icon="Download" plain @click="handleExport">
+        <el-button :title="$t('common.export')" icon="Download" plain @click="handleExport">
         </el-button>
         <el-button :title="$t('preferences.config.edit.name')" icon="Edit" plain @click="handleEdit">
         </el-button>

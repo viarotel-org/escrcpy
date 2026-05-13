@@ -16,11 +16,11 @@ const props = defineProps({
 
 const { loading, invoke: handleClick } = useScreenshotAction()
 
-const taskStore = useTaskStore()
+const scheduleStore = useScheduleStore()
 
-taskStore.on('screenshot', (task) => {
-  taskStore.start({
-    task,
+scheduleStore.on('screenshot', (schedule) => {
+  scheduleStore.start({
+    schedule,
     handler: handleClick,
   })
 })

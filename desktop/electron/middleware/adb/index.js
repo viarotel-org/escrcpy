@@ -10,11 +10,12 @@ import { streamToBase64 } from '$electron/helpers/index.js'
 import { sheller } from '$electron/helpers/shell/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ADBDownloader } from './helpers/downloader/index.js'
-import adbScanner from './helpers/scanner/index.js'
+import adbScanner, { MDNS_CONFIG, probeDeviceCandidates, scanMdnsDevices } from './helpers/scanner/index.js'
 import { ADBUploader } from './helpers/uploader/index.js'
 import { electronAPI } from '@electron-toolkit/preload'
 import { readDirWithStat } from './helpers/explorer/index.js'
 import { setupEnvPath } from '$electron/process/helper.js'
+import { filterConnectedDevices } from './helpers/index.js'
 
 const processManager = new ProcessManager()
 
@@ -227,6 +228,118 @@ async function scannerConnect(password, options = {}) {
     },
     ...options,
   })
+}
+
+async function discoverConnect(options = {}) {
+  const {
+    timeout = MDNS_CONFIG.DISCOVER_TIMEOUT,
+    probeTimeout = MDNS_CONFIG.PROBE_TIMEOUT,
+    ports = MDNS_CONFIG.DEFAULT_PROBE_PORTS,
+    concurrency = Number(electronStore.get('common.concurrencyLimit') ?? 5),
+    excludeConnected = true,
+    onStatus = () => {},
+    onDevice = () => {},
+  } = options
+
+  const devices = await scanMdnsDevices({
+    timeout,
+    onStatus,
+    onDevice,
+  })
+
+  if (!devices.length) {
+    return {
+      success: false,
+      errorCode: 'NO_DEVICES',
+      error: 'No wireless debugging devices discovered',
+      devices: [],
+      results: [],
+    }
+  }
+
+  const reachableDevices = await probeDeviceCandidates(devices, {
+    ports,
+    timeout: probeTimeout,
+    concurrency,
+    onStatus,
+    onDevice,
+  })
+
+  if (!reachableDevices.length) {
+    onStatus('unreachable')
+
+    return {
+      success: false,
+      errorCode: 'NO_REACHABLE_DEVICES',
+      error: 'No reachable ADB ports discovered',
+      devices,
+      results: [],
+    }
+  }
+
+  const connectableDevices = await filterConnectedDevices(reachableDevices, {
+    client,
+    excludeConnected,
+  })
+
+  if (!connectableDevices.length) {
+    onStatus('connected')
+
+    return {
+      success: false,
+      errorCode: 'NO_UNCONNECTED_DEVICES',
+      error: 'Discovered devices are already connected',
+      devices,
+      results: [],
+    }
+  }
+
+  const limit = pLimit(concurrency)
+  const results = await Promise.all(
+    connectableDevices.map(device =>
+      limit(async () => {
+        onStatus('connecting', device)
+
+        try {
+          const message = await connect(device.address, device.port)
+          const result = {
+            ...device,
+            success: true,
+            message,
+          }
+
+          onStatus('connected', result)
+
+          return result
+        }
+        catch (error) {
+          const result = {
+            ...device,
+            success: false,
+            message: error?.message || error?.cause?.message || error,
+          }
+
+          onStatus('connect-error', result)
+
+          return result
+        }
+      }),
+    ),
+  )
+
+  const success = results.some(item => item.success)
+
+  if (!success) {
+    onStatus('error')
+  }
+
+  return {
+    success,
+    errorCode: success ? undefined : 'NO_CONNECTED_DEVICES',
+    error: success ? undefined : 'Failed to connect discovered devices',
+    devices,
+    results,
+  }
 }
 
 async function battery(id) {
@@ -461,6 +574,7 @@ export default {
   watch,
   readdir,
   scannerConnect,
+  discoverConnect,
   battery,
   uploader,
   downloader,

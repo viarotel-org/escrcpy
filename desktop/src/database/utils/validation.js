@@ -63,7 +63,6 @@ export const FieldTypes = {
  * @returns {{valid: boolean, error?: string}}
  */
 export function validateField(value, fieldName, rules = {}) {
-  // Check requiredk requiredk required
   if (rules.required && (value === undefined || value === null || value === '')) {
     return {
       valid: false,

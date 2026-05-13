@@ -271,7 +271,7 @@
     "useStyleTag": true,
     "useSupported": true,
     "useSwipe": true,
-    "useTaskStore": true,
+    "useScheduleStore": true,
     "useTemplateRef": true,
     "useTemplateRefsList": true,
     "useTextDirection": true,
@@ -336,8 +336,8 @@
     "useUploaderPlus": true,
     "UPLOAD_STATUS": true,
     "useWindowStateSync": true,
-    "TaskStatus": true,
-    "TimerType": true,
+    "ScheduleStatus": true,
+    "ScheduleTimerType": true,
     "useBillingStore": true,
     "useSubscribeStore": true,
     "useSubscribePrice": true,
@@ -346,7 +346,6 @@
     "useSubscribeSms": true,
     "useCountdown": true,
     "useSmsCountdown": true,
-    "useCopilotStore": true,
     "createRef": true,
     "onElementRemoval": true,
     "refManualReset": true,
@@ -370,6 +369,8 @@
     "useControlVolume": true,
     "useLaunchMirror": true,
     "useSidebarStore": true,
-    "useControlSidebarStore": true
+    "useControlSidebarStore": true,
+    "useLaunchOrientation": true,
+    "ScheduleStatusGroups": true
   }
 }

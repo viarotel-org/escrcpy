@@ -16,11 +16,11 @@ const props = defineProps({
 
 const { loading, invoke: handleClick } = useInstallAction()
 
-const taskStore = useTaskStore()
+const scheduleStore = useScheduleStore()
 
-taskStore.on('install', (task) => {
-  taskStore.start({
-    task,
+scheduleStore.on('install', (schedule) => {
+  scheduleStore.start({
+    schedule,
     handler: handleClick,
   })
 })

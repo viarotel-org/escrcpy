@@ -57,7 +57,7 @@ export default {
           stderr: this.onStderr,
         })
 
-        await sleep(1 * 1000)
+        await sleep(500)
 
         this.loading = false
 

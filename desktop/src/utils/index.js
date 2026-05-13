@@ -178,3 +178,25 @@ export function isEditableTarget(target) {
 
   return ['input', 'textarea', 'select'].includes(tag)
 }
+
+export function toPlainValue(value) {
+  if (Array.isArray(value)) {
+    return value.map(item => toPlainValue(item))
+  }
+
+  if (!value || typeof value !== 'object') {
+    return value
+  }
+
+  const plainValue = {}
+
+  for (const [key, nestedValue] of Object.entries(value)) {
+    plainValue[key] = toPlainValue(nestedValue)
+  }
+
+  return plainValue
+}
+
+export function clonePlainValue(value) {
+  return toPlainValue(value)
+}

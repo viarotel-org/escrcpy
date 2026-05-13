@@ -78,6 +78,7 @@
     </el-button-group>
 
     <QrAction v-bind="{ handleRefresh }" />
+    <DiscoverAction v-bind="{ handleRefresh }" />
   </div>
 </template>
 
@@ -85,6 +86,7 @@
 import pLimit from 'p-limit'
 import { sleep } from '$/utils'
 import { parseDeviceId } from '$/utils/device'
+import DiscoverAction from './discover-action/index.vue'
 import QrAction from './qr-action/index.vue'
 
 const props = defineProps({

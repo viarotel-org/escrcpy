@@ -10,7 +10,7 @@ import useRenderer from 'vite-plugin-electron-renderer'
 
 import postcssConfig from './postcss.config.js'
 
-import useAutoImports from './src/plugins/auto.js'
+import useInternalPlugins from './src/plugins/internal.js'
 
 const alias = {
   $: resolve('src'),
@@ -20,8 +20,7 @@ const alias = {
   $electron: resolve('electron'),
   $control: resolve('pages/control'),
   $explorer: resolve('pages/explorer'),
-  $copilot: resolve('pages/copilot'),
-  $terminal: resolve('pages/terminal'),
+  $terminal: resolve('pages/terminal')
 }
 
 function mergeCommon(config, { command = '' } = {}) {
@@ -56,7 +55,6 @@ export default function (args) {
             main: resolve('index.html'),
             control: resolve('pages/control/index.html'),
             explorer: resolve('pages/explorer/index.html'),
-            copilot: resolve('pages/copilot/index.html'),
             terminal: resolve('pages/terminal/index.html'),
           },
         },
@@ -86,7 +84,7 @@ export default function (args) {
           },
         }),
         useRenderer(),
-        ...useAutoImports(),
+        ...useInternalPlugins(),
       ],
       css: {
         postcss: postcssConfig,

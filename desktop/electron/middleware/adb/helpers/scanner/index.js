@@ -2,12 +2,17 @@ import { Bonjour } from 'bonjour-service'
 import net from 'node:net'
 import electronStore from '$electron/helpers/store/index.js'
 import { parseDeviceId } from '$/utils/device/index.js'
+import pLimit from 'p-limit'
 
 export const MDNS_CONFIG = {
   PAIRING_TYPE: 'adb-tls-pairing',
   CONNECT_TYPE: 'adb-tls-connect',
+  LEGACY_ADB_TYPE: 'adb',
   DEFAULT_TIMEOUT: 60 * 1000,
   CONNECT_TIMEOUT: 30 * 1000,
+  DISCOVER_TIMEOUT: 8 * 1000,
+  PROBE_TIMEOUT: 1000,
+  DEFAULT_PROBE_PORTS: [5555],
 }
 
 export const ERROR_CODES = {
@@ -18,13 +23,14 @@ export const ERROR_CODES = {
 }
 
 export class DeviceData {
-  constructor(name, address, port) {
+  constructor(name, address, port, source = '') {
     this.name = name
     this.address = address
     this.port = port
+    this.source = source
   }
 
-  static fromMdnsService(service) {
+  static fromMdnsService(service, source = '') {
     const ipv4Address = service.addresses?.find(addr => net.isIP(addr) === 4)
     if (!ipv4Address)
       return null
@@ -33,6 +39,7 @@ export class DeviceData {
       service.name,
       ipv4Address,
       service.port,
+      source || service.type,
     )
   }
 }
@@ -48,31 +55,156 @@ export class DeviceScanner {
   constructor() {
     this.bonjour = null
     this.scanner = null
+    this.scanners = []
   }
 
   async startScanning(type, callback) {
+    return this.startScanningMultiple([type], callback)
+  }
+
+  async startScanningMultiple(types, callback) {
+    this.dispose()
     this.bonjour = new Bonjour()
 
-    return new Promise((resolve, reject) => {
-      this.scanner = this.bonjour.find({ type }, (service) => {
-        const device = DeviceData.fromMdnsService(service)
+    this.scanners = types.map(type =>
+      this.bonjour.find({ type }, (service) => {
+        const device = DeviceData.fromMdnsService(service, type)
         if (device) {
           callback(device)
         }
-      })
-    })
+      }),
+    )
+    this.scanner = this.scanners[0] ?? null
   }
 
   dispose() {
-    if (this.scanner) {
-      this.scanner.stop()
-      this.scanner = null
-    }
+    const scanners = [...new Set([this.scanner, ...this.scanners])].filter(Boolean)
+    scanners.forEach(scanner => scanner.stop())
+    this.scanner = null
+    this.scanners = []
+
     if (this.bonjour) {
       this.bonjour.destroy()
       this.bonjour = null
     }
   }
+}
+
+function createDeviceKey(device) {
+  return `${device.address}:${device.port}`
+}
+
+function normalizePorts(ports) {
+  return [...new Set(ports.filter(Boolean).map(Number).filter(Boolean))]
+}
+
+export async function scanMdnsDevices(options = {}) {
+  const {
+    types = [MDNS_CONFIG.CONNECT_TYPE, MDNS_CONFIG.LEGACY_ADB_TYPE],
+    timeout = MDNS_CONFIG.DISCOVER_TIMEOUT,
+    onStatus = () => {},
+    onDevice = () => {},
+  } = options
+
+  const deviceScanner = new DeviceScanner()
+  const devices = new Map()
+
+  onStatus('scanning')
+
+  return new Promise((resolve) => {
+    let timeoutHandle = null
+
+    const finish = (status) => {
+      clearTimeout(timeoutHandle)
+      deviceScanner.dispose()
+
+      if (!devices.size) {
+        onStatus(status)
+      }
+
+      resolve([...devices.values()])
+    }
+
+    timeoutHandle = setTimeout(() => {
+      finish('not-found')
+    }, timeout)
+
+    deviceScanner.startScanningMultiple(types, (device) => {
+      const key = createDeviceKey(device)
+
+      if (devices.has(key)) {
+        return
+      }
+
+      devices.set(key, device)
+      onStatus('found', device)
+      onDevice(device)
+    })
+  })
+}
+
+export async function probePort(host, port, timeout = MDNS_CONFIG.PROBE_TIMEOUT) {
+  return new Promise((resolve) => {
+    const socket = net.createConnection({ host, port })
+
+    const done = (reachable) => {
+      socket.removeAllListeners()
+      socket.destroy()
+      resolve(reachable)
+    }
+
+    socket.setTimeout(timeout)
+    socket.once('connect', () => done(true))
+    socket.once('error', () => done(false))
+    socket.once('timeout', () => done(false))
+  })
+}
+
+export async function probeDeviceCandidates(devices, options = {}) {
+  const {
+    ports = MDNS_CONFIG.DEFAULT_PROBE_PORTS,
+    timeout = MDNS_CONFIG.PROBE_TIMEOUT,
+    concurrency = 20,
+    onStatus = () => {},
+    onDevice = () => {},
+  } = options
+
+  const candidates = new Map()
+
+  devices.forEach((device) => {
+    normalizePorts([device.port, ...ports]).forEach((port) => {
+      const candidate = {
+        ...device,
+        port,
+        source: port === device.port ? device.source : `${device.source || 'mdns'}:probe`,
+      }
+
+      candidates.set(createDeviceKey(candidate), candidate)
+    })
+  })
+
+  const limit = pLimit(concurrency)
+  const results = await Promise.all(
+    [...candidates.values()].map(candidate =>
+      limit(async () => {
+        onStatus('probing', candidate)
+
+        const reachable = await probePort(candidate.address, candidate.port, timeout)
+        const result = {
+          ...candidate,
+          reachable,
+        }
+
+        if (reachable) {
+          onDevice(result)
+        }
+
+        return result
+      }),
+    ),
+  )
+
+  return results.filter(item => item.reachable)
 }
 
 export class AdbScanner {

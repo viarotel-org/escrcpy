@@ -1,5 +1,102 @@
 # Changelog
 
+## [2.10.2](https://github.com/viarotel/escrcpy-x/compare/v2.10.1...v2.10.2) (2026-05-12)
+
+
+### Bug Fixes
+
+* 👷 Fix the issue of dependency updates ([37c3a7f](https://github.com/viarotel/escrcpy-x/commit/37c3a7fb96aaa49bdda75467caa8aedc70d45775))
+
+## [2.10.1](https://github.com/viarotel/escrcpy-x/compare/v2.10.0...v2.10.1) (2026-05-12)
+
+
+### Bug Fixes
+
+* 🐛 Fix the app startup list search box jitter problem ([4196bd8](https://github.com/viarotel/escrcpy-x/commit/4196bd82d393cf9976eb48af02a4f70dc280a096))
+* 🐛 Fixed the issue of normalized boundaries for keyboard mapping coordinates ([1bf494d](https://github.com/viarotel/escrcpy-x/commit/1bf494dddd55a05ec8b85c9f2a9986a052484720))
+
+
+### Performance Improvements
+
+* 🚀 Improve sub-window naming rules ([257e4da](https://github.com/viarotel/escrcpy-x/commit/257e4da482acb0696434f87f0810f4050f7e7c89))
+* 🚀 Keyboard mapping adds switch hotkey functions for necessary mapping types to support temporary start and stop. ([ef66ed2](https://github.com/viarotel/escrcpy-x/commit/ef66ed2069add8da500fe4fd81f63289d989d540))
+* 🚀 Keyboard mapping interaction details and performance optimization ([005f4e3](https://github.com/viarotel/escrcpy-x/commit/005f4e369e5a7767a492b835b6e77bdec982b824))
+* 🚀 Optimize keyboard mapping performance ([4146ce5](https://github.com/viarotel/escrcpy-x/commit/4146ce523c446ff04ec2d7bf351b144d396dddf2))
+* 🚀 Optimize keyboard mapping switch hotkey binding interaction details ([ef0d1da](https://github.com/viarotel/escrcpy-x/commit/ef0d1da262865de4dfed5cdeb34328841a60f212))
+* 🚀 Optimize the interaction effect of the subscription page ([2dd409e](https://github.com/viarotel/escrcpy-x/commit/2dd409ea855d1484b126e43db2164a9dae7ef951))
+* 🚀 Optimized keyboard mapping trigger logic provides extreme speed mode and natural mode ([dc047d5](https://github.com/viarotel/escrcpy-x/commit/dc047d5a6c89490f9b25eb12b04736951fe82d2f))
+
+
+### Code Refactoring
+
+* 🚀 Refactored to support more flexible keyboard mapping key entry logic ([0bec65f](https://github.com/viarotel/escrcpy-x/commit/0bec65fc615ef3ecce8f7738b0d41a44f43f8b12))
+
+## [2.10.0](https://github.com/viarotel/escrcpy-x/compare/v2.9.0...v2.10.0) (2026-05-07)
+
+
+### Features
+
+* ⚡️ Added automatic discovery function to support scanning and automatically connecting all available devices in the LAN ([9b81352](https://github.com/viarotel/escrcpy-x/commit/9b813524321484c4298fffeedca17ef4d8c3a196))
+* ✨ Embedded mirroring adds keyboard mapping function ([92e9de6](https://github.com/viarotel/escrcpy-x/commit/92e9de64f69389dfd06b9102f810f387768f2982))
+* 🎉 Added perspective control, mouse mapping, and random range attribute configuration to the keyboard mapping function. ([34c2ad6](https://github.com/viarotel/escrcpy-x/commit/34c2ad628abf48e16270374ad962ca616c9c8030))
+
+
+### Bug Fixes
+
+* 🐛 Fix i18n variable declaration exception ([d55b8ba](https://github.com/viarotel/escrcpy-x/commit/d55b8ba6c6e4057e4b7ce3e2d4d159b7849a2d12))
+* 🐛 Fixed the issue where the audio forwarding of the embedded image was not cleared after the window was closed ([1b24bd1](https://github.com/viarotel/escrcpy-x/commit/1b24bd17b594466a3661dce82537208d43f52e51))
+
+
+### Performance Improvements
+
+* ♻️ Optimize the automatic discovery logic to exclude connected devices ([02110b8](https://github.com/viarotel/escrcpy-x/commit/02110b868b2d86e709888e93a31da04f440b6e4c))
+* ✨ Optimization of embedded screen projection keyboard mapping details ([885edb2](https://github.com/viarotel/escrcpy-x/commit/885edb28d83edd8940ed2e9018b4915e64872ffa))
+* 🚀 Improve the performance of app startup to obtain list data ([e44e478](https://github.com/viarotel/escrcpy-x/commit/e44e47866f41d8af52a2eca87186f681873c23e2))
+* 🚀 Improve the reliability of wscrcpy group control ([7b152e0](https://github.com/viarotel/escrcpy-x/commit/7b152e082785a77241cc98f176d3ab85b9b3d73d))
+* 🚀 Improve the stability of embedded mirror group control ([eee8538](https://github.com/viarotel/escrcpy-x/commit/eee853866c9206a953441138a314014d13e68847))
+* 🚀 Keymap macro support using automation scripts ([cb62309](https://github.com/viarotel/escrcpy-x/commit/cb6230912bbb13b1b982250cbb4614fab6436af4))
+* 🚀 Optimize keyboard mapping interaction ([c4169ea](https://github.com/viarotel/escrcpy-x/commit/c4169eaef6c5e889f605ba40e1a3dc74515ee298))
+* 🚀 Optimize keyboard mapping module interaction details ([4a1eb03](https://github.com/viarotel/escrcpy-x/commit/4a1eb0365dee3466ce72c7ddd5ebfb3c793c6184))
+* 🚀 Optimize the interaction details of the keyboard mapping function ([dadc13d](https://github.com/viarotel/escrcpy-x/commit/dadc13df77386d573a5697004f9e741b7b714e34))
+* 🚀 Optimize the synchronization issue between the embedded mirror rotation window and the device rotation ([123f08a](https://github.com/viarotel/escrcpy-x/commit/123f08a877253e4c6151263465827f5fb7809d8b))
+
+
+### Code Refactoring
+
+* ♻️ Refactor and split wscrcpy function logic ([7eb3518](https://github.com/viarotel/escrcpy-x/commit/7eb35189658724c2d4414363277800e75f2bad50))
+* 👷 The refactored scheduled task module supports application restart and task recovery. ([10f9a86](https://github.com/viarotel/escrcpy-x/commit/10f9a86b881d1fe724244ac763816180e4bde6f0))
+* 🔧 Use the safer shell-quote library instead of custom functions ([ec5b4d0](https://github.com/viarotel/escrcpy-x/commit/ec5b4d02f0da699f1dd8068d447345dba51d84e3))
+* 🚀 Improve performance and reliability of batch/automated image execution ([cbe67b2](https://github.com/viarotel/escrcpy-x/commit/cbe67b2417b0a4146748c4c7863417c05972ed2c))
+* 🚀 Optimize subscription system token storage logic ([6bcbb27](https://github.com/viarotel/escrcpy-x/commit/6bcbb275b82009e6deaca40cdd7bbfe214ba5526))
+* 🚀 Reconstruct the directory structure of the keyboard mapping module and optimize performance and interaction ([78f39cf](https://github.com/viarotel/escrcpy-x/commit/78f39cfbd471c83f232c326b950e9877ab3b191b))
+* 🚀 优化键盘映射交互及样式效果 ([70f3756](https://github.com/viarotel/escrcpy-x/commit/70f3756236ab319cb55f543bdefd0baede6ac07f))
+
+## [2.9.0](https://github.com/viarotel/escrcpy-x/compare/v2.8.1...v2.9.0) (2026-04-24)
+
+
+### Features
+
+* 🚀 Fully support independent configuration for app startup ([2d7c632](https://github.com/viarotel/escrcpy-x/commit/2d7c632634bb15ed90ae2a1c42916e90b15c47a6))
+* 🚀 Supports launching Android multi-user/clone applications and provides independent landscape secondary screen launch options for applications ([67612d9](https://github.com/viarotel/escrcpy-x/commit/67612d9072aacf466b01874b3004140f9878d32d))
+
+
+### Bug Fixes
+
+* 🐛 Fix the problem that the app startup is affected by window arrangement from the root ([2a1f846](https://github.com/viarotel/escrcpy-x/commit/2a1f84609b034d3f341d0b7c49d9c8ad400ed20e))
+* 🐛 Fixed the interaction experience problem of the operation button at the top of the scheduled task list ([dc7bcbc](https://github.com/viarotel/escrcpy-x/commit/dc7bcbc06a8ba4c4293859a1da8c1a6fc503b0ce))
+* 🐛 Fixed the issue where clicking the Cancel/Save button did not respond when editing files in file management ([8df5822](https://github.com/viarotel/escrcpy-x/commit/8df5822fbdb0223c5da67336cfb980e65f7e4c10))
+* 🐛 Fixed the issue where the app launch was affected by window arrangement ([540d813](https://github.com/viarotel/escrcpy-x/commit/540d8133a64415df0bc7c51bf3bc107dffaa8566))
+* 🚀 Solve the problem of incompatible window arrangements for embedded mirror ([d651412](https://github.com/viarotel/escrcpy-x/commit/d6514125947eefc8d192c8b301fc253b53f3055d))
+
+
+### Performance Improvements
+
+* ⚡️ Optimize embedded image startup performance ([a836101](https://github.com/viarotel/escrcpy-x/commit/a836101eb543752a8f337eb3cb5bb5b6d367e1ff))
+* 👷 Optimize subscription configuration ([284a6d6](https://github.com/viarotel/escrcpy-x/commit/284a6d6db73bd23072fd858059f114e9dda8c89b))
+* 🚀 Disable uncommon flatpak builds to improve packaging speed ([472c1b7](https://github.com/viarotel/escrcpy-x/commit/472c1b796b5e3399509f772c177fa6657e963532))
+* 🚀 Improve the reliability of scheduled task execution ([da148de](https://github.com/viarotel/escrcpy-x/commit/da148de60da5cad30f47eef02800131ce1cee46d))
+* 🚀 Optimize the app configuration ([ae9c87e](https://github.com/viarotel/escrcpy-x/commit/ae9c87e9bb4678f70b172358bb5b7dce70a415db))
+
 ## [2.8.1](https://github.com/viarotel/escrcpy-x/compare/v2.8.0...v2.8.1) (2026-04-07)
 
 

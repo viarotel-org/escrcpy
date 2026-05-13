@@ -23,6 +23,9 @@ features:
   - icon: 🖥️
     title: 内嵌镜像
     details: '独立内嵌窗口，自动适配分辨率与屏幕方向，内置一体化快捷操作'
+  - icon: ⌨️
+    title: 键盘映射
+    details: '直接在内嵌镜像上配置点击、摇杆、滑动、滚动与自动化映射'
   - icon: 🔄
     title: 多设备群控
     details: '单窗口同控多台设备，广播输入，支持批量截图与 APK 安装'
@@ -40,7 +43,7 @@ features:
     details: '可视化窗口编排，统一管理所有已连接设备'
   - icon: 📡
     title: 无线连接
-    details: '无线 ADB 连接，支持 Gnirehtet 反向供网'
+    details: '无线 ADB 连接，支持局域网自动发现与 Gnirehtet 反向供网'
   - icon: ⚡️
     title: Scrcpy 内核
     details: '高性能、低延迟屏幕镜像与控制'

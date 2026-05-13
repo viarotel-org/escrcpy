@@ -9,7 +9,6 @@
       "$renderer/*": ["src/*"],
       "$control/*": ["pages/control/*"],
       "$explorer/*": ["pages/explorer/*"],
-      "$copilot/*": ["pages/copilot/*"],
       "$terminal/*": ["pages/terminal/*"]
     },
     "ignoreDeprecations": "6.0"

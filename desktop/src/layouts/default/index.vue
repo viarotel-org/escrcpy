@@ -50,10 +50,6 @@ const tabsModel = [
     value: '/preference',
   },
   {
-    label: 'subscribe.subscription',
-    value: '/subscribe',
-  },
-  {
     label: 'about.name',
     value: '/about',
   },

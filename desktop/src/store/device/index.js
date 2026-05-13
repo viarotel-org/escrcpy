@@ -37,19 +37,10 @@ export const useDeviceStore = defineStore('app-device', () => {
     const currentTime = dayjs().format('YYYYMMDDHHmmss')
     let value = `${deviceName}-${appName}`
 
-    const createPreset = type => `${capitalize(type)}-${deviceName}-${appName}`
+    const createPreset = type => `${deviceName}-${capitalize(type)}-${appName}`
 
     const presets = {
-      ...[
-        'mirror',
-        'camera',
-        'custom',
-        'synergy',
-      ].reduce((obj, type) => {
-        obj[type] = createPreset(type)
-        return obj
-      }, {}),
-      screenshot: `Screenshot-${deviceName}-${currentTime}`,
+      screenshot: `${deviceName}-Screenshot-${currentTime}`,
       name: deviceName,
     }
 
@@ -62,7 +53,7 @@ export const useDeviceStore = defineStore('app-device', () => {
       })
     }
     else if (params && typeof params === 'string') {
-      value = presets[params]
+      value = presets[params] || createPreset(params)
     }
 
     return value

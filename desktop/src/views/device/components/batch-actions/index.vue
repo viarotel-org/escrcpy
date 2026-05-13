@@ -44,8 +44,7 @@ import Mirror from './mirror/index.vue'
 import Application from './application/index.vue'
 import FilePush from './file-push/index.vue'
 import Screenshot from './screenshot/index.vue'
-import Tasks from './tasks/index.vue'
-import Copilot from './copilot/index.vue'
+import Schedule from './schedule/index.vue'
 import Delete from './delete/index.vue'
 
 const props = defineProps({
@@ -82,14 +81,9 @@ const actionModel = [
     component: FilePush,
   },
   {
-    label: 'device.task.name',
+    label: 'device.schedule.name',
     fontIcon: 'i-bi-clock',
-    component: Tasks,
-  },
-  {
-    label: 'device.control.copilot',
-    fontIcon: 'i-carbon-chat-bot',
-    component: Copilot,
+    component: Schedule,
   },
 ]
 </script>

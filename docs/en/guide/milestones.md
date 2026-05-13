@@ -44,4 +44,5 @@ Priority from high to low:
 - Refactor main process architecture to improve performance and stability ✅
 - Support script automation through visual orchestration tools ✅
 - Device group control feature ✅
-- Keyboard mapping feature 🚧
+- Keyboard mapping feature ✅
+- Global shortcut management 🚧

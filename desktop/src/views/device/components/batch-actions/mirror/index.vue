@@ -16,11 +16,11 @@ const props = defineProps({
 
 const { loading, invoke: handleClick } = useMirrorAction()
 
-const taskStore = useTaskStore()
+const scheduleStore = useScheduleStore()
 
-taskStore.on('mirror', (task) => {
-  taskStore.start({
-    task,
+scheduleStore.on('mirror', (schedule) => {
+  scheduleStore.start({
+    schedule,
     handler: handleClick,
   })
 })

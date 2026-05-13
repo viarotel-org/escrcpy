@@ -11,8 +11,15 @@
     <slot :current="current" :loading="loading" />
 
     <template #dropdown>
-      <el-dropdown-menu>
-        <div class="sticky top-0 z-10 px-2 pt-2 pb-2 bg-[var(--el-bg-color-overlay)] border-b dark:border-gray-700">
+      <div v-if="loading" class="h-32 w-48 flex flex-col items-center justify-center gap-2 text-primary-500">
+        <div class="i-ep-loading  animate-spin size-6"></div>
+        <div class="">
+          {{ $t('common.loading') }}
+        </div>
+      </div>
+
+      <el-dropdown-menu v-else class="!p-0">
+        <div class="sticky top-0 z-10 px-2 py-2 bg-[var(--el-bg-color-overlay)] border-b dark:border-gray-700">
           <el-input
             v-model="keyword"
             class="!w-full"
@@ -30,11 +37,11 @@
           :title="item.packageName"
           @click="onSelect(item)"
         >
-          <div :class="showActions ? 'pr-24' : ''">
+          <div :class="[labelClass]">
             {{ item.label }}
           </div>
 
-          <div v-if="showActions" class="absolute inset-y-center right-1 z-5 flex items-center">
+          <div v-if="$slots.actions" class="absolute inset-y-center right-1 z-5 flex items-center">
             <slot name="actions" :item="item" />
           </div>
         </el-dropdown-item>
@@ -46,6 +53,7 @@
 <script setup>
 import { pinyin } from 'pinyin-pro'
 import { sleep } from '$/utils'
+import { parseActivityList, parsePackageList, parseUserList } from './helpers/index.js'
 
 defineOptions({ inheritAttrs: false })
 
@@ -62,9 +70,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  showActions: {
-    type: Boolean,
-    default: false,
+  labelClass: {
+    type: [String, Object, Array],
+    default: '',
   },
   maxHeight: {
     type: String,
@@ -74,9 +82,13 @@ const props = defineProps({
     type: Function,
     default: item => `${item.name || item.label}[${item.packageName}]`,
   },
+  withSecondary: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'visible-change'])
 
 const modelValue = defineModel({
   type: String,
@@ -122,114 +134,89 @@ const current = computed(() => {
   return found || null
 })
 
-function parseUserList(rawText = '') {
-  return rawText
-    .split(/\r?\n/)
-    .map((line) => {
-      const match = line.match(/UserInfo\{(\d+):([^:}]+):/)
-
-      if (!match) {
-        return null
-      }
-
-      return {
-        id: Number(match[1]),
-        name: match[2].trim(),
-      }
-    })
-    .filter(Boolean)
-}
-
-function parsePackageList(rawText = '') {
-  return new Set(
-    rawText
-      .split(/\r?\n/)
-      .map(line => line.trim())
-      .filter(line => line.startsWith('package:'))
-      .map(line => line.replace(/^package:/, '').trim()),
-  )
-}
-
-function parseActivityList(rawText = '') {
-  return rawText
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(line => line && line.includes('/'))
-    .map((line) => {
-      const [packageName] = line.split('/', 1)
-
-      return {
-        packageName,
-        activity: line,
-      }
-    })
-}
-
 function buildSecondaryUserLabel(user) {
   return user.name || `User ${user.id}`
 }
 
 async function loadSecondaryUserApps(baseAppList = []) {
-  const rawUsers = await window.$preload.adb.deviceShell(props.deviceId, 'pm list users').catch(() => '')
-  const users = parseUserList(rawUsers).filter(item => item.id > 0)
+  const deviceId = props.deviceId
+  const adbShell = window.$preload.adb.deviceShell
 
-  if (!users.length) {
+  const rawUsers = await adbShell(deviceId, 'pm list users').catch(() => '')
+  const users = parseUserList(rawUsers).filter(({ id }) => id > 0)
+
+  if (users.length === 0) {
     return []
   }
 
-  const baseNameMap = new Map(
-    baseAppList.map(item => [item.packageName, item.name || item.label || item.packageName]),
-  )
+  const baseNameMap = new Map()
 
-  const groups = await Promise.all(
+  for (const { packageName, name, label } of baseAppList) {
+    if (!packageName) {
+      continue
+    }
+
+    baseNameMap.set(packageName, name || label || packageName)
+  }
+
+  const results = await Promise.all(
     users.map(async (user) => {
+      const userId = user.id
+      const userLabel = buildSecondaryUserLabel(user)
+
       const [rawPackages, rawActivities] = await Promise.all([
-        window.$preload.adb.deviceShell(props.deviceId, `pm list packages -3 --user ${user.id}`).catch(() => ''),
-        window.$preload.adb.deviceShell(
-          props.deviceId,
-          `cmd package query-activities --brief --components --user ${user.id} -a android.intent.action.MAIN -c android.intent.category.LAUNCHER`,
+        adbShell(deviceId, `pm list packages -3 --user ${userId}`).catch(() => ''),
+        adbShell(
+          deviceId,
+          `cmd package query-activities --brief --components --user ${userId} -a android.intent.action.MAIN -c android.intent.category.LAUNCHER`,
         ).catch(() => ''),
       ])
 
       const thirdPartyPackages = parsePackageList(rawPackages)
-
-      if (!thirdPartyPackages.size) {
+      if (thirdPartyPackages.size === 0) {
         return []
       }
 
+      const apps = []
       const dedupe = new Set()
 
-      return parseActivityList(rawActivities)
-        .filter(item => thirdPartyPackages.has(item.packageName))
-        .filter((item) => {
-          const key = `${user.id}:${item.activity}`
+      for (const item of parseActivityList(rawActivities)) {
+        const { packageName, activity } = item
 
-          if (dedupe.has(key)) {
-            return false
-          }
+        if (!thirdPartyPackages.has(packageName)) {
+          continue
+        }
+        if (dedupe.has(activity)) {
+          continue
+        }
 
-          dedupe.add(key)
-          return true
+        dedupe.add(activity)
+
+        const appName = baseNameMap.get(packageName) || packageName
+
+        apps.push({
+          name: appName,
+          label: `${appName}[${userLabel}]`,
+          value: `${packageName}@user:${userId}`,
+          packageName,
+          activity,
+          userId,
+          userName: userLabel,
+          isCloned: true,
         })
-        .map((item) => {
-          const userLabel = buildSecondaryUserLabel(user)
-          const appName = baseNameMap.get(item.packageName) || item.packageName
+      }
 
-          return {
-            name: appName,
-            label: `${appName}[${userLabel}]`,
-            value: `${item.packageName}@user:${user.id}`,
-            packageName: item.packageName,
-            activity: item.activity,
-            userId: user.id,
-            userName: userLabel,
-            isCloned: true,
-          }
-        })
+      return apps
     }),
   )
 
-  return groups.flat()
+  const apps = []
+
+  for (const group of results) {
+    apps.push(...group)
+  }
+
+  return apps
 }
 
 async function loadAppList() {
@@ -249,11 +236,19 @@ async function loadAppList() {
 
   loadPromise = (async () => {
     try {
-      const baseAppList = await window.$preload.scrcpy.getAppList(props.deviceId)
-      const secondaryUserApps = await loadSecondaryUserApps(baseAppList)
+      const baseAppList = await window.$preload.scrcpy.getAppList(props.deviceId) || []
 
-      appList.value = [...(baseAppList || []), ...secondaryUserApps]
+      appList.value = baseAppList
       loaded.value = true
+
+      if (props.withSecondary) {
+        const secondaryUserApps = await loadSecondaryUserApps(baseAppList).catch((error) => {
+          console.warn('appSelector.loadSecondaryUserApps.error', error)
+          return []
+        })
+
+        appList.value = [...baseAppList, ...secondaryUserApps]
+      }
     }
     catch {
       appList.value = []
@@ -280,8 +275,11 @@ async function updateDropdownPosition() {
 async function onVisibleChange(val) {
   popupVisible.value = val
 
+  emit('visible-change', val)
+
   if (val) {
     await loadAppList()
+    await nextTick()
     await updateDropdownPosition()
     return
   }
@@ -302,26 +300,6 @@ watch(() => props.deviceId, () => {
   appList.value = []
   loadPromise = null
 })
-
-watch(
-  () => options.value.length,
-  () => {
-    if (!popupVisible.value) {
-      return
-    }
-
-    updateDropdownPosition()
-  },
-  { flush: 'post' },
-)
-
-watch(keyword, () => {
-  if (!popupVisible.value) {
-    return
-  }
-
-  updateDropdownPosition()
-}, { flush: 'post' })
 
 defineExpose({ loadAppList, appList, loading })
 </script>

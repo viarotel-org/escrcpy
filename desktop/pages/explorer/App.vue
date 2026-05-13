@@ -229,7 +229,7 @@
           </el-table>
         </div>
 
-        <div class="flex items-center text-sm text-gray-500 h-10 px-2 app-region-drag">
+        <div class="flex items-center text-sm text-gray-500 h-10 px-2">
           <div class="flex-1 min-w-0">
             {{ explorer.files.value.length }} {{ $t('common.item') || 'items' }}
             <span v-if="explorer.selection.hasSelection.value">
@@ -290,9 +290,15 @@ const uploadDropdownTrigger = ['darwin'].includes(window.$preload.process.platfo
 const explorer = useExplorer()
 
 const { currentDevice, locale, size } = useWindowStateSync({
-  onQueryMounted() {
-    deviceStore.getList()
+  async onQueryMounted() {
     explorer.init(currentDevice.value, '/sdcard')
+
+    const currentDeviceId = currentDevice.value?.id
+
+    if (currentDeviceId) {
+      await deviceStore.getList()
+      document.title = deviceStore.getLabel(currentDeviceId, 'explorer')
+    }
   },
 })
 

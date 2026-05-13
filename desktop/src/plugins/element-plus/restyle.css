@@ -8,7 +8,8 @@
   --el-color-primary-dark-2: rgba(var(--color-primary-600), 1);
 }
 
-:root.dark {
+:root.dark,
+.dark {
   --el-color-primary: rgba(var(--color-primary-500), 1);
   --el-color-primary-light-3: rgba(var(--color-primary-300), 1);
   --el-color-primary-light-5: rgba(var(--color-primary-500), 1);
@@ -19,7 +20,7 @@
 }
 
 .el-divider--plain .el-divider__text {
-  @apply !bg-gray-100 !dark:bg-gray-950;
+  @apply !bg-gray-100 !dark:bg-gray-900;
 }
 
 .el-loading-mask {
@@ -139,6 +140,23 @@
     }
     .el-switch__action {
       @apply !bg-gray-900 !text-gray-100;
+    }
+  }
+
+  &.el-switch--theme[plain] {
+    .el-switch__action,
+    .el-switch__core {
+      @apply !bg-transparent;
+    }
+
+    &.is-checked {
+      .el-switch__action {
+        @apply !text-primary-500;
+      }
+
+      .el-switch__core {
+        @apply !border !border-primary-500;
+      }
     }
   }
 }

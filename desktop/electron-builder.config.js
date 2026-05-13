@@ -96,7 +96,7 @@ export default {
     target: [
       { target: 'AppImage', arch: ['x64', 'arm64'] },
       { target: 'deb', arch: ['x64', 'arm64'] },
-      { target: 'flatpak', arch: ['x64', 'arm64'] },
+      // { target: 'flatpak', arch: ['x64', 'arm64'] },
     ],
     artifactName: '${productName}-${version}-linux-${arch}.${ext}',
     extraResources: {

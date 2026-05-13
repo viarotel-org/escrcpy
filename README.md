@@ -21,12 +21,13 @@
 ## Features
 
 - 🖥️ **Inset Mirror**: Dedicated embedded window, auto-fits screen resolution and orientation, with integrated one-tap shortcuts
+- ⌨️ **Keyboard Mapping**: Configure touch, joystick, swipe, scroll, and automation mappings directly on the embedded mirror
 - 🔄 **Multi-Device Control**: Control multiple devices simultaneously in a single window, broadcast input, with batch screenshot and APK install support
 - 🎛️ **Integrated Control Bar**: Compact, draggable sidebar with reorderable controls: rotation, screenshot, apps, files, terminal, AI assistant, and automation
 - 🤖 **Intelligent Control**: Natural-language commands powered by AutoGLM for smart control of Android devices
 - 🏃 **Automated Execution**: Automation workflows run in parallel, supporting synchronized operations across multiple devices
 - 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of all connected devices
-- 📡 **Wireless Connection**: Wireless ADB connections with Gnirehtet reverse tethering support
+- 📡 **Wireless Connection**: Wireless ADB connections with LAN auto-discovery and Gnirehtet reverse tethering support
 - ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring and control
 
 ## Installation

@@ -48,11 +48,11 @@ export const useThemeStore = defineStore('app-theme', () => {
 
     if (theme === 'dark') {
       htmlEl.classList.remove('bg-gray-100')
-      htmlEl.classList.add('dark', 'dark:bg-gray-900')
+      htmlEl.classList.add('dark', 'bg-gray-900')
       return
     }
 
-    htmlEl.classList.remove('dark', 'dark:bg-gray-900')
+    htmlEl.classList.remove('dark', 'bg-gray-900')
     htmlEl.classList.add('bg-gray-100')
   }
 

@@ -5,8 +5,8 @@
     }"
   >
     <template #icon>
-      <slot name="title">
-        <div class="i-line-md-coffee-half-empty-twotone-loop size-24 opacity-30" :class="[iconClass]"></div>
+      <slot name="icon">
+        <div class="i-line-md-coffee-half-empty-twotone-loop size-24 opacity-30 text-[--el-text-color-primary]" :class="[iconClass]"></div>
       </slot>
     </template>
     <template v-if="$slots.title" #title>

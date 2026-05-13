@@ -320,10 +320,12 @@
         <!-- Validation status display -->
         <div class="cron-validation mt-2">
           <el-tag v-if="isValidCron && cronExpression" type="success">
-            <el-icon class="mr-1">
-              <Check />
-            </el-icon>
-            {{ $t('cron.valid') }}
+            <div class="flex items-center gap-1">
+              <el-icon class="mr-1">
+                <Check />
+              </el-icon>
+              {{ $t('cron.valid') }}
+            </div>
           </el-tag>
           <el-tag v-else-if="!isValidCron && cronExpression" type="danger">
             <el-icon class="mr-1">

@@ -1,26 +1,37 @@
-﻿<template>
+<template>
   <AppSelector
     ref="appSelectorRef"
     :device-id="device.id"
     :disabled="floating"
     with-home
-    show-actions
-    @mouseenter="onMouseEnter"
+    with-secondary
+    label-class="pr-32"
     @change="(pkg, item) => onStartApp(item)"
+    @visible-change="onVisibleChange"
   >
     <template #default>
       <slot :trigger="handleTrigger" />
     </template>
 
     <template #actions="{ item }">
-      <div class="launch-landscape-checkbox" @click.stop @mousedown.stop>
-        <el-checkbox
-          :model-value="isLandscapeEnabled(item)"
-          :title="$t('device.control.rotation.horizontally')"
-          :aria-label="$t('device.control.rotation.horizontally')"
-          @change="value => onLandscapeChange(item, value)"
-        />
-      </div>
+      <el-switch
+        v-model="launchOrientation.selections[getLaunchKey(item)]"
+        class="el-switch--theme mr-[5px]"
+        plain
+        size="small"
+        :title="getOrientationToggleTitle(item)"
+        @click.stop
+        @mousedown.stop
+        @pointerdown.stop
+        @change="value => launchOrientation.setEnabled(item, value)"
+      >
+        <template #active-action>
+          <div class="i-fluent-rectangle-landscape-12-regular size-full"></div>
+        </template>
+        <template #inactive-action>
+          <div class="i-fluent-rectangle-portrait-12-regular text-primary-500 size-full"></div>
+        </template>
+      </el-switch>
       <el-link
         v-if="['win32'].includes(platform)"
         type="primary"
@@ -41,9 +52,12 @@
 </template>
 
 <script setup>
+import { quote } from 'shell-quote'
 import { openFloatControl } from '$/utils/device/index.js'
 import { useStartApp } from '$/hooks/useStartApp/index.js'
+import { useLaunchOrientation } from '$/hooks/useLaunchOrientation/index.js'
 import AppSelector from '$/components/app-selector/index.vue'
+import { getLaunchKey, getPackageName } from '$/utils/launch/index.js'
 
 const props = defineProps({
   device: {
@@ -61,39 +75,15 @@ const deviceStore = useDeviceStore()
 const platform = window.$preload.process?.platform
 
 const appSelectorRef = ref(null)
-const landscapeSelections = reactive({})
-
-function getLandscapeItemKey(item = {}) {
-  const userId = item.userId ?? 0
-  const packageName = item.packageName || item.value || 'unknown'
-
-  return `${userId}__${packageName}`.replace(/[^\w-]/g, '_')
-}
-
-function getLandscapeStoreKey(item) {
-  return `launch.landscape.${props.device.id}.${getLandscapeItemKey(item)}`
-}
-
-function isLandscapeEnabled(item) {
-  const key = getLandscapeItemKey(item)
-
-  if (typeof landscapeSelections[key] !== 'undefined') {
-    return Boolean(landscapeSelections[key])
-  }
-
-  return Boolean(window.$preload.store.get(getLandscapeStoreKey(item)))
-}
-
-function onLandscapeChange(item, value) {
-  const enabled = Boolean(value)
-  const key = getLandscapeItemKey(item)
-
-  landscapeSelections[key] = enabled
-  window.$preload.store.set(getLandscapeStoreKey(item), enabled)
-}
+const launchOrientation = useLaunchOrientation({
+  lazy: true,
+  getDeviceId: () => props.device.id,
+})
 
 function getStartAppOptions(item = {}, extraOptions = {}) {
-  const { label, value, packageName = value, userId, activity } = item
+  const { label, userId, activity } = item
+
+  const packageName = getPackageName(item)
 
   return {
     deviceId: props.device.id,
@@ -101,22 +91,23 @@ function getStartAppOptions(item = {}, extraOptions = {}) {
     packageName,
     userId,
     activity,
-    landscape: isLandscapeEnabled(item),
+    landscape: launchOrientation.isEnabled(item),
     ...extraOptions,
   }
 }
 
-function onMouseEnter() {
-  if (!['device'].includes(props.device.status)) {
-    return
-  }
+function getOrientationToggleTitle(item = {}) {
+  const title = launchOrientation.isEnabled(item)
+    ? window.t('device.control.rotation.horizontally')
+    : window.t('device.control.rotation.vertically')
 
-  appSelectorRef.value?.loadAppList()
+  return `${window.t('device.control.rotation.name')}: ${title}`
 }
 
 function handleTrigger() {
-  if (!props.floating)
+  if (!props.floating) {
     return false
+  }
 
   const channel = 'startApp'
 
@@ -133,43 +124,43 @@ function handleTrigger() {
   window.$preload.ipcRenderer.invoke('open-system-menu', { channel, options })
 }
 
-function onStartApp({ label, value, packageName = value, userId, activity }) {
-  startApp.open(getStartAppOptions({ label, value, packageName, userId, activity }))
+function onStartApp(item = {}) {
+  startApp.open(getStartAppOptions(item))
   openFloatControl(toRaw(props.device))
 }
 
-function onMainStartClick({ label, value, packageName = value, userId, activity }) {
-  startApp.open(getStartAppOptions(
-    { label, value, packageName, userId, activity },
-    { useNewDisplay: false },
-  ))
+function onMainStartClick(item = {}) {
+  startApp.open(getStartAppOptions(item, { useNewDisplay: false }))
   openFloatControl(toRaw(props.device))
+}
+
+function quoteShortcutArgument(value = '') {
+  return quote([String(value)])
+}
+
+function stringifyShortcutArguments(args = {}) {
+  return Object.entries(args)
+    .filter(([, value]) => ![undefined, null, ''].includes(value))
+    .map(([key, value]) => `--${key}=${quoteShortcutArgument(value)}`)
+    .join(' ')
 }
 
 function onShortcutClick(item) {
-  const landscape = isLandscapeEnabled(item)
+  const startOptions = getStartAppOptions(item)
+  const landscape = startOptions.landscape
   const desktopName = deviceStore.getLabel(
     props.device,
     ({ deviceName }) => `${item.label}${landscape ? '-landscape' : ''}-${deviceName}`,
   )
 
-  let shortcutArguments = `--device-id=${props.device.id} --app-name=${item.label}`
-
-  if (item.packageName) {
-    shortcutArguments += ` --package-name=${item.packageName}`
-  }
-
-  if (item.userId) {
-    shortcutArguments += ` --user-id=${item.userId}`
-  }
-
-  if (item.activity) {
-    shortcutArguments += ` --activity=${item.activity}`
-  }
-
-  if (landscape) {
-    shortcutArguments += ' --landscape=1'
-  }
+  const shortcutArguments = stringifyShortcutArguments({
+    'device-id': startOptions.deviceId,
+    'app-name': startOptions.appName,
+    'package-name': startOptions.packageName,
+    'user-id': startOptions.userId,
+    'activity': startOptions.activity,
+    'landscape': landscape ? 1 : '',
+  })
 
   const result = window.$preload.desktop.createShortcuts({
     name: desktopName,
@@ -183,16 +174,12 @@ function onShortcutClick(item) {
   }
   ElMessage.warning(window.t('common.failed'))
 }
+
+function onVisibleChange(visible) {
+  if (!visible) {
+    return false
+  }
+
+  launchOrientation.init()
+}
 </script>
-
-<style scoped>
-.launch-landscape-checkbox {
-  display: flex;
-  align-items: center;
-  margin-right: 2px;
-}
-
-.launch-landscape-checkbox :deep(.el-checkbox) {
-  margin-right: 0;
-}
-</style>

@@ -13,7 +13,7 @@
  * │   ├── chat/       # Chat messages module
  * │   │   ├── store.js      # ChatMessageStore
  * │   │   └── composables.js # useChatMessages Hook
- * │   └── [future]/   # Future modules (tasks, etc.)
+ * │   └── [future]/   # Future modules
  * │
  * └── utils/          # Utility functions
  *     └── validation.js # Data validation and error handling
@@ -35,11 +35,15 @@ export { BaseStore, db, deleteDatabase, getDatabase, resetDatabase } from './cor
 // Hooks
 export { useLiveQuery, useLiveQueryWithDeps, useLiveQueryWithState } from './hooks/index.js'
 
-// Chat module
+// Schedule module
 export {
-  chatMessageStore,
-  useChatMessages,
-} from './modules/chat/index.js'
+  ActiveScheduleStatuses,
+  RecoverableScheduleStatuses,
+  ScheduleStatus,
+  scheduleStore,
+  TerminalScheduleStatuses,
+  useSchedules,
+} from './modules/schedule/index.js'
 
 // Utilities
 export {

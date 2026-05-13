@@ -1,3 +1,7 @@
+import { quote } from 'shell-quote'
+import { mergeConfig } from '$/store/preference/helpers/index.js'
+import { getLaunchConfig } from '$/utils/launch/index.js'
+
 export function useStartApp() {
   const deviceStore = useDeviceStore()
   const preferenceStore = usePreferenceStore()
@@ -9,7 +13,7 @@ export function useStartApp() {
   }
 
   function quoteShellValue(value = '') {
-    return `"${String(value).replaceAll('"', '\\"')}"`
+    return quote([String(value)])
   }
 
   function normalizeActivity(activity = '', packageName = '') {
@@ -38,6 +42,24 @@ export function useStartApp() {
     }
 
     return false
+  }
+
+  function normalizeUserId(userId = '') {
+    const value = String(userId).trim()
+
+    if (!/^\d+$/.test(value)) {
+      return ''
+    }
+
+    return value
+  }
+
+  function shouldUseNewDisplay(useNewDisplay) {
+    return useNewDisplay !== false
+  }
+
+  function isSecondaryUserLaunch({ userId, packageName }) {
+    return Boolean(packageName) && !['', '0'].includes(normalizeUserId(userId))
   }
 
   function parseDisplaySize(rawText = '') {
@@ -113,98 +135,121 @@ export function useStartApp() {
     )
   }
 
-  async function open(options = {}) {
-    const deviceId = options.deviceId || env.EXECUTE_ARG_DEVICE_ID
-    const appName = options.appName || env.EXECUTE_ARG_APP_NAME
-    const activity = options.activity || env.EXECUTE_ARG_ACTIVITY
-    const userId = options.userId || env.EXECUTE_ARG_USER_ID
-    const landscape = normalizeBoolean(options.landscape ?? env.EXECUTE_ARG_LANDSCAPE)
-    let packageName = options.packageName || env.EXECUTE_ARG_PACKAGE_NAME
-    let useNewDisplay = options.useNewDisplay
+  function resolveStartOptions(options = {}) {
+    const deviceId = env.EXECUTE_ARG_DEVICE_ID || options.deviceId
+    const appName = env.EXECUTE_ARG_APP_NAME || options.appName
+    const activity = env.EXECUTE_ARG_ACTIVITY || options.activity
+    const userId = normalizeUserId(env.EXECUTE_ARG_USER_ID || options.userId)
+    const landscape = normalizeBoolean(env.EXECUTE_ARG_LANDSCAPE || options.landscape)
+    const packageName = env.EXECUTE_ARG_PACKAGE_NAME || options.packageName
+    const useNewDisplay = options.useNewDisplay
 
-    if (!deviceId) {
+    return {
+      deviceId,
+      appName,
+      activity,
+      userId,
+      landscape,
+      packageName,
+      useNewDisplay,
+      shouldCreateNewDisplay: shouldUseNewDisplay(useNewDisplay),
+    }
+  }
+
+  async function resolveScrcpyRuntime({ deviceId, userId, appName, landscape, shouldCreateNewDisplay, packageName }) {
+    await window.$preload.adb.waitForDevice(deviceId)
+    await deviceStore.getList()
+
+    const title = `${appName}-${deviceStore.getLabel(deviceId, 'synergy')}`
+    const deviceConfig = preferenceStore.getData(deviceId) || {}
+    const launchConfig = getLaunchConfig({ deviceId, packageName, userId, scope: 'scrcpy' }) || {}
+    const mergedConfig = mergeConfig(deviceConfig, launchConfig)
+
+    if (landscape) {
+      const tempWindowWidth = mergedConfig['--window-width']
+      mergedConfig['--window-width'] = mergedConfig['--window-height']
+      mergedConfig['--window-height'] = tempWindowWidth
+    }
+
+    const commands = preferenceStore.scrcpyParameter(mergedConfig, {
+      excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
+    })
+
+    const newDisplay = landscape && shouldCreateNewDisplay
+      ? await resolveLandscapeDisplay(deviceId)
+      : ''
+
+    return {
+      title,
+      commands,
+      newDisplay,
+    }
+  }
+
+  function buildScrcpyOptions(options, startOptions, runtime, overrides = {}) {
+    return {
+      ...options,
+      title: runtime.title,
+      commands: runtime.commands,
+      packageName: startOptions.packageName,
+      userId: startOptions.userId,
+      activity: startOptions.activity,
+      landscape: startOptions.landscape,
+      newDisplay: runtime.newDisplay,
+      useNewDisplay: startOptions.useNewDisplay,
+      ...overrides,
+    }
+  }
+
+  async function launchScrcpy(deviceId, options) {
+    try {
+      return await window.$preload.scrcpy.launch(deviceId, options)
+    }
+    catch (error) {
+      console.error('mirror.commands', options.commands)
+      console.error('mirror.error', error)
+      throw error
+    }
+  }
+
+  async function openSecondaryUserAppWithMirror(startOptions, scrcpyOptions) {
+    if (!startOptions.shouldCreateNewDisplay) {
+      await openSecondaryUserApp(startOptions)
+      await launchScrcpy(startOptions.deviceId, scrcpyOptions)
+      return
+    }
+
+    const displayId = await launchScrcpy(startOptions.deviceId, scrcpyOptions)
+
+    await openSecondaryUserApp({
+      ...startOptions,
+      displayId,
+    })
+  }
+
+  async function open(options = {}) {
+    const startOptions = resolveStartOptions(options)
+
+    if (!startOptions.deviceId) {
       return false
     }
 
     loading.value = true
 
     try {
-      await window.$preload.adb.waitForDevice(deviceId)
+      const runtime = await resolveScrcpyRuntime(startOptions)
 
-      await deviceStore.getList()
-
-      const title = `${appName}-${deviceStore.getLabel(deviceId, 'synergy')}`
-
-      const commands = preferenceStore.scrcpyParameter(deviceId, {
-        excludes: ['--otg', '--mouse=aoa', '--keyboard=aoa'],
-      })
-      const newDisplay = landscape && useNewDisplay !== false
-        ? await resolveLandscapeDisplay(deviceId)
-        : ''
-
-      if (userId && packageName) {
-        if (useNewDisplay === false) {
-          await openSecondaryUserApp({
-            deviceId,
-            userId,
-            packageName,
-            activity,
-          })
-
-          await window.$preload.scrcpy.launch(deviceId, {
-            ...options,
-            title,
-            commands,
-            packageName: '',
-            userId,
-            activity,
-            landscape,
-            newDisplay,
-            useNewDisplay,
-          })
-        }
-        else {
-          const displayId = await window.$preload.scrcpy.launch(deviceId, {
-            ...options,
-            title,
-            commands,
-            packageName: '',
-            userId,
-            activity,
-            landscape,
-            newDisplay,
-            useNewDisplay,
-          })
-
-          await openSecondaryUserApp({
-            deviceId,
-            userId,
-            packageName,
-            activity,
-            displayId,
-          })
-        }
-      }
-      else {
-        await window.$preload.scrcpy.launch(deviceId, {
-          ...options,
-          title,
-          commands,
-          packageName,
-          userId,
-          activity,
-          landscape,
-          newDisplay,
-          useNewDisplay,
+      if (isSecondaryUserLaunch(startOptions)) {
+        const scrcpyOptions = buildScrcpyOptions(options, startOptions, runtime, {
+          packageName: '',
         })
-          .catch((e) => {
-            console.error('mirror.commands', commands)
-            console.error('mirror.error', e)
-            if (e.message) {
-              ElMessage.warning(e.message)
-            }
-          })
+
+        await openSecondaryUserAppWithMirror(startOptions, scrcpyOptions)
+        return
       }
+
+      const scrcpyOptions = buildScrcpyOptions(options, startOptions, runtime)
+      await launchScrcpy(startOptions.deviceId, scrcpyOptions)
     }
     catch (error) {
       console.error('startApp.error', error)

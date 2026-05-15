@@ -100,6 +100,10 @@ async function launch(serial, args = {}) {
       ? ` --new-display=${newDisplay}`
       : ` --new-display`
 
+    if (!/\s(?:--flex-display|-x)(?:\s|$)/.test(commands)) {
+      commands += ` --flex-display`
+    }
+
     if (!newDisplay) {
       const displayOverlay = getDisplayOverlay(serial)
 

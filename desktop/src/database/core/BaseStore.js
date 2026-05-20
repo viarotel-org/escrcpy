@@ -12,6 +12,16 @@
 
 import { db } from './database.js'
 import { createStorageError, StorageErrorTypes, validateData } from '../utils/validation.js'
+import { createLogger } from '../../utils/logger.js'
+
+// Create a logger instance for BaseStore
+const logger = createLogger('BaseStore')
+
+// Default pagination constants
+const DEFAULT_PAGE = 1
+const DEFAULT_PAGE_SIZE = 20
+const DEFAULT_ORDER_BY = 'createdAt'
+const DEFAULT_DESCENDING = true
 
 /**
  * Store configuration options
@@ -95,7 +105,7 @@ export class BaseStore {
       }
     }
     catch (error) {
-      console.error(`[${this.tableName}] Add error:`, error)
+      logger.error(`Add error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -138,7 +148,7 @@ export class BaseStore {
       }
     }
     catch (error) {
-      console.error(`[${this.tableName}] BulkAdd error:`, error)
+      logger.error(` BulkAdd error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -168,7 +178,7 @@ export class BaseStore {
       return { success: true, data: record }
     }
     catch (error) {
-      console.error(`[${this.tableName}] GetById error:`, error)
+      logger.error(` GetById error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.READ_ERROR, error.message),
@@ -199,7 +209,7 @@ export class BaseStore {
       return { success: true, data: records }
     }
     catch (error) {
-      console.error(`[${this.tableName}] GetAll error:`, error)
+      logger.error(` GetAll error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.READ_ERROR, error.message),
@@ -216,10 +226,10 @@ export class BaseStore {
   async getList(params = {}, filter = {}) {
     try {
       const {
-        page = 1,
-        pageSize = 20,
-        orderBy = 'createdAt',
-        desc = true,
+        page = DEFAULT_PAGE,
+        pageSize = DEFAULT_PAGE_SIZE,
+        orderBy = DEFAULT_ORDER_BY,
+        desc = DEFAULT_DESCENDING,
       } = params
 
       // Build query
@@ -288,7 +298,7 @@ export class BaseStore {
       }
     }
     catch (error) {
-      console.error(`[${this.tableName}] GetList error:`, error)
+      logger.error(` GetList error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.READ_ERROR, error.message),
@@ -328,7 +338,7 @@ export class BaseStore {
       return { success: true, data: updated }
     }
     catch (error) {
-      console.error(`[${this.tableName}] Update error:`, error)
+      logger.error(` Update error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -347,7 +357,7 @@ export class BaseStore {
       return { success: true }
     }
     catch (error) {
-      console.error(`[${this.tableName}] DeleteById error:`, error)
+      logger.error(` DeleteById error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -366,7 +376,7 @@ export class BaseStore {
       return { success: true }
     }
     catch (error) {
-      console.error(`[${this.tableName}] BulkDelete error:`, error)
+      logger.error(` BulkDelete error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -384,7 +394,7 @@ export class BaseStore {
       return { success: true }
     }
     catch (error) {
-      console.error(`[${this.tableName}] ClearAll error:`, error)
+      logger.error(` ClearAll error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.WRITE_ERROR, error.message),
@@ -415,7 +425,7 @@ export class BaseStore {
       return { success: true, data: total }
     }
     catch (error) {
-      console.error(`[${this.tableName}] Count error:`, error)
+      logger.error(` Count error:`, error)
       return {
         success: false,
         error: createStorageError(StorageErrorTypes.READ_ERROR, error.message),

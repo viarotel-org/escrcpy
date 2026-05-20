@@ -11,6 +11,10 @@
 
 import { liveQuery } from 'dexie'
 import { useObservable } from '@vueuse/rxjs'
+import { createLogger } from '../../utils/logger.js'
+
+// Create logger instance for useLiveQuery hooks
+const logger = createLogger('useLiveQuery')
 
 /**
  * Create reactive queries using Dexie liveQuery
@@ -70,14 +74,14 @@ export function useLiveQueryWithState(queryFn, options = {}) {
           loading.value = false
         },
         error: (err) => {
-          console.error('[useLiveQueryWithState] Query error:', err)
+          logger.error('useLiveQueryWithState Query error:', err)
           error.value = err
           loading.value = false
         },
       })
     }
     catch (err) {
-      console.error('[useLiveQueryWithState] Subscribe error:', err)
+      logger.error('useLiveQueryWithState Subscribe error:', err)
       error.value = err
       loading.value = false
     }
@@ -156,14 +160,14 @@ export function useLiveQueryWithDeps(queryFnFactory, deps, options = {}) {
           loading.value = false
         },
         error: (err) => {
-          console.error('[useLiveQueryWithDeps] Query error:', err)
+          logger.error('useLiveQueryWithDeps Query error:', err)
           error.value = err
           loading.value = false
         },
       })
     }
     catch (err) {
-      console.error('[useLiveQueryWithDeps] Subscribe error:', err)
+      logger.error('useLiveQueryWithDeps Subscribe error:', err)
       error.value = err
       loading.value = false
     }

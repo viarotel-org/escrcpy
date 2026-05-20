@@ -7,6 +7,10 @@
 import { liveQuery } from 'dexie'
 import { db } from '$/database/core/database.js'
 import { scheduleStore } from './store.js'
+import { createLogger } from '../../../utils/logger.js'
+
+// Create logger instance for schedule hooks
+const logger = createLogger('useSchedules')
 
 export function useSchedules(statusRef = null) {
   const schedules = shallowRef([])
@@ -45,14 +49,14 @@ export function useSchedules(statusRef = null) {
           loading.value = false
         },
         error(err) {
-          console.error('[useSchedules] Subscribe error:', err)
+          logger.error('Subscribe error:', err)
           error.value = err
           loading.value = false
         },
       })
     }
     catch (err) {
-      console.error('[useSchedules] Init error:', err)
+      logger.error('Init error:', err)
       error.value = err
       loading.value = false
     }

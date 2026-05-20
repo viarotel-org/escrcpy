@@ -7,6 +7,14 @@
 import { BaseStore } from '$/database/core/BaseStore.js'
 import { db } from '$/database/core/database.js'
 import { FieldTypes } from '$/database/utils/validation.js'
+import { createLogger } from '../../../utils/logger.js'
+
+// Create logger instance for schedule store
+const logger = createLogger('ScheduleStore')
+
+// Default schedule configuration constants
+const DEFAULT_MAX_RETRIES = 3
+const DEFAULT_SCHEMA_VERSION = 1
 
 export const ScheduleStatus = {
   PENDING: 'pending',

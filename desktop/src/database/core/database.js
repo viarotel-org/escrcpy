@@ -10,8 +10,12 @@
  */
 
 import Dexie from 'dexie'
+import { createLogger } from '../../utils/logger.js'
 
-// Database namease name
+// Create logger instance for database module
+const logger = createLogger('Database')
+
+// Database name
 const DB_NAME = 'escrcpy_local_db'
 
 // Current database version
@@ -69,7 +73,7 @@ class AppDatabase extends Dexie {
   getModuleTables(moduleName) {
     const schema = MODULE_SCHEMAS[moduleName]
     if (!schema) {
-      console.warn(`[Database] Unknown module: ${moduleName}`)
+      logger.warn(`Unknown module: ${moduleName}`)
       return {}
     }
 

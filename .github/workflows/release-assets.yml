@@ -41,6 +41,20 @@ jobs:
           corepack enable
           corepack prepare pnpm@10.29.2 --activate
 
+      - name: Get pnpm store path
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install Dependencies
         run: pnpm install
 
@@ -50,7 +64,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y flatpak flatpak-builder libudev-dev
           flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak --user install -y --noninteractive flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08 org.electronjs.Electron2.BaseApp//23.08
+          flatpak --user install -y --noninteractive flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08 org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
 
       - name: Build ${{ matrix.platform }}
         run: pnpm ${{ matrix.build_command }}

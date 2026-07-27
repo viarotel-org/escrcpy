@@ -13,7 +13,12 @@ export default () => {
       resolvers,
       imports: ['vue', 'pinia', '@vueuse/core', VueRouterAutoImports],
       eslintrc: {
-        enabled: true,
+        // This file is checked into the repository. Rewriting it on every
+        // Vite startup occasionally fails on Windows when another watcher or
+        // antivirus scanner opens it at the same time, aborting the whole dev
+        // server with UNKNOWN/EPERM. Keep consuming the generated file without
+        // touching it during normal development.
+        enabled: false,
       },
       dirs: [
         'src/hooks/*/index.js',

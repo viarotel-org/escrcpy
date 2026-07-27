@@ -1,35 +1,30 @@
 <template>
   <div
     class="bg-primary-100 dark:bg-gray-800 flex group overflow-hidden"
+    :class="direction === 'vertical' ? 'is-vertical h-full flex-col items-center' : ''"
   >
-    <el-button
-      type="primary"
-      class="el-button-nav"
-      :style="{
-        ...buttonHeightStyle,
-      }"
-      title="Prev"
-      @click="handlePrev"
+    <Scrollable
+      class="flex-1 min-w-0"
+      :class="direction === 'vertical' ? 'h-0 w-full' : ''"
+      :direction="direction"
+      disabled-drag
     >
-      <el-icon>
-        <CaretLeft />
-      </el-icon>
-    </el-button>
-
-    <Scrollable ref="scrollableRef" class="flex-1 min-w-0" disabled-drag>
       <Swapy
         :key="controlStore.swapyKey"
         :enabled="swapyEnabled"
         class="flex items-center"
-        :class="floating ? '!h-full' : ''"
-        :config="{ animation: 'dynamic', dragAxis: 'x', autoScrollOnDrag: false }"
+        :class="[
+          floating ? '!h-full' : '',
+          direction === 'vertical' ? '!h-auto w-full flex-col gap-2 !space-x-0' : '',
+        ]"
+        :config="{ animation: 'dynamic', dragAxis: direction === 'vertical' ? 'y' : 'x', autoScrollOnDrag: false }"
         @swap-end="onSwapEnd"
       >
         <SwapyItem
-          v-for="item of controlModel"
+          v-for="item of scrollControlModel"
           :key="item.id"
           class="flex-none"
-          :class="[buttonClass]"
+          :class="[buttonClass, direction === 'vertical' ? 'w-full flex justify-center' : '']"
           v-bind="{
             slotId: item.id,
             itemId: item.id,
@@ -57,14 +52,14 @@
                 :disabled="['unauthorized', 'offline'].includes(device.status)"
                 :title="$t(item.tips || item.label)"
                 :loading="loading"
-                @click="handleClick(item, trigger || item.trigger)"
+                @click="handleClick(item, item.trigger || trigger)"
               >
                 <template #icon>
                   <el-icon v-if="item.elIcon" :class="item.iconClass">
                     <component :is="item.elIcon" />
                   </el-icon>
 
-                  <i v-else-if="item.fontIcon" :class="item.fontIcon"></i>
+                  <i v-else-if="item.fontIcon" :class="[item.fontIcon, item.iconClass]"></i>
                 </template>
               </el-button>
             </template>
@@ -73,19 +68,26 @@
       </Swapy>
     </Scrollable>
 
-    <el-button
-      type="primary"
-      class="el-button-nav"
-      :style="{
-        ...buttonHeightStyle,
-      }"
-      title="Next"
-      @click="handleNext"
+    <div
+      v-if="fixedNavigationModel.length"
+      class="fixed-navigation-group flex w-full flex-none flex-col border-t border-white/10 py-1"
     >
-      <el-icon>
-        <CaretRight />
-      </el-icon>
-    </el-button>
+      <div
+        v-for="item of fixedNavigationModel"
+        :key="item.id"
+        class="w-full"
+      >
+        <button
+          type="button"
+          class="fixed-navigation-button"
+          :disabled="['unauthorized', 'offline'].includes(device.status)"
+          :title="$t(item.tips || item.label)"
+          @click="handleClick(item, item.trigger)"
+        >
+          <i :class="item.fontIcon"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -100,6 +102,7 @@ import Screenshot from './screenshot/index.vue'
 import Terminal from './terminal/index.vue'
 import Schedule from './schedule/index.vue'
 import Volume from './volume/index.vue'
+import KeyboardMapping from './keyboard-mapping/index.vue'
 
 export default {
   components: {
@@ -109,6 +112,7 @@ export default {
     Gnirehtet,
     Rotation,
     Volume,
+    KeyboardMapping,
     Explorer,
     Terminal,
     Schedule,
@@ -134,10 +138,14 @@ export default {
       type: String,
       default: '',
     },
+    direction: {
+      type: String,
+      default: 'horizontal',
+      validator: value => ['horizontal', 'vertical'].includes(value),
+    },
   },
   setup() {
     const controlStore = useControlStore()
-
     return {
       controlStore,
     }
@@ -146,6 +154,13 @@ export default {
     return {}
   },
   computed: {
+    fixedNavigationIds() {
+      // DOM order is top-to-bottom: task switch, Home, then Back at the
+      // physical bottom of the mirror toolbar.
+      return this.direction === 'vertical' && this.floating
+        ? ['switch', 'home', 'back']
+        : []
+    },
     controlModel() {
       const valueMap = {
         switch: {
@@ -197,11 +212,40 @@ export default {
           label: 'device.control.volume.name',
           fontIcon: 'i-simple-line-icons-volume-2',
           component: 'Volume',
+          hiddenKeys: ['floating'],
+        },
+        volumeUp: {
+          label: 'device.control.volume-up.name',
+          fontIcon: 'i-material-symbols-volume-up-rounded',
+          iconClass: 'volume-button-icon',
+          command: 'input keyevent 24',
+          floatingOnly: true,
+        },
+        volumeDown: {
+          label: 'device.control.volume-down.name',
+          fontIcon: 'i-material-symbols-volume-down-rounded',
+          iconClass: 'volume-button-icon',
+          command: 'input keyevent 25',
+          floatingOnly: true,
+        },
+        volumeMute: {
+          label: 'device.control.volume-mute.name',
+          fontIcon: 'i-material-symbols-volume-off-rounded',
+          iconClass: 'volume-button-icon',
+          command: 'input keyevent 164',
+          floatingOnly: true,
         },
         screenshot: {
           label: 'device.control.capture',
           fontIcon: 'i-simple-line-icons-camera',
           component: 'Screenshot',
+        },
+        keyboardMapping: {
+          label: 'keyboard.mapping.name',
+          fontIcon: 'i-grommet-icons-gamepad',
+          tips: 'keyboard.mapping.tips',
+          floatingOnly: true,
+          component: 'KeyboardMapping',
         },
         reboot: {
           label: 'device.control.reboot',
@@ -238,7 +282,8 @@ export default {
       }
 
       const isHidden = item =>
-        (item.hiddenKeys || []).some(key => this.$props[key])
+        (item.floatingOnly && !this.floating)
+        || (item.hiddenKeys || []).some(key => this.$props[key])
 
       const barLayout = [...new Set([...this.controlStore.barLayout, ...Object.keys(valueMap)])]
 
@@ -257,7 +302,22 @@ export default {
 
       return value
     },
+    scrollControlModel() {
+      return this.controlModel.filter(item => !this.fixedNavigationIds.includes(item.id))
+    },
+    fixedNavigationModel() {
+      return this.fixedNavigationIds
+        .map(id => this.controlModel.find(item => item.id === id))
+        .filter(Boolean)
+    },
     buttonHeightStyle() {
+      if (this.direction === 'vertical') {
+        return {
+          width: '32px !important',
+          height: '32px !important',
+        }
+      }
+
       if (!this.buttonHeight) {
         return {}
       }
@@ -268,12 +328,6 @@ export default {
     },
   },
   methods: {
-    handlePrev() {
-      this.$refs.scrollableRef.scrollBackward()
-    },
-    handleNext() {
-      this.$refs.scrollableRef.scrollForward()
-    },
     handleClick(row, trigger) {
       if (trigger) {
         trigger(row)
@@ -301,13 +355,42 @@ export default {
   @apply !dark:bg-gray-800;
 }
 
-.el-button.el-button-nav {
-  @apply !flex-none !flex !items-center !justify-center;
-  @apply !w-4 !p-0;
-  @apply !border-0 !rounded-none;
-  @apply !opacity-0 !group-hover:opacity-100 !transition-opacity;
-  @apply !bg-primary-100 !dark:bg-gray-800;
-  @apply !hover:bg-primary-300 !active:bg-primary-500;
-  @apply !text-primary-600 !hover:text-white;
+.is-vertical {
+  width: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+  background: #171717 !important;
+}
+
+.is-vertical :deep(.el-button) {
+  color: #d1d5db;
+}
+
+.is-vertical :deep(.volume-button-icon) {
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 22px !important;
+}
+
+.fixed-navigation-button {
+  width: 48px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #d1d5db;
+  background: transparent;
+}
+
+.fixed-navigation-button:hover:not(:disabled) {
+  color: var(--el-color-primary);
+  background: rgb(255 255 255 / 6%);
+}
+
+.is-vertical .fixed-navigation-group {
+  transform: translateX(-8px);
 }
 </style>

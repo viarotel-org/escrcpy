@@ -121,14 +121,21 @@ export async function selectAndSendFileToDevice(
   return successFiles
 }
 
-export function openFloatControl(device) {
+export function openFloatControl(
+  device,
+  { force = false, targetWindowTitle = '', scrcpyArgs = '' } = {},
+) {
   const floatControl = window.$preload.store.get('common.floatControl')
 
-  if (!floatControl) {
+  if (!force && !floatControl) {
     return false
   }
 
-  window.$preload.win.open('pages/control', { device })
+  const payload = { device, targetWindowTitle, scrcpyArgs }
+
+  window.$preload.win.open('pages/control', targetWindowTitle
+    ? { payload, show: false }
+    : payload)
   return true
 }
 

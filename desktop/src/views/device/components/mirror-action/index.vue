@@ -37,6 +37,8 @@ export default {
   data() {
     return {
       loading: false,
+      embeddedContainerId: '',
+      scrcpyOutputBuffer: '',
     }
   },
   methods: {
@@ -46,35 +48,99 @@ export default {
       this.toggleRowExpansion(row, true)
 
       const args = this.preferenceStore.scrcpyParameter(row.id)
+      const title = this.deviceStore.getLabel(row, 'mirror')
+      let launchArgs = args
+      let containerId = ''
 
       try {
-        const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.deviceStore.getLabel(row, 'mirror'),
-          args,
+        const container = await window.$preload.ipcRenderer.invoke(
+          'control:open-embedded',
+          {
+            device: toRaw(row),
+            targetWindowTitle: title,
+            scrcpyArgs: args,
+          },
+        )
+        containerId = container?.containerId || ''
+        this.embeddedContainerId = containerId
+        const parentWindowHandle = container?.parentWindowHandle
+
+        if (parentWindowHandle) {
+          launchArgs = `${args} --parent-window-handle=${parentWindowHandle}`.trim()
+        }
+
+        const mirror = parentWindowHandle
+          ? this.$scrcpy.mirrorEmbedded
+          : this.$scrcpy.mirror
+        const mirroring = mirror(row.id, {
+          title,
+          args: launchArgs,
           stdout: this.onStdout,
           stderr: this.onStderr,
         })
+
+        // The patched Windows scrcpy creates its SDL child directly in the
+        // container. Other platforms keep the existing floating toolbar.
+        if (!parentWindowHandle) {
+          openFloatControl(toRaw(row), { force: true })
+        }
 
         await sleep(500)
 
         this.loading = false
 
-        openFloatControl(toRaw(row))
-
         await mirroring
       }
       catch (error) {
-        console.error('mirror.args', args)
+        console.error('mirror.args', launchArgs)
         console.error('mirror.error', error)
 
         if (error.message) {
           this.$message.warning(error.message)
         }
       }
+      finally {
+        this.loading = false
+        this.embeddedContainerId = ''
+        this.scrcpyOutputBuffer = ''
+
+        if (containerId) {
+          window.$preload.ipcRenderer.invoke('control:close-embedded', {
+            containerId,
+          })
+        }
+        else {
+          window.$preload.win.close('pages/control')
+        }
+      }
     },
 
-    onStdout() {},
-    onStderr() {},
+    onStdout(data) {
+      this.handleScrcpyOutput(data)
+    },
+    onStderr(data) {
+      this.handleScrcpyOutput(data)
+    },
+    handleScrcpyOutput(data) {
+      if (!this.embeddedContainerId)
+        return
+
+      this.scrcpyOutputBuffer = `${this.scrcpyOutputBuffer}${String(data)}`.slice(-4096)
+      const matches = [...this.scrcpyOutputBuffer.matchAll(
+        /(?:Texture|Video|Display):\s*(\d+)x(\d+)/gi,
+      )]
+      const match = matches.at(-1)
+
+      if (!match)
+        return
+
+      window.$preload.ipcRenderer.invoke('control:set-video-size', {
+        containerId: this.embeddedContainerId,
+        width: Number(match[1]),
+        height: Number(match[2]),
+      })
+      this.scrcpyOutputBuffer = ''
+    },
   },
 }
 </script>

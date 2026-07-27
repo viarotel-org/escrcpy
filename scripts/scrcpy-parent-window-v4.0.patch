@@ -1,0 +1,376 @@
+diff --git a/app/src/cli.c b/app/src/cli.c
+index 785e8b9..585e33b 100644
+--- a/app/src/cli.c
++++ b/app/src/cli.c
+@@ -1,7 +1,9 @@
+ #include "cli.h"
+ 
+ #include <assert.h>
++#include <errno.h>
+ #include <getopt.h>
++#include <inttypes.h>
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -109,6 +111,7 @@ enum {
+     OPT_KEEP_ACTIVE,
+     OPT_BACKGROUND_COLOR,
+     OPT_RENDER_FIT,
++    OPT_PARENT_WINDOW_HANDLE,
+ };
+ 
+ struct sc_option {
+@@ -1044,6 +1047,15 @@ static const struct sc_option options[] = {
+         .text = "Set the initial window height.\n"
+                 "Default is 0 (automatic).",
+     },
++#ifdef _WIN32
++    {
++        .longopt_id = OPT_PARENT_WINDOW_HANDLE,
++        .longopt = "parent-window-handle",
++        .argdesc = "hwnd",
++        .text = "Render into a native child window owned by the given HWND.\n"
++                "This option is only available on Windows.",
++    },
++#endif
+     {
+         .shortopt = 'x',
+         .longopt = "flex-display",
+@@ -1786,6 +1798,25 @@ parse_window_dimension(const char *s, uint16_t *dimension) {
+     return true;
+ }
+ 
++static bool
++parse_parent_window_handle(const char *s, uintptr_t *handle) {
++    if (!s[0]) {
++        LOGE("Parent window handle must not be empty");
++        return false;
++    }
++
++    errno = 0;
++    char *end;
++    uintmax_t value = strtoumax(s, &end, 0);
++    if (errno || *end || !value || value > UINTPTR_MAX) {
++        LOGE("Invalid parent window handle: %s", s);
++        return false;
++    }
++
++    *handle = (uintptr_t) value;
++    return true;
++}
++
+ static bool
+ parse_port_range(const char *s, struct sc_port_range *port_range) {
+     long values[2];
+@@ -2629,6 +2660,12 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
+             case OPT_WINDOW_BORDERLESS:
+                 opts->window_borderless = true;
+                 break;
++            case OPT_PARENT_WINDOW_HANDLE:
++                if (!parse_parent_window_handle(optarg,
++                                                &opts->parent_window_handle)) {
++                    return false;
++                }
++                break;
+             case OPT_PUSH_TARGET:
+                 opts->push_target = optarg;
+                 break;
+diff --git a/app/src/options.c b/app/src/options.c
+index 55a7089..7377366 100644
+--- a/app/src/options.c
++++ b/app/src/options.c
+@@ -64,6 +64,7 @@ const struct scrcpy_options scrcpy_options_default = {
+     .window_y = SC_WINDOW_POSITION_UNDEFINED,
+     .window_width = 0,
+     .window_height = 0,
++    .parent_window_handle = 0,
+     .display_id = 0,
+     .background_color = 0x222222, // dark gray
+     .video_buffer = 0,
+diff --git a/app/src/options.h b/app/src/options.h
+index cf4b2fb..58e14a2 100644
+--- a/app/src/options.h
++++ b/app/src/options.h
+@@ -281,6 +281,7 @@ struct scrcpy_options {
+     int16_t window_y; // SC_WINDOW_POSITION_UNDEFINED for "auto"
+     uint16_t window_width;
+     uint16_t window_height;
++    uintptr_t parent_window_handle;
+     uint32_t display_id;
+     uint32_t background_color;
+     sc_tick video_buffer;
+diff --git a/app/src/scrcpy.c b/app/src/scrcpy.c
+index 7738800..4b45b3a 100644
+--- a/app/src/scrcpy.c
++++ b/app/src/scrcpy.c
+@@ -752,6 +752,7 @@ aoa_complete:
+             .window_y = options->window_y,
+             .window_width = options->window_width,
+             .window_height = options->window_height,
++            .parent_window_handle = options->parent_window_handle,
+             .background_color = options->background_color,
+             .window_aspect_ratio_lock = options->window_aspect_ratio_lock,
+             .window_borderless = options->window_borderless,
+diff --git a/app/src/screen.c b/app/src/screen.c
+index 5c280c7..0f0b532 100644
+--- a/app/src/screen.c
++++ b/app/src/screen.c
+@@ -443,7 +443,8 @@ sc_screen_frame_sink_push(struct sc_frame_sink *sink, const AVFrame *frame) {
+     sc_mutex_lock(&screen->mutex);
+     bool previous_skipped = sc_frame_buffer_has_frame(&screen->fb);
+     bool ok = sc_frame_buffer_push(&screen->fb, frame);
+-    screen->prevent_auto_resize = screen->current_session.video.client_resized;
++    screen->prevent_auto_resize = screen->embedded
++                               || screen->current_session.video.client_resized;
+     sc_mutex_unlock(&screen->mutex);
+     if (!ok) {
+         return false;
+@@ -487,7 +488,9 @@ sc_screen_init(struct sc_screen *screen,
+ 
+     screen->video = params->video;
+     screen->camera = params->camera;
+-    screen->window_aspect_ratio_lock = params->window_aspect_ratio_lock;
++    screen->embedded = params->parent_window_handle != 0;
++    screen->window_aspect_ratio_lock =
++        params->window_aspect_ratio_lock && !screen->embedded;
+     screen->render_fit = params->render_fit;
+     screen->flex_display = params->flex_display;
+ 
+@@ -565,7 +568,8 @@ sc_screen_init(struct sc_screen *screen,
+ 
+     // The window will be positioned and sized on first video frame
+     screen->window =
+-        sc_sdl_create_window(title, x, y, width, height, window_flags);
++        sc_sdl_create_window(title, x, y, width, height, window_flags,
++                             params->parent_window_handle);
+     if (!screen->window) {
+         LOGE("Could not create window: %s", SDL_GetError());
+         goto error_destroy_fps_counter;
+@@ -713,7 +717,7 @@ error_destroy_renderer:
+ #endif
+     SDL_DestroyRenderer(screen->renderer);
+ error_destroy_window:
+-    SDL_DestroyWindow(screen->window);
++    sc_sdl_destroy_window(screen->window);
+ error_destroy_fps_counter:
+     sc_fps_counter_destroy(&screen->fps_counter);
+ error_destroy_frame_buffer:
+@@ -730,10 +734,9 @@ sc_screen_show_initial_window(struct sc_screen *screen) {
+           ? screen->req.x : (int) SDL_WINDOWPOS_CENTERED;
+     int y = screen->req.y != SC_WINDOW_POSITION_UNDEFINED
+           ? screen->req.y : (int) SDL_WINDOWPOS_CENTERED;
+-    struct sc_point position = {
+-        .x = x,
+-        .y = y,
+-    };
++    struct sc_point position = screen->embedded
++                             ? (struct sc_point) {.x = 0, .y = 0}
++                             : (struct sc_point) {.x = x, .y = y};
+ 
+     struct sc_size window_size =
+         get_initial_optimal_size(screen->content_size, screen->req.width,
+@@ -752,7 +755,7 @@ sc_screen_show_initial_window(struct sc_screen *screen) {
+     sc_sdl_set_window_size(screen->window, window_size);
+     sc_sdl_set_window_position(screen->window, position);
+ 
+-    if (screen->req.fullscreen) {
++    if (screen->req.fullscreen && !screen->embedded) {
+         sc_screen_toggle_fullscreen(screen);
+     }
+ 
+@@ -805,7 +808,7 @@ sc_screen_destroy(struct sc_screen *screen) {
+     SDL_GL_DestroyContext(screen->gl_context);
+ #endif
+     SDL_DestroyRenderer(screen->renderer);
+-    SDL_DestroyWindow(screen->window);
++    sc_sdl_destroy_window(screen->window);
+     sc_fps_counter_destroy(&screen->fps_counter);
+     sc_frame_buffer_destroy(&screen->fb);
+     sc_mutex_destroy(&screen->mutex);
+@@ -998,6 +1001,10 @@ void
+ sc_screen_toggle_fullscreen(struct sc_screen *screen) {
+     assert(screen->video);
+ 
++    if (screen->embedded) {
++        return;
++    }
++
+     bool req_fullscreen =
+         !(SDL_GetWindowFlags(screen->window) & SDL_WINDOW_FULLSCREEN);
+ 
+@@ -1014,6 +1021,10 @@ void
+ sc_screen_resize_to_fit(struct sc_screen *screen) {
+     assert(screen->video);
+ 
++    if (screen->embedded) {
++        return;
++    }
++
+     if (!is_windowed(screen)) {
+         return;
+     }
+@@ -1078,6 +1089,10 @@ void
+ sc_screen_resize_to_pixel_perfect(struct sc_screen *screen) {
+     assert(screen->video);
+ 
++    if (screen->embedded) {
++        return;
++    }
++
+     if (!is_windowed(screen)) {
+         return;
+     }
+diff --git a/app/src/screen.h b/app/src/screen.h
+index a8058d9..32d44c1 100644
+--- a/app/src/screen.h
++++ b/app/src/screen.h
+@@ -39,6 +39,7 @@ struct sc_screen {
+     bool camera;
+     bool window_aspect_ratio_lock;
+     bool flex_display;
++    bool embedded;
+ 
+     struct sc_controller *controller;
+ 
+@@ -132,6 +133,7 @@ struct sc_screen_params {
+     int16_t window_y; // accepts SC_WINDOW_POSITION_UNDEFINED
+     uint16_t window_width;
+     uint16_t window_height;
++    uintptr_t parent_window_handle;
+ 
+     uint32_t background_color;
+ 
+diff --git a/app/src/usb/scrcpy_otg.c b/app/src/usb/scrcpy_otg.c
+index ba2768b..0eb8f80 100644
+--- a/app/src/usb/scrcpy_otg.c
++++ b/app/src/usb/scrcpy_otg.c
+@@ -201,6 +201,7 @@ scrcpy_otg(struct scrcpy_options *options) {
+         .window_width = options->window_width,
+         .window_height = options->window_height,
+         .window_borderless = options->window_borderless,
++        .parent_window_handle = options->parent_window_handle,
+         .orientation = SC_ORIENTATION_0,
+         .mipmaps = options->mipmaps,
+         .fullscreen = false,
+diff --git a/app/src/util/sdl.c b/app/src/util/sdl.c
+index 5bfcdad..50a2f51 100644
+--- a/app/src/util/sdl.c
++++ b/app/src/util/sdl.c
+@@ -3,12 +3,20 @@
+ #include <assert.h>
+ #include <stdlib.h>
+ 
++#ifdef _WIN32
++# include <windows.h>
++#endif
++
+ #include "util/log.h"
+ 
+ SDL_Window *
+ sc_sdl_create_window(const char *title, int64_t x, int64_t y, int64_t width,
+-                     int64_t height, int64_t flags) {
++                     int64_t height, int64_t flags,
++                     uintptr_t parent_window_handle) {
+     SDL_Window *window = NULL;
++#ifdef _WIN32
++    HWND child = NULL;
++#endif
+ 
+     SDL_PropertiesID props = SDL_CreateProperties();
+     if (!props) {
+@@ -27,16 +35,78 @@ sc_sdl_create_window(const char *title, int64_t x, int64_t y, int64_t width,
+     ok &= SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER,
+                                 flags);
+ 
++#ifdef _WIN32
++    if (parent_window_handle) {
++        HWND parent = (HWND) parent_window_handle;
++        if (!IsWindow(parent)) {
++            SDL_SetError("Invalid parent window handle");
++            ok = false;
++        } else {
++            DWORD style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
++            child = CreateWindowExW(0, L"STATIC", L"", style,
++                                    0, 0, (int) width, (int) height,
++                                    parent, NULL, GetModuleHandleW(NULL), NULL);
++            if (!child) {
++                SDL_SetError("Could not create the embedded child window");
++                ok = false;
++            } else {
++                ok &= SDL_SetPointerProperty(
++                    props, SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER, child);
++            }
++        }
++    }
++#else
++    if (parent_window_handle) {
++        SDL_SetError("Parent window handles are only supported on Windows");
++        ok = false;
++    }
++#endif
++
+     if (!ok) {
++#ifdef _WIN32
++        if (child) {
++            DestroyWindow(child);
++        }
++#endif
+         SDL_DestroyProperties(props);
+         return NULL;
+     }
+ 
+     window = SDL_CreateWindowWithProperties(props);
+     SDL_DestroyProperties(props);
++
++#ifdef _WIN32
++    if (!window && child) {
++        DestroyWindow(child);
++    } else if (window && child) {
++        SDL_SetBooleanProperty(SDL_GetWindowProperties(window),
++                               "escrcpy.win32.owned_child", true);
++    }
++#endif
+     return window;
+ }
+ 
++void
++sc_sdl_destroy_window(SDL_Window *window) {
++#ifdef _WIN32
++    SDL_PropertiesID props = SDL_GetWindowProperties(window);
++    bool owned_child = SDL_GetBooleanProperty(
++        props, "escrcpy.win32.owned_child", false);
++    HWND child = owned_child
++               ? SDL_GetPointerProperty(
++                     props, SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL)
++               : NULL;
++#endif
++
++    SDL_DestroyWindow(window);
++
++#ifdef _WIN32
++    if (child) {
++        DestroyWindow(child);
++    }
++#endif
++}
++
+ struct sc_size
+ sc_sdl_get_window_size(SDL_Window *window) {
+     int width;
+diff --git a/app/src/util/sdl.h b/app/src/util/sdl.h
+index e1d49cc..15ab603 100644
+--- a/app/src/util/sdl.h
++++ b/app/src/util/sdl.h
+@@ -11,7 +11,11 @@
+ 
+ SDL_Window *
+ sc_sdl_create_window(const char *title, int64_t x, int64_t y, int64_t width,
+-                     int64_t height, int64_t flags);
++                     int64_t height, int64_t flags,
++                     uintptr_t parent_window_handle);
++
++void
++sc_sdl_destroy_window(SDL_Window *window);
+ 
+ struct sc_size
+ sc_sdl_get_window_size(SDL_Window *window);

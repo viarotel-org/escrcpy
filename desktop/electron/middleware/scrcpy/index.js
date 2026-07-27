@@ -1,5 +1,7 @@
 import { electronAPI } from '@electron-toolkit/preload'
+import quote from 'shell-quote'
 import { sheller } from '$electron/helpers/shell/index.js'
+import { extraResolve } from '$electron/process/resources.js'
 import commandHelper from '$renderer/utils/command/index.js'
 
 import { ProcessManager } from '$electron/process/manager.js'
@@ -18,14 +20,18 @@ function normalizeScrcpyError(error) {
 }
 
 function createScrcpyProcess(command, options = {}) {
+  const { executable, ...processOptions } = options
   let scrcpyProcess = null
+  const invocation = executable
+    ? [executable, ...quote.parse(command)]
+    : `scrcpy ${command}`
 
-  scrcpyProcess = sheller(`scrcpy ${command}`, {
-    shell: true,
+  scrcpyProcess = sheller(invocation, {
+    shell: !executable,
     encoding: 'utf8',
-    ...options,
+    ...processOptions,
     stderr: (data) => {
-      options?.stderr?.(data, scrcpyProcess)
+      processOptions?.stderr?.(data, scrcpyProcess)
       console.error('scrcpyProcess.stderr.data:', data)
     },
   })
@@ -67,6 +73,13 @@ async function getEncoders(serial) {
 
 async function mirror(...args) {
   return createMirrorProcess(...args)
+}
+
+async function mirrorEmbedded(serial, options = {}) {
+  return createMirrorProcess(serial, {
+    ...options,
+    executable: extraResolve('win/scrcpy/scrcpy.exe'),
+  })
 }
 
 async function record(serial, { title, args = '', savePath, ...options } = {}) {
@@ -203,6 +216,7 @@ export default {
   shell,
   getEncoders,
   mirror,
+  mirrorEmbedded,
   record,
   launch,
   helper,

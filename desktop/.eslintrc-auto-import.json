@@ -371,6 +371,7 @@
     "useSidebarStore": true,
     "useControlSidebarStore": true,
     "useLaunchOrientation": true,
-    "ScheduleStatusGroups": true
+    "ScheduleStatusGroups": true,
+    "useKeyboardMappingStore": true
   }
 }

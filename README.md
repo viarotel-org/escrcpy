@@ -102,7 +102,3 @@ You can also support me through the AiFaDian platform.
 Thanks to all who contributed!
 
 [Contributors](https://github.com/viarotel/escrcpy/graphs/contributors)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=viarotel-org/escrcpy&type=Date)](https://star-history.com/#viarotel-org/escrcpy&Date)

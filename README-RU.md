@@ -102,7 +102,3 @@
 Спасибо всем, кто внес свой вклад!
 
 [Участники](https://github.com/viarotel/escrcpy/graphs/contributors)
-
-## История звезд
-
-[![Star History Chart](https://api.star-history.com/svg?repos=viarotel-org/escrcpy&type=Date)](https://star-history.com/#viarotel-org/escrcpy&Date)

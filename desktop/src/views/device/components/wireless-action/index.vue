@@ -3,6 +3,7 @@
     v-if="!row.wifi"
     type="primary"
     text
+    circle
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :title="$t('device.wireless.mode')"
     @click="handleWifi(row)"
@@ -14,8 +15,9 @@
 
   <el-button
     v-if="row.wifi"
-    type="danger"
+    type="primary"
     text
+    circle
     :loading="stopLoading"
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :icon="stopLoading ? '' : 'Close'"

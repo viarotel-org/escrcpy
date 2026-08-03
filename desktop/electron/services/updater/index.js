@@ -30,7 +30,7 @@ export default {
     // Install update
     ipcMain.on('quit-and-install', () => {
       setImmediate(() => {
-        app.isQuiting = true
+        app.isQuitting = true
         autoUpdater.quitAndInstall()
       })
     })

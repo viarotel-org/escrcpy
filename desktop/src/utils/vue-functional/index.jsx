@@ -1,3 +1,5 @@
+import bootstrap from '$/bootstrap/index.js'
+
 /**
  * Define a functional component that can be dynamically mounted and unmounted.
  *
@@ -17,7 +19,6 @@ export function defineFunctionalComponent(
     close = ref => ref.close,
     closedEmitKey = 'onClosed',
     props = {},
-    ...args
   } = {},
 ) {
   const mountNode = document.createElement('div')
@@ -34,17 +35,16 @@ export function defineFunctionalComponent(
     ...props,
   }
 
-  root = createApp(<RawComponent {...rawComponentProps} />)
+  root = bootstrap(<RawComponent {...rawComponentProps} />, { manualMount: true })
 
   const instance = root.mount(mountNode)
 
   const withOpen = open(instance)
   const withClose = close(instance)
 
-  withOpen({ ...args })
-
   return {
     ref: instance,
+    open: withOpen,
     close: withClose,
   }
 }

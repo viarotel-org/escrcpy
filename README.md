@@ -13,7 +13,7 @@
 📱 Display and control your Android device graphically with scrcpy. [中文文档](https://github.com/viarotel-org/escrcpy/blob/main/README-CN.md)
 
 <div style="display:flex;">
-  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/en-US/overview.png?version=2.5.1" alt="viarotel-escrcpy" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/viarotel/resources@latest/screenshots/escrcpy/en-US/overview.png?version=3.0.8" alt="viarotel-escrcpy" width="100%">
 </div>
 
 <sub>Escrcpy focuses on a stable integration foundation; some advanced features come from the private extension repository EscrcpyX and are offered on a paid basis.</sub>
@@ -24,10 +24,11 @@
 - ⌨️ **Keyboard Mapping**: Configure touch, joystick, swipe, scroll, and automation mappings directly on the embedded mirror
 - 🔄 **Multi-Device Control**: Control multiple devices simultaneously in a single window, broadcast input, with batch screenshot and APK install support
 - 🎛️ **Integrated Control Bar**: Compact, draggable sidebar with reorderable controls: rotation, screenshot, apps, files, terminal, AI assistant, and automation
-- 🤖 **Intelligent Control**: Natural-language commands powered by AutoGLM for smart control of Android devices
-- 🏃 **Automated Execution**: Automation workflows run in parallel, supporting synchronized operations across multiple devices
+- 🤖 **Copilot**: AI assistant built on MCP protocol for intelligent Android device control with multi-model chat support
+- 🏃 **Automation Script**: Visual step-by-step workflow orchestration with screen image recognition and batch execution across multiple devices
 - 🪟 **Multi-Device Management**: Visual window orchestration for centralized management of all connected devices
 - 📡 **Wireless Connection**: Wireless ADB connections with LAN auto-discovery and Gnirehtet reverse tethering support
+- 🔑 **Shortcut Management**: Customizable global hotkeys for quick device operations
 - ⚡ **Scrcpy Core**: High-performance, low-latency screen mirroring and control
 
 ## Installation
@@ -73,7 +74,7 @@ This project owes its existence to the following open-source projects:
 - [electron](https://www.electronjs.org/)
 - [vue](https://vuejs.org/)
 - [gnirehtet](https://github.com/Genymobile/gnirehtet/)
-- [autoglm.js](https://github.com/FliPPeDround/autoglm.js)
+- [yadb](https://github.com/nicepkg/yadb)
 - [tangoadb](https://tangoadb.dev/)
 
 ## Friendly Links

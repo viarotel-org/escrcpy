@@ -1,11 +1,29 @@
 import { cloneDeep, keyBy, mergeWith, pick, pickBy, uniq } from 'lodash-es'
 import preferenceModel from '$/models/preference/index.js'
 
+/**
+ * Base unset values shared by all fields.
+ * Values considered equivalent to "not set", used by setStoreData filtering
+ * and mergePreferenceConfig fallback. Fields can declare additional unset values
+ * via the schema's unset property (incremental mode).
+ */
+const BASE_UNSET = [undefined, null, '']
+
 const topFields = getTopFields()
 
 const modelMap = getModelMap()
 
 const modelEntries = Object.entries(modelMap)
+
+/**
+ * Get the effective unset list for a field (base + field extras, deduplicated).
+ * null is always treated as unset for backward compatibility with persisted values.
+ */
+function getFieldUnset(key) {
+  const meta = modelMap[key]
+  const extra = meta?.unset ?? []
+  return [...new Set([...BASE_UNSET, ...extra])]
+}
 
 export function getTopFields(data = preferenceModel) {
   return uniq(Object.values(data).map(item => item.field))
@@ -103,35 +121,55 @@ export function setStoreData(data, scope) {
 
     const pickValue = pickBy(
       value,
-      (value) => {
-        return !['', void 0].includes(value)
-      },
+      (v, key) => !getFieldUnset(key).includes(v),
     )
 
     window.$preload.store.set(item.field, pickValue)
   })
 }
 
-export function mergeConfig(object, sources) {
+/**
+ * Seed effective default values into the store for keys not yet persisted.
+ * Only writes keys absent from the store whose defaults are effective
+ * (not unset), to avoid overwriting user values or writing empty objects.
+ * Ensures the store JSON file contains all default values so that
+ * main-process code (which reads the store directly without mergePreferenceConfig)
+ * always gets the correct defaults.
+ */
+export function seedStoreDefaults(scope) {
+  const defaults = getDefaultData()
+  const stored = getStoreData(scope)
+
+  const missing = Object.entries(defaults).reduce((obj, [key, value]) => {
+    if (stored[key] === undefined && !getFieldUnset(key).includes(value)) {
+      obj[key] = value
+    }
+    return obj
+  }, {})
+
+  if (Object.keys(missing).length > 0) {
+    setStoreData(missing, scope)
+  }
+}
+
+/**
+ * Merge preference config objects, with unset values falling back to the base object.
+ */
+export function mergePreferenceConfig(object, sources) {
   const cloneObject = cloneDeep(object)
   const cloneSources = cloneDeep(sources)
 
   const customizer = (objValue, srcValue, key) => {
-    let value
+    const unset = getFieldUnset(key)
 
-    if (![void 0].includes(srcValue)) {
-      value = srcValue
-    }
-    else {
-      value = objValue
+    if (unset.includes(srcValue)) {
+      return objValue
     }
 
-    return value
+    return srcValue
   }
 
-  const value = mergeWith(cloneObject, cloneSources, customizer)
-
-  return value
+  return mergeWith(cloneObject, cloneSources, customizer)
 }
 
 export function getScrcpyExcludeKeys() {

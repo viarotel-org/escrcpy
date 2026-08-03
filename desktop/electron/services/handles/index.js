@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import path from 'node:path'
 import { openLogPath } from '$root/electron/helpers/debugger/index.js'
 import { isWindowDestroyed } from '$electron/helpers/index.js'
+import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
 
 export default {
   name: 'service:handles',
@@ -167,6 +168,20 @@ export default {
       }
     })
 
+    ipcMain.handle('show-main-window', () => {
+      globalEventEmitter.emit('show:app')
+      globalEventEmitter.emit('tray:destroy')
+
+      return true
+    })
+
+    ipcMain.handle('hide-main-window', () => {
+      globalEventEmitter.emit('hide:app')
+      globalEventEmitter.emit('tray:create')
+
+      return true
+    })
+
     ipcMain.handle('open-system-menu', (event, args = {}) => {
       const win = BrowserWindow.fromWebContents(event.sender)
 
@@ -213,6 +228,8 @@ export default {
       ipcMain.removeHandler('navigate-to-route')
       ipcMain.removeHandler('open-log-path')
       ipcMain.removeHandler('open-system-menu')
+      ipcMain.removeHandler('show-main-window')
+      ipcMain.removeHandler('hide-main-window')
     }
   },
 }

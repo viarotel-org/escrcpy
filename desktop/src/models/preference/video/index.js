@@ -8,6 +8,7 @@ export default {
       field: '--no-video',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.video.noVideo.placeholder',
     },
     videoSource: {

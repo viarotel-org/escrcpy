@@ -1,4 +1,4 @@
-import { generateShades } from '@viarotel-org/unocss-preset-shades'
+import { generateShades } from '@escrcpy/unocss-preset-shades'
 
 export const primaryColor = '#0F8C79'
 

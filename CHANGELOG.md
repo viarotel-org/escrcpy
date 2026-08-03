@@ -1,5 +1,181 @@
 # Changelog
 
+## [3.0.8](https://github.com/viarotel/escrcpy-x/compare/v3.0.7...v3.0.8) (2026-08-03)
+
+
+### Performance Improvements
+
+* 🚀 Optimize copilot details ([e7b8c7b](https://github.com/viarotel/escrcpy-x/commit/e7b8c7b7680cc64338b6d9b09bd124d6cff9b74d))
+* 🚀 Optimize the calculation of cumulative subscription recharge value ([f23d83c](https://github.com/viarotel/escrcpy-x/commit/f23d83c8088677ff226e2de3ccaebbd5f742483f))
+
+## [3.0.7](https://github.com/viarotel/escrcpy-x/compare/v3.0.6...v3.0.7) (2026-07-31)
+
+
+### Performance Improvements
+
+* 🚀 Optimize mcp client code logic details ([d1f9645](https://github.com/viarotel/escrcpy-x/commit/d1f964528c34e19b7919a0c686d8e5d861af783e))
+* 🚀 Optimize the copilot system prompt word logic to prevent the model from getting entangled ([cde6b74](https://github.com/viarotel/escrcpy-x/commit/cde6b7474c762be35608fab8df0b8106baf7e17b))
+
+## [3.0.6](https://github.com/viarotel/escrcpy-x/compare/v3.0.5...v3.0.6) (2026-07-31)
+
+
+### Bug Fixes
+
+* 🐛 Fix the issue of errors occurring when running the MCP server after packaging ([d2e7e36](https://github.com/viarotel/escrcpy-x/commit/d2e7e36486d4c4266031d98afd723cf83a70186e))
+
+
+### Performance Improvements
+
+* 🚀 Optimize sub-package construction logic ([c726486](https://github.com/viarotel/escrcpy-x/commit/c7264863cc206e3a26532c4531dbea9936eeb9fe))
+
+## [3.0.5](https://github.com/viarotel/escrcpy-x/compare/v3.0.4...v3.0.5) (2026-07-31)
+
+
+### Bug Fixes
+
+* 🐛 Fix github actions build errors ([0f87bbf](https://github.com/viarotel/escrcpy-x/commit/0f87bbfa2d21d98020aff00d4778d9a5e3e64306))
+
+## [3.0.4](https://github.com/viarotel/escrcpy-x/compare/v3.0.3...v3.0.4) (2026-07-31)
+
+
+### Performance Improvements
+
+* 🚀 Update the automatic release script ([c02b271](https://github.com/viarotel/escrcpy-x/commit/c02b271877523e3b23ffe0495d2722eef30ee1cc))
+
+## [3.0.3](https://github.com/viarotel/escrcpy-x/compare/v3.0.2...v3.0.3) (2026-07-31)
+
+
+### Performance Improvements
+
+* 🚀 Optimization build issues ([8f67eff](https://github.com/viarotel/escrcpy-x/commit/8f67eff79b2427053c729d9379eeea0d7793b0e0))
+
+## [3.0.2](https://github.com/viarotel/escrcpy-x/compare/v3.0.1...v3.0.2) (2026-07-31)
+
+
+### Bug Fixes
+
+* 🐛 Fix dependency build errors ([3a61342](https://github.com/viarotel/escrcpy-x/commit/3a61342a7e3507092469ae9bdc9b8992bc4b1920))
+
+## [3.0.1](https://github.com/viarotel/escrcpy-x/compare/v3.0.0...v3.0.1) (2026-07-31)
+
+
+### Performance Improvements
+
+* 👷 Optimize build and runtime performance ([63a463f](https://github.com/viarotel/escrcpy-x/commit/63a463f9b458af1819c3d1ed57e080d36991b1b1))
+* 🚀 Optimize subscription interactions ([946b79f](https://github.com/viarotel/escrcpy-x/commit/946b79f2740a04d940871dea7f36be9f730e3d17))
+
+## [3.0.0](https://github.com/viarotel/escrcpy-x/compare/v2.11.1...v3.0.0) (2026-07-30)
+
+
+### Features
+
+* 🚀 Add escrcpy-ui package ([db5d1c3](https://github.com/viarotel/escrcpy-x/commit/db5d1c3529e49bccbc74b49c840e4388a216b5b6))
+* 🚀 Add msrcpy ([018b989](https://github.com/viarotel/escrcpy-x/commit/018b989d4a85d7ef7c9e147c8015ccb13448456c))
+* 🚀 Add quick access/favorite function to file manager ([0a96d54](https://github.com/viarotel/escrcpy-x/commit/0a96d54388bae25c12128e38bfd9632d8e54f6cf))
+* 🚀 Add scrcpy-mcp package ([30c8e6f](https://github.com/viarotel/escrcpy-x/commit/30c8e6fa2f18d38e1e45278ddc1682d69afcae0b))
+* 🚀 Add shortcut module entry ([b7c484e](https://github.com/viarotel/escrcpy-x/commit/b7c484eecf1f0c5c635e6a5ccfa5be8760faff5b))
+* 🚀 Bring the map recognition and judgment function to a preliminarily usable state ([0d07a06](https://github.com/viarotel/escrcpy-x/commit/0d07a065b36eeb0733054550ba017dc6e3fc2458))
+* 🚀 Completed the first version of the shortcut module. ([5180203](https://github.com/viarotel/escrcpy-x/commit/518020328e82f9bde38d01824490fd273c2aac69))
+* 🚀 copilot module reconstruction and optimization of interaction details ([b024bf5](https://github.com/viarotel/escrcpy-x/commit/b024bf5d6c81d1a856ea20c66fbb4c4d4a1880cf))
+* 🚀 copilot underlying architecture and interaction reconstruction ([44815b3](https://github.com/viarotel/escrcpy-x/commit/44815b34578ec9bd5dab4cd3ae3e88dc23adfa2a))
+* 🚀 Enable more intuitive file sorting for the file manager ([6b5ae60](https://github.com/viarotel/escrcpy-x/commit/6b5ae609018b4bb32bf3845b3c14203728663df5))
+* 🚀 Optimization of interaction details of the copilot module ([5000cf4](https://github.com/viarotel/escrcpy-x/commit/5000cf499220ca5e19f9247717ef429bb44be432))
+* 🚀 Optimize the conflict detection logic for shortcut keys ([28d36f3](https://github.com/viarotel/escrcpy-x/commit/28d36f3e4bdb8d6c45f4dbe50ec6a2c622700844))
+* 🚀 Preliminary reconstruction of the Copilot session message body enhances the user interaction experience ([01bc2c3](https://github.com/viarotel/escrcpy-x/commit/01bc2c3ace4e6dd3cbb0873b0682215e98db0ffc))
+* 🚀 Prepare to add image recognition steps to the automation module ([45593dd](https://github.com/viarotel/escrcpy-x/commit/45593dd09ee7c464da71b5785a9bc3eff8c53e61))
+* 🚀 Refactor the copilot module to initially support session lists and multi-model configurations ([077b066](https://github.com/viarotel/escrcpy-x/commit/077b0668d10c0f5aadab88a626e90695e861d149))
+* 🚀 Refactor the mscrcpy server using yadb ([4ec0b5e](https://github.com/viarotel/escrcpy-x/commit/4ec0b5e40973501c2e6d4832438e577c7b564aa3))
+* 🚀 The rendering process initially integrates mcp-based model control capabilities ([d5e00ee](https://github.com/viarotel/escrcpy-x/commit/d5e00ee72f392f4bf38dbe70e728e88163253891))
+* 🚀 Update scrcpy v4.1 ([c61b181](https://github.com/viarotel/escrcpy-x/commit/c61b1810e7bc8f7460293737da72c8713fbadbe4))
+
+
+### Bug Fixes
+
+* 🐛 Fix @escrcpy/shadcn-ui type issue ([0fb377a](https://github.com/viarotel/escrcpy-x/commit/0fb377a8d37a3c7e5b788273bfce6196df5ae1c3))
+* 🐛 Fix keyboard mapping issues causing inability to multitouch and touch drops ([63d44c0](https://github.com/viarotel/escrcpy-x/commit/63d44c0bac796c45d07b89ad4666a1a09313e011))
+* 🐛 Fix the race condition issue with setting the model default value in Copilot ([7a7a85d](https://github.com/viarotel/escrcpy-x/commit/7a7a85dd57191d754dac1dc19668a5b56cc7d42e))
+* 🐛 Fixed an issue where custom executable files in preferences did not take effect ([ce5e16f](https://github.com/viarotel/escrcpy-x/commit/ce5e16f4d544d67de9f52a8b0c5b619b22b47fdf))
+* 🐛 Fixed an issue where model replies could not be displayed in the interface ([dafeca8](https://github.com/viarotel/escrcpy-x/commit/dafeca801081ce9aa6e3ca6f5161db0e287a7b0b))
+* 🐛 Fixed batch boot mirror window exception ([ebb282f](https://github.com/viarotel/escrcpy-x/commit/ebb282f783b6306213db7fa4f49e223d50a1bb6c))
+* 🐛 Fixed the problem that shortcut module cannot import configuration ([1041476](https://github.com/viarotel/escrcpy-x/commit/104147678b2a40b4c3874c5ea539bc47ce3b301f))
+* 🐛 Optimize the details of the copilot module ([274415c](https://github.com/viarotel/escrcpy-x/commit/274415c0f339e8283d077ade956a7b8b0a0513fe))
+* 🚀 Fix screenshot direction defect issue ([011a480](https://github.com/viarotel/escrcpy-x/commit/011a480246a6f92dcad33084a9e2a04577995683))
+* 🚀 Fix the issue of reversed scroll direction in the embedded casting scroll wheel ([83997c3](https://github.com/viarotel/escrcpy-x/commit/83997c322e435febf317c07204daf6b7e5da5138))
+* 🚀 Fix the issue where copilot shortcuts cannot be saved ([fc62675](https://github.com/viarotel/escrcpy-x/commit/fc62675023f14bd8c4ba4c30d7fe5e853fe4233d))
+* 🚀 Remove redundant packages ([d0ff209](https://github.com/viarotel/escrcpy-x/commit/d0ff20913fb6d868877b2287af9e5cf92ba50d27))
+
+
+### Performance Improvements
+
+* ✨ Add environment variable support for custom execution commands in preferences ([b3c8fef](https://github.com/viarotel/escrcpy-x/commit/b3c8feffea9e10e01c790e39f9ca5590f4d64184))
+* ➕ Extend shortcut capabilities ([1ad74d3](https://github.com/viarotel/escrcpy-x/commit/1ad74d3badde00b314953f40654ea1004833fabd))
+* 👷 Optimize details of the automated script editor ([f838d1c](https://github.com/viarotel/escrcpy-x/commit/f838d1cecd58181c4beb335acf8f42eaa8b4ad20))
+* 🔐 Refactor the subscription module business logic to support pay-per-function ([cccc5d2](https://github.com/viarotel/escrcpy-x/commit/cccc5d2ab64d49f9a83f14da5a80f87a4c60186d))
+* 🔖 Optimize subscription details ([3f17f71](https://github.com/viarotel/escrcpy-x/commit/3f17f712329dfa7c33a106b6f9cfc0638298211f))
+* 🩹 Optimize subscription module error prompts ([aac412a](https://github.com/viarotel/escrcpy-x/commit/aac412a219e4d984e10360546954365cc4957492))
+* 🚀 Add getDeviceVisual utility function ([5c0745c](https://github.com/viarotel/escrcpy-x/commit/5c0745c91496eaea4e8b3ca270d26c88a108d229))
+* 🚀 Add pricing display to built-in models to improve user experience ([0bcf11e](https://github.com/viarotel/escrcpy-x/commit/0bcf11e2e3514611f7b9ee3150d9c06f0560ae03))
+* 🚀 Application windows launched from the device control bar will no longer inherit the option to turn off the screen when ending control to match user intuition. ([f82f1a7](https://github.com/viarotel/escrcpy-x/commit/f82f1a7b99aacc1dda5a05dc814fd9b107bdfead))
+* 🚀 Built-in model pricing adds input price display ([7b25640](https://github.com/viarotel/escrcpy-x/commit/7b25640677e765b95993ebc1041b1e12693dba01))
+* 🚀 Complete project details ([6c61a98](https://github.com/viarotel/escrcpy-x/commit/6c61a98bd4932662485ff7c00ab5c87880701cf7))
+* 🚀 Enhance the robustness of mscrcpy ([c9274df](https://github.com/viarotel/escrcpy-x/commit/c9274dff3823880545859fd2fc1b357932dc8824))
+* 🚀 Improve scrcpy-mcp interaction details ([1d1a7d1](https://github.com/viarotel/escrcpy-x/commit/1d1a7d1032b869a4e88df6aa604d0a40cb34339b))
+* 🚀 Improve subscription interactive experience ([079ac02](https://github.com/viarotel/escrcpy-x/commit/079ac025bf70f26bdce88859f96b258b16c68319))
+* 🚀 Improve the reliability of the mscrcpy mcp tool ([24efc64](https://github.com/viarotel/escrcpy-x/commit/24efc6459f76e917ee42da78bd7df329ac78ca3f))
+* 🚀 Improve the stability of copilot ([fad2d7f](https://github.com/viarotel/escrcpy-x/commit/fad2d7f9f3aaa886f158888b4802bd5a4c96275f))
+* 🚀 Improve the stability of mscrcpy ([41eae1a](https://github.com/viarotel/escrcpy-x/commit/41eae1a9364bf80d2d74b239438eae8291ab75a6))
+* 🚀 Integrate scheduled tasks into the shortcut module ([85d046f](https://github.com/viarotel/escrcpy-x/commit/85d046fdd0263bb46432e17d81c4da349e5d6250))
+* 🚀 Optimize automatic startup mirroring performance ([633944f](https://github.com/viarotel/escrcpy-x/commit/633944ffd0783e30c94e31db9a5aa986c8a47595))
+* 🚀 Optimize copilot baseURL logic and enhance compatibility ([35aa8be](https://github.com/viarotel/escrcpy-x/commit/35aa8be626782ba58a11804654e974badceff8c0))
+* 🚀 Optimize copilot model update logic ([9225c18](https://github.com/viarotel/escrcpy-x/commit/9225c186538ff0a62c49b93748c84fff0b72ae28))
+* 🚀 Optimize copilot’s session list interaction details ([6e75e57](https://github.com/viarotel/escrcpy-x/commit/6e75e573ebe2db39ce366e89758bb1d3519b0ca7))
+* 🚀 Optimize image recognition, judgment, matching points and following details ([ed27353](https://github.com/viarotel/escrcpy-x/commit/ed27353c88bf59ca62c5732a4318820188e2b1d2))
+* 🚀 Optimize mscrcpy details ([052bdb5](https://github.com/viarotel/escrcpy-x/commit/052bdb5f66e1b99876e1def334e34ae9d054b18b))
+* 🚀 Optimize mscrcpy module architecture ([864371a](https://github.com/viarotel/escrcpy-x/commit/864371a8ba63284775bb634ee7ea5a4e8d99f4cd))
+* 🚀 Optimize scrcpy configuration processing logic ([60dfa0c](https://github.com/viarotel/escrcpy-x/commit/60dfa0c78b76924808fc79382c873c71a53255fd))
+* 🚀 Optimize shortcut module interaction details ([270ce63](https://github.com/viarotel/escrcpy-x/commit/270ce63eb90655669ac458676ad00ee4f7d999e8))
+* 🚀 Optimize shortcut module interaction details ([0a80ad6](https://github.com/viarotel/escrcpy-x/commit/0a80ad64a85cb665ec938269b4d3d0bad0090154))
+* 🚀 Optimize terminal display details ([658e2c9](https://github.com/viarotel/escrcpy-x/commit/658e2c94a254b729f4ec68a528cdff016b241c73))
+* 🚀 Optimize the algorithm of mcp tool to obtain the screen rotation direction ([aa1cbe3](https://github.com/viarotel/escrcpy-x/commit/aa1cbe37afb7bc60466dc1ade74c24c2c6c3fbd5))
+* 🚀 Optimize the automatic scrolling logic of session messages in the copilot module ([1a82d73](https://github.com/viarotel/escrcpy-x/commit/1a82d73f2f1bc7077ccf58c4cf1f45edd722c79e))
+* 🚀 Optimize the details of the planned task page ([b3fbd24](https://github.com/viarotel/escrcpy-x/commit/b3fbd24d8a507a3e12de1de7822af1100ebc0ba7))
+* 🚀 Optimize the display details of copilot ([5f4ce9c](https://github.com/viarotel/escrcpy-x/commit/5f4ce9c859e8be4b115258f98984e1c323e387d8))
+* 🚀 Optimize the display details of the shortcut module ([069f6dd](https://github.com/viarotel/escrcpy-x/commit/069f6dd656bb9a7bc87340e3da03aaa84c276aee))
+* 🚀 Optimize the performance of copilot ([fae3ecd](https://github.com/viarotel/escrcpy-x/commit/fae3ecdfe9c567a4a35f2488c8843311ef9b0e3d))
+* 🚀 Refactor the copilot form configuration logic ([46ba00d](https://github.com/viarotel/escrcpy-x/commit/46ba00d729cdb0ee87075ee304b8b9e1319b3854))
+* 🚀 Refactoring the core of shortcuts and planned tasks ([9f76561](https://github.com/viarotel/escrcpy-x/commit/9f76561b0f5791f36d5cde393b88063947c67dff))
+* 🚀 Refine the details of the subscription plan ([e4ad5cc](https://github.com/viarotel/escrcpy-x/commit/e4ad5cc30cde3fb77ec7188089e7d7159c014bb1))
+* 🚀 Remove redundant code logic ([da5cf46](https://github.com/viarotel/escrcpy-x/commit/da5cf46f1ec26b6d7a8f48c037e2aaa469fe332d))
+* 🚀 Remove redundant scrcpy dependency files ([ca2df40](https://github.com/viarotel/escrcpy-x/commit/ca2df4019680b7f31066882fcba601b7df060d52))
+* 🚀 Shortcut module details optimization ([8b6ab9a](https://github.com/viarotel/escrcpy-x/commit/8b6ab9a3a46b2737cc0db12bc97c623f3d480a10))
+* 🚀 Unified subscription experience ([7a606d4](https://github.com/viarotel/escrcpy-x/commit/7a606d4da7811ec174c7792037d1b0823478ba8c))
+* 🚀 Update @escrcpy/shadcn-ui ([32f2302](https://github.com/viarotel/escrcpy-x/commit/32f2302992e79ab7a57e83add097137963a78b73))
+* Optimize built-in model configuration ([8c39696](https://github.com/viarotel/escrcpy-x/commit/8c396965f677fcf9f40837cc97facc1177793b71))
+
+
+### Miscellaneous Chores
+
+* release 3.0.0 ([5aebc22](https://github.com/viarotel/escrcpy-x/commit/5aebc22a84b9223bee3e3d243f3342e2153cf035))
+
+
+### Code Refactoring
+
+* 📌 Refactor the hook function directory ([b05b921](https://github.com/viarotel/escrcpy-x/commit/b05b921c3ae281cef078de8ebca2ac9fb3db2539))
+* 🔀 Refactor the scope configuration file model and related storage logic to match user intuition ([c44f5ed](https://github.com/viarotel/escrcpy-x/commit/c44f5ed4f3c54dac551f29e153ec65b26cad9062))
+* 🚀 Extract the shortcut form pop-up window into an independent module ([e792a9c](https://github.com/viarotel/escrcpy-x/commit/e792a9caf5a37836407253fbf23c83feac3c04b9))
+* 🚀 mscrcpy refactored to madb ([de72364](https://github.com/viarotel/escrcpy-x/commit/de72364b1751f088ce6af774f7f6d07d01a0bdac))
+* 🚀 Reconstruct the accuracy algorithm for pure visual recognition in the mcp service ([ebbd1ce](https://github.com/viarotel/escrcpy-x/commit/ebbd1ce2b1ab57ee59839de714996931f341f920))
+* 🚀 Refactor adb-related tools and repetitive logic into a separate packages/adbx ([d5ad723](https://github.com/viarotel/escrcpy-x/commit/d5ad7231690e48dc3d5de75131185c520c19d0b5))
+* 🚀 Refactor and integrate the MCP package to improve reusability ([9576b9c](https://github.com/viarotel/escrcpy-x/commit/9576b9c141948e25939b1b3535dbca0dd2e50b4f))
+* 🚀 Refactor Automated Screenshot Annotation Selector ([b1d239b](https://github.com/viarotel/escrcpy-x/commit/b1d239bde05a52a92a401c39ea45894b76fb8955))
+* 🚀 Refactor Copilot shortcut command interaction ([911ed02](https://github.com/viarotel/escrcpy-x/commit/911ed02dde512330eab5acf3244edc973cf4ca6f))
+* 🚀 Refactor scrcpy parameter parsing and related code logic ([8deef6c](https://github.com/viarotel/escrcpy-x/commit/8deef6c29a9386aa7f5aa2156a559d71d82afd50))
+* 🚀 Refactor the automated screenshot selector ([f4f38f2](https://github.com/viarotel/escrcpy-x/commit/f4f38f25ecfb49d5d66d1d7f6131ee7d68828ecc))
+* 🚀 Refactor the automated script editor value units to be coordinate-based percentages ([3b6afdd](https://github.com/viarotel/escrcpy-x/commit/3b6afddff967dfa1ccfba92dd90c8e72e657c0b3))
+* 🚀 Remove redundant code ([a3379b7](https://github.com/viarotel/escrcpy-x/commit/a3379b71ceaa7cfee1b6eb01e9eac6d8618488a4))
+* 🚀 Restructure subscription plan to improve user experience ([f02555d](https://github.com/viarotel/escrcpy-x/commit/f02555d94e244ee2e5002f60a9f5e8f2e344c9af))
+* 🚀 The name of escrcpy-ui is adjusted to shadcn-ui ([49bc85e](https://github.com/viarotel/escrcpy-x/commit/49bc85e81edb433a3d6a0d0375a7c97f80b19779))
+
 ## [2.11.1](https://github.com/viarotel/escrcpy-x/compare/v2.11.0...v2.11.1) (2026-05-19)
 
 

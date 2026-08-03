@@ -1,6 +1,7 @@
 import { electronAPI } from '@electron-toolkit/preload'
 import { sheller } from '$electron/helpers/shell/index.js'
 import commandHelper from '$renderer/utils/command/index.js'
+import { createDeferred } from '$renderer/utils/index.js'
 
 import { ProcessManager } from '$electron/process/manager.js'
 
@@ -13,28 +14,95 @@ electronAPI.ipcRenderer.on('quit-before', () => {
 })
 
 function normalizeScrcpyError(error) {
-  const message = error?.stderr || error?.message
+  const message = error?.stderr || error?.message || String(error)
   throw new Error(message)
 }
 
 function createScrcpyProcess(command, options = {}) {
-  let scrcpyProcess = null
+  let mirrorProcess = null
 
-  scrcpyProcess = sheller(`scrcpy ${command}`, {
+  const {
+    args = '',
+    resolveOnReady = false,
+    resolveOnSpawn = false,
+    readyPattern = /(?:Renderer:|Texture:|\[server\]\s+INFO:\s+Device:)/i,
+    getReadyValue = () => void 0,
+    readyErrorMessage = 'scrcpy process exited before ready',
+    stdout,
+    stderr,
+    ...shellerOptions
+  } = options
+
+  const readyDeferred = resolveOnReady || resolveOnSpawn
+    ? createDeferred()
+    : null
+
+  function resolveReady(data) {
+    if (!readyDeferred || !resolveOnReady) {
+      return
+    }
+
+    const text = String(data)
+
+    if (!text.trim()) {
+      return
+    }
+
+    readyPattern.lastIndex = 0
+
+    const matchList = text.match(readyPattern)
+
+    if (!matchList) {
+      return
+    }
+
+    try {
+      readyDeferred.resolve(getReadyValue(matchList, text))
+    }
+    catch (error) {
+      readyDeferred.reject(error)
+    }
+  }
+
+  mirrorProcess = sheller(`scrcpy ${command}`, {
     shell: true,
     encoding: 'utf8',
-    ...options,
+    ...shellerOptions,
+
+    stdout: (data) => {
+      stdout?.(data, mirrorProcess)
+      resolveReady(data)
+    },
+
     stderr: (data) => {
-      options?.stderr?.(data, scrcpyProcess)
-      console.error('scrcpyProcess.stderr.data:', data)
+      stderr?.(data, mirrorProcess)
+      resolveReady(data)
     },
   })
 
-  processManager.add(scrcpyProcess)
+  processManager.add(mirrorProcess)
 
-  const promise = scrcpyProcess.catch(normalizeScrcpyError)
+  if (resolveOnSpawn) {
+    mirrorProcess.once('spawn', () => {
+      readyDeferred?.resolve()
+    })
+  }
 
-  return Object.assign(scrcpyProcess, {
+  const exitPromise = mirrorProcess
+    .then((result) => {
+      readyDeferred?.reject(new Error(readyErrorMessage))
+      return result
+    })
+    .catch((error) => {
+      readyDeferred?.reject(error)
+      normalizeScrcpyError(error)
+    })
+
+  const promise = readyDeferred
+    ? readyDeferred.promise
+    : exitPromise
+
+  return Object.assign(mirrorProcess, {
     then: promise.then.bind(promise),
     catch: promise.catch.bind(promise),
     finally: promise.finally.bind(promise),
@@ -85,7 +153,10 @@ async function helper(
 
   return createScrcpyProcess(
     `--serial="${serial}" --no-window --no-video --no-audio ${stringCommand}`,
-    options,
+    {
+      resolveOnReady: true,
+      ...options,
+    },
   )
 }
 
@@ -120,7 +191,14 @@ async function getCameraList(serial, options) {
 }
 
 async function launch(serial, args = {}) {
-  let { commands = '', packageName, useNewDisplay = true, newDisplay = '', landscape, ...options } = args
+  let {
+    commands = '',
+    packageName,
+    useNewDisplay = true,
+    newDisplay = '',
+    landscape,
+    ...options
+  } = args
 
   if (useNewDisplay) {
     commands += newDisplay
@@ -132,66 +210,28 @@ async function launch(serial, args = {}) {
     commands = commands.replace(/\s*--flex-display\s*/g, ' ')
   }
 
-  if (packageName && !['unknown'].includes(packageName)) {
+  if (packageName && packageName !== 'unknown') {
     commands += ` --start-app=${packageName}`
   }
 
-  const promise = {
-    resolve: null,
-  }
-
-  const signalText = /New display:.+?\(id=(\d+)\)/i
-
-  const child = createMirrorProcess(serial, {
+  return createMirrorProcess(serial, {
     ...options,
     args: commands,
-    stdout: (data) => {
-      const matchList = data.match(signalText)
-
-      if (!matchList?.length) {
-        return false
-      }
-
+    resolveOnReady: useNewDisplay,
+    resolveOnSpawn: !useNewDisplay,
+    readyPattern: /New display:.+?\(id=(\d+)\)/i,
+    getReadyValue: (matchList) => {
       const displayId = matchList[1]
 
-      if (!displayId && useNewDisplay) {
+      if (!displayId) {
         throw new Error('The display ID was not obtained.')
       }
 
-      promise?.resolve?.(displayId)
+      return displayId
     },
-  })
-
-  return new Promise((resolve, reject) => {
-    let settled = false
-
-    function resolveOnce(value) {
-      if (settled) {
-        return
-      }
-
-      settled = true
-      resolve(value)
-    }
-
-    function rejectOnce(error) {
-      if (settled) {
-        return
-      }
-
-      settled = true
-      reject(error)
-    }
-
-    promise.resolve = resolveOnce
-
-    if (!useNewDisplay) {
-      child.once('spawn', () => {
-        resolveOnce()
-      })
-    }
-
-    child.then(resolveOnce).catch(rejectOnce)
+    readyErrorMessage: useNewDisplay
+      ? 'scrcpy exited before new display was created'
+      : 'scrcpy exited before spawn',
   })
 }
 

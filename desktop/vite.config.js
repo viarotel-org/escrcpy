@@ -20,7 +20,7 @@ const alias = {
   $electron: resolve('electron'),
   $control: resolve('pages/control'),
   $explorer: resolve('pages/explorer'),
-  $terminal: resolve('pages/terminal')
+  $terminal: resolve('pages/terminal'),
 }
 
 function mergeCommon(config, { command = '' } = {}) {
@@ -32,7 +32,6 @@ function mergeCommon(config, { command = '' } = {}) {
       build: {
         rollupOptions: {
           external: [
-            'sharp',
             'i18next-fs-backend',
             '@lydell/node-pty',
           ],
@@ -57,7 +56,38 @@ export default function (args) {
             explorer: resolve('pages/explorer/index.html'),
             terminal: resolve('pages/terminal/index.html'),
           },
+          output: {
+            manualChunks(id) {
+              if (!id.includes('node_modules'))
+                return undefined
+              if (id.includes('element-plus') || id.includes('@element-plus'))
+                return 'element-plus'
+              if (id.includes('@tdesign'))
+                return 'tdesign'
+              if (id.includes('konva') || id.includes('vue-konva'))
+                return 'konva'
+              if (id.includes('@xterm'))
+                return 'xterm'
+              if (id.includes('@vueuse'))
+                return 'vueuse'
+              if (id.includes('dexie'))
+                return 'dexie'
+              if (id.includes('rxjs'))
+                return 'rxjs'
+              if (id.includes('lodash'))
+                return 'lodash'
+              if (/[\\/]node_modules[\\/](vue|vue-router|pinia)[\\/]/.test(id))
+                return 'vue'
+              if (id.includes('pinyin-pro'))
+                return 'pinyin-pro'
+              if (id.includes('/ai-sdk/') || id.includes('/ai/'))
+                return 'ai-sdk'
+              if (id.includes('@modelcontextprotocol'))
+                return 'mcp'
+            },
+          },
         },
+        chunkSizeWarningLimit: 1500,
       },
       plugins: [
         useUnoCSS(),

@@ -25,7 +25,7 @@ title: Operation
 
 ## Device Interaction Bar
 
-- Automatic Control (AutoGLM)
+- Automatic Control (MCP)
 - Switch
 - Home
 - Back

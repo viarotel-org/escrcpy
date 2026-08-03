@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center flex-none space-x-2">
+  <div class="flex items-center flex-none !space-x-2">
     <div class="w-72 flex-none">
       <el-autocomplete
         :key="autocompleteKey"
@@ -78,6 +78,7 @@
     </el-button-group>
 
     <QrAction v-bind="{ handleRefresh }" />
+
     <DiscoverAction v-bind="{ handleRefresh }" />
   </div>
 </template>
@@ -143,8 +144,9 @@ function onPairToggle(val) {
 }
 
 async function handleConnectAuto() {
-  if (!preferenceStore.data.autoConnect)
+  if (!preferenceStore.data.autoConnect) {
     return
+  }
 
   await handleBatch()
   handleRefresh()

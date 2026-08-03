@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden">
     <div
-      class="mr-4 pb-2 flex items-center justify-between flex-none"
+      class="mr-3 pb-2 flex items-center justify-between flex-none"
     >
       <div class="flex-none">
         <ScopeSelect
@@ -22,7 +22,7 @@
       </el-button-group>
     </div>
 
-    <div class="pr-2 flex-1 min-h-0">
+    <div class="flex-1 min-h-0">
       <PreferenceForm
         v-model="preferenceData"
         v-bind="{
@@ -42,6 +42,8 @@ import ScopeSelect from './components/scope-select/index.vue'
 
 const preferenceStore = usePreferenceStore()
 const themeStore = useThemeStore()
+
+const configFile = useConfigFile()
 
 const preferenceData = computed({
   get() {
@@ -88,60 +90,19 @@ function onScopeChange(value) {
 }
 
 async function handleImport() {
-  try {
-    await window.$preload.ipcRenderer.invoke('show-open-dialog', {
-      preset: 'replaceFile',
-      filePath: window.$preload.store.getPath(),
-      filters: [
-        {
-          name: window.t('preferences.config.import.placeholder'),
-          extensions: ['json'],
-        },
-      ],
-    })
-
-    ElMessage.success(window.t('preferences.config.import.success'))
-    preferenceStore.init()
-  }
-  catch (error) {
-    if (error.message) {
-      const message = error.message?.match(/Error: (.*)/)?.[1]
-      ElMessage.warning(message || error.message)
-    }
-  }
+  configFile.importConfig({
+    onSuccess: () => {
+      preferenceStore.init()
+    },
+  })
 }
 
 function handleEdit() {
-  window.$preload.store.openInEditor()
+  configFile.editConfig()
 }
 
 async function handleExport() {
-  const message = ElMessage.loading(
-    window.t('preferences.config.export.message'),
-  )
-
-  try {
-    await window.$preload.ipcRenderer.invoke('show-save-dialog', {
-      defaultPath: 'escrcpy-configs.json',
-      filePath: window.$preload.store.getPath(),
-      filters: [
-        {
-          name: window.t('preferences.config.export.placeholder'),
-          extensions: ['json'],
-        },
-      ],
-    })
-
-    ElMessage.success(window.t('preferences.config.export.success'))
-  }
-  catch (error) {
-    if (error.message) {
-      const message = error.message?.match(/Error: (.*)/)?.[1]
-      ElMessage.warning(message || error.message)
-    }
-  }
-
-  message.close()
+  configFile.exportConfig()
 }
 
 const handleSave = debounce(_handleSave, 500)
@@ -160,7 +121,4 @@ function _handleSave() {
 </script>
 
 <style scoped lang="postcss">
-:deep(.el-collapse-item__arrow) {
-  @apply w-2em;
-}
 </style>

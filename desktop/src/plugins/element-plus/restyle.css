@@ -1,4 +1,4 @@
-:root {
+:root:root {
   --el-color-primary: rgba(var(--color-primary), 1);
   --el-color-primary-light-3: rgba(var(--color-primary-400), 1);
   --el-color-primary-light-5: rgba(var(--color-primary-300), 1);
@@ -6,9 +6,13 @@
   --el-color-primary-light-8: rgba(var(--color-primary-100), 1);
   --el-color-primary-light-9: rgba(var(--color-primary-50), 1);
   --el-color-primary-dark-2: rgba(var(--color-primary-600), 1);
+
+  --el-menu-sub-item-height: 36px;
+  --el-menu-item-height: 36px;
+  --el-menu-base-level-padding: 8px;
 }
 
-:root.dark,
+:root:root.dark,
 .dark {
   --el-color-primary: rgba(var(--color-primary-500), 1);
   --el-color-primary-light-3: rgba(var(--color-primary-300), 1);
@@ -105,12 +109,17 @@
   }
 
   .el-collapse-item {
-    @apply !border !border-[--el-border-color-light] !rounded-xl;
+    @apply border border-[--el-border-color-light] rounded-xl overflow-hidden;
   }
 
   .el-collapse-item__header {
     @apply !rounded-t-xl;
   }
+
+  .el-collapse-item__content {
+    @apply !pb-4;
+  }
+
   .el-collapse-item__wrap {
     @apply !rounded-b-xl;
   }
@@ -118,6 +127,10 @@
   .el-collapse-item__header,
   .el-collapse-item__wrap {
     @apply !dark:bg-[--el-bg-color-overlay];
+  }
+
+  .el-collapse-item__arrow {
+    @apply w-[2em];
   }
 }
 
@@ -170,10 +183,16 @@
   --el-table-header-bg-color: var(--el-bg-color-overlay) !important;
   --el-table-tr-bg-color: var(--el-bg-color-overlay) !important;
 
-  @apply !scale-[1.004] bg-[var(--el-bg-color-overlay)] !rounded-xl !overflow-hidden;
+  @apply !scale-[1.004] bg-[var(--el-bg-color-overlay)] rounded-xl !overflow-hidden;
 
   .el-table__inner-wrapper::before {
     @apply !bg-transparent;
+  }
+
+  .el-table__header-wrapper {
+    .el-table__header .el-table__cell .cell {
+      @apply whitespace-nowrap;
+    }
   }
 }
 
@@ -191,5 +210,15 @@
 
   .el-radio-button__inner {
     @apply min-w-full text-center;
+  }
+}
+
+.el-select--beautify {
+  --el-border-radius-base: 9999px;
+}
+
+.el-select-popper--beautify {
+  .el-select-dropdown__footer {
+    @apply !p-0;
   }
 }

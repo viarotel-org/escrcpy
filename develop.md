@@ -40,43 +40,13 @@ pnpm build:linux    # Build for Linux
 
 - Electron - Cross-platform desktop application framework
 - Vue.js - Frontend framework
-- JavaScript - Primary programming language
+- JavaScript / TypeScript - Primary programming languages
 - Node.js - Runtime environment
 - scrcpy - Android device display and control
 - adbkit - Android Debug Bridge toolkit
-
-### Project Structure
-
-```
-📦Escrcpy
- ┣ 📂.github              # GitHub workflows and configurations
- ┣ 📂.husky              # Git hooks settings
- ┣ 📂.vscode             # VSCode editor settings
- ┣ 📂control             # Device floating control bar
- ┣ 📂electron          # Electron main process
- ┣ 📂src               # Main renderer process
- ┃ ┣ 📂assets         # Static resources
- ┃ ┣ 📂components     # Vue components
- ┃ ┃ ┣ 📂Device      # Device management
- ┃ ┃ ┣ 📂Preference  # Settings interface
- ┃ ┃ ┗ 📂Quick       # Quick access features
- ┃ ┣ 📂hooks   # Vue composition functions
- ┃ ┣ 📂configs       # App configurations
- ┃ ┣ 📂dicts         # Constants and enums
- ┃ ┣ 📂icons         # Icon assets
- ┃ ┣ 📂locales       # Internationalization
- ┃ ┣ 📂plugins       # Vue plugins
- ┃ ┣ 📂store         # State management
- ┃ ┣ 📂styles        # Global styles
- ┃ ┗ 📂utils         # Helper functions
- ┣ 📂public             # Public assets
- ┣ 📂screenshots        # Application screenshots
- ┣ 📂scripts           # Build scripts
- ┣ 📜.eslintrc-auto-import.json  # ESLint settings
- ┣ 📜package.json      # Project metadata
- ┣ 📜vite.config.js    # Build configuration
- ┗ 📜electron-builder.json  # Electron packaging config
-```
+- yadb - Enhanced ADB commands (fast input, screenshot, clipboard)
+- gnirehtet - Reverse tethering tool
+- MCP (Model Context Protocol) - AI agent device control
 
 ## Development Guidelines
 

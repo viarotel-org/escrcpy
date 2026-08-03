@@ -49,6 +49,13 @@ export default {
         return this.modelValue
       },
       set(value) {
+        // Suppress el-slider's initial emit when modelValue is undefined.
+        // el-slider auto-clamps undefined to min, which would write a
+        // spurious value into the preference store.
+        if (this.modelValue === undefined && value === this.min) {
+          return
+        }
+
         this.$emit('update:model-value', value)
       },
     },

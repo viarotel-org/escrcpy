@@ -1,7 +1,7 @@
 <template>
   <ElDialog v-model="visible" v-bind="{ modal: false, closeOnClickModal: false, showClose: false, top: '3vh' }" class="el-message--loading">
     <template #header>
-      <div class="flex items-center space-x-2 opacity-70">
+      <div class="flex items-center gap-2 opacity-70">
         <ElIcon class="is-loading flex-none">
           <ElIconLoading />
         </ElIcon>

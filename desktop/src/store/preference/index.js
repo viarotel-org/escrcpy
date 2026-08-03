@@ -4,7 +4,8 @@ import {
   getScrcpyExcludeKeys,
   getStoreData,
   getTopFields,
-  mergeConfig,
+  mergePreferenceConfig,
+  seedStoreDefaults,
   setStoreData,
 } from './helpers/index.js'
 import preferenceModel from '$/models/preference/index.js'
@@ -18,7 +19,6 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   const cameraKeys = ref(Object.values(preferenceModel?.camera?.children || {}).map((item) => {
     return item.field
   }))
-  const otgKeys = ref(['--otg', '--mouse=aoa', '--keyboard=aoa'])
 
   const launchKeys = ref(Object.values(preferenceModel?.launch?.children || {}).map((item) => {
     return item.field
@@ -34,6 +34,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   })
 
   function init(scope = deviceScope.value) {
+    seedStoreDefaults(scope)
     data.value = getData(scope)
     return data.value
   }
@@ -83,35 +84,43 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   }
 
   function getData(scope = deviceScope.value) {
-    let value = mergeConfig(getDefaultData(), getStoreData())
-    if (scope !== 'global') {
-      value = mergeConfig(value, getStoreData(scope))
+    return mergePreferenceConfig(getDefaultData(), getStoreData(scope))
+  }
+
+  function getDataWithFallback(scope = deviceScope.value) {
+    const globalData = getData('global')
+
+    if (scope === 'global') {
+      return globalData
     }
-    return value
+
+    return mergePreferenceConfig(globalData, getStoreData(scope))
   }
 
   function scrcpyParameter(scope = deviceScope.value, options) {
     const {
       useRecord = false,
       useCamera = false,
-      useOtg = false,
       useLaunch = false,
       excludes = [],
+      overrides = {},
     } = options || {}
 
-    const dataToUse = typeof scope === 'object' ? scope : getData(scope)
+    const dataToUse = typeof scope === 'object' ? scope : getDataWithFallback(scope)
+
     if (!dataToUse) {
       return ''
     }
 
-    const params = Object.entries(dataToUse).reduce((obj, [key, value]) => {
+    const mergedData = { ...dataToUse, ...overrides }
+
+    const params = Object.entries(mergedData).reduce((obj, [key, value]) => {
       const shouldExclude
-        = (!value && typeof value !== 'number')
+        = ([null, undefined, '', false].includes(value))
           || scrcpyExcludeKeys.value.includes(key)
           || [key, `${key}=${value}`].some(v => excludes.includes(v))
           || (!useRecord && recordKeys.value.includes(key))
           || (!useCamera && cameraKeys.value.includes(key))
-          || (!useOtg && [key, `${key}=${value}`].some(v => otgKeys.value.includes(v)))
           || (!useLaunch && launchKeys.value.includes(key))
 
       if (!shouldExclude) {
@@ -132,8 +141,10 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     }
 
     let value = command.stringify(params)
-    if (dataToUse.scrcpyAppend) {
-      value += ` ${dataToUse.scrcpyAppend}`
+
+    const scrcpyAppend = (dataToUse.scrcpyAppend || '').replace(/\r?\n/g, ' ').trim()
+    if (scrcpyAppend) {
+      value += ` ${scrcpyAppend}`
     }
 
     return value
@@ -166,7 +177,6 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     scrcpyExcludeKeys,
     recordKeys,
     cameraKeys,
-    otgKeys,
     getDefaultData,
     init,
     setScope,
@@ -174,6 +184,7 @@ export const usePreferenceStore = defineStore('app-preference', () => {
     reset,
     resetDeps,
     getData,
+    getDataWithFallback,
     scrcpyParameter,
     getModel,
     setModel,

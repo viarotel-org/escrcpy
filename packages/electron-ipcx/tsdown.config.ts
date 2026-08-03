@@ -8,7 +8,10 @@ export default defineConfig({
   dts: true,
   exports: true,
   publint: false,
-  external: [
-    'electron',
-  ],
+  deps: {
+    neverBundle: [
+      'electron',
+    ],
+  },
+
 })

@@ -7,14 +7,16 @@
         class="px-2"
       >
         <template #right>
-          <div class="flex items-center !space-x-2 *:app-region-no-drag">
+          <div class="flex items-center gap-2 !*:ml-0 *:app-region-no-drag">
             <el-button
               circle
               text
               icon="Refresh"
+              class=""
               :title="$t('device.refresh.name')"
               @click="onRefreshClick"
             />
+
             <el-switch v-model="isDark" class="el-switch--theme">
               <template #active-action>
                 <i class="i-solar-moon-bold"></i>
@@ -39,7 +41,7 @@
 
 <script setup>
 import AppHeader from '$/components/app-header/index.vue'
-import { useTerminal } from './hooks/useTerminal/index'
+import { useTerminal } from './hooks/use-terminal/index'
 
 const deviceName = ref('')
 

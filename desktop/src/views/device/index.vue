@@ -2,8 +2,8 @@
   <div class="h-full flex flex-col">
     <BatchActions
       class="overflow-hidden transition-all"
-      :class="isMultipleRow ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 mb-0'"
-      :devices="selectionRows"
+      :class="hasSelection ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 mb-0'"
+      :devices="selectedRows"
     />
 
     <div class="flex-1 min-h-0 overflow-hidden">
@@ -30,10 +30,10 @@
           sortable
           show-overflow-tooltip
           align="left"
-          min-width="200"
+          min-width="250"
         >
           <template #default="{ row }">
-            <div class="flex items-center space-x-2 relative">
+            <div class="flex items-center gap-2 relative">
               <DevicePopover :key="row.status" :device="row" class="" />
 
               <div class="flex-none max-w-[75%] truncate">
@@ -94,7 +94,7 @@
           align="left"
           min-width="150"
         >
-          <div class="flex items-center !space-x-0">
+          <div class="flex items-center gap-1 !*:ml-0">
             <ConnectAction
               v-if="['offline'].includes(row.status) && row.wifi"
               v-bind="{
@@ -141,7 +141,7 @@
         <WirelessGroup ref="wirelessGroupRef" v-bind="{ handleRefresh }" @auto-connected="onAutoConnected" />
       </div>
 
-      <div class="flex-1 w-0 space-x-2 flex items-center justify-end">
+      <div class="flex-1 w-0 gap-2 flex items-center justify-end">
         <el-button
           type="default"
           :icon="loading ? '' : 'Refresh'"
@@ -157,9 +157,8 @@
 </template>
 
 <script setup>
-import pLimit from 'p-limit'
-import { sleep } from '$/utils/index.js'
 import { uniqBy } from 'lodash-es'
+import { sleep } from '$/utils/index.js'
 
 import AppEmpty from '$/components/app-empty/index.vue'
 import BatchActions from './components/batch-actions/index.vue'
@@ -176,17 +175,13 @@ import DevicePopover from './components/device-popover/index.vue'
 import { getDictLabel } from '$/dicts/helper'
 import { deviceStatus } from '$/dicts/index.js'
 
-const MIRROR_START_INTERVAL = 1000
-
 const deviceStore = useDeviceStore()
 const preferenceStore = usePreferenceStore()
 
 const loading = ref(false)
-const autoMirrorConcurrencyLimit = Number(window.$preload.store.get('common.concurrencyLimit') ?? 5)
-const autoMirrorLimit = pLimit(autoMirrorConcurrencyLimit)
 
 const mirrorActionRefs = ref([])
-const selectionRows = ref([])
+const selectedRows = ref([])
 
 const tableRef = ref(null)
 const wirelessGroupRef = ref(null)
@@ -198,7 +193,7 @@ const deviceList = computed({
   },
 })
 
-const isMultipleRow = computed(() => selectionRows.value.length > 0)
+const hasSelection = computed(() => selectedRows.value.length > 0)
 
 const statusFilters = computed(() => {
   return deviceStatus
@@ -258,7 +253,7 @@ function filterMethod(value, row, column) {
 }
 
 function onSelectionChange(rows) {
-  selectionRows.value = rows
+  selectedRows.value = rows
 }
 
 async function onAdbWatch(type, ret) {
@@ -274,9 +269,9 @@ async function onAdbWatch(type, ret) {
   }
 }
 
+let autoMirrorTimer
+let autoMirrorLock = false
 async function getMirrorActionRefs(ref) {
-  await nextTick()
-
   if (!ref?.row?.id) {
     return false
   }
@@ -292,13 +287,23 @@ async function getMirrorActionRefs(ref) {
 
   mirrorActionRefs.value.push(ref)
 
-  const autoMirror = preferenceStore.data.autoMirror
-  if (autoMirror) {
-    await autoMirrorLimit(async () => {
-      ref.handleClick(ref.row)
-      await sleep(MIRROR_START_INTERVAL)
-    })
+  const autoMirrorFlag = preferenceStore.data.autoMirror
+
+  if (!autoMirrorFlag || autoMirrorLock) {
+    return false
   }
+
+  autoMirrorLock = true
+
+  if (autoMirrorTimer) {
+    clearTimeout(autoMirrorTimer)
+  }
+  autoMirrorTimer = setTimeout(async () => {
+    for (const item of mirrorActionRefs.value) {
+      await item.handleClick(item.row)
+      await sleep()
+    }
+  }, 1000)
 }
 
 function toggleRowExpansion(...args) {

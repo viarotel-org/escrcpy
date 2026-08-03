@@ -9,6 +9,9 @@ Escrcpy is a pnpm + Turborepo monorepo for an Electron GUI around Android mirror
 - Window modules live under [desktop/electron/modules/](../desktop/electron/modules/). Register main-process features as modules/services instead of adding logic to the preload script.
 - [packages/electron-setup/](../packages/electron-setup/) provides app/plugin/window management primitives. [packages/electron-ipcx/README.md](../packages/electron-ipcx/README.md) documents IPC with renderer callbacks.
 - [packages/wscrcpy/](../packages/wscrcpy/) contains scrcpy session/client logic. Preserve its `WscrcpySession` model and `DeviceTarget = 'all' | 'primary' | string | string[]` contract.
+- [packages/adbx/](../packages/adbx/) is an injected adbkit capability layer; it prefers yadb when available and falls back to standard ADB.
+- [packages/shared/](../packages/shared/) contains platform-neutral utilities shared across workspace packages.
+- [packages/unocss-preset-shades/](../packages/unocss-preset-shades/) is an UnoCSS preset that generates color shades from a base color.
 
 ## Commands
 
@@ -29,7 +32,7 @@ There is no repo-wide test script today. For changes, run the smallest meaningfu
 - Use existing aliases from [desktop/vite.config.js](../desktop/vite.config.js): `$`, `$root`, `$docs`, `$renderer`, `$electron`, `$control`, `$explorer`, `$copilot`, `$terminal`, `$automation`, and `$mirror`.
 - File-based routes live in [desktop/src/views/](../desktop/src/views/) and exclude nested `components` folders.
 - Pinia stores live in [desktop/src/store/](../desktop/src/store/), with persisted state and `window.$preload.store` for electron-store integration. See [desktop/src/store/device/index.js](../desktop/src/store/device/index.js) for the main pattern.
-- Styling uses UnoCSS utilities and project presets from [desktop/unocss.config.js](../desktop/unocss.config.js). Prefer local utility/style patterns over introducing new UI systems.
+- Styling uses UnoCSS utilities and project presets from [desktop/uno.config.js](../desktop/uno.config.js). Prefer local utility/style patterns over introducing new UI systems.
 
 ## Electron And IPC
 

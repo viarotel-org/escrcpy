@@ -10,7 +10,7 @@ import 'virtual:uno.css'
 
 import '$/styles/index.js'
 
-export default (App, { router, install } = {}) => {
+export default (App, { router, install, manualMount } = {}) => {
   const app = createApp(App)
 
   if (router) {
@@ -35,19 +35,21 @@ export default (App, { router, install } = {}) => {
 
   app.config.globalProperties.$toRaw = toRaw
 
-  app.mount('#app').$nextTick(() => {
-    // Remove Preload scripts loading
-    postMessage({ payload: 'removeLoading' }, '*')
+  if (!manualMount) {
+    app.mount('#app').$nextTick(() => {
+      // Remove Preload scripts loading
+      postMessage({ payload: 'removeLoading' }, '*')
 
-    const root = document.documentElement
+      const root = document.documentElement
 
-    // Add platform-specific class to the root element
-    ;(['macos', 'windows', 'linux']).forEach((platform) => {
-      if (isPlatform(platform)) {
-        root.classList.add(`${platform}-platform`)
-      }
+      // Add platform-specific class to the root element
+      ;(['macos', 'windows', 'linux']).forEach((platform) => {
+        if (isPlatform(platform)) {
+          root.classList.add(`${platform}-platform`)
+        }
+      })
     })
-  })
+  }
 
   return app
 }

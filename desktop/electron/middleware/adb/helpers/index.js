@@ -1,6 +1,6 @@
 import ipRegex from 'ip-regex'
 import { Adb } from '@devicefarmer/adbkit'
-import { parseDeviceId } from '$/utils/device/index.js'
+import { createDeviceAddressKey, normalizeDeviceHost, parseDeviceId } from '@escrcpy/shared'
 
 /**
  * Determine whether it is an ipv6 address
@@ -33,19 +33,7 @@ export async function getFileSize(device, filePath, options = {}) {
   }
 }
 
-export function normalizeDeviceHost(host = '') {
-  return String(host).trim().replace(/^\[(.*)\]$/, '$1').toLowerCase()
-}
-
-export function createDeviceAddressKey(host, port = 5555) {
-  const value = normalizeDeviceHost(host)
-
-  if (!value) {
-    return ''
-  }
-
-  return `${value}:${Number(port) || 5555}`
-}
+export { createDeviceAddressKey, normalizeDeviceHost }
 
 export async function getConnectedDeviceAddressKeys({ client } = {}) {
   try {

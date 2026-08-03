@@ -1,4 +1,4 @@
-import { useI18n } from '$/hooks/useI18n/index.js'
+import { useI18n } from '$/hooks/use-i18n/index.js'
 
 export default {
   install(app) {

@@ -13,6 +13,7 @@ import type {
 import type { TemplateBrowserWindow } from '../shared/template'
 import { useElectronApp } from './app'
 import { encodePayload } from '../shared/helpers'
+import { createBrowserWindow } from '../shared/template'
 
 /**
  * Window context - allows hooks to access window context via useWindowContext()
@@ -206,7 +207,7 @@ export function createWindowManager<TPayload = unknown>(
       // Create window (internal TemplateBrowserWindow)
       const internalWin = typeof create === 'function'
         ? create(context)
-        : (await import('../shared/template.js')).createBrowserWindow(options)
+        : createBrowserWindow(options)
 
       if (!internalWin) {
         return null

@@ -2,6 +2,7 @@
   <el-button
     type="primary"
     text
+    circle
     :loading="loading"
     :icon="loading ? '' : 'Connection'"
     :title="loading ? $t('common.connecting') : $t('device.wireless.connect.name')"

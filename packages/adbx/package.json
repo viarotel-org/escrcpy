@@ -1,0 +1,28 @@
+{
+  "name": "@escrcpy/adbx",
+  "type": "module",
+  "version": "3.0.8",
+  "private": true,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@devicefarmer/adbkit": "*",
+    "@escrcpy/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "*",
+    "typescript": "*"
+  }
+}

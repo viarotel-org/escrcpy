@@ -106,9 +106,9 @@ async function run(deviceId) {
     })
   }
 
-  const gnirehtetAppend = electronStore.get('common.gnirehtetAppend')
+  const append = (electronStore.get('common.gnirehtetAppend') || '').replace(/\r?\n/g, ' ').trim()
 
-  await start(deviceId, { append: gnirehtetAppend }).catch((error) => {
+  await start(deviceId, { append }).catch((error) => {
     throw new Error(error?.message || 'Gnirehtet Start fail')
   })
 }

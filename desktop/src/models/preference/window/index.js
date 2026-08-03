@@ -42,6 +42,7 @@ export default {
       field: '--window-borderless',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.window.borderless.placeholder',
     },
     fullscreen: {
@@ -49,6 +50,7 @@ export default {
       field: '--fullscreen',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.window.fullscreen.placeholder',
     },
     alwaysOnTop: {
@@ -56,6 +58,7 @@ export default {
       field: '--always-on-top',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.window.alwaysOnTop.placeholder',
     },
     disableScreensaver: {
@@ -63,6 +66,7 @@ export default {
       field: '--disable-screensaver',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.window.disableScreensaver.placeholder',
     },
     backgroundColor: {

@@ -1,52 +1,10 @@
 import { allSettledWrapper, sleep } from '$/utils'
 
 export * from './migrator/index.js'
+
 export * from './qr/index.js'
 export * from './selection/index.js'
-
-/**
- * Parse `host` and `port` from a device ID string.
- *
- * Supported formats:
- * - IPv6: "[fd7a:115c:a1e0::9c01:264d]:5555" → { host: "[fd7a:115c:a1e0::9c01:264d]", port: 5555 }
- * - IPv4: "127.0.0.1:5555" → { host: "127.0.0.1", port: 5555 }
- * - domain: "www.domain.com:1234" → { host: "www.domain.com", port: 1234 }
- *
- * When port is omitted, { port: 5555 } is returned by default.
- *
- * @param {string} string - Device ID string
- * @returns {{ host: string, port: number }} Parsed result
- */
-export function parseDeviceId(string = '') {
-  if (!string?.trim()) {
-    return { host: '', port: 5555 }
-  }
-
-  const input = string.trim()
-  const DEFAULT_PORT = 5555
-
-  // Validate that port number is valid
-  const isValidPort = port => port > 0 && port <= 65535
-
-  // IPv6 format: [host]:port or [host]
-  const ipv6Match = input.match(/^\[([^\]]+)\](?::(\d+))?$/)
-  if (ipv6Match) {
-    const [, host, portStr] = ipv6Match
-    const port = portStr ? Number.parseInt(portStr, 10) : DEFAULT_PORT
-    return { host: `[${host}]`, port: isValidPort(port) ? port : DEFAULT_PORT }
-  }
-
-  // IPv4/domain format: host:port or host
-  const match = input.match(/^(.+?)(?::(\d+))?$/)
-  if (match) {
-    const [, host, portStr] = match
-    const port = portStr ? Number.parseInt(portStr, 10) : DEFAULT_PORT
-    return { host, port: isValidPort(port) ? port : DEFAULT_PORT }
-  }
-
-  // Fallback case
-  return { host: input, port: DEFAULT_PORT }
-}
+export { parseDeviceId } from '@escrcpy/shared'
 
 /**
  * Select files and push them to a device

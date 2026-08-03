@@ -14,7 +14,7 @@
       <el-link type="primary" underline="never" icon="InfoFilled" :disabled="!connectFlag" class="flex-none"></el-link>
     </template>
 
-    <div v-loading="loading" :element-loading-text="$t('common.loading')" class="flex items-stretch p-2" :class="[horizontalFlag ? 'flex-col space-y-2' : 'space-x-2 h-60', { '!h-auto': !connectFlag }]">
+    <div v-loading="loading" :element-loading-text="$t('common.loading')" class="flex items-stretch p-2 gap-2" :class="[horizontalFlag ? 'flex-col' : 'h-60', { '!h-auto': !connectFlag }]">
       <img v-if="connectFlag" :src="deviceInfo.screencap" :class="[horizontalFlag ? 'w-full' : 'h-full']" class="flex-none overflow-hidden rounded-xl shadow bg-gray-200 dark:bg-black object-contain cursor-pointer" alt="" @load="onScreencapLoad" @click="handlePreview" />
 
       <div class="overflow-auto" :class="[horizontalFlag ? 'flex-none max-h-56' : 'h-full flex-1 w-0']">

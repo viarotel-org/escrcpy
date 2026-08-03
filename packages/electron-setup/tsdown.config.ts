@@ -8,9 +8,11 @@ export default defineConfig({
   dts: true,
   exports: true,
   publint: false,
-  external: [
-    'electron',
-    'electron-store',
-    '@escrcpy/electron-ipcx',
-  ],
+  deps: {
+    neverBundle: [
+      'electron',
+      'electron-store',
+      '@escrcpy/electron-ipcx',
+    ],
+  },
 })

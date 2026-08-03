@@ -34,11 +34,11 @@ features:
     title: Integrated Control Bar
     details: 'Compact, draggable sidebar with reorderable controls: rotation, screenshot, apps, files, terminal, AI assistant, and automation'
   - icon: 🤖
-    title: Intelligent Control
-    details: 'Natural-language commands powered by AutoGLM for smart control of Android devices'
+    title: Copilot
+    details: 'AI assistant built on MCP protocol for intelligent Android device control with multi-model chat support'
   - icon: 🏃
     title: Automated Execution
-    details: 'Automation workflows run in parallel, supporting synchronized operations across multiple devices'
+    details: 'Visual step-by-step workflow orchestration with screen image recognition and batch execution across multiple devices'
   - icon: 🪟
     title: Multi-Device Management
     details: 'Visual window orchestration for centralized management of all connected devices'
@@ -48,4 +48,7 @@ features:
   - icon: ⚡️
     title: Scrcpy Core
     details: 'High-performance, low-latency screen mirroring and control'
+  - icon: 🔑
+    title: Shortcut Management
+    details: 'Customizable global hotkeys for quick device operations'
 ---

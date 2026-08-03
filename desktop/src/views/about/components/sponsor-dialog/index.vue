@@ -11,8 +11,8 @@
       {{ $t('about.donate.description') }}
     </div>
 
-    <div class="flex space-x-4">
-      <el-image v-for="(item, index) of imageList" :key="index" :src="item.src" :alt="item.alt" preview-teleported :preview-src-list :initial-index="index" fit="contain" class="!flex-1 !w-0 !border !rounded-md !overflow-hidden" />
+    <div class="flex gap-4">
+      <el-image v-for="(item, index) of imageList" :key="index" :src="item.src" :alt="item.alt" preview-teleported :preview-src-list :initial-index="index" fit="contain" class="!flex-1 !w-0 !rounded-md !overflow-hidden" />
     </div>
   </el-dialog>
 </template>

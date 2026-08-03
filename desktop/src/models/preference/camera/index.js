@@ -44,7 +44,8 @@ export default {
       label: 'preferences.camera.cameraTorch.name',
       field: '--camera-torch',
       type: 'Switch',
-      value: false,
+      value: undefined,
+      unset: [false],
     },
     cameraZoom: {
       hidden: ['global'],

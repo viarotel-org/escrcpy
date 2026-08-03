@@ -19,7 +19,7 @@
       </div>
 
       <el-dropdown-menu v-else class="!p-0">
-        <div class="sticky top-0 z-10 px-2 py-2 bg-[var(--el-bg-color-overlay)] border-b dark:border-gray-700">
+        <div class="sticky top-0 z-10 px-2 py-2 bg-[var(--el-bg-color-overlay)] border-b">
           <el-input
             v-model="keyword"
             class="!w-full"

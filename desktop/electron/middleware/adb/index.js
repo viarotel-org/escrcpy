@@ -1,12 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { adbKeyboardApkPath, desktopPath, getDefaultAdbPath } from '$electron/configs/index.js'
+import { desktopPath, getDefaultAdbPath, yadbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
+import { createAdbx } from '@escrcpy/adbx'
 import pLimit from 'p-limit'
 import dayjs from 'dayjs'
 import { ProcessManager } from '$electron/process/manager.js'
-import { streamToBase64 } from '$electron/helpers/index.js'
 import { sheller } from '$electron/helpers/shell/index.js'
 import { parseBatteryDump } from './helpers/battery/index.js'
 import { ADBDownloader } from './helpers/downloader/index.js'
@@ -20,6 +20,15 @@ import { filterConnectedDevices } from './helpers/index.js'
 const processManager = new ProcessManager()
 
 let client = null
+let adbx = null
+
+export function getAdbx() {
+  if (!adbx) {
+    throw new Error('ADB middleware has not been initialized')
+  }
+
+  return adbx
+}
 
 electronAPI.ipcRenderer.on('quit-before', () => {
   client?.kill?.()
@@ -71,8 +80,7 @@ async function shell(command) {
 }
 
 async function deviceShell(id, command) {
-  const res = await client.getDevice(id).shell(command).then(Adb.util.readAll)
-  return res.toString()
+  return getAdbx().shell(id, command)
 }
 
 async function kill(...params) {
@@ -100,45 +108,29 @@ async function tcpip(id, port = 5555) {
 async function screencap(deviceId, options = {}) {
   const { returnBase64 = false } = options
 
-  const device = client.getDevice(deviceId)
-
-  const fileStream = await device.screencap()
-
-  if (!fileStream) {
-    throw new Error('Failed to obtain screenshot data')
-  }
+  const screenshot = await getAdbx().screenshot.capture(deviceId)
 
   if (returnBase64) {
-    const base64 = await streamToBase64(fileStream)
-    return base64
+    return screenshot.toString('base64')
   }
 
   const fileName = `Screencap-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.png`
   const savePath = options.savePath || path.join(electronStore.get('common.savePath') || desktopPath, fileName)
 
-  return new Promise((resolve, reject) => {
-    fileStream
-      .pipe(fs.createWriteStream(savePath))
-      .on('finish', () => {
-        resolve(true)
-      })
-      .on('error', (error) => {
-        console.warn(error?.message || error)
-        reject(false)
-      })
-  })
+  await fs.promises.writeFile(savePath, screenshot)
+  return true
 }
 
 async function install(id, path) {
-  return client.getDevice(id).install(path)
+  return getAdbx().install(id, path)
 }
 
 async function uninstall(id, path) {
-  return client.getDevice(id).uninstall(path)
+  return getAdbx().uninstall(id, path)
 }
 
 async function isInstalled(id, pkg) {
-  return client.getDevice(id).isInstalled(pkg)
+  return getAdbx().isInstalled(id, pkg)
 }
 
 async function version() {
@@ -451,8 +443,7 @@ async function getSerialNo(id) {
   let value = id
 
   try {
-    const ret = await deviceShell(id, 'getprop ro.serialno')
-    value = ret.replace(/[\n\r]/g, '')
+    value = await getAdbx().deviceInfo.serialNo(id)
   }
   catch (error) {
     console.error('getSerialNo.error', error?.message || error)
@@ -463,16 +454,7 @@ async function getSerialNo(id) {
 
 async function getScreenSize(id) {
   try {
-    const ret = await deviceShell(id, 'wm size')
-    // Prefer Override size (user-visible logical resolution), fallback to Physical size
-    const overrideMatch = ret.match(/Override size:\s*(\d+)x(\d+)/)
-    if (overrideMatch) {
-      return { width: Number(overrideMatch[1]), height: Number(overrideMatch[2]) }
-    }
-    const physicalMatch = ret.match(/Physical size:\s*(\d+)x(\d+)/)
-    if (physicalMatch) {
-      return { width: Number(physicalMatch[1]), height: Number(physicalMatch[2]) }
-    }
+    return await getAdbx().deviceInfo.getScreenSize(id)
   }
   catch (error) {
     console.error('getScreenSize.error', error?.message || error)
@@ -511,53 +493,17 @@ async function getDeviceList() {
 function init() {
   // Setup the PATH environment variable by injecting necessary tool paths
   setupEnvPath()
+
   client = Adb.createClient()
+
+  adbx = createAdbx({
+    adb: client,
+    yadbPath,
+  })
 }
 
 async function killProcesses() {
   return processManager.kill()
-}
-
-export async function isInstalledAdbKeyboard(deviceId) {
-  try {
-    const pkg = 'com.android.adbkeyboard'
-    const installed = await isInstalled(deviceId, pkg)
-    return installed
-  }
-  catch (error) {
-    console.warn(
-      `Failed to check AdbKeyboard on device ${deviceId}:`,
-      error?.message || error,
-    )
-    return false
-  }
-}
-
-export async function installAdbKeyboard(deviceId) {
-  try {
-    const installed = await isInstalledAdbKeyboard(deviceId)
-
-    if (installed) {
-      return true
-    }
-
-    await install(deviceId, adbKeyboardApkPath)
-
-    const installedAfter = await isInstalledAdbKeyboard(deviceId)
-
-    if (installedAfter) {
-      await deviceShell(deviceId, 'ime enable com.android.adbkeyboard/.AdbIME')
-    }
-
-    return installedAfter
-  }
-  catch (error) {
-    const message = `Failed to install AdbKeyboard on device ${deviceId}: ${error?.message || error}`
-
-    console.warn(message)
-
-    throw new Error(message)
-  }
 }
 
 export default {
@@ -589,6 +535,4 @@ export default {
   waitForDevice,
   getSerialNo,
   killProcesses,
-  installAdbKeyboard,
-  isInstalledAdbKeyboard,
 }

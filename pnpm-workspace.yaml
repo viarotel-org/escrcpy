@@ -3,25 +3,27 @@ ignoreWorkspaceRootCheck: true
 shellEmulator: true
 
 supportedArchitectures:
-  cpu:
-    - x64
-    - arm64
-  os:
-    - current
+  cpu: [x64, arm64]
+  os: [current]
 
 packages:
   - packages/*
   - desktop
 
 overrides:
+  '@devicefarmer/adbkit': 3.3.8
   electron: 33.0.2
   sharp: 0.34.5
-  tsdown: 0.19.0
-  typescript: 5.6.3
+  tsdown: 0.22.3
+  typescript: 6.0.3
   vite: 5.4.21
 
 ignoredBuiltDependencies:
-  - esbuild
   - electron
+  - esbuild
   - sharp
   - vue-demi
+
+allowBuilds:
+  electron: true
+  zod: true

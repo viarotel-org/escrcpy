@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center !space-x-2 relative z-10 *:app-region-no-drag">
+  <div class="flex items-center relative z-10 *:app-region-no-drag -mr-1">
     <component
       :is="item.component || 'div'"
       v-for="item in actionModel"
@@ -23,6 +23,7 @@
             ...slotProps,
             ...(trigger ? { onClick: trigger } : {}),
           }"
+          class="!mx-1"
         >
           <template #icon>
             <el-icon v-if="item.elIcon" :class="item.iconClass">
@@ -41,7 +42,6 @@ import Arrange from './components/arrange/index.vue'
 import Log from './components/log/index.vue'
 import Restart from './components/restart/index.vue'
 import Search from './components/search/index.vue'
-import Schedule from './components/schedule/index.vue'
 import Terminal from './components/terminal/index.vue'
 
 const props = defineProps({})
@@ -56,11 +56,6 @@ const actionModel = [
     label: 'device.terminal.name',
     fontIcon: 'i-bi-terminal',
     component: Terminal,
-  },
-  {
-    label: 'device.schedule.list',
-    fontIcon: 'i-bi-clock',
-    component: Schedule,
   },
   {
     label: 'device.log.name',

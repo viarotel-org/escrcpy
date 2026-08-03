@@ -5,7 +5,7 @@
       reverse ? 'flex-col-reverse' : 'flex-col',
     ]"
   >
-    <div class="flex-1 min-h-0 overflow-auto pr-2 relative">
+    <div class="flex-1 min-h-0 overflow-auto pr-1 relative">
       <el-form ref="elForm" :model="preferenceData" :label-width="$grid.lg ? '240px' : '140px'" class="">
         <el-collapse
           v-model="collapseValue"
@@ -225,7 +225,6 @@ async function generateCommand() {
   const value = await preferenceStore.scrcpyParameter(preferenceData.value, {
     useRecord: true,
     useCamera: true,
-    useOtg: true,
   })
 
   return value
@@ -253,9 +252,5 @@ defineExpose({
 <style scoped lang="postcss">
 :deep(.el-collapse-item__header) {
   @apply h-10 leading-10 md:h-12 md:leading-12;
-}
-
-:deep(.el-collapse-item__arrow) {
-  @apply w-2em;
 }
 </style>

@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import { sleep } from '$/utils'
 import { openFloatControl } from '$/utils/device/index.js'
 import DeployDialog from '$/components/preference-form/dialog.vue'
 
@@ -31,14 +30,15 @@ const props = defineProps({
   },
 })
 
-const deviceStore = useDeviceStore()
-
 const loading = ref(false)
 const deployDialogRef = ref()
 const deployLazy = useLazy()
 
+const deviceStore = useDeviceStore()
+
 async function handleClick() {
   await deployLazy.mount()
+
   deployDialogRef.value?.open({
     row: props.row,
     onClosed() {
@@ -50,8 +50,6 @@ async function handleClick() {
 async function handleScrcpy(args) {
   const { row, toggleRowExpansion } = props
 
-  loading.value = true
-
   const isCamera = ['--camera-facing'].some(key => args.includes(key))
 
   if (isCamera) {
@@ -60,21 +58,19 @@ async function handleScrcpy(args) {
 
   toggleRowExpansion(row, true)
 
+  const mirroring = window.$preload.scrcpy.mirror(row.id, {
+    title: deviceStore.getLabel(row, 'custom'),
+    args,
+    resolveOnReady: true,
+    stdout: onStdout,
+    stderr: onStderr,
+  })
+
+  loading.value = true
+
   try {
-    const mirroring = window.$preload.scrcpy.mirror(row.id, {
-      title: deviceStore.getLabel(row, 'custom'),
-      args,
-      stdout: onStdout,
-      stderr: onStderr,
-    })
-
-    await sleep(1000)
-
-    loading.value = false
-
-    openFloatControl(toRaw(row))
-
     await mirroring
+    openFloatControl(toRaw(row))
   }
   catch (error) {
     console.error('mirror.args', args)
@@ -83,9 +79,9 @@ async function handleScrcpy(args) {
     if (error?.message) {
       ElMessage.warning(error.message)
     }
-
-    loading.value = false
   }
+
+  loading.value = false
 }
 
 function onStdout() {}

@@ -1,0 +1,230 @@
+name: sync-release-to-public
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_tag:
+        description: Private repository release tag to sync. Leave empty to sync the latest release.
+        required: false
+        type: string
+      target_repository:
+        description: Target public repository in owner/repo format
+        required: true
+        default: viarotel-org/escrcpy
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  sync-release:
+    name: Sync release to public repository
+    runs-on: ubuntu-latest
+
+    env:
+      SOURCE_REPO: ${{ github.repository }}
+
+    steps:
+      - name: Validate inputs
+        id: inputs
+        shell: bash
+        env:
+          SOURCE_TAG_INPUT: ${{ inputs.source_tag }}
+          TARGET_REPOSITORY_INPUT: ${{ inputs.target_repository }}
+        run: |
+          set -euo pipefail
+
+          SOURCE_TAG="$(printf '%s' "$SOURCE_TAG_INPUT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          TARGET_REPOSITORY="$(printf '%s' "$TARGET_REPOSITORY_INPUT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
+          if [[ "$SOURCE_TAG" == *$'\n'* || "$SOURCE_TAG" == *$'\r'* ]]; then
+            echo "::error::source_tag cannot contain newlines"
+            exit 1
+          fi
+
+          if [[ ! "$TARGET_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+            echo "::error::target_repository must use owner/repo format"
+            exit 1
+          fi
+
+          {
+            echo "source_tag=$SOURCE_TAG"
+            echo "target_repository=$TARGET_REPOSITORY"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Read source release metadata
+        id: source_release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_TAG_INPUT: ${{ steps.inputs.outputs.source_tag }}
+        run: |
+          set -euo pipefail
+
+          source_tag="$SOURCE_TAG_INPUT"
+
+          if [[ -n "$source_tag" ]]; then
+            release_view_args=(
+              release view "$source_tag"
+              --repo "$SOURCE_REPO"
+              --json name,body,tagName,isPrerelease
+            )
+          else
+            release_view_args=(
+              release view
+              --repo "$SOURCE_REPO"
+              --json name,body,tagName,isPrerelease
+            )
+          fi
+
+          if ! gh "${release_view_args[@]}" > release.json; then
+            if [[ -n "$source_tag" ]]; then
+              echo "::error::Release '$source_tag' does not exist in source repository '$SOURCE_REPO'"
+            else
+              echo "::error::No latest release found in source repository '$SOURCE_REPO'"
+            fi
+            exit 1
+          fi
+
+          RELEASE_TAG="$(jq -r '.tagName // ""' release.json)"
+
+          if [[ -z "$RELEASE_TAG" ]]; then
+            echo "::error::Unable to resolve source release tag in repository '$SOURCE_REPO'"
+            exit 1
+          fi
+
+          if [[ -n "$source_tag" && "$RELEASE_TAG" != "$source_tag" ]]; then
+            echo "::error::Resolved source release tag '$RELEASE_TAG' does not match requested tag '$source_tag'"
+            exit 1
+          fi
+
+          jq -r 'if (.name // "") == "" then .tagName else .name end' release.json > release-title.txt
+          jq -r '.body // ""' release.json > release-body.md
+
+          echo "source_tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "Resolved source release tag: $RELEASE_TAG"
+
+      - name: Download source release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_TAG: ${{ steps.source_release.outputs.source_tag }}
+        run: |
+          set -euo pipefail
+
+          rm -rf release-assets
+          mkdir -p release-assets
+
+          gh release download "$SOURCE_TAG" \
+            --repo "$SOURCE_REPO" \
+            --dir release-assets \
+            --clobber
+
+          ASSET_COUNT="$(find release-assets -maxdepth 1 -type f | wc -l | tr -d ' ')"
+
+          if [[ "$ASSET_COUNT" -lt 1 ]]; then
+            echo "::error::No release assets found for '$SOURCE_TAG'. Source code archives are intentionally not downloaded."
+            exit 1
+          fi
+
+          echo "Found $ASSET_COUNT release asset(s)."
+
+      - name: Validate target repository access
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          TARGET_REPOSITORY: ${{ steps.inputs.outputs.target_repository }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "::error::PUBLIC_REPO_TOKEN secret is not configured"
+            exit 1
+          fi
+
+          gh repo view "$TARGET_REPOSITORY" \
+            --json nameWithOwner \
+            --jq .nameWithOwner \
+            >/dev/null
+
+      - name: Check target release
+        id: target_release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          SOURCE_TAG: ${{ steps.source_release.outputs.source_tag }}
+          TARGET_REPOSITORY: ${{ steps.inputs.outputs.target_repository }}
+        run: |
+          set -euo pipefail
+
+          if gh release view "$SOURCE_TAG" \
+            --repo "$TARGET_REPOSITORY" \
+            --json tagName \
+            >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update target draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          SOURCE_TAG: ${{ steps.source_release.outputs.source_tag }}
+          TARGET_REPOSITORY: ${{ steps.inputs.outputs.target_repository }}
+          TARGET_RELEASE_EXISTS: ${{ steps.target_release.outputs.exists }}
+        run: |
+          set -euo pipefail
+
+          RELEASE_TITLE="$(cat release-title.txt)"
+          IS_PRERELEASE="$(jq -r '.isPrerelease' release.json)"
+
+          if [[ "$TARGET_RELEASE_EXISTS" == "true" ]]; then
+            args=(
+              release edit "$SOURCE_TAG"
+              --repo "$TARGET_REPOSITORY"
+              --title "$RELEASE_TITLE"
+              --notes-file release-body.md
+              --draft
+            )
+
+            if [[ "$IS_PRERELEASE" == "true" ]]; then
+              args+=(--prerelease)
+            else
+              args+=(--prerelease=false)
+            fi
+          else
+            args=(
+              release create "$SOURCE_TAG"
+              --repo "$TARGET_REPOSITORY"
+              --title "$RELEASE_TITLE"
+              --notes-file release-body.md
+              --draft
+            )
+
+            if [[ "$IS_PRERELEASE" == "true" ]]; then
+              args+=(--prerelease)
+            fi
+          fi
+
+          gh "${args[@]}"
+
+      - name: Upload release assets to target draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          SOURCE_TAG: ${{ steps.source_release.outputs.source_tag }}
+          TARGET_REPOSITORY: ${{ steps.inputs.outputs.target_repository }}
+        run: |
+          set -euo pipefail
+
+          mapfile -d '' ASSETS < <(find release-assets -maxdepth 1 -type f -print0)
+
+          if [[ "${#ASSETS[@]}" -lt 1 ]]; then
+            echo "::error::No release assets found to upload"
+            exit 1
+          fi
+
+          gh release upload "$SOURCE_TAG" "${ASSETS[@]}" \
+            --repo "$TARGET_REPOSITORY" \
+            --clobber

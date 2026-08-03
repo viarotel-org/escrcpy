@@ -7,7 +7,7 @@
   >
     <template #reference>
       <el-tag effect="light" class="cursor-pointer">
-        <div class="flex items-center space-x-1">
+        <div class="flex items-center gap-1">
           <span class="">{{ device.remark || device.name }}</span>
           <el-icon><EditPen /></el-icon>
         </div>

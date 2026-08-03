@@ -13,8 +13,7 @@
       <slot name="title"></slot>
     </template>
     <template v-if="$slots['sub-title']" #sub-title>
-      <slot name="sub-title">
-      </slot>
+      <slot name="sub-title"></slot>
     </template>
     <template v-if="$slots.extra" #extra>
       <slot name="extra"></slot>

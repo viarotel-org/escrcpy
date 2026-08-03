@@ -10,7 +10,7 @@ export default {
       props: {
         clearable: true,
       },
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.input.mouse.placeholder',
       tips: 'preferences.input.mouse.tips',
       options: [
@@ -42,7 +42,7 @@ export default {
       label: 'preferences.input.mouseBind.name',
       placeholder: 'preferences.input.mouseBind.placeholder',
       tips: 'preferences.input.mouseBind.tips',
-      value: void 0,
+      value: undefined,
     },
     keyboard: {
       label: 'preferences.input.keyboard.name',
@@ -51,7 +51,7 @@ export default {
       props: {
         clearable: true,
       },
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.input.keyboard.placeholder',
       tips: 'preferences.input.keyboard.tips',
       options: [
@@ -82,7 +82,7 @@ export default {
       field: '--keyboard-inject',
       customized: true,
       type: 'KeyboardInjectSelect',
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.input.keyboard.inject.placeholder',
       tips: 'preferences.input.keyboard.inject.tips',
       options: [
@@ -109,18 +109,18 @@ export default {
     videoCodec: {
       hidden: true,
       field: '--prefer-text',
-      value: void 0,
+      value: undefined,
     },
     videoEncoder: {
       hidden: true,
       field: '--raw-key-events',
-      value: void 0,
+      value: undefined,
     },
     gamepad: {
       label: 'preferences.input.gamepad.name',
       field: '--gamepad',
       type: 'Select',
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.input.gamepad.placeholder',
       tips: 'preferences.input.gamepad.tips',
       options: [

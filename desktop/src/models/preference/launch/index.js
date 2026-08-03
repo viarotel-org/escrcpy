@@ -126,6 +126,7 @@ export default {
       field: '--flex-display',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.launch.flexDisplay.placeholder',
     },
     noVdDestroyContent: {
@@ -133,6 +134,7 @@ export default {
       field: '--no-vd-destroy-content',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.launch.noVdDestroyContent.placeholder',
       tips: 'preferences.launch.noVdDestroyContent.tips',
     },

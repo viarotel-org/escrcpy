@@ -44,7 +44,6 @@ import Mirror from './mirror/index.vue'
 import Application from './application/index.vue'
 import FilePush from './file-push/index.vue'
 import Screenshot from './screenshot/index.vue'
-import Schedule from './schedule/index.vue'
 import Delete from './delete/index.vue'
 
 const props = defineProps({
@@ -79,11 +78,6 @@ const actionModel = [
     label: 'device.control.file.push',
     fontIcon: 'i-bi-folder',
     component: FilePush,
-  },
-  {
-    label: 'device.schedule.name',
-    fontIcon: 'i-bi-clock',
-    component: Schedule,
   },
 ]
 </script>

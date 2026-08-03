@@ -93,9 +93,6 @@ export default {
         options: this.options,
       })
     },
-    preferenceData(...args) {
-      return this.preferenceStore.getData(...args)
-    },
     async handleStart() {
       if (this.device.$gnirehtetLoading) {
         return false

@@ -16,6 +16,8 @@ if (process.platform === 'darwin') {
   fixPath()
 }
 
+process.env.RAW_PATH = process.env.PATH
+
 process.env.IS_PACKAGED = String(app.isPackaged)
 
 process.env.DESKTOP_PATH = app.getPath('desktop')

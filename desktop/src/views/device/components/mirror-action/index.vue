@@ -2,6 +2,7 @@
   <el-button
     type="primary"
     text
+    circle
     :disabled="['unauthorized', 'offline'].includes(row.status)"
     :loading="loading"
     :icon="loading ? '' : 'Monitor'"
@@ -12,7 +13,6 @@
 </template>
 
 <script>
-import { sleep } from '$/utils'
 import { openFloatControl } from '$/utils/device/index.js'
 
 export default {
@@ -41,27 +41,23 @@ export default {
   },
   methods: {
     async handleClick(row = this.row) {
-      this.loading = true
-
       this.toggleRowExpansion(row, true)
 
       const args = this.preferenceStore.scrcpyParameter(row.id)
 
+      const mirroring = this.$scrcpy.mirror(row.id, {
+        title: this.deviceStore.getLabel(row, 'mirror'),
+        args,
+        resolveOnReady: true,
+        stdout: this.onStdout,
+        stderr: this.onStderr,
+      })
+
+      this.loading = true
+
       try {
-        const mirroring = this.$scrcpy.mirror(row.id, {
-          title: this.deviceStore.getLabel(row, 'mirror'),
-          args,
-          stdout: this.onStdout,
-          stderr: this.onStderr,
-        })
-
-        await sleep(500)
-
-        this.loading = false
-
-        openFloatControl(toRaw(row))
-
         await mirroring
+        openFloatControl(toRaw(row))
       }
       catch (error) {
         console.error('mirror.args', args)
@@ -71,8 +67,9 @@ export default {
           this.$message.warning(error.message)
         }
       }
-    },
 
+      this.loading = false
+    },
     onStdout() {},
     onStderr() {},
   },

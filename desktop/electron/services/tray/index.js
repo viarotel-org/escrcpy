@@ -19,13 +19,21 @@ export default {
       createTray()
     })
 
+    globalEventEmitter.on('show:app', () => {
+      showApp()
+    })
+
+    globalEventEmitter.on('hide:app', () => {
+      hideApp()
+    })
+
     registerWindowCloseHandler()
 
     async function registerWindowCloseHandler() {
       const mainWindow = await resolveMainWindow(mainApp)
 
       mainWindow?.on?.('close', async (event) => {
-        if (app.isQuiting) {
+        if (app.isQuitting) {
           return true
         }
 
@@ -84,14 +92,11 @@ export default {
 
     async function quitApp() {
       const mainWindow = mainApp.getMainWindow()
-
-      app.isQuiting = true
-
       mainWindow?.webContents?.send?.('quit-before')
 
       await sleep(1 * 1000)
 
-      app.quit()
+      globalEventEmitter.emit('app:quit')
 
       return true
     }

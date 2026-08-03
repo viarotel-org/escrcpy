@@ -31,13 +31,13 @@ features:
     details: '单窗口同控多台设备，广播输入，支持批量截图与 APK 安装'
   - icon: 🎛️
     title: 集成控制栏
-    details: '可拖拽排序的紧凑侧边栏，涵盖旋转、截图、应用、文件、终端、AI 助手与自动化'
+    details: '可拖拽排序的紧凑侧边栏，涵盖旋转、截图、应用、文件、终端、自动操控与自动化'
   - icon: 🤖
-    title: 智能控制
-    details: '基于 AutoGLM 的自然语言指令，智能操控 Android 设备'
+    title: 自动操控
+    details: '基于 MCP 协议深度融合构建的 自动操控，支持多模型对话与智能设备控制'
   - icon: 🏃
-    title: 自动化执行
-    details: '自动化流程并行运行，支持多设备同步操作'
+    title: 自动化脚本
+    details: '图形化逐步编排工作流，支持屏幕识图条件判断与多设备批量执行'
   - icon: 🪟
     title: 多设备管理
     details: '可视化窗口编排，统一管理所有已连接设备'
@@ -47,4 +47,7 @@ features:
   - icon: ⚡️
     title: Scrcpy 内核
     details: '高性能、低延迟屏幕镜像与控制'
+  - icon: 🔑
+    title: 快捷键管理
+    details: '可自定义的全局快捷键，快速执行设备操作'
 ---

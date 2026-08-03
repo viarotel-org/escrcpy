@@ -1,8 +1,9 @@
 <template>
   <el-button
-    type="danger"
+    type="primary"
     text
-    :loading
+    circle
+    :loading="loading"
     :icon="loading ? '' : 'Delete'"
     :title="$t('common.remove')"
     @click="handleClick(device)"

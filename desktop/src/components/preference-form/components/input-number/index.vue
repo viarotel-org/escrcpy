@@ -6,7 +6,7 @@
       clearable: true,
       ...(data.props || {}),
     }"
-    @update:model-value="(val) => $emit('update:model-value', Number(val))"
+    @update:model-value="(val) => $emit('update:model-value', val ? Number(val) : undefined)"
   >
     <template v-if="data.append" #append>
       {{ data.append }}

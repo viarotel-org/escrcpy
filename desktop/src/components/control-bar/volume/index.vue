@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { useDeviceVolume } from '$/hooks/useDeviceVolume/index.js'
+import { useDeviceVolume } from '$/hooks/use-device-volume/index.js'
 
 const props = defineProps({
   device: {

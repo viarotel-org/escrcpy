@@ -54,8 +54,8 @@
 <script setup>
 import { quote } from 'shell-quote'
 import { openFloatControl } from '$/utils/device/index.js'
-import { useStartApp } from '$/hooks/useStartApp/index.js'
-import { useLaunchOrientation } from '$/hooks/useLaunchOrientation/index.js'
+import { useStartApp } from '$/hooks/use-start-app/index.js'
+import { useLaunchOrientation } from '$/hooks/use-launch-orientation/index.js'
 import AppSelector from '$/components/app-selector/index.vue'
 import { getLaunchKey, getPackageName } from '$/utils/launch/index.js'
 

@@ -19,7 +19,6 @@ window.$preload.ipcRenderer.on('quit-before', async () => {
 })
 
 const startApp = useStartApp()
-const scheduleStore = useScheduleStore()
 
 window.$preload.ipcRenderer.on('execute-arguments-change', async (event, params) => {
   startApp.open(params)
@@ -32,7 +31,6 @@ window.$preload.ipcRenderer.on('navigate-to-route', (event, route) => {
 onMounted(() => {
   showTips()
   startApp.open()
-  scheduleStore.recoverSchedules()
 })
 
 async function showTips() {

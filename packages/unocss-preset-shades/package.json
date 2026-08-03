@@ -1,0 +1,31 @@
+{
+  "name": "@escrcpy/unocss-preset-shades",
+  "type": "module",
+  "version": "3.0.8",
+  "private": true,
+  "description": "🎨 A UnoCSS preset that automatically generates a full range of shades from light to dark based on a specified base color, injecting CSS variables and theme color configurations.",
+  "author": "viarotel",
+  "homepage": "https://github.com/viarotel-org/escrcpy",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "peerDependencies": {
+    "unocss": ">=60.0.0"
+  },
+  "dependencies": {
+    "color": "^5.0.3"
+  }
+}

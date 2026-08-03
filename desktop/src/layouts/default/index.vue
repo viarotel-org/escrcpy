@@ -42,15 +42,15 @@ const route = useRoute()
 
 const tabsModel = [
   {
-    label: 'device.list',
+    label: 'menus.device.name',
     value: '/device',
   },
   {
-    label: 'preferences.name',
+    label: 'menus.preference.name',
     value: '/preference',
   },
   {
-    label: 'about.name',
+    label: 'menus.about.name',
     value: '/about',
   },
 ]

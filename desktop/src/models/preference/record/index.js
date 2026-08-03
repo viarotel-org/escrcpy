@@ -6,7 +6,7 @@ export default {
       label: 'preferences.record.format.name',
       field: '--record-format',
       type: 'Select',
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.record.format.placeholder',
       options: [
         {
@@ -24,7 +24,7 @@ export default {
       field: '--audio-record-format',
       customized: true,
       type: 'Select',
-      value: void 0,
+      value: undefined,
       placeholder: 'preferences.record.format.audio.placeholder',
       options: [
         {
@@ -80,6 +80,7 @@ export default {
       field: '--no-video-playback',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.record.noVideoPlayback.placeholder',
       tips: 'preferences.record.noVideoPlayback.tips',
     },
@@ -88,6 +89,7 @@ export default {
       field: '--no-audio-playback',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.record.noAudioPlayback.placeholder',
       tips: 'preferences.record.noAudioPlayback.tips',
     },

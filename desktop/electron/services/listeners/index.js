@@ -4,7 +4,7 @@ export default {
   name: 'service:listeners',
   apply() {
     ipcMain.on('restart-app', () => {
-      app.isQuiting = true
+      app.isQuitting = true
       app.relaunch()
       app.quit()
     })

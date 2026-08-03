@@ -1,3 +1,8 @@
+import { execSync } from 'node:child_process'
+
+const raw = execSync('npm config get electron_mirror').toString().trim()
+const mirror = (raw && raw !== 'undefined') ? raw : null
+
 /** @type {import('electron-builder').Configuration} */
 export default {
   productName: 'Escrcpy',
@@ -11,8 +16,6 @@ export default {
   files: [
     'dist',
     'dist-electron',
-    '!**/node_modules/@img/sharp-*/**/*',
-    '**/node_modules/@img/sharp-*${platform}-${arch}/**/*',
     '!**/node_modules/@lydell/node-pty-*/**/*',
     '**/node_modules/@lydell/node-pty-*${platform}-${arch}/**/*',
   ],
@@ -20,9 +23,7 @@ export default {
   asar: true,
 
   asarUnpack: [
-    '**/node_modules/sharp/**/*',
-    '**/node_modules/@img/**/*',
-    '**/node_modules/@lydell/**/*',
+    '**/node_modules/@lydell/node-pty*/**/*',
   ],
 
   win: {
@@ -134,5 +135,9 @@ export default {
     owner: 'viarotel-org',
     repo: 'escrcpy',
     updaterCacheDirName: 'escrcpy-updater',
+  },
+
+  electronDownload: {
+    mirror,
   },
 }

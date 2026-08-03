@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/electron-ipcx",
   "type": "module",
-  "version": "2.11.1",
+  "version": "3.0.8",
   "private": false,
   "description": "A more intuitive electron ipc system with function proxy support",
   "author": "viarotel",
@@ -12,7 +12,7 @@
     "./renderer": "./dist/renderer/index.mjs",
     "./package.json": "./package.json"
   },
-  "types": "./dist/main/index.d.ts",
+  "types": "./dist/main/index.d.mts",
   "files": [
     "README.md",
     "dist"

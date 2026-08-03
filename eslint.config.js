@@ -14,6 +14,7 @@ export default antfu(
     },
     ignores: [
       '.github',
+      '.trae',
       '.vscode',
       'node_modules',
       'dist',
@@ -56,6 +57,7 @@ export default antfu(
 
       'import/default': 'off',
       'import/order': 'off',
+      'antfu/no-import-dist': 'off',
 
       'node/prefer-global/process': 'off',
       'node/prefer-global/buffer': 'off',

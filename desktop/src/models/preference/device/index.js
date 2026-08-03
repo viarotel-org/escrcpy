@@ -16,6 +16,7 @@ export default {
       field: '--stay-awake',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.stayAwake.placeholder',
       tips: 'preferences.device.stayAwake.tips',
     },
@@ -24,6 +25,7 @@ export default {
       field: '--keep-active',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.keepActive.placeholder',
     },
     turnScreenOff: {
@@ -31,6 +33,7 @@ export default {
       field: '--turn-screen-off',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.turnScreenOff.placeholder',
     },
     powerOffOnClose: {
@@ -38,6 +41,7 @@ export default {
       field: '--power-off-on-close',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.powerOffOnClose.placeholder',
     },
     noPowerOn: {
@@ -45,6 +49,7 @@ export default {
       field: '--no-power-on',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.noPowerOn.placeholder',
       tips: 'preferences.device.noPowerOn.tips',
     },
@@ -53,6 +58,7 @@ export default {
       field: '--show-touches',
       type: 'Switch',
       value: undefined,
+      unset: [false],
       placeholder: 'preferences.device.showTouches.placeholder',
       tips: 'preferences.device.showTouches.tips',
     },

@@ -30,7 +30,7 @@
           <div
             v-for="device of targetDevices"
             :key="device.id"
-            class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+            class="flex items-center p-3 border rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <el-checkbox :value="device.id" class="mr-3 w-full">
               <div class="flex flex-col space-y-1">
@@ -48,7 +48,7 @@
     </div>
 
     <template #footer>
-      <div class="flex justify-end space-x-2">
+      <div class="flex justify-end gap-2 !*:ml-0">
         <el-button @click="handleCancel">
           {{ $t('common.cancel') }}
         </el-button>

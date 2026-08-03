@@ -12,7 +12,7 @@
   >
     <div class="flex flex-col h-full overflow-hidden">
       <!-- Path breadcrumb -->
-      <div class="flex-none flex items-center mb-4 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+      <div class="flex-none flex items-center mb-4 bg-white dark:bg-gray-800 rounded-full p-1">
         <el-button
           text
           icon="Top"
@@ -43,7 +43,7 @@
       </div>
 
       <!-- Directory list -->
-      <div class="flex-1 min-h-0 border rounded-lg overflow-hidden">
+      <div class="flex-1 min-h-0 rounded-lg overflow-hidden bg-white dark:bg-gray-800">
         <el-scrollbar>
           <div v-loading="loading" class="min-h-full">
             <div
@@ -65,7 +65,7 @@
       </div>
 
       <!-- Currently selected path -->
-      <div class="flex-none mt-4 p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
+      <div class="flex-none mt-4 p-2 bg-white dark:bg-gray-800 rounded text-sm">
         <span class="text-gray-500">{{ $t('device.control.file.manager.target.path') }}:</span>
         <span class="ml-2 font-mono">{{ selectedPath || currentPath }}</span>
       </div>

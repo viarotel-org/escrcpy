@@ -36,7 +36,7 @@
           @resize-stop="(x, y, w, h) => onWidgetResizeStop(widget.id, { x, y, width: w, height: h })"
         >
           <div class="widget-content">
-            <div class="widget-header flex w-full space-x-2 p-1">
+            <div class="widget-header flex w-full gap-2 p-1">
               <div class="widget-name text-white flex-1 w-0 truncate" :title="widget.name">
                 {{ widget.name }}
               </div>
@@ -77,7 +77,7 @@
     </div>
 
     <template #footer>
-      <div class="control-panel flex-none flex items-center space-x-2">
+      <div class="control-panel flex-none flex items-center gap-2">
         <el-dropdown type="primary" @command="addWidget">
           <el-button type="primary">
             <template #icon>
@@ -136,7 +136,7 @@
 import { Delete, Monitor, Refresh, Setting } from '@element-plus/icons-vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/style.css'
-import { useScaleScreen } from '$/hooks/useScaleScreen/index.js'
+import { useScaleScreen } from '$/hooks/use-scale-screen/index.js'
 import {
   useAutoArrange,
   useDeviceManagement,

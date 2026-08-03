@@ -46,12 +46,13 @@
               <el-button
                 type="primary"
                 plain
-                class="!border-none !mx-0 !py-0 bg-transparent !rounded-0"
+                class="!border-none !mx-0 !py-0 !rounded-0"
                 :class="[
                   ['unauthorized', 'offline'].includes(device.status) ? '!bg-transparent' : '',
                   buttonClass,
                 ]"
                 :style="{
+                  '--el-button-bg-color': 'transparent',
                   ...buttonHeightStyle,
                 }"
                 :disabled="['unauthorized', 'offline'].includes(device.status)"
@@ -98,7 +99,6 @@ import Gnirehtet from './gnirehtet/index.vue'
 import Rotation from './rotation/index.vue'
 import Screenshot from './screenshot/index.vue'
 import Terminal from './terminal/index.vue'
-import Schedule from './schedule/index.vue'
 import Volume from './volume/index.vue'
 
 export default {
@@ -111,7 +111,6 @@ export default {
     Volume,
     Explorer,
     Terminal,
-    Schedule,
   },
   props: {
     device: {
@@ -222,12 +221,6 @@ export default {
           label: 'device.terminal.name',
           fontIcon: 'i-bi-terminal',
           component: 'Terminal',
-        },
-        schedule: {
-          label: 'device.schedule.name',
-          fontIcon: 'i-bi-clock',
-          component: 'Schedule',
-          hiddenKeys: ['floating'],
         },
         gnirehtet: {
           label: 'device.control.gnirehtet',

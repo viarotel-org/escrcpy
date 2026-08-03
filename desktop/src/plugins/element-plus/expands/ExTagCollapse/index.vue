@@ -1,13 +1,15 @@
 <template>
-  <div class="flex items-center space-x-2">
+  <div class="flex items-center gap-2">
     <ElTag
       v-for="(item, index) of visibleTags"
       :key="index"
       v-bind="$props"
-      :class="{
+      :class="[
+        {
+          '!border-none': borderless,
+        },
         tagClass,
-        '!border-none': borderless,
-      }"
+      ]"
       :title="showLabel(item)"
     >
       {{ showLabel(item) }}

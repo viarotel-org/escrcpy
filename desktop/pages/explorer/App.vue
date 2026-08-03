@@ -96,6 +96,14 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
+
+            <QuickAccessDropdown
+              :favorites="explorer.quickAccess.favorites.value"
+              :recent="explorer.quickAccess.recentItems.value"
+              @select="handleQuickAccessSelect"
+              @remove-favorite="explorer.quickAccess.removeFavorite"
+              @clear-recent="explorer.quickAccess.clearRecent"
+            />
           </div>
 
           <el-button
@@ -154,6 +162,7 @@
             row-key="id"
             height="100%"
             class="el-table--beautify"
+            highlight-current-row
             @selection-change="handleSelectionChange"
             @row-click="handleRowClick"
             @row-contextmenu="handleContextMenu"
@@ -163,6 +172,7 @@
             <el-table-column prop="name" :label="$t('common.name')" sortable show-overflow-tooltip min-width="200">
               <template #default="{ row }">
                 <div
+                  :id="row.id"
                   class="flex items-center cursor-pointer hover:text-primary-500 hover:underline"
                   :class="{ 'opacity-50': explorer.clipboard.isCut(row) }"
                   @click.stop="handleNameClick(row)"
@@ -177,53 +187,66 @@
 
             <el-table-column prop="updateTime" :label="$t('time.update')" sortable align="left" min-width="150" />
 
-            <el-table-column :label="$t('common.actions')" align="left" min-width="200">
+            <el-table-column :label="$t('common.actions')" align="left" min-width="150">
               <template #default="{ row }">
-                <el-button
-                  :title="$t('device.control.file.manager.preview')"
-                  text
-                  type="success"
-                  icon="View"
-                  circle
-                  :class="['file'].includes(row.type) ? '!visible' : '!invisible'"
-                  @click.stop="handlePreview(row)"
-                />
+                <div class="!*:ml-0">
+                  <el-button
+                    :title="$t('device.control.file.manager.preview')"
+                    text
+                    type="success"
+                    icon="View"
+                    circle
+                    :class="['file'].includes(row.type) ? '!visible' : '!invisible'"
+                    @click.stop="handlePreview(row)"
+                  />
 
-                <el-button
-                  :title="$t('common.download')"
-                  text
-                  type="primary"
-                  icon="Download"
-                  circle
-                  @click.stop="handleDownload(row)"
-                />
+                  <el-button
+                    :title="$t('common.download')"
+                    text
+                    type="primary"
+                    icon="Download"
+                    circle
+                    @click.stop="handleDownload(row)"
+                  />
 
-                <el-button
-                  :title="$t('device.control.file.manager.edit')"
-                  text
-                  type="success"
-                  icon="Edit"
-                  circle
-                  @click.stop="handleEdit(row)"
-                />
+                  <el-button
+                    :title="$t('device.control.file.manager.edit')"
+                    text
+                    type="success"
+                    icon="Edit"
+                    circle
+                    @click.stop="handleEdit(row)"
+                  />
 
-                <el-button
-                  :title="$t('device.control.file.manager.move')"
-                  text
-                  type="info"
-                  icon="Rank"
-                  circle
-                  @click.stop="handleMoveItem(row)"
-                />
+                  <el-button
+                    :title="$t('device.control.file.manager.move')"
+                    text
+                    type="info"
+                    icon="Rank"
+                    circle
+                    @click.stop="handleMoveItem(row)"
+                  />
 
-                <el-button
-                  :title="$t('common.delete')"
-                  text
-                  type="danger"
-                  icon="Delete"
-                  circle
-                  @click.stop="handleRemove(row)"
-                />
+                  <el-button
+                    :title="explorer.quickAccess.isFavorite(row.id)
+                      ? $t('device.control.file.manager.unfavorite')
+                      : $t('device.control.file.manager.favorite')"
+                    text
+                    :type="explorer.quickAccess.isFavorite(row.id) ? 'warning' : 'default'"
+                    :icon="explorer.quickAccess.isFavorite(row.id) ? 'StarFilled' : 'Star'"
+                    circle
+                    @click.stop="handleToggleFavorite(row)"
+                  />
+
+                  <el-button
+                    :title="$t('common.delete')"
+                    text
+                    type="danger"
+                    icon="Delete"
+                    circle
+                    @click.stop="handleRemove(row)"
+                  />
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -271,11 +294,12 @@
 
 <script setup>
 import AppHeader from '$/components/app-header/index.vue'
-import useExplorer from '$/hooks/useExplorer'
+import useExplorer from '$/hooks/use-explorer'
 import AddPopover from './components/add/index.vue'
 import DragUpload from './components/upload/drag.vue'
 import EditDialog from './components/edit/index.vue'
 import MoveDialog from './components/move/index.vue'
+import QuickAccessDropdown from './components/quick/index.vue'
 
 const deviceStore = useDeviceStore()
 const preferenceStore = usePreferenceStore()
@@ -313,6 +337,45 @@ const deviceName = computed(() => {
 watch(() => explorer.breadcrumbs.value.length, async () => {
   await nextTick()
   scrollableRef.value?.scrollToEnd?.()
+})
+
+watch(() => explorer.quickAccess.pendingHighlightId.value, async (highlightId) => {
+  if (!highlightId) {
+    return false
+  }
+
+  await new Promise((resolve) => {
+    const unwatch = watch(() => explorer.files.value, (files) => {
+      if (!files.length) {
+        return false
+      }
+
+      unwatch()
+      nextTick(() => {
+        resolve()
+      })
+    })
+
+    setTimeout(() => {
+      unwatch()
+      resolve()
+    }, 1000)
+  })
+
+  const files = explorer.files.value
+  const rowIndex = files.findIndex(f => f.id === highlightId)
+
+  if (rowIndex >= 0 && tableRef.value) {
+    const el = document.getElementById(highlightId)
+
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    tableRef.value.setCurrentRow(files[rowIndex], true)
+  }
+
+  explorer.quickAccess.clearPendingHighlight()
 })
 
 function handleSelectionChange(selection) {
@@ -630,6 +693,26 @@ function handleContextMenu(row, column, event) {
 
 async function handleRowClick(row) {
   tableRef.value?.toggleRowSelection(row)
+}
+
+function toQuickAccessItem(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    type: row.type,
+    parentPath: row.path || explorer.currentPath.value,
+  }
+}
+
+function handleToggleFavorite(row) {
+  explorer.quickAccess.toggleFavorite(toQuickAccessItem(row))
+}
+
+async function handleQuickAccessSelect(item) {
+  const result = await explorer.quickAccess.open(item)
+  if (!result.success && result.error === 'pathNotFound') {
+    ElMessage.warning(window.t('device.control.file.manager.pathNotFound'))
+  }
 }
 </script>
 

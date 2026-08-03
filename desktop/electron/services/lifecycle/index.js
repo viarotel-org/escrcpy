@@ -2,7 +2,13 @@ import { app, BrowserWindow } from 'electron'
 import remote from '@electron/remote/main'
 import { optimizer } from '@electron-toolkit/utils'
 import { globalEventEmitter } from '$electron/helpers/emitter/index.js'
-import { ensureSingleInstance, injectExecuteArguments, parseExecuteArguments, restoreAndFocusWindow } from './helpers/index.js'
+import {
+  ensureSingleInstance,
+  injectExecuteArguments,
+  parseExecuteArguments,
+  restoreAndFocusWindow,
+} from './helpers/index.js'
+
 import { resolveMainWindow } from '@escrcpy/electron-setup/main'
 
 export default {
@@ -10,6 +16,13 @@ export default {
   deps: ['module:main'],
   apply(mainApp) {
     const windowManager = mainApp.getWindowManager('main')
+
+    app.isQuitting = false
+    let quittingPromise = null
+
+    globalEventEmitter.on('app:quit', () => {
+      requestQuit()
+    })
 
     ensureSingleInstance({
       onCreateWindow: openMainWindow,
@@ -29,7 +42,7 @@ export default {
 
       const args = runExecuteArguments(process.argv, mainWindow)
 
-      if (args.minimized) {
+      if (args?.minimized) {
         globalEventEmitter.emit('tray:create')
         return false
       }
@@ -42,48 +55,63 @@ export default {
 
       const args = runExecuteArguments(commandLine, mainWindow)
 
-      if (!args['device-id']) {
+      if (!args?.['device-id']) {
         restoreAndFocusWindow(mainWindow)
       }
     }
 
-    /**
-     * Enable keyboard shortcut monitoring for all windows
-     */
     app.on('browser-window-created', (_, window) => {
       optimizer.watchWindowShortcuts(window)
     })
 
-    /**
-     * activate event (macOS)
-     * Restore window when clicking dock icon
-     */
     app.on('activate', async () => {
-      // If no windows exist, let singleton plugin handle window creation
       if (BrowserWindow.getAllWindows().length === 0) {
         return
       }
 
       const mainWindow = await resolveMainWindow(mainApp)
-
       restoreAndFocusWindow(mainWindow)
     })
 
-    /**
-     * window-all-closed event
-     * Quit application when all windows are closed
-     */
     app.on('window-all-closed', () => {
-      app.isQuiting = true
-      app.quit()
+      requestQuit()
     })
 
-    /**
-     * Run execute arguments handling
-     */
+    app.on('before-quit', (event) => {
+      if (app.isQuitting) {
+        return
+      }
+
+      event.preventDefault()
+      requestQuit()
+    })
+
+    function requestQuit() {
+      if (app.isQuitting) {
+        return
+      }
+
+      app.isQuitting = true
+
+      if (quittingPromise) {
+        return
+      }
+
+      quittingPromise = (async () => {
+        try {
+          await mainApp.stop()
+        }
+        catch (error) {
+          console.error('[lifecycle] App cleanup failed:', error?.message || error)
+        }
+        finally {
+          app.quit()
+        }
+      })()
+    }
+
     function runExecuteArguments(commandLine = '', mainWindow) {
       try {
-        // Parse command line arguments
         const args = parseExecuteArguments(commandLine)
 
         if (!args) {
@@ -91,10 +119,8 @@ export default {
           return null
         }
 
-        // Inject arguments into environment variables
         injectExecuteArguments(args)
 
-        // Send IPC message to renderer process
         if (mainWindow?.webContents && !mainWindow.isDestroyed?.()) {
           mainWindow.webContents.send('execute-arguments-change', {
             deviceId: args['device-id'],

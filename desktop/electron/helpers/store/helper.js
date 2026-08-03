@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import { isEqual, set } from 'lodash-es'
+import { get, isEqual, set } from 'lodash-es'
 import { createProxy } from '$electron/helpers/index.js'
 
 export function createStore(options = {}) {
@@ -46,6 +46,14 @@ export function resolveStore(store) {
       }
 
       store.set(...args)
+    },
+
+    get(...args) {
+      if (Array.isArray(args[0])) {
+        return get(store.store, args[0])
+      }
+
+      return store.get(...args)
     },
   }
 }

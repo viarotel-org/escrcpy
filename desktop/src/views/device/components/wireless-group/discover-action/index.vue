@@ -3,7 +3,7 @@
     type="default"
     :loading="loading"
     :title="$t('device.wireless.connect.discover.tips')"
-    class="flex-none"
+    class="flex-none !mx-0"
     @click="handleClick"
   >
     <template v-if="!loading" #icon>

@@ -13,9 +13,9 @@ jobs:
 
     steps:
       - name: Update Homebrew cask
-        uses: LanikSJ/homebrew-bump-cask@v1
+        uses: LanikSJ/homebrew-bump-cask@v2
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.GH_TOKEN }}
           tap: viarotel-org/escrcpy
           cask: escrcpy
           livecheck: true

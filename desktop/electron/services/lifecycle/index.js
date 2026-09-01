@@ -82,7 +82,7 @@ export default {
         return
       }
 
-      event.preventDefault()
+      // Do NOT call event.preventDefault() — let the quit proceed normally.
       requestQuit()
     })
 

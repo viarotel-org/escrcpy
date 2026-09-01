@@ -1,5 +1,5 @@
 import { sheller } from '$electron/helpers/shell/index.js'
-import { getAdbPath } from '$electron/configs/index.js'
+import { getAdb } from '$electron/configs/index.js'
 import { BaseTerminalProvider } from './base.js'
 
 /**
@@ -31,7 +31,7 @@ export class DeviceTerminalProvider extends BaseTerminalProvider {
     }
 
     this.deviceId = deviceId
-    const adbPath = getAdbPath()
+    const adbPath = getAdb()
 
     try {
       let isEnded = false

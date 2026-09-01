@@ -34,7 +34,7 @@ export function useScreenshotAction({ floating } = {}) {
     )}.jpg`
 
     const deviceConfig = preferenceStore.getDataWithFallback(device.id)
-    const savePath = window.$preload.path.resolve(deviceConfig.savePath, fileName)
+    const savePath = window.$preload.path.resolve(deviceConfig.saveDir, fileName)
 
     try {
       await window.$preload.adb.screencap(device.id, { savePath })

@@ -1,16 +1,19 @@
+import { defineConfig, mergeConfig } from 'vite'
+
+import { rmSync } from 'node:fs'
 import { resolve } from 'node:path'
-import useVueRouter from 'unplugin-vue-router/vite'
+
+import useVueRouter from 'vue-router/vite'
 import useVue from '@vitejs/plugin-vue'
 import useVueJsx from '@vitejs/plugin-vue-jsx'
 import useUnoCSS from 'unocss/vite'
-import { defineConfig, mergeConfig } from 'vite'
 
 import useElectron from 'vite-plugin-electron/simple'
-import useRenderer from 'vite-plugin-electron-renderer'
-
-import postcssConfig from './postcss.config.js'
+import { notBundle } from 'vite-plugin-electron/plugin'
 
 import useInternalPlugins from './src/plugins/internal.js'
+
+import postcssConfig from './postcss.config.js'
 
 const alias = {
   $: resolve('src'),
@@ -23,33 +26,41 @@ const alias = {
   $terminal: resolve('pages/terminal'),
 }
 
-function mergeCommon(config, { command = '' } = {}) {
-  return mergeConfig(
-    {
-      resolve: {
-        alias,
-      },
-      build: {
-        rollupOptions: {
-          external: [
-            'i18next-fs-backend',
-            '@lydell/node-pty',
-          ],
-        },
+function mergeCommon(config) {
+  return mergeConfig({
+    resolve: {
+      alias,
+    },
+    build: {
+      rolldownOptions: {
+        external: [
+          'i18next-fs-backend',
+          '@lydell/node-pty',
+        ],
       },
     },
-    config,
-  )
+  },
+  config)
 }
 
-export default function (args) {
+export default defineConfig((args) => {
+  rmSync('dist-electron', { recursive: true, force: true })
+
+  const { command } = args
+
+  const isServe = command === 'serve'
+  const isBuild = command === 'build'
+  const sourcemap = (isServe || !!process.env.VSCODE_DEBUG) ? 'inline' : undefined
+
   return mergeCommon(
     defineConfig({
       server: {
         port: 1535,
       },
       build: {
-        rollupOptions: {
+        sourcemap,
+        minify: isBuild,
+        rolldownOptions: {
           input: {
             main: resolve('index.html'),
             control: resolve('pages/control/index.html'),
@@ -92,33 +103,45 @@ export default function (args) {
       plugins: [
         useUnoCSS(),
         useVueRouter({
-          routesFolder: 'src/views',
-          exclude: ['src/views/**/components'],
+          routesFolder: [
+            {
+              src: './src/views',
+              exclude: [
+                '**/modules',
+                '**/components',
+              ],
+            },
+          ],
         }),
         useVue(),
         useVueJsx(),
         useElectron({
           main: {
             entry: 'electron/main.js',
-            vite: mergeCommon({}, args),
+            vite: mergeCommon({
+              plugins: [notBundle()],
+            }, args),
             onstart(args) {
               args.startup()
             },
           },
           preload: {
-            input: 'electron/preload.js',
-            vite: mergeCommon({}, args),
+            entry: 'electron/preload.js',
+            vite: mergeCommon({
+              plugins: [notBundle()],
+            }, args),
             onstart(args) {
               args.reload()
             },
           },
+          renderer: {},
         }),
-        useRenderer(),
         ...useInternalPlugins(),
       ],
       css: {
         postcss: postcssConfig,
       },
+      clearScreen: false,
     }),
   )
-}
+})

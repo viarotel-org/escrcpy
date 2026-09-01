@@ -18,13 +18,17 @@ export default {
     }
 
     // Trigger update check (intended to be called from the renderer, e.g. when user clicks "check for updates")
+    // The returned promise MUST be caught: electron-updater downloads the feed
+    // via SimpleURLLoader, and network failures (e.g. net::ERR_CONNECTION_CLOSED
+    // when GitHub is unreachable) would otherwise surface as unhandledRejection.
+    // The autoUpdater 'error' event already notifies the renderer.
     ipcMain.on('check-for-update', () => {
-      autoUpdater.checkForUpdates()
+      autoUpdater.checkForUpdates().catch(error => console.warn('update-check-failed', error?.message ?? error))
     })
 
     // Download update
     ipcMain.on('download-update', () => {
-      autoUpdater.downloadUpdate()
+      autoUpdater.downloadUpdate().catch(error => console.warn('update-download-failed', error?.message ?? error))
     })
 
     // Install update

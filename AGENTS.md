@@ -8,7 +8,8 @@ Escrcpy is a pnpm + Turborepo monorepo for an Electron GUI around Android mirror
 - Renderer windows are separate Vite entries in [desktop/vite.config.js](../desktop/vite.config.js): `main`, `control`, `explorer`, `copilot`, `terminal`, `automation`, and `mirror`.
 - Window modules live under [desktop/electron/modules/](../desktop/electron/modules/). Register main-process features as modules/services instead of adding logic to the preload script.
 - [packages/electron-setup/](../packages/electron-setup/) provides app/plugin/window management primitives. [packages/electron-ipcx/README.md](../packages/electron-ipcx/README.md) documents IPC with renderer callbacks.
-- [packages/wscrcpy/](../packages/wscrcpy/) contains scrcpy session/client logic. Preserve its `WscrcpySession` model and `DeviceTarget = 'all' | 'primary' | string | string[]` contract.
+- [packages/wscrcpy/](../packages/wscrcpy/) is a self-contained Vue + TS module built from `src/` (tsdown + unplugin-vue, declarations via vue-tsc). Two process-scoped entries: the package root exports the renderer-facing API (`Wscrcpy` component, composables, core helpers/types), and `@escrcpy/wscrcpy/main` exports the main-process ByteBridge factory — never import the root from main or `./main` from a renderer. `service/bridge/` is a thin main-process TCP ⇄ MessagePort pump; `src/stack/` owns the full protocol stack inside each window; `src/core/runtime.ts` routes every wscrcpy channel to the local stack. Preserve the public signatures and the `DeviceTarget = 'all' | 'primary' | string | string[]` contract; business code stays untouched across internal changes.
+- [packages/madb/](../packages/madb/) is an MCP server for AI agent Android device control via ADB and yadb (32 tools). See its [AGENTS.md](../packages/madb/AGENTS.md).
 - [packages/adbx/](../packages/adbx/) is an injected adbkit capability layer; it prefers yadb when available and falls back to standard ADB.
 - [packages/shared/](../packages/shared/) contains platform-neutral utilities shared across workspace packages.
 - [packages/unocss-preset-shades/](../packages/unocss-preset-shades/) is an UnoCSS preset that generates color shades from a base color.
@@ -22,7 +23,7 @@ Escrcpy is a pnpm + Turborepo monorepo for an Electron GUI around Android mirror
 - Docs: `pnpm docs:dev`, `pnpm docs:build`, `pnpm docs:preview`.
 - i18n sync: `pnpm lang-sync` after editing locale keys in `desktop/electron/resources/extra/common/locales/*.json`.
 - Electron install repair: `pnpm electron-fix` when Electron reports an incomplete install.
-- wscrcpy type check: `pnpm exec tsc -p packages/wscrcpy/tsconfig.json --pretty false`.
+- wscrcpy type check: `pnpm --filter @escrcpy/wscrcpy typecheck` (vue-tsc; plain tsc cannot resolve `.vue` imports).
 
 There is no repo-wide test script today. For changes, run the smallest meaningful verification first, then `pnpm lint`; use `pnpm build` for packaging, Electron main-process, Vite config, dependency, or release-sensitive changes.
 
@@ -52,7 +53,8 @@ There is no repo-wide test script today. For changes, run the smallest meaningfu
 - In `desktop/electron/middleware/scrcpy`, never resolve a ready Promise with the scrcpy process object directly. It is thenable-like and Promise resolution can adopt it, causing `resolveOnReady` to hang; resolve with plain data or `undefined`.
 - Turbo disables caching for Electron packaging in [turbo.json](../turbo.json). Do not assume packaging output is incremental or cache-backed.
 - Native dependencies such as `sharp`, Electron, Vite, tsdown, and TypeScript are pinned/overridden in [pnpm-workspace.yaml](../pnpm-workspace.yaml); change them deliberately.
-- Audio in wscrcpy is intentionally opt-in by default. On Windows, audio plus control should default `clipboardAutosync` to `false` because clipboard device messages can destabilize the controller while streams keep running.
+- Audio in wscrcpy is intentionally opt-in by default. When audio and control are both enabled, `createScrcpyOptions` (packages/wscrcpy/src/options.ts) defaults `clipboardAutosync` to `false` because clipboard device messages can destabilize the controller while streams keep running; an explicit user preference always wins. Do not gate audio playback on the host platform — WebCodecs + Web Audio work identically on Windows/macOS/Linux.
+- Wscrcpy defaults to forward tunnel mode (`tunnelForward: true` in createScrcpyOptions). Reverse mode assigns video/audio/control by TCP accept order, but the adb server forwards the device's connections concurrently and may deliver them out of order on Windows, swapping the control and audio sockets (audio hangs forever, control writes are silently discarded). Forward mode identifies each stream by ADB protocol local-id, which removes the race.
 - The desktop app is mostly JavaScript/JSDoc, while workspace packages may be TypeScript. Do not add broad strict TS assumptions to the desktop renderer/main app.
 - Use kebab-case for new directories and files.
 

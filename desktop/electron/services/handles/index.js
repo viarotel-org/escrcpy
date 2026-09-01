@@ -48,6 +48,9 @@ export default {
       const scaleFactor = primaryDisplay.scaleFactor || 1
 
       primaryDisplay.titleBarHeight = Math.round(30 * scaleFactor)
+      // Exposed so renderers can reason about coordinate units consistently
+      // with the main process (physical px on win32/linux, DIP on darwin).
+      primaryDisplay.platform = process.platform
 
       return primaryDisplay
     })

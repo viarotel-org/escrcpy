@@ -34,9 +34,9 @@ onMounted(() => {
 })
 
 async function showTips() {
-  const { getScrcpyPath } = window.$preload.configs || {}
+  const { getScrcpy } = window.$preload.configs || {}
 
-  const scrcpyPath = getScrcpyPath?.({ store: window.$preload.store })
+  const scrcpyPath = getScrcpy?.({ store: window.$preload.store })
 
   if (scrcpyPath) {
     return false

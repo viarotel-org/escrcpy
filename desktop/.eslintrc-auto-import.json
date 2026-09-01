@@ -379,6 +379,11 @@
     "useGnirehtetAction": true,
     "useOtgAction": true,
     "useQuickAccess": true,
-    "useRecordAction": true
+    "useRecordAction": true,
+    "createDisposableDirective": true,
+    "definePage": true,
+    "useAppUpdate": true,
+    "useCssSupports": true,
+    "useElementOverflow": true
   }
 }

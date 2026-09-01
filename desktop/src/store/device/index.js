@@ -33,7 +33,10 @@ export const useDeviceStore = defineStore('app-device', () => {
 
     const appName = capitalize(packageName)
     const deviceSerial = data.id.replaceAll(/[<>:"/\\|?*]/g, '_')
-    const deviceName = `${data.remark || data.name}[${deviceSerial}]`
+    // Fallback for devices without remark/name (e.g. partially hydrated payloads)
+    // so labels and generated file names never contain a literal `undefined`.
+    const displayName = data.remark || data.name || window.t?.('common.unknownDevice') || 'Unknown Device'
+    const deviceName = `${displayName}[${deviceSerial}]`
     const currentTime = dayjs().format('YYYYMMDDHHmmss')
     let value = `${deviceName}-${appName}`
 

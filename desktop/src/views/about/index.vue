@@ -11,14 +11,14 @@
 
       <div class="pt-[4vh]">
         <el-button
-          :loading="loading"
+          :loading="state.checking || state.downloading"
           type="primary"
           :size="$grid.lg ? 'large' : 'default'"
           @click="handleUpdate"
         >
           {{
-            loading && percent
-              ? `${$t("about.update.progress")}...（${percent.toFixed(1)}%）`
+            state.downloading && state.percent
+              ? `${$t("about.update.progress")}...（${state.percent.toFixed(1)}%）`
               : $t("about.update")
           }}
         </el-button>
@@ -47,17 +47,15 @@
     </div>
 
     <SponsorDialog ref="sponsorDialogRef" />
-    <UpdateDialog ref="updateDialogRef" />
   </div>
 </template>
 
 <script setup>
 import { homepage, version } from '/package.json'
 import SponsorDialog from './components/sponsor-dialog/index.vue'
-import UpdateDialog from './components/update-dialog/index.vue'
 
-const loading = ref(false)
-const percent = ref(0)
+const { state, checkForUpdate, openDialog } = useAppUpdate()
+
 const escrcpyURL = homepage
 const { language: locale } = useI18n()
 
@@ -70,7 +68,6 @@ const docsUrl = computed(() => {
 })
 
 const sponsorDialogRef = ref()
-const updateDialogRef = ref()
 
 function onDonateClick() {
   sponsorDialogRef.value.open()
@@ -81,85 +78,13 @@ function onDocsClick() {
 }
 
 function handleUpdate() {
-  loading.value = true
-  window.$preload.ipcRenderer.send('check-for-update')
+  if (state.updateAvailable) {
+    openDialog()
+  }
+  else {
+    checkForUpdate()
+  }
 }
-
-function onUpdateNotAvailable() {
-  window.$preload.ipcRenderer.on('update-not-available', () => {
-    loading.value = false
-    ElMessage.success(window.t('about.update-not-available'))
-  })
-}
-
-function onDownloadProgress() {
-  window.$preload.ipcRenderer.on('download-progress', (event, ret) => {
-    percent.value = ret.percent
-  })
-}
-
-function onUpdateDownloaded() {
-  window.$preload.ipcRenderer.on('update-downloaded', async () => {
-    loading.value = false
-    try {
-      await ElMessageBox.confirm(
-        window.t('about.update-downloaded.message'),
-        window.t('about.update-downloaded.title'),
-        {
-          confirmButtonText: window.t('about.update-downloaded.confirm'),
-          cancelButtonText: window.t('common.cancel'),
-          closeOnClickModal: false,
-        },
-      )
-      window.$preload.ipcRenderer.send('quit-and-install')
-    }
-    catch (error) {
-      console.warn(error.message)
-    }
-  })
-}
-
-function onUpdateError() {
-  window.$preload.ipcRenderer.on('update-error', async (_, ret) => {
-    loading.value = false
-    try {
-      await ElMessageBox.confirm(
-        window.t('about.update-error.message'),
-        window.t('about.update-error.title'),
-        {
-          closeOnClickModal: false,
-          type: 'error',
-        },
-      )
-      window.open(`${docsUrl.value}/guide/started`)
-    }
-    catch (error) {
-      console.warn(error.message)
-    }
-  })
-}
-
-function onUpdateAvailable() {
-  window.$preload.ipcRenderer.on('update-available', async (_, ret) => {
-    loading.value = false
-
-    updateDialogRef.value.open({
-      releaseNotes: ret.releaseNotes,
-      onConfirm() {
-        window.$preload.ipcRenderer.send('download-update')
-        loading.value = true
-      },
-    })
-  })
-}
-
-onMounted(() => {
-  onUpdateNotAvailable()
-  onUpdateAvailable()
-  onDownloadProgress()
-  onUpdateDownloaded()
-  onUpdateError()
-})
 </script>
 
 <style></style>

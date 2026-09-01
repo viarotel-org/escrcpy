@@ -7,6 +7,7 @@
       :class="[
         {
           '!border-none': borderless,
+          'el-tag--plain-text': $props.effect === 'plain',
         },
         tagClass,
       ]"
@@ -16,7 +17,14 @@
     </ElTag>
 
     <el-dropdown v-if="collapseTags.length">
-      <ElTag v-bind="$props" type="info" class="app-region-no-drag" :class="[tagClass]">
+      <ElTag
+        v-bind="$props" type="info" class="app-region-no-drag" :class="[
+          tagClass,
+          {
+            'el-tag--plain-text': $props.effect === 'plain',
+          },
+        ]"
+      >
         + {{ collapseTags.length }}
       </ElTag>
 

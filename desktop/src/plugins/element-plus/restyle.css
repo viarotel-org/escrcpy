@@ -222,3 +222,23 @@
     @apply !p-0;
   }
 }
+
+.el-tag--plain-text {
+  @apply !bg-transparent !border-none !p-0 !m-0;
+
+  &.el-tag--info {
+    color: var(--el-text-color-regular);
+  }
+}
+
+.el-progress--mini {
+  .el-progress__text {
+    @apply min-w-auto;
+  }
+}
+
+.el-progress--theme {
+  .el-progress-circle__track {
+    @apply !stroke-gray-200 !dark:stroke-gray-700;
+  }
+}

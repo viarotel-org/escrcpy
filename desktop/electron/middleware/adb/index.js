@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { desktopPath, getDefaultAdbPath, yadbPath } from '$electron/configs/index.js'
+import { desktopPath, yadbPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 import { Adb } from '@devicefarmer/adbkit'
 import { createAdbx } from '@escrcpy/adbx'
@@ -35,14 +35,10 @@ electronAPI.ipcRenderer.on('quit-before', () => {
   processManager.kill()
 })
 
-electronStore.onDidChange('common.adbPath', async (...args) => {
-  const [value, oldValue = getDefaultAdbPath()] = args
+electronStore.onDidChange('common.adbDir', async (...args) => {
+  const [value, oldValue] = args
 
   if (value === oldValue) {
-    return false
-  }
-
-  if (value === client?.options?.bin) {
     return false
   }
 
@@ -115,7 +111,7 @@ async function screencap(deviceId, options = {}) {
   }
 
   const fileName = `Screencap-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.png`
-  const savePath = options.savePath || path.join(electronStore.get('common.savePath') || desktopPath, fileName)
+  const savePath = options.savePath || path.join(electronStore.get('common.saveDir') || desktopPath, fileName)
 
   await fs.promises.writeFile(savePath, screenshot)
   return true
@@ -169,11 +165,11 @@ async function readdir(id, currentPath) {
 }
 
 async function push(id, filePath, args = {}) {
-  const { progress, savePath = '/sdcard/Download' } = args
+  const { progress, saveDir = '/sdcard/Download' } = args
 
   const fileName = path.basename(filePath)
 
-  const fullSavePath = `${savePath}/${fileName}`.replace(/\/+/g, '/')
+  const fullSavePath = `${saveDir}/${fileName}`.replace(/\/+/g, '/')
 
   const transfer = await client.getDevice(id).push(filePath, fullSavePath)
 
@@ -193,11 +189,11 @@ async function push(id, filePath, args = {}) {
 }
 
 async function pull(id, filePath, args = {}) {
-  const { progress, savePath = '../' } = args
+  const { progress, saveDir = '../' } = args
 
   const fileName = path.basename(filePath)
 
-  const fullSavePath = path.resolve(savePath, fileName)
+  const fullSavePath = path.resolve(saveDir, fileName)
 
   const transfer = await client.getDevice(id).pull(filePath)
 

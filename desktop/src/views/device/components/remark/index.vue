@@ -1,56 +1,41 @@
 <template>
-  <el-popover
-    placement="bottom-start"
-    :width="250"
-    trigger="click"
-    @show="onShow"
-  >
-    <template #reference>
-      <el-tag effect="light" class="cursor-pointer">
-        <div class="flex items-center gap-1">
-          <span class="">{{ device.remark || device.name }}</span>
-          <el-icon><EditPen /></el-icon>
-        </div>
-      </el-tag>
-    </template>
-
-    <el-input
-      ref="elInput"
-      v-model="device.remark"
-      class=""
-      :placeholder="$t('common.input.placeholder')"
-      clearable
-      @change="onInputChange"
-    ></el-input>
-  </el-popover>
+  <div class="relative flex items-center group">
+    <Contenteditable
+      :key="contenteditableKey"
+      :model-value="modelValue"
+      nowrap
+      show-edit-button
+      select-all-on-focus
+      allow-empty
+      actions-class="group-hover:inline-flex hidden"
+      @confirm="onConfirm"
+    />
+  </div>
 </template>
 
-<script>
-export default {
-  props: {
-    device: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  setup() {
-    const deviceStore = useDeviceStore()
-    return {
-      deviceStore,
-    }
-  },
-  data() {
-    return {}
-  },
-  methods: {
-    async onShow() {
-      this.$refs.elInput.focus()
-    },
+<script setup>
+import Contenteditable from '$/components/contenteditable/index.vue'
 
-    onInputChange(value) {
-      this.deviceStore.setRemark(this.device.id, value)
-    },
+const props = defineProps({
+  device: {
+    type: Object,
+    default: () => ({}),
   },
+})
+
+const deviceStore = useDeviceStore()
+
+const modelValue = computed(() => props.device.remark || props.device.name)
+
+const contenteditableKey = ref(0)
+
+function onConfirm(value) {
+  deviceStore.setRemark(props.device.id, value)
+
+  // If the value is empty, we need to force re-render the Contenteditable component to show the original value (device name) instead of an empty string.
+  if (!value) {
+    ++contenteditableKey.value
+  }
 }
 </script>
 

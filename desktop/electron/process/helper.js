@@ -1,15 +1,10 @@
-import { delimiter, dirname, join } from 'node:path'
-import { extraResolve } from './resources.js'
-import { getAdbPath, getGnirehtetPath, getScrcpyPath, gnirehtetApkPath } from '$electron/configs/index.js'
+import { existsSync } from 'node:fs'
+import { delimiter, join } from 'node:path'
+import { extraResolve, PLATFORM_MAP } from './resources.js'
+import { getAdb, getUserAdbDir, getUserGnirehtetDir, getUserScrcpyDir, gnirehtetApkPath } from '$electron/configs/index.js'
 import electronStore from '$electron/helpers/store/index.js'
 
 export const rawEnvPath = process.env.RAW_PATH || ''
-
-export const PLATFORM_MAP = Object.freeze({
-  win32: 'win',
-  darwin: 'mac',
-  linux: 'linux',
-})
 
 export function setupEnvPath() {
   const platform = PLATFORM_MAP[process.platform]
@@ -50,30 +45,16 @@ export function setupEnvPath() {
     ],
   }
 
-  const binaryConfigs = {
-    adb: {
-      path: getAdbPath({ onlyStore: true }),
-      defaultDir: extraDirs.adb,
-    },
-    scrcpy: {
-      path: getScrcpyPath({ onlyStore: true }),
-      defaultDir: extraDirs.scrcpy,
-    },
-    gnirehtet: {
-      path: getGnirehtetPath({ onlyStore: true }),
-      defaultDir: extraDirs.gnirehtet,
-    },
-  }
+  // Collect user-configured directories (already directories, no dirname needed)
+  const userDirs = [
+    getUserAdbDir(),
+    getUserScrcpyDir(),
+    getUserGnirehtetDir(),
+  ].filter((dir) => {
+    return dir && !Object.values(extraDirs).flat().includes(dir)
+  })
 
-  const auto = Object.values(binaryConfigs).reduce((arr, { path, defaultDir }) => {
-    const dir = dirnameOrUndefined(path)
-
-    if (dir && dir !== defaultDir && !arr.includes(dir)) {
-      arr.push(dir)
-    }
-
-    return arr
-  }, [])
+  const auto = [...new Set(userDirs)]
 
   process.env.PATH = resolveEnvPath({
     auto,
@@ -82,22 +63,18 @@ export function setupEnvPath() {
     linux: extraDirs.linux,
   })
 
-  setupToolEnv({
-    scrcpyDir: dirnameOrUndefined(binaryConfigs.scrcpy.path),
-    defaultScrcpyDir: extraDirs.scrcpy,
-  })
+  setupToolEnv()
 }
 
-export function setupToolEnv({ scrcpyDir, defaultScrcpyDir }) {
+export function setupToolEnv() {
   // Set environment variables for tools to ensure they can find their dependencies
-  process.env.ADB = getAdbPath()
+  process.env.ADB = getAdb()
   process.env.GNIREHTET_APK = gnirehtetApkPath
 
-  // For scrcpy, we need to set the icon directory and server path via environment variables
-  const shouldUseBundledScrcpyAssets = !scrcpyDir || scrcpyDir === defaultScrcpyDir
-  const currentScrcpyDir = shouldUseBundledScrcpyAssets ? extraResolve('common/scrcpy') : scrcpyDir
-  process.env.SCRCPY_ICON_DIR = currentScrcpyDir
-  process.env.SCRCPY_SERVER_PATH = join(currentScrcpyDir, 'scrcpy-server')
+  const commonScrcpyDir = extraResolve('common/scrcpy')
+
+  process.env.SCRCPY_ICON_DIR = commonScrcpyDir
+  process.env.SCRCPY_SERVER_PATH = getScrcpyResourcesPath({ resourceName: 'scrcpy-server', rollbackDir: commonScrcpyDir })
 
   // Load additional environment variables from the store
   const variables = (electronStore.get('common.environmentVariables') || '').split(/\r?\n/).filter(Boolean)
@@ -131,6 +108,19 @@ export function resolveEnvPath(options = {}) {
   return `${platformPaths.join(delimiter)}${delimiter}${rawEnvPath}`
 }
 
-export function dirnameOrUndefined(filePath) {
-  return filePath ? dirname(filePath) : void 0
+export function getScrcpyResourcesPath(options = {}) {
+  const { rollbackDir, resourceName = 'scrcpy-server' } = options
+
+  const scrcpyDir = getUserScrcpyDir()
+  const resourcePath = dir => join(dir, resourceName)
+
+  if (!scrcpyDir) {
+    return resourcePath(rollbackDir)
+  }
+
+  if (!existsSync(resourcePath(scrcpyDir))) {
+    return resourcePath(rollbackDir)
+  }
+
+  return resourcePath(scrcpyDir)
 }

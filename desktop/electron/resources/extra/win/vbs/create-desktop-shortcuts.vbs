@@ -32,7 +32,10 @@ sub createFile()
   objLink.WorkingDirectory = strCwd
   objLink.IconLocation = strIcon
   objLink.WindowStyle = strWindowMode
-  objLink.Hotkey = strHotkey
+  ' We must skip setting the hotkey if the trimmed value is an empty string to avoid errors (#96).
+  If Trim(strHotkey) <> "" Then
+    objLink.Hotkey = strHotkey
+  End If
   objLink.Save
 end sub
 

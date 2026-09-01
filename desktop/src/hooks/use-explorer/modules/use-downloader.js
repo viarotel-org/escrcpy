@@ -37,7 +37,7 @@ export function useDownloader({ deviceId }) {
    * Download files or folders
    * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to download
    * @param {Object} [options] - Options
-   * @param {string} options.savePath - Local save path
+   * @param {string} options.saveDir - Local save directory
    * @param {Function} [options.onProgress] - Progress callback
    * @param {Function} [options.onScanProgress] - Scan progress callback
    * @param {Function} [options.onError] - Error callback
@@ -47,7 +47,7 @@ export function useDownloader({ deviceId }) {
    */
   async function download(items, options = {}) {
     const {
-      savePath,
+      saveDir,
       onProgress: externalOnProgress,
       onScanProgress: externalOnScanProgress,
       onError: externalOnError,
@@ -60,8 +60,8 @@ export function useDownloader({ deviceId }) {
       return { success: false, error: 'Device ID is required' }
     }
 
-    if (!savePath) {
-      return { success: false, error: 'Save path is required' }
+    if (!saveDir) {
+      return { success: false, error: 'Save directory is required' }
     }
 
     const itemArray = Array.isArray(items) ? items : [items]
@@ -120,7 +120,7 @@ export function useDownloader({ deviceId }) {
       downloaderInstance = $adb.downloader({
         deviceId: deviceId.value,
         items: downloadItems,
-        localPath: savePath,
+        localPath: saveDir,
         onProgress,
         onScanProgress,
         onError,
@@ -184,23 +184,23 @@ export function useDownloader({ deviceId }) {
     }
   }
   /**
-   * Select save path and download
+   * Select save directory and download
    * @param {import('../types.js').FileEntry|import('../types.js').FileEntry[]} items - Items to download
    * @param {Object} [options] - Options
    * @returns {Promise<import('../types.js').OperationResult>}
    */
   async function selectAndDownload(items, options = {}) {
     try {
-      const savePath = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
+      const saveDir = await window.$preload.ipcRenderer.invoke('show-open-dialog', {
         properties: ['openDirectory', 'createDirectory'],
         title: 'Select Save Location',
       })
 
-      if (!savePath || savePath.length === 0) {
-        return { success: false, error: 'No save path selected' }
+      if (!saveDir || saveDir.length === 0) {
+        return { success: false, error: 'No save directory selected' }
       }
 
-      return download(items, { ...options, savePath: savePath[0] })
+      return download(items, { ...options, saveDir: saveDir[0] })
     }
     catch (err) {
       return { success: false, error: err.message }

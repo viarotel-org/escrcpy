@@ -70,14 +70,18 @@ export const usePreferenceStore = defineStore('app-preference', () => {
   function resetDeps(type) {
     switch (type) {
       case 'adb':
-        window.$preload.store.set('common.adbPath', '')
+        window.$preload.store.set('common.adbDir', '')
         break
       case 'scrcpy':
-        window.$preload.store.set('common.scrcpyPath', '')
+        window.$preload.store.set('common.scrcpyDir', '')
+        break
+      case 'gnirehtet':
+        window.$preload.store.set('common.gnirehtetDir', '')
         break
       default:
-        window.$preload.store.set('common.adbPath', '')
-        window.$preload.store.set('common.scrcpyPath', '')
+        window.$preload.store.set('common.adbDir', '')
+        window.$preload.store.set('common.scrcpyDir', '')
+        window.$preload.store.set('common.gnirehtetDir', '')
         break
     }
     init()

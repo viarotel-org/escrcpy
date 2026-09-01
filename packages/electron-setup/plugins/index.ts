@@ -8,9 +8,9 @@
 export { clipboardPlugin } from './clipboard/index.js'
 export type { ClipboardPluginAPI, ClipboardPluginOptions } from './clipboard/index.js'
 
-// Sandbox plugin
-export { sandboxPlugin } from './sandbox/index.js'
-export type { SandboxConfigResult, SandboxPluginOptions } from './sandbox/index.js'
+// Sandbox configuration
+export { configureSandbox, SandboxManager } from './sandbox/helper.js'
+export type { SandboxConfigResult, SandboxManagerOptions } from './sandbox/helper.js'
 
 // Theme plugin
 export { themePlugin } from './theme/index.js'

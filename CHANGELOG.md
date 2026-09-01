@@ -1,5 +1,91 @@
 # Changelog
 
+## [3.2.0](https://github.com/viarotel/escrcpy-x/compare/v3.1.2...v3.2.0) (2026-09-01)
+
+
+### Features
+
+* 📌 Added top switching function for embedded mirrors ([da622ba](https://github.com/viarotel/escrcpy-x/commit/da622ba870a49166b9793d69fb8894ac4234deba))
+* 🚀 Add full-screen display function to embedded mirroring ([b9513c9](https://github.com/viarotel/escrcpy-x/commit/b9513c96574bbac3860d836fd52cc8a1f22fdc14))
+* 🚀 Refactor custom dependency configuration related logic to improve user experience ([fc28519](https://github.com/viarotel/escrcpy-x/commit/fc28519b8758347800e433ce38118df85c454bdc))
+
+
+### Bug Fixes
+
+* 🐛 Fix key and mouse mapping joystick type mapping key conflict issue ([8d0c263](https://github.com/viarotel/escrcpy-x/commit/8d0c2633ab47fb1f9433d30374cb619481af9750))
+* 🐛 Fix the problem of incorrect definition of binary dependency logic ([f999d16](https://github.com/viarotel/escrcpy-x/commit/f999d16e74b64f30c94377e00e3e730d02829563))
+* 🐛 Fix the regression issue of abnormal window behavior on Windows caused by embedded image refactoring ([42ab9b2](https://github.com/viarotel/escrcpy-x/commit/42ab9b29e5b957a032364dc36ff58a6fffc74b50))
+* 🐛 Fixed an issue that would cause the image to fail to start normally after changing preferences under certain circumstances ([d81f344](https://github.com/viarotel/escrcpy-x/commit/d81f344f9af20bd5925f278bf46d26256b2f5499))
+* 🐛 Fixed the abnormal regression problem of embedded mirror video stream size and window ratio under macos ([a51e5db](https://github.com/viarotel/escrcpy-x/commit/a51e5db599db52f799f337bf7761992b8c5896fd))
+* 🐛 Fixed the issue where the camera control toggle hotkey did not automatically release the mouse ([415f870](https://github.com/viarotel/escrcpy-x/commit/415f87091639d5ae138da106cb8789b3ffbbe969))
+* 🐛 Fixed the problem of abnormal embedded mirror audio forwarding function under windows ([88a889c](https://github.com/viarotel/escrcpy-x/commit/88a889cb81cb7e23a5cb1d93cdb73cabc5366f1d))
+* 🚀 Fix the abnormal regression problem of audio forwarding function under windows ([328a38d](https://github.com/viarotel/escrcpy-x/commit/328a38dea578860369191c1798fbd1ceb803237a))
+* 🚀 Fix the issue of abnormal application startup list data for embedded images in group control mode ([548efd9](https://github.com/viarotel/escrcpy-x/commit/548efd99fd769f110e3bb08b23039415ec804517))
+* **wscrcpy:** request keyframe when backpressure enters a drop cycle ([f590c7e](https://github.com/viarotel/escrcpy-x/commit/f590c7ec3d42f6bc56a004f1c52d5bf48dcbd6a1))
+
+
+### Performance Improvements
+
+* 🌱 Optimize the interaction details of automatic update checks ([db56453](https://github.com/viarotel/escrcpy-x/commit/db564537b79ae80f332c1f78f2149197300d23c9))
+* 🚀 Comprehensively optimize the interactive experience of embedded mirroring function ([500d2e2](https://github.com/viarotel/escrcpy-x/commit/500d2e2465f638108c6e1842aefe2b6eb553cffd))
+* 🚀 Optimize and improve the performance and stability of keyboard and mouse mapping ([777f5c2](https://github.com/viarotel/escrcpy-x/commit/777f5c2446007a22a03230203c23174c62c49ea0))
+* 🚀 Optimize and improve the stability of mcp tool ([abe32b9](https://github.com/viarotel/escrcpy-x/commit/abe32b9221473e1e24718a6c06370dc99a195c1a))
+* 🚀 Optimize and update the problem of abnormal layout caused by incorrect mounting points of pop-up window components ([4a6d936](https://github.com/viarotel/escrcpy-x/commit/4a6d9361c679e8dd9ac28c5a45ace36b9c85fdd0))
+* 🚀 Optimize embedded mirror window behavior details ([ef968de](https://github.com/viarotel/escrcpy-x/commit/ef968def8e82942efc9f46a3fd69d5d0701408fb))
+* 🚀 Optimize keyboard and mouse mapping to resolve the issue of event conflicts caused by a single modifier key acting as an event trigger ([354be62](https://github.com/viarotel/escrcpy-x/commit/354be62d50069ef7451acb39467d99343ea58904))
+* 🚀 Optimize MCP control server performance ([fe4d9e2](https://github.com/viarotel/escrcpy-x/commit/fe4d9e205f4ec28f11c79a5daa9e8ec11fcf6afc))
+* 🚀 Optimize project development and build configuration ([e5edf82](https://github.com/viarotel/escrcpy-x/commit/e5edf8239f236119766b21701bd002145500ca12))
+* 🚀 Optimize the abnormal issue caused by certain keys being restricted and unable to be recorded in Windows ([09b1898](https://github.com/viarotel/escrcpy-x/commit/09b1898b9621bcad8aedbfb4b8d4586c488e2f4c))
+* 🚀 Optimize the default save path initialization timing ([684b37a](https://github.com/viarotel/escrcpy-x/commit/684b37a4f4eeb5493fc5b05cef041f31932cc133))
+* 🚀 Optimize the dialogue interaction experience of the copilot module ([b1ffc54](https://github.com/viarotel/escrcpy-x/commit/b1ffc5437867e19f0c40a5778e8b43551944ff3e))
+* 🚀 Optimize the performance of embedded mirroring underlying dependency packages ([6bf1c16](https://github.com/viarotel/escrcpy-x/commit/6bf1c169821679b03c76a13a9010d88c4c87bd15))
+* 🚀 Optimize unocss style detection reliability ([662591e](https://github.com/viarotel/escrcpy-x/commit/662591ef6e6225874a6b9d928554f9763709b962))
+* 🚀 Refactor application update check interaction ([e57f7a4](https://github.com/viarotel/escrcpy-x/commit/e57f7a402216fed49b43ff16035171244d6a21b5))
+* 🚀 Update copilot built-in model ([cc2cc9f](https://github.com/viarotel/escrcpy-x/commit/cc2cc9f8b2240471d24719abb251abc356634ce1))
+
+
+### Code Refactoring
+
+* 📌 Refactor the behavior logic of the embedded casting window to unify across all platforms ([59a22aa](https://github.com/viarotel/escrcpy-x/commit/59a22aa98a3e560f2c56fe6649be6d3db20843a6))
+* 🔨 Refactor the electron-builder configuration architecture and resolve the Linux chrome-sandbox issue ([cf0a496](https://github.com/viarotel/escrcpy-x/commit/cf0a4964c38fc061d42020d8a5f1a26baa0c146d))
+* 🚀 Reconstructing the wscrcpy architecture significantly improves the manipulation performance of embedded images and reduces lags ([47f36f7](https://github.com/viarotel/escrcpy-x/commit/47f36f7a4c0059ea88556d54db98d73d6a9c8639))
+
+## [3.1.2](https://github.com/viarotel/escrcpy-x/compare/v3.1.1...v3.1.2) (2026-08-12)
+
+
+### Bug Fixes
+
+* 🐛 Fix the issue of mismatched flatpak build configurations ([9a69fa6](https://github.com/viarotel/escrcpy-x/commit/9a69fa6262c3bae2a32cd22718321688625d0261))
+
+## [3.1.1](https://github.com/viarotel/escrcpy-x/compare/v3.1.0...v3.1.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* 🚀 Fix build script execution failure issue ([d5568b5](https://github.com/viarotel/escrcpy-x/commit/d5568b5831eaff341010e78d72fb275b684aa9ac))
+
+## [3.1.0](https://github.com/viarotel/escrcpy-x/compare/v3.0.8...v3.1.0) (2026-08-11)
+
+
+### Bug Fixes
+
+* 🐛 Fix the compatibility issue with scripts for creating startup application shortcuts in Windows ([29dfad7](https://github.com/viarotel/escrcpy-x/commit/29dfad7da38b2763c0719be07e11cbf4a19ea371))
+* 🐛 Fix the issue with abnormal parameters when creating startup application shortcuts ([7ee7b6b](https://github.com/viarotel/escrcpy-x/commit/7ee7b6b0e08360a6d900fae4216cf119b30cf239))
+* 🐛 Remove redundant dynamic imports ([d43ec13](https://github.com/viarotel/escrcpy-x/commit/d43ec13520f0ef741972404a907dabc0d614667e))
+* 🚀 Rollback to fix regression in creating app launch creation shortcut ([3915153](https://github.com/viarotel/escrcpy-x/commit/3915153f4521e8589c01dd7d9ae2f396e12c62b5))
+
+
+### Performance Improvements
+
+* 👷 Optimize copilot sidebar interaction details ([9baa7c5](https://github.com/viarotel/escrcpy-x/commit/9baa7c5cdda1c8728466622c197b3876431c7eee))
+* 🚀 Optimize interaction details of lightweight editing components ([32fffa4](https://github.com/viarotel/escrcpy-x/commit/32fffa48462ba9c39eae86ab28a2b44f0211597f))
+* 🚀 Use more elegant contenteditable for lightweight editing ([e5303e6](https://github.com/viarotel/escrcpy-x/commit/e5303e63512ba0741c6f58d6d92e7820ddb07932))
+
+
+### Miscellaneous Chores
+
+* release 3.1.0 ([02e94c6](https://github.com/viarotel/escrcpy-x/commit/02e94c69a655f1cadd49af7df48fb865415a1be3))
+
 ## [3.0.8](https://github.com/viarotel/escrcpy-x/compare/v3.0.7...v3.0.8) (2026-08-03)
 
 

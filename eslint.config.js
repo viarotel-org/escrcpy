@@ -54,10 +54,10 @@ export default antfu(
 
       'antfu/consistent-list-newline': 'off',
       'antfu/top-level-function': 'off',
+      'antfu/no-import-dist': 'off',
 
       'import/default': 'off',
       'import/order': 'off',
-      'antfu/no-import-dist': 'off',
 
       'node/prefer-global/process': 'off',
       'node/prefer-global/buffer': 'off',
@@ -73,16 +73,29 @@ export default antfu(
       'prefer-promise-reject-errors': 'off',
       'no-unused-expressions': 'off',
       'sort-imports': 'off',
-      'unicorn/consistent-function-scoping': 'off',
       'perfectionist/sort-imports': 'off',
       'no-control-regex': 'off',
       'no-cond-assign': 'off',
       'no-template-curly-in-string': 'off',
 
+      'unicorn/consistent-function-scoping': 'off',
+
       'pnpm/yaml-enforce-settings': 'off',
 
       'ts/no-unsafe-function-type': 'off',
       'ts/method-signature-style': 'off',
+
+      'e18e/prefer-timer-args': 'off',
+      'e18e/prefer-object-has-own': 'off',
+      'e18e/prefer-array-some': 'off',
+    },
+  },
+  {
+    files: ['**/*.md'],
+    rules: {
+      'markdown/no-missing-link-fragments': 'off',
+      'markdown/no-unused-definitions': 'off',
+      'markdown/heading-increment': 'off',
     },
   },
 )

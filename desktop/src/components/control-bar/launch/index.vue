@@ -52,7 +52,6 @@
 </template>
 
 <script setup>
-import { quote } from 'shell-quote'
 import { openFloatControl } from '$/utils/device/index.js'
 import { useStartApp } from '$/hooks/use-start-app/index.js'
 import { useLaunchOrientation } from '$/hooks/use-launch-orientation/index.js'
@@ -135,7 +134,11 @@ function onMainStartClick(item = {}) {
 }
 
 function quoteShortcutArgument(value = '') {
-  return quote([String(value)])
+  const str = String(value)
+
+  return `"${str
+    .replaceAll('\\', '\\\\')
+    .replaceAll('"', '\\"')}"`
 }
 
 function stringifyShortcutArguments(args = {}) {

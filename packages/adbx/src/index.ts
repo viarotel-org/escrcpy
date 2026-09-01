@@ -3,7 +3,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
 import adbkit from '@devicefarmer/adbkit'
 import { getAdbUtil, shellEscape } from '@escrcpy/shared'
-import type { AdbxOptions, IAdbClient } from './types.js'
+import type { AdbxOptions, IAdbClient, ShellOptions } from './types.js'
 
 const AdbUtil = getAdbUtil(adbkit) as typeof adbkit.Adb.util
 
@@ -55,8 +55,12 @@ class YadbRunner {
 export function createAdbx(options: AdbxOptions) {
   const { adb } = options
   const yadb = new YadbRunner(adb, options.yadbPath)
-  async function shell(serial: string, command: string): Promise<string> {
-    return (await AdbUtil.readAll(await adb.getDevice(serial).shell(command) as never)).toString().trim()
+  async function shell(serial: string, command: string, opts?: ShellOptions): Promise<string> {
+    // adbkit's device.shell() only returns the stdout stream; stderr is silently
+    // discarded by the ADB protocol layer. When opts.stderr is true, append 2>&1
+    // to merge stderr into stdout so callers can see error messages.
+    const cmd = opts?.stderr ? `${command} 2>&1` : command
+    return (await AdbUtil.readAll(await adb.getDevice(serial).shell(cmd) as never)).toString().trim()
   }
 
   async function screencap(serial: string): Promise<Buffer> {
@@ -213,4 +217,4 @@ export function createAdbx(options: AdbxOptions) {
 }
 
 export type Adbx = ReturnType<typeof createAdbx>
-export type { AdbxEntry, AdbxOptions, IAdbClient, IAdbDevice } from './types.js'
+export type { AdbxEntry, AdbxOptions, IAdbClient, IAdbDevice, ShellOptions } from './types.js'

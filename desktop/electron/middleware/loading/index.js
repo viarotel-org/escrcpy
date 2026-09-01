@@ -1,12 +1,12 @@
 export default () => {
   const safeDOM = {
     append(parent, child) {
-      if (!Array.from(parent.children).find(e => e === child)) {
+      if (!Array.from(parent.children).includes(child)) {
         parent.appendChild(child)
       }
     },
     remove(parent, child) {
-      if (Array.from(parent.children).find(e => e === child)) {
+      if (Array.from(parent.children).includes(child)) {
         parent.removeChild(child)
       }
     },

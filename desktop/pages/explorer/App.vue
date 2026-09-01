@@ -561,7 +561,7 @@ async function handleDownload(row) {
   if (items.length === 0)
     return
 
-  const savePath = preferenceStore.getData(currentDevice.value.id)?.savePath || './'
+  const saveDir = preferenceStore.getData(currentDevice.value.id)?.saveDir || './'
 
   const messageLoading = useMessageLoading(
     window.t('device.control.file.manager.download.scanning'),
@@ -572,7 +572,7 @@ async function handleDownload(row) {
   )
 
   const result = await explorer.downloader.download(items, {
-    savePath,
+    saveDir,
     onProgress: ({ total }) => {
       if (total) {
         messageLoading.update(

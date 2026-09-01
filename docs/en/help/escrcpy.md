@@ -100,11 +100,9 @@ This might be due to Chinese or special characters in the installation path. Ple
 
 ### Unable to Open After Installation in Linux System
 
-> New restrictions have been implemented for AppImage applications in some popular distributions, such as Ubuntu 24.04, limiting the use of sandboxes. A temporary workaround is as follows:
+> Some popular distributions (such as Ubuntu 24.04+) restrict the use of sandboxes by applications.
 
-```shell
-sudo chmod 4755 /opt/Escrcpy/chrome-sandbox
-```
+This issue has been fixed at the packaging level in the latest version: the `.deb` installer now always sets the correct permissions on the sandbox helper, so the application starts normally without any manual steps.
 
 ### Black edges appear after resizing the casting window
 

@@ -20,7 +20,7 @@
  *
  * // Download selected items
  * await explorer.download.download(explorer.selection.selectedItems.value, {
- *   savePath: '/local/path',
+ *   saveDir: '/local/path',
  * })
  * ```
  */

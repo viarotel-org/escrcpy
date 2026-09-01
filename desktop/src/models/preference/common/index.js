@@ -1,10 +1,3 @@
-const { getDefaultAdbPath, getDefaultScrcpyPath, getDefaultGnirehtetPath, desktopPath }
-  = window.$preload.configs || {}
-
-const defaultAdbPath = getDefaultAdbPath?.()
-const defaultScrcpyPath = getDefaultScrcpyPath?.()
-const defaultGnirehtetPath = getDefaultGnirehtetPath?.()
-
 export default {
   label: 'preferences.common.name',
   field: 'common',
@@ -88,46 +81,41 @@ export default {
         },
       ],
     },
-    savePath: {
+    saveDir: {
       label: 'preferences.common.file.name',
-      field: 'savePath',
+      field: 'saveDir',
       type: 'PathInput',
-      value: desktopPath,
+      value: undefined,
       placeholder: 'preferences.common.file.placeholder',
       tips: 'preferences.common.file.tips',
       properties: ['openDirectory'],
     },
-    adbPath: {
+    adbDir: {
       label: 'preferences.common.adb.name',
-      field: 'adbPath',
-      value: defaultAdbPath,
+      field: 'adbDir',
+      value: undefined,
       type: 'PathInput',
       placeholder: 'preferences.common.adb.placeholder',
       tips: 'preferences.common.adb.tips',
-      properties: ['openFile'],
-      filters: [{ name: 'preferences.common.adb.name', extensions: ['*'] }],
+      properties: ['openDirectory'],
     },
-    gnirehtetPath: {
+    gnirehtetDir: {
       label: 'preferences.common.gnirehtet.name',
-      field: 'gnirehtetPath',
-      value: defaultGnirehtetPath,
+      field: 'gnirehtetDir',
+      value: undefined,
       type: 'PathInput',
       placeholder: 'preferences.common.gnirehtet.placeholder',
       tips: 'preferences.common.gnirehtet.tips',
-      properties: ['openFile'],
-      filters: [
-        { name: 'preferences.common.gnirehtet.name', extensions: ['*'] },
-      ],
+      properties: ['openDirectory'],
     },
-    scrcpyPath: {
+    scrcpyDir: {
       label: 'preferences.common.scrcpy.name',
-      field: 'scrcpyPath',
-      value: defaultScrcpyPath,
+      field: 'scrcpyDir',
+      value: undefined,
       type: 'PathInput',
       placeholder: 'preferences.common.scrcpy.placeholder',
       tips: 'preferences.common.scrcpy.tips',
-      properties: ['openFile'],
-      filters: [{ name: 'preferences.common.scrcpy.name', extensions: ['*'] }],
+      properties: ['openDirectory'],
     },
     concurrencyLimit: {
       label: 'preferences.common.concurrencyLimit.name',
@@ -211,13 +199,6 @@ export default {
       placeholder: 'preferences.common.edgeHidden.placeholder',
       tips: 'preferences.common.edgeHidden.tips',
     },
-    autoLaunch: {
-      label: 'preferences.common.autoLaunch.name',
-      field: 'autoLaunch',
-      type: 'Switch',
-      value: undefined,
-      placeholder: 'preferences.common.autoLaunch.placeholder',
-    },
     gnirehtetFix: {
       label: 'preferences.common.gnirehtet.fix.name',
       field: 'gnirehtetFix',
@@ -233,6 +214,20 @@ export default {
       value: undefined,
       placeholder: 'preferences.common.debug.placeholder',
       tips: 'preferences.common.debug.tips',
+    },
+    autoLaunch: {
+      label: 'preferences.common.autoLaunch.name',
+      field: 'autoLaunch',
+      type: 'Switch',
+      value: undefined,
+      placeholder: 'preferences.common.autoLaunch.placeholder',
+    },
+    autoCheckUpdate: {
+      label: 'preferences.common.autoCheckUpdate.name',
+      field: 'autoCheckUpdate',
+      type: 'Switch',
+      value: true,
+      placeholder: 'preferences.common.autoCheckUpdate.placeholder',
     },
   },
 }

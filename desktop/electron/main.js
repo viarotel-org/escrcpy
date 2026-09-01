@@ -17,7 +17,7 @@ import { createElectronApp } from '@escrcpy/electron-setup/main'
 
 import {
   clipboardPlugin,
-  sandboxPlugin,
+  configureSandbox,
   themePlugin,
   windowIPCPlugin,
 } from '@escrcpy/electron-setup/plugins'
@@ -46,6 +46,10 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Sandbox switches must be appended before Chromium's browser startup decides
+// on the sandbox (zygote/SUID helper) — i.e. before `app.whenReady()`.
+configureSandbox()
+
 const mainApp = createElectronApp({
   preloadDir: __dirname,
   rendererDir: path.join(__dirname, '../dist'),
@@ -56,7 +60,6 @@ const mainApp = createElectronApp({
   backgroundColor: getAppBackgroundColor(),
 })
 
-mainApp.use(sandboxPlugin)
 mainApp.use(mainModule)
 mainApp.use(lifecycleService)
 

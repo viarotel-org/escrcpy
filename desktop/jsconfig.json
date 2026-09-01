@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "$/*": ["src/*"],
-      "$root/*": ["*"],
-      "$docs/*": ["docs/*"],
-      "$electron/*": ["electron/*"],
-      "$renderer/*": ["src/*"],
-      "$control/*": ["pages/control/*"],
-      "$explorer/*": ["pages/explorer/*"],
-      "$terminal/*": ["pages/terminal/*"]
+      "$/*": ["./src/*"],
+      "$root/*": ["./*"],
+      "$docs/*": ["./docs/*"],
+      "$electron/*": ["./electron/*"],
+      "$renderer/*": ["./src/*"],
+      "$control/*": ["./pages/control/*"],
+      "$explorer/*": ["./pages/explorer/*"],
+      "$copilot/*": ["./pages/copilot/*"],
+      "$terminal/*": ["./pages/terminal/*"],
+      "$automation/*": ["./pages/automation/*"],
+      "$mirror/*": ["./pages/mirror/*"]
     },
     "ignoreDeprecations": "6.0"
   },

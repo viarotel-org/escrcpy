@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/unocss-preset-shades",
   "type": "module",
-  "version": "3.0.8",
+  "version": "3.2.0",
   "private": true,
   "description": "🎨 A UnoCSS preset that automatically generates a full range of shades from light to dark based on a specified base color, injecting CSS variables and theme color configurations.",
   "author": "viarotel",

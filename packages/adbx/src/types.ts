@@ -27,3 +27,9 @@ export interface IAdbClient {
   trackDevices(): Promise<NodeJS.EventEmitter>
 }
 export interface AdbxOptions { adb: IAdbClient, yadbPath?: string | (() => string | undefined) }
+
+/** Options for adbx.shell(). */
+export interface ShellOptions {
+  /** Merge stderr into stdout via `2>&1` so error messages are captured. */
+  stderr?: boolean
+}

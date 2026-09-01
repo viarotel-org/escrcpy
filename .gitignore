@@ -28,8 +28,4 @@ yarn.lock
 .pnpm-store
 
 # Dist
-dist
-dist-ssr
-dist-electron
-dist-release
-dist-docs
+dist*

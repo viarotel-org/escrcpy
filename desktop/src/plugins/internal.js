@@ -1,6 +1,6 @@
 import useAutoImport from 'unplugin-auto-import/vite'
 import useAutoComponents from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
+import { VueRouterAutoImports } from 'vue-router/unplugin'
 
 import ElementPlus from './element-plus/auto.js'
 import useElementPlusLocalDark from './element-plus/local-dark.js'
@@ -11,7 +11,12 @@ export default () => {
   return [
     useAutoImport({
       resolvers,
-      imports: ['vue', 'pinia', '@vueuse/core', VueRouterAutoImports],
+      imports: [
+        VueRouterAutoImports,
+        'vue',
+        'pinia',
+        '@vueuse/core',
+      ],
       eslintrc: {
         enabled: true,
       },

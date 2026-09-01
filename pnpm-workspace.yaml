@@ -12,17 +12,25 @@ packages:
 
 overrides:
   '@devicefarmer/adbkit': 3.3.8
-  electron: 33.0.2
+  '@vitejs/plugin-vue': 6.0.8
+  '@vitejs/plugin-vue-jsx': 5.1.6
+  '@vueuse/components': 14.4.0
+  '@vueuse/core': 14.4.0
+  '@vueuse/rxjs': 14.4.0
   sharp: 0.34.5
-  tsdown: 0.22.3
+  tsdown: 0.22.14
   typescript: 6.0.3
-  vite: 5.4.21
+  unplugin-vue: 7.2.0
+  vite: 8.0.16
+  vue: 3.5.41
+  vue-router: 5.2.0
+  vue-tsc: 3.1.8
 
 ignoredBuiltDependencies:
-  - electron
   - esbuild
   - sharp
   - vue-demi
+  - electron-winstaller
 
 allowBuilds:
   electron: true

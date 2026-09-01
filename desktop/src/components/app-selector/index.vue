@@ -234,12 +234,29 @@ async function loadAppList() {
 
   loading.value = true
 
+  const requestDeviceId = props.deviceId
+
   loadPromise = (async () => {
     try {
-      const baseAppList = await window.$preload.scrcpy.getAppList(props.deviceId) || []
+      const baseAppList = await window.$preload.scrcpy.getAppList(requestDeviceId) || []
+
+      // The selector may have moved to another device while the request was
+      // in flight (e.g. a primary-device switch in the mirror window);
+      // discard the stale response instead of poisoning the new cache.
+      if (props.deviceId !== requestDeviceId) {
+        return appList.value
+      }
 
       appList.value = baseAppList
-      loaded.value = true
+
+      // An empty result is NOT a stable state: the first query can run while
+      // the device/session is still settling (e.g. right after a fleet mirror
+      // window opens, or while the device list is still being resolved), and
+      // caching it made the selector look permanently empty until the device
+      // id changed. Keep `loaded` false so the next open retries.
+      if (baseAppList.length > 0) {
+        loaded.value = true
+      }
 
       if (props.withSecondary) {
         const secondaryUserApps = await loadSecondaryUserApps(baseAppList).catch((error) => {
@@ -250,7 +267,8 @@ async function loadAppList() {
         appList.value = [...baseAppList, ...secondaryUserApps]
       }
     }
-    catch {
+    catch (error) {
+      console.warn('appSelector.loadAppList.error', error)
       appList.value = []
     }
     finally {
@@ -299,6 +317,13 @@ watch(() => props.deviceId, () => {
   loaded.value = false
   appList.value = []
   loadPromise = null
+
+  // The selector can already be open when the device id becomes available
+  // (the mirror window resolves its fleet asynchronously after mount);
+  // reload in place instead of leaving an empty menu until the next open.
+  if (popupVisible.value) {
+    loadAppList().then(updateDropdownPosition)
+  }
 })
 
 defineExpose({ loadAppList, appList, loading })

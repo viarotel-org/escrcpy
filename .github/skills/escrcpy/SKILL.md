@@ -26,11 +26,11 @@ Key pattern evidence:
 
 | Dimension | Actual Pattern | File & Snippet |
 | --- | --- | --- |
-| Multi-window entries | `main/control/explorer/copilot/terminal/automation/mirror` are independent Vite inputs | `desktop/vite.config.js`: `rollupOptions.input = { main, control, explorer, copilot, terminal, automation, mirror }` |
+| Multi-window entries | `main/control/explorer/copilot/terminal/automation/mirror` are independent Vite inputs | `desktop/vite.config.js`: `rolldownOptions.input = { main, control, explorer, copilot, terminal, automation, mirror }` |
 | Path aliases | Unified via `$`, `$root`, `$electron`, `$control`, `$explorer`, `$copilot`, `$terminal`, `$automation`, `$mirror` | `desktop/vite.config.js`: `alias = { $: resolve('src'), $electron: resolve('electron'), ... }` |
 | Main process plugins | Main entry only assembles plugins/modules/services | `desktop/electron/main.js`: `mainApp.use(mainModule)`, `mainApp.use(wscrcpyService)`, `mainApp.use(mirrorModule)` |
 | Module structure | Module `index.js` composes window + service | `desktop/electron/modules/mirror/index.js`: `apply(mainApp) { mainApp.use(window); mainApp.use(service) }` |
-| Regular IPC | Register `ipcMain.handle` inside service `apply()`, return cleanup function | `desktop/electron/modules/mirror/service.js`: `ipcMain.handle('mirror-update-rotation', ...)` + `ipcMain.removeHandler(...)` |
+| Regular IPC | Register `ipcMain.handle` inside service `apply()`, return cleanup function | `desktop/electron/modules/mirror/service.js`: `ipcMain.handle('mirror-video-geometry', ...)` + `ipcMain.removeHandler(...)` |
 | Callback IPC | Use `ipcxMain` / `ipcxRenderer` when renderer callbacks are needed | `desktop/electron/modules/terminal/service.js`: payload includes `onData`, `onExit`, `onError`; `desktop/electron/middleware/terminal/index.js`: `ipcxRenderer.invokeRetained(...)` |
 | Preload boundary | All renderer exposure centralized in `createMiddleware()` via `$preload` | `desktop/electron/middleware/index.js`: `contextBridge.exposeInMainWorld('$preload', { adb, scrcpy, terminal, ...electronAPI, ipcxRenderer })` |
 | Pinia store | Setup store, state via `ref`, getters via `computed`, actions are plain functions | `desktop/src/store/device/index.js`: `defineStore('app-device', () => { const list = ref([]); async function getList() { ... } return { ... } })` |
@@ -41,7 +41,7 @@ Key pattern evidence:
 | i18n | Templates use `$t()`, scripts use `window.t()`, keys are dot-separated hierarchies; `zh-CN` is the primary language | `desktop/src/plugins/vue-i18n/index.js`: `window.t = t`; `scripts/lang-sync.js`: `primary: 'zh-CN'` |
 | TypeScript boundary | `packages/wscrcpy` uses TS types, interfaces, JSDoc; desktop main body uses JS/JSDoc | `packages/wscrcpy/shared/types.ts`: `export type DeviceTarget = 'all' \| 'primary' \| string \| string[]`; `desktop/src/store/automation/index.js`: JSDoc comments |
 | wscrcpy session | `WscrcpySession` owns main-process scrcpy lifecycle; manager handles per-device queues and ownership | `packages/wscrcpy/service/session.ts`: `export class WscrcpySession`; `service/manager.ts`: `private readonly deviceQueues = new Map(...)` |
-| Binary paths | scrcpy/adb/gnirehtet resolved via which config and store fallback | `desktop/electron/configs/which/index.js`: `getScrcpyPath()`, `getAdbPath()`, `whichResolve(...)` |
+| Binary paths | scrcpy/adb/gnirehtet resolved via which config and store fallback | `desktop/electron/configs/which/index.js`: `getScrcpy()`, `getAdb()`, `whichResolve(...)` |
 | Build cache | Turbo disables cache for dev/build; Electron build artifacts should not assume incremental output | `turbo.json`: `build.cache=false`, `dev.cache=false`, `build:electron.outputs=['dist-release/**']` |
 
 ### On-Demand Context References
@@ -263,7 +263,7 @@ import { sleep } from '$/utils/index.js'
 import { name as packageName } from '$root/package.json'
 
 // main process only
-import { getAdbPath } from '$electron/configs/index.js'
+import { getAdb } from '$electron/configs/index.js'
 
 // window-private resource
 import { ApiModelEnum } from '$copilot/dicts/api.js'

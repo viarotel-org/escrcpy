@@ -1,50 +1,68 @@
-import { whichResolve } from '$electron/process/resources.js'
+import { getExtraPlatformDirs, whichResolve } from '$electron/process/resources.js'
 import electronStore from '$electron/helpers/store/index.js'
 
-export function getScrcpyPath({ store = electronStore, onlyStore, onlyDefault } = {}) {
-  if (onlyStore) {
-    return store.get('common.scrcpyPath')
-  }
-
-  if (onlyDefault) {
-    return getDefaultScrcpyPath()
-  }
-
-  return store.get('common.scrcpyPath') ?? getDefaultScrcpyPath()
+/**
+ * Return the user-configured scrcpy directory from store, or undefined.
+ */
+export function getUserScrcpyDir({ store = electronStore } = {}) {
+  return store.get('common.scrcpyDir')
 }
 
-export function getAdbPath({ store = electronStore, onlyStore, onlyDefault } = {}) {
-  if (onlyStore) {
-    return store.get('common.adbPath')
-  }
-
-  if (onlyDefault) {
-    return getDefaultAdbPath()
-  }
-
-  return store.get('common.adbPath') ?? getDefaultAdbPath()
+/**
+ * Return the user-configured adb directory from store, or undefined.
+ */
+export function getUserAdbDir({ store = electronStore } = {}) {
+  return store.get('common.adbDir')
 }
 
-export function getGnirehtetPath({ store = electronStore, onlyStore, onlyDefault } = {}) {
-  if (onlyStore) {
-    return store.get('common.gnirehtetPath')
-  }
-
-  if (onlyDefault) {
-    return getDefaultGnirehtetPath()
-  }
-
-  return store.get('common.gnirehtetPath') ?? getDefaultGnirehtetPath()
+/**
+ * Return the user-configured gnirehtet directory from store, or undefined.
+ */
+export function getUserGnirehtetDir({ store = electronStore } = {}) {
+  return store.get('common.gnirehtetDir')
 }
 
-export function getDefaultScrcpyPath() {
-  return whichResolve('scrcpy')
+/**
+ * Resolve the scrcpy directory: user-configured > platform built-in.
+ */
+export function getScrcpyDir(options) {
+  return getUserScrcpyDir(options) || getExtraPlatformDirs().scrcpy
 }
 
-export function getDefaultAdbPath() {
-  return whichResolve('adb')
+/**
+ * Resolve the adb directory: user-configured > platform built-in.
+ */
+export function getAdbDir(options) {
+  return getUserAdbDir(options) || getExtraPlatformDirs().adb
 }
 
-export function getDefaultGnirehtetPath() {
-  return whichResolve('gnirehtet')
+/**
+ * Resolve the gnirehtet directory: user-configured > platform built-in.
+ */
+export function getGnirehtetDir(options) {
+  return getUserGnirehtetDir(options) || getExtraPlatformDirs().gnirehtet
+}
+
+/**
+ * Resolve the scrcpy executable path.
+ * Searches user directory > built-in directories > system PATH.
+ */
+export function getScrcpy(options) {
+  return whichResolve('scrcpy', getUserScrcpyDir(options))
+}
+
+/**
+ * Resolve the adb executable path.
+ * Searches user directory > built-in directories > system PATH.
+ */
+export function getAdb(options) {
+  return whichResolve('adb', getUserAdbDir(options))
+}
+
+/**
+ * Resolve the gnirehtet executable path.
+ * Searches user directory > built-in directories > system PATH.
+ */
+export function getGnirehtet(options) {
+  return whichResolve('gnirehtet', getUserGnirehtetDir(options))
 }

@@ -91,7 +91,7 @@
 /**
  * Download options
  * @typedef {Object} DownloadOptions
- * @property {string} savePath - Local save path
+ * @property {string} saveDir - Local save directory
  * @property {boolean} [preserveStructure=true] - Preserve directory structure
  * @property {number} [retries=3] - Retry count
  * @property {Function} [onProgress] - Progress callback

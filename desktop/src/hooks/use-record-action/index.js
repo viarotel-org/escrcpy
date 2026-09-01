@@ -94,7 +94,7 @@ export function useRecordAction() {
     const deviceConfig = preferenceStore.getDataWithFallback(deviceId)
     const extension = activeModel.extname(deviceConfig)
     const fileName = deviceStore.getLabel(device, ({ currentTime, deviceName }) => `${activeModel.label}-${deviceName}-${currentTime}.${extension}`)
-    const filePath = window.$preload.path.join(deviceConfig.savePath, fileName)
+    const filePath = window.$preload.path.join(deviceConfig.saveDir, fileName)
 
     return window.$preload.path.normalize(filePath)
   }

@@ -3,6 +3,7 @@
     <el-button
       type="primary"
       text
+      circle
       :disabled="['unauthorized', 'offline'].includes(row.status)"
       icon="CirclePlus"
       :title="$t('device.actions.more.name')"

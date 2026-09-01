@@ -73,7 +73,7 @@
           :filters="statusFilters"
           :filter-method="filterMethod"
         >
-          <el-tag :type="getDictLabel('deviceStatus', row.status, { labelKey: 'tagType' })">
+          <el-tag effect="plain" class="el-tag--plain-text" :type="getDictLabel('deviceStatus', row.status, { labelKey: 'tagType' })">
             <div class="flex items-center">
               <el-tooltip
                 v-if="['unauthorized'].includes(row.status)"

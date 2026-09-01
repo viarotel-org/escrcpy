@@ -28,6 +28,7 @@
     "@antfu/eslint-config": "9.3.0",
     "eslint": "10.8.1",
     "eslint-plugin-format": "2.0.1",
+    "esbuild": "0.27.0",
     "husky": "9.0.11",
     "publint": "0.3.16",
     "turbo": "2.10.12",

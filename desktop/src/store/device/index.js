@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import { capitalize } from 'lodash-es'
 import { name as packageName } from '$root/package.json'
+import { ScrcpyConfigMigrator } from '$/utils/device/migrator/index.js'
+import { deduplicateWirelessDevices } from './helpers/wireless-dedup.js'
 import {
   getCurrentDevices,
   getHistoryDevices,
@@ -66,9 +68,17 @@ export const useDeviceStore = defineStore('app-device', () => {
     const historyDevices = getHistoryDevices()
     const currentDevices = await getCurrentDevices()
     const mergedDevices = mergeDevices(historyDevices, currentDevices)
-    saveDevicesToStore(mergedDevices)
-    list.value = mergedDevices
-    return mergedDevices
+    const { devices, migrations } = deduplicateWirelessDevices(mergedDevices, currentDevices)
+    const migrator = new ScrcpyConfigMigrator()
+
+    for (const { oldDeviceId, newDeviceId } of migrations) {
+      migrator.migrateConfigFromOldToNew(oldDeviceId, newDeviceId)
+    }
+    saveDevicesToStore(devices)
+    migrator.cleanupProcessedConfigs()
+
+    list.value = devices
+    return devices
   }
 
   function setRemark(deviceId, value) {

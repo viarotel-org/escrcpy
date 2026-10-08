@@ -27,6 +27,7 @@ const XML_TYPE_START_ELEMENT = 0x0102
 
 const VALUE_TYPE_STRING = 0x03
 const VALUE_TYPE_REFERENCE = 0x01
+const VALUE_TYPE_COLOR = 0x1c
 
 const UTF8_FLAG = 0x100
 
@@ -319,6 +320,48 @@ function resolveResourcePath(arsc, resId, { preferExt = '.png' } = {}) {
   return candidates[0].path
 }
 
+/**
+ * Resolves a resource id to an ARGB color value (dataType COLOR), or null.
+ * Color state lists (complex bags) cannot be resolved and return null.
+ */
+function resolveResourceColor(arsc, resId) {
+  const packageId = (resId >>> 24) & 0xff
+  const typeId = (resId >>> 16) & 0xff
+  const entryIndex = resId & 0xffff
+
+  const pkg = arsc.packages.find(p => p.id === packageId)
+  if (!pkg) return null
+
+  const entries = pkg.types.get(typeId)
+  if (!entries || !entries.has(entryIndex)) return null
+
+  const candidates = entries.get(entryIndex).filter(item => item.dataType === VALUE_TYPE_COLOR)
+  if (!candidates.length) return null
+
+  candidates.sort((a, b) => rankDensity(b.density) - rankDensity(a.density))
+  return candidates[0].data
+}
+
+/**
+ * Builds a solid { width, height, rgba } image from an ARGB color.
+ * Colors defined without alpha (0x00RRGGBB) are treated as opaque.
+ */
+function solidColorImage(color, size) {
+  const alpha8 = (color >>> 24) & 0xff
+  const rgba = Buffer.alloc(size * size * 4)
+  const r = (color >>> 16) & 0xff
+  const g = (color >>> 8) & 0xff
+  const b = color & 0xff
+  const a = alpha8 === 0 ? 255 : alpha8
+  for (let i = 0; i < size * size; i++) {
+    rgba[i * 4] = r
+    rgba[i * 4 + 1] = g
+    rgba[i * 4 + 2] = b
+    rgba[i * 4 + 3] = a
+  }
+  return { width: size, height: size, rgba }
+}
+
 /* ------------------------------ PNG codec ------------------------------ */
 
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
@@ -358,6 +401,10 @@ export function decodePng(buf) {
   let width = 0
   let height = 0
   let colorType = 0
+  let bitDepth = 0
+  let interlace = 0
+  let palette = null
+  let trns = null
   const idat = []
 
   while (offset + 8 <= buf.length) {
@@ -367,11 +414,15 @@ export function decodePng(buf) {
     if (type === 'IHDR') {
       width = buf.readUInt32BE(offset + 8)
       height = buf.readUInt32BE(offset + 12)
-      const bitDepth = buf[offset + 16]
+      bitDepth = buf[offset + 16]
       colorType = buf[offset + 17]
-      const interlace = buf[offset + 20]
-      if (bitDepth !== 8 || interlace !== 0) return null
-      if (colorType !== 6 && colorType !== 2) return null
+      interlace = buf[offset + 20]
+    }
+    else if (type === 'PLTE') {
+      palette = buf.slice(offset + 8, offset + 8 + length)
+    }
+    else if (type === 'tRNS') {
+      trns = buf.slice(offset + 8, offset + 8 + length)
     }
     else if (type === 'IDAT') {
       idat.push(buf.slice(offset + 8, offset + 8 + length))
@@ -384,12 +435,30 @@ export function decodePng(buf) {
   }
 
   if (!width || !height) return null
-  const channels = colorType === 6 ? 4 : 3
-  const bpp = channels
+  if (interlace !== 0) return null
+
+  const channels = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 }[colorType]
+  if (!channels) return null
+  if (colorType === 3) {
+    if (!palette) return null
+    if (bitDepth !== 1 && bitDepth !== 2 && bitDepth !== 4 && bitDepth !== 8) return null
+  }
+  else if (bitDepth !== 8) return null
+
+  const bpp = Math.max(1, Math.floor((channels * bitDepth) / 8))
 
   const raw = zlib.inflateSync(Buffer.concat(idat))
-  const stride = width * bpp
+  const stride = Math.ceil((width * channels * bitDepth) / 8)
   const out = Buffer.alloc(width * height * 4)
+
+  // Extracts the sample index for palette images with sub-byte depths
+  const readIndex = (row, x) => {
+    if (bitDepth === 8) return row[x]
+    const perByte = 8 / bitDepth
+    const byte = row[Math.floor(x / perByte)]
+    const shift = 8 - bitDepth * ((x % perByte) + 1)
+    return (byte >> shift) & ((1 << bitDepth) - 1)
+  }
 
   let prev = Buffer.alloc(stride)
 
@@ -415,12 +484,36 @@ export function decodePng(buf) {
     }
 
     for (let x = 0; x < width; x++) {
-      const src = x * bpp
       const dst = (y * width + x) * 4
-      out[dst] = decoded[src]
-      out[dst + 1] = decoded[src + 1]
-      out[dst + 2] = decoded[src + 2]
-      out[dst + 3] = bpp === 4 ? decoded[src + 3] : 0xff
+
+      if (colorType === 3) {
+        const idx = readIndex(decoded, x)
+        const p = idx * 3
+        out[dst] = palette[p]
+        out[dst + 1] = palette[p + 1]
+        out[dst + 2] = palette[p + 2]
+        out[dst + 3] = trns && idx < trns.length ? trns[idx] : 0xff
+      }
+      else if (colorType === 0) {
+        const g = decoded[x]
+        out[dst] = g
+        out[dst + 1] = g
+        out[dst + 2] = g
+        out[dst + 3] = 0xff
+      }
+      else if (colorType === 4) {
+        out[dst] = decoded[x * 2]
+        out[dst + 1] = decoded[x * 2]
+        out[dst + 2] = decoded[x * 2]
+        out[dst + 3] = decoded[x * 2 + 1]
+      }
+      else {
+        const src = x * bpp
+        out[dst] = decoded[src]
+        out[dst + 1] = decoded[src + 1]
+        out[dst + 2] = decoded[src + 2]
+        out[dst + 3] = bpp === 4 ? decoded[src + 3] : 0xff
+      }
     }
 
     prev = decoded
@@ -615,8 +708,13 @@ export function pngToIco(pngBuf) {
 
 /**
  * Extracts the launcher icon of an APK buffer as an ICO buffer (or null).
+ *
+ * @param {Buffer} apkBuf
+ * @param {{ decodeWebp?: (buf: Buffer) => Buffer|null }} [options]
+ *   Optional async-environment hook: decodes a WebP buffer to a PNG buffer
+ *   (e.g. via Electron's nativeImage). WebP icons are skipped when absent.
  */
-export function extractIconIcoFromApkBuffer(apkBuf) {
+export function extractIconIcoFromApkBuffer(apkBuf, { decodeWebp } = {}) {
   const manifest = readZipEntry(apkBuf, 'AndroidManifest.xml')
   if (!manifest) return null
 
@@ -628,12 +726,24 @@ export function extractIconIcoFromApkBuffer(apkBuf) {
 
   const arsc = parseArsc(arscBuf)
 
+  const isWebp = (buf) => buf.length > 12 && buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP'
+
+  const decodeImageBuf = (fileBuf) => {
+    if (isWebp(fileBuf)) {
+      if (!decodeWebp) return null
+      const pngBuf = decodeWebp(fileBuf)
+      return pngBuf && decodePng(pngBuf)
+    }
+    return decodePng(fileBuf)
+  }
+
   const decodeBestPng = (resId) => {
     const resPath = resolveResourcePath(arsc, resId)
-    if (!resPath || !resPath.toLowerCase().endsWith('.png')) return null
+    const lower = resPath && resPath.toLowerCase()
+    if (!lower || (!lower.endsWith('.png') && !lower.endsWith('.webp'))) return null
     const fileBuf = readZipEntry(apkBuf, resPath)
     if (!fileBuf) return null
-    return decodePng(fileBuf)
+    return decodeImageBuf(fileBuf)
   }
 
   let png = null
@@ -646,16 +756,23 @@ export function extractIconIcoFromApkBuffer(apkBuf) {
     const layers = xmlBuf && findAdaptiveLayerResIds(xmlBuf)
     if (!layers) return null
 
-    const background = layers.background && decodeBestPng(layers.background)
     const foreground = layers.foreground && decodeBestPng(layers.foreground)
-    if (!background || !foreground) return null
+    if (!foreground) return null
+
+    // The background may be a plain image, a color resource, or a color
+    // state list (unresolvable) — fall back to transparent canvas.
+    const background = (layers.background && decodeBestPng(layers.background))
+      || solidColorImage(
+        (layers.background && resolveResourceColor(arsc, layers.background)) ?? 0x00000000,
+        foreground.width,
+      )
 
     png = compositeAdaptiveIcon(background, foreground)
   }
-  else if (iconPath && iconPath.toLowerCase().endsWith('.png')) {
+  else if (iconPath && (iconPath.toLowerCase().endsWith('.png') || iconPath.toLowerCase().endsWith('.webp'))) {
     const fileBuf = readZipEntry(apkBuf, iconPath)
     if (!fileBuf) return null
-    png = decodePng(fileBuf)
+    png = decodeImageBuf(fileBuf)
   }
 
   if (!png) return null
@@ -667,11 +784,11 @@ export function extractIconIcoFromApkBuffer(apkBuf) {
  * Pulls an APK from a device via the adb middleware, extracts its launcher
  * icon and caches it as .ico.
  *
- * @param {{ adb: object, id: string, packageName: string, cacheDir?: string }} options
+ * @param {{ adb: object, id: string, packageName: string, cacheDir?: string, decodeWebp?: Function }} options
  * @returns {Promise<string|null>} absolute .ico path, or null when unavailable
  */
 export async function createAppIcon(options = {}) {
-  const { adb, id, packageName, cacheDir = path.join(os.tmpdir(), 'escrcpy', 'app-icons') } = options
+  const { adb, id, packageName, cacheDir = path.join(os.tmpdir(), 'escrcpy', 'app-icons'), decodeWebp } = options
   if (!adb || !id || !packageName) return null
 
   try {
@@ -699,14 +816,23 @@ export async function createAppIcon(options = {}) {
     try {
       const apkPath = await adb.pull(id, deviceApkPath, { saveDir: tmpDir })
       const apkBuf = fs.readFileSync(apkPath)
-      const icoBuf = extractIconIcoFromApkBuffer(apkBuf)
+      const icoBuf = extractIconIcoFromApkBuffer(apkBuf, { decodeWebp })
       if (!icoBuf) return null
 
       fs.writeFileSync(iconPath, icoBuf)
       return iconPath
     }
     finally {
-      fs.rmSync(tmpDir, { recursive: true, force: true })
+      // The adb pull transfer resolves on 'end' while the write stream may
+      // still hold the file open; on Windows that makes an immediate removal
+      // fail with ENOTEMPTY. Retries cover the flush window, and cleanup
+      // failures must never discard an otherwise successful extraction.
+      try {
+        fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 20, retryDelay: 100 })
+      }
+      catch (error) {
+        console.warn('[escrcpy] app icon temp cleanup failed:', error?.message)
+      }
     }
   }
   catch (error) {

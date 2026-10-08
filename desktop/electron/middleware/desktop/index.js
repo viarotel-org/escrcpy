@@ -1,3 +1,4 @@
+import { nativeImage } from 'electron'
 import { extraResolve } from '$root/electron/process/resources.js'
 import createDesktopShortcuts from 'create-desktop-shortcuts'
 import adb from '$electron/middleware/adb/index.js'
@@ -42,6 +43,9 @@ export default {
         id,
         packageName,
         cacheDir: path.join(os.tmpdir(), 'escrcpy', 'app-icons'),
+        decodeWebp: buf => nativeImage.createFromBuffer(buf).isEmpty()
+          ? null
+          : nativeImage.createFromBuffer(buf).toPNG(),
       })
 
       if (iconPath) {

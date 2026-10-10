@@ -1,7 +1,7 @@
 {
   "name": "@escrcpy/adbx",
   "type": "module",
-  "version": "3.2.0",
+  "version": "3.3.1",
   "private": true,
   "exports": {
     ".": "./dist/index.mjs",

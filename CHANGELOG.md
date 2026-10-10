@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.3.1](https://github.com/viarotel/escrcpy-x/compare/v3.3.0...v3.3.1) (2026-10-10)
+
+
+### Performance Improvements
+
+* 🚀 Improve the stability of application startup logic related to embedded mirrored virtual screen. ([d0d5a47](https://github.com/viarotel/escrcpy-x/commit/d0d5a475a3c64fec7fc433aa72026e1e063bb31b))
+
+## [3.3.0](https://github.com/viarotel/escrcpy-x/compare/v3.2.0...v3.3.0) (2026-10-09)
+
+
+### Features
+
+* ✨ Preliminary support for launching application virtual screens with embedded mirrors ([cf69837](https://github.com/viarotel/escrcpy-x/commit/cf698371a0d4a4109ae535cc5f2a4f27892efaf1))
+* ✨ Unlock paid features and adjust copilot model service configuration ([ceddfdc](https://github.com/viarotel/escrcpy-x/commit/ceddfdc8df3d9cc8ac0ae3d27a9dd2070ad16556))
+
+
+### Bug Fixes
+
+* 🐛 Fixed an issue with abnormal control parameters when launching an image via an application shortcut. ([5ab97fb](https://github.com/viarotel/escrcpy-x/commit/5ab97fb656a2b2733bbbafe26bb69fdbb272515f))
+* 🐛 Fixes an issue where some users on Windows encounter problems launching shortcut applications. ([8a59b24](https://github.com/viarotel/escrcpy-x/commit/8a59b24f757f561a8acf58aa1c758977f215348e))
+
+
+### Performance Improvements
+
+* 🚀 Unlock paid features and optimize details ([b500487](https://github.com/viarotel/escrcpy-x/commit/b500487d2e88088e2633dbb8ae579c57afdaca3e))
+
 ## [3.2.0](https://github.com/viarotel/escrcpy-x/compare/v3.1.2...v3.2.0) (2026-09-01)
 
 

@@ -80,6 +80,7 @@ This project owes its existence to the following open-source projects:
 ## Friendly Links
 
 - [ADB Device Manager 2](https://github.com/Shrey113/Adb-Device-Manager-2)
+- [FreeControl2](https://github.com/pdone/FreeControl2)
 
 ## Donate
 

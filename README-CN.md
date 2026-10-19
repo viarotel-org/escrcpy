@@ -80,6 +80,7 @@
 ## 友情链接
 
 - [ADB Device Manager 2](https://github.com/Shrey113/Adb-Device-Manager-2)
+- [FreeControl2](https://github.com/pdone/FreeControl2)
 
 ## 捐赠项目
 

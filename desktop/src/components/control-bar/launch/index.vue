@@ -148,7 +148,7 @@ function stringifyShortcutArguments(args = {}) {
     .join(' ')
 }
 
-function onShortcutClick(item) {
+async function onShortcutClick(item) {
   const startOptions = getStartAppOptions(item)
   const landscape = startOptions.landscape
   const desktopName = deviceStore.getLabel(
@@ -165,7 +165,9 @@ function onShortcutClick(item) {
     'landscape': landscape ? 1 : '',
   })
 
-  const result = window.$preload.desktop.createShortcuts({
+  const result = await window.$preload.desktop.createAppShortcuts({
+    id: startOptions.deviceId,
+    packageName: startOptions.packageName,
     name: desktopName,
     comment: desktopName,
     arguments: shortcutArguments,

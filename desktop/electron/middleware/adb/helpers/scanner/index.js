@@ -11,6 +11,8 @@ export const MDNS_CONFIG = {
   DEFAULT_TIMEOUT: 60 * 1000,
   CONNECT_TIMEOUT: 30 * 1000,
   DISCOVER_TIMEOUT: 8 * 1000,
+  NATIVE_TIMEOUT: 2000,
+  POLL_INTERVAL: 1000,
   PROBE_TIMEOUT: 1000,
   DEFAULT_PROBE_PORTS: [5555],
 }
@@ -52,7 +54,8 @@ export class MonitorError extends Error {
 }
 
 export class DeviceScanner {
-  constructor() {
+  constructor(adb = null) {
+    this.adb = adb
     this.bonjour = null
     this.scanner = null
     this.scanners = []
@@ -62,22 +65,77 @@ export class DeviceScanner {
     return this.startScanningMultiple([type], callback)
   }
 
-  async startScanningMultiple(types, callback) {
+  async startScanningMultiple(types, callback, onNativeFound = () => {}) {
     this.dispose()
-    this.bonjour = new Bonjour()
+    const controller = new AbortController()
+    this.abortController = controller
 
-    this.scanners = types.map(type =>
-      this.bonjour.find({ type }, (service) => {
-        const device = DeviceData.fromMdnsService(service, type)
-        if (device) {
+    const startBonjour = () => {
+      if (controller.signal.aborted || this.bonjour) {
+        return
+      }
+
+      this.bonjour = new Bonjour()
+      this.scanners = types.map(type =>
+        this.bonjour.find({ type }, (service) => {
+          const device = DeviceData.fromMdnsService(service, type)
+          if (device && !controller.signal.aborted) {
+            callback(device)
+          }
+        }),
+      )
+      this.scanner = this.scanners[0] ?? null
+    }
+
+    if (!this.adb?.mdnsServices) {
+      startBonjour()
+      return
+    }
+
+    const checkNative = async () => {
+      try {
+        const { stdout } = await this.adb.mdnsServices({
+          signal: controller.signal,
+          timeout: MDNS_CONFIG.NATIVE_TIMEOUT,
+        })
+        if (controller.signal.aborted) {
+          return
+        }
+
+        const devices = parseAdbMdnsServices(stdout).filter(device => types.includes(device.source))
+        for (const device of devices) {
+          if (controller.signal.aborted) {
+            return
+          }
           callback(device)
         }
-      }),
-    )
-    this.scanner = this.scanners[0] ?? null
+
+        if (devices.length && !controller.signal.aborted) {
+          onNativeFound()
+        }
+        startBonjour()
+      }
+      catch (error) {
+        if (!controller.signal.aborted) {
+          startBonjour()
+        }
+      }
+      finally {
+        // Schedule only after the previous command exits, so queries never overlap.
+        if (!controller.signal.aborted) {
+          this.pollHandle = setTimeout(checkNative, MDNS_CONFIG.POLL_INTERVAL)
+        }
+      }
+    }
+
+    checkNative()
   }
 
   dispose() {
+    this.abortController?.abort()
+    this.abortController = null
+    clearTimeout(this.pollHandle)
+    this.pollHandle = null
     const scanners = [...new Set([this.scanner, ...this.scanners])].filter(Boolean)
     scanners.forEach(scanner => scanner.stop())
     this.scanner = null
@@ -98,23 +156,44 @@ function normalizePorts(ports) {
   return [...new Set(ports.filter(Boolean).map(Number).filter(Boolean))]
 }
 
+export function parseAdbMdnsServices(stdout) {
+  if (!stdout) {
+    return []
+  }
+
+  return stdout.split(/\r?\n/).reduce((devices, line) => {
+    const match = line.trim().match(/^(.*?)\s+(_adb\S+)\s+([^\s:]+):(\d+)$/)
+    if (match && net.isIP(match[3]) === 4) {
+      const type = match[2].replace(/^_+/, '').replace(/\._tcp.*$/, '')
+      devices.push(new DeviceData(match[1].trim(), match[3], Number(match[4]), type))
+    }
+    return devices
+  }, [])
+}
+
 export async function scanMdnsDevices(options = {}) {
   const {
+    adb,
     types = [MDNS_CONFIG.CONNECT_TYPE, MDNS_CONFIG.LEGACY_ADB_TYPE],
     timeout = MDNS_CONFIG.DISCOVER_TIMEOUT,
     onStatus = () => {},
     onDevice = () => {},
   } = options
 
-  const deviceScanner = new DeviceScanner()
+  const deviceScanner = new DeviceScanner(adb)
   const devices = new Map()
 
   onStatus('scanning')
 
   return new Promise((resolve) => {
     let timeoutHandle = null
+    let resolved = false
 
     const finish = (status) => {
+      if (resolved) {
+        return
+      }
+      resolved = true
       clearTimeout(timeoutHandle)
       deviceScanner.dispose()
 
@@ -139,7 +218,7 @@ export async function scanMdnsDevices(options = {}) {
       devices.set(key, device)
       onStatus('found', device)
       onDevice(device)
-    })
+    }, () => finish('found'))
   })
 }
 
@@ -225,6 +304,7 @@ export class AdbScanner {
     } = options
 
     this.adb = adb
+    this.deviceScanner.adb = adb
     this.isActive = true
     this.onStatus = onStatus
 
@@ -306,7 +386,24 @@ export class AdbScanner {
 
   async scanForDevice() {
     return new Promise((resolve, reject) => {
-      const timeoutHandle = setTimeout(() => {
+      let timeoutHandle = null
+      let resolved = false
+
+      const finish = (device) => {
+        if (resolved) {
+          return
+        }
+        resolved = true
+        clearTimeout(timeoutHandle)
+        this.deviceScanner.dispose()
+        resolve(device)
+      }
+
+      timeoutHandle = setTimeout(() => {
+        if (resolved) {
+          return
+        }
+        resolved = true
         this.dispose()
         reject(new MonitorError(
           ERROR_CODES.TIMEOUT,
@@ -317,8 +414,7 @@ export class AdbScanner {
       this.deviceScanner.startScanning(
         MDNS_CONFIG.PAIRING_TYPE,
         (device) => {
-          clearTimeout(timeoutHandle)
-          resolve(device)
+          finish(device)
         },
       )
     })
@@ -338,9 +434,25 @@ export class AdbScanner {
 
   async waitForDeviceConnect(device) {
     return new Promise((resolve, reject) => {
-      const scanner = new DeviceScanner()
+      const scanner = new DeviceScanner(this.adb)
+      let timeoutHandle = null
+      let resolved = false
 
-      const timeoutHandle = setTimeout(() => {
+      const finish = (connectDevice) => {
+        if (resolved) {
+          return
+        }
+        resolved = true
+        clearTimeout(timeoutHandle)
+        scanner.dispose()
+        resolve(connectDevice)
+      }
+
+      timeoutHandle = setTimeout(() => {
+        if (resolved) {
+          return
+        }
+        resolved = true
         scanner.dispose()
         reject(new MonitorError(
           ERROR_CODES.TIMEOUT,
@@ -352,9 +464,7 @@ export class AdbScanner {
         MDNS_CONFIG.CONNECT_TYPE,
         (connectDevice) => {
           if (connectDevice.address === device.address) {
-            clearTimeout(timeoutHandle)
-            scanner.dispose()
-            resolve(connectDevice)
+            finish(connectDevice)
           }
         },
       )

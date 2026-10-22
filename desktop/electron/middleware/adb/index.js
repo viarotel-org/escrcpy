@@ -79,6 +79,17 @@ async function deviceShell(id, command) {
   return getAdbx().shell(id, command)
 }
 
+function mdnsServices(options) {
+  // Spawn ADB directly so timeout/abort terminates ADB, not just a shell wrapper.
+  const adbProcess = sheller(['adb', 'mdns', 'services'], {
+    encoding: 'utf8',
+    windowsHide: true,
+    ...options,
+  })
+  processManager.add(adbProcess)
+  return adbProcess
+}
+
 async function kill(...params) {
   return client.kill(...params)
 }
@@ -221,6 +232,7 @@ async function scannerConnect(password, options = {}) {
       pair,
       connect,
       shell,
+      mdnsServices,
     },
     ...options,
   })
@@ -238,6 +250,7 @@ async function discoverConnect(options = {}) {
   } = options
 
   const devices = await scanMdnsDevices({
+    adb: { mdnsServices },
     timeout,
     onStatus,
     onDevice,

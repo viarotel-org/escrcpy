@@ -51,6 +51,10 @@ export default {
           value: 'en-US',
         },
         {
+          label: 'Polski',
+          value: 'pl',
+        },
+        {
           label: 'Русский',
           value: 'ru-RU',
         },

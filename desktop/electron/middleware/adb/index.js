@@ -198,19 +198,29 @@ async function pull(id, filePath, args = {}) {
   const transfer = await client.getDevice(id).pull(filePath)
 
   return new Promise((resolve, reject) => {
+    const writeStream = fs.createWriteStream(fullSavePath)
+
     transfer.on('progress', (stats) => {
       progress?.(stats)
     })
 
-    transfer.on('end', () => {
-      resolve(fullSavePath)
-    })
-
+    // Resolving on the transfer's 'end' would race the write stream flush:
+    // callers reading the file right after await get a truncated file and
+    // cleanup hits EBUSY/ENOTEMPTY on Windows. Resolve on 'finish' instead.
     transfer.on('error', (err) => {
+      writeStream.destroy()
       reject(err)
     })
 
-    transfer.pipe(fs.createWriteStream(fullSavePath))
+    writeStream.on('error', (err) => {
+      reject(err)
+    })
+
+    writeStream.on('finish', () => {
+      resolve(fullSavePath)
+    })
+
+    transfer.pipe(writeStream)
   })
 }
 
